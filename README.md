@@ -10,6 +10,14 @@ QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
 QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
 == Compiling on Ubuntu Linux==
+=== Update for QT5 ===
+Prerequisite: Install QT5: https://qt-project.org/wiki/Install_Qt_5_on_Ubuntu
+Use QT Creator for compilation or perform the following steps:
+1) Change to build directory parallel to PC CryptoStickGUI directory
+2) For 64 bit system: ~/bin/qt/5.3/gcc_64/bin/qmake -spec  ~/bin/qt/5.3/gcc_64/mkspecs/linux-g++-64 -o Makefile ../cryptostick.utility/CryptoStickGUI_QT5.pro
+3) make
+
+=== QT 4 ===
 Prerequisite: sudo apt-get install qt4-default libqt4-dev libusb-1.0.0-dev qtcreator
 Use QT Creator for compilation or perform the following steps:
 1) Change to build directory parallel to PC CryptoStickGUI directory
@@ -52,15 +60,7 @@ To get a response, you just create a new object of class Response and do Respons
 https://www.assembla.com/code/cryptostick/git/nodes/master/PC%20software/CryptoStickGUI/response.h
 
 =To Dos=
-Other than libusb, HID API has the advantage that it uses native drivers on OSX. Consider migrating to it. https://github.com/signal11/hidapi 
-
-* Remove the windows showing the actual OTP values and copy the OTP value to the clipboard directly.
-
-* Change name to "Crypto Stick Tool". 
-
-* If the user enteres a wrong PIN, the dialog should state how many retries are left until the card gets locked.
-
-* incorporate help "?" buttons, as indicated in my mockup
+Other than libusb, HID API has the advantage that it uses native drivers on OSX. Consider migrating to it. https://github.com/signal11/hidapi
 
 * Make USB description and token ID configurable, e.g. through config file?
 

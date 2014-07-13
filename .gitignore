@@ -1,0 +1,7 @@
+CryptoStickGUI_QT5.pro.user*
+build-*-Debug
+*~
+*.o
+*.lst
+.*
+!/.gitignore
