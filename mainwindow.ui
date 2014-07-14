@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>602</width>
+    <width>637</width>
     <height>550</height>
    </rect>
   </property>
@@ -23,7 +23,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>601</width>
+      <width>641</width>
       <height>691</height>
      </rect>
     </property>
@@ -34,25 +34,12 @@
      <attribute name="title">
       <string>Slot config</string>
      </attribute>
-     <widget class="QPushButton" name="resetButton">
-      <property name="geometry">
-       <rect>
-        <x>175</x>
-        <y>430</y>
-        <width>161</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Reload Configuration</string>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
        <rect>
         <x>20</x>
         <y>50</y>
-        <width>571</width>
+        <width>601</width>
         <height>171</height>
        </rect>
       </property>
@@ -65,7 +52,7 @@
          <x>120</x>
          <y>70</y>
          <width>82</width>
-         <height>17</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="text">
@@ -81,7 +68,7 @@
          <x>190</x>
          <y>70</y>
          <width>82</width>
-         <height>17</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="text">
@@ -99,12 +86,12 @@
         <rect>
          <x>100</x>
          <y>30</y>
-         <width>441</width>
-         <height>20</height>
+         <width>491</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="inputMask">
-        <string>HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH</string>
+        <string/>
        </property>
        <property name="text">
         <string>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
@@ -122,7 +109,7 @@
          <x>20</x>
          <y>30</y>
          <width>81</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -135,7 +122,7 @@
          <x>20</x>
          <y>70</y>
          <width>101</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -148,7 +135,7 @@
          <x>20</x>
          <y>100</y>
          <width>251</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -160,12 +147,12 @@
         <rect>
          <x>410</x>
          <y>70</y>
-         <width>161</width>
-         <height>23</height>
+         <width>181</width>
+         <height>27</height>
         </rect>
        </property>
        <property name="text">
-        <string>Create random secret</string>
+        <string>Generate random secret</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="checkBox">
@@ -174,7 +161,7 @@
          <x>300</x>
          <y>70</y>
          <width>111</width>
-         <height>20</height>
+         <height>24</height>
         </rect>
        </property>
        <property name="text">
@@ -188,11 +175,14 @@
      <widget class="QPushButton" name="cancelButton">
       <property name="geometry">
        <rect>
-        <x>450</x>
+        <x>350</x>
         <y>430</y>
-        <width>75</width>
-        <height>23</height>
+        <width>99</width>
+        <height>27</height>
        </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>Close</string>
@@ -201,14 +191,14 @@
      <widget class="QPushButton" name="writeButton">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>130</x>
         <y>430</y>
-        <width>141</width>
-        <height>23</height>
+        <width>99</width>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Save Configuration</string>
+       <string>Save Slot</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -217,7 +207,7 @@
         <x>320</x>
         <y>10</y>
         <width>51</width>
-        <height>21</height>
+        <height>25</height>
        </rect>
       </property>
       <property name="text">
@@ -230,7 +220,7 @@
         <x>50</x>
         <y>10</y>
         <width>191</width>
-        <height>22</height>
+        <height>26</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -273,7 +263,7 @@
         <x>20</x>
         <y>10</y>
         <width>31</width>
-        <height>21</height>
+        <height>25</height>
        </rect>
       </property>
       <property name="text">
@@ -285,7 +275,7 @@
        <rect>
         <x>20</x>
         <y>320</y>
-        <width>571</width>
+        <width>601</width>
         <height>111</height>
        </rect>
       </property>
@@ -301,7 +291,7 @@
          <x>10</x>
          <y>20</y>
          <width>131</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -317,7 +307,7 @@
          <x>50</x>
          <y>60</y>
          <width>31</width>
-         <height>20</height>
+         <height>24</height>
         </rect>
        </property>
        <property name="inputMask">
@@ -333,7 +323,7 @@
          <x>116</x>
          <y>60</y>
          <width>31</width>
-         <height>20</height>
+         <height>24</height>
         </rect>
        </property>
        <property name="inputMask">
@@ -349,7 +339,7 @@
          <x>190</x>
          <y>60</y>
          <width>91</width>
-         <height>20</height>
+         <height>24</height>
         </rect>
        </property>
        <property name="inputMask">
@@ -362,7 +352,7 @@
          <x>10</x>
          <y>60</y>
          <width>41</width>
-         <height>16</height>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
@@ -375,7 +365,7 @@
          <x>90</x>
          <y>60</y>
          <width>21</width>
-         <height>16</height>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
@@ -388,7 +378,7 @@
          <x>155</x>
          <y>60</y>
          <width>31</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -404,7 +394,7 @@
          <x>290</x>
          <y>60</y>
          <width>131</width>
-         <height>22</height>
+         <height>26</height>
         </rect>
        </property>
        <item>
@@ -448,11 +438,14 @@
         <x>370</x>
         <y>10</y>
         <width>113</width>
-        <height>20</height>
+        <height>24</height>
        </rect>
       </property>
       <property name="inputMask">
-       <string>xxxxxxxxxxxxxxx</string>
+       <string/>
+      </property>
+      <property name="maxLength">
+       <number>15</number>
       </property>
      </widget>
      <widget class="QGroupBox" name="hotpGroupBox">
@@ -460,12 +453,12 @@
        <rect>
         <x>20</x>
         <y>190</y>
-        <width>571</width>
+        <width>601</width>
         <height>141</height>
        </rect>
       </property>
       <property name="title">
-       <string>OATH-HOTP Parameters</string>
+       <string>Parameters</string>
       </property>
       <widget class="QLabel" name="label_5">
        <property name="geometry">
@@ -473,7 +466,7 @@
          <x>20</x>
          <y>30</y>
          <width>101</width>
-         <height>16</height>
+         <height>20</height>
         </rect>
        </property>
        <property name="text">
@@ -486,7 +479,7 @@
          <x>120</x>
          <y>30</y>
          <width>82</width>
-         <height>17</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="text">
@@ -502,7 +495,7 @@
          <x>210</x>
          <y>30</y>
          <width>82</width>
-         <height>17</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="text">
@@ -515,7 +508,7 @@
          <x>20</x>
          <y>60</y>
          <width>151</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -527,24 +520,27 @@
         <rect>
          <x>170</x>
          <y>60</y>
-         <width>241</width>
-         <height>20</height>
+         <width>231</width>
+         <height>25</height>
         </rect>
        </property>
        <property name="inputMask">
-        <string>hhhhhhhhhhhhhhhh</string>
+        <string/>
        </property>
        <property name="text">
         <string>0000000000000000</string>
+       </property>
+       <property name="maxLength">
+        <number>16</number>
        </property>
       </widget>
       <widget class="QPushButton" name="setToZeroButton">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>170</x>
          <y>90</y>
-         <width>91</width>
-         <height>23</height>
+         <width>99</width>
+         <height>27</height>
         </rect>
        </property>
        <property name="text">
@@ -554,10 +550,10 @@
       <widget class="QPushButton" name="setToRandomButton">
        <property name="geometry">
         <rect>
-         <x>230</x>
+         <x>280</x>
          <y>90</y>
-         <width>111</width>
-         <height>23</height>
+         <width>120</width>
+         <height>27</height>
         </rect>
        </property>
        <property name="text">
@@ -568,14 +564,30 @@
      <widget class="QPushButton" name="eraseButton">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>240</x>
         <y>430</y>
-        <width>81</width>
-        <height>23</height>
+        <width>99</width>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
        <string>Erase Slot</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelQuestion1">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>10</y>
+        <width>67</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>question_mark_icon.png</pixmap>
       </property>
      </widget>
     </widget>
@@ -589,7 +601,7 @@
         <x>20</x>
         <y>20</y>
         <width>131</width>
-        <height>21</height>
+        <height>25</height>
        </rect>
       </property>
       <property name="text">
@@ -602,7 +614,7 @@
         <x>20</x>
         <y>50</y>
         <width>141</width>
-        <height>21</height>
+        <height>25</height>
        </rect>
       </property>
       <property name="text">
@@ -615,7 +627,7 @@
         <x>160</x>
         <y>20</y>
         <width>113</width>
-        <height>20</height>
+        <height>24</height>
        </rect>
       </property>
       <property name="readOnly">
@@ -628,7 +640,7 @@
         <x>160</x>
         <y>50</y>
         <width>113</width>
-        <height>20</height>
+        <height>24</height>
        </rect>
       </property>
       <property name="readOnly">
@@ -641,7 +653,7 @@
         <x>20</x>
         <y>230</y>
         <width>141</width>
-        <height>21</height>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
@@ -654,7 +666,7 @@
         <x>170</x>
         <y>230</y>
         <width>75</width>
-        <height>23</height>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
@@ -667,7 +679,7 @@
         <x>260</x>
         <y>230</y>
         <width>75</width>
-        <height>23</height>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
@@ -680,7 +692,7 @@
         <x>20</x>
         <y>90</y>
         <width>571</width>
-        <height>121</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="title">
@@ -692,7 +704,7 @@
          <x>180</x>
          <y>60</y>
          <width>131</width>
-         <height>22</height>
+         <height>26</height>
         </rect>
        </property>
        <item>
@@ -717,7 +729,7 @@
          <x>10</x>
          <y>60</y>
          <width>171</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -730,7 +742,7 @@
          <x>10</x>
          <y>30</y>
          <width>171</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -743,7 +755,7 @@
          <x>180</x>
          <y>30</y>
          <width>131</width>
-         <height>22</height>
+         <height>26</height>
         </rect>
        </property>
        <item>
@@ -768,7 +780,7 @@
          <x>180</x>
          <y>90</y>
          <width>131</width>
-         <height>22</height>
+         <height>26</height>
         </rect>
        </property>
        <item>
@@ -793,7 +805,7 @@
          <x>10</x>
          <y>90</y>
          <width>171</width>
-         <height>21</height>
+         <height>25</height>
         </rect>
        </property>
        <property name="text">
@@ -809,7 +821,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>602</width>
+     <width>637</width>
      <height>25</height>
     </rect>
    </property>
@@ -856,6 +868,22 @@
     <hint type="destinationlabel">
      <x>300</x>
      <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>writeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>181</x>
+     <y>499</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>

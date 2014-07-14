@@ -50,8 +50,8 @@
 int main(int argc, char *argv[])
 {
     int i;
-    int DebugWindowActive;
-    int SpecialConfigActive;
+    //int DebugWindowActive;
+    //int SpecialConfigActive;
     char *p;
     StartUpParameter_tst StartupInfo_st;
 

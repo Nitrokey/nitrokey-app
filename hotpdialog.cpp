@@ -35,6 +35,12 @@ HOTPDialog::HOTPDialog( QWidget *parent) :
     connect(TOTP_ValidTimer, SIGNAL(timeout()), this, SLOT(checkTOTP_Valid()));
     TOTP_ValidTimer->start(100);
 
+    Clipboard_ValidTimer = new QTimer(this);
+
+    // Start timer for polling stick response
+    connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
+    Clipboard_ValidTimer->start(100);
+
     ui->setupUi(this);
 }
 
@@ -84,6 +90,7 @@ void HOTPDialog::getNextCode()
      qDebug() << "TOTP:" << code;
 
      ui->lineEdit->setText(output);
+     copyToClipboard(ui->lineEdit->text());
 
 }
 
@@ -124,14 +131,16 @@ void HOTPDialog::on_nextButton_clicked()
 
     getNextCode();
 
+
 }
 
-void HOTPDialog::on_clipboardButton_clicked()
+void HOTPDialog::copyToClipboard(QString text)
 {
      QClipboard *clipboard = QApplication::clipboard();
 
-     clipboard->setText(ui->lineEdit->text());
-     this->accept();
+     lastClipboardTime = QDateTime::currentDateTime().toTime_t();
+     clipboard->setText(text);
+    // this->accept();
 }
 
 
@@ -193,5 +202,30 @@ void HOTPDialog::checkTOTP_Valid()
     }
 
     ui->validTimer->setPalette(palette);
+
+}
+
+/*******************************************************************************
+
+  checkTOTP_Valid
+
+  Changes
+  Date      Author        Info
+  12.07.14  SN            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void HOTPDialog::checkClipboard_Valid()
+{
+    uint64_t currentTime;
+    uint64_t checkTime;
+
+    currentTime = QDateTime::currentDateTime().toTime_t();
+    if(currentTime >= lastClipboardTime + (uint64_t)60){
+        copyToClipboard(QString(""));
+    }
 
 }

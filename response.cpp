@@ -89,25 +89,25 @@ void Response::DebugResponse()
     switch (deviceStatus)
     {
         case CMD_STATUS_OK :
-            DebugAppendText ("         Device status       : CMD_STATUS_OK\n");
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_OK\n");
             break;
         case CMD_STATUS_WRONG_CRC :
-            DebugAppendText ("         Device status       : CMD_STATUS_WRONG_CRC\n");
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_WRONG_CRC\n");
             break;
         case CMD_STATUS_WRONG_SLOT :
-            DebugAppendText ("         Device status       : CMD_STATUS_WRONG_SLOT\n");
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_WRONG_SLOT\n");
             break;
         case CMD_STATUS_SLOT_NOT_PROGRAMMED :
-            DebugAppendText ("         Device status       : CMD_STATUS_SLOT_NOT_PROGRAMMED\n");
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_SLOT_NOT_PROGRAMMED\n");
             break;
         case CMD_STATUS_WRONG_PASSWORD :
-            DebugAppendText ("         Device status       : CMD_STATUS_WRONG_PASSWORD\n");
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_WRONG_PASSWORD\n");
             break;
         case CMD_STATUS_NOT_AUTHORIZED :
-            DebugAppendText ("         Device status       : CMD_STATUS_NOT_AUTHORIZED\n");
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_NOT_AUTHORIZED\n");
             break;
         default:
-            DebugAppendText ("         Device status       : Unknown\n");
+            DebugAppendText ((char *)"         Device status       : Unknown\n");
             break;
     }
 
@@ -116,10 +116,10 @@ void Response::DebugResponse()
     switch (lastCommandType)
     {
         case CMD_GET_STATUS :
-            DebugAppendText ("         Last command        : CMD_GET_STATUS\n");
+            DebugAppendText ((char *)"         Last command        : CMD_GET_STATUS\n");
             break;
         case CMD_WRITE_TO_SLOT :
-            DebugAppendText ("         Last command        : CMD_WRITE_TO_SLOT\n");
+            DebugAppendText ((char *)"         Last command        : CMD_WRITE_TO_SLOT\n");
             break;
         case CMD_READ_SLOT_NAME :
             strncpy (text1,data,15);
@@ -128,28 +128,28 @@ void Response::DebugResponse()
             DebugAppendText (text);
             break;
         case CMD_READ_SLOT :
-            DebugAppendText ("         Last command        : CMD_READ_SLOT\n");
+            DebugAppendText ((char *)"         Last command        : CMD_READ_SLOT\n");
             break;
         case CMD_GET_CODE :
-            DebugAppendText ("         Last command        : CMD_GET_CODE\n");
+            DebugAppendText ((char *)"         Last command        : CMD_GET_CODE\n");
             break;
         case CMD_WRITE_CONFIG :
-            DebugAppendText ("         Last command        : CMD_WRITE_CONFIG\n");
+            DebugAppendText ((char *)"         Last command        : CMD_WRITE_CONFIG\n");
             break;
         case CMD_ERASE_SLOT :
-            DebugAppendText ("         Last command        : CMD_ERASE_SLOT\n");
+            DebugAppendText ((char *)"         Last command        : CMD_ERASE_SLOT\n");
             break;
         case CMD_FIRST_AUTHENTICATE :
-            DebugAppendText ("         Last command        : CMD_FIRST_AUTHENTICATE\n");
+            DebugAppendText ((char *)"         Last command        : CMD_FIRST_AUTHENTICATE\n");
             break;
         case CMD_AUTHORIZE :
-            DebugAppendText ("         Last command        : CMD_AUTHORIZE\n");
+            DebugAppendText ((char *)"         Last command        : CMD_AUTHORIZE\n");
             break;
         case CMD_GET_PASSWORD_RETRY_COUNT :
-            DebugAppendText ("         Last command        : CMD_GET_PASSWORD_RETRY_COUNT\n");
+            DebugAppendText ((char *)"         Last command        : CMD_GET_PASSWORD_RETRY_COUNT\n");
             break;
         default:
-            DebugAppendText ("         Last command        : Unknown\n");
+            DebugAppendText ((char *)"         Last command        : Unknown\n");
             break;
     }
 
@@ -160,25 +160,25 @@ void Response::DebugResponse()
     switch (lastCommandStatus)
     {
         case CMD_STATUS_OK :
-            DebugAppendText ("         Last command status : CMD_STATUS_OK\n");
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_OK\n");
             break;
         case CMD_STATUS_WRONG_CRC :
-            DebugAppendText ("         Last command status : CMD_STATUS_WRONG_CRC\n");
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_WRONG_CRC\n");
             break;
         case CMD_STATUS_WRONG_SLOT :
-            DebugAppendText ("         Last command status : CMD_STATUS_WRONG_SLOT\n");
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_WRONG_SLOT\n");
             break;
         case CMD_STATUS_SLOT_NOT_PROGRAMMED :
-            DebugAppendText ("         Last command status : CMD_STATUS_SLOT_NOT_PROGRAMMED\n");
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_SLOT_NOT_PROGRAMMED\n");
             break;
         case CMD_STATUS_WRONG_PASSWORD :
-            DebugAppendText ("         Last command status : CMD_STATUS_WRONG_PASSWORD\n");
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_WRONG_PASSWORD\n");
             break;
         case CMD_STATUS_NOT_AUTHORIZED :
-            DebugAppendText ("         Last command status : CMD_STATUS_NOT_AUTHORIZED\n");
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_NOT_AUTHORIZED\n");
             break;
         default:
-            DebugAppendText ("         Last command status : Unknown\n");
+            DebugAppendText ((char *)"         Last command status : Unknown\n");
             break;
     }
 

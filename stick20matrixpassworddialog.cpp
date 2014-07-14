@@ -310,7 +310,7 @@ void MatrixPasswordDialog::sendPasswordKey (char *Password)
 
 void MatrixPasswordDialog::on_pushButton_0_clicked()
 {
-    sendPasswordKey ("0");
+    sendPasswordKey ((char *)"0");
 }
 
 /*******************************************************************************
@@ -325,7 +325,7 @@ void MatrixPasswordDialog::on_pushButton_0_clicked()
 
 void MatrixPasswordDialog::on_pushButton_1_clicked()
 {
-    sendPasswordKey ("1");
+    sendPasswordKey ((char *)"1");
 }
 /*******************************************************************************
 
@@ -339,7 +339,7 @@ void MatrixPasswordDialog::on_pushButton_1_clicked()
 
 void MatrixPasswordDialog::on_pushButton_2_clicked()
 {
-    sendPasswordKey ("2");
+    sendPasswordKey ((char *)"2");
 }
 
 /*******************************************************************************
@@ -354,7 +354,7 @@ void MatrixPasswordDialog::on_pushButton_2_clicked()
 
 void MatrixPasswordDialog::on_pushButton_3_clicked()
 {
-    sendPasswordKey ("3");
+    sendPasswordKey ((char *)"3");
 }
 
 /*******************************************************************************
@@ -369,7 +369,7 @@ void MatrixPasswordDialog::on_pushButton_3_clicked()
 
 void MatrixPasswordDialog::on_pushButton_4_clicked()
 {
-    sendPasswordKey ("4");
+    sendPasswordKey ((char *)"4");
 }
 
 /*******************************************************************************
@@ -384,7 +384,7 @@ void MatrixPasswordDialog::on_pushButton_4_clicked()
 
 void MatrixPasswordDialog::on_pushButton_5_clicked()
 {
-    sendPasswordKey ("5");
+    sendPasswordKey ((char *)"5");
 }
 
 /*******************************************************************************
@@ -399,7 +399,7 @@ void MatrixPasswordDialog::on_pushButton_5_clicked()
 
 void MatrixPasswordDialog::on_pushButton_6_clicked()
 {
-    sendPasswordKey ("6");
+    sendPasswordKey ((char *)"6");
 }
 
 /*******************************************************************************
@@ -414,7 +414,7 @@ void MatrixPasswordDialog::on_pushButton_6_clicked()
 
 void MatrixPasswordDialog::on_pushButton_7_clicked()
 {
-    sendPasswordKey ("7");
+    sendPasswordKey ((char *)"7");
 }
 
 /*******************************************************************************
@@ -429,7 +429,7 @@ void MatrixPasswordDialog::on_pushButton_7_clicked()
 
 void MatrixPasswordDialog::on_pushButton_8_clicked()
 {
-    sendPasswordKey ("8");
+    sendPasswordKey ((char *)"8");
 }
 
 /*******************************************************************************
@@ -444,7 +444,7 @@ void MatrixPasswordDialog::on_pushButton_8_clicked()
 
 void MatrixPasswordDialog::on_pushButton_9_clicked()
 {
-    sendPasswordKey ("9");
+    sendPasswordKey ((char *)"9");
 }
 
 /*******************************************************************************

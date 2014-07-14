@@ -53,26 +53,26 @@ typedef struct {
 
 typeOptionsComboboxStick20 tOptionsComboboxStick20[] =
 {
-    "Enable encrypted volume",                STICK20_CMD_ENABLE_CRYPTED_PARI,
-    "Disable encrypted volume",               STICK20_CMD_DISABLE_CRYPTED_PARI,
-    "Enable hidden volume",                   STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI,
+    {(char *)"Enable encrypted volume",                STICK20_CMD_ENABLE_CRYPTED_PARI},
+    {(char *)"Disable encrypted volume",               STICK20_CMD_DISABLE_CRYPTED_PARI},
+    {(char *)"Enable hidden volume",                   STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI},
 //    "Disable hidden crypted volume",     STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI,
-    "Enable firmware update",                 STICK20_CMD_ENABLE_FIRMWARE_UPDATE,
-    "Export firmware to file",                STICK20_CMD_EXPORT_FIRMWARE_TO_FILE,
-    "Generate new AES keys",                  STICK20_CMD_GENERATE_NEW_KEYS,
-    "Initialize storage with random data",     STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS,
-    "Get stick status - Todo",                STICK20_CMD_GET_DEVICE_STATUS,
-    "Set readonly unencrypted volume",        STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN,
-    "Set readwrite unencrypted volume",       STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN,
-    "Get device status",                      STICK20_CMD_GET_DEVICE_STATUS,
-    "Send hidden volume password",            STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD,
-    "Setup hidden volume",                    STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP,
-    "Send password",                          STICK20_CMD_SEND_PASSWORD,
-    "Send new password",                      STICK20_CMD_SEND_NEW_PASSWORD,
-    "Clear new SD card found",                STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND,
-    "Send startup",                           STICK20_CMD_SEND_STARTUP,
-    "Clear stick keys are not initiated",     STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED,
-    NULL, 0
+    {(char *)"Enable firmware update",                 STICK20_CMD_ENABLE_FIRMWARE_UPDATE},
+    {(char *)"Export firmware to file",                STICK20_CMD_EXPORT_FIRMWARE_TO_FILE},
+    {(char *)"Generate new AES keys",                  STICK20_CMD_GENERATE_NEW_KEYS},
+    {(char *)"Initialize storage with random data",    STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS},
+    {(char *)"Get stick status - Todo",                STICK20_CMD_GET_DEVICE_STATUS},
+    {(char *)"Set readonly unencrypted volume",        STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN},
+    {(char *)"Set readwrite unencrypted volume",       STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN},
+    {(char *)"Get device status",                      STICK20_CMD_GET_DEVICE_STATUS},
+    {(char *)"Send hidden volume password",            STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD},
+    {(char *)"Setup hidden volume",                    STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP},
+    {(char *)"Send password",                          STICK20_CMD_SEND_PASSWORD},
+    {(char *)"Send new password",                      STICK20_CMD_SEND_NEW_PASSWORD},
+    {(char *)"Clear new SD card found",                STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND},
+    {(char *)"Send startup",                           STICK20_CMD_SEND_STARTUP},
+    {(char *)"Clear stick keys are not initiated",     STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED},
+    {NULL, 0}
 };
 
 
@@ -479,7 +479,7 @@ void Stick20Dialog::on_comboBox_currentIndexChanged(int index)
     switch (index)
     {
         case STICK20_CMD_ENABLE_CRYPTED_PARI            :
-            InitEnterPasswordGui ("User-Password");
+            InitEnterPasswordGui ((char *)"User-Password");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             break;
         case STICK20_CMD_DISABLE_CRYPTED_PARI           :
@@ -487,7 +487,7 @@ void Stick20Dialog::on_comboBox_currentIndexChanged(int index)
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
             break;
         case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
-            InitEnterPasswordGui ("User-Password");
+            InitEnterPasswordGui ((char *)"User-Password");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             break;
         case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI    :
@@ -495,27 +495,27 @@ void Stick20Dialog::on_comboBox_currentIndexChanged(int index)
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
             break;
         case STICK20_CMD_ENABLE_FIRMWARE_UPDATE         :
-            InitEnterPasswordGui ("Admin-Password");
+            InitEnterPasswordGui ((char *)"Admin-Password");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             break;
         case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE        :
-            InitEnterPasswordGui ("Admin-Password");
+            InitEnterPasswordGui ((char *)"Admin-Password");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :
-            InitEnterPasswordGui ("Admin-Password");
+            InitEnterPasswordGui ((char *)"Admin-Password");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             break;
         case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
-            InitEnterPasswordGui ("Admin-Password");
+            InitEnterPasswordGui ((char *)"Admin-Password");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             break;
         case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN :
-            InitEnterPasswordGui ("Admin-Password");
+            InitEnterPasswordGui ((char *)"Admin-Password");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             break;
         case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
-            InitEnterPasswordGui ("Admin-Password");
+            InitEnterPasswordGui ((char *)"Admin-Password");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
             break;
         default :

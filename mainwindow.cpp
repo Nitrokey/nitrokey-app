@@ -224,18 +224,18 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     // Init debug text
     DebugClearText ();
-    DebugAppendText ("Start Debug - ");
+    DebugAppendText ((char *)"Start Debug - ");
 
 #ifdef WIN32
-    DebugAppendText ("WIN32 system\n");
+    DebugAppendText ((char *)"WIN32 system\n");
 #endif
 
 #ifdef linux
-    DebugAppendText ("LINUX system\n");
+    DebugAppendText ((char *)"LINUX system\n");
 #endif
 
 #ifdef MAC
-    DebugAppendText ("MAC system\n");
+    DebugAppendText ((char *)"MAC system\n");
 #endif
 
     {
@@ -246,10 +246,10 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
         unsigned char text[50];
 
-        DebugAppendText ("\nEndian check\n\n");
+        DebugAppendText ((char *)"\nEndian check\n\n");
 
-        DebugAppendText ("Store 0x01 0x02 0x03 0x04 in memory locations x,x+1,x+2,x+3\n");
-        DebugAppendText ("then read the location x - x+3 as an unsigned int\n\n");
+        DebugAppendText ((char *)"Store 0x01 0x02 0x03 0x04 in memory locations x,x+1,x+2,x+3\n");
+        DebugAppendText ((char *)"then read the location x - x+3 as an unsigned int\n\n");
 
         uEndianCheck.input[0] = 0x01;
         uEndianCheck.input[1] = 0x02;
@@ -262,19 +262,19 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         sprintf ((char*)text,"read  u32 %08x\n",uEndianCheck.endianCheck);
         DebugAppendText ((char*)text);
 
-        DebugAppendText ("\n");
+        DebugAppendText ((char *)"\n");
 
         if (0x01020304 == uEndianCheck.endianCheck)
         {
-            DebugAppendText ("System is little endian\n");
+            DebugAppendText ((char *)"System is little endian\n");
         }
         if (0x04030201 == uEndianCheck.endianCheck)
         {
-            DebugAppendText ("System is big endian\n");
+            DebugAppendText ((char *)"System is big endian\n");
         }
-        DebugAppendText ("\n");
+        DebugAppendText ((char *)"\n");
     }
-
+    ui->labelQuestion1->setToolTip("Test");
     generateMenu();
 
 
@@ -361,7 +361,7 @@ int MainWindow::ExecStickCmd(char *Cmdline)
 
         stick20SendCommand (STICK20_CMD_PRODUCTION_TEST,NULL);
 
-        ret = ret = cryptostick->stick20ProductionTest();
+        ret = cryptostick->stick20ProductionTest();
 
 /*
         Stick20ResponseDialog ResponseDialog(this);
@@ -473,9 +473,9 @@ void MainWindow::AnalyseProductionInfos()
     printf ("\nGet production infos\n");
 
     printf ("Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
-    printf ("CPU ID       0x%08x\n",Stick20ProductionInfos_st.CPU_CardID_u32);
-    printf ("Smartcard ID 0x%08x\n",Stick20ProductionInfos_st.SmartCardID_u32);
-    printf ("SD card ID   0x%08x\n",Stick20ProductionInfos_st.SD_CardID_u32);
+    printf ("CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
+    printf ("Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
+    printf ("SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
 
     printf ((char*)"\nSD card infos\n");
     printf ("Manufacturer 0x%02x\n",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
@@ -505,14 +505,14 @@ void MainWindow::AnalyseProductionInfos()
 // Write to log
     {
         FILE *fp;
-        char *LogFile = "prodlog.txt";
+        char *LogFile = (char *)"prodlog.txt";
 
         fp = fopen (LogFile,"a");
         if (NULL != fp)
         {
-            fprintf (fp,"CPU:0x%08x,",Stick20ProductionInfos_st.CPU_CardID_u32);
-            fprintf (fp,"SC:0x%08x,",Stick20ProductionInfos_st.SmartCardID_u32);
-            fprintf (fp,"SD:0x%08x,",Stick20ProductionInfos_st.SD_CardID_u32);
+            fprintf (fp,"CPU:0x%08lx,",Stick20ProductionInfos_st.CPU_CardID_u32);
+            fprintf (fp,"SC:0x%08lx,",Stick20ProductionInfos_st.SmartCardID_u32);
+            fprintf (fp,"SD:0x%08lx,",Stick20ProductionInfos_st.SD_CardID_u32);
             fprintf (fp,"SCM:0x%02x,",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
             fprintf (fp,"SCO:0x%04x,",Stick20ProductionInfos_st.SD_Card_OEM_u16);
             fprintf (fp,"DAT:%d.%02d,",Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8+2000,Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
@@ -539,15 +539,15 @@ void MainWindow::AnalyseProductionInfos()
         printf ((char*)"\n**** Stick NOT OK ****\n");
     }
 
-    DebugAppendText ("Production Infos\n");
+    DebugAppendText ((char *)"Production Infos\n");
 
     sprintf ((char*)text,"Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
     DebugAppendText ((char*)text);
-    sprintf ((char*)text,"CPU ID       0x%08x\n",Stick20ProductionInfos_st.CPU_CardID_u32);
+    sprintf ((char*)text,"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
     DebugAppendText ((char*)text);
-    sprintf ((char*)text,"Smartcard ID 0x%08x\n",Stick20ProductionInfos_st.SmartCardID_u32);
+    sprintf ((char*)text,"Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
     DebugAppendText ((char*)text);
-    sprintf ((char*)text,"SD card ID   0x%08x\n",Stick20ProductionInfos_st.SD_CardID_u32);
+    sprintf ((char*)text,"SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
     DebugAppendText ((char*)text);
 
 
@@ -585,7 +585,7 @@ void MainWindow::AnalyseProductionInfos()
 
 void MainWindow::checkConnection()
 {
-    static int Stick20CheckFlashMode = TRUE;
+    //static int Stick20CheckFlashMode = TRUE;
     static int DeviceOffline         = TRUE;
     int ret;
 
@@ -658,7 +658,7 @@ void MainWindow::checkConnection()
             if (FALSE == StickNotInitated_DontAsk)
             {
                 QMessageBox msgBox;
-                int ret;
+                //int ret;
 
                 msgBox.setText("Warning: Encrypted Volume not secure\nSelect -Init encrypted volume-");
 //                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -671,7 +671,7 @@ void MainWindow::checkConnection()
             if (FALSE == SdCardNotErased_DontAsk)
             {
                 QMessageBox msgBox;
-                int ret;
+                //int ret;
 
                 msgBox.setText("Warning: Encrypted Volume not secure\nSelect -Fill encrypted volume with ramdom chars-");
                 ret = msgBox.exec();
@@ -816,7 +816,7 @@ void MainWindow::generateComboBoxEntrys()
 
     for (i=0;i<HOTP_SlotCount;i++)
     {
-        if ((char *)cryptostick->HOTPSlots[i]->slotName[0] == '\0') {
+        if ((char)cryptostick->HOTPSlots[i]->slotName[0] == '\0') {
             ui->slotComboBox->addItem(QString("HOTP slot ").append(QString::number(i+1,10)));
         } else {
             ui->slotComboBox->addItem(QString("HOTP slot ").append(QString::number(i+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[i]->slotName).append("]"));
@@ -827,7 +827,7 @@ void MainWindow::generateComboBoxEntrys()
 
     for (i=0;i<TOTP_SlotCount;i++)
     {
-        if ((char *)cryptostick->TOTPSlots[i]->slotName[0] == '\0') {
+        if ((char)cryptostick->TOTPSlots[i]->slotName[0] == '\0') {
             ui->slotComboBox->addItem(QString("TOTP slot ").append(QString::number(i+1,10)));
         } else {
             ui->slotComboBox->addItem(QString("TOTP slot ").append(QString::number(i+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[i]->slotName).append("]"));
@@ -1144,7 +1144,7 @@ void MainWindow::generateMenuForStick10()
 
 void MainWindow::generateMenuForStick20()
 {
-    int i;
+    //int i;
     int AddSeperator;
 
     AddSeperator = FALSE;
@@ -1272,7 +1272,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
         memset(slot->secret,0,20);
         memcpy(slot->secret,secretFromGUI.data(),secretFromGUI.size());
 
-        QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
+        QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().trimmed().toLatin1());
         memset(slot->slotName,0,15);
         memcpy(slot->slotName,slotNameFromGUI.data(),slotNameFromGUI.size());
 
@@ -1319,7 +1319,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
 
 void MainWindow::generateTOTPConfig(TOTPSlot *slot)
 {
-    int selectedSlot = ui->slotComboBox->currentIndex();
+    int selectedSlot = ui->slotComboBox->currentIndex()-1;
 
     // get the TOTP slot number
     selectedSlot -= HOTP_SlotCount;
@@ -1332,7 +1332,7 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot)
         memset(slot->secret,0,20);
         memcpy(slot->secret,secretFromGUI.data(),secretFromGUI.size());
 
-        QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
+        QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().trimmed().toLatin1());
         memset(slot->slotName,0,15);
         memcpy(slot->slotName,slotNameFromGUI.data(),slotNameFromGUI.size());
 
@@ -1390,8 +1390,14 @@ void MainWindow::generateAllConfigs()
 void MainWindow::displayCurrentSlotConfig()
 {
     uint8_t slotNo = ui->slotComboBox->currentIndex();
+    if (slotNo > HOTP_SlotCount){
+        slotNo = slotNo - 1;
+        if (slotNo == 254){
+            return;
+        }
+    }
 
-    if (slotNo == 255)
+    if (slotNo == 255 )
     {
         return;
     }
@@ -1399,7 +1405,7 @@ void MainWindow::displayCurrentSlotConfig()
     if ((slotNo >=0) && (slotNo < HOTP_SlotCount))
     {
         //ui->hotpGroupBox->show();
-        ui->hotpGroupBox->setTitle("OATH-HOTP Parameters");
+        ui->hotpGroupBox->setTitle("Parameters");
         ui->label_5->setText("HOTP length:");
         ui->label_6->show();
         ui->counterEdit->show();
@@ -1408,14 +1414,14 @@ void MainWindow::displayCurrentSlotConfig()
         ui->enterCheckBox->show();
 
         //slotNo=slotNo+0x10;
-        ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
+        ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName).trimmed());
 
         QByteArray secret((char *) cryptostick->HOTPSlots[slotNo]->secret,20);
         ui->base32RadioButton->setChecked(true);
-        ui->secretEdit->setText(secret.toHex());
+        ui->secretEdit->setText(secret);//.toHex());
 
         QByteArray counter((char *) cryptostick->HOTPSlots[slotNo]->counter,8);
-        ui->counterEdit->setText(counter.toHex());
+        ui->counterEdit->setText(counter);//.toHex());
 
         if (cryptostick->HOTPSlots[slotNo]->counter==0)
             ui->counterEdit->setText("0");
@@ -1449,7 +1455,7 @@ void MainWindow::displayCurrentSlotConfig()
     {
         slotNo -= HOTP_SlotCount;
         //ui->hotpGroupBox->hide();
-        ui->hotpGroupBox->setTitle("OATH-TOTP Parameters");
+        ui->hotpGroupBox->setTitle("Parameters");
         ui->label_5->setText("TOTP length:");
         ui->label_6->hide();
         ui->counterEdit->hide();
@@ -1458,12 +1464,12 @@ void MainWindow::displayCurrentSlotConfig()
         ui->enterCheckBox->hide();
 
 
-        ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
+        ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName).trimmed());
 
 
         QByteArray secret((char *) cryptostick->TOTPSlots[slotNo]->secret,20);
         ui->base32RadioButton->setChecked(true);
-        ui->secretEdit->setText(secret.toHex());
+        ui->secretEdit->setText(secret);//.toHex());
 
         ui->counterEdit->setText("0");
 
@@ -1558,7 +1564,7 @@ void MainWindow::startConfiguration()
     //PasswordDialog pd;
     //pd.exec();
     bool ok;
-    int i;
+    //int i;
 /*
 // Setup OTP combo box
     ui->slotComboBox->clear();
@@ -1739,7 +1745,7 @@ void MainWindow::startStick20EnableCryptedVolume()
     bool           ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -1793,7 +1799,7 @@ void MainWindow::startStick20EnableHiddenVolume()
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter password for hidden volume",-1);
+    dialog.init((char *)"Enter password for hidden volume",-1);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -1849,7 +1855,7 @@ void MainWindow::startStick20EnableFirmwareUpdate()
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
+    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -1942,7 +1948,7 @@ void MainWindow::startStick20ExportFirmwareToFile()
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
+    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -1975,7 +1981,7 @@ void MainWindow::startStick20DestroyCryptedVolume()
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
+    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -2009,7 +2015,7 @@ void MainWindow::startStick20FillSDCardWithRandomChars()
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
+    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -2042,7 +2048,7 @@ void MainWindow::startStick20ClearNewSdCardFound()
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
+    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -2072,7 +2078,7 @@ void MainWindow::startStick20ClearNewSdCardFound()
 void MainWindow::startStick20GetStickStatus()
 {
     uint8_t password[40];
-    bool    ret;
+    //bool    ret;
 /*
     PasswordDialog dialog(this);
     dialog.init("Enter admin password");
@@ -2111,7 +2117,7 @@ void MainWindow::startStick20SetReadonlyUncryptedVolume()
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -2145,7 +2151,7 @@ void MainWindow::startStick20SetReadWriteUncryptedVolume()
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init("Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
     dialog.cryptostick = cryptostick;
 
     ret = dialog.exec();
@@ -2184,7 +2190,7 @@ void MainWindow::startStick20LockStickHardware()
     if (Accepted == ret)
     {
         PasswordDialog dialog1(MatrixInputActive,this);
-        dialog1.init("Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
+        dialog1.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
         dialog1.cryptostick = cryptostick;
 
         ret = dialog1.exec();
@@ -2242,9 +2248,9 @@ void MainWindow::startStick20SetupPasswordMatrix()
 
 void MainWindow::startStick20DebugAction()
 {
-    uint8_t password[40];
-    bool    ret;
-    int64_t crc;
+    //uint8_t password[40];
+    //bool    ret;
+    //int64_t crc;
     stick20HiddenVolumeDialog HVDialog(this);
 
 /*
@@ -2750,6 +2756,7 @@ void MainWindow::on_writeButton_clicked()
         msgBox.setText("Crypto stick not connected!");
         msgBox.exec();
     }
+    displayCurrentSlotConfig();
 }
 
 /*******************************************************************************
@@ -2779,10 +2786,10 @@ void MainWindow::on_slotComboBox_currentIndexChanged(int index)
 
 *******************************************************************************/
 
-void MainWindow::on_resetButton_clicked()
+/*void MainWindow::on_resetButton_clicked()
 {
     displayCurrentSlotConfig();
-}
+}*/
 
 /*******************************************************************************
 
@@ -2984,7 +2991,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
         msgBox.setText("Crypto stick not connected!");
         msgBox.exec();
     }
-
+    displayCurrentGeneralConfig();
 }
 /*******************************************************************************
 
@@ -3250,12 +3257,15 @@ void MainWindow::on_eraseButton_clicked()
      int ret = msgBox.exec();
 
      uint8_t slotNo=ui->slotComboBox->currentIndex();
+     if (slotNo > HOTP_SlotCount){
+         slotNo -= 1;
+     }
 
-     if ((slotNo >= 0) && (slotNo <= HOTP_SlotCount))
+     if ((slotNo >= 0) && (slotNo < HOTP_SlotCount))
      {
          slotNo = slotNo+0x10;
      }
-     else if ((slotNo > HOTP_SlotCount) && (slotNo <= TOTP_SlotCount + HOTP_SlotCount))
+     else if ((slotNo >= HOTP_SlotCount) && (slotNo <= TOTP_SlotCount + HOTP_SlotCount))
      {
          slotNo = slotNo + 0x20 - HOTP_SlotCount;
      }
@@ -3280,6 +3290,7 @@ void MainWindow::on_eraseButton_clicked()
            // should never be reached
            break;
      }
+     displayCurrentSlotConfig();
 }
 
 /*******************************************************************************
@@ -3318,7 +3329,7 @@ void MainWindow::on_randomSecretButton_clicked()
 
     QByteArray secretArray((char *) secret,20);
     ui->base32RadioButton->setChecked(true);
-    ui->secretEdit->setText(secretArray.toHex());
+    ui->secretEdit->setText(secretArray);//.toHex());
 
 }
 

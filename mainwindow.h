@@ -142,7 +142,7 @@ private slots:
     void displayCurrentSlotConfig();
     void displayCurrentGeneralConfig();
     void on_slotComboBox_currentIndexChanged(int index);
-    void on_resetButton_clicked();
+//    void on_resetButton_clicked();
     void on_hexRadioButton_toggled(bool checked);
     void on_base32RadioButton_toggled(bool checked);
     void on_setToZeroButton_clicked();

@@ -43,6 +43,9 @@ public:
     uint64_t lastTOTPTime;
     uint8_t  lastInterval;
 
+    QTimer *Clipboard_ValidTimer;
+    uint64_t lastClipboardTime;
+
     ~HOTPDialog();
 
     void getNextCode();
@@ -54,9 +57,11 @@ public:
 private slots:
     void on_nextButton_clicked();
 
-    void on_clipboardButton_clicked();
+    void copyToClipboard(QString text);
 
     void checkTOTP_Valid();
+
+    void checkClipboard_Valid();
 
 private:
     Ui::HOTPDialog *ui;
