@@ -45,9 +45,9 @@ macx{
  SOURCES +=   hid_mac.c
 }
 
-#unix:!macx{
+unix:!macx{
   SOURCES +=   hid_libusb.c
-#}
+}
 
 HEADERS  += mainwindow.h \
     totpslot.h \
@@ -100,10 +100,10 @@ macx{
 LIBS=-framework IOKit -framework CoreFoundation
 }
 
-#unix:!macx{
+unix:!macx{
 LIBS  = `pkg-config libusb-1.0 --libs` -lrt -lpthread
 INCLUDEPATH += /usr/include/libusb-1.0
-#}
+}
 
 OTHER_FILES +=
 
