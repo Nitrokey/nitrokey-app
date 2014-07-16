@@ -79,6 +79,7 @@ DebugDialog::DebugDialog(QWidget *parent) :
     ret = connect(RefreshTimer, SIGNAL(timeout()), this, SLOT(UpdateDebugText()));
 
     RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME);
+    if(ret){}//Fix warnings
 }
 
 
@@ -152,6 +153,7 @@ void DebugDialog::UpdateDebugText()
     }
 
     nCallCounter++;
+    if(ret){}//Fix warnings
 }
 
 /*******************************************************************************

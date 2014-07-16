@@ -22,8 +22,8 @@
     <rect>
      <x>230</x>
      <y>340</y>
-     <width>75</width>
-     <height>23</height>
+     <width>111</width>
+     <height>27</height>
     </rect>
    </property>
    <property name="text">
@@ -34,13 +34,13 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>20</y>
+     <y>40</y>
      <width>321</width>
-     <height>141</height>
+     <height>121</height>
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Crypto Stick Storage&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;www.crypto-stick.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.crypto-stick.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://crypto-stick.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Copyright 2014 by Crypto Stick team. &lt;/p&gt;&lt;p&gt;This software is licensed under the&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;www.crypto-stick.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.crypto-stick.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://crypto-stick.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Copyright 2014 by Crypto Stick team. &lt;/p&gt;&lt;p&gt;This software is licensed under the&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -82,10 +82,10 @@
   <widget class="QPushButton" name="ButtonStickStatus">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>30</x>
      <y>340</y>
-     <width>91</width>
-     <height>23</height>
+     <width>151</width>
+     <height>27</height>
     </rect>
    </property>
    <property name="text">
@@ -96,7 +96,7 @@
    <property name="geometry">
     <rect>
      <x>290</x>
-     <y>40</y>
+     <y>20</y>
      <width>81</width>
      <height>81</height>
     </rect>
@@ -109,7 +109,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>180</y>
+     <y>170</y>
      <width>111</width>
      <height>20</height>
     </rect>
@@ -123,6 +123,26 @@
    </property>
    <property name="text">
     <string>Status</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="HeaderLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>10</y>
+     <width>311</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Crypto Stick Utility</string>
    </property>
   </widget>
  </widget>

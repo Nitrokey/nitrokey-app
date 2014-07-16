@@ -25,8 +25,6 @@
 #include <QSystemTrayIcon>
 #include "device.h"
 
-#define GUI_VERSION      "0.6"
-
 namespace Ui {
 class MainWindow;
 }
@@ -54,6 +52,9 @@ public:
     bool ExtendedConfigActive;
     bool MatrixInputActive;
     bool LockHardware;
+
+    QTimer *Clipboard_ValidTimer;
+    uint64_t lastClipboardTime;
 
 protected:
      void closeEvent(QCloseEvent *event);
@@ -150,6 +151,9 @@ private slots:
 //    void on_checkBox_2_toggled(bool checked);
     void on_tokenIDCheckBox_toggled(bool checked);
     void on_writeGeneralConfigButton_clicked();
+
+    void copyToClipboard(QString text);
+    void checkClipboard_Valid();
 
 bool eventFilter (QObject *obj, QEvent *event);
 void iconActivated(QSystemTrayIcon::ActivationReason reason);

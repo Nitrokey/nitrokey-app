@@ -564,6 +564,7 @@ void Stick20Dialog::on_checkBox_Matrix_toggled(bool checked)
 
 void Stick20Dialog::on_PasswordEdit_textChanged(const QString &arg1)
 {
+    if(arg1==""){}//Fix warnings
     if (0 ==  ui->PasswordEdit->text().size())
     {
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);

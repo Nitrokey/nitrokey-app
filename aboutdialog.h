@@ -4,6 +4,8 @@
 #include <QDialog>
 #include "device.h"
 
+#define GUI_VERSION      "0.6"
+
 namespace Ui {
 class AboutDialog;
 }
@@ -22,7 +24,7 @@ public:
 private slots:
     void on_ButtonOK_clicked();
 
-//   void on_ButtonStickStatus_clicked();
+    void on_ButtonStickStatus_clicked();
 
 private:
     Ui::AboutDialog *ui;

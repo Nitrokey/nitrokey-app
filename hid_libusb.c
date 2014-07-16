@@ -48,6 +48,7 @@
 #include "iconv.h"
 
 #include "hidapi.h"
+#include "stick20hid.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -960,6 +961,7 @@ hid_device * HID_API_EXPORT hid_open_path(const char *path)
 		free_hid_device(dev);
 		return NULL;
 	}
+    if(num_devs){}//Fix warnings
 }
 
 
@@ -1170,7 +1172,7 @@ int HID_API_EXPORT hid_get_feature_report(hid_device *dev, unsigned char *data, 
 	int skipped_report_id = 0;
 	int report_number = data[0];
     static int CallCounter =0;
-    int i;
+    //int i;
 
     CallCounter++;
 
@@ -1278,6 +1280,7 @@ int HID_API_EXPORT_CALL hid_get_indexed_string(hid_device *dev, int string_index
 
 HID_API_EXPORT const wchar_t * HID_API_CALL  hid_error(hid_device *dev)
 {
+    if(dev){}//Fix warnings
 	return NULL;
 }
 

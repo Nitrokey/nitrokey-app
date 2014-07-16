@@ -118,6 +118,37 @@ void DebugAppendText (char *Text)
 }
 
 /** Only for debugging - End */
+/*******************************************************************************
+
+  HID_Stick20Init
+
+  Changes
+  Date      Author        Info
+  09.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void HID_Stick20Init (void)
+{
+    HID_Stick20Configuration_st.MagicNumber_StickConfig_u16     = 0;
+    HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = 0;
+    HID_Stick20Configuration_st.ReadWriteFlagCryptedVolume_u8   = 0;
+    memcpy (HID_Stick20Configuration_st.VersionInfo_au8,"----",4);
+    HID_Stick20Configuration_st.ReadWriteFlagHiddenVolume_u8    = 0;
+    HID_Stick20Configuration_st.FirmwareLocked_u8               = 0;
+    HID_Stick20Configuration_st.NewSDCardFound_u8               = 0;
+    HID_Stick20Configuration_st.SDFillWithRandomChars_u8        = 0;
+    HID_Stick20Configuration_st.ActiveSD_CardID_u32             = 0;
+    HID_Stick20Configuration_st.VolumeActiceFlag_u8             = 0;
+    HID_Stick20Configuration_st.NewSmartCardFound_u8            = 0;
+    HID_Stick20Configuration_st.UserPwRetryCount                = 99;
+    HID_Stick20Configuration_st.AdminPwRetryCount               = 99;
+    HID_Stick20Configuration_st.ActiveSmartCardID_u32           = 0;
+    HID_Stick20Configuration_st.StickKeysNotInitiated           = 0;
+}
 
 /*******************************************************************************
 
@@ -149,6 +180,8 @@ int HID_GetStick20Configuration (void)
         Stick20_ConfigurationChanged = TRUE;
         SavedConfiguration_st = HID_Stick20Configuration_st;
     }
+    if(len){}//Fix warnings
+    if(NewDebugBlock){}//Fix warnings
 
     return (TRUE);
 }
@@ -186,6 +219,8 @@ int HID_GetStick20ProductionInfos (void)
         Stick20_ProductionInfosChanged = TRUE;
         SavedProductionInfos_st = Stick20ProductionInfos_st;
     }
+    if(len){}//Fix warnings
+    if(NewDebugBlock){}//Fix warnings
 
     return (TRUE);
 }
@@ -322,8 +357,8 @@ int HID_GetStick20DebugData (void)
 
 int HID_GetStick20ReceiveData (unsigned char *data)
 {
-    static unsigned char LastDebugBlock = 0;
-    unsigned char NewDebugBlock = 1;
+    //static unsigned char LastDebugBlock = 0;
+    //unsigned char NewDebugBlock = 1;
 
     /* Copy Stick 2.0 HID response to receive struct */
 #ifdef WIN32

@@ -98,6 +98,7 @@ void HOTPDialog::setToHOTP()
 {
     ui->label->setText("Your HOTP:");
     ui->nextButton->setText("Next HOTP");
+    ui->labelNotify->setText("HOTP copied to clipboard");
     this->setWindowTitle(title);
     ui->intervalLabel->hide();
     ui->intervalSpinBox->hide();
@@ -111,10 +112,12 @@ void HOTPDialog::setToTOTP()
     ui->nextButton->setText("Generate TOTP");
     this->setWindowTitle(title);
     ui->intervalLabel->show();
+    ui->labelNotify->setText("TOTP copied to clipboard");
 
     ui->intervalSpinBox->setValue(device->TOTPSlots[slotNumber-0x20]->interval);
     ui->intervalSpinBox->show();
     ui->validTimer->show();
+
 }
 
 HOTPDialog::~HOTPDialog()
@@ -140,6 +143,7 @@ void HOTPDialog::copyToClipboard(QString text)
 
      lastClipboardTime = QDateTime::currentDateTime().toTime_t();
      clipboard->setText(text);
+     ui->labelNotify->show();
     // this->accept();
 }
 
@@ -221,11 +225,12 @@ void HOTPDialog::checkTOTP_Valid()
 void HOTPDialog::checkClipboard_Valid()
 {
     uint64_t currentTime;
-    uint64_t checkTime;
+    //uint64_t checkTime;
 
     currentTime = QDateTime::currentDateTime().toTime_t();
     if(currentTime >= lastClipboardTime + (uint64_t)60){
         copyToClipboard(QString(""));
+        ui->labelNotify->hide();
     }
 
 }

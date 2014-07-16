@@ -1065,6 +1065,7 @@ bool Device::stick20EnableCryptedPartition  (uint8_t *password)
     cmd = new Command(STICK20_CMD_ENABLE_CRYPTED_PARI,password,n);
     res = sendCommand(cmd);
 
+    if(res){}//Fix warnings
     return (true);
 }
 /*******************************************************************************
@@ -1085,6 +1086,7 @@ bool Device::stick20DisableCryptedPartition  (void)
     cmd = new Command(STICK20_CMD_DISABLE_CRYPTED_PARI,NULL,0);
     res = sendCommand(cmd);
 
+    if(res){}//Fix warnings
     return (true);
 }
 
@@ -1114,6 +1116,7 @@ bool Device::stick20EnableHiddenCryptedPartition  (uint8_t *password)
 
     cmd = new Command(STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI,password,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1135,6 +1138,7 @@ bool Device::stick20DisableHiddenCryptedPartition  (void)
 
     cmd = new Command(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI,NULL,0);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1164,6 +1168,7 @@ bool Device::stick20EnableFirmwareUpdate (uint8_t *password)
 
     cmd = new Command(STICK20_CMD_ENABLE_FIRMWARE_UPDATE,password,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1193,6 +1198,7 @@ bool Device::stick20ExportFirmware (uint8_t *password)
 
     cmd = new Command(STICK20_CMD_EXPORT_FIRMWARE_TO_FILE,password,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1222,6 +1228,7 @@ bool Device::stick20CreateNewKeys (uint8_t *password)
 
     cmd = new Command(STICK20_CMD_GENERATE_NEW_KEYS,password,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1255,6 +1262,7 @@ bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeF
 
     cmd = new Command(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS,data,n+1);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1292,6 +1300,7 @@ bool Device::stick20SetupHiddenVolume (void)
         }
     }
 */
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1329,6 +1338,7 @@ bool Device::stick20GetPasswordMatrix (void)
         }
     }
 */
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1359,6 +1369,7 @@ bool Device::stick20SendPasswordMatrixPinData (uint8_t *Pindata)
 
     cmd = new Command(STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA,Pindata,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1388,6 +1399,7 @@ bool Device::stick20SendPasswordMatrixSetup (uint8_t *Setupdata)
 
     cmd = new Command(STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP,Setupdata,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1409,6 +1421,7 @@ bool Device::stick20GetStatusData ()
 
     cmd = new Command(STICK20_CMD_GET_DEVICE_STATUS,NULL,0);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1438,6 +1451,7 @@ int Device::stick20SendPassword (uint8_t *Pindata)
 
     cmd = new Command(STICK20_CMD_SEND_PASSWORD,Pindata,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1467,6 +1481,7 @@ int Device::stick20SendNewPassword (uint8_t *NewPindata)
 
     cmd = new Command(STICK20_CMD_SEND_NEW_PASSWORD,NewPindata,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1496,6 +1511,7 @@ int Device::stick20SendSetReadonlyToUncryptedVolume (uint8_t *Pindata)
 
     cmd = new Command(STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN,Pindata,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1525,6 +1541,7 @@ int Device::stick20SendSetReadwriteToUncryptedVolume (uint8_t *Pindata)
 
     cmd = new Command(STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN,Pindata,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1557,6 +1574,7 @@ int Device::stick20SendClearNewSdCardFound (uint8_t *Pindata)
 
     cmd = new Command(STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND,Pindata,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1584,6 +1602,7 @@ int Device::stick20SendStartup (uint64_t localTime)
 
     cmd = new Command (STICK20_CMD_SEND_STARTUP,data,8);
     res = sendCommand (cmd);
+    if(res){}//Fix warnings
 
     return (TRUE);
 }
@@ -1606,12 +1625,13 @@ int Device::stick20SendHiddenVolumeSetup (HiddenVolumeSetup_tst *HV_Data_st)
     uint8_t   data[30];
     int       res;
     Command  *cmd;
-    uint8_t   SizeCheck_data[1 - 2*(sizeof(HiddenVolumeSetup_tst) > 30)];
+    //uint8_t   SizeCheck_data[1 - 2*(sizeof(HiddenVolumeSetup_tst) > 30)];
 
     memcpy (data,HV_Data_st,sizeof (HiddenVolumeSetup_tst));
 
     cmd = new Command (STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP,data,sizeof (HiddenVolumeSetup_tst));
     res = sendCommand (cmd);
+    if(res){}//Fix warnings
 
     return (TRUE);
 }
@@ -1644,6 +1664,7 @@ int Device::stick20LockFirmware (uint8_t *password)
 
     cmd = new Command(STICK20_CMD_SEND_LOCK_STICK_HARDWARE,password,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }
@@ -1674,6 +1695,7 @@ int Device::stick20ProductionTest (void)
 
     cmd = new Command(STICK20_CMD_PRODUCTION_TEST,TestData,n);
     res = sendCommand(cmd);
+    if(res){}//Fix warnings
 
     return (true);
 }

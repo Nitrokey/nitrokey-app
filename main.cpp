@@ -21,6 +21,7 @@
 #include <QtWidgets/QApplication>
 #include "mainwindow.h"
 #include "device.h"
+#include "stick20hid.h"
 
 /*******************************************************************************
 
@@ -35,6 +36,32 @@
 
 *******************************************************************************/
 
+
+/*******************************************************************************
+
+  HelpInfos
+
+  Changes
+  Date      Author        Info
+  09.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void HelpInfos (void)
+{
+    printf ("Crypto Stick GUI\n");
+    printf ("\n");
+    printf ("-h             This help\n");
+    printf ("--help         This help\n");
+    printf ("--debug        Enable debug options\n");
+    printf ("--lockHardware Enable menu entry for hardware lock\n");
+    printf ("--PWM          Enable PIN entry via matrix\n");
+    printf ("--cmd ....     Start a command line command\n");
+    printf ("\n");
+}
 
 /*******************************************************************************
 
@@ -63,11 +90,19 @@ int main(int argc, char *argv[])
     StartupInfo_st.LockHardware          = FALSE;
     StartupInfo_st.Cmd                   = FALSE;
 
+    HID_Stick20Init ();
+
 // Check for commandline parameter
     //    if (2 == argc)
     for (i=2;i<=argc;i++)
     {
         p = argv[i-1];
+        if ((0 == strcmp (p,"--help")) || (0 == strcmp (p,"-h")))
+        {
+            HelpInfos ();
+            exit (0);
+        }
+
         if (0 == strcmp (p,"--debug"))
         {
             StartupInfo_st.FlagDebug = DEBUG_STATUS_LOCAL_DEBUG;

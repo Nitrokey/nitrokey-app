@@ -171,6 +171,27 @@
         <bool>true</bool>
        </property>
       </widget>
+      <widget class="QLabel" name="labelNotify">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>50</y>
+         <width>171</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <italic>true</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Secret copied to clipboard</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QPushButton" name="cancelButton">
       <property name="geometry">
@@ -572,22 +593,6 @@
       </property>
       <property name="text">
        <string>Erase Slot</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="labelQuestion1">
-      <property name="geometry">
-       <rect>
-        <x>520</x>
-        <y>10</y>
-        <width>67</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="pixmap">
-       <pixmap>question_mark_icon.png</pixmap>
       </property>
      </widget>
     </widget>

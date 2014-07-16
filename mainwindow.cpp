@@ -170,7 +170,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     ret_connection = connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
     timer->start(1000);
 
+    Clipboard_ValidTimer = new QTimer(this);
 
+    // Start timer for polling stick response
+    connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
+    Clipboard_ValidTimer->start(100);
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon(":/images/CS_icon.png"));
@@ -216,7 +220,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     DebugAction = new QAction(tr("&Debug"), this);
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
 
-    ActionAboutDialog = new QAction(tr("&About Crypto Stick - GUI V")+tr(GUI_VERSION), this);
+    ActionAboutDialog = new QAction(tr("&About Crypto Stick"), this);
     connect(ActionAboutDialog, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
     initActionsForStick20 ();
@@ -274,7 +278,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         }
         DebugAppendText ((char *)"\n");
     }
-    ui->labelQuestion1->setToolTip("Test");
+    //ui->labelQuestion1->setToolTip("Test");
     generateMenu();
 
 
@@ -685,6 +689,7 @@ void MainWindow::checkConnection()
 
         AnalyseProductionInfos ();
     }
+    if(ret){}//Fix warnings
 }
 
 /*******************************************************************************
@@ -814,16 +819,6 @@ void MainWindow::generateComboBoxEntrys()
 
     ui->slotComboBox->clear();
 
-    for (i=0;i<HOTP_SlotCount;i++)
-    {
-        if ((char)cryptostick->HOTPSlots[i]->slotName[0] == '\0') {
-            ui->slotComboBox->addItem(QString("HOTP slot ").append(QString::number(i+1,10)));
-        } else {
-            ui->slotComboBox->addItem(QString("HOTP slot ").append(QString::number(i+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[i]->slotName).append("]"));
-        }
-    }
-
-    ui->slotComboBox->insertSeparator(HOTP_SlotCount+1);
 
     for (i=0;i<TOTP_SlotCount;i++)
     {
@@ -833,7 +828,19 @@ void MainWindow::generateComboBoxEntrys()
             ui->slotComboBox->addItem(QString("TOTP slot ").append(QString::number(i+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[i]->slotName).append("]"));
         }
     }
-    ui->slotComboBox->setCurrentIndex(HOTP_SlotCount+1);
+
+    ui->slotComboBox->insertSeparator(TOTP_SlotCount+1);
+
+    for (i=0;i<HOTP_SlotCount;i++)
+    {
+        if ((char)cryptostick->HOTPSlots[i]->slotName[0] == '\0') {
+            ui->slotComboBox->addItem(QString("HOTP slot ").append(QString::number(i+1,10)));
+        } else {
+            ui->slotComboBox->addItem(QString("HOTP slot ").append(QString::number(i+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[i]->slotName).append("]"));
+        }
+    }
+
+    ui->slotComboBox->setCurrentIndex(0);
 
 //    i = ui->slotComboBox->currentIndex();
 }
@@ -994,21 +1001,6 @@ void MainWindow::initActionsForStick20()
 
 void MainWindow::generateMenuOTP()
 {
-    if (cryptostick->HOTPSlots[0]->isProgrammed==true){
-        QString actionName("HOTP slot 1 ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[0]->slotName),this,SLOT(getHOTP1()));
-    }
-    if (cryptostick->HOTPSlots[1]->isProgrammed==true){
-        QString actionName("HOTP slot 2 ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[1]->slotName),this,SLOT(getHOTP2()));
-    }
-    if (HOTP_SlotCount >= 3)
-    {
-        if (cryptostick->HOTPSlots[2]->isProgrammed==true){
-            QString actionName("HOTP slot 3 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[2]->slotName),this,SLOT(getHOTP3()));
-        }
-    }
 
     if (cryptostick->TOTPSlots[0]->isProgrammed==true){
         QString actionName("TOTP slot 1 ");
@@ -1105,6 +1097,21 @@ void MainWindow::generateMenuOTP()
         }
     }
 
+    if (cryptostick->HOTPSlots[0]->isProgrammed==true){
+        QString actionName("HOTP slot 1 ");
+        trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[0]->slotName),this,SLOT(getHOTP1()));
+    }
+    if (cryptostick->HOTPSlots[1]->isProgrammed==true){
+        QString actionName("HOTP slot 2 ");
+        trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[1]->slotName),this,SLOT(getHOTP2()));
+    }
+    if (HOTP_SlotCount >= 3)
+    {
+        if (cryptostick->HOTPSlots[2]->isProgrammed==true){
+            QString actionName("HOTP slot 3 ");
+            trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[2]->slotName),this,SLOT(getHOTP3()));
+        }
+    }
 
     trayMenu->addSeparator();
 }
@@ -1261,18 +1268,20 @@ void MainWindow::generateMenuForStick20()
 
 void MainWindow::generateHOTPConfig(HOTPSlot *slot)
 {
-    int selectedSlot = ui->slotComboBox->currentIndex();
+    uint8_t selectedSlot = ui->slotComboBox->currentIndex();
+    selectedSlot -= (TOTP_SlotCount+1);
 
-    if ((selectedSlot >= 0) && (selectedSlot < HOTP_SlotCount))
+
+    if (selectedSlot < HOTP_SlotCount)
     {
         slot->slotNumber=selectedSlot+0x10;
 
 
-        QByteArray secretFromGUI = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
+        QByteArray secretFromGUI = QByteArray(ui->secretEdit->text().toLatin1());
         memset(slot->secret,0,20);
         memcpy(slot->secret,secretFromGUI.data(),secretFromGUI.size());
 
-        QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().trimmed().toLatin1());
+        QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
         memset(slot->slotName,0,15);
         memcpy(slot->slotName,slotNameFromGUI.data(),slotNameFromGUI.size());
 
@@ -1288,7 +1297,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
 
         slot->tokenID[12]=ui->keyboardComboBox->currentIndex()&0xFF;
 
-        QByteArray counterFromGUI = QByteArray::fromHex(ui->counterEdit->text().toLatin1());
+        QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
         memset(slot->counter,0,8);
         memcpy(slot->counter,counterFromGUI.data(),counterFromGUI.length());
 
@@ -1319,20 +1328,18 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
 
 void MainWindow::generateTOTPConfig(TOTPSlot *slot)
 {
-    int selectedSlot = ui->slotComboBox->currentIndex()-1;
+    int selectedSlot = ui->slotComboBox->currentIndex();
 
     // get the TOTP slot number
-    selectedSlot -= HOTP_SlotCount;
-
     if ((selectedSlot >= 0) && (selectedSlot < TOTP_SlotCount))
     {
         slot->slotNumber = selectedSlot + 0x20;
 
-        QByteArray secretFromGUI = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
+        QByteArray secretFromGUI = QByteArray(ui->secretEdit->text().toLatin1());
         memset(slot->secret,0,20);
         memcpy(slot->secret,secretFromGUI.data(),secretFromGUI.size());
 
-        QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().trimmed().toLatin1());
+        QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
         memset(slot->slotName,0,15);
         memcpy(slot->slotName,slotNameFromGUI.data(),slotNameFromGUI.size());
 
@@ -1390,19 +1397,19 @@ void MainWindow::generateAllConfigs()
 void MainWindow::displayCurrentSlotConfig()
 {
     uint8_t slotNo = ui->slotComboBox->currentIndex();
-    if (slotNo > HOTP_SlotCount){
-        slotNo = slotNo - 1;
-        if (slotNo == 254){
-            return;
-        }
-    }
 
     if (slotNo == 255 )
     {
         return;
     }
 
-    if ((slotNo >=0) && (slotNo < HOTP_SlotCount))
+    if(slotNo > 4){
+        slotNo -= (TOTP_SlotCount+1);
+    } else {
+        slotNo += (HOTP_SlotCount);
+    }
+
+    if (slotNo < HOTP_SlotCount)
     {
         //ui->hotpGroupBox->show();
         ui->hotpGroupBox->setTitle("Parameters");
@@ -1414,14 +1421,14 @@ void MainWindow::displayCurrentSlotConfig()
         ui->enterCheckBox->show();
 
         //slotNo=slotNo+0x10;
-        ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName).trimmed());
+        ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
 
         QByteArray secret((char *) cryptostick->HOTPSlots[slotNo]->secret,20);
         ui->base32RadioButton->setChecked(true);
-        ui->secretEdit->setText(secret);//.toHex());
+        ui->secretEdit->setText(secret.toHex());
 
         QByteArray counter((char *) cryptostick->HOTPSlots[slotNo]->counter,8);
-        ui->counterEdit->setText(counter);//.toHex());
+        ui->counterEdit->setText((counter).toHex());
 
         if (cryptostick->HOTPSlots[slotNo]->counter==0)
             ui->counterEdit->setText("0");
@@ -1464,12 +1471,12 @@ void MainWindow::displayCurrentSlotConfig()
         ui->enterCheckBox->hide();
 
 
-        ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName).trimmed());
+        ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
 
 
         QByteArray secret((char *) cryptostick->TOTPSlots[slotNo]->secret,20);
         ui->base32RadioButton->setChecked(true);
-        ui->secretEdit->setText(secret);//.toHex());
+        ui->secretEdit->setText(secret.toHex());
 
         ui->counterEdit->setText("0");
 
@@ -1509,6 +1516,8 @@ void MainWindow::displayCurrentSlotConfig()
         QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
         ui->muiEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
     }
+
+    copyToClipboard(ui->secretEdit->text());
 }
 
 /*******************************************************************************
@@ -2717,11 +2726,17 @@ void MainWindow::on_writeButton_clicked()
     QMessageBox msgBox;
     int res;
 
+    uint8_t slotNo = ui->slotComboBox->currentIndex();
+    if(slotNo > 4){
+        slotNo -= (TOTP_SlotCount+1);
+    } else {
+        slotNo += (HOTP_SlotCount);
+    }
     if (cryptostick->isConnected){
 
         ui->base32RadioButton->toggle();
 
-        if (ui->slotComboBox->currentIndex() < HOTP_SlotCount){//HOTP slot
+        if (slotNo < HOTP_SlotCount){//HOTP slot
             HOTPSlot *hotp=new HOTPSlot();
 
             generateHOTPConfig(hotp);
@@ -2819,13 +2834,14 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
         base32_decode(encoded,decoded,20);
 
         //ui->secretEdit->setInputMask("HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH;");
-        ui->secretEdit->setInputMask("hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh;");
+        //ui->secretEdit->setInputMask("hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh;");
         //ui->secretEdit->setInputMask("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH;0");
         //ui->secretEdit->setMaxLength(59);
 
         secret = QByteArray((char *)decoded,20).toHex();
 
         ui->secretEdit->setText(QString(secret));
+        copyToClipboard(ui->secretEdit->text());
         //qDebug() << QString(secret);
 
     }
@@ -2857,9 +2873,10 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
         base32_encode(decoded,secret.length(),encoded,128);
 
         //ui->secretEdit->setInputMask("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN;");
-        ui->secretEdit->setInputMask("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn;");
+        //ui->secretEdit->setInputMask("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn;");
         ui->secretEdit->setMaxLength(32);
         ui->secretEdit->setText(QString((char *)encoded));
+        copyToClipboard(ui->secretEdit->text());
         //qDebug() << QString((char *)encoded);
 
     }
@@ -3256,12 +3273,14 @@ void MainWindow::on_eraseButton_clicked()
      msgBox.setDefaultButton(QMessageBox::No);
      int ret = msgBox.exec();
 
-     uint8_t slotNo=ui->slotComboBox->currentIndex();
-     if (slotNo > HOTP_SlotCount){
-         slotNo -= 1;
+     uint8_t slotNo = ui->slotComboBox->currentIndex();
+     if(slotNo > 4){
+         slotNo -= (TOTP_SlotCount+1);
+     } else {
+         slotNo += (HOTP_SlotCount);
      }
 
-     if ((slotNo >= 0) && (slotNo < HOTP_SlotCount))
+     if (slotNo < HOTP_SlotCount)
      {
          slotNo = slotNo+0x10;
      }
@@ -3329,7 +3348,8 @@ void MainWindow::on_randomSecretButton_clicked()
 
     QByteArray secretArray((char *) secret,20);
     ui->base32RadioButton->setChecked(true);
-    ui->secretEdit->setText(secretArray);//.toHex());
+    ui->secretEdit->setText(secretArray.toHex());
+    copyToClipboard(ui->secretEdit->text());
 
 }
 
@@ -3353,4 +3373,26 @@ void MainWindow::on_checkBox_toggled(bool checked)
 
 }
 
+void MainWindow::copyToClipboard(QString text)
+{
+     QClipboard *clipboard = QApplication::clipboard();
+
+     lastClipboardTime = QDateTime::currentDateTime().toTime_t();
+     clipboard->setText(text);
+     ui->labelNotify->show();
+    // this->accept();
+}
+
+void MainWindow::checkClipboard_Valid()
+{
+    uint64_t currentTime;
+    //uint64_t checkTime;
+
+    currentTime = QDateTime::currentDateTime().toTime_t();
+    if(currentTime >= lastClipboardTime + (uint64_t)60){
+        copyToClipboard(QString(""));
+        ui->labelNotify->hide();
+    }
+
+}
 

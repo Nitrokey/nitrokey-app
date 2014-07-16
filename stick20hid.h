@@ -150,7 +150,7 @@ extern typeStick20ProductionInfos_st Stick20ProductionInfos_st;
 
 
 
-
+void HID_Stick20Init (void);
 
 int HID_GetStick20Configuration (void);
 int HID_GetStick20PasswordMatrixData (void);
