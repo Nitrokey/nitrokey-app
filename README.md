@@ -35,12 +35,6 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
 6) <mxe root>/usr/i686-pc-mingw32/qt/bin/qmake -spec <mxe root>/usr/i686-pc-mingw32/qt/mkspecs/default -o Makefile ../CryptoStickGUI/CryptoStickGUI.pro
 7) make
 
-=Firmware=
-In the makefile you have to change the tool names according to your toolchain
-I changed them to "CC = arm-none-eabi-gcc" etc.
-In hw_config.c and platform_config.h you have to set up the USB
-disconnect pin, because I had to change it for my devboard.
-
 =Internals=
 All configuration data including OTP secrets are stored in clear text in the flash of Crypto Stick's Microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.
 
@@ -58,10 +52,5 @@ https://www.assembla.com/code/cryptostick/git/nodes/master/PC%20software/CryptoS
 First you create an object of class Command, for that you need a number for the command type, a buffer of data you want to send and the length of that buffer. Then you just use Device::sendCommand(Command *cmd), the CRC32 will be calculated automatically.
 To get a response, you just create a new object of class Response and do Response::getResponse(Device *device) and then you can analyze contents of the response object, already divided into fields:
 https://www.assembla.com/code/cryptostick/git/nodes/master/PC%20software/CryptoStickGUI/response.h
-
-=To Dos=
-Other than libusb, HID API has the advantage that it uses native drivers on OSX. Consider migrating to it. https://github.com/signal11/hidapi
-
-* Make USB description and token ID configurable, e.g. through config file?
 
 
