@@ -1403,7 +1403,7 @@ void MainWindow::displayCurrentSlotConfig()
         return;
     }
 
-    if(slotNo > 4){
+    if(slotNo > TOTP_SlotCount){
         slotNo -= (TOTP_SlotCount+1);
     } else {
         slotNo += (HOTP_SlotCount);
@@ -2727,7 +2727,7 @@ void MainWindow::on_writeButton_clicked()
     int res;
 
     uint8_t slotNo = ui->slotComboBox->currentIndex();
-    if(slotNo > 4){
+    if(slotNo > TOTP_SlotCount){
         slotNo -= (TOTP_SlotCount+1);
     } else {
         slotNo += (HOTP_SlotCount);
@@ -3274,7 +3274,7 @@ void MainWindow::on_eraseButton_clicked()
      int ret = msgBox.exec();
 
      uint8_t slotNo = ui->slotComboBox->currentIndex();
-     if(slotNo > 4){
+     if(slotNo > TOTP_SlotCount){
          slotNo -= (TOTP_SlotCount+1);
      } else {
          slotNo += (HOTP_SlotCount);

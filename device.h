@@ -192,8 +192,8 @@ typedef struct {
 #define HOTP_SLOT_COUNT_MAX      3
 #define TOTP_SLOT_COUNT_MAX     15
 
-#define HOTP_SLOT_COUNT      2
-#define TOTP_SLOT_COUNT      4
+#define HOTP_SLOT_COUNT      3
+#define TOTP_SLOT_COUNT      15
 
 class Device
 {
