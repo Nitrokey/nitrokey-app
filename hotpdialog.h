@@ -65,7 +65,7 @@ private slots:
 
 private:
     Ui::HOTPDialog *ui;
-
+    QClipboard *clipboard;
 
 };
 

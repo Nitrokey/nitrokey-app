@@ -65,6 +65,7 @@ private:
     QMenu *trayMenu;
     QMenu *trayMenuSubConfigure;
     QMenu *trayMenuSubSpecialConfigure;
+    QClipboard *clipboard;
 
     unsigned char HOTP_SlotCount;
     unsigned char TOTP_SlotCount;
