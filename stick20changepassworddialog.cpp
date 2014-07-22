@@ -98,6 +98,9 @@ void DialogChangePassword::InitData(void)
         case STICK20_PASSWORD_KIND_ADMIN :
             ui->label->setText("Change admin PIN");
             break;
+        case STICK20_PASSWORD_KIND_RESET_USER :
+            ui->label->setText("Reset user PIN");
+            break;
     }
 }
 

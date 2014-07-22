@@ -1670,6 +1670,10 @@ void MainWindow::startStickDebug()
 
   startAboutDialog
 
+  Changes
+  Date      Author          Info
+  22.07.14  RB              Move stick comunication in this context, to avoid exception
+
   Reviews
   Date      Reviewer        Info
   13.08.13  RB              First review
@@ -1680,12 +1684,28 @@ void MainWindow::startAboutDialog()
 {
     AboutDialog dialog(this);
 
-    dialog.cryptostick = cryptostick;
+// Get actual data from stick 20
+    cryptostick->stick20GetStatusData ();
 
-//    dialog.showStick20Configuration ();
+// Wait for response
+    Stick20ResponseDialog ResponseDialog(this);
 
+    ResponseDialog.NoStopWhenStatusOK ();
+    ResponseDialog.NoShowDialog();
+    ResponseDialog.hide();
+
+    ResponseDialog.cryptostick=cryptostick;
+    ResponseDialog.exec();
+    ResponseDialog.ResultValue;
+
+// Show dialog
     dialog.exec();
 }
+
+
+
+
+
 
 
 /*******************************************************************************
@@ -2819,15 +2839,15 @@ void MainWindow::on_slotComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_hexRadioButton_toggled(bool checked)
 {
+    QByteArray secret;
+    uint8_t encoded[128];
+    uint8_t decoded[20];
+
     if (checked){
 
-        QByteArray secret;
         secret = ui->secretEdit->text().toLatin1();
+// qDebug() << "encoded secret:" << QString(secret);
 
-//        qDebug() << "encoded secret:" << QString(secret);
-
-        uint8_t encoded[128];
-        uint8_t decoded[20];
         memset(encoded,'A',32);
         memcpy(encoded,secret.data(),secret.length());
 
@@ -2842,7 +2862,8 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
 
         ui->secretEdit->setText(QString(secret));
         copyToClipboard(ui->secretEdit->text());
-        //qDebug() << QString(secret);
+
+//qDebug() << QString(secret);
 
     }
 }
@@ -2862,7 +2883,11 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
     if (checked){
 
         QByteArray secret;
-        secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
+        QByteArray secret1;
+
+        secret1 = ui->secretEdit->text().toLatin1();
+//qDebug() << "base32 secret:" << QString(secret);
+        secret  = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
 
 
         uint8_t encoded[128];
@@ -2877,7 +2902,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
         ui->secretEdit->setMaxLength(32);
         ui->secretEdit->setText(QString((char *)encoded));
         copyToClipboard(ui->secretEdit->text());
-        //qDebug() << QString((char *)encoded);
+//qDebug() << QString((char *)encoded);
 
     }
 

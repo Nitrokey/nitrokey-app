@@ -166,6 +166,7 @@ static hid_device *new_hid_device()
 static void register_error(hid_device *device, const char *op)
 {
 	WCHAR *ptr, *msg;
+    char msg_c[400];
 
 	FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM |
@@ -175,10 +176,14 @@ static void register_error(hid_device *device, const char *op)
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPWSTR)&msg, 0/*sz*/,
 		NULL);
-	
+
+// Write error to debug log
+    wcstombs(msg_c,msg,400-1);
+    DebugAppendText (msg_c);
+
 	// Get rid of the CR and LF that FormatMessage() sticks at the
 	// end of the message. Thanks Microsoft!
-	ptr = msg;
+    ptr = msg;
 	while (*ptr) {
 		if (*ptr == '\r') {
 			*ptr = 0x0000;
@@ -187,10 +192,12 @@ static void register_error(hid_device *device, const char *op)
 		ptr++;
 	}
 
+
+
 	// Store the message off in the Device entry so that 
 	// the hid_error() function can pick it up.
-	LocalFree(device->last_error_str);
-	device->last_error_str = msg;
+//	LocalFree(device->last_error_str);
+//	device->last_error_str = msg;       // Exception occures ???
 }
 
 #ifndef HIDAPI_USE_DDK
@@ -789,7 +796,7 @@ int HID_API_EXPORT HID_API_CALL hid_send_feature_report(hid_device *dev, const u
 {
 	BOOL res = HidD_SetFeature(dev->device_handle, (PVOID)data, length);
 	if (!res) {
-		register_error(dev, "HidD_SetFeature");
+//		register_error(dev, "HidD_SetFeature");
 		return -1;
 	}
 

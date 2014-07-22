@@ -30,11 +30,11 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->setupUi(this);
 
     QPixmap image(":/images/CS_icon.png");
-    QPixmap small = image.scaled(70,70,Qt::KeepAspectRatio,Qt::FastTransformation);
+    QPixmap small_img = image.scaled(70,70,Qt::KeepAspectRatio,Qt::FastTransformation);
 
-    ui->IconLabel->setPixmap(small);
+    ui->IconLabel->setPixmap(small_img);
     ui->HeaderLabel->setText(tr("Crypto Stick Utility - GUI V")+tr(GUI_VERSION));
-//    showStick20Configuration ();
+    showStick20Configuration ();
 }
 
 AboutDialog::~AboutDialog()
@@ -48,40 +48,6 @@ void AboutDialog::on_ButtonOK_clicked()
 }
 
 
-/*******************************************************************************
-
-  GetStick20Status
-
-  Changes
-  Date      Author        Info
-  17.04.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void AboutDialog::GetStick20Status (void)
-{
-    bool ret;
-    int  Result;
-
-    ret = cryptostick->stick20GetStatusData ();
-
-// Wait for response
-    Stick20ResponseDialog ResponseDialog(this);
-
-    ResponseDialog.NoStopWhenStatusOK ();
-    ResponseDialog.NoShowDialog();
-    ResponseDialog.hide();
-
-    ResponseDialog.cryptostick=cryptostick;
-    ResponseDialog.open();
-//    ResponseDialog.exec();
-    Result = ResponseDialog.ResultValue;
-    if(ret){}
-    if(Result){}
-}
 
 /*******************************************************************************
 
@@ -102,6 +68,7 @@ void AboutDialog::showStick20Configuration (void)
 /*
     OutputText.append(QString("Crypto Stick Storage status\n\n"));
 */
+/*
     if (false == cryptostick->activStick20)
     {
         OutputText.append(QString("*** No Crypto Stick Storage found ***\n"));
@@ -110,6 +77,7 @@ void AboutDialog::showStick20Configuration (void)
     }
 
     GetStick20Status ();
+*/
 /*
     OutputText.append(QString("Firmware version     "));
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0])));

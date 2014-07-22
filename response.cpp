@@ -223,7 +223,7 @@ int Response::getResponse(Device *device)
 
         memcpy(data,reportBuffer+8,PAYLOAD_SIZE);
 
-        /* Copy Stick 2.0 status vom HID response data */
+        // Copy Stick 2.0 status vom HID response data
         memcpy ((void*)&HID_Stick20Status_st,reportBuffer+1+OUTPUT_CMD_RESULT_STICK20_STATUS_START,sizeof (HID_Stick20Status_st));
 
         DebugResponse ();

@@ -415,6 +415,7 @@ if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE != HID_Stick20ReceiveData_st.SendData
             HID_GetStick20ProductionInfos ();
             break;
     }
+
     return (TRUE);
 }
 
