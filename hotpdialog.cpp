@@ -41,6 +41,7 @@ HOTPDialog::HOTPDialog( QWidget *parent) :
     connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
     Clipboard_ValidTimer->start(100);
 
+    clipboard = QApplication::clipboard();
     ui->setupUi(this);
 }
 
@@ -139,8 +140,6 @@ void HOTPDialog::on_nextButton_clicked()
 
 void HOTPDialog::copyToClipboard(QString text)
 {
-     QClipboard *clipboard = QApplication::clipboard();
-
      lastClipboardTime = QDateTime::currentDateTime().toTime_t();
      clipboard->setText(text);
      ui->labelNotify->show();
@@ -211,7 +210,7 @@ void HOTPDialog::checkTOTP_Valid()
 
 /*******************************************************************************
 
-  checkTOTP_Valid
+  checkClipboard_Valid
 
   Changes
   Date      Author        Info
@@ -228,8 +227,12 @@ void HOTPDialog::checkClipboard_Valid()
     //uint64_t checkTime;
 
     currentTime = QDateTime::currentDateTime().toTime_t();
-    if(currentTime >= lastClipboardTime + (uint64_t)60){
+
+    if(currentTime >= lastClipboardTime + (uint64_t)60 && (QString::compare(clipboard->text(),ui->lineEdit->text())==0)){
         copyToClipboard(QString(""));
+        ui->labelNotify->hide();
+    }
+    if (QString::compare(clipboard->text(),ui->lineEdit->text())!=0){
         ui->labelNotify->hide();
     }
 

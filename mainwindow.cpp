@@ -116,6 +116,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     SdCardNotErased_DontAsk   = FALSE;
     StickNotInitated_DontAsk  = FALSE;
 
+    clipboard = QApplication::clipboard();  
+  
     ExtendedConfigActive = StartupInfo_st->ExtendedConfigActive;
 
     if (0 != StartupInfo_st->PasswordMatrix)
@@ -172,7 +174,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     Clipboard_ValidTimer = new QTimer(this);
 
-    // Start timer for polling stick response
+    // Start timer for Clipboard delete check 
     connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
     Clipboard_ValidTimer->start(100);
 
@@ -1404,9 +1406,10 @@ void MainWindow::displayCurrentSlotConfig()
     }
 
     if(slotNo > TOTP_SlotCount){
-        slotNo -= (TOTP_SlotCount+1);
+        slotNo -= (TOTP_SlotCount + 1);
+
     } else {
-        slotNo += (HOTP_SlotCount);
+        slotNo += HOTP_SlotCount;
     }
 
     if (slotNo < HOTP_SlotCount)
@@ -1469,7 +1472,6 @@ void MainWindow::displayCurrentSlotConfig()
         ui->setToZeroButton->hide();
         ui->setToRandomButton->hide();
         ui->enterCheckBox->hide();
-
 
         ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
 
@@ -2748,9 +2750,9 @@ void MainWindow::on_writeButton_clicked()
 
     uint8_t slotNo = ui->slotComboBox->currentIndex();
     if(slotNo > TOTP_SlotCount){
-        slotNo -= (TOTP_SlotCount+1);
+        slotNo -= (TOTP_SlotCount + 1);
     } else {
-        slotNo += (HOTP_SlotCount);
+        slotNo += HOTP_SlotCount;
     }
     if (cryptostick->isConnected){
 
@@ -3300,9 +3302,9 @@ void MainWindow::on_eraseButton_clicked()
 
      uint8_t slotNo = ui->slotComboBox->currentIndex();
      if(slotNo > TOTP_SlotCount){
-         slotNo -= (TOTP_SlotCount+1);
+         slotNo -= (TOTP_SlotCount + 1);
      } else {
-         slotNo += (HOTP_SlotCount);
+         slotNo += HOTP_SlotCount;
      }
 
      if (slotNo < HOTP_SlotCount)
@@ -3400,8 +3402,6 @@ void MainWindow::on_checkBox_toggled(bool checked)
 
 void MainWindow::copyToClipboard(QString text)
 {
-     QClipboard *clipboard = QApplication::clipboard();
-
      lastClipboardTime = QDateTime::currentDateTime().toTime_t();
      clipboard->setText(text);
      ui->labelNotify->show();
@@ -3414,8 +3414,11 @@ void MainWindow::checkClipboard_Valid()
     //uint64_t checkTime;
 
     currentTime = QDateTime::currentDateTime().toTime_t();
-    if(currentTime >= lastClipboardTime + (uint64_t)60){
+    if(currentTime >= lastClipboardTime + (uint64_t)180 && (QString::compare(clipboard->text(),ui->secretEdit->text())==0)){
         copyToClipboard(QString(""));
+        ui->labelNotify->hide();
+    }
+    if (QString::compare(clipboard->text(),ui->secretEdit->text())!=0){
         ui->labelNotify->hide();
     }
 
