@@ -23,18 +23,39 @@
 #include "stick20infodialog.h"
 #include "stick20responsedialog.h"
 
-AboutDialog::AboutDialog(QWidget *parent) :
+AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
+
+    cryptostick = global_cryptostick;
 
     QPixmap image(":/images/CS_icon.png");
     QPixmap small_img = image.scaled(70,70,Qt::KeepAspectRatio,Qt::FastTransformation);
 
     ui->IconLabel->setPixmap(small_img);
     ui->HeaderLabel->setText(tr("Crypto Stick Utility - GUI V")+tr(GUI_VERSION));
-    showStick20Configuration ();
+
+    if (true == cryptostick->isConnected)
+    {
+        if (true == cryptostick->activStick20)
+        {
+            showStick20Configuration ();
+        }
+        else
+        {
+            showStick20Configuration ();
+            ui->ButtonStickStatus->hide();
+        }
+    }
+    else
+    {
+        ui->ButtonStickStatus->hide();
+        showNoStickFound ();
+    }
+
+
 }
 
 AboutDialog::~AboutDialog()
@@ -162,6 +183,52 @@ void AboutDialog::showStick20Configuration (void)
 
     OutputText.append(QString("User  : "));
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.UserPwRetryCount))).append("\n");
+
+    ui->DeviceStatusLabel->setText(OutputText);
+}
+
+
+
+/*******************************************************************************
+
+  showStick10Configuration
+
+  Changes
+  Date      Author        Info
+  23.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void AboutDialog::showStick10Configuration (void)
+{
+    QString OutputText;
+
+    OutputText.append(QString("Crypto Stick aktive\n\n"));
+
+    ui->DeviceStatusLabel->setText(OutputText);
+}
+
+/*******************************************************************************
+
+  showNoStickFound
+
+  Changes
+  Date      Author        Info
+  23.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void AboutDialog::showNoStickFound (void)
+{
+    QString OutputText;
+
+    OutputText.append(QString("No Crypto Stick aktive\n\n"));
 
     ui->DeviceStatusLabel->setText(OutputText);
 }

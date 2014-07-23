@@ -459,15 +459,15 @@ int Device::eraseSlot(uint8_t slotNo)
 
 int Device::writeToHOTPSlot(HOTPSlot *slot)
 {
-    qDebug() << "preparing to send";
-    qDebug() << slot->slotNumber;
-    qDebug() << QString((char *)slot->slotName);
+//    qDebug() << "preparing to send";
+//    qDebug() << slot->slotNumber;
+//    qDebug() << QString((char *)slot->slotName);
 
     if ((slot->slotNumber >= 0x10) && (slot->slotNumber < 0x10 + HOTP_SlotCount)){
         int res;
         uint8_t data[COMMAND_SIZE];
         memset(data,0,COMMAND_SIZE);
-        qDebug() << "prepared data array";
+//        qDebug() << "prepared data array";
 
         data[0]=slot->slotNumber;
         memcpy(data+1,slot->slotName,15);
@@ -479,14 +479,14 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
 
 
 
-        qDebug() << "copied data to array";
+//        qDebug() << "copied data to array";
 
         if (isConnected){
         Command *cmd=new Command(CMD_WRITE_TO_SLOT,data,COMMAND_SIZE);
-        qDebug() << "sending";
+//        qDebug() << "sending";
         authorize(cmd);
         res=sendCommand(cmd);
-        qDebug() << "sent";
+//        qDebug() << "sent";
 
         if (res==-1)
             return -1;
@@ -497,7 +497,7 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
             resp->getResponse(this);
 
              if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_OK){
-                 qDebug() << "sent sucessfully!";
+//                 qDebug() << "sent sucessfully!";
                  return 0;
 
              }
@@ -529,7 +529,7 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
         int res;
         uint8_t data[COMMAND_SIZE];
         memset(data,0,COMMAND_SIZE);
-        qDebug() << "prepared data array";
+//        qDebug() << "prepared data array";
 
         data[0]=slot->slotNumber;
         memcpy(data+1,slot->slotName,15);
@@ -537,14 +537,14 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
         data[36]=slot->config;
         memcpy(data+37,slot->tokenID,13);
 
-        qDebug() << "copied data to array";
+//        qDebug() << "copied data to array";
 
         if (isConnected){
         Command *cmd=new Command(CMD_WRITE_TO_SLOT,data,COMMAND_SIZE);
-        qDebug() << "sending";
+//        qDebug() << "sending";
         authorize(cmd);
         res=sendCommand(cmd);
-        qDebug() << "sent";
+//        qDebug() << "sent";
 
         if (res==-1)
             return -1;
@@ -555,7 +555,7 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
             resp->getResponse(this);
 
              if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_OK){
-                 qDebug() << "sent sucessfully!";
+//                 qDebug() << "sent sucessfully!";
                  return 0;
 
              }
@@ -585,7 +585,7 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
 int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uint8_t  lastInterval,uint8_t result[18])
 {
 
-    qDebug() << "getting code" << slotNo;
+//    qDebug() << "getting code" << slotNo;
     int res;
     uint8_t data[30];
 
@@ -597,7 +597,7 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
     memcpy(data+17,&lastInterval,1);
 
     if (isConnected){
-       qDebug() << "sending command";
+//       qDebug() << "sending command";
 
     Command *cmd=new Command(CMD_GET_CODE,data,18);
     res=sendCommand(cmd);
@@ -606,7 +606,7 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
         return -1;
     else{  //sending the command was successful
         //return cmd->crc;
-         qDebug() << "command sent";
+//         qDebug() << "command sent";
         Sleep::msleep(100);
         Response *resp=new Response();
         resp->getResponse(this);
@@ -633,7 +633,7 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
 int Device::getHOTP(uint8_t slotNo)
 {
 
-    qDebug() << "getting code" << slotNo;
+//    qDebug() << "getting code" << slotNo;
     int res;
     uint8_t data[9];
 
@@ -670,7 +670,7 @@ int Device::readSlot(uint8_t slotNo)
 
     data[0]=slotNo;
 
-    qDebug()<< "reading slot number:" << slotNo;
+//    qDebug()<< "reading slot number:" << slotNo;
 
     if (isConnected){
     Command *cmd=new Command(CMD_READ_SLOT,data,1);
@@ -704,7 +704,7 @@ int Device::readSlot(uint8_t slotNo)
                     TOTPSlots[slotNo&0x0F]->isProgrammed=true;
 
                 }
-                qDebug() << "programmed";
+//                qDebug() << "programmed";
             }
             else if (resp->lastCommandStatus==CMD_STATUS_SLOT_NOT_PROGRAMMED){
                 if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount)){
@@ -716,7 +716,7 @@ int Device::readSlot(uint8_t slotNo)
                    // TOTPSlots[slotNo&0x0F]->isProgrammed=false;
                 }
 
-                qDebug() << "not programmed";
+//                qDebug() << "not programmed";
             }
 
         }

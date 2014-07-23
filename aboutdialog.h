@@ -15,9 +15,12 @@ class AboutDialog : public QDialog
     Q_OBJECT
     
 public:
-    explicit AboutDialog(QWidget *parent = 0);
+    explicit AboutDialog(Device *global_cryptostick,QWidget *parent = 0);
     ~AboutDialog();
     void showStick20Configuration (void);
+    void showStick10Configuration (void);
+    void showNoStickFound (void);
+    Device *cryptostick;
 
 private slots:
     void on_ButtonOK_clicked();

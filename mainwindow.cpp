@@ -860,16 +860,17 @@ void MainWindow::generateComboBoxEntrys()
 
 void MainWindow::generateMenu()
 {
-
-
-// Delete old menu
-    if (NULL != trayMenu)
+    if (NULL == trayMenu)
     {
-        delete trayMenu;
+        trayMenu = new QMenu();
+    }
+    else
+    {
+        trayMenu->clear();      // Delete old menu
+//        delete trayMenu;
     }
 
 // Setup the new menu
-    trayMenu = new QMenu();
 
 // About entry
 
@@ -964,6 +965,7 @@ void MainWindow::initActionsForStick20()
 
     Stick20ActionGetStickStatus = new QAction(tr("&Get stick status"), this);
     connect(Stick20ActionGetStickStatus, SIGNAL(triggered()), this, SLOT(startStick20GetStickStatus()));
+//    connect(Stick20ActionGetStickStatus, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
     Stick20ActionSetReadonlyUncryptedVolume = new QAction(tr("&Set readonly unencrypted volume"), this);
     connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20SetReadonlyUncryptedVolume()));
@@ -1684,21 +1686,24 @@ void MainWindow::startStickDebug()
 
 void MainWindow::startAboutDialog()
 {
-    AboutDialog dialog(this);
+    AboutDialog dialog(cryptostick,this);
 
-// Get actual data from stick 20
-    cryptostick->stick20GetStatusData ();
+    if (true == cryptostick->activStick20)
+    {
+    // Get actual data from stick 20
+        cryptostick->stick20GetStatusData ();
 
-// Wait for response
-    Stick20ResponseDialog ResponseDialog(this);
+    // Wait for response
+        Stick20ResponseDialog ResponseDialog(this);
 
-    ResponseDialog.NoStopWhenStatusOK ();
-    ResponseDialog.NoShowDialog();
-    ResponseDialog.hide();
+        ResponseDialog.NoStopWhenStatusOK ();
+        ResponseDialog.NoShowDialog();
+        ResponseDialog.hide();
 
-    ResponseDialog.cryptostick=cryptostick;
-    ResponseDialog.exec();
-    ResponseDialog.ResultValue;
+        ResponseDialog.cryptostick=cryptostick;
+        ResponseDialog.exec();
+        ResponseDialog.ResultValue;
+    }
 
 // Show dialog
     dialog.exec();
@@ -2108,25 +2113,25 @@ void MainWindow::startStick20ClearNewSdCardFound()
 
 void MainWindow::startStick20GetStickStatus()
 {
-    uint8_t password[40];
-    //bool    ret;
-/*
-    PasswordDialog dialog(this);
-    dialog.init("Enter admin password");
-    ret = dialog.exec();
-
-    if (Accepted == ret)
-    {
-        password[0] = 'P';
-        dialog.getPassword ((char*)&password[1]);
-
-        stick20SendCommand (STICK20_CMD_GET_DEVICE_STATUS,password);
-    }
+/*    startAboutDialog ();
 */
 
-    password[0] = 'P';
-    password[1] = 0;
-    stick20SendCommand (STICK20_CMD_GET_DEVICE_STATUS,password);
+// Get actual data from stick 20
+    cryptostick->stick20GetStatusData ();
+
+// Wait for response
+    Stick20ResponseDialog ResponseDialog(this);
+
+    ResponseDialog.NoStopWhenStatusOK ();
+    ResponseDialog.NoShowDialog();
+    ResponseDialog.hide();
+
+    ResponseDialog.cryptostick = cryptostick;
+    ResponseDialog.exec();
+    ResponseDialog.ResultValue;
+
+    Stick20InfoDialog InfoDialog(this);
+    InfoDialog.exec();
 }
 
 /*******************************************************************************
@@ -2669,8 +2674,8 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             case STICK20_CMD_GET_DEVICE_STATUS              :
                 UpdateDynamicMenuEntrys ();
                 {
-                    Stick20InfoDialog InfoDialog(this);
-                    InfoDialog.exec();
+//                    Stick20InfoDialog InfoDialog(this);
+//                   InfoDialog.exec();
                 }
                 break;
             case STICK20_CMD_SEND_STARTUP                   :
@@ -2727,9 +2732,9 @@ void MainWindow::getCode(uint8_t slotNo)
      code=result[0]+(result[1]<<8)+(result[2]<<16)+(result[3]<<24);
      code=code%100000000;
 
-     qDebug() << "Current time:" << currentTime;
-     qDebug() << "Counter:" << currentTime/30;
-     qDebug() << "TOTP:" << code;
+//     qDebug() << "Current time:" << currentTime;
+//     qDebug() << "Counter:" << currentTime/30;
+//     qDebug() << "TOTP:" << code;
 
 }
 

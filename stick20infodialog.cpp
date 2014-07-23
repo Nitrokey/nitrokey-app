@@ -139,7 +139,6 @@ void Stick20InfoDialog::showStick20Configuration (void)
 
     ui->Infotext->setText(OutputText);
 
-
 }
 
 void Stick20InfoDialog::on_pushButton_clicked()
