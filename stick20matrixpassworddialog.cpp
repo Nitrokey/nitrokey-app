@@ -109,6 +109,9 @@ MatrixPasswordDialog::MatrixPasswordDialog(QWidget *parent) :
     ui->pushButton_8->setGeometry(QRect(Rect.x()+width * i / 10 + width / 20 - 10, 355, 20, 20));  i++;
     ui->pushButton_9->setGeometry(QRect(Rect.x()+width * i / 10 + width / 20 - 10, 355, 20, 20));  i++;
 
+// Hardware access var isn't filled
+    cryptostick = NULL;
+
 // Init Timer
     WaitForMatrixTimer = new QTimer(this);
 
@@ -224,6 +227,11 @@ void MatrixPasswordDialog::InitSecurePasswordDialog()
 
 void MatrixPasswordDialog::CheckGetPasswordMatrix(void)
 {
+    if (NULL == cryptostick)
+    {
+        return;
+    }
+
     Response *stick20Response = new Response();
 
 

@@ -903,6 +903,7 @@ void MainWindow::generateMenu()
     trayIcon->setContextMenu(trayMenu);
 
     generateComboBoxEntrys();
+
 }
 
 
