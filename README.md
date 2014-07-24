@@ -25,14 +25,14 @@ Use QT Creator for compilation or perform the following steps:
 For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 -o Makefile ../CryptoStickGUI/CryptoStickGUI.pro
 3) make
 
-== Cross Compiling for Windows under Ubuntu Linux ==
+== Cross Compiling with QT5 for Windows on Ubuntu Linux ==
 Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target
 1) sudo make install bison cmake flex intltool libtool scons
 2) git clone https://github.com/mxe/mxe.git
-3) cd mxe && make qt
+3) cd mxe && make qt5
 4) export PATH=<mxe root>/usr/bin:$PATH
 5) Change to build directory parallel to PC CryptoStickGUI directory, e.g. build-CryptoStickGUI-Win32-release
-6) <mxe root>/usr/i686-pc-mingw32/qt/bin/qmake -spec <mxe root>/usr/i686-pc-mingw32/qt/mkspecs/default -o Makefile ../CryptoStickGUI/CryptoStickGUI.pro
+6) <mxe root>/usr/i686-pc-mingw32/qt5/bin/qmake -spec <mxe root>/usr/i686-pc-mingw32/qt5/mkspecs/win32-g++ -o Makefile ../cryptostick.utility/CryptoStickGUI_QT5.pro
 7) make
 
 =Internals=
