@@ -28,6 +28,7 @@ int base32_decode(const uint8_t *encoded, uint8_t *result, int bufSize) {
   const uint8_t *ptr;
 
   for (ptr = encoded; count < bufSize && *ptr; ++ptr) {
+//      if(count%3 != 0){
     uint8_t ch = *ptr;
     if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n' || ch == '-') {
       continue;
@@ -58,10 +59,15 @@ int base32_decode(const uint8_t *encoded, uint8_t *result, int bufSize) {
       result[count++] = buffer >> (bitsLeft - 8);
       bitsLeft -= 8;
     }
+//  } else {
+//         result[count++] = ' ';
+//         --ptr;
+//      }
   }
   if (count < bufSize) {
     result[count] = '\000';
   }
+
   return count;
 }
 
@@ -96,6 +102,34 @@ int base32_encode(const uint8_t *data, int length, uint8_t *result,
     result[count] = '\000';
   }
   return count;
+}
+
+int base32_clean(const uint8_t *data, int length, uint8_t *result){
+    int i,j = 0;
+    while(i<=length){
+        if (data[i] >= 'A' && data[i] <= 'Z'){
+            result[j] = data[i];
+            i++;j++;
+        } else if (data[i] >= 'a' && data[i] <= 'z'){
+            result[j] = data[i] - 32;
+            i++;j++;
+        } else if (data[i] >= '2' && data[i] <= '7'){
+            result[j] = data[i];
+            i++;j++;
+        } else if (data[i] == '0') {
+            result[j] = 'O';
+            i++;j++;
+        } else if (data[i] == '1') {
+            result[j] = 'L';
+            i++;j++;
+        } else if (data[i] == '8') {
+            result[j] = 'B';
+            i++;j++;
+        } else {
+            i++;
+        }
+    }
+    return j;
 }
 
 

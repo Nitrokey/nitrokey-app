@@ -1282,7 +1282,20 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
         slot->slotNumber=selectedSlot+0x10;
 
 
-        QByteArray secretFromGUI = QByteArray(ui->secretEdit->text().toLatin1());
+        QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
+
+        uint8_t encoded[128];
+        uint8_t decoded[20];
+        uint8_t data[128];
+        memset(encoded,'A',32);
+        memset(data,'A',32);
+        memcpy(encoded,secretFromGUI.data(),secretFromGUI.length());
+
+        base32_clean(encoded,32,data);
+        base32_decode(data,decoded,20);
+
+        secretFromGUI = QByteArray((char *)decoded,20);//.toHex();
+
         memset(slot->secret,0,20);
         memcpy(slot->secret,secretFromGUI.data(),secretFromGUI.size());
 
@@ -1333,15 +1346,28 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
 
 void MainWindow::generateTOTPConfig(TOTPSlot *slot)
 {
-    int selectedSlot = ui->slotComboBox->currentIndex();
+    uint8_t selectedSlot = ui->slotComboBox->currentIndex();
 
     // get the TOTP slot number
-    if ((selectedSlot >= 0) && (selectedSlot < TOTP_SlotCount))
+    if (selectedSlot < TOTP_SlotCount)
     {
         slot->slotNumber = selectedSlot + 0x20;
 
-        QByteArray secretFromGUI = QByteArray(ui->secretEdit->text().toLatin1());
-        memset(slot->secret,0,20);
+        QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
+        	
+        uint8_t encoded[128];
+        uint8_t decoded[20];
+        uint8_t data[128];
+        memset(encoded,'A',32);
+        memset(data,'A',32);
+        memcpy(encoded,secretFromGUI.data(),secretFromGUI.length());
+
+        base32_clean(encoded,32,data);
+        base32_decode(data,decoded,20);
+
+        secretFromGUI = QByteArray((char *)decoded,20);//.toHex();
+
+	memset(slot->secret,0,20);
         memcpy(slot->secret,secretFromGUI.data(),secretFromGUI.size());
 
         QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
@@ -1521,8 +1547,6 @@ void MainWindow::displayCurrentSlotConfig()
         QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
         ui->muiEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
     }
-
-    copyToClipboard(ui->secretEdit->text());
 }
 
 /*******************************************************************************
@@ -2849,6 +2873,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
 {
     QByteArray secret;
     uint8_t encoded[128];
+    uint8_t data[128];
     uint8_t decoded[20];
 
     if (checked){
@@ -2858,8 +2883,9 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
 
         memset(encoded,'A',32);
         memcpy(encoded,secret.data(),secret.length());
-
-        base32_decode(encoded,decoded,20);
+        
+        base32_clean(encoded,32,data);
+        base32_decode(data,decoded,20);
 
         //ui->secretEdit->setInputMask("HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH;");
         //ui->secretEdit->setInputMask("hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh;");
@@ -2870,7 +2896,6 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
 
         ui->secretEdit->setText(QString(secret));
         copyToClipboard(ui->secretEdit->text());
-
 //qDebug() << QString(secret);
 
     }
@@ -2888,18 +2913,12 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
 
 void MainWindow::on_base32RadioButton_toggled(bool checked)
 {
-    if (checked){
+    QByteArray secret;
+    uint8_t encoded[128];
+    uint8_t decoded[20];
+    if (checked){ 
+        secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
 
-        QByteArray secret;
-        QByteArray secret1;
-
-        secret1 = ui->secretEdit->text().toLatin1();
-//qDebug() << "base32 secret:" << QString(secret);
-        secret  = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
-
-
-        uint8_t encoded[128];
-        uint8_t decoded[20];
         memset(decoded,0,20);
         memcpy(decoded,secret.data(),secret.length());
 
@@ -2911,9 +2930,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
         ui->secretEdit->setText(QString((char *)encoded));
         copyToClipboard(ui->secretEdit->text());
 //qDebug() << QString((char *)encoded);
-
     }
-
 }
 
 /*******************************************************************************
@@ -3373,15 +3390,24 @@ void MainWindow::on_resetGeneralConfigButton_clicked()
 void MainWindow::on_randomSecretButton_clicked()
 {
 
-    int i;
+    int i=0;
     uint8_t secret[20];
+    char temp;
 
-    for (i=0;i<20;i++)
-        secret[i]=qrand()&0xFF;
+   // for (i=0;i<20;i++)
+   //     secret[i]=qrand()&0xFF;
+    while(i<20){
+        temp = qrand()&0xFF;
+        if((temp >= 'A' && temp <= 'Z') || (temp >= '2' && temp <= '7')){
+            secret[i]=temp;
+            i++;
+        }
+    }
 
     QByteArray secretArray((char *) secret,20);
     ui->base32RadioButton->setChecked(true);
-    ui->secretEdit->setText(secretArray.toHex());
+    //ui->secretEdit->setText(secretArray.toHex());
+    ui->secretEdit->setText(secretArray);
     copyToClipboard(ui->secretEdit->text());
 
 }
