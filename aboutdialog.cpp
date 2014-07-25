@@ -35,7 +35,7 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
     QPixmap small_img = image.scaled(70,70,Qt::KeepAspectRatio,Qt::FastTransformation);
 
     ui->IconLabel->setPixmap(small_img);
-    ui->HeaderLabel->setText(tr("Crypto Stick Utility - GUI V")+tr(GUI_VERSION));
+    ui->VersionLabel->setText(tr(GUI_VERSION));
 
     if (true == cryptostick->isConnected)
     {
