@@ -72,8 +72,8 @@ void HOTPDialog::getNextCode()
 
 
 
-     if (config&(1<<2))
-         output.append(QByteArray((char *)(result+5),12));
+     /*if (config&(1<<2))
+         output.append(QByteArray((char *)(result+5),12));*/
 
      if (config&(1<<0)){
              code=code%100000000;

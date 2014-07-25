@@ -670,11 +670,9 @@ int Device::readSlot(uint8_t slotNo)
 
     data[0]=slotNo;
 
-//    qDebug()<< "reading slot number:" << slotNo;
 
     if (isConnected){
     Command *cmd=new Command(CMD_READ_SLOT,data,1);
-    authorize(cmd);
     res=sendCommand(cmd);
 
     if (res==-1)
@@ -685,42 +683,59 @@ int Device::readSlot(uint8_t slotNo)
         Response *resp=new Response();
         resp->getResponse(this);
 
-//        qDebug() << cmd->crc;
-//        qDebug() << resp->lastCommandCRC;
+//         qDebug() << cmd->crc;
+//         qDebug() << resp->lastCommandCRC;
 
         if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
-            if (resp->lastCommandStatus==CMD_STATUS_OK){
+            if (resp->lastCommandStatus==CMD_STATUS_OK)
+            {
                 if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount)){
-                   memcpy(HOTPSlots[slotNo&0x0F]->secret,resp->data,20);
-                   HOTPSlots[slotNo&0x0F]->config=resp->data[20];
-                   memcpy(HOTPSlots[slotNo&0x0F]->counter,resp->data+34,8);
-                   memcpy(HOTPSlots[slotNo&0x0F]->tokenID,resp->data+21,13);
+                   memcpy(HOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
+                   HOTPSlots[slotNo&0x0F]->config = resp->data[15];
+                   memcpy(HOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
+                   memcpy(HOTPSlots[slotNo&0x0F]->counter,resp->data+29,8);
                    HOTPSlots[slotNo&0x0F]->isProgrammed=true;
+                   printf("DEBUG:::%s\n",HOTPSlots[slotNo&0x0F]->tokenID);
                 }
                 else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount)){
-                    memcpy(TOTPSlots[slotNo&0x0F]->secret,resp->data,20);
-                    TOTPSlots[slotNo&0x0F]->config=resp->data[20];
-                    memcpy(TOTPSlots[slotNo&0x0F]->tokenID,resp->data+21,13);
+                    memcpy(TOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
+                    TOTPSlots[slotNo&0x0F]->config = resp->data[15];
+                    memcpy(TOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
                     TOTPSlots[slotNo&0x0F]->isProgrammed=true;
-
                 }
-//                qDebug() << "programmed";
+
             }
-            else if (resp->lastCommandStatus==CMD_STATUS_SLOT_NOT_PROGRAMMED){
-                if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount)){
-                    HOTPSlots[slotNo&0x0F]=new HOTPSlot();
-                  // HOTPSlots[slotNo&0x0F]->isProgrammed=false;
+            else if (resp->lastCommandStatus==CMD_STATUS_SLOT_NOT_PROGRAMMED)
+            {
+                if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
+                {
+                   HOTPSlots[slotNo&0x0F]->isProgrammed=false;
+                   HOTPSlots[slotNo&0x0F]->slotName[0] = 0;
                 }
-                else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount)){
-                    TOTPSlots[slotNo&0x0F]=new TOTPSlot();
-                   // TOTPSlots[slotNo&0x0F]->isProgrammed=false;
+                else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
+                {
+                   TOTPSlots[slotNo&0x0F]->isProgrammed=false;
+                   TOTPSlots[slotNo&0x0F]->slotName[0] = 0;
                 }
-
-//                qDebug() << "not programmed";
             }
 
         }
+/*
+        {
 
+            QMessageBox message;
+            QString str;
+            QByteArray *data =new QByteArray((char*)resp->reportBuffer,REPORT_SIZE+1);
+
+//            str.append(QString::number(testResponse->lastCommandCRC,16));
+            str.append(QString(data->toHex()));
+
+            message.setText(str);
+            message.exec();
+
+            str.clear();
+        }
+*/
         return 0;
     }
 
@@ -749,12 +764,12 @@ void Device::initializeConfig()
 
     for (i=0;i<HOTP_SlotCount;i++)
     {
-        getSlotName(0x10 + i);
+        readSlot(0x10 + i);
     }
 
     for (i=0;i<TOTP_SlotCount;i++)
     {
-        getSlotName(0x20 + i);
+        readSlot(0x20 + i);
     }
 
     if (true == activStick20)

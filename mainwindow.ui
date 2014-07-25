@@ -332,7 +332,10 @@
         </rect>
        </property>
        <property name="inputMask">
-        <string>NN</string>
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>2</number>
        </property>
       </widget>
       <widget class="QLineEdit" name="ttEdit">
@@ -348,7 +351,10 @@
         </rect>
        </property>
        <property name="inputMask">
-        <string>NN</string>
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>2</number>
        </property>
       </widget>
       <widget class="QLineEdit" name="muiEdit">
@@ -364,7 +370,10 @@
         </rect>
        </property>
        <property name="inputMask">
-        <string>HHHHHHHH</string>
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>8</number>
        </property>
       </widget>
       <widget class="QLabel" name="label_7">
