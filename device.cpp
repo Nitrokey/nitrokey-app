@@ -695,7 +695,6 @@ int Device::readSlot(uint8_t slotNo)
                    memcpy(HOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
                    memcpy(HOTPSlots[slotNo&0x0F]->counter,resp->data+29,8);
                    HOTPSlots[slotNo&0x0F]->isProgrammed=true;
-                   printf("DEBUG:::%s\n",HOTPSlots[slotNo&0x0F]->tokenID);
                 }
                 else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount)){
                     memcpy(TOTPSlots[slotNo&0x0F]->slotName,resp->data,15);

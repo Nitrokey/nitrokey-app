@@ -227,6 +227,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     initActionsForStick20 ();
 
+    connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
+
 
     // Init debug text
     DebugClearText ();
@@ -1303,18 +1305,20 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
         memset(slot->slotName,0,15);
         memcpy(slot->slotName,slotNameFromGUI.data(),slotNameFromGUI.size());
 
-        memset(slot->tokenID,0,13);
-        QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-        memcpy(slot->tokenID,ompFromGUI,2);
+        memset(slot->tokenID,32,13);
 
-        QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-        memcpy(slot->tokenID+2,ttFromGUI,2);
+        if(ui->tokenIDCheckBox->isChecked()){
+            QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
+            memcpy(slot->tokenID,ompFromGUI,2);
 
-        QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-        memcpy(slot->tokenID+4,muiFromGUI,8);
+            QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
+            memcpy(slot->tokenID+2,ttFromGUI,2);
+
+            QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
+            memcpy(slot->tokenID+4,muiFromGUI,8);
+        }
 
         slot->tokenID[12]=ui->keyboardComboBox->currentIndex()&0xFF;
-        printf("DEBUG:::%s\n",slot->tokenID);
 
         QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
         memset(slot->counter,0,8);
@@ -1375,15 +1379,18 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot)
         memset(slot->slotName,0,15);
         memcpy(slot->slotName,slotNameFromGUI.data(),slotNameFromGUI.size());
 
-        memset(slot->tokenID,0,13);
-        QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-        memcpy(slot->tokenID,ompFromGUI,2);
+        memset(slot->tokenID,32,13);
 
-        QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-        memcpy(slot->tokenID+2,ttFromGUI,2);
+        if(ui->tokenIDCheckBox->isChecked()){
+            QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
+            memcpy(slot->tokenID,ompFromGUI,2);
 
-        QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-        memcpy(slot->tokenID+4,muiFromGUI,8);
+            QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
+            memcpy(slot->tokenID+2,ttFromGUI,2);
+
+            QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
+            memcpy(slot->tokenID+4,muiFromGUI,8);
+        }
 
         slot->config=0;
 
@@ -1452,6 +1459,9 @@ void MainWindow::displayCurrentSlotConfig()
         ui->setToZeroButton->show();
         ui->setToRandomButton->show();
         ui->enterCheckBox->show();
+        if (cryptostick->HOTPSlots[slotNo]->isProgrammed){
+            ui->checkBox->setEnabled(false);
+        }
 
         //slotNo=slotNo+0x10;
         ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
@@ -1461,13 +1471,12 @@ void MainWindow::displayCurrentSlotConfig()
         ui->secretEdit->setText(secret);//.toHex());
 
         QByteArray counter((char *) cryptostick->HOTPSlots[slotNo]->counter,8);
-        ui->counterEdit->setText(counter);//.toHex());
+        ui->counterEdit->setText(counter.trimmed());//.toHex());
 
         if (cryptostick->HOTPSlots[slotNo]->counter==0)
             ui->counterEdit->setText("0");
 
         QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID,2);
-        printf("DEBUG::%s\n",omp.data());
         ui->ompEdit->setText(QString(omp));
 
         QByteArray tt((char *)cryptostick->HOTPSlots[slotNo]->tokenID+2,2);
@@ -1489,7 +1498,7 @@ void MainWindow::displayCurrentSlotConfig()
         else ui->tokenIDCheckBox->setChecked(false);
 
         if (!cryptostick->HOTPSlots[slotNo]->isProgrammed){
-            ui->ompEdit->setText("CS");
+            ui->ompEdit->setText("NK");
             ui->ttEdit->setText("01");
             QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
             ui->muiEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
@@ -1509,13 +1518,16 @@ void MainWindow::displayCurrentSlotConfig()
         ui->setToZeroButton->hide();
         ui->setToRandomButton->hide();
         ui->enterCheckBox->hide();
+        if (cryptostick->TOTPSlots[slotNo]->isProgrammed){
+            ui->checkBox->setEnabled(false);
+        }
 
         ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
 
 
         QByteArray secret((char *) cryptostick->TOTPSlots[slotNo]->secret,20);
         ui->base32RadioButton->setChecked(true);
-        ui->secretEdit->setText(secret.toHex());
+        ui->secretEdit->setText(secret);//.toHex());
 
         ui->counterEdit->setText("0");
 
@@ -1541,7 +1553,7 @@ void MainWindow::displayCurrentSlotConfig()
     else ui->tokenIDCheckBox->setChecked(false);
 
     if (!cryptostick->TOTPSlots[slotNo]->isProgrammed){
-        ui->ompEdit->setText("CS");
+        ui->ompEdit->setText("NK");
         ui->ttEdit->setText("01");
         QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
         ui->muiEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
@@ -2894,6 +2906,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
 
         secret = QByteArray((char *)decoded,20).toHex();
 
+        //ui->secretEdit->setMaxLength(20);
         ui->secretEdit->setText(QString(secret));
         copyToClipboard(ui->secretEdit->text());
 //qDebug() << QString(secret);
@@ -2926,7 +2939,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
 
         //ui->secretEdit->setInputMask("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN;");
         //ui->secretEdit->setInputMask("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn;");
-        ui->secretEdit->setMaxLength(32);
+        //ui->secretEdit->setMaxLength(32);
         ui->secretEdit->setText(QString((char *)encoded));
         copyToClipboard(ui->secretEdit->text());
 //qDebug() << QString((char *)encoded);
@@ -2964,12 +2977,12 @@ void MainWindow::on_setToRandomButton_clicked()
     quint64 counter=qrand();
     counter<<=16;
     counter+=qrand();
-    counter<<=16;
-    counter+=qrand();
-    counter<<=16;
-    counter+=qrand();
+    //counter<<=16;
+    //counter+=qrand();
+    //counter<<=16;
+    //counter+=qrand();
     //qDebug() << counter;
-    ui->counterEdit->setText(QString(QByteArray::number(counter,16)));
+    ui->counterEdit->setText(QString(QByteArray::number(counter,8)));
 }
 
 /*******************************************************************************
@@ -3322,6 +3335,9 @@ void MainWindow::on_eraseButton_clicked()
      msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
      msgBox.setDefaultButton(QMessageBox::No);
      int ret = msgBox.exec();
+     char clean[8];
+
+     memset(clean,' ',8);
 
      uint8_t slotNo = ui->slotComboBox->currentIndex();
      if(slotNo > TOTP_SlotCount){
@@ -3332,6 +3348,7 @@ void MainWindow::on_eraseButton_clicked()
 
      if (slotNo < HOTP_SlotCount)
      {
+         memcpy(cryptostick->HOTPSlots[slotNo&0x0F]->counter,clean,8);
          slotNo = slotNo+0x10;
      }
      else if ((slotNo >= HOTP_SlotCount) && (slotNo <= TOTP_SlotCount + HOTP_SlotCount))
@@ -3408,6 +3425,7 @@ void MainWindow::on_randomSecretButton_clicked()
     ui->base32RadioButton->setChecked(true);
     //ui->secretEdit->setText(secretArray.toHex());
     ui->secretEdit->setText(secretArray);
+    ui->checkBox->setEnabled(true);
     copyToClipboard(ui->secretEdit->text());
 
 }
@@ -3456,3 +3474,9 @@ void MainWindow::checkClipboard_Valid()
 
 }
 
+void MainWindow::checkTextEdited(){
+    if(!ui->checkBox->isEnabled()){
+        ui->checkBox->setEnabled(true);
+        ui->checkBox->setChecked(false);
+    }
+}

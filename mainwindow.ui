@@ -94,13 +94,16 @@
         <string/>
        </property>
        <property name="text">
-        <string>00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00</string>
+        <string/>
        </property>
        <property name="maxLength">
         <number>59</number>
        </property>
        <property name="echoMode">
         <enum>QLineEdit::PasswordEchoOnEdit</enum>
+       </property>
+       <property name="placeholderText">
+        <string>********************************</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_3">
@@ -156,6 +159,9 @@
        </property>
       </widget>
       <widget class="QCheckBox" name="checkBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>300</x>
@@ -558,10 +564,10 @@
         <string/>
        </property>
        <property name="text">
-        <string>0000000000000000</string>
+        <string>00000000</string>
        </property>
        <property name="maxLength">
-        <number>16</number>
+        <number>8</number>
        </property>
       </widget>
       <widget class="QPushButton" name="setToZeroButton">
@@ -829,22 +835,6 @@
      </widget>
     </widget>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>637</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuCrypto_Stick_OTP_TOol">
-    <property name="title">
-     <string>Crypto Stick OTP Tool</string>
-    </property>
-   </widget>
-   <addaction name="menuCrypto_Stick_OTP_TOol"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

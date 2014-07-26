@@ -155,6 +155,7 @@ private slots:
 
     void copyToClipboard(QString text);
     void checkClipboard_Valid();
+    void checkTextEdited();
 
 bool eventFilter (QObject *obj, QEvent *event);
 void iconActivated(QSystemTrayIcon::ActivationReason reason);
