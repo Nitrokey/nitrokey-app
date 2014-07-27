@@ -1307,16 +1307,14 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
 
         memset(slot->tokenID,32,13);
 
-        if(ui->tokenIDCheckBox->isChecked()){
-            QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-            memcpy(slot->tokenID,ompFromGUI,2);
+        QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
+        memcpy(slot->tokenID,ompFromGUI,2);
 
-            QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-            memcpy(slot->tokenID+2,ttFromGUI,2);
+        QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
+        memcpy(slot->tokenID+2,ttFromGUI,2);
 
-            QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-            memcpy(slot->tokenID+4,muiFromGUI,8);
-        }
+        QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
+        memcpy(slot->tokenID+4,muiFromGUI,8);
 
         slot->tokenID[12]=ui->keyboardComboBox->currentIndex()&0xFF;
 
@@ -1381,16 +1379,14 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot)
 
         memset(slot->tokenID,32,13);
 
-        if(ui->tokenIDCheckBox->isChecked()){
-            QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-            memcpy(slot->tokenID,ompFromGUI,2);
+        QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
+        memcpy(slot->tokenID,ompFromGUI,2);
 
-            QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-            memcpy(slot->tokenID+2,ttFromGUI,2);
+        QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
+        memcpy(slot->tokenID+2,ttFromGUI,2);
 
-            QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-            memcpy(slot->tokenID+4,muiFromGUI,8);
-        }
+        QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
+        memcpy(slot->tokenID+4,muiFromGUI,8);
 
         slot->config=0;
 
@@ -1459,8 +1455,12 @@ void MainWindow::displayCurrentSlotConfig()
         ui->setToZeroButton->show();
         ui->setToRandomButton->show();
         ui->enterCheckBox->show();
+        ui->labelNotify->hide();
         if (cryptostick->HOTPSlots[slotNo]->isProgrammed){
             ui->checkBox->setEnabled(false);
+            ui->secretEdit->setPlaceholderText("");
+        } else {
+            ui->secretEdit->setPlaceholderText("********************************");
         }
 
         //slotNo=slotNo+0x10;
@@ -1518,8 +1518,12 @@ void MainWindow::displayCurrentSlotConfig()
         ui->setToZeroButton->hide();
         ui->setToRandomButton->hide();
         ui->enterCheckBox->hide();
+        ui->labelNotify->hide();
         if (cryptostick->TOTPSlots[slotNo]->isProgrammed){
             ui->checkBox->setEnabled(false);
+            ui->secretEdit->setPlaceholderText("");
+        } else {
+            ui->secretEdit->setPlaceholderText("********************************");
         }
 
         ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
@@ -2892,7 +2896,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
 
         secret = ui->secretEdit->text().toLatin1();
 // qDebug() << "encoded secret:" << QString(secret);
-
+        if(secret.size() != 0){
         memset(encoded,'A',32);
         memcpy(encoded,secret.data(),secret.length());
         
@@ -2910,7 +2914,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
         ui->secretEdit->setText(QString(secret));
         copyToClipboard(ui->secretEdit->text());
 //qDebug() << QString(secret);
-
+        }
     }
 }
 
@@ -2931,7 +2935,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
     uint8_t decoded[20];
     if (checked){ 
         secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
-
+        if(secret.size() != 0){
         memset(decoded,0,20);
         memcpy(decoded,secret.data(),secret.length());
 
@@ -2943,6 +2947,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
         ui->secretEdit->setText(QString((char *)encoded));
         copyToClipboard(ui->secretEdit->text());
 //qDebug() << QString((char *)encoded);
+        }
     }
 }
 
@@ -3453,8 +3458,10 @@ void MainWindow::on_checkBox_toggled(bool checked)
 void MainWindow::copyToClipboard(QString text)
 {
      lastClipboardTime = QDateTime::currentDateTime().toTime_t();
-     clipboard->setText(text);
-     ui->labelNotify->show();
+     if (text != 0){
+        clipboard->setText(text);
+        ui->labelNotify->show();
+     }
     // this->accept();
 }
 
