@@ -148,6 +148,32 @@ void Response::DebugResponse()
         case CMD_GET_PASSWORD_RETRY_COUNT :
             DebugAppendText ((char *)"         Last command        : CMD_GET_PASSWORD_RETRY_COUNT\n");
             break;
+        case CMD_CLEAR_WARNING :
+            DebugAppendText ((char *)"         Last command        : CMD_CLEAR_WARNING\n");
+            break;
+        case CMD_GET_PW_SAFE_SLOT_STATUS :
+            DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_STATUS\n");
+            break;
+        case CMD_GET_PW_SAFE_SLOT_NAME :
+            DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_NAME\n");
+            break;
+        case CMD_GET_PW_SAFE_SLOT_PASSWORD :
+            DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_PASSWORD\n");
+            break;
+
+        case CMD_GET_PW_SAFE_SLOT_LOGINNAME :
+            DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_LOGINNAME\n");
+            break;
+        case CMD_SET_PW_SAFE_SLOT_DATA_1 :
+            DebugAppendText ((char *)"         Last command        : CMD_SET_PW_SAFE_SLOT_DATA_1\n");
+            break;
+        case CMD_SET_PW_SAFE_SLOT_DATA_2 :
+            DebugAppendText ((char *)"         Last command        : CMD_SET_PW_SAFE_SLOT_DATA_2\n");
+            break;
+        case CMD_PW_SAFE_ERASE_SLOT :
+            DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_ERASE_SLOT\n");
+            break;
+
         default:
             DebugAppendText ((char *)"         Last command        : Unknown\n");
             break;

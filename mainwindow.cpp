@@ -1702,7 +1702,7 @@ void MainWindow::startStickDebug()
 
     dialog.cryptostick=cryptostick;
 
-    dialog.SetNewText (DebugText_Stick20);
+    dialog.updateText (); // Init data
 
     dialog.exec();
 }
@@ -2324,7 +2324,8 @@ void MainWindow::startStick20DebugAction()
     //uint8_t password[40];
     //bool    ret;
     //int64_t crc;
-    stick20HiddenVolumeDialog HVDialog(this);
+    int ret;
+//    stick20HiddenVolumeDialog HVDialog(this);
 
 /*
     ret = HVDialog.exec();
@@ -2334,7 +2335,32 @@ void MainWindow::startStick20DebugAction()
         stick20SendCommand (STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP,(unsigned char*)&HVDialog.HV_Setup_st);
     }
 */
-    stick20SendCommand (STICK20_CMD_PRODUCTION_TEST,NULL);
+/*
+    ret = cryptostick->getPasswordSafeSlotStatus();
+    if (ERR_NO_ERROR != ret)
+    {
+        ret = 0;
+    }
+*/
+
+
+
+    ret = cryptostick->getPasswordSafeSlotName(0);
+    ret = cryptostick->getPasswordSafeSlotPassword(0);
+    ret = cryptostick->getPasswordSafeSlotLoginName(0);
+
+    ret = cryptostick->setPasswordSafeSlotData_1 (0,(uint8_t*)"Name1",(uint8_t*)"PPPPP");
+    ret = cryptostick->setPasswordSafeSlotData_2 (0,(uint8_t*)"LN11111");
+
+    ret = cryptostick->getPasswordSafeSlotName(0);
+    ret = cryptostick->getPasswordSafeSlotPassword(0);
+    ret = cryptostick->getPasswordSafeSlotLoginName(0);
+
+    ret = cryptostick->passwordSafeEraseSlot(0);
+
+
+
+//    stick20SendCommand (STICK20_CMD_PRODUCTION_TEST,NULL);
 
     if (1)
     {
