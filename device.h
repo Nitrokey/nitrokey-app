@@ -75,6 +75,15 @@ class Response;
 #define CMD_SET_PW_SAFE_SLOT_DATA_1       0x64
 #define CMD_SET_PW_SAFE_SLOT_DATA_2       0x65
 #define CMD_PW_SAFE_ERASE_SLOT            0x66
+#define CMD_PW_SAFE_ENABLE                0x67
+#define CMD_PW_SAFE_INIT_KEY              0x68
+#define CMD_PW_SAFE_SEND_DATA             0x69
+
+
+#define PWS_SEND_PASSWORD     0
+#define PWS_SEND_LOGINNAME    1
+#define PWS_SEND_TAB          2
+#define PWS_SEND_CR           3
 
 
 #define DEBUG_STATUS_NO_DEBUGGING       0
@@ -249,6 +258,9 @@ public:
     int getHOTP(uint8_t slotNo);
     int readSlot(uint8_t slotNo);
     int getPasswordRetryCount();
+
+
+// Password safe
     int getPasswordSafeSlotStatus ();
     int getPasswordSafeSlotName (int Slot);
     int getPasswordSafeSlotPassword (int Slot);
@@ -256,6 +268,19 @@ public:
     int setPasswordSafeSlotData_1 (int Slot,uint8_t *Name,uint8_t *Password);
     int setPasswordSafeSlotData_2 (int Slot,uint8_t *LoginName);
     int passwordSafeEraseSlot (int Slot);
+    int passwordSafeEnable (char *password);
+    int passwordSafeInitKey (void);
+    int passwordSafeSendSlotDataViaHID (int Slot,int Kind);
+
+    uint8_t passwordSafeUnlocked;
+    uint8_t passwordSafeStatus[PWS_SLOT_COUNT];
+    uint8_t passwordSafeStatusDisplayed[PWS_SLOT_COUNT];
+    uint8_t passwordSafeSlotNames[PWS_SLOT_COUNT][PWS_SLOTNAME_LENGTH+1];
+
+    uint8_t passwordSafeSlotName[PWS_SLOTNAME_LENGTH+1];
+    uint8_t passwordSafeLoginName[PWS_LOGINNAME_LENGTH+1];
+    uint8_t passwordSafePassword[PWS_PASSWORD_LENGTH+1];
+// Password safe end
 
     bool newConnection;
     int  LastStickError;
@@ -268,13 +293,8 @@ public:
     bool passwordSet;
     uint8_t passwordRetryCount;
 
-    uint8_t passwordSafeStatus[PWS_SLOT_COUNT];
-    uint8_t passwordSafeStatusDisplayed[PWS_SLOT_COUNT];
-    uint8_t passwordSafeSlotNames[PWS_SLOT_COUNT][PWS_SLOTNAME_LENGTH+1];
 
-    uint8_t passwordSafeSlotName[PWS_SLOTNAME_LENGTH+1];
-    uint8_t passwordSafeLoginName[PWS_LOGINNAME_LENGTH+1];
-    uint8_t passwordSafePassword[PWS_PASSWORD_LENGTH+1];
+
 
     bool stick20EnableCryptedPartition (uint8_t *password);
     bool stick20DisableCryptedPartition (void);

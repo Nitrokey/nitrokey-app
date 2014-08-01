@@ -73,6 +73,8 @@ private:
     Device *cryptostick;
     void getSlotNames();
 
+    int PWS_Access;
+
     uint64_t currentTime;
     bool     CryptedVolumeActive;
     bool     HiddenVolumeActive;
@@ -160,6 +162,32 @@ private slots:
 bool eventFilter (QObject *obj, QEvent *event);
 void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
+// Functions for password safe
+    void SetupPasswordSafeConfig (void);
+    void generateMenuPasswordSafe();
+    char *PWS_GetSlotName (int Slot);
+    void PWS_ExceClickedSlot (int Slot);
+
+    void PWS_Clicked_EnablePWSAccess ();
+    void PWS_Clicked_Slot00 ();
+    void PWS_Clicked_Slot01 ();
+    void PWS_Clicked_Slot02 ();
+    void PWS_Clicked_Slot03 ();
+    void PWS_Clicked_Slot04 ();
+    void PWS_Clicked_Slot05 ();
+    void PWS_Clicked_Slot06 ();
+    void PWS_Clicked_Slot07 ();
+    void PWS_Clicked_Slot08 ();
+    void PWS_Clicked_Slot09 ();
+    void PWS_Clicked_Slot10 ();
+    void PWS_Clicked_Slot11 ();
+    void PWS_Clicked_Slot12 ();
+    void PWS_Clicked_Slot13 ();
+    void PWS_Clicked_Slot14 ();
+    void PWS_Clicked_Slot15 ();
+
+
+// Functions for OTP
     void getHOTPDialog (int slot);
     void getHOTP1();
     void getHOTP2();
@@ -212,6 +240,11 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void startStick20ClearNewSdCardFound();
     void startStick20SetupPasswordMatrix();
     void startStick20LockStickHardware();
+    void on_PWS_ButtonClearSlot_clicked();
+    void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
+    void on_PWS_CheckBoxHideSecret_toggled(bool checked);
+    void on_PWS_ButtonSaveSlot_pressed();
+    void on_PWS_ButtonClose_pressed();
 };
 
 #endif // MAINWINDOW_H

@@ -75,6 +75,9 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
     passwordSet      =false;
 
     memset(password,0,50);
+
+// Vars for password safe
+    passwordSafeUnlocked = FALSE;
     memset(passwordSafeStatusDisplayed,0,PWS_SLOT_COUNT);
 
     for (i=0;i<PWS_SLOT_COUNT;i++)
@@ -903,6 +906,8 @@ int Device::getPasswordSafeSlotStatus ()
     int i;
     uint8_t data[1];
 
+// Clear entrys
+    memset (passwordSafeStatus,0,PWS_SLOT_COUNT);
 
     if (isConnected)
     {
@@ -1213,27 +1218,195 @@ int Device::passwordSafeEraseSlot (int Slot)
 
     data[0] = Slot;
 
-    if (isConnected){
-    Command *cmd=new Command(CMD_PW_SAFE_ERASE_SLOT,data,1);
-    res=sendCommand(cmd);
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_PW_SAFE_ERASE_SLOT,data,1);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return ERR_SENDING;
-    else{  //sending the command was successful
-        Sleep::msleep(500);
-        Response *resp=new Response();
-        resp->getResponse(this);
-
-        if (cmd->crc==resp->lastCommandCRC)
-        {
-//            passwordRetryCount=resp->data[0];
-        }
+        if (res==-1)
+            return ERR_SENDING;
         else
-            return ERR_WRONG_RESPONSE_CRC;
-    }
+        {  //sending the command was successful
+            Sleep::msleep(500);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                {
+                    return (ERR_NO_ERROR);
+                }
+                else
+                {
+                    return (ERR_STATUS_NOT_OK);
+                }
+            }
+            else
+                return ERR_WRONG_RESPONSE_CRC;
+        }
     }
     return ERR_NOT_CONNECTED;
 }
+
+/*******************************************************************************
+
+  passwordSafeEnable
+
+  Changes
+  Date      Author        Info
+  01.08.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::passwordSafeEnable (char *password)
+{
+    int res;
+    uint8_t data[50];
+
+    strncpy ((char*)data,password,30);
+    data[30+1] = 0;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_PW_SAFE_ENABLE,data,strlen ((char*)data));
+        res=sendCommand(cmd);
+
+        if (res==-1)
+            return ERR_SENDING;
+        else
+        {  //sending the command was successful
+            Sleep::msleep(500);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                {
+                    passwordSafeUnlocked = TRUE;
+                    return (ERR_NO_ERROR);
+                }
+                else
+                {
+                    return (ERR_STATUS_NOT_OK);
+                }
+            }
+            else
+                return ERR_WRONG_RESPONSE_CRC;
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
+
+/*******************************************************************************
+
+  passwordSafeInitKey
+
+  Changes
+  Date      Author        Info
+  01.08.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::passwordSafeInitKey (void)
+{
+    int res;
+    uint8_t data[1];
+
+    data[0] = 0;
+
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_PW_SAFE_INIT_KEY,data,1);
+        res=sendCommand(cmd);
+
+        if (res==-1)
+            return ERR_SENDING;
+        else
+        {  //sending the command was successful
+            Sleep::msleep(500);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                {
+                    return (ERR_NO_ERROR);
+                }
+                else
+                {
+                    return (ERR_STATUS_NOT_OK);
+                }
+            }
+            else
+                return ERR_WRONG_RESPONSE_CRC;
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
+/*******************************************************************************
+
+  passwordSafeSendSlotDataViaHID
+
+  Changes
+  Date      Author        Info
+  01.08.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::passwordSafeSendSlotDataViaHID (int Slot, int Kind)
+{
+    int res;
+    uint8_t data[2];
+
+    data[0] = Slot;
+    data[1] = Kind;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_PW_SAFE_SEND_DATA,data,2);
+        res=sendCommand(cmd);
+
+        if (res==-1)
+            return ERR_SENDING;
+        else
+        {  //sending the command was successful
+            Sleep::msleep(200);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                {
+                    return (ERR_NO_ERROR);
+                }
+                else
+                {
+                    return (ERR_STATUS_NOT_OK);
+                }
+            }
+            else
+                return ERR_WRONG_RESPONSE_CRC;
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
 
 
 /*******************************************************************************

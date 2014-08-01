@@ -173,13 +173,17 @@ void Response::DebugResponse()
         case CMD_PW_SAFE_ERASE_SLOT :
             DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_ERASE_SLOT\n");
             break;
+        case CMD_PW_SAFE_ENABLE :
+            DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_ENABLE\n");
+            break;
+        case CMD_PW_SAFE_INIT_KEY :
+            DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_INIT_KEY\n");
+            break;
 
         default:
             DebugAppendText ((char *)"         Last command        : Unknown\n");
             break;
     }
-
-
 
 
 // Check last command status =     lastCommandStatus = reportBuffer[7]
