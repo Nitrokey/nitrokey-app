@@ -44,6 +44,9 @@ unsigned long DebugTextlen_Stick20 = 0;
 char DebugTextHasChanged = FALSE;
 int DebugingActive = FALSE;
 int DebugingStick20PoolingActive = FALSE;
+char DebugNewText[STICK20_DEBUG_TEXT_LEN];               // We have it
+int  DebugNewTextLen = 0;
+
 
 HID_Stick20SendData_est             HID_Stick20ReceiveData_st;
 
@@ -78,6 +81,9 @@ void DebugClearText (void)
 {
     DebugText_Stick20[0] = 0;
     DebugTextlen_Stick20 = 0;
+    DebugNewText[0]      = 0;
+    DebugNewTextLen      = 0;
+
     DebugTextHasChanged  = FALSE;
 }
 
@@ -95,11 +101,30 @@ void DebugAppendText (char *Text)
 {
     int i;
 
-    if (STICK20_DEBUG_TEXT_LEN <= DebugTextlen_Stick20 + strlen (Text))
+    if (STICK20_DEBUG_TEXT_LEN <= DebugTextlen_Stick20 + strlen (Text) + DebugNewTextLen - 1)
     {
         return;
     }
 
+    i = 0;
+    while (Text[i] != 0)
+    {
+        // Remove embedded LF
+        if ('\r' != Text[i])
+        {
+            DebugNewText[DebugNewTextLen] = Text[i];
+            DebugNewTextLen++;
+        }
+        i++;
+    }
+    DebugNewText[DebugNewTextLen] = 0;
+
+    if (0 != i)
+    {
+        DebugTextHasChanged = TRUE;
+    }
+
+/*
     i = 0;
     while (Text[i] != 0)
     {
@@ -115,6 +140,7 @@ void DebugAppendText (char *Text)
     {
         DebugTextHasChanged = TRUE;
     }
+*/
 }
 
 /** Only for debugging - End */

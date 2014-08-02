@@ -68,6 +68,24 @@ class Response;
 #define CMD_CLEAR_WARNING              0x0A
 
 
+#define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
+#define CMD_GET_PW_SAFE_SLOT_NAME         0x61
+#define CMD_GET_PW_SAFE_SLOT_PASSWORD     0x62
+#define CMD_GET_PW_SAFE_SLOT_LOGINNAME    0x63
+#define CMD_SET_PW_SAFE_SLOT_DATA_1       0x64
+#define CMD_SET_PW_SAFE_SLOT_DATA_2       0x65
+#define CMD_PW_SAFE_ERASE_SLOT            0x66
+#define CMD_PW_SAFE_ENABLE                0x67
+#define CMD_PW_SAFE_INIT_KEY              0x68
+#define CMD_PW_SAFE_SEND_DATA             0x69
+
+
+#define PWS_SEND_PASSWORD     0
+#define PWS_SEND_LOGINNAME    1
+#define PWS_SEND_TAB          2
+#define PWS_SEND_CR           3
+
+
 #define DEBUG_STATUS_NO_DEBUGGING       0
 #define DEBUG_STATUS_LOCAL_DEBUG        1
 #define DEBUG_STATUS_DEBUG_ALL          2
@@ -120,11 +138,13 @@ class Response;
 #define CMD_STATUS_TIMESTAMP_WARNING   6
 
 enum comm_errors{
+    ERR_NO_ERROR           =  0,
     ERR_NOT_CONNECTED      = -1,
     ERR_WRONG_RESPONSE_CRC = -2,
     ERR_SENDING            = -3,
     ERR_STATUS_NOT_OK      = -4
 };
+
 
 
 #define STICK20_PASSOWRD_LEN               20
@@ -197,6 +217,26 @@ typedef struct {
 #define HOTP_SLOT_COUNT      3
 #define TOTP_SLOT_COUNT      15
 
+
+/******************************************************************************
+
+  Declarations for password safe
+
+******************************************************************************/
+
+#define PWS_SLOT_COUNT          16
+
+#define PWS_SLOTSTATE_LENGTH     1
+#define PWS_SLOTNAME_LENGTH     11
+#define PWS_PASSWORD_LENGTH     20
+#define PWS_LOGINNAME_LENGTH    32
+
+/******************************************************************************
+
+  class Device
+
+******************************************************************************/
+
 class Device
 {
 
@@ -219,7 +259,31 @@ public:
     int readSlot(uint8_t slotNo);
     int getPasswordRetryCount();
 
+
+// Password safe
+    int getPasswordSafeSlotStatus ();
+    int getPasswordSafeSlotName (int Slot);
+    int getPasswordSafeSlotPassword (int Slot);
+    int getPasswordSafeSlotLoginName (int Slot);
+    int setPasswordSafeSlotData_1 (int Slot,uint8_t *Name,uint8_t *Password);
+    int setPasswordSafeSlotData_2 (int Slot,uint8_t *LoginName);
+    int passwordSafeEraseSlot (int Slot);
+    int passwordSafeEnable (char *password);
+    int passwordSafeInitKey (void);
+    int passwordSafeSendSlotDataViaHID (int Slot,int Kind);
+
+    uint8_t passwordSafeUnlocked;
+    uint8_t passwordSafeStatus[PWS_SLOT_COUNT];
+    uint8_t passwordSafeStatusDisplayed[PWS_SLOT_COUNT];
+    uint8_t passwordSafeSlotNames[PWS_SLOT_COUNT][PWS_SLOTNAME_LENGTH+1];
+
+    uint8_t passwordSafeSlotName[PWS_SLOTNAME_LENGTH+1];
+    uint8_t passwordSafeLoginName[PWS_LOGINNAME_LENGTH+1];
+    uint8_t passwordSafePassword[PWS_PASSWORD_LENGTH+1];
+// Password safe end
+
     bool newConnection;
+    int  LastStickError;
     void initializeConfig();
     HOTPSlot *HOTPSlots[HOTP_SLOT_COUNT_MAX];
     TOTPSlot *TOTPSlots[TOTP_SLOT_COUNT_MAX];
@@ -228,6 +292,9 @@ public:
     bool validPassword;
     bool passwordSet;
     uint8_t passwordRetryCount;
+
+
+
 
     bool stick20EnableCryptedPartition (uint8_t *password);
     bool stick20DisableCryptedPartition (void);

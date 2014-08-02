@@ -38,7 +38,7 @@ public:
 
     QString DebugText;
     
-    void SetNewText(QString Text);
+    void updateText(void);
 
     Device *cryptostick;
 

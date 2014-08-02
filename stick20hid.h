@@ -54,6 +54,9 @@ extern unsigned long DebugTextlen_Stick20;
 extern char DebugTextHasChanged;
 extern int DebugingActive;
 extern int DebugingStick20PoolingActive;
+extern char DebugNewText[600000];               // We have it
+extern int  DebugNewTextLen;
+
 
 void DebugClearText (void);
 void DebugAppendText (char *Text);

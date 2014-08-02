@@ -116,6 +116,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     SdCardNotErased_DontAsk   = FALSE;
     StickNotInitated_DontAsk  = FALSE;
 
+    PWS_Access = FALSE;
+
     clipboard = QApplication::clipboard();  
   
     ExtendedConfigActive = StartupInfo_st->ExtendedConfigActive;
@@ -216,7 +218,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-    restoreAction = new QAction(tr("&Configure OTP"), this);
+    restoreAction = new QAction(tr("&Configure"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
     DebugAction = new QAction(tr("&Debug"), this);
@@ -282,6 +284,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         }
         DebugAppendText ((char *)"\n");
     }
+
     //ui->labelQuestion1->setToolTip("Test");
     generateMenu();
 
@@ -1138,6 +1141,9 @@ void MainWindow::generateMenuOTP()
 
 void MainWindow::generateMenuForStick10()
 {
+// Hide tab for password safe for stick 1.x
+    ui->tabWidget->removeTab(2);
+
     generateMenuOTP ();
 
     trayMenu->addAction(restoreAction);
@@ -1160,6 +1166,14 @@ void MainWindow::generateMenuForStick20()
 {
     //int i;
     int AddSeperator;
+
+// Enable tab for password safe for stick 2
+    if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+    {
+        ui->tabWidget->addTab(ui->tab_3,"Password safe config");
+    }
+
+    generateMenuPasswordSafe ();
 
     AddSeperator = FALSE;
 
@@ -1653,6 +1667,8 @@ void MainWindow::startConfiguration()
             password.clear();
         }
     }
+
+// Start the config dialog
     if (cryptostick->validPassword){
 
         cryptostick->getSlotConfigs();
@@ -1661,8 +1677,9 @@ void MainWindow::startConfiguration()
         cryptostick->getStatus();
         displayCurrentGeneralConfig();
 
-        showNormal();
+        SetupPasswordSafeConfig ();
 
+        showNormal();
    }
     else if (ok){
         QMessageBox msgBox;
@@ -1706,7 +1723,7 @@ void MainWindow::startStickDebug()
 
     dialog.cryptostick=cryptostick;
 
-    dialog.SetNewText (DebugText_Stick20);
+    dialog.updateText (); // Init data
 
     dialog.exec();
 }
@@ -2328,7 +2345,8 @@ void MainWindow::startStick20DebugAction()
     //uint8_t password[40];
     //bool    ret;
     //int64_t crc;
-    stick20HiddenVolumeDialog HVDialog(this);
+    int ret;
+//    stick20HiddenVolumeDialog HVDialog(this);
 
 /*
     ret = HVDialog.exec();
@@ -2338,7 +2356,32 @@ void MainWindow::startStick20DebugAction()
         stick20SendCommand (STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP,(unsigned char*)&HVDialog.HV_Setup_st);
     }
 */
-    stick20SendCommand (STICK20_CMD_PRODUCTION_TEST,NULL);
+/*
+    ret = cryptostick->getPasswordSafeSlotStatus();
+    if (ERR_NO_ERROR != ret)
+    {
+        ret = 0;
+    }
+*/
+
+
+
+    ret = cryptostick->getPasswordSafeSlotName(0);
+    ret = cryptostick->getPasswordSafeSlotPassword(0);
+    ret = cryptostick->getPasswordSafeSlotLoginName(0);
+
+    ret = cryptostick->setPasswordSafeSlotData_1 (0,(uint8_t*)"Name1",(uint8_t*)"PPPPP");
+    ret = cryptostick->setPasswordSafeSlotData_2 (0,(uint8_t*)"LN11111");
+
+    ret = cryptostick->getPasswordSafeSlotName(0);
+    ret = cryptostick->getPasswordSafeSlotPassword(0);
+    ret = cryptostick->getPasswordSafeSlotLoginName(0);
+
+    ret = cryptostick->passwordSafeEraseSlot(0);
+
+
+
+//    stick20SendCommand (STICK20_CMD_PRODUCTION_TEST,NULL);
 
     if (1)
     {
@@ -3487,3 +3530,503 @@ void MainWindow::checkTextEdited(){
         ui->checkBox->setChecked(false);
     }
 }
+
+/*******************************************************************************
+
+  SetupPasswordSafeConfig
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::SetupPasswordSafeConfig (void)
+{
+    int ret;
+    int i;
+
+    ui->PWS_ComboBoxSelectSlot->clear();
+    PWS_Access = FALSE;
+
+// Get active password slots
+    ret = cryptostick->getPasswordSafeSlotStatus();
+    if (ERR_NO_ERROR == ret)
+    {
+        PWS_Access = TRUE;
+    // Setup combobox
+        for (i=0;i<PWS_SLOT_COUNT;i++)
+        {
+            if (TRUE == cryptostick->passwordSafeStatus[i])
+            {
+                if (0 == strlen ((char*)cryptostick->passwordSafeSlotNames[i]))
+                {
+                    cryptostick->getPasswordSafeSlotName(i);
+                    strcpy ((char*)cryptostick->passwordSafeSlotNames[i],(char*)cryptostick->passwordSafeSlotName);
+                }
+                ui->PWS_ComboBoxSelectSlot->addItem((char*)cryptostick->passwordSafeSlotNames[i]);
+            }
+            else
+            {
+                cryptostick->passwordSafeSlotNames[i][0] = 0;
+                ui->PWS_ComboBoxSelectSlot->addItem(QString("Slot ").append(QString::number(i+1,10)).append(QString(" free")));
+            }
+        }
+    }
+    else
+    {
+        ui->PWS_ComboBoxSelectSlot->addItem(QString("*** No slot access ***"));
+    }
+
+    ui->PWS_EditSlotName->setMaxLength(PWS_SLOTNAME_LENGTH);
+    ui->PWS_EditPassword->setMaxLength(PWS_PASSWORD_LENGTH);
+    ui->PWS_EditLoginName->setMaxLength(PWS_LOGINNAME_LENGTH);
+
+    ui->PWS_CheckBoxHideSecret->setChecked(TRUE);
+    ui->PWS_EditPassword->setEchoMode(QLineEdit::Password);
+
+/*
+    ret = cryptostick->getPasswordSafeSlotName(0);
+    ret = cryptostick->getPasswordSafeSlotPassword(0);
+    ret = cryptostick->getPasswordSafeSlotLoginName(0);
+
+    ret = cryptostick->setPasswordSafeSlotData_1 (0,(uint8_t*)"Name1",(uint8_t*)"PPPPP");
+    ret = cryptostick->setPasswordSafeSlotData_2 (0,(uint8_t*)"LN11111");
+
+    ret = cryptostick->getPasswordSafeSlotName(0);
+    ret = cryptostick->getPasswordSafeSlotPassword(0);
+    ret = cryptostick->getPasswordSafeSlotLoginName(0);
+
+    ret = cryptostick->passwordSafeEraseSlot(0);
+*/
+}
+
+/*******************************************************************************
+
+  on_PWS_ButtonClearSlot_clicked
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_PWS_ButtonClearSlot_clicked()
+{
+    int Slot;
+    int ret;
+
+    Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
+
+    if (0 != cryptostick->passwordSafeSlotNames[Slot][0])      // Is slot active ?
+    {
+        ret = cryptostick->passwordSafeEraseSlot(Slot);
+        if (ERR_NO_ERROR == ret)
+        {
+            ui->PWS_EditSlotName->setText("");
+            ui->PWS_EditPassword->setText("");
+            ui->PWS_EditLoginName->setText("");
+            cryptostick->passwordSafeStatus[Slot] = FALSE;
+            cryptostick->passwordSafeSlotNames[Slot][0] = 0;
+            ui->PWS_ComboBoxSelectSlot->setItemText(Slot,QString("Slot ").append(QString::number(Slot+1,10)).append(QString(" free")));
+        }
+        else
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Can't clear slot");
+            msgBox.exec();
+        }
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Slot already erased");
+        msgBox.exec();
+    }
+
+}
+
+/*******************************************************************************
+
+  on_PWS_ButtonClearSlot_clicked
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index)
+{
+    int ret;
+    QString OutputText;
+
+    if (FALSE == PWS_Access)
+    {
+        return;
+    }
+
+// Slot already used ?
+    if (TRUE == cryptostick->passwordSafeStatus[index])
+    {
+//        ret = cryptostick->getPasswordSafeSlotName(index);
+        ui->PWS_EditSlotName->setText((char*)cryptostick->passwordSafeSlotNames[index]);
+
+        ret = cryptostick->getPasswordSafeSlotPassword(index);
+        ret = cryptostick->getPasswordSafeSlotLoginName(index);
+
+        ui->PWS_EditPassword->setText((QString)(char*)cryptostick->passwordSafePassword);
+        ui->PWS_EditLoginName->setText((QString)(char*)cryptostick->passwordSafeLoginName);
+    }
+    else
+    {
+        ui->PWS_EditSlotName->setText("");
+        ui->PWS_EditPassword->setText("");
+        ui->PWS_EditLoginName->setText("");
+    }
+}
+
+/*******************************************************************************
+
+  on_PWS_CheckBoxHideSecret_toggled
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked)
+{
+    if (checked)
+        ui->PWS_EditPassword->setEchoMode(QLineEdit::Password);
+    else
+        ui->PWS_EditPassword->setEchoMode(QLineEdit::Normal);
+}
+
+/*******************************************************************************
+
+  on_PWS_ButtonSaveSlot_pressed
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_PWS_ButtonSaveSlot_pressed()
+{
+    int Slot;
+    int ret;
+    uint8_t SlotName[PWS_SLOTNAME_LENGTH+1];
+    uint8_t LoginName[PWS_LOGINNAME_LENGTH+1];
+    uint8_t Password[PWS_PASSWORD_LENGTH+1];
+
+
+    Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
+
+    strncpy ((char*)SlotName,ui->PWS_EditSlotName->text().toLatin1(),PWS_SLOTNAME_LENGTH);
+    SlotName[PWS_SLOTNAME_LENGTH] = 0;
+
+    strncpy ((char*)LoginName,ui->PWS_EditLoginName->text().toLatin1(),PWS_LOGINNAME_LENGTH);
+    LoginName[PWS_LOGINNAME_LENGTH] = 0;
+
+    strncpy ((char*)Password,ui->PWS_EditPassword->text().toLatin1(),PWS_PASSWORD_LENGTH);
+    Password[PWS_PASSWORD_LENGTH] = 0;
+
+    ret = cryptostick->setPasswordSafeSlotData_1 (Slot,(uint8_t*)SlotName,(uint8_t*)Password);
+    if (ERR_NO_ERROR == ret)
+    {
+        return;
+    }
+
+    ret = cryptostick->setPasswordSafeSlotData_2 (Slot,(uint8_t*)LoginName);
+    if (ERR_NO_ERROR == ret)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Can't save slot");
+        msgBox.exec();
+        return;
+    }
+
+    cryptostick->passwordSafeStatus[Slot] = TRUE;
+    strcpy ((char*)cryptostick->passwordSafeSlotNames[Slot],(char*)SlotName);
+    ui->PWS_ComboBoxSelectSlot->setItemText (Slot,(QString)(char*)SlotName);
+
+    generateMenu ();
+}
+
+/*******************************************************************************
+
+  on_PWS_ButtonClose_pressed
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+char *MainWindow::PWS_GetSlotName (int Slot)
+{
+    if (0 == strlen ((char*)cryptostick->passwordSafeSlotNames[Slot]))
+    {
+        cryptostick->getPasswordSafeSlotName(Slot);
+        strcpy ((char*)cryptostick->passwordSafeSlotNames[Slot],(char*)cryptostick->passwordSafeSlotName);
+    }
+    return ((char*)cryptostick->passwordSafeSlotNames[Slot]);
+}
+
+/*******************************************************************************
+
+  on_PWS_ButtonClose_pressed
+
+  Changes
+  Date      Author        Info
+  01.08.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_PWS_ButtonClose_pressed()
+{
+    hide();
+}
+
+
+/*******************************************************************************
+
+  generateMenuPasswordSafe
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::generateMenuPasswordSafe()
+{
+    if (FALSE == cryptostick->passwordSafeUnlocked)
+    {
+        QString actionName("Enable password safe");
+        trayMenu->addAction(actionName,this,SLOT(PWS_Clicked_EnablePWSAccess()));
+        return;
+    }
+
+    if (cryptostick->passwordSafeStatus[0] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (0)),this,SLOT(PWS_Clicked_Slot00()));
+    }
+    if (cryptostick->passwordSafeStatus[1] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (1)),this,SLOT(PWS_Clicked_Slot01()));
+    }
+    if (cryptostick->passwordSafeStatus[2] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (2)),this,SLOT(PWS_Clicked_Slot02()));
+    }
+    if (cryptostick->passwordSafeStatus[3] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (3)),this,SLOT(PWS_Clicked_Slot03()));
+    }
+    if (cryptostick->passwordSafeStatus[4] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (4)),this,SLOT(PWS_Clicked_Slot04()));
+    }
+    if (cryptostick->passwordSafeStatus[5] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (5)),this,SLOT(PWS_Clicked_Slot05()));
+    }
+    if (cryptostick->passwordSafeStatus[6] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (6)),this,SLOT(PWS_Clicked_Slot06()));
+    }
+    if (cryptostick->passwordSafeStatus[7] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (7)),this,SLOT(PWS_Clicked_Slot07()));
+    }
+    if (cryptostick->passwordSafeStatus[8] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (8)),this,SLOT(PWS_Clicked_Slot08()));
+    }
+    if (cryptostick->passwordSafeStatus[9] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (9)),this,SLOT(PWS_Clicked_Slot09()));
+    }
+    if (cryptostick->passwordSafeStatus[10] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (10)),this,SLOT(PWS_Clicked_Slot10()));
+    }
+    if (cryptostick->passwordSafeStatus[10] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (10)),this,SLOT(PWS_Clicked_Slot10()));
+    }
+    if (cryptostick->passwordSafeStatus[11] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (11)),this,SLOT(PWS_Clicked_Slot11()));
+    }
+    if (cryptostick->passwordSafeStatus[12] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (12)),this,SLOT(PWS_Clicked_Slot12()));
+    }
+    if (cryptostick->passwordSafeStatus[13] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (13)),this,SLOT(PWS_Clicked_Slot13()));
+    }
+    if (cryptostick->passwordSafeStatus[14] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (14)),this,SLOT(PWS_Clicked_Slot14()));
+    }
+    if (cryptostick->passwordSafeStatus[15] == (unsigned char)true)
+    {
+        QString actionName("PW Safe - ");
+        trayMenu->addAction(actionName.append(PWS_GetSlotName (15)),this,SLOT(PWS_Clicked_Slot15()));
+    }
+}
+
+/*******************************************************************************
+
+  PWS_Clicked_EnablePWSAccess
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::PWS_Clicked_EnablePWSAccess ()
+{
+    uint8_t password[40];
+    bool    ret;
+    int     ret_s32;
+
+    PasswordDialog dialog(FALSE,this);
+    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.cryptostick = cryptostick;
+
+    ret = dialog.exec();
+
+    if (Accepted == ret)
+    {
+        dialog.getPassword ((char*)password);
+
+        ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+        if (ERR_NO_ERROR != ret_s32)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Can't enable password safe");
+            msgBox.exec();
+        }
+        else
+        {
+            SetupPasswordSafeConfig ();
+            generateMenu ();
+        }
+
+    }
+}
+
+/*******************************************************************************
+
+  PWS_Clicked_EnablePWSAccess
+
+  Changes
+  Date      Author        Info
+  31.07.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::PWS_ExceClickedSlot (int Slot)
+{
+    QString MsgText ("PW Safe Slot ");
+    QMessageBox msgBox;
+    int     ret_s32;
+
+    MsgText.append(QString::number(Slot+1,10));
+    MsgText.append(" clicked.\nPress <OK> and set cursor to the password dialog");
+
+    msgBox.setText(MsgText);
+    msgBox.exec();
+
+    Sleep::msleep(1000);
+
+    ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (Slot,PWS_SEND_PASSWORD);
+    if (ERR_NO_ERROR != ret_s32)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Can't send password chars via HID");
+        msgBox.exec();
+        return;
+    }
+
+    ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (Slot,PWS_SEND_CR);
+    if (ERR_NO_ERROR != ret_s32)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Can't send CR via HID");
+        msgBox.exec();
+        return;
+    }
+}
+
+void MainWindow::PWS_Clicked_Slot00 () { PWS_ExceClickedSlot ( 0); }
+void MainWindow::PWS_Clicked_Slot01 () { PWS_ExceClickedSlot ( 1); }
+void MainWindow::PWS_Clicked_Slot02 () { PWS_ExceClickedSlot ( 2); }
+void MainWindow::PWS_Clicked_Slot03 () { PWS_ExceClickedSlot ( 3); }
+void MainWindow::PWS_Clicked_Slot04 () { PWS_ExceClickedSlot ( 4); }
+void MainWindow::PWS_Clicked_Slot05 () { PWS_ExceClickedSlot ( 5); }
+void MainWindow::PWS_Clicked_Slot06 () { PWS_ExceClickedSlot ( 6); }
+void MainWindow::PWS_Clicked_Slot07 () { PWS_ExceClickedSlot ( 7); }
+void MainWindow::PWS_Clicked_Slot08 () { PWS_ExceClickedSlot ( 8); }
+void MainWindow::PWS_Clicked_Slot09 () { PWS_ExceClickedSlot ( 9); }
+void MainWindow::PWS_Clicked_Slot10 () { PWS_ExceClickedSlot (10); }
+void MainWindow::PWS_Clicked_Slot11 () { PWS_ExceClickedSlot (11); }
+void MainWindow::PWS_Clicked_Slot12 () { PWS_ExceClickedSlot (12); }
+void MainWindow::PWS_Clicked_Slot13 () { PWS_ExceClickedSlot (13); }
+void MainWindow::PWS_Clicked_Slot14 () { PWS_ExceClickedSlot (14); }
+void MainWindow::PWS_Clicked_Slot15 () { PWS_ExceClickedSlot (15); }
+

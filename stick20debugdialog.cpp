@@ -39,7 +39,11 @@ extern "C" char DebugText_Stick20[600000];          // todo move to header
 extern "C" unsigned long DebugTextlen_Stick20;      // todo move to header
 extern "C" char DebugTextHasChanged;                // todo move to header
 extern "C" int DebugingActive;                      // todo move to header
-extern "C" int DebugingStick20PoolingActive;;       // todo move to header
+extern "C" int DebugingStick20PoolingActive;        // todo move to header
+
+
+extern "C" char DebugNewText[600000];               // We have it
+extern "C" int  DebugNewTextLen;
 
 /*******************************************************************************
 
@@ -79,6 +83,10 @@ DebugDialog::DebugDialog(QWidget *parent) :
     ret = connect(RefreshTimer, SIGNAL(timeout()), this, SLOT(UpdateDebugText()));
 
     RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME);
+
+    ui->plainTextEdit->clear();
+    ui->plainTextEdit->appendPlainText(DebugText_Stick20);
+
     if(ret){}//Fix warnings
 }
 
@@ -146,7 +154,13 @@ void DebugDialog::UpdateDebugText()
     {
         if (TRUE == DebugTextHasChanged)
         {
-            ui->plainTextEdit->setPlainText(DebugText_Stick20);
+            strcat (DebugText_Stick20,DebugNewText);
+
+//            ui->plainTextEdit->setPlainText(DebugText_Stick20);
+            ui->plainTextEdit->appendPlainText(DebugNewText);
+            DebugNewText[0] = 0;
+            DebugNewTextLen = 0;
+            DebugTextHasChanged = FALSE;
 
             ui->plainTextEdit->moveCursor (QTextCursor::End);
        }
@@ -158,7 +172,7 @@ void DebugDialog::UpdateDebugText()
 
 /*******************************************************************************
 
-  SetNewText
+  updateText
 
   Reviews
   Date      Reviewer        Info
@@ -166,9 +180,18 @@ void DebugDialog::UpdateDebugText()
 
 *******************************************************************************/
 
-void DebugDialog::SetNewText(QString Text)
+void DebugDialog::updateText(void)
 {
-    ui->plainTextEdit->setPlainText(Text);
+    if (TRUE == DebugTextHasChanged)
+    {
+        strcat (DebugText_Stick20,DebugNewText);
+        ui->plainTextEdit->appendPlainText(DebugNewText);
+        DebugNewText[0] = 0;
+        DebugNewTextLen = 0;
+
+        ui->plainTextEdit->moveCursor (QTextCursor::End);
+        DebugTextHasChanged = FALSE;
+   }
 }
 
 
@@ -186,7 +209,19 @@ void DebugDialog::SetNewText(QString Text)
 
 void DebugDialog::on_pushButton_clicked()
 {
-    ui->plainTextEdit->setPlainText(DebugText_Stick20);
+    if (TRUE == DebugTextHasChanged)
+    {
+        strcat (DebugText_Stick20,DebugNewText);
+        ui->plainTextEdit->appendPlainText(DebugNewText);
+        DebugNewText[0] = 0;
+        DebugNewTextLen = 0;
 
-    ui->plainTextEdit->moveCursor (QTextCursor::End);
+        ui->plainTextEdit->moveCursor (QTextCursor::End);
+        DebugTextHasChanged = FALSE;
+   }
+
+//    UpdateDebugText ();
+//    ui->plainTextEdit->setPlainText(DebugText_Stick20);
+
+//    ui->plainTextEdit->moveCursor (QTextCursor::End);
 }
