@@ -174,6 +174,7 @@ int Device::checkConnection()
             {
                 HOTP_SlotCount = HOTP_SLOT_COUNT_MAX;
                 TOTP_SlotCount = TOTP_SLOT_COUNT_MAX;
+                passwordSafeUnlocked = FALSE;
             }
             initializeConfig();          // init data for OTP
             return 1;
@@ -994,6 +995,14 @@ int Device::getPasswordSafeSlotName (int Slot)
             {
                 memcpy (passwordSafeSlotName,&resp->data[0],PWS_SLOTNAME_LENGTH);
                 passwordSafeSlotName[PWS_SLOTNAME_LENGTH] = 0;
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                {
+                    return (ERR_NO_ERROR);
+                }
+                else
+                {
+                    return (ERR_STATUS_NOT_OK);
+                }
 /*
 {
     char text[1000];
@@ -1044,6 +1053,15 @@ int Device::getPasswordSafeSlotPassword (int Slot)
         {
             memcpy (passwordSafePassword,&resp->data[0],PWS_PASSWORD_LENGTH);
             passwordSafePassword[PWS_PASSWORD_LENGTH] = 0;
+
+            if (resp->lastCommandStatus == CMD_STATUS_OK)
+            {
+                return (ERR_NO_ERROR);
+            }
+            else
+            {
+                return (ERR_STATUS_NOT_OK);
+            }
 /*
 {
     char text[1000];
@@ -1094,6 +1112,14 @@ int Device::getPasswordSafeSlotLoginName (int Slot)
         {
             memcpy (passwordSafeLoginName,&resp->data[0],PWS_LOGINNAME_LENGTH);
             passwordSafeLoginName[PWS_LOGINNAME_LENGTH] = 0;
+            if (resp->lastCommandStatus == CMD_STATUS_OK)
+            {
+                return (ERR_NO_ERROR);
+            }
+            else
+            {
+                return (ERR_STATUS_NOT_OK);
+            }
 /*
 {
     char text[1000];
