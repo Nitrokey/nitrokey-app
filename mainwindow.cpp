@@ -170,7 +170,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         exit (ret);
     }
 
-
+    set_initial_time = false;
     QTimer *timer = new QTimer(this);
     ret_connection = connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
     timer->start(1000);
@@ -293,7 +293,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     //ui->labelQuestion1->setToolTip("Test");
     generateMenu();
-
 
 }
 
@@ -619,6 +618,43 @@ void MainWindow::checkConnection()
         if (false == cryptostick->activStick20)
         {
             ui->statusBar->showMessage("Device connected.");
+
+            if(set_initial_time == FALSE) {
+                ret = cryptostick->setTime(0);
+                qDebug() << "test";
+                set_initial_time = TRUE;
+            } else {
+                ret = 0;
+            }
+
+            if(ret == -2){
+                 QMessageBox msgBox;
+                 msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or your Crypto Stick\nmay have been attacked. If an attacker or malware could\nhave used your Crypto Stick you should reset the secrets\nof your configured One Time Passwords. If your computer's time is wrong,\nplease configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
+                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                 msgBox.setDefaultButton(QMessageBox::No);
+                 ret = msgBox.exec();
+
+                 switch (ret) {
+                   case QMessageBox::Yes:
+                        resetTime();
+                        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+                        Sleep::msleep(1000);
+                        QApplication::restoreOverrideCursor();
+                        generateAllConfigs();
+
+                        msgBox.setText("Time reset!");
+                        msgBox.setStandardButtons(QMessageBox::Ok);
+                        msgBox.exec();
+
+                       break;
+                   case QMessageBox::No:
+
+                       break;
+                   default:
+                       // should never be reached
+                       break;
+                 }
+             }
         } else
         {
             ui->statusBar->showMessage("Device Stick 2.0 connected.");
@@ -630,6 +666,7 @@ void MainWindow::checkConnection()
         ui->statusBar->showMessage("Device disconnected.");
         CryptedVolumeActive = FALSE;
         HiddenVolumeActive  = FALSE;
+        set_initial_time = FALSE;
         if (FALSE== DeviceOffline)      // To avoid the continuous reseting of the menu
         {
             generateMenu();
@@ -658,6 +695,42 @@ void MainWindow::checkConnection()
         if (false == cryptostick->activStick20)
         {
             ui->statusBar->showMessage("Device connected.");
+            if(set_initial_time == FALSE){
+                ret = cryptostick->setTime(0);
+                qDebug() << "test";
+                set_initial_time = TRUE;
+            } else {
+                ret = 0;
+            }
+
+            if(ret == -2){
+                 QMessageBox msgBox;
+                 msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or your Crypto Stick\nmay have been attacked. If an attacker or malware could\nhave used your Crypto Stick you should reset the secrets\nof your configured One Time Passwords. If your computer's time is wrong,\nplease configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
+                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                 msgBox.setDefaultButton(QMessageBox::No);
+                 ret = msgBox.exec();
+
+                 switch (ret) {
+                   case QMessageBox::Yes:
+                        resetTime();
+                        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+                        Sleep::msleep(1000);
+                        QApplication::restoreOverrideCursor();
+                        generateAllConfigs();
+
+                        msgBox.setText("Time reset!");
+                        msgBox.setStandardButtons(QMessageBox::Ok);
+                        msgBox.exec();
+
+                       break;
+                   case QMessageBox::No:
+
+                       break;
+                   default:
+                       // should never be reached
+                       break;
+                 }
+             }
         } else
         {
             ui->statusBar->showMessage("Device Stick 2.0 connected.");
@@ -1439,38 +1512,6 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot)
 void MainWindow::generateAllConfigs()
 {
     cryptostick->initializeConfig();
-
-    int ret = cryptostick->setTime(0);
-
-    if(ret == -2){
-         QMessageBox msgBox;
-         msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or your Crypto Stick\nmay have been attacked. If an attacker or malware could\nhave used your Crypto Stick you should reset the secrets\nof your configured One Time Passwords. If your computer's time is wrong,\nplease configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
-         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-         msgBox.setDefaultButton(QMessageBox::No);
-         ret = msgBox.exec();
-
-         switch (ret) {
-           case QMessageBox::Yes:
-                resetTime();
-                QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-                Sleep::msleep(1000);
-                QApplication::restoreOverrideCursor();
-                generateAllConfigs();
-
-                msgBox.setText("Time reset!");
-                msgBox.setStandardButtons(QMessageBox::Ok);
-                msgBox.exec();
-
-               break;
-           case QMessageBox::No:
-
-               break;
-           default:
-               // should never be reached
-               break;
-         }
-     }
-
     cryptostick->getSlotConfigs();
     displayCurrentSlotConfig();
     generateMenu();
@@ -3604,10 +3645,10 @@ void MainWindow::checkClipboard_Valid()
 void MainWindow::checkPasswordTime_Valid(){
     uint64_t currentTime;
 
-    currentTime = QDateTime::currentDateTime().toTime_t();
+ /*   currentTime = QDateTime::currentDateTime().toTime_t();
     if(currentTime >= lastAuthenticateTime + (uint64_t)60){
         cryptostick->validPassword = false;
-    }
+    }*/
 }
 
 void MainWindow::checkTextEdited(){

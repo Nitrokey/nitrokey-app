@@ -2406,7 +2406,7 @@ uint16_t Device::testHOTP(uint16_t tests_number,uint8_t counter_number){
     res=sendCommand(cmd);
 
     if (res==-1)
-        return -1;
+        return -2;
     else{  //sending the command was successful
         //return cmd->crc;
          qDebug() << "command sent";
@@ -2417,7 +2417,8 @@ uint16_t Device::testHOTP(uint16_t tests_number,uint8_t counter_number){
 
         if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
             if (resp->lastCommandStatus==CMD_STATUS_OK){
-                memcpy(&result,resp->data,2);
+                //memcpy(&result,resp->data,2);
+                result = *((uint16_t *)resp->data);
                 return result;
             }
 
@@ -2458,7 +2459,7 @@ uint16_t Device::testTOTP(uint16_t tests_number){
     res=sendCommand(cmd);
 
     if (res==-1)
-        return -1;
+        return -2;
     else{  //sending the command was successful
         //return cmd->crc;
          qDebug() << "command sent";
@@ -2469,7 +2470,8 @@ uint16_t Device::testTOTP(uint16_t tests_number){
 
         if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
             if (resp->lastCommandStatus==CMD_STATUS_OK){
-                memcpy(&result,resp->data,2);
+                //memcpy(&result,resp->data,2);
+                result = *((uint16_t *)resp->data);
                 return result;
             }
 

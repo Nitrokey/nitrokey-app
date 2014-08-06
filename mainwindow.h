@@ -91,6 +91,7 @@ private:
     bool     SdCardNotErased;
     bool     SdCardNotErased_DontAsk;
     bool     StickNotInitated_DontAsk;
+    bool     set_initial_time;
 
     QAction *quitAction;
     QAction *restoreAction;
