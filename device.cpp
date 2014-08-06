@@ -2389,13 +2389,13 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
   06.08.14  SN              First review
 
 *******************************************************************************/
-uint16_t Device::testHOTP(uint16_t tests_number){
+uint16_t Device::testHOTP(uint16_t tests_number,uint8_t counter_number){
 
     uint8_t data[10];
     uint16_t result;
     int res;
 
-    data[0] = 1;
+    data[0] =counter_number;
 
     memcpy(data+1,&tests_number,2);
 

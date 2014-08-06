@@ -4274,8 +4274,9 @@ void MainWindow::on_testHOTPButton_clicked(){
 
     uint16_t results;
     uint16_t tests_number = ui->testsSpinBox->value();
+    uint8_t counter_number = ui->testsSpinBox_2->value();
 
-    results = cryptostick->testHOTP(tests_number);
+    results = cryptostick->testHOTP(tests_number,counter_number);
     if(results < 0){
         QMessageBox msgBox;
         msgBox.setText("There was an error with the test. Check if the device is connected and try again.");
