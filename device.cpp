@@ -761,7 +761,7 @@ int Device::readSlot(uint8_t slotNo)
                     TOTPSlots[slotNo&0x0F]->config = resp->data[15];
                     memcpy(TOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
                     memcpy(&(TOTPSlots[slotNo&0x0F]->interval),resp->data+29,2);
-		    TOTPSlots[slotNo&0x0F]->isProgrammed=true;
+                    TOTPSlots[slotNo&0x0F]->isProgrammed=true;
                 }
 
             }
@@ -2379,3 +2379,107 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
 
 }
 */
+
+/*******************************************************************************
+
+  testHOTP
+
+  Reviews
+  Date      Reviewer        Info
+  06.08.14  SN              First review
+
+*******************************************************************************/
+uint16_t Device::testHOTP(uint16_t tests_number){
+
+    uint8_t data[10];
+    uint16_t result;
+    int res;
+
+    data[0] = 1;
+
+    memcpy(data+1,&tests_number,2);
+
+    if (isConnected){
+       qDebug() << "sending command";
+
+    Command *cmd=new Command(CMD_TEST_COUNTER,data,3);
+    res=sendCommand(cmd);
+
+    if (res==-1)
+        return -1;
+    else{  //sending the command was successful
+        //return cmd->crc;
+         qDebug() << "command sent";
+        Sleep::msleep(100*tests_number);
+        Response *resp=new Response();
+        resp->getResponse(this);
+
+
+        if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+            if (resp->lastCommandStatus==CMD_STATUS_OK){
+                memcpy(&result,resp->data,2);
+                return result;
+            }
+
+        }
+
+        return -1;
+    }
+
+   }
+
+    return -2;
+
+}
+
+/*******************************************************************************
+
+  testTOTP
+
+  Reviews
+  Date      Reviewer        Info
+  06.08.14  SN              First review
+
+*******************************************************************************/
+uint16_t Device::testTOTP(uint16_t tests_number){
+
+    uint8_t data[10];
+    uint16_t result;
+    int res;
+
+    data[0] = 1;
+
+    memcpy(data+1,&tests_number,2);
+
+    if (isConnected){
+       qDebug() << "sending command";
+
+    Command *cmd=new Command(CMD_TEST_TIME,data,3);
+    res=sendCommand(cmd);
+
+    if (res==-1)
+        return -1;
+    else{  //sending the command was successful
+        //return cmd->crc;
+         qDebug() << "command sent";
+        Sleep::msleep(100*tests_number);
+        Response *resp=new Response();
+        resp->getResponse(this);
+
+
+        if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+            if (resp->lastCommandStatus==CMD_STATUS_OK){
+                memcpy(&result,resp->data,2);
+                return result;
+            }
+
+        }
+
+        return -1;
+    }
+
+   }
+
+    return -2;
+
+}

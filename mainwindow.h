@@ -169,6 +169,9 @@ private slots:
     void checkPasswordTime_Valid();
     void checkTextEdited();
 
+    void on_testHOTPButton_clicked();
+    void on_testTOTPButton_clicked();
+
 bool eventFilter (QObject *obj, QEvent *event);
 void iconActivated(QSystemTrayIcon::ActivationReason reason);
 

@@ -67,6 +67,8 @@ class Response;
 #define CMD_GET_PASSWORD_RETRY_COUNT   0x09
 #define CMD_CLEAR_WARNING              0x0A
 #define CMD_SET_TIME                   0x0B
+#define CMD_TEST_COUNTER               0x0C
+#define CMD_TEST_TIME                  0x0D
 
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
@@ -260,6 +262,8 @@ public:
     int getHOTP(uint8_t slotNo);
     int readSlot(uint8_t slotNo);
     int getPasswordRetryCount();
+    uint16_t testHOTP(uint16_t tests_number);
+    uint16_t testTOTP(uint16_t tests_number);
 
 
 // Password safe

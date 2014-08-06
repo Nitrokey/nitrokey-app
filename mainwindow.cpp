@@ -1444,7 +1444,7 @@ void MainWindow::generateAllConfigs()
 
     if(ret == -2){
          QMessageBox msgBox;
-         msgBox.setText("Your computer's time is not set correctly.\nIf you see this message and you commputer's time is set correctly\nyou might have been a victim of a hacker attack\nDo you want to reset the time?");
+         msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or your Crypto Stick\nmay have been attacked. If an attacker or malware could\nhave used your Crypto Stick you should reset the secrets\nof your configured One Time Passwords. If your computer's time is wrong,\nplease configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
          msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
          msgBox.setDefaultButton(QMessageBox::No);
          ret = msgBox.exec();
@@ -4167,6 +4167,15 @@ void MainWindow::resetTime(){
     }
 }
 
+/*******************************************************************************
+
+  getNextCode
+
+  Reviews
+  Date      Reviewer        Info
+  01.08.14  SN              First review
+
+*******************************************************************************/
 
 int MainWindow::getNextCode(uint8_t slotNumber)
 {
@@ -4192,7 +4201,7 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
      if(ret == -2){
          QMessageBox msgBox;
-         msgBox.setText("Your computer's time is not set correctly.\nIf you see this message and you commputer's time is set correctly\nyou might have been a victim of a hacker attack\nDo you want to reset the time?");
+         msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or your Crypto Stick\nmay have been attacked. If an attacker or malware could\nhave used your Crypto Stick you should reset the secrets\nof your configured One Time Passwords. If your computer's time is wrong,\nplease configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
          msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
          msgBox.setDefaultButton(QMessageBox::No);
          ret = msgBox.exec();
@@ -4248,5 +4257,63 @@ int MainWindow::getNextCode(uint8_t slotNumber)
      //ui->lineEdit->setText(output);
      copyToClipboard(output);
      return 0;
+
+}
+
+/*******************************************************************************
+
+  on_testHOTPButton_clicked()
+
+  Reviews
+  Date      Reviewer        Info
+  01.08.14  SN              First review
+
+*******************************************************************************/
+
+void MainWindow::on_testHOTPButton_clicked(){
+
+    uint16_t results;
+    uint16_t tests_number = ui->testsSpinBox->value();
+
+    results = cryptostick->testHOTP(tests_number);
+    if(results < 0){
+        QMessageBox msgBox;
+        msgBox.setText("There was an error with the test. Check if the device is connected and try again.");
+        msgBox.exec();
+    } else {
+        QMessageBox msgBox;
+        msgBox.setText("Tested HOTP counter write/read " + QString::number(tests_number) + " times.\nOf those " + QString::number(results) +" were successful");
+        msgBox.exec();
+    }
+
+}
+
+/*******************************************************************************
+
+  on_testTOTPButton_clicked()
+
+  Reviews
+  Date      Reviewer        Info
+  01.08.14  SN              First review
+
+*******************************************************************************/
+
+void MainWindow::on_testTOTPButton_clicked(){
+
+    uint16_t results;
+    uint16_t tests_number = ui->testsSpinBox->value();
+
+    results = cryptostick->testTOTP(tests_number);
+
+    if(results < 0){
+        QMessageBox msgBox;
+        msgBox.setText("There was an error with the test. Check if the device is connected and try again.");
+        msgBox.exec();
+    } else {
+        QMessageBox msgBox;
+        msgBox.setText("Tested TOTP counter write/read " + QString::number(tests_number) + " times.\nOf those " + QString::number(results) +" were successful");
+        msgBox.exec();
+    }
+
 
 }
