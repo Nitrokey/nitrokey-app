@@ -175,12 +175,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     ret_connection = connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
     timer->start(1000);
 
-    Clipboard_ValidTimer = new QTimer(this);
-
-    // Start timer for Clipboard delete check 
-    connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
-    Clipboard_ValidTimer->start(100);
-
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon(":/images/CS_icon.png"));
 
@@ -232,6 +226,17 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
+    Clipboard_ValidTimer = new QTimer(this);
+
+    // Start timer for Clipboard delete check
+    connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
+    Clipboard_ValidTimer->start(100);
+
+    Password_ValidTimer = new QTimer(this);
+
+    // Start timer for Password check
+    connect(Password_ValidTimer, SIGNAL(timeout()), this, SLOT(checkPasswordTime_Valid()));
+    Password_ValidTimer->start(100);
 
     // Init debug text
     DebugClearText ();
@@ -1344,8 +1349,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
         if (ui->enterCheckBox->isChecked())
             slot->config+=(1<<1);
         if (ui->tokenIDCheckBox->isChecked())
-            slot->config+=(1<<2);
-
+            slot->config+=(1<<2);      
 
     }
    // qDebug() << slot->counter;
@@ -1412,6 +1416,12 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot)
         if (ui->tokenIDCheckBox->isChecked())
             slot->config+=(1<<2);
 
+        uint16_t lastInterval = ui->intervalSpinBox->value();
+
+        if (lastInterval<1)
+            lastInterval=1;
+
+        slot->interval = lastInterval;
 
     }
 }
@@ -1429,6 +1439,38 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot)
 void MainWindow::generateAllConfigs()
 {
     cryptostick->initializeConfig();
+
+    int ret = cryptostick->setTime(0);
+
+    if(ret == -2){
+         QMessageBox msgBox;
+         msgBox.setText("Your computer's time is not set correctly.\nIf you see this message and you commputer's time is set correctly\nyou might have been a victim of a hacker attack\nDo you want to reset the time?");
+         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+         msgBox.setDefaultButton(QMessageBox::No);
+         ret = msgBox.exec();
+
+         switch (ret) {
+           case QMessageBox::Yes:
+                resetTime();
+                QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+                Sleep::msleep(1000);
+                QApplication::restoreOverrideCursor();
+                generateAllConfigs();
+
+                msgBox.setText("Time reset!");
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.exec();
+
+               break;
+           case QMessageBox::No:
+
+               break;
+           default:
+               // should never be reached
+               break;
+         }
+     }
+
     cryptostick->getSlotConfigs();
     displayCurrentSlotConfig();
     generateMenu();
@@ -1471,6 +1513,8 @@ void MainWindow::displayCurrentSlotConfig()
         ui->setToRandomButton->show();
         ui->enterCheckBox->show();
         ui->labelNotify->hide();
+        ui->intervalLabel->hide();
+        ui->intervalSpinBox->hide();
         if (cryptostick->HOTPSlots[slotNo]->isProgrammed){
             ui->checkBox->setEnabled(false);
             ui->secretEdit->setPlaceholderText("");
@@ -1534,6 +1578,8 @@ void MainWindow::displayCurrentSlotConfig()
         ui->setToRandomButton->hide();
         ui->enterCheckBox->hide();
         ui->labelNotify->hide();
+        ui->intervalLabel->show();
+        ui->intervalSpinBox->show();
         if (cryptostick->TOTPSlots[slotNo]->isProgrammed){
             ui->checkBox->setEnabled(false);
             ui->secretEdit->setPlaceholderText("");
@@ -1558,6 +1604,9 @@ void MainWindow::displayCurrentSlotConfig()
 
     QByteArray mui((char *)cryptostick->TOTPSlots[slotNo]->tokenID+4,8);
     ui->muiEdit->setText(QString(mui));
+
+    int interval = cryptostick->TOTPSlots[slotNo]->interval;
+    ui->intervalSpinBox->setValue(interval);
 
     if (cryptostick->TOTPSlots[slotNo]->config&(1<<0))
         ui->digits8radioButton->setChecked(true);
@@ -1672,6 +1721,7 @@ void MainWindow::startConfiguration()
 // Start the config dialog
     if (cryptostick->validPassword){
 
+        lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
         cryptostick->getSlotConfigs();
         displayCurrentSlotConfig();
 
@@ -3138,13 +3188,26 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
 
 void MainWindow::getHOTPDialog(int slot)
 {
-    HOTPDialog dialog(this);
-    dialog.device=cryptostick;
-    dialog.slotNumber=0x10 + slot;
-    dialog.title=QString("HOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[slot]->slotName).append("]");
-    dialog.setToHOTP();
-    dialog.getNextCode();
-    dialog.exec();
+    //HOTPDialog dialog(this);
+    //dialog.device=cryptostick;
+    //dialog.slotNumber=0x10 + slot;
+    //dialog.title=QString("HOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[slot]->slotName).append("]");
+    //dialog.setToHOTP();
+    //dialog.getNextCode();
+    //dialog.exec();
+
+    int ret;
+    QMessageBox msgBox;
+    getNextCode(0x10 + slot);
+    if(ret == 0){
+    if(cryptostick->HOTPSlots[slot]->slotName[0] == '\0')
+        msgBox.setWindowTitle(QString("HOTP slot ").append(QString::number(slot+1,10)));
+    else
+        msgBox.setWindowTitle(QString("HOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[slot]->slotName).append("]"));
+    msgBox.setText("HOTP copied to clipboard!");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
+    }
 }
 
 void MainWindow::getHOTP1()
@@ -3219,13 +3282,26 @@ void MainWindow::getHOTP2()
 
 void MainWindow::getTOTPDialog(int slot)
 {
-    HOTPDialog dialog(this);
-    dialog.device=cryptostick;
-    dialog.slotNumber=0x20 + slot;
-    dialog.title=QString("TOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName).append("]");
-    dialog.setToTOTP();
-    dialog.getNextCode();
-    dialog.exec();
+    //HOTPDialog dialog(this);
+    //dialog.device=cryptostick;
+    //dialog.slotNumber=0x20 + slot;
+    //dialog.title=QString("TOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName).append("]");
+   // dialog.setToTOTP();
+    //dialog.getNextCode();
+   //dialog.exec();
+
+    int ret;
+    QMessageBox msgBox;
+    ret = getNextCode(0x20 + slot);
+    if(ret == 0){
+    if(cryptostick->TOTPSlots[slot]->slotName[0] == '\0')
+        msgBox.setWindowTitle(QString("TOTP slot ").append(QString::number(slot+1,10)));
+    else
+        msgBox.setWindowTitle(QString("TOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName).append("]"));
+    msgBox.setText("TOTP copied to clipboard!");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
+    }
 }
 
 
@@ -3515,7 +3591,7 @@ void MainWindow::checkClipboard_Valid()
     //uint64_t checkTime;
 
     currentTime = QDateTime::currentDateTime().toTime_t();
-    if(currentTime >= lastClipboardTime + (uint64_t)180 && (QString::compare(clipboard->text(),ui->secretEdit->text())==0)){
+    if(currentTime >= lastClipboardTime + (uint64_t)20){
         copyToClipboard(QString(""));
         ui->labelNotify->hide();
     }
@@ -3523,6 +3599,15 @@ void MainWindow::checkClipboard_Valid()
         ui->labelNotify->hide();
     }
 
+}
+
+void MainWindow::checkPasswordTime_Valid(){
+    uint64_t currentTime;
+
+    currentTime = QDateTime::currentDateTime().toTime_t();
+    if(currentTime >= lastAuthenticateTime + (uint64_t)60){
+        cryptostick->validPassword = false;
+    }
 }
 
 void MainWindow::checkTextEdited(){
@@ -4040,3 +4125,128 @@ void MainWindow::PWS_Clicked_Slot13 () { PWS_ExceClickedSlot (13); }
 void MainWindow::PWS_Clicked_Slot14 () { PWS_ExceClickedSlot (14); }
 void MainWindow::PWS_Clicked_Slot15 () { PWS_ExceClickedSlot (15); }
 
+/*******************************************************************************
+
+  resetTime
+
+  Reviews
+  Date      Reviewer        Info
+  27.07.14  SN              First review
+
+*******************************************************************************/
+
+void MainWindow::resetTime(){
+
+    bool ok;
+
+    if (!cryptostick->validPassword){
+        cryptostick->getPasswordRetryCount();
+
+        QString password = QInputDialog::getText(this,tr("Enter card admin password"),tr("Admin password: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
+
+        if (ok){
+
+            uint8_t tempPassword[25];
+
+            for (int i=0;i<25;i++)
+                tempPassword[i]=qrand()&0xFF;
+            cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
+            password.clear();
+        }
+    }
+
+// Start the config dialog
+    if (cryptostick->validPassword){
+        lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+        cryptostick->setTime(1);
+   }
+    else if (ok){
+        QMessageBox msgBox;
+         msgBox.setText("Invalid password!");
+         msgBox.exec();
+    }
+}
+
+
+int MainWindow::getNextCode(uint8_t slotNumber)
+{
+    uint8_t result[18];
+    memset(result,0,18);
+    uint32_t code;
+    uint8_t config;
+    int ret;
+
+    uint16_t lastInterval = 30;
+
+    if (lastInterval<1)
+        lastInterval=1;
+
+    if (slotNumber>=0x20)
+    cryptostick->TOTPSlots[slotNumber-0x20]->interval = lastInterval;
+
+    QString output;
+
+     lastTOTPTime = QDateTime::currentDateTime().toTime_t();
+
+     ret = cryptostick->setTime(0);
+
+     if(ret == -2){
+         QMessageBox msgBox;
+         msgBox.setText("Your computer's time is not set correctly.\nIf you see this message and you commputer's time is set correctly\nyou might have been a victim of a hacker attack\nDo you want to reset the time?");
+         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+         msgBox.setDefaultButton(QMessageBox::No);
+         ret = msgBox.exec();
+
+         switch (ret) {
+           case QMessageBox::Yes:
+                resetTime();
+                QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+                Sleep::msleep(1000);
+                QApplication::restoreOverrideCursor();
+                generateAllConfigs();
+
+                msgBox.setText("Time reset!");
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.exec();
+
+               break;
+           case QMessageBox::No:
+               return 1;
+               break;
+           default:
+               // should never be reached
+               break;
+         }
+      }
+
+     cryptostick->getCode(slotNumber,lastTOTPTime/lastInterval,lastTOTPTime,lastInterval,result);
+
+     //cryptostick->getCode(slotNo,1,result);
+     code=result[0]+(result[1]<<8)+(result[2]<<16)+(result[3]<<24);
+     config=result[4];
+
+
+
+     /*if (config&(1<<2))
+         output.append(QByteArray((char *)(result+5),12));*/
+
+     if (config&(1<<0)){
+             code=code%100000000;
+             output.append(QString( "%1" ).arg(QString::number(code),8,'0') );
+         }
+             else{
+
+         code=code%1000000;
+         output.append(QString( "%1" ).arg(QString::number(code),6,'0') );
+     }
+
+
+     qDebug() << "Current time:" << lastTOTPTime;
+     qDebug() << "Counter:" << lastTOTPTime/lastInterval;
+     qDebug() << "TOTP:" << code;
+
+     //ui->lineEdit->setText(output);
+     copyToClipboard(output);
+     return 0;
+
+}

@@ -463,6 +463,54 @@ int Device::eraseSlot(uint8_t slotNo)
 
 /*******************************************************************************
 
+  setTime
+
+  Reviews
+  Date      Reviewer        Info
+  27.07.14  SN              First review
+
+*******************************************************************************/
+
+int Device::setTime(int reset){
+     int res;
+     uint8_t data[30];
+     uint64_t time = QDateTime::currentDateTime().toTime_t();
+
+     memset(data,0,30);
+     data[0] = reset;
+     memcpy(data+1,&time,8);
+
+     if (isConnected){
+     Command *cmd=new Command(CMD_SET_TIME,data,9);
+     res=sendCommand(cmd);
+
+     if (res==-1)
+         return -1;
+     else{  //sending the command was successful
+         Sleep::msleep(100);
+         Response *resp=new Response();
+         resp->getResponse(this);
+
+         if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+             if (resp->lastCommandStatus==CMD_STATUS_OK)
+             {
+             }
+             else if (resp->lastCommandStatus==CMD_STATUS_TIMESTAMP_WARNING)
+             {
+                 return -2;
+             }
+
+         }
+         return 0;
+     }
+
+    }
+
+     return -1;
+}
+
+/*******************************************************************************
+
   writeToHOTPSlot
 
   Reviews
@@ -488,10 +536,7 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
         memcpy(data+16,slot->secret,20);
         data[36]=slot->config;
         memcpy(data+37,slot->tokenID,13);
-
         memcpy(data+50,slot->counter,8);
-
-
 
 //        qDebug() << "copied data to array";
 
@@ -550,6 +595,7 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
         memcpy(data+16,slot->secret,20);
         data[36]=slot->config;
         memcpy(data+37,slot->tokenID,13);
+	memcpy(data+50,&(slot->interval),2);
 
 //        qDebug() << "copied data to array";
 
@@ -714,7 +760,8 @@ int Device::readSlot(uint8_t slotNo)
                     memcpy(TOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
                     TOTPSlots[slotNo&0x0F]->config = resp->data[15];
                     memcpy(TOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
-                    TOTPSlots[slotNo&0x0F]->isProgrammed=true;
+                    memcpy(&(TOTPSlots[slotNo&0x0F]->interval),resp->data+29,2);
+		    TOTPSlots[slotNo&0x0F]->isProgrammed=true;
                 }
 
             }

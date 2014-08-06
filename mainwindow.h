@@ -53,8 +53,15 @@ public:
     bool MatrixInputActive;
     bool LockHardware;
 
+    uint64_t lastTOTPTime;
+
     QTimer *Clipboard_ValidTimer;
     uint64_t lastClipboardTime;
+
+    QTimer *Password_ValidTimer;
+    uint64_t lastAuthenticateTime;
+
+    void resetTime();
 
 protected:
      void closeEvent(QCloseEvent *event);
@@ -119,6 +126,8 @@ private:
 
     int ExecStickCmd(char *Cmdline);
 
+    int getNextCode(uint8_t slotNumber);
+
     void generateMenuOTP();
     void generateMenuForStick10();
     void initActionsForStick20();
@@ -157,6 +166,7 @@ private slots:
 
     void copyToClipboard(QString text);
     void checkClipboard_Valid();
+    void checkPasswordTime_Valid();
     void checkTextEdited();
 
 bool eventFilter (QObject *obj, QEvent *event);

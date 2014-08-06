@@ -66,6 +66,7 @@ class Response;
 #define CMD_AUTHORIZE                  0x08
 #define CMD_GET_PASSWORD_RETRY_COUNT   0x09
 #define CMD_CLEAR_WARNING              0x0A
+#define CMD_SET_TIME                   0x0B
 
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
@@ -252,6 +253,7 @@ public:
     void connect();
     int getSlotName(uint8_t slotNo);
     int eraseSlot(uint8_t slotNo);
+    int setTime(int reset);
     int writeToHOTPSlot(HOTPSlot *slot);
     int writeToTOTPSlot(TOTPSlot *slot);
     int getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uint8_t  lastInterval,uint8_t result[18]);
