@@ -41,6 +41,7 @@
 #include "stick20infodialog.h"
 #include "stick20hiddenvolumedialog.h"
 #include "stick20lockfirmwaredialog.h"
+#include "passwordsafedialog.h"
 
 #include <QTimer>
 #include <QMenu>
@@ -3982,6 +3983,14 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
 
 void MainWindow::PWS_ExceClickedSlot (int Slot)
 {
+
+    PasswordSafeDialog PWS_dialog (Slot,this);
+
+    PWS_dialog.cryptostick = cryptostick;
+
+    PWS_dialog.exec();
+/**/
+/*
     QString MsgText ("PW Safe Slot ");
     QMessageBox msgBox;
     int     ret_s32;
@@ -4011,6 +4020,7 @@ void MainWindow::PWS_ExceClickedSlot (int Slot)
         msgBox.exec();
         return;
     }
+*/
 }
 
 void MainWindow::PWS_Clicked_Slot00 () { PWS_ExceClickedSlot ( 0); }
