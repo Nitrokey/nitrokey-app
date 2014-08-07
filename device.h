@@ -139,6 +139,7 @@ class Response;
 #define CMD_STATUS_WRONG_PASSWORD      4
 #define CMD_STATUS_NOT_AUTHORIZED      5
 #define CMD_STATUS_TIMESTAMP_WARNING   6
+#define CMD_STATUS_NO_NAME_ERROR       7
 
 enum comm_errors{
     ERR_NO_ERROR           =  0,

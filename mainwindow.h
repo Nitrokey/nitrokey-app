@@ -55,10 +55,8 @@ public:
 
     uint64_t lastTOTPTime;
 
-    QTimer *Clipboard_ValidTimer;
     uint64_t lastClipboardTime;
 
-    QTimer *Password_ValidTimer;
     uint64_t lastAuthenticateTime;
 
     void resetTime();

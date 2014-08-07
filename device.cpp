@@ -559,6 +559,8 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
 //                 qDebug() << "sent sucessfully!";
                  return 0;
 
+             } else if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_NO_NAME_ERROR){
+                 return -3;
              }
 
         }
@@ -618,6 +620,8 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
 //                 qDebug() << "sent sucessfully!";
                  return 0;
 
+             } else if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_NO_NAME_ERROR){
+                 return -3;
              }
 
         }

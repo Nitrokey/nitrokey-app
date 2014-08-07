@@ -673,32 +673,6 @@
        <string>Card serial number:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="firmwareEdit">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>20</y>
-        <width>113</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="serialEdit">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>50</y>
-        <width>113</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
      <widget class="QPushButton" name="writeGeneralConfigButton">
       <property name="geometry">
        <rect>
@@ -967,6 +941,32 @@
         <string>HOTP counter</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QLabel" name="firmwareEdit">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>20</y>
+        <width>171</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="serialEdit">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>50</y>
+        <width>171</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
