@@ -55,20 +55,23 @@ class Response;
 #define REPORT_SIZE 64
 #define PAYLOAD_SIZE 53
 
-#define CMD_GET_STATUS                 0x00
-#define CMD_WRITE_TO_SLOT              0x01
-#define CMD_READ_SLOT_NAME             0x02
-#define CMD_READ_SLOT                  0x03
-#define CMD_GET_CODE                   0x04
-#define CMD_WRITE_CONFIG               0x05
-#define CMD_ERASE_SLOT                 0x06
-#define CMD_FIRST_AUTHENTICATE         0x07
-#define CMD_AUTHORIZE                  0x08
-#define CMD_GET_PASSWORD_RETRY_COUNT   0x09
-#define CMD_CLEAR_WARNING              0x0A
-#define CMD_SET_TIME                   0x0B
-#define CMD_TEST_COUNTER               0x0C
-#define CMD_TEST_TIME                  0x0D
+#define CMD_GET_STATUS                      0x00
+#define CMD_WRITE_TO_SLOT                   0x01
+#define CMD_READ_SLOT_NAME                  0x02
+#define CMD_READ_SLOT                       0x03
+#define CMD_GET_CODE                        0x04
+#define CMD_WRITE_CONFIG                    0x05
+#define CMD_ERASE_SLOT                      0x06
+#define CMD_FIRST_AUTHENTICATE              0x07
+#define CMD_AUTHORIZE                       0x08
+#define CMD_GET_PASSWORD_RETRY_COUNT        0x09
+#define CMD_CLEAR_WARNING                   0x0A
+#define CMD_SET_TIME                        0x0B
+#define CMD_TEST_COUNTER                    0x0C
+#define CMD_TEST_TIME                       0x0D
+#define CMD_USER_AUTHENTICATE               0x0E
+#define CMD_GET_USER_PASSWORD_RETRY_COUNT   0x0F
+#define CMD_USER_AUTHORIZE                  0x10
 
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
@@ -263,6 +266,7 @@ public:
     int getHOTP(uint8_t slotNo);
     int readSlot(uint8_t slotNo);
     int getPasswordRetryCount();
+    int getUserPasswordRetryCount();
     uint16_t testHOTP(uint16_t tests_number,uint8_t counter_number);
     uint16_t testTOTP(uint16_t tests_number);
 
@@ -297,10 +301,11 @@ public:
     void getSlotConfigs();
     uint8_t *password[25];
     bool validPassword;
+    uint8_t *userPassword[25];
+    bool validUserPassword;
     bool passwordSet;
     uint8_t passwordRetryCount;
-
-
+    uint8_t userPasswordRetryCount;
 
 
     bool stick20EnableCryptedPartition (uint8_t *password);
@@ -336,6 +341,8 @@ public:
 
     uint8_t generalConfig[3];
 
+    uint8_t otpPasswordConfig[2];
+
     uint8_t PasswordMatrix[100];
     uint8_t PasswordMatrixPinData[30];
 
@@ -345,6 +352,9 @@ public:
 
     int firstAuthenticate(uint8_t cardPassword[25],uint8_t tempPasswrod[25]);
     int authorize(Command *authorizedCmd);
+
+    int userAuthenticate(uint8_t cardPassword[25],uint8_t tempPasswrod[25]);
+    int userAuthorize(Command *authorizedCmd);
 
     int  activStick20;
     bool waitForAckStick20;

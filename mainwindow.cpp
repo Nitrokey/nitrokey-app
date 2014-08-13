@@ -293,6 +293,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     }
 
     //ui->labelQuestion1->setToolTip("Test");
+    ui->deleteUserPasswordCheckBox->setEnabled(false);
+    ui->deleteUserPasswordCheckBox->setChecked(false);
+
+    cryptostick->getStatus();
+
     generateMenu();
 
 }
@@ -655,6 +660,8 @@ void MainWindow::checkConnection()
                        break;
                  }
              }
+
+            cryptostick->getStatus();
         } else
         {
             ui->statusBar->showMessage("Device Stick 2.0 connected.");
@@ -730,6 +737,8 @@ void MainWindow::checkConnection()
                        break;
                  }
              }
+
+            cryptostick->getStatus();
         } else
         {
             ui->statusBar->showMessage("Device Stick 2.0 connected.");
@@ -1694,7 +1703,15 @@ void MainWindow::displayCurrentGeneralConfig()
     if (cryptostick->generalConfig[2]==0||cryptostick->generalConfig[2]==1)
         ui->scrollLockComboBox->setCurrentIndex(cryptostick->generalConfig[2]+1);
 
+    if (cryptostick->otpPasswordConfig[0] == 1)
+        ui->enableUserPasswordCheckBox->setChecked(true);
+    else
+        ui->enableUserPasswordCheckBox->setChecked(false);
 
+    if (cryptostick->otpPasswordConfig[1] == 1)
+        ui->deleteUserPasswordCheckBox->setChecked(true);
+    else
+        ui->deleteUserPasswordCheckBox->setChecked(false);
 
 }
 
@@ -3039,7 +3056,8 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
 
         //ui->secretEdit->setMaxLength(20);
         ui->secretEdit->setText(QString(secret));
-        copyToClipboard(ui->secretEdit->text());
+        secretInClipboard = ui->secretEdit->text();
+        copyToClipboard(secretInClipboard);
 //qDebug() << QString(secret);
         }
     }
@@ -3072,7 +3090,8 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
         //ui->secretEdit->setInputMask("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn;");
         //ui->secretEdit->setMaxLength(32);
         ui->secretEdit->setText(QString((char *)encoded));
-        copyToClipboard(ui->secretEdit->text());
+        secretInClipboard = ui->secretEdit->text();
+        copyToClipboard(secretInClipboard);
 //qDebug() << QString((char *)encoded);
         }
     }
@@ -3163,6 +3182,36 @@ void MainWindow::on_tokenIDCheckBox_toggled(bool checked)
 
 /*******************************************************************************
 
+  on_enableUserPasswordCheckBox_toggled
+
+  Reviews
+  Date      Reviewer        Info
+  12.08.14  SN              First review
+
+*******************************************************************************/
+
+void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked)
+{
+
+    if (checked){
+        ui->deleteUserPasswordCheckBox->setEnabled(true);
+        ui->deleteUserPasswordCheckBox->setChecked(false);
+        cryptostick->otpPasswordConfig[0] = 1;
+        cryptostick->otpPasswordConfig[1] = 0;
+
+    }
+    else{
+        ui->deleteUserPasswordCheckBox->setEnabled(false);
+        ui->deleteUserPasswordCheckBox->setChecked(false);
+        cryptostick->otpPasswordConfig[0] = 0;
+        cryptostick->otpPasswordConfig[1] = 0;
+    }
+
+}
+
+
+/*******************************************************************************
+
   on_writeGeneralConfigButton_clicked
 
   Reviews
@@ -3175,13 +3224,24 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
 {
     QMessageBox msgBox;
     int res;
-    uint8_t data[3];
+    uint8_t data[5];
 
     if (cryptostick->isConnected){
 
         data[0]=ui->numLockComboBox->currentIndex()-1;
         data[1]=ui->capsLockComboBox->currentIndex()-1;
         data[2]=ui->scrollLockComboBox->currentIndex()-1;
+        if(ui->enableUserPasswordCheckBox->isChecked()){
+            data[3]=1;
+            if(ui->deleteUserPasswordCheckBox->isChecked()){
+                data[4]=1;
+            } else {
+                data[4]=0;
+            }
+        } else {
+            data[3]=0;
+            data[4]=0;
+        }
 
         res =cryptostick->writeGeneralConfig(data);
 
@@ -3234,9 +3294,9 @@ void MainWindow::getHOTPDialog(int slot)
     ret = getNextCode(0x10 + slot);
     if(ret == 0){
     if(cryptostick->HOTPSlots[slot]->slotName[0] == '\0')
-        trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)),"HOTP copied to clipboard!");
+        trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)),"One-time password has been copied to clipboard.");
     else
-        trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[slot]->slotName).append("]"),"HOTP copied to clipboard!");
+        trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[slot]->slotName).append("]"),"One-time password has been copied to clipboard.");
     }
 }
 
@@ -3325,9 +3385,9 @@ void MainWindow::getTOTPDialog(int slot)
     ret = getNextCode(0x20 + slot);
     if(ret == 0){
     if(cryptostick->TOTPSlots[slot]->slotName[0] == '\0')
-        trayIcon->showMessage (QString("TOTP slot ").append(QString::number(slot+1,10)),"TOTP copied to clipboard!");
+        trayIcon->showMessage (QString("TOTP slot ").append(QString::number(slot+1,10)),"One-time password has been copied to clipboard.");
     else
-        trayIcon->showMessage (QString("TOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName).append("]"),"TOTP copied to clipboard!");
+        trayIcon->showMessage (QString("TOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName).append("]"),"One-time password has been copied to clipboard.");
     }
 }
 
@@ -3538,13 +3598,16 @@ void MainWindow::on_eraseButton_clicked()
   Reviews
   Date      Reviewer        Info
   13.08.13  RB              First review
+  13.08.13  SN              Removed
 
 *******************************************************************************/
 
-void MainWindow::on_resetGeneralConfigButton_clicked()
+/*
+ void MainWindow::on_resetGeneralConfigButton_clicked()
 {
     displayCurrentGeneralConfig();
 }
+*/
 
 /*******************************************************************************
 
@@ -3579,7 +3642,8 @@ void MainWindow::on_randomSecretButton_clicked()
     ui->secretEdit->setText(secretArray);
     ui->checkBox->setEnabled(true);
     ui->checkBox->setChecked(true);
-    copyToClipboard(ui->secretEdit->text());
+    secretInClipboard = ui->secretEdit->text();
+    copyToClipboard(secretInClipboard);
 
 }
 
@@ -3619,11 +3683,18 @@ void MainWindow::checkClipboard_Valid()
     //uint64_t checkTime;
 
     currentTime = QDateTime::currentDateTime().toTime_t();
-    if(currentTime >= lastClipboardTime + (uint64_t)120){
+    if(currentTime >= lastClipboardTime + (uint64_t)60 and clipboard->text() == otpInClipboard){
+        otpInClipboard = "";
+        clipboard->setText(QString(""));
+    }
+
+    if(currentTime >= lastClipboardTime + (uint64_t)120 and clipboard->text() == secretInClipboard){
+        secretInClipboard = "";
         clipboard->setText(QString(""));
         ui->labelNotify->hide();
     }
-    if (QString::compare(clipboard->text(),ui->secretEdit->text())!=0){
+
+    if (QString::compare(clipboard->text(),secretInClipboard)!=0){
         ui->labelNotify->hide();
     }
 
@@ -3636,7 +3707,13 @@ void MainWindow::checkPasswordTime_Valid(){
     currentTime = QDateTime::currentDateTime().toTime_t();
     if(currentTime >= lastAuthenticateTime + (uint64_t)600){
         cryptostick->validPassword = false;
+        memset(cryptostick->password,0,25);
     }
+    if(currentTime >= lastUserAuthenticateTime + (uint64_t)600 && cryptostick->otpPasswordConfig[0] == 1 && cryptostick->otpPasswordConfig[1] == 1){
+        cryptostick->validUserPassword = false;
+        memset(cryptostick->userPassword,0,25);
+    }
+
 }
 
 void MainWindow::checkTextEdited(){
@@ -4215,11 +4292,37 @@ int MainWindow::getNextCode(uint8_t slotNumber)
     uint32_t code;
     uint8_t config;
     int ret;
+    bool ok;
 
     uint16_t lastInterval = 30;
 
     if (lastInterval<1)
         lastInterval=1;
+
+    if(cryptostick->otpPasswordConfig[0] == 1){
+
+    if (!cryptostick->validUserPassword){
+        cryptostick->getUserPasswordRetryCount();
+
+        QString password = QInputDialog::getText(this, tr("Enter card user password"),tr("User password: ")+tr("(Tries left: ")+QString::number(cryptostick->userPasswordRetryCount)+")", QLineEdit::Password,"", &ok);
+
+        if (ok){
+
+            uint8_t tempPassword[25];
+
+            for (int i=0;i<25;i++)
+                tempPassword[i]=qrand()&0xFF;
+
+            cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
+            if (cryptostick->validUserPassword){
+                lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+            }
+            password.clear();
+        }
+    }
+}
+// Start the config dialog
+    if (cryptostick->validUserPassword || cryptostick->otpPasswordConfig[0] != 1){
 
     if (slotNumber>=0x20)
     cryptostick->TOTPSlots[slotNumber-0x20]->interval = lastInterval;
@@ -4286,7 +4389,16 @@ int MainWindow::getNextCode(uint8_t slotNumber)
      qDebug() << "TOTP:" << code;
 
      //ui->lineEdit->setText(output);
-     copyToClipboard(output);
+     otpInClipboard = output;
+     copyToClipboard(otpInClipboard);
+    }
+     else if (ok){
+         QMessageBox msgBox;
+          msgBox.setText("Invalid password!");
+          msgBox.exec();
+          return 1;
+     }
+
      return 0;
 
 }
@@ -4303,7 +4415,8 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
 void MainWindow::on_testHOTPButton_clicked(){
 
-    uint16_t results;
+/*
+    *uint16_t results;
     uint16_t tests_number = ui->testsSpinBox->value();
     uint8_t counter_number = ui->testsSpinBox_2->value();
 
@@ -4318,6 +4431,7 @@ void MainWindow::on_testHOTPButton_clicked(){
         msgBox.setText("Tested HOTP counter write/read " + QString::number(tests_number) + " times.\nOf those " + QString::number(results) +" were successful");
         msgBox.exec();
     }
+*/
 
 }
 
@@ -4333,6 +4447,7 @@ void MainWindow::on_testHOTPButton_clicked(){
 
 void MainWindow::on_testTOTPButton_clicked(){
 
+    /*
     uint16_t results;
     uint16_t tests_number = ui->testsSpinBox->value();
 
@@ -4347,6 +4462,6 @@ void MainWindow::on_testTOTPButton_clicked(){
         msgBox.setText("Tested TOTP counter write/read " + QString::number(tests_number) + " times.\nOf those " + QString::number(results) +" were successful");
         msgBox.exec();
     }
-
+    */
 
 }

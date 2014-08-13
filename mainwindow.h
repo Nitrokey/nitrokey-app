@@ -59,6 +59,8 @@ public:
 
     uint64_t lastAuthenticateTime;
 
+    uint64_t lastUserAuthenticateTime;
+
     void resetTime();
 
 protected:
@@ -121,6 +123,8 @@ private:
     QAction *Stick20ActionLockStickHardware;
 
     QString DebugText;
+    QString otpInClipboard;
+    QString secretInClipboard;
 
 
     int ExecStickCmd(char *Cmdline);
@@ -161,6 +165,7 @@ private slots:
     void on_setToRandomButton_clicked();
 //    void on_checkBox_2_toggled(bool checked);
     void on_tokenIDCheckBox_toggled(bool checked);
+    void on_enableUserPasswordCheckBox_toggled(bool checked);
     void on_writeGeneralConfigButton_clicked();
 
     void copyToClipboard(QString text);
