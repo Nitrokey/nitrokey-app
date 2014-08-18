@@ -157,8 +157,10 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     }
 
 
-
     ui->setupUi(this);
+
+    ui->tabWidget->setCurrentIndex (0); // Set first tab active
+
     ui->statusBar->showMessage("Device disconnected.");
 
     cryptostick =  new Device(VID_STICK_OTP, PID_STICK_OTP,VID_STICK_20,PID_STICK_20,VID_STICK_20_UPDATE_MODE,PID_STICK_20_UPDATE_MODE);
