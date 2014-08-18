@@ -40,7 +40,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Crypto Stick Utility&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Utility Version:&lt;br/&gt;Firmware Version:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This application allows you to configure and use the Crypto Stick.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://crypto-stick.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.crypto-stick.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://crypto-stick.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Crypto Stick Utility&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Utility Version:&lt;br/&gt;Firmware Version:&lt;br/&gt;Card serial number&lt;/p&gt;&lt;p&gt;This application allows you to configure and use the Crypto Stick.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://crypto-stick.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.crypto-stick.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://crypto-stick.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
 </string>
    </property>
    <property name="alignment">
@@ -60,9 +60,9 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>240</y>
+     <y>230</y>
      <width>331</width>
-     <height>151</height>
+     <height>161</height>
     </rect>
    </property>
    <property name="font">
@@ -110,7 +110,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>220</y>
+     <y>210</y>
      <width>111</width>
      <height>20</height>
     </rect>
@@ -154,7 +154,7 @@
   <widget class="QLabel" name="VersionLabel">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>165</x>
      <y>40</y>
      <width>111</width>
      <height>20</height>
@@ -174,8 +174,28 @@
   <widget class="QLabel" name="firmwareLabel">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>165</x>
      <y>60</y>
+     <width>111</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:400;&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="serialEdit">
+   <property name="geometry">
+    <rect>
+     <x>165</x>
+     <y>77</y>
      <width>111</width>
      <height>20</height>
     </rect>

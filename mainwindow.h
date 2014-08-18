@@ -173,8 +173,12 @@ private slots:
     void checkPasswordTime_Valid();
     void checkTextEdited();
 
+    //START - OTP Test Routine --------------------------------
+    /*
     void on_testHOTPButton_clicked();
     void on_testTOTPButton_clicked();
+    */
+    //END - OTP Test Routine ----------------------------------
 
 bool eventFilter (QObject *obj, QEvent *event);
 void iconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -227,7 +231,7 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void getTOTP14();
     void getTOTP15();
     void on_eraseButton_clicked();
-    void on_resetGeneralConfigButton_clicked();
+    //void on_resetGeneralConfigButton_clicked();
     void on_randomSecretButton_clicked();
     void on_checkBox_toggled(bool checked);
 
