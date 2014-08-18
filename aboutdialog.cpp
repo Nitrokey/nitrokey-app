@@ -26,6 +26,7 @@
 AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AboutDialog)
+
 {
     ui->setupUi(this);
 
@@ -34,8 +35,13 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
     QPixmap image(":/images/CS_icon.png");
     QPixmap small_img = image.scaled(70,70,Qt::KeepAspectRatio,Qt::FastTransformation);
 
+    //cryptostick->getStatus();
+    int majorFirmwareVersion = cryptostick->firmwareVersion[0]/10;
+    int minorFirmwareVersion = cryptostick->firmwareVersion[0]%10;
+
     ui->IconLabel->setPixmap(small_img);
     ui->VersionLabel->setText(tr(GUI_VERSION));
+    ui->firmwareLabel->setText(QString::number(majorFirmwareVersion).append(".").append(QString::number(minorFirmwareVersion)));
 
     if (true == cryptostick->isConnected)
     {
@@ -45,7 +51,7 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
         }
         else
         {
-            showStick20Configuration ();
+            showStick10Configuration ();
             ui->ButtonStickStatus->hide();
         }
     }
@@ -206,7 +212,21 @@ void AboutDialog::showStick10Configuration (void)
 {
     QString OutputText;
 
-    OutputText.append(QString("Crypto Stick aktive\n\n"));
+    cryptostick->getPasswordRetryCount();
+    cryptostick->getUserPasswordRetryCount();
+
+    //OutputText.append(QString("Crypto Stick aktive\n\n"));
+
+    OutputText.append(QString(" *** Not erased with random chars ***\n\n"));
+    OutputText.append(QString("Encrypted volume     not active")).append("\n");
+    OutputText.append(QString("\n"));
+
+    OutputText.append(QString("Password retry counter\n"));
+    OutputText.append(QString("Admin : "));
+    OutputText.append(QString("%1").arg(QString::number(cryptostick->passwordRetryCount))).append("\n");
+
+    OutputText.append(QString("User  : "));
+    OutputText.append(QString("%1").arg(QString::number(cryptostick->userPasswordRetryCount))).append("\n");
 
     ui->DeviceStatusLabel->setText(OutputText);
 }

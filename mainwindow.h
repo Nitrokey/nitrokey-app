@@ -53,8 +53,15 @@ public:
     bool MatrixInputActive;
     bool LockHardware;
 
-    QTimer *Clipboard_ValidTimer;
+    uint64_t lastTOTPTime;
+
     uint64_t lastClipboardTime;
+
+    uint64_t lastAuthenticateTime;
+
+    uint64_t lastUserAuthenticateTime;
+
+    void resetTime();
 
 protected:
      void closeEvent(QCloseEvent *event);
@@ -84,6 +91,7 @@ private:
     bool     SdCardNotErased;
     bool     SdCardNotErased_DontAsk;
     bool     StickNotInitated_DontAsk;
+    bool     set_initial_time;
 
     QAction *quitAction;
     QAction *restoreAction;
@@ -115,9 +123,13 @@ private:
     QAction *Stick20ActionLockStickHardware;
 
     QString DebugText;
+    QString otpInClipboard;
+    QString secretInClipboard;
 
 
     int ExecStickCmd(char *Cmdline);
+
+    int getNextCode(uint8_t slotNumber);
 
     void generateMenuOTP();
     void generateMenuForStick10();
@@ -153,11 +165,16 @@ private slots:
     void on_setToRandomButton_clicked();
 //    void on_checkBox_2_toggled(bool checked);
     void on_tokenIDCheckBox_toggled(bool checked);
+    void on_enableUserPasswordCheckBox_toggled(bool checked);
     void on_writeGeneralConfigButton_clicked();
 
     void copyToClipboard(QString text);
     void checkClipboard_Valid();
+    void checkPasswordTime_Valid();
     void checkTextEdited();
+
+    void on_testHOTPButton_clicked();
+    void on_testTOTPButton_clicked();
 
 bool eventFilter (QObject *obj, QEvent *event);
 void iconActivated(QSystemTrayIcon::ActivationReason reason);

@@ -28,11 +28,11 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>OTP slot config</string>
+      <string>OTP Slot Configuration</string>
      </attribute>
      <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
@@ -49,7 +49,7 @@
       <widget class="QRadioButton" name="hexRadioButton">
        <property name="geometry">
         <rect>
-         <x>120</x>
+         <x>220</x>
          <y>70</y>
          <width>82</width>
          <height>21</height>
@@ -65,7 +65,7 @@
       <widget class="QRadioButton" name="base32RadioButton">
        <property name="geometry">
         <rect>
-         <x>190</x>
+         <x>120</x>
          <y>70</y>
          <width>82</width>
          <height>21</height>
@@ -132,19 +132,6 @@
         <string>Input format:</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="enterCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>100</y>
-         <width>251</width>
-         <height>25</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Send 'enter'as the last keystroke</string>
-       </property>
-      </widget>
       <widget class="QPushButton" name="randomSecretButton">
        <property name="geometry">
         <rect>
@@ -203,7 +190,7 @@
       <property name="geometry">
        <rect>
         <x>350</x>
-        <y>430</y>
+        <y>460</y>
         <width>99</width>
         <height>27</height>
        </rect>
@@ -212,20 +199,20 @@
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
-       <string>Close</string>
+       <string>Cancel</string>
       </property>
      </widget>
      <widget class="QPushButton" name="writeButton">
       <property name="geometry">
        <rect>
         <x>130</x>
-        <y>430</y>
+        <y>460</y>
         <width>99</width>
         <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Save Slot</string>
+       <string>Save</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_2">
@@ -301,7 +288,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>320</y>
+        <y>350</y>
         <width>601</width>
         <height>111</height>
        </rect>
@@ -488,9 +475,9 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>190</y>
+        <y>170</y>
         <width>601</width>
-        <height>141</height>
+        <height>171</height>
        </rect>
       </property>
       <property name="title">
@@ -499,8 +486,8 @@
       <widget class="QLabel" name="label_5">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>30</y>
+         <x>10</x>
+         <y>60</y>
          <width>101</width>
          <height>20</height>
         </rect>
@@ -512,8 +499,8 @@
       <widget class="QRadioButton" name="digits6radioButton">
        <property name="geometry">
         <rect>
-         <x>120</x>
-         <y>30</y>
+         <x>110</x>
+         <y>60</y>
          <width>82</width>
          <height>21</height>
         </rect>
@@ -528,8 +515,8 @@
       <widget class="QRadioButton" name="digits8radioButton">
        <property name="geometry">
         <rect>
-         <x>210</x>
-         <y>30</y>
+         <x>200</x>
+         <y>60</y>
          <width>82</width>
          <height>21</height>
         </rect>
@@ -541,8 +528,8 @@
       <widget class="QLabel" name="label_6">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>60</y>
+         <x>10</x>
+         <y>90</y>
          <width>151</width>
          <height>25</height>
         </rect>
@@ -554,8 +541,8 @@
       <widget class="QLineEdit" name="counterEdit">
        <property name="geometry">
         <rect>
-         <x>170</x>
-         <y>60</y>
+         <x>160</x>
+         <y>90</y>
          <width>231</width>
          <height>25</height>
         </rect>
@@ -573,8 +560,8 @@
       <widget class="QPushButton" name="setToZeroButton">
        <property name="geometry">
         <rect>
-         <x>170</x>
-         <y>90</y>
+         <x>160</x>
+         <y>120</y>
          <width>99</width>
          <height>27</height>
         </rect>
@@ -586,8 +573,8 @@
       <widget class="QPushButton" name="setToRandomButton">
        <property name="geometry">
         <rect>
-         <x>280</x>
-         <y>90</y>
+         <x>270</x>
+         <y>120</y>
          <width>120</width>
          <height>27</height>
         </rect>
@@ -596,24 +583,69 @@
         <string>Set to random</string>
        </property>
       </widget>
+      <widget class="QCheckBox" name="enterCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>251</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Send 'enter'as the last keystroke</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="intervalSpinBox">
+       <property name="geometry">
+        <rect>
+         <x>111</x>
+         <y>30</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>65536</number>
+       </property>
+       <property name="value">
+        <number>30</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="intervalLabel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>111</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TOTP interval:</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QPushButton" name="eraseButton">
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>430</y>
+        <y>460</y>
         <width>99</width>
         <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Erase Slot</string>
+       <string>Erase</string>
       </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>OTP general config</string>
+      <string>OTP General Configuration</string>
      </attribute>
      <widget class="QLabel" name="label_11">
       <property name="geometry">
@@ -641,76 +673,37 @@
        <string>Card serial number:</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="firmwareEdit">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>20</y>
-        <width>113</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="serialEdit">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>50</y>
-        <width>113</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
      <widget class="QPushButton" name="writeGeneralConfigButton">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>230</y>
-        <width>141</width>
+        <x>130</x>
+        <y>460</y>
+        <width>99</width>
         <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Save configuration</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="resetGeneralConfigButton">
-      <property name="geometry">
-       <rect>
-        <x>170</x>
-        <y>230</y>
-        <width>75</width>
-        <height>27</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Reset</string>
+       <string>Save</string>
       </property>
      </widget>
      <widget class="QPushButton" name="generalCancelButton">
       <property name="geometry">
        <rect>
-        <x>260</x>
-        <y>230</y>
-        <width>75</width>
+        <x>350</x>
+        <y>460</y>
+        <width>99</width>
         <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Close</string>
+       <string>Cancel</string>
       </property>
      </widget>
      <widget class="QGroupBox" name="USBKeyboardGroupBox">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>90</y>
+        <y>170</y>
         <width>571</width>
         <height>131</height>
        </rect>
@@ -830,6 +823,174 @@
        </property>
        <property name="text">
         <string>Double press ScrollLock:</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="testsGroupBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>290</y>
+        <width>601</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Tests</string>
+      </property>
+      <widget class="QPushButton" name="testHOTPButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>99</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Test HOTP</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="testTOTPButton">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>60</y>
+         <width>99</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Test TOTP</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="testsSpinBox">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>30</y>
+         <width>51</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>65536</number>
+       </property>
+       <property name="value">
+        <number>30</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="testsLabel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>111</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Number of tests</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="testsSpinBox_2">
+       <property name="geometry">
+        <rect>
+         <x>310</x>
+         <y>30</y>
+         <width>41</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>3</number>
+       </property>
+       <property name="value">
+        <number>1</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="testsLabel_2">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>30</y>
+         <width>111</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>HOTP counter</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QLabel" name="firmwareEdit">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>20</y>
+        <width>171</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="serialEdit">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>50</y>
+        <width>171</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="OTPPasswordGroupBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>80</y>
+        <width>571</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>OTP Password settings</string>
+      </property>
+      <widget class="QCheckBox" name="enableUserPasswordCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>231</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Enable OTP password</string>
+       </property>
+      </widget>
+      <widget class="QCheckBox" name="deleteUserPasswordCheckBox">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>60</y>
+         <width>381</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Forget OTP password after 10 minutes</string>
        </property>
       </widget>
      </widget>

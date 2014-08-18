@@ -74,7 +74,10 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
     validPassword    =false;
     passwordSet      =false;
 
+    validUserPassword = false;
+
     memset(password,0,50);
+    memset(userPassword,0,50);
 
 // Vars for password safe
     passwordSafeUnlocked = FALSE;
@@ -165,6 +168,7 @@ int Device::checkConnection()
             newConnection = false;
             passwordSet   = false;
             validPassword = false;
+            validUserPassword = false;
 
             HOTP_SlotCount = HOTP_SLOT_COUNT;       // For stick 1.0
             TOTP_SlotCount = TOTP_SLOT_COUNT;
@@ -463,6 +467,54 @@ int Device::eraseSlot(uint8_t slotNo)
 
 /*******************************************************************************
 
+  setTime
+
+  Reviews
+  Date      Reviewer        Info
+  27.07.14  SN              First review
+
+*******************************************************************************/
+
+int Device::setTime(int reset){
+     int res;
+     uint8_t data[30];
+     uint64_t time = QDateTime::currentDateTime().toTime_t();
+
+     memset(data,0,30);
+     data[0] = reset;
+     memcpy(data+1,&time,8);
+
+     if (isConnected){
+     Command *cmd=new Command(CMD_SET_TIME,data,9);
+     res=sendCommand(cmd);
+
+     if (res==-1)
+         return -1;
+     else{  //sending the command was successful
+         Sleep::msleep(100);
+         Response *resp=new Response();
+         resp->getResponse(this);
+
+         if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+             if (resp->lastCommandStatus==CMD_STATUS_OK)
+             {
+             }
+             else if (resp->lastCommandStatus==CMD_STATUS_TIMESTAMP_WARNING)
+             {
+                 return -2;
+             }
+
+         }
+         return 0;
+     }
+
+    }
+
+     return -1;
+}
+
+/*******************************************************************************
+
   writeToHOTPSlot
 
   Reviews
@@ -488,10 +540,7 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
         memcpy(data+16,slot->secret,20);
         data[36]=slot->config;
         memcpy(data+37,slot->tokenID,13);
-
         memcpy(data+50,slot->counter,8);
-
-
 
 //        qDebug() << "copied data to array";
 
@@ -514,6 +563,8 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
 //                 qDebug() << "sent sucessfully!";
                  return 0;
 
+             } else if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_NO_NAME_ERROR){
+                 return -3;
              }
 
         }
@@ -550,6 +601,7 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
         memcpy(data+16,slot->secret,20);
         data[36]=slot->config;
         memcpy(data+37,slot->tokenID,13);
+	memcpy(data+50,&(slot->interval),2);
 
 //        qDebug() << "copied data to array";
 
@@ -572,6 +624,8 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
 //                 qDebug() << "sent sucessfully!";
                  return 0;
 
+             } else if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_NO_NAME_ERROR){
+                 return -3;
              }
 
         }
@@ -614,6 +668,7 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
 //       qDebug() << "sending command";
 
     Command *cmd=new Command(CMD_GET_CODE,data,18);
+    userAuthorize(cmd);
     res=sendCommand(cmd);
 
     if (res==-1)
@@ -714,6 +769,7 @@ int Device::readSlot(uint8_t slotNo)
                     memcpy(TOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
                     TOTPSlots[slotNo&0x0F]->config = resp->data[15];
                     memcpy(TOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
+                    memcpy(&(TOTPSlots[slotNo&0x0F]->interval),resp->data+29,2);
                     TOTPSlots[slotNo&0x0F]->isProgrammed=true;
                 }
 
@@ -843,6 +899,7 @@ int Device::getStatus()
             memcpy(firmwareVersion,resp->data,2);
             memcpy(cardSerial,resp->data+2,4);
             memcpy(generalConfig,resp->data+6,3);
+            memcpy(otpPasswordConfig,resp->data+9,2);
 
 
         }
@@ -880,6 +937,43 @@ int Device::getPasswordRetryCount()
 
         if (cmd->crc==resp->lastCommandCRC){
             passwordRetryCount=resp->data[0];
+        }
+        else
+            return ERR_WRONG_RESPONSE_CRC;
+    }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
+/*******************************************************************************
+
+  getUserPasswordRetryCount
+
+  Changes
+  Date      Reviewer        Info
+  10.08.14  SN              Function created
+
+*******************************************************************************/
+
+int Device::getUserPasswordRetryCount()
+{
+    int res;
+    uint8_t data[1];
+
+
+    if (isConnected){
+    Command *cmd=new Command(CMD_GET_USER_PASSWORD_RETRY_COUNT,data,0);
+    res=sendCommand(cmd);
+
+    if (res==-1)
+        return ERR_SENDING;
+    else{  //sending the command was successful
+        Sleep::msleep(1000);
+        Response *resp=new Response();
+        resp->getResponse(this);
+
+        if (cmd->crc==resp->lastCommandCRC){
+            userPasswordRetryCount=resp->data[0];
         }
         else
             return ERR_WRONG_RESPONSE_CRC;
@@ -1465,7 +1559,7 @@ int Device::writeGeneralConfig(uint8_t data[])
 
 
     if (isConnected){
-    Command *cmd=new Command(CMD_WRITE_CONFIG,data,3);
+    Command *cmd=new Command(CMD_WRITE_CONFIG,data,5);
     authorize(cmd);
     res=sendCommand(cmd);
 
@@ -1551,7 +1645,68 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
 
 }
 
+/*******************************************************************************
 
+  userAuthenticate
+
+  Reviews
+  Date      Reviewer        Info
+  10.08.14  SN              First review
+
+*******************************************************************************/
+
+int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
+{
+
+    int res;
+    uint8_t data[50];
+    uint32_t crc;
+    memcpy(data,cardPassword,25);
+    memcpy(data+25,tempPasswrod,25);
+
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_USER_AUTHENTICATE,data,50);
+        res=sendCommand(cmd);
+        crc=cmd->crc;
+
+        //remove the card password from memory
+        delete cmd;
+        memset(data,0,sizeof(data));
+
+        if (res==-1)
+            return -1;
+        else
+        {  //sending the command was successful
+            //return cmd->crc;
+            Sleep::msleep(1000);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (crc==resp->lastCommandCRC)
+            { //the response was for the last command
+                if (resp->lastCommandStatus==CMD_STATUS_OK)
+                {
+                    memcpy(userPassword,tempPasswrod,25);
+                    validUserPassword=true;
+                    return 0;
+                }
+                else if (resp->lastCommandStatus==CMD_STATUS_WRONG_PASSWORD)
+                {
+                    return -3;
+                }
+
+            }
+
+        }
+
+   }
+
+    return -2;
+
+
+}
 
 /*******************************************************************************
 
@@ -1575,6 +1730,53 @@ int Device::authorize(Command *authorizedCmd)
 
    if (isConnected){
    Command *cmd=new Command(CMD_AUTHORIZE,data,29);
+   res=sendCommand(cmd);
+
+
+   if (res==-1)
+       return -1;
+   else{
+
+       Sleep::msleep(200);
+       Response *resp=new Response();
+       resp->getResponse(this);
+
+       if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+           if (resp->lastCommandStatus==CMD_STATUS_OK){
+               return 0;
+           }
+
+       }
+       return -2;
+   }
+   }
+
+   return -1;
+}
+
+
+/*******************************************************************************
+
+  userAuthorize
+
+  Reviews
+  Date      Reviewer        Info
+  10.08.14  SN              First review
+
+*******************************************************************************/
+
+int Device::userAuthorize(Command *authorizedCmd)
+{
+   authorizedCmd->generateCRC();
+   uint32_t crc=authorizedCmd->crc;
+   uint8_t data[29];
+   int res;
+
+   memcpy(data,&crc,4);
+   memcpy(data+4,userPassword,25);
+
+   if (isConnected){
+   Command *cmd=new Command(CMD_USER_AUTHORIZE,data,29);
    res=sendCommand(cmd);
 
 
@@ -2332,3 +2534,109 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
 
 }
 */
+
+/*******************************************************************************
+
+  testHOTP
+
+  Reviews
+  Date      Reviewer        Info
+  06.08.14  SN              First review
+
+*******************************************************************************/
+uint16_t Device::testHOTP(uint16_t tests_number,uint8_t counter_number){
+
+    uint8_t data[10];
+    uint16_t result;
+    int res;
+
+    data[0] =counter_number;
+
+    memcpy(data+1,&tests_number,2);
+
+    if (isConnected){
+       qDebug() << "sending command";
+
+    Command *cmd=new Command(CMD_TEST_COUNTER,data,3);
+    res=sendCommand(cmd);
+
+    if (res==-1)
+        return -2;
+    else{  //sending the command was successful
+        //return cmd->crc;
+         qDebug() << "command sent";
+        Sleep::msleep(100*tests_number);
+        Response *resp=new Response();
+        resp->getResponse(this);
+
+
+        if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+            if (resp->lastCommandStatus==CMD_STATUS_OK){
+                //memcpy(&result,resp->data,2);
+                result = *((uint16_t *)resp->data);
+                return result;
+            }
+
+        }
+
+        return -1;
+    }
+
+   }
+
+    return -2;
+
+}
+
+/*******************************************************************************
+
+  testTOTP
+
+  Reviews
+  Date      Reviewer        Info
+  06.08.14  SN              First review
+
+*******************************************************************************/
+uint16_t Device::testTOTP(uint16_t tests_number){
+
+    uint8_t data[10];
+    uint16_t result;
+    int res;
+
+    data[0] = 1;
+
+    memcpy(data+1,&tests_number,2);
+
+    if (isConnected){
+       qDebug() << "sending command";
+
+    Command *cmd=new Command(CMD_TEST_TIME,data,3);
+    res=sendCommand(cmd);
+
+    if (res==-1)
+        return -2;
+    else{  //sending the command was successful
+        //return cmd->crc;
+         qDebug() << "command sent";
+        Sleep::msleep(100*tests_number);
+        Response *resp=new Response();
+        resp->getResponse(this);
+
+
+        if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+            if (resp->lastCommandStatus==CMD_STATUS_OK){
+                //memcpy(&result,resp->data,2);
+                result = *((uint16_t *)resp->data);
+                return result;
+            }
+
+        }
+
+        return -1;
+    }
+
+   }
+
+    return -2;
+
+}

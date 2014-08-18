@@ -18,7 +18,7 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QtWidgets/QApplication>
+#include <QApplication>
 #include "mainwindow.h"
 #include "device.h"
 #include "stick20hid.h"
