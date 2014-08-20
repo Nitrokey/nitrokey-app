@@ -960,13 +960,12 @@ void MainWindow::generateMenu()
     }
     else
     {
-        trayMenu->clear();      // Delete old menu
-//        delete trayMenu;
+        trayMenu->clear();      // Clear old menu
     }
 
 // Setup the new menu
 
-// About entry
+
 
     if (cryptostick->isConnected == false){
         trayMenu->addAction("Crypto Stick not connected");
@@ -991,6 +990,7 @@ void MainWindow::generateMenu()
 
     trayMenu->addSeparator();
 
+// About entry
     trayMenu->addAction(ActionAboutDialog);
 
     trayMenu->addAction(quitAction);
@@ -1262,8 +1262,11 @@ void MainWindow::generateMenuForStick20()
         ui->tabWidget->addTab(ui->tab_3,"Password safe config");
     }
 
+// Setup entrys for password safe
     generateMenuPasswordSafe ();
+    trayMenu->addSeparator();
 
+// Add special entrys
     AddSeperator = FALSE;
 
     if (TRUE == StickNotInitated)
@@ -3685,12 +3688,12 @@ void MainWindow::checkClipboard_Valid()
     //uint64_t checkTime;
 
     currentTime = QDateTime::currentDateTime().toTime_t();
-    if(currentTime >= lastClipboardTime + (uint64_t)60 and clipboard->text() == otpInClipboard){
+    if((currentTime >= (lastClipboardTime + (uint64_t)60)) && (clipboard->text() == otpInClipboard)){
         otpInClipboard = "";
         clipboard->setText(QString(""));
     }
 
-    if(currentTime >= lastClipboardTime + (uint64_t)120 and clipboard->text() == secretInClipboard){
+    if((currentTime >= (lastClipboardTime + (uint64_t)120)) && (clipboard->text() == secretInClipboard)){
         secretInClipboard = "";
         clipboard->setText(QString(""));
         ui->labelNotify->hide();
@@ -3699,7 +3702,6 @@ void MainWindow::checkClipboard_Valid()
     if (QString::compare(clipboard->text(),secretInClipboard)!=0){
         ui->labelNotify->hide();
     }
-
 }
 
 void MainWindow::checkPasswordTime_Valid(){
@@ -3742,6 +3744,7 @@ void MainWindow::SetupPasswordSafeConfig (void)
 {
     int ret;
     int i;
+    QString Slotname;
 
     ui->PWS_ComboBoxSelectSlot->clear();
     PWS_Access = FALSE;
@@ -3761,12 +3764,13 @@ void MainWindow::SetupPasswordSafeConfig (void)
                     cryptostick->getPasswordSafeSlotName(i);
                     strcpy ((char*)cryptostick->passwordSafeSlotNames[i],(char*)cryptostick->passwordSafeSlotName);
                 }
-                ui->PWS_ComboBoxSelectSlot->addItem((char*)cryptostick->passwordSafeSlotNames[i]);
+//                ui->PWS_ComboBoxSelectSlot->addItem((char*)cryptostick->passwordSafeSlotNames[i]);
+                ui->PWS_ComboBoxSelectSlot->addItem(QString("Slot ").append(QString::number(i+1,10)).append(QString(" [").append((char*)cryptostick->passwordSafeSlotNames[i]).append(QString("]"))));
             }
             else
             {
                 cryptostick->passwordSafeSlotNames[i][0] = 0;
-                ui->PWS_ComboBoxSelectSlot->addItem(QString("Slot ").append(QString::number(i+1,10)).append(QString(" free")));
+                ui->PWS_ComboBoxSelectSlot->addItem(QString("Slot ").append(QString::number(i+1,10)));
             }
         }
     }
@@ -3828,7 +3832,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked()
             ui->PWS_EditLoginName->setText("");
             cryptostick->passwordSafeStatus[Slot] = FALSE;
             cryptostick->passwordSafeSlotNames[Slot][0] = 0;
-            ui->PWS_ComboBoxSelectSlot->setItemText(Slot,QString("Slot ").append(QString::number(Slot+1,10)).append(QString(" free")));
+            ui->PWS_ComboBoxSelectSlot->setItemText(Slot,QString("Slot ").append(QString::number(Slot+1,10)));
         }
         else
         {

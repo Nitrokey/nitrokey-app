@@ -97,7 +97,7 @@ class Response;
 #define DEBUG_STATUS_DEBUG_ALL          2
 
 
-#define STICK20_CMD_START_VALUE                         0x10
+#define STICK20_CMD_START_VALUE                         0x20
 #define STICK20_CMD_ENABLE_CRYPTED_PARI                 (STICK20_CMD_START_VALUE +  0)
 #define STICK20_CMD_DISABLE_CRYPTED_PARI                (STICK20_CMD_START_VALUE +  1)
 #define STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI          (STICK20_CMD_START_VALUE +  2)

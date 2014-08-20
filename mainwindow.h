@@ -25,6 +25,9 @@
 #include <QSystemTrayIcon>
 #include "device.h"
 
+
+#define uint64_t unsigned long long
+
 namespace Ui {
 class MainWindow;
 }
@@ -227,7 +230,7 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void getTOTP14();
     void getTOTP15();
     void on_eraseButton_clicked();
-    void on_resetGeneralConfigButton_clicked();
+//    void on_resetGeneralConfigButton_clicked();
     void on_randomSecretButton_clicked();
     void on_checkBox_toggled(bool checked);
 
