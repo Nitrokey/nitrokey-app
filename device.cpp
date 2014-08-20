@@ -2544,6 +2544,8 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
   06.08.14  SN              First review
 
 *******************************************************************************/
+//START - OTP Test Routine --------------------------------
+/*
 uint16_t Device::testHOTP(uint16_t tests_number,uint8_t counter_number){
 
     uint8_t data[10];
@@ -2587,6 +2589,8 @@ uint16_t Device::testHOTP(uint16_t tests_number,uint8_t counter_number){
     return -2;
 
 }
+*/
+//END - OTP Test Routine ----------------------------------
 
 /*******************************************************************************
 
@@ -2597,6 +2601,9 @@ uint16_t Device::testHOTP(uint16_t tests_number,uint8_t counter_number){
   06.08.14  SN              First review
 
 *******************************************************************************/
+
+//START - OTP Test Routine --------------------------------
+/*
 uint16_t Device::testTOTP(uint16_t tests_number){
 
     uint8_t data[10];
@@ -2640,3 +2647,5 @@ uint16_t Device::testTOTP(uint16_t tests_number){
     return -2;
 
 }
+*/
+//END - OTP Test Routine ----------------------------------

@@ -43,6 +43,10 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
     ui->VersionLabel->setText(tr(GUI_VERSION));
     ui->firmwareLabel->setText(QString::number(majorFirmwareVersion).append(".").append(QString::number(minorFirmwareVersion)));
 
+    QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
+
+    ui->serialEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
+
     if (true == cryptostick->isConnected)
     {
         if (true == cryptostick->activStick20)
@@ -215,11 +219,11 @@ void AboutDialog::showStick10Configuration (void)
     cryptostick->getPasswordRetryCount();
     cryptostick->getUserPasswordRetryCount();
 
-    //OutputText.append(QString("Crypto Stick aktive\n\n"));
+    //OutputText.append(QString("Crypto Stick active\n\n"));
 
-    OutputText.append(QString(" *** Not erased with random chars ***\n\n"));
-    OutputText.append(QString("Encrypted volume     not active")).append("\n");
-    OutputText.append(QString("\n"));
+    //OutputText.append(QString(" *** Not erased with random chars ***\n\n"));
+    //OutputText.append(QString("Encrypted volume     not active")).append("\n");
+    //OutputText.append(QString("\n"));
 
     OutputText.append(QString("Password retry counter\n"));
     OutputText.append(QString("Admin : "));
@@ -248,7 +252,7 @@ void AboutDialog::showNoStickFound (void)
 {
     QString OutputText;
 
-    OutputText.append(QString("No Crypto Stick aktive\n\n"));
+    OutputText.append(QString("No Crypto Stick active\n\n"));
 
     ui->DeviceStatusLabel->setText(OutputText);
 }

@@ -196,7 +196,7 @@
        </rect>
       </property>
       <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;test&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string/>
       </property>
       <property name="text">
        <string>Cancel</string>
@@ -647,45 +647,6 @@
      <attribute name="title">
       <string>OTP General Configuration</string>
      </attribute>
-     <widget class="QLabel" name="label_11">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>20</y>
-        <width>131</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Firmware version:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_12">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>50</y>
-        <width>141</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Card serial number:</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="writeGeneralConfigButton">
-      <property name="geometry">
-       <rect>
-        <x>130</x>
-        <y>460</y>
-        <width>99</width>
-        <height>27</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Save</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="generalCancelButton">
       <property name="geometry">
        <rect>
@@ -703,7 +664,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>170</y>
+        <y>110</y>
         <width>571</width>
         <height>131</height>
        </rect>
@@ -830,7 +791,7 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>290</y>
+        <y>230</y>
         <width>601</width>
         <height>91</height>
        </rect>
@@ -929,37 +890,11 @@
        </property>
       </widget>
      </widget>
-     <widget class="QLabel" name="firmwareEdit">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>20</y>
-        <width>171</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="serialEdit">
-      <property name="geometry">
-       <rect>
-        <x>160</x>
-        <y>50</y>
-        <width>171</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="OTPPasswordGroupBox">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>80</y>
+        <y>20</y>
         <width>571</width>
         <height>91</height>
        </rect>
@@ -993,6 +928,19 @@
         <string>Forget OTP password after 10 minutes</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QPushButton" name="writeGeneralConfigButton">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>460</y>
+        <width>99</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">

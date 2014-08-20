@@ -267,8 +267,13 @@ public:
     int readSlot(uint8_t slotNo);
     int getPasswordRetryCount();
     int getUserPasswordRetryCount();
+
+    //START - OTP Test Routine --------------------------------
+    /*
     uint16_t testHOTP(uint16_t tests_number,uint8_t counter_number);
     uint16_t testTOTP(uint16_t tests_number);
+    */
+    //END - OTP Test Routine ----------------------------------
 
 
 // Password safe

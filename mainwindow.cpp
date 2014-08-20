@@ -636,6 +636,7 @@ void MainWindow::checkConnection()
 
             if(ret == -2){
                  QMessageBox msgBox;
+                 msgBox.setWindowTitle("Time is out-of-sync");
                  msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync. Your computer may be configured with a wrong time or your Crypto Stick may have been attacked. If an attacker or malware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
                  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                  msgBox.setDefaultButton(QMessageBox::No);
@@ -713,6 +714,7 @@ void MainWindow::checkConnection()
 
             if(ret == -2){
                  QMessageBox msgBox;
+                 msgBox.setWindowTitle("Time is out-of-sync");
                  msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync. Your computer may be configured with a wrong time or your Crypto Stick may have been attacked. If an attacker or malware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
                  msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                  msgBox.setDefaultButton(QMessageBox::No);
@@ -1426,7 +1428,13 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot)
 
         QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
         memset(slot->counter,0,8);
-        memcpy(slot->counter,counterFromGUI.data(),counterFromGUI.length());
+        if(!counterFromGUI.length()) {
+            memcpy(slot->counter,counterFromGUI.data(),counterFromGUI.length());
+        }
+
+        qDebug() << "test";
+        qDebug() << slot->counter;
+        qDebug() << counterFromGUI.length();
 
         slot->config=0;
 
@@ -1580,6 +1588,7 @@ void MainWindow::displayCurrentSlotConfig()
         ui->secretEdit->setText(secret);//.toHex());
 
         QByteArray counter((char *) cryptostick->HOTPSlots[slotNo]->counter,8);
+        qDebug() << (char *) cryptostick->HOTPSlots[slotNo]->counter;
         ui->counterEdit->setText(counter.trimmed());//.toHex());
 
         if (cryptostick->HOTPSlots[slotNo]->counter==0)
@@ -1673,6 +1682,7 @@ void MainWindow::displayCurrentSlotConfig()
         ui->muiEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
     }
     }
+    lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 }
 
 /*******************************************************************************
@@ -1688,13 +1698,6 @@ void MainWindow::displayCurrentSlotConfig()
 
 void MainWindow::displayCurrentGeneralConfig()
 {
-    QByteArray firmware = QByteArray((char *) cryptostick->firmwareVersion).toHex();
-    ui->firmwareEdit->setText(QString(firmware));
-   // qDebug() << QString(firmware);
-    QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
-
-    ui->serialEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
-
     ui->numLockComboBox->setCurrentIndex(0);
     ui->capsLockComboBox->setCurrentIndex(0);
     ui->scrollLockComboBox->setCurrentIndex(0);
@@ -1717,6 +1720,7 @@ void MainWindow::displayCurrentGeneralConfig()
         ui->deleteUserPasswordCheckBox->setChecked(true);
     else
         ui->deleteUserPasswordCheckBox->setChecked(false);
+    lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 
 }
 
@@ -3261,7 +3265,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
         Sleep::msleep(500);
         QApplication::restoreOverrideCursor();
         cryptostick->getStatus();
-        displayCurrentGeneralConfig();
+        generateAllConfigs();
 
     }
     else{
@@ -4341,6 +4345,7 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
      if(ret == -2){
          QMessageBox msgBox;
+         msgBox.setWindowTitle("Time is out-of-sync");
          msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or\nyour Crypto Stick may have been attacked. If an attacker or\nmalware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
          msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
          msgBox.setDefaultButton(QMessageBox::No);
@@ -4419,10 +4424,11 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
 *******************************************************************************/
 
+//START - OTP Test Routine --------------------------------
+/*
 void MainWindow::on_testHOTPButton_clicked(){
 
-/*
-    *uint16_t results;
+    uint16_t results;
     uint16_t tests_number = ui->testsSpinBox->value();
     uint8_t counter_number = ui->testsSpinBox_2->value();
 
@@ -4437,9 +4443,10 @@ void MainWindow::on_testHOTPButton_clicked(){
         msgBox.setText("Tested HOTP counter write/read " + QString::number(tests_number) + " times.\nOf those " + QString::number(results) +" were successful");
         msgBox.exec();
     }
-*/
 
 }
+*/
+//END - OTP Test Routine ----------------------------------
 
 /*******************************************************************************
 
@@ -4451,9 +4458,10 @@ void MainWindow::on_testHOTPButton_clicked(){
 
 *******************************************************************************/
 
+//START - OTP Test Routine --------------------------------
+/*
 void MainWindow::on_testTOTPButton_clicked(){
 
-    /*
     uint16_t results;
     uint16_t tests_number = ui->testsSpinBox->value();
 
@@ -4468,6 +4476,7 @@ void MainWindow::on_testTOTPButton_clicked(){
         msgBox.setText("Tested TOTP counter write/read " + QString::number(tests_number) + " times.\nOf those " + QString::number(results) +" were successful");
         msgBox.exec();
     }
-    */
 
 }
+*/
+//END - OTP Test Routine ----------------------------------
