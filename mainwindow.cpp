@@ -628,7 +628,7 @@ void MainWindow::checkConnection()
             ui->statusBar->showMessage("Device connected.");
 
             if(set_initial_time == FALSE) {
-                ret = cryptostick->setTime(0);
+                ret = cryptostick->setTime(TOTP_CHECK_TIME);
                 set_initial_time = TRUE;
             } else {
                 ret = 0;
@@ -706,7 +706,7 @@ void MainWindow::checkConnection()
         {
             ui->statusBar->showMessage("Device connected.");
             if(set_initial_time == FALSE){
-                ret = cryptostick->setTime(0);
+                ret = cryptostick->setTime(TOTP_CHECK_TIME);
                 set_initial_time = TRUE;
             } else {
                 ret = 0;
@@ -4276,7 +4276,7 @@ void MainWindow::resetTime(){
 
 // Start the config dialog
     if (cryptostick->validPassword){
-        cryptostick->setTime(1);
+        cryptostick->setTime(TOTP_SET_TIME);
    }
     else if (ok){
         QMessageBox msgBox;
@@ -4341,7 +4341,7 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
      lastTOTPTime = QDateTime::currentDateTime().toTime_t();
 
-     ret = cryptostick->setTime(0);
+     ret = cryptostick->setTime(TOTP_CHECK_TIME);
 
      if(ret == -2){
          QMessageBox msgBox;

@@ -469,6 +469,9 @@ int Device::eraseSlot(uint8_t slotNo)
 
   setTime
 
+  reset  =  0   Get time
+            1   Set time
+
   Reviews
   Date      Reviewer        Info
   27.07.14  SN              First review
