@@ -28,8 +28,68 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Overview</string>
+     </attribute>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>110</y>
+        <width>371</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>Use TOTP for login to websites</string>
+      </property>
+      <property name="text">
+       <string>Time-based One-Time Password (TOTP)</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>260</y>
+        <width>371</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>General One-Time Password Settings</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>210</y>
+        <width>371</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Static Passwords</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>160</y>
+        <width>371</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>HMAC-based One-Time Password (HOTP)</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab">
      <attribute name="title">
       <string>OTP Slot Configuration</string>
@@ -945,14 +1005,14 @@
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
-      <string>Password safe config</string>
+      <string>Static Passwords</string>
      </attribute>
      <widget class="QComboBox" name="PWS_ComboBoxSelectSlot">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>140</x>
         <y>20</y>
-        <width>121</width>
+        <width>171</width>
         <height>26</height>
        </rect>
       </property>
@@ -983,7 +1043,7 @@
        <rect>
         <x>20</x>
         <y>60</y>
-        <width>61</width>
+        <width>111</width>
         <height>25</height>
        </rect>
       </property>
@@ -996,7 +1056,7 @@
        <rect>
         <x>20</x>
         <y>100</y>
-        <width>61</width>
+        <width>101</width>
         <height>25</height>
        </rect>
       </property>
@@ -1009,7 +1069,7 @@
        <rect>
         <x>20</x>
         <y>140</y>
-        <width>61</width>
+        <width>91</width>
         <height>25</height>
        </rect>
       </property>
@@ -1020,7 +1080,7 @@
      <widget class="QLineEdit" name="PWS_EditSlotName">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>140</x>
         <y>60</y>
         <width>171</width>
         <height>20</height>
@@ -1030,7 +1090,7 @@
      <widget class="QLineEdit" name="PWS_EditLoginName">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>140</x>
         <y>100</y>
         <width>171</width>
         <height>20</height>
@@ -1040,7 +1100,7 @@
      <widget class="QLineEdit" name="PWS_EditPassword">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>140</x>
         <y>140</y>
         <width>171</width>
         <height>20</height>
@@ -1092,7 +1152,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>290</x>
+        <x>340</x>
         <y>140</y>
         <width>111</width>
         <height>24</height>

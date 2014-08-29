@@ -269,6 +269,7 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_PWS_CheckBoxHideSecret_toggled(bool checked);
     void on_PWS_ButtonSaveSlot_pressed();
     void on_PWS_ButtonClose_pressed();
+    void on_pushButton_clicked();
 };
 
 #endif // MAINWINDOW_H
