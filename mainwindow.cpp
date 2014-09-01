@@ -844,7 +844,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
   13.08.13  RB              First review
 
 *******************************************************************************/
-/*
 void MainWindow::on_pushButton_clicked()
 {
     if (cryptostick->isConnected){
@@ -868,7 +867,6 @@ void MainWindow::on_pushButton_clicked()
         }
     }
 }
-*/
 /*******************************************************************************
 
   on_pushButton_2_clicked
