@@ -1762,9 +1762,16 @@ void MainWindow::startConfiguration()
 
         QString password = QInputDialog::getText(this, tr("Enter card admin password"),tr("Admin password: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
 
-        if (ok){
-
+        if (TRUE == ok)
+        {
             uint8_t tempPassword[25];
+
+            if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
+            {
+                QMessageBox   msgBox;
+                msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+                msgBox.exec();
+            }
 
             for (int i=0;i<25;i++)
                 tempPassword[i]=qrand()&0xFF;
@@ -3853,7 +3860,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked()
 
 /*******************************************************************************
 
-  on_PWS_ButtonClearSlot_clicked
+  on_PWS_ComboBoxSelectSlot_currentIndexChanged
 
   Changes
   Date      Author        Info
@@ -3965,7 +3972,8 @@ void MainWindow::on_PWS_ButtonSaveSlot_pressed()
 
     cryptostick->passwordSafeStatus[Slot] = TRUE;
     strcpy ((char*)cryptostick->passwordSafeSlotNames[Slot],(char*)SlotName);
-    ui->PWS_ComboBoxSelectSlot->setItemText (Slot,(QString)(char*)SlotName);
+    ui->PWS_ComboBoxSelectSlot->setItemText (Slot,QString("Slot ").append(QString::number(Slot+1,10)).append(QString(" [").append((char*)cryptostick->passwordSafeSlotNames[Slot]).append(QString("]"))));
+
 
     generateMenu ();
 }
@@ -4248,7 +4256,8 @@ void MainWindow::PWS_Clicked_Slot15 () { PWS_ExceClickedSlot (15); }
 
 *******************************************************************************/
 
-void MainWindow::resetTime(){
+void MainWindow::resetTime()
+{
 
     bool ok;
 
@@ -4260,6 +4269,13 @@ void MainWindow::resetTime(){
         if (ok){
 
             uint8_t tempPassword[25];
+
+            if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
+            {
+                QMessageBox   msgBox;
+                msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+                msgBox.exec();
+            }
 
             for (int i=0;i<25;i++)
                 tempPassword[i]=qrand()&0xFF;
@@ -4306,30 +4322,40 @@ int MainWindow::getNextCode(uint8_t slotNumber)
     if (lastInterval<1)
         lastInterval=1;
 
-    if(cryptostick->otpPasswordConfig[0] == 1){
+    if(cryptostick->otpPasswordConfig[0] == 1)
+    {
+        if (!cryptostick->validUserPassword)
+        {
+            cryptostick->getUserPasswordRetryCount();
 
-    if (!cryptostick->validUserPassword){
-        cryptostick->getUserPasswordRetryCount();
+            QString password = QInputDialog::getText(this, tr("Enter card user password"),tr("User password: ")+tr("(Tries left: ")+QString::number(cryptostick->userPasswordRetryCount)+")", QLineEdit::Password,"", &ok);
 
-        QString password = QInputDialog::getText(this, tr("Enter card user password"),tr("User password: ")+tr("(Tries left: ")+QString::number(cryptostick->userPasswordRetryCount)+")", QLineEdit::Password,"", &ok);
+            if (TRUE == ok)
+            {
+                uint8_t tempPassword[25];
 
-        if (ok){
+                if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
+                {
+                    QMessageBox   msgBox;
+                    msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+                    msgBox.exec();
+                }
 
-            uint8_t tempPassword[25];
+                for (int i=0;i<25;i++)
+                    tempPassword[i]=qrand()&0xFF;
 
-            for (int i=0;i<25;i++)
-                tempPassword[i]=qrand()&0xFF;
+                cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
 
-            cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
-            if (cryptostick->validUserPassword){
-                lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+                if (cryptostick->validUserPassword){
+                    lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+                }
+                password.clear();
             }
-            password.clear();
         }
     }
-}
 // Start the config dialog
-    if (cryptostick->validUserPassword || cryptostick->otpPasswordConfig[0] != 1){
+    if ((TRUE == cryptostick->validUserPassword) || (cryptostick->otpPasswordConfig[0] != 1))
+    {
 
     if (slotNumber>=0x20)
     cryptostick->TOTPSlots[slotNumber-0x20]->interval = lastInterval;
@@ -4477,3 +4503,4 @@ void MainWindow::on_testTOTPButton_clicked(){
 }
 */
 //END - OTP Test Routine ----------------------------------
+

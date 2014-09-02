@@ -217,10 +217,16 @@ void PasswordDialog::on_buttonBox_accepted()
         // Check the password length
         passwordString = ui->lineEdit->text().toLatin1();
         n = passwordString.size();
-        if (30 <= n) {
+        if (30 <= n)
+        {
             msgBox.setText("Password too long! (Max = 30 char)");
             msgBox.exec();
             return;
+        }
+        if ((0 == strcmp (passwordString, "123456")) || (0 == strcmp (passwordString, "12345678")))
+        {
+            msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+            msgBox.exec();
         }
         memset (&password[1],0,49);
         memcpy(&password[1],passwordString.data(),n);
