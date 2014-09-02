@@ -109,13 +109,8 @@ void AboutDialog::showStick20Configuration (void)
 
     GetStick20Status ();
 */
-/*
-    OutputText.append(QString("Firmware version     "));
-    OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0])));
-    OutputText.append(QString("."));
-    OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[1])));
-    OutputText.append(QString("\n"));
-*/
+
+
     if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated)
     {
         OutputText.append(QString(" ***  Warning stick is not securce  ***")).append("\n");
@@ -181,12 +176,7 @@ void AboutDialog::showStick20Configuration (void)
     }
 
     OutputText.append(QString("\n"));
-/*
-    OutputText.append(QString("Smartcard infos\n"));
 
-    OutputText.append(QString(" ID     0x"));
-    OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.ActiveSmartCardID_u32,16))).append("\n");
-*/
     OutputText.append(QString("Password retry counter\n"));
     OutputText.append(QString("Admin : "));
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.AdminPwRetryCount))).append("\n");
@@ -195,6 +185,10 @@ void AboutDialog::showStick20Configuration (void)
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.UserPwRetryCount))).append("\n");
 
     ui->DeviceStatusLabel->setText(OutputText);
+
+    ui->firmwareLabel->setText(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0]).append(".").append(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[1])));
+
+    ui->serialEdit->setText(QString::number(HID_Stick20Configuration_st.ActiveSmartCardID_u32,16));
 }
 
 
