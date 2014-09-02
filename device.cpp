@@ -1804,6 +1804,59 @@ int Device::userAuthorize(Command *authorizedCmd)
    return -1;
 }
 
+
+
+/*******************************************************************************
+
+  unlockUserPassword
+
+  Changes
+  Date      Author        Info
+  02.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::unlockUserPassword (uint8_t *adminPassword)
+{
+    int res;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command (CMD_UNLOCK_USER_PASSOWRD,adminPassword,30);
+
+        res=sendCommand(cmd);
+
+        if (res==-1)
+        {
+            return ERR_SENDING;
+        }
+        else                    //sending the command was successful
+        {
+            Sleep::msleep(800);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus==CMD_STATUS_OK)
+                {
+                    HID_Stick20Configuration_st.UserPwRetryCount = 3;
+                    Stick20_ConfigurationChanged = TRUE;
+                    return 0;
+                }
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
 /*******************************************************************************
 
     Here starts the new commands for stick 2.0

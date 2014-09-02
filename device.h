@@ -72,6 +72,7 @@ class Response;
 #define CMD_USER_AUTHENTICATE               0x0E
 #define CMD_GET_USER_PASSWORD_RETRY_COUNT   0x0F
 #define CMD_USER_AUTHORIZE                  0x10
+#define CMD_UNLOCK_USER_PASSOWRD            0x11
 
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
@@ -370,6 +371,8 @@ public:
 
     int userAuthenticate(uint8_t cardPassword[25],uint8_t tempPasswrod[25]);
     int userAuthorize(Command *authorizedCmd);
+
+    int unlockUserPassword (uint8_t *adminPassword);
 
     int  activStick20;
     bool waitForAckStick20;

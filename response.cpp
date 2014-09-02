@@ -106,9 +106,16 @@ void Response::DebugResponse()
         case CMD_STATUS_NOT_AUTHORIZED :
             DebugAppendText ((char *)"         Device status       : CMD_STATUS_NOT_AUTHORIZED\n");
             break;
-        default:
-            DebugAppendText ((char *)"         Device status       : Unknown\n");
+        case CMD_STATUS_TIMESTAMP_WARNING :
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_TIMESTAMP_WARNING\n");
             break;
+        case CMD_STATUS_NO_NAME_ERROR :
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_NO_NAME_ERROR\n");
+            break;
+
+        default:
+                DebugAppendText ((char *)"         Device status       : Unknown\n");
+                break;
     }
 
 
@@ -179,7 +186,54 @@ void Response::DebugResponse()
         case CMD_PW_SAFE_INIT_KEY :
             DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_INIT_KEY\n");
             break;
-
+        case CMD_SET_TIME :
+            DebugAppendText ((char *)"         Last command        : CMD_SET_TIME\n");
+            break;
+        case CMD_TEST_COUNTER :
+            DebugAppendText ((char *)"         Last command        : CMD_TEST_COUNTER\n");
+            break;
+        case CMD_TEST_TIME :
+            DebugAppendText ((char *)"         Last command        : CMD_TEST_TIME\n");
+            break;
+        case CMD_USER_AUTHENTICATE :
+            DebugAppendText ((char *)"         Last command        : CMD_USER_AUTHENTICATE\n");
+            break;
+        case CMD_GET_USER_PASSWORD_RETRY_COUNT :
+            DebugAppendText ((char *)"         Last command        : CMD_GET_USER_PASSWORD_RETRY_COUNT\n");
+            break;
+        case CMD_USER_AUTHORIZE :
+            DebugAppendText ((char *)"         Last command        : CMD_USER_AUTHORIZE\n");
+            break;
+        case CMD_UNLOCK_USER_PASSOWRD :
+            DebugAppendText ((char *)"         Last command        : CMD_UNLOCK_USER_PASSOWRD\n");
+            break;
+        case STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD\n");
+            break;
+        case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP\n");
+            break;
+        case STICK20_CMD_SEND_PASSWORD :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD\n");
+            break;
+        case STICK20_CMD_SEND_NEW_PASSWORD :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_NEW_PASSWORD\n");
+            break;
+        case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND\n");
+            break;
+        case STICK20_CMD_SEND_STARTUP :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_STARTUP\n");
+            break;
+        case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED\n");
+            break;
+        case STICK20_CMD_SEND_LOCK_STICK_HARDWARE :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_LOCK_STICK_HARDWARE\n");
+            break;
+        case STICK20_CMD_PRODUCTION_TEST :
+            DebugAppendText ((char *)"         Last command        : STICK20_CMD_PRODUCTION_TEST\n");
+            break;
         default:
             DebugAppendText ((char *)"         Last command        : Unknown\n");
             break;
@@ -207,6 +261,12 @@ void Response::DebugResponse()
         case CMD_STATUS_NOT_AUTHORIZED :
             DebugAppendText ((char *)"         Last command status : CMD_STATUS_NOT_AUTHORIZED\n");
             break;
+        case CMD_STATUS_TIMESTAMP_WARNING :
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_TIMESTAMP_WARNING\n");
+            break;
+        case CMD_STATUS_NO_NAME_ERROR :
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_NO_NAME_ERROR\n");
+            break;
         default:
             DebugAppendText ((char *)"         Last command status : Unknown\n");
             break;
@@ -214,7 +274,6 @@ void Response::DebugResponse()
 
 //    lastCommandCRC     = ((uint32_t *)(reportBuffer+3))[0];
 //    responseCRC       = ((uint32_t *)(reportBuffer+61))[0];
-
 
 
 }

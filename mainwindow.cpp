@@ -753,6 +753,10 @@ void MainWindow::checkConnection()
     if (TRUE == Stick20_ConfigurationChanged)
     {
         Stick20_ConfigurationChanged = FALSE;
+
+        cryptostick->userPasswordRetryCount = HID_Stick20Configuration_st.UserPwRetryCount;
+        cryptostick->passwordRetryCount     = HID_Stick20Configuration_st.AdminPwRetryCount;
+
         UpdateDynamicMenuEntrys ();
 
         if (TRUE == StickNotInitated)
@@ -1083,6 +1087,10 @@ void MainWindow::initActionsForStick20()
     Stick20ActionLockStickHardware = new QAction(tr("&Lock stick hardware"), this);
     connect(Stick20ActionLockStickHardware, SIGNAL(triggered()), this, SLOT(startStick20LockStickHardware()));
 
+    Stick20ActionResetUserPassword = new QAction(tr("&Reset user password"), this);
+    connect(Stick20ActionResetUserPassword, SIGNAL(triggered()), this, SLOT(startResetUserPassword()));
+
+
 }
 
 /*******************************************************************************
@@ -1351,7 +1359,14 @@ void MainWindow::generateMenuForStick20()
     }
 
 
-    // Add secure password dialog test
+// Enable "reset user password" ?
+    if (0 == cryptostick->userPasswordRetryCount)
+    {
+        trayMenu->addSeparator();
+        trayMenu->addAction(Stick20ActionResetUserPassword);
+    }
+
+// Add secure password dialog test
 //    trayMenu->addAction(SecPasswordAction);
 
     // Add debug window ?
@@ -2135,6 +2150,33 @@ void MainWindow::startStick20ActionChangeAdminPIN()
     dialog.exec();
 }
 
+/*******************************************************************************
+
+  startResetUserPassword
+
+  Changes
+  Date      Author        Info
+  02.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+
+void MainWindow::startResetUserPassword ()
+{
+    DialogChangePassword dialog(this);
+
+    dialog.setModal (TRUE);
+
+    dialog.cryptostick        = cryptostick;
+
+    dialog.PasswordKind       = STICK20_PASSWORD_KIND_RESET_USER;
+
+    dialog.InitData ();
+    dialog.exec();
+}
 
 
 
@@ -2479,8 +2521,9 @@ void MainWindow::startStick20DebugAction()
     }
 */
 
+//    ret = cryptostick->unlockUserPassword((uint8_t*)"123456");
 
-
+/*
     ret = cryptostick->getPasswordSafeSlotName(0);
     ret = cryptostick->getPasswordSafeSlotPassword(0);
     ret = cryptostick->getPasswordSafeSlotLoginName(0);
@@ -2493,7 +2536,7 @@ void MainWindow::startStick20DebugAction()
     ret = cryptostick->getPasswordSafeSlotLoginName(0);
 
     ret = cryptostick->passwordSafeEraseSlot(0);
-
+*/
 
 
 //    stick20SendCommand (STICK20_CMD_PRODUCTION_TEST,NULL);

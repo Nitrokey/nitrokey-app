@@ -48,6 +48,7 @@ private:
     Ui::DialogChangePassword *ui;
     void accept();
     void SendNewPassword(void);
+    void ResetUserPassword (void);
     int  CheckResponse(bool NoStopFlag);
 };
 

@@ -101,6 +101,11 @@ void DebugAppendText (char *Text)
 {
     int i;
 
+    if (FALSE == DebugingActive)            // Don't save text when debugging is disabled
+    {
+        return;
+    }
+
     if (STICK20_DEBUG_TEXT_LEN <= DebugTextlen_Stick20 + strlen (Text) + DebugNewTextLen - 1)
     {
         return;
@@ -123,24 +128,6 @@ void DebugAppendText (char *Text)
     {
         DebugTextHasChanged = TRUE;
     }
-
-/*
-    i = 0;
-    while (Text[i] != 0)
-    {
-        // Remove embedded LF
-        if ('\r' != Text[i])
-        {
-            DebugText_Stick20[DebugTextlen_Stick20] = Text[i];
-            DebugTextlen_Stick20++;
-        }
-        i++;
-    }
-    if (0 != i)
-    {
-        DebugTextHasChanged = TRUE;
-    }
-*/
 }
 
 /** Only for debugging - End */

@@ -124,6 +124,7 @@ private:
     QAction *Stick20ActionClearNewSDCardFound;
     QAction *Stick20ActionSetupPasswordMatrix;
     QAction *Stick20ActionLockStickHardware;
+    QAction *Stick20ActionResetUserPassword;
 
     QString DebugText;
     QString otpInClipboard;
@@ -264,6 +265,7 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void startStick20ClearNewSdCardFound();
     void startStick20SetupPasswordMatrix();
     void startStick20LockStickHardware();
+    void startResetUserPassword ();
     void on_PWS_ButtonClearSlot_clicked();
     void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
     void on_PWS_CheckBoxHideSecret_toggled(bool checked);

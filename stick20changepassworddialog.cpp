@@ -94,12 +94,21 @@ void DialogChangePassword::InitData(void)
     {
         case STICK20_PASSWORD_KIND_USER :
             ui->label->setText("Change user PIN");
+            ui->label_2->setText("Admin PIN");
+            ui->label_3->setText("New PIN");
+            ui->label_4->setText("New PIN");
             break;
         case STICK20_PASSWORD_KIND_ADMIN :
             ui->label->setText("Change admin PIN");
+            ui->label_2->setText("Admin PIN");
+            ui->label_3->setText("New PIN");
+            ui->label_4->setText("New PIN");
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
             ui->label->setText("Reset user PIN");
+            ui->label_2->setText("Admin PIN");
+            ui->label_3->setText("New user PIN");
+            ui->label_4->setText("New user PIN");
             break;
     }
 }
@@ -200,6 +209,63 @@ void DialogChangePassword::SendNewPassword(void)
 
 /*******************************************************************************
 
+  ResetUserPassword
+
+  Reviews
+  Date      Reviewer        Info
+  13.08.13  RB              First review
+
+*******************************************************************************/
+
+void DialogChangePassword::ResetUserPassword (void)
+{
+    int ret;
+    QByteArray PasswordString;
+
+    unsigned char Data[STICK20_PASSOWRD_LEN+2];
+
+// Set kind of password
+    Data[0] = 'A';
+
+// Send old password
+    PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+
+    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
+    Data[STICK20_PASSOWRD_LEN+1] = 0;
+
+    ret = cryptostick->stick20SendPassword (Data);
+
+    if ((int)true == ret)
+    {
+        CheckResponse (TRUE);
+    }
+    else
+    {
+        // Todo
+        return;
+    }
+
+// Reset new user password
+    PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
+
+    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
+    Data[STICK20_PASSOWRD_LEN+1] = 0;
+
+    ret = cryptostick->unlockUserPassword (Data);
+
+    if ((int)true == ret)
+    {
+        CheckResponse (FALSE);
+    }
+    else
+    {
+        // Todo
+        return;
+    }
+}
+
+/*******************************************************************************
+
   accept
 
   Reviews
@@ -234,7 +300,20 @@ void DialogChangePassword::accept()
     }
 
 // Send password to Stick 2.0
-    SendNewPassword();
+    switch (PasswordKind)
+    {
+        case STICK20_PASSWORD_KIND_USER :
+        case STICK20_PASSWORD_KIND_ADMIN :
+            SendNewPassword();
+            break;
+        case STICK20_PASSWORD_KIND_RESET_USER :
+            ResetUserPassword ();
+            break;
+        default :
+            break;
+    }
+
+    cryptostick->getStatus();
 
     done (true);
 }
