@@ -2697,7 +2697,7 @@ int MainWindow::UpdateDynamicMenuEntrys (void)
 
 int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
 {
-    bool        ret;
+    int         ret;
     bool        waitForAnswerFromStick20;
     bool        stopWhenStatusOKFromStick20;
     int         Result;
@@ -2781,7 +2781,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
-                if (Accepted == ret)
+                if (QMessageBox::Yes == ret)
                 {
                     ret = cryptostick->stick20FillSDCardWithRandomChars (password,STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
                     if (TRUE == ret)
@@ -2932,6 +2932,10 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
                UpdateDynamicMenuEntrys ();
                break;
+            case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
+                HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
+                UpdateDynamicMenuEntrys ();
+                break;
             case STICK20_CMD_GENERATE_NEW_KEYS              :
                 HID_Stick20Configuration_st.StickKeysNotInitiated = FALSE;
                 UpdateDynamicMenuEntrys ();

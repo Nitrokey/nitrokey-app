@@ -396,6 +396,7 @@ void Stick20ResponseDialog::checkStick20Status()
                             QMessageBox msgBox;
                             msgBox.setText("Storage successfully initialized with random data");
                             msgBox.exec();
+
                     }
                     done (TRUE);
                     ResultValue = TRUE;
