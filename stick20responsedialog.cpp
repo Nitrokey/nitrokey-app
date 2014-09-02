@@ -345,6 +345,10 @@ void Stick20ResponseDialog::checkStick20Status()
                 OutputText.append (QString("SMARTCARD ERROR"));
                 pollStick20Timer->stop();
                 break;
+            case OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE   :
+                OutputText.append (QString("SECURITY BIT ACTIVE"));
+                pollStick20Timer->stop();
+                break;
             default :
                 break;
         }
@@ -373,7 +377,9 @@ void Stick20ResponseDialog::checkStick20Status()
                     done (FALSE);
                     ResultValue = FALSE;
                     break;
-                default :
+                case OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE  :
+                    done (FALSE);
+                    ResultValue = FALSE;
                     break;
             }
         }
@@ -430,8 +436,24 @@ void Stick20ResponseDialog::checkStick20Status()
                     break;
             }
         }
-    }
 
+        if (OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE == stick20Response->HID_Stick20Status_st.Status_u8)
+        {
+            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            {
+                case STICK20_CMD_ENABLE_FIRMWARE_UPDATE     :
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Security bit of stick is activ.\nUpdate is not possible.");
+                        msgBox.exec();
+                    }
+                    break;
+                default :
+                    break;
+            }
+        }
+
+    }
 }
 
 /*******************************************************************************

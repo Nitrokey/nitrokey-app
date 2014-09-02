@@ -4,13 +4,13 @@
 #
 #-------------------------------------------------
 
-CONFIG += qt
+CONFIG   += qt
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 
-TARGET = CryptoStickGUI_QT5
+TARGET = CryptoStickGUI
 TEMPLATE = app
 
 SOURCES += main.cpp\

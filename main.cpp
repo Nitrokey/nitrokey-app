@@ -115,10 +115,12 @@ int main(int argc, char *argv[])
         {
             StartupInfo_st.ExtendedConfigActive = TRUE;
         }
+/* Disable password matrix
         if (0 == strcmp (p,"--PWM"))
         {
             StartupInfo_st.PasswordMatrix = TRUE;
         }
+*/
         if (0 == strcmp (p,"--lockHardware"))
         {
             StartupInfo_st.LockHardware = TRUE;

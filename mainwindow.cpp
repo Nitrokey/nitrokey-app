@@ -2774,7 +2774,6 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                 waitForAnswerFromStick20 = TRUE;
             }
             break;
-
         case STICK20_CMD_GET_DEVICE_STATUS        :
             ret = cryptostick->stick20GetStatusData ();
             if (TRUE == ret)
