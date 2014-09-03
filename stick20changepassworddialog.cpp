@@ -125,6 +125,7 @@ void DialogChangePassword::InitData(void)
 
 int DialogChangePassword::CheckResponse(bool NoStopFlag)
 {
+/*
     Stick20ResponseDialog ResponseDialog(this);
 
     ResponseDialog.setModal(TRUE);
@@ -137,6 +138,17 @@ int DialogChangePassword::CheckResponse(bool NoStopFlag)
     ResponseDialog.cryptostick=cryptostick;
 
     return (ResponseDialog.exec());
+*/
+    Stick20ResponseTask ResponseTask(this,cryptostick);
+
+    if (FALSE == NoStopFlag)
+    {
+        ResponseTask.NoStopWhenStatusOK ();
+    }
+
+    ResponseTask.GetResponse ();
+
+    return (ResponseTask.ResultValue);
 }
 
 /*******************************************************************************

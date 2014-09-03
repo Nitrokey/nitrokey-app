@@ -862,6 +862,10 @@ void MatrixPasswordDialog::SendMatrixRowDataToStick20()
     }
 
 // Wait vor response
+    Stick20ResponseTask ResponseTask(this,cryptostick);
+    ResponseTask.GetResponse ();
+
+/*
     Stick20ResponseDialog ResponseDialog(this);
 
     ResponseDialog.setModal (TRUE);
@@ -869,6 +873,7 @@ void MatrixPasswordDialog::SendMatrixRowDataToStick20()
     ResponseDialog.cryptostick=cryptostick;
 
     ResponseDialog.exec();
+*/
 }
 
 /*******************************************************************************

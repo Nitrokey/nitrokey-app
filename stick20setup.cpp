@@ -177,6 +177,7 @@ void Stick20Setup::on_pushButton_Ch_HiddenVol_clicked()
 
         if (TRUE == ret)
         {
+/*
             Stick20ResponseDialog ResponseDialog(this);
 
             ResponseDialog.cryptostick=cryptostick;
@@ -184,6 +185,12 @@ void Stick20Setup::on_pushButton_Ch_HiddenVol_clicked()
             ResponseDialog.NoStopWhenStatusOK ();
 
             ResponseDialog.exec();
+*/
+            Stick20ResponseTask ResponseTask(this,cryptostick);
+            ResponseTask.NoStopWhenStatusOK ();
+            ResponseTask.GetResponse ();
+
+
         }
     }
 }

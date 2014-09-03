@@ -175,14 +175,14 @@ void HID_Stick20Init (void)
 
 int HID_GetStick20Configuration (void)
 {
-    unsigned char NewDebugBlock = 1;
-    int len;
+//    unsigned char NewDebugBlock = 1;
+//    int len;
     static typeStick20Configuration_st SavedConfiguration_st;
 
     DebugAppendText ("GetStick20Configuration\n");
 
-    NewDebugBlock = HID_Stick20ReceiveData_st.SendCounter_u8;
-    len = HID_Stick20ReceiveData_st.SendSize_u8;
+//    NewDebugBlock = HID_Stick20ReceiveData_st.SendCounter_u8;
+//    len = HID_Stick20ReceiveData_st.SendSize_u8;
 
     memcpy (&HID_Stick20Configuration_st,
             &HID_Stick20ReceiveData_st.SendData_u8[0],
@@ -193,8 +193,8 @@ int HID_GetStick20Configuration (void)
         Stick20_ConfigurationChanged = TRUE;
         SavedConfiguration_st = HID_Stick20Configuration_st;
     }
-    if(len){}//Fix warnings
-    if(NewDebugBlock){}//Fix warnings
+//    if(len){}//Fix warnings
+//    if(NewDebugBlock){}//Fix warnings
 
     return (TRUE);
 }

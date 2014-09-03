@@ -63,18 +63,40 @@ public:
 
     QTimer *pollStick20Timer;
     void NoStopWhenStatusOK();
-    void NoShowDialog();
-    void ShowDialog();
 
 private:
     Ui::Stick20ResponseDialog *ui;
     int Counter_u32;
     bool FlagNoStopWhenStatusOK;
-    bool FlagNoShow;
 
 private slots:
     void checkStick20Status();
-
 };
+
+
+
+
+class Stick20ResponseTask : public QObject
+{
+    Q_OBJECT
+
+public:
+    Stick20ResponseTask(QWidget *parent,Device *Cryptostick20);
+    ~Stick20ResponseTask();
+    void done (int Status);
+    void checkStick20Status();
+    void GetResponse (void);
+    void NoStopWhenStatusOK ();
+
+    QWidget *Stick20ResponseTaskParent;
+
+    Device *cryptostick;
+
+    bool FlagNoStopWhenStatusOK;
+    int  ResultValue;
+    int  EndFlag;
+};
+
+
 
 #endif // STICK20RESPONSEDIALOG_H

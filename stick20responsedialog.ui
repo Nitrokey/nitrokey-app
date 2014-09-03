@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>381</width>
-    <height>207</height>
+    <height>197</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>170</y>
+     <y>70</y>
      <width>161</width>
      <height>32</height>
     </rect>
@@ -36,9 +36,9 @@
   <widget class="QProgressBar" name="progressBar">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>140</y>
-     <width>301</width>
+     <x>30</x>
+     <y>40</y>
+     <width>331</width>
      <height>23</height>
     </rect>
    </property>
@@ -49,8 +49,8 @@
   <widget class="QLabel" name="OutputText">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>50</y>
+     <x>40</x>
+     <y>100</y>
      <width>281</width>
      <height>81</height>
     </rect>
@@ -77,8 +77,8 @@
   <widget class="QLabel" name="HeaderText">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>20</y>
+     <x>20</x>
+     <y>10</y>
      <width>331</width>
      <height>20</height>
     </rect>
@@ -134,6 +134,22 @@
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>HeaderText</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>Stick20ResponseDialog</receiver>
+   <slot>open()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>195</x>
+     <y>29</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>190</x>
+     <y>103</y>
     </hint>
    </hints>
   </connection>

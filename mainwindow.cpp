@@ -750,12 +750,16 @@ void MainWindow::checkConnection()
         generateMenu();
     }
 
+// Be sure that the retry counter are always up to date
+    if ( (cryptostick->userPasswordRetryCount != HID_Stick20Configuration_st.UserPwRetryCount)) // (99 != HID_Stick20Configuration_st.UserPwRetryCount) &&
+    {
+        cryptostick->userPasswordRetryCount = HID_Stick20Configuration_st.UserPwRetryCount;
+        cryptostick->passwordRetryCount     = HID_Stick20Configuration_st.AdminPwRetryCount;
+    }
+
     if (TRUE == Stick20_ConfigurationChanged)
     {
         Stick20_ConfigurationChanged = FALSE;
-
-        cryptostick->userPasswordRetryCount = HID_Stick20Configuration_st.UserPwRetryCount;
-        cryptostick->passwordRetryCount     = HID_Stick20Configuration_st.AdminPwRetryCount;
 
         UpdateDynamicMenuEntrys ();
 
@@ -1881,16 +1885,19 @@ void MainWindow::startAboutDialog()
     // Get actual data from stick 20
         cryptostick->stick20GetStatusData ();
 
+        Stick20ResponseTask ResponseTask(this,cryptostick);
+        ResponseTask.NoStopWhenStatusOK ();
+        ResponseTask.GetResponse ();
+
+
+/*
     // Wait for response
         Stick20ResponseDialog ResponseDialog(this);
 
         ResponseDialog.NoStopWhenStatusOK ();
-        ResponseDialog.NoShowDialog();
-        ResponseDialog.hide();
-
         ResponseDialog.cryptostick=cryptostick;
         ResponseDialog.exec();
-        ResponseDialog.ResultValue;
+*/
     }
 
 // Show dialog
@@ -2335,16 +2342,20 @@ void MainWindow::startStick20GetStickStatus()
     cryptostick->stick20GetStatusData ();
 
 // Wait for response
+
+    Stick20ResponseTask ResponseTask(this,cryptostick);
+    ResponseTask.NoStopWhenStatusOK ();
+    ResponseTask.GetResponse ();
+
+/*
     Stick20ResponseDialog ResponseDialog(this);
 
     ResponseDialog.NoStopWhenStatusOK ();
-    ResponseDialog.NoShowDialog();
-    ResponseDialog.hide();
 
     ResponseDialog.cryptostick = cryptostick;
     ResponseDialog.exec();
     ResponseDialog.ResultValue;
-
+*/
     Stick20InfoDialog InfoDialog(this);
     InfoDialog.exec();
 }
@@ -2876,6 +2887,16 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
     Result = FALSE;
     if (TRUE == waitForAnswerFromStick20)
     {
+
+        Stick20ResponseTask ResponseTask(this,cryptostick);
+        if (FALSE == stopWhenStatusOKFromStick20)
+        {
+            ResponseTask.NoStopWhenStatusOK ();
+        }
+        ResponseTask.GetResponse ();
+        Result = ResponseTask.ResultValue;
+
+/*
         Stick20ResponseDialog ResponseDialog(this);
 
         if (FALSE == stopWhenStatusOKFromStick20)
@@ -2886,6 +2907,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
 
         ResponseDialog.exec();
         Result = ResponseDialog.ResultValue;
+*/
     }
 
     if (TRUE == Result)

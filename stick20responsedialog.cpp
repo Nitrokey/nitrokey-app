@@ -30,6 +30,21 @@
 
 /*******************************************************************************
 
+ Local defines
+
+*******************************************************************************/
+
+class OwnSleep : public QThread
+{
+public:
+    static void usleep(unsigned long usecs){QThread::usleep(usecs);}
+    static void msleep(unsigned long msecs){QThread::msleep(msecs);}
+    static void sleep (unsigned long secs) {QThread::sleep(secs);}
+};
+
+
+/*******************************************************************************
+
  External declarations
 
 *******************************************************************************/
@@ -56,11 +71,10 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Stick20ResponseDialog)
 {
-    bool ret;
+    int Value;
 
     Counter_u32            = 0;
     FlagNoStopWhenStatusOK = FALSE;
-    FlagNoShow             = FALSE;
     ResultValue            = FALSE;
 
     ui->setupUi(this);
@@ -68,14 +82,22 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent) :
     ui->OutputText->setText("");
     ui->progressBar->hide();
 
+    if (FALSE == DebugingActive)             // Resize the dialog when debugging is inactiv
+    {
+        ui->OutputText->hide ();
+        Value = ui->OutputText->height();
+
+        QSize dialogSize = this->size();
+        dialogSize.setHeight (dialogSize.height() - Value);
+        this->resize(dialogSize);
+    }
+
     pollStick20Timer = new QTimer(this);
 
     // Start timer for polling stick response
-    ret = connect(pollStick20Timer, SIGNAL(timeout()), this, SLOT(checkStick20Status()));
+    connect(pollStick20Timer, SIGNAL(timeout()), this, SLOT(checkStick20Status()));
     pollStick20Timer->start(100);
 
-    if(ret){}
-//    hide ();
 }
 
 /*******************************************************************************
@@ -226,27 +248,12 @@ void Stick20ResponseDialog::checkStick20Status()
     QString OutputText;
     int ret;
 
-    Counter_u32 += 1;
-/*
-    if (RESPONSE_DIALOG_TIME_TO_SHOW_DIALOG < Counter_u32)
-    {
-        FlagNoShow = false;
-    }
-    if (true == FlagNoShow)
-    {
-        hide ();
-    }
-    else
-    {
-        show ();
-    }
-*/
+    Counter_u32++;
+
     // Get response data
     Response *stick20Response = new Response();
 
     ret = stick20Response->getResponse(cryptostick);
-
-
 
     if (true == DebugingActive)
     {
@@ -461,6 +468,10 @@ void Stick20ResponseDialog::checkStick20Status()
 
   NoStopWhenStatusOK
 
+  Changes
+  Date      Author        Info
+  02.07.14  RB            Function created
+
   Reviews
   Date      Reviewer        Info
   12.08.13  RB              First review
@@ -472,48 +483,14 @@ void Stick20ResponseDialog::NoStopWhenStatusOK()
     FlagNoStopWhenStatusOK = TRUE;
 }
 
-/*******************************************************************************
 
-  NoShowDialog
-
-  Changes
-  Date      Author        Info
-  02.07.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void Stick20ResponseDialog::NoShowDialog()
-{
-    FlagNoShow = TRUE;
-
-    hide ();
-}
-
-/*******************************************************************************
-
-  ShowDialog
-
-  Changes
-  Date      Author        Info
-  02.07.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void Stick20ResponseDialog::ShowDialog()
-{
-    FlagNoShow = FALSE;
-
-    show ();
-}
 /*******************************************************************************
 
   ~Stick20ResponseDialog
+
+  Changes
+  Date      Author        Info
+  02.07.14  RB            Function created
 
   Reviews
   Date      Reviewer        Info
@@ -532,3 +509,290 @@ Stick20ResponseDialog::~Stick20ResponseDialog()
 
     setResult (ResultValue);
 }
+
+
+
+
+/*******************************************************************************
+
+  Stick20ResponseDialog
+
+  Constructor Stick20ResponseDialog
+
+  Changes
+  Date      Author          Info
+  02.09.14  RB              Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+Stick20ResponseTask::Stick20ResponseTask(QWidget *parent,Device *Cryptostick20)
+{
+    EndFlag                   = FALSE;
+    FlagNoStopWhenStatusOK    = FALSE;
+    ResultValue               = FALSE;
+
+    Stick20ResponseTaskParent = parent;
+
+    cryptostick               = Cryptostick20;
+}
+
+/*******************************************************************************
+
+  NoStopWhenStatusOK
+
+  Changes
+  Date      Author          Info
+  02.09.14  RB              Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void Stick20ResponseTask::NoStopWhenStatusOK()
+{
+    FlagNoStopWhenStatusOK = TRUE;
+}
+
+
+/*******************************************************************************
+
+  checkStick20Status
+
+  Changes
+  Date      Author          Info
+  02.09.14  RB              Function created
+
+  Reviews
+  Date      Reviewer        Info
+  12.08.13  RB              First review
+
+*******************************************************************************/
+#define RESPONSE_DIALOG_TIME_TO_SHOW_DIALOG 30 // a 100 ms = 3 sec
+
+void Stick20ResponseTask::checkStick20Status()
+{
+    QString OutputText;
+    int ret;
+
+    // Get response data
+    Response *stick20Response = new Response();
+
+    ret = stick20Response->getResponse(cryptostick);
+
+    if (true == DebugingActive)
+    {
+//        checkStick20StatusDebug (stick20Response,ret);
+    }
+
+    if (0 == ret)
+    {
+        switch (stick20Response->HID_Stick20Status_st.Status_u8)
+        {
+            case OUTPUT_CMD_STICK20_STATUS_IDLE             :
+                break;
+            case OUTPUT_CMD_STICK20_STATUS_OK               :
+                EndFlag = TRUE;
+                break;
+            case OUTPUT_CMD_STICK20_STATUS_BUSY             :
+                break;
+            case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
+                EndFlag = TRUE;
+                break;
+            case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
+                break;
+            case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY   :
+                EndFlag = TRUE;
+                break;
+            case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK   :
+                EndFlag = TRUE;
+                break;
+            case OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR   :
+                EndFlag = TRUE;
+                break;
+            case OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE   :
+                EndFlag = TRUE;
+                break;
+            default :
+                break;
+        }
+
+        if (TRUE == FlagNoStopWhenStatusOK)
+        {
+            switch (stick20Response->HID_Stick20Status_st.Status_u8)
+            {
+                case OUTPUT_CMD_STICK20_STATUS_OK               :
+                    done (TRUE);
+                    ResultValue = TRUE;
+                    break;
+                case OUTPUT_CMD_STICK20_STATUS_IDLE             :
+                case OUTPUT_CMD_STICK20_STATUS_BUSY             :
+                case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
+                case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
+                case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY   :
+                    // Do nothing, wait for next hid info
+                    break;
+                case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK :
+                    done (FALSE);
+                    ResultValue = FALSE;
+                    break;
+                case OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR  :
+                    done (FALSE);
+                    ResultValue = FALSE;
+                    break;
+                case OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE  :
+                    done (FALSE);
+                    ResultValue = FALSE;
+                    break;
+            }
+        }
+
+        if (OUTPUT_CMD_STICK20_STATUS_OK == stick20Response->HID_Stick20Status_st.Status_u8)
+        {
+            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            {
+                case STICK20_CMD_GET_DEVICE_STATUS              :
+//                    showStick20Configuration (ret);
+                    break;
+                case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
+                    {
+                            QMessageBox msgBox;
+                            msgBox.setText("Storage successfully initialized with random data");
+                            msgBox.exec();
+
+                    }
+                    done (TRUE);
+                    ResultValue = TRUE;
+                    break;
+                default :
+                    break;
+            }
+        }
+
+        if (OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK == stick20Response->HID_Stick20Status_st.Status_u8)
+        {
+            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            {
+                case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Encrypted volume was not enabled, please enable the encrypted volume");
+                        msgBox.exec();
+                    }
+                    break;
+                default :
+                    break;
+            }
+        }
+
+        if (OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR == stick20Response->HID_Stick20Status_st.Status_u8)
+        {
+            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            {
+                case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Smartcard error, please retry the command");
+                        msgBox.exec();
+                    }
+                    break;
+                default :
+                    break;
+            }
+        }
+
+        if (OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE == stick20Response->HID_Stick20Status_st.Status_u8)
+        {
+            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            {
+                case STICK20_CMD_ENABLE_FIRMWARE_UPDATE     :
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Security bit of stick is activ.\nUpdate is not possible.");
+                        msgBox.exec();
+                    }
+                    break;
+                default :
+                    break;
+            }
+        }
+
+    }
+}
+
+/*******************************************************************************
+
+  done
+
+  Changes
+  Date      Author          Info
+  02.09.14  RB              Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void Stick20ResponseTask::done (int Status)
+{
+    EndFlag = TRUE;
+}
+
+
+/*******************************************************************************
+
+  GetResponse
+
+  Changes
+  Date      Author          Info
+  02.09.14  RB              Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void Stick20ResponseTask::GetResponse(void)
+{
+    int i;
+
+    for (i=0;i<15;i++)
+    {
+        OwnSleep::msleep(100);
+        checkStick20Status ();
+    }
+
+    if (FALSE == EndFlag)
+    {
+        Stick20ResponseDialog ResponseDialog(Stick20ResponseTaskParent);
+
+        if (TRUE == FlagNoStopWhenStatusOK)
+        {
+            ResponseDialog.NoStopWhenStatusOK ();
+        }
+        ResponseDialog.cryptostick=cryptostick;
+        ResponseDialog.exec();
+        ResultValue = ResponseDialog.ResultValue;
+    }
+}
+
+/*******************************************************************************
+
+  ~Stick20ResponseTask
+
+  Changes
+  Date      Author          Info
+  02.09.14  RB              Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+Stick20ResponseTask::~Stick20ResponseTask()
+{
+}
+

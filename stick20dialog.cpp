@@ -380,6 +380,7 @@ void Stick20Dialog::on_buttonBox_accepted()
 
     if (TRUE == waitForAnswerFromStick20)
     {
+/*
         Stick20ResponseDialog ResponseDialog(this);
 
         if (FALSE == stopWhenStatusOKFromStick20)
@@ -389,6 +390,15 @@ void Stick20Dialog::on_buttonBox_accepted()
         ResponseDialog.cryptostick=cryptostick;
 
         ResponseDialog.exec();
+*/
+        Stick20ResponseTask ResponseTask(this,cryptostick);
+
+        if (FALSE == stopWhenStatusOKFromStick20)
+        {
+            ResponseTask.NoStopWhenStatusOK ();
+        }
+
+        ResponseTask.GetResponse ();
     }
 
 }
