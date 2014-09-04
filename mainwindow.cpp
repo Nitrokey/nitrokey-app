@@ -1074,10 +1074,10 @@ void MainWindow::initActionsForStick20()
     connect(Stick20ActionGetStickStatus, SIGNAL(triggered()), this, SLOT(startStick20GetStickStatus()));
 //    connect(Stick20ActionGetStickStatus, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
-    Stick20ActionSetReadonlyUncryptedVolume = new QAction(tr("&Set readonly unencrypted volume"), this);
+    Stick20ActionSetReadonlyUncryptedVolume = new QAction(tr("&Set unencrypted volume read-only"), this);
     connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20SetReadonlyUncryptedVolume()));
 
-    Stick20ActionSetReadWriteUncryptedVolume = new QAction(tr("&Set readwrite unencrypted volume"), this);
+    Stick20ActionSetReadWriteUncryptedVolume = new QAction(tr("&Set unencrypted volume read-write"), this);
     connect(Stick20ActionSetReadWriteUncryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20SetReadWriteUncryptedVolume()));
 
     Stick20ActionDebugAction = new QAction(tr("&Debug Action"), this);
@@ -2404,7 +2404,6 @@ void MainWindow::startStick20SetReadonlyUncryptedVolume()
 
     if (Accepted == ret)
     {
-//        password[0] = 'P';
         dialog.getPassword ((char*)password);
 
         stick20SendCommand (STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN,password);
@@ -2963,10 +2962,12 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                 UpdateDynamicMenuEntrys ();
                 break;
             case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
-               NormalVolumeRWActive = TRUE;
+               HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_WRITE_ACTIVE;
+               UpdateDynamicMenuEntrys ();
                break;
             case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
-               NormalVolumeRWActive = FALSE;
+               HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_ONLY_ACTIVE;
+               UpdateDynamicMenuEntrys ();
                break;
             case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND        :
                HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
