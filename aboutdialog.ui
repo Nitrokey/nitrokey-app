@@ -36,7 +36,7 @@
      <x>30</x>
      <y>10</y>
      <width>321</width>
-     <height>251</height>
+     <height>191</height>
     </rect>
    </property>
    <property name="text">
@@ -59,9 +59,9 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>230</y>
+     <y>210</y>
      <width>331</width>
-     <height>161</height>
+     <height>181</height>
     </rect>
    </property>
    <property name="font">
@@ -80,6 +80,9 @@
    </property>
   </widget>
   <widget class="QPushButton" name="ButtonStickStatus">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -109,7 +112,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>210</y>
+     <y>190</y>
      <width>111</width>
      <height>20</height>
     </rect>
