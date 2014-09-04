@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-    StartupInfo_st.ExtendedConfigActive  = TRUE;
+    StartupInfo_st.ExtendedConfigActive  = FALSE;
     StartupInfo_st.FlagDebug             = DEBUG_STATUS_NO_DEBUGGING;
     StartupInfo_st.PasswordMatrix        = FALSE;
     StartupInfo_st.LockHardware          = FALSE;
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
         {
             StartupInfo_st.FlagDebug = DEBUG_STATUS_DEBUG_ALL;
         }     
-        if (0 == strcmp (p,"--configAll"))
+        if ((0 == strcmp (p,"--admin")) || (0 == strcmp (p,"-a")))
         {
             StartupInfo_st.ExtendedConfigActive = TRUE;
         }

@@ -1294,7 +1294,6 @@ void MainWindow::generateMenuForStick20()
     if (TRUE == SdCardNotErased)
     {
         trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars  );
-        trayMenu->addAction(Stick20ActionClearNewSDCardFound  );
         AddSeperator = TRUE;
     }
 
@@ -1305,22 +1304,25 @@ void MainWindow::generateMenuForStick20()
 
     generateMenuOTP ();
 
-    if (FALSE == CryptedVolumeActive)
+    if (TRUE == SdCardNotErased)
     {
-        trayMenu->addAction(Stick20ActionEnableCryptedVolume        );
-    }
-    else
-    {
-        trayMenu->addAction(Stick20ActionDisableCryptedVolume       );
-    }
+        if (FALSE == CryptedVolumeActive)
+        {
+            trayMenu->addAction(Stick20ActionEnableCryptedVolume        );
+        }
+        else
+        {
+            trayMenu->addAction(Stick20ActionDisableCryptedVolume       );
+        }
 
-    if (FALSE == HiddenVolumeActive)
-    {
-        trayMenu->addAction(Stick20ActionEnableHiddenVolume         );
-    }
-    else
-    {
-        trayMenu->addAction(Stick20ActionDisableHiddenVolume        );
+        if (FALSE == HiddenVolumeActive)
+        {
+            trayMenu->addAction(Stick20ActionEnableHiddenVolume         );
+        }
+        else
+        {
+            trayMenu->addAction(Stick20ActionDisableHiddenVolume        );
+        }
     }
 
 
@@ -1328,7 +1330,25 @@ void MainWindow::generateMenuForStick20()
     trayMenuSubConfigure->addAction(restoreAction);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
-    trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
+
+    if (FALSE == NormalVolumeRWActive)
+    {
+        trayMenuSubConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume );      // Set RW active
+    }
+    else
+    {
+        trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);      // Set readonly active
+    }
+
+    if (TRUE == SdCardNotErased)
+    {
+        trayMenuSubConfigure->addAction(Stick20ActionClearNewSDCardFound  );
+    }
+
+    if (TRUE == SdCardNotErased)
+    {
+        trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
+    }
 
     if (TRUE == MatrixInputActive)
     {
@@ -1349,21 +1369,13 @@ void MainWindow::generateMenuForStick20()
 
     }
 
+    trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate       );
+    trayMenuSubConfigure->addAction(Stick20ActionExportFirmwareToFile       );
+
     if (TRUE == ExtendedConfigActive)
     {
         trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu( "Special Configure" );
-        trayMenuSubSpecialConfigure->addAction(Stick20ActionEnableFirmwareUpdate       );
-        trayMenuSubSpecialConfigure->addAction(Stick20ActionExportFirmwareToFile       );
         trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars  );
-
-        if (FALSE == NormalVolumeRWActive)
-        {
-            trayMenuSubSpecialConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume );      // Set RW active
-        }
-        else
-        {
-            trayMenuSubSpecialConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);      // Set readonly active
-        }
     }
 
 
