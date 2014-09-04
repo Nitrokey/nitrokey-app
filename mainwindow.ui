@@ -34,7 +34,7 @@
      <attribute name="title">
       <string>Overview</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButton_GotoTOTP">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -50,7 +50,7 @@
        <string>Time-based One-Time Password (TOTP)</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushButton_GotoGenOTP">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -63,7 +63,7 @@
        <string>General One-Time Password Settings</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="pushButton_StaticPasswords">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -76,7 +76,7 @@
        <string>Static Passwords</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="pushButton_GotoHOTP">
       <property name="geometry">
        <rect>
         <x>120</x>
@@ -1165,6 +1165,19 @@
        <bool>true</bool>
       </property>
      </widget>
+     <widget class="QPushButton" name="PWS_ButtonCreatePW">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>140</y>
+        <width>191</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Generate random password 12 Char</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -1182,8 +1195,8 @@
    <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>267</x>
-     <y>692</y>
+     <x>352</x>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
      <x>262</x>
@@ -1198,8 +1211,8 @@
    <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>309</x>
-     <y>254</y>
+     <x>352</x>
+     <y>482</y>
     </hint>
     <hint type="destinationlabel">
      <x>300</x>

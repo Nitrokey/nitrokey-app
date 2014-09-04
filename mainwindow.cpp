@@ -117,7 +117,9 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     SdCardNotErased_DontAsk   = FALSE;
     StickNotInitated_DontAsk  = FALSE;
 
-    PWS_Access = FALSE;
+    PWS_Access       = FALSE;
+    PWS_CreatePWSize = 12;
+
 
     clipboard = QApplication::clipboard();  
   
@@ -160,6 +162,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     ui->setupUi(this);
 
     ui->tabWidget->setCurrentIndex (0); // Set first tab active
+
+    ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
 
     ui->statusBar->showMessage("Device disconnected.");
 
@@ -1784,6 +1788,8 @@ void MainWindow::startConfiguration()
         if (TRUE == ok)
         {
             uint8_t tempPassword[25];
+            QDateTime local(QDateTime::currentDateTime());
+            qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 
             if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
             {
@@ -3207,6 +3213,10 @@ void MainWindow::on_setToZeroButton_clicked()
 
 void MainWindow::on_setToRandomButton_clicked()
 {
+    QDateTime local(QDateTime::currentDateTime());
+
+    qsrand (local.currentMSecsSinceEpoch() % 2000000000);
+
     quint64 counter=qrand();
     counter<<=16;
     counter+=qrand();
@@ -3703,10 +3713,12 @@ void MainWindow::on_eraseButton_clicked()
 
 void MainWindow::on_randomSecretButton_clicked()
 {
-
+    QDateTime local(QDateTime::currentDateTime());
     int i=0;
     uint8_t secret[32];
     char temp;
+
+    qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 
    // for (i=0;i<20;i++)
    //     secret[i]=qrand()&0xFF;
@@ -3993,7 +4005,7 @@ void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked)
 
 /*******************************************************************************
 
-  on_PWS_ButtonSaveSlot_pressed
+  on_PWS_ButtonSaveSlot_clicked
 
   Changes
   Date      Author        Info
@@ -4004,7 +4016,7 @@ void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked)
 
 *******************************************************************************/
 
-void MainWindow::on_PWS_ButtonSaveSlot_pressed()
+void MainWindow::on_PWS_ButtonSaveSlot_clicked()
 {
     int Slot;
     int ret;
@@ -4335,9 +4347,12 @@ void MainWindow::resetTime()
 
         QString password = QInputDialog::getText(this,tr("Enter card admin password"),tr("Admin password: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
 
-        if (ok){
-
+        if (ok)
+        {
             uint8_t tempPassword[25];
+            QDateTime local(QDateTime::currentDateTime());
+
+            qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 
             if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
             {
@@ -4395,6 +4410,9 @@ int MainWindow::getNextCode(uint8_t slotNumber)
     {
         if (!cryptostick->validUserPassword)
         {
+            QDateTime local(QDateTime::currentDateTime());
+            qsrand (local.currentMSecsSinceEpoch() % 2000000000);
+
             cryptostick->getUserPasswordRetryCount();
 
             QString password = QInputDialog::getText(this, tr("Enter card user password"),tr("User password: ")+tr("(Tries left: ")+QString::number(cryptostick->userPasswordRetryCount)+")", QLineEdit::Password,"", &ok);
@@ -4573,3 +4591,126 @@ void MainWindow::on_testTOTPButton_clicked(){
 */
 //END - OTP Test Routine ----------------------------------
 
+/*******************************************************************************
+
+  on_pushButton_GotoTOTP_clicked
+
+  Changes
+  Date      Author        Info
+  04.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_pushButton_GotoTOTP_clicked()
+{
+    ui->tabWidget->setCurrentWidget(ui->tab);
+}
+
+/*******************************************************************************
+
+  on_pushButton_GotoHOTP_clicked
+
+  Changes
+  Date      Author        Info
+  04.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_pushButton_GotoHOTP_clicked()
+{
+    ui->tabWidget->setCurrentWidget(ui->tab);
+}
+
+/*******************************************************************************
+
+  on_pushButton_StaticPasswords_clicked
+
+  Changes
+  Date      Author        Info
+  04.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_pushButton_StaticPasswords_clicked()
+{
+    ui->tabWidget->setCurrentWidget(ui->tab_3);
+}
+
+/*******************************************************************************
+
+  on_pushButton_GotoGenOTP_clicked
+
+  Changes
+  Date      Author        Info
+  04.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_pushButton_GotoGenOTP_clicked()
+{
+    ui->tabWidget->setCurrentWidget(ui->tab_2);
+}
+
+/*******************************************************************************
+
+  on_pushButton_GotoGenOTP_clicked
+
+  Changes
+  Date      Author        Info
+  04.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+#define PWS_RANDOM_PASSWORD_CHAR_SPACE "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"§$%&/()=?[]{}~*+#_'-`,.;:><^|@\\"
+
+void MainWindow::on_PWS_ButtonCreatePW_clicked()
+{
+    int   i;
+    int   n;
+    int   PasswordCharSpaceLen;
+    char  RandomPassword[30];
+    char *PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
+    QString Text;
+    QDateTime local(QDateTime::currentDateTime());
+
+    qsrand (local.currentMSecsSinceEpoch() % 2000000000);
+//    qDebug() << "Seed is:" << local.currentMSecsSinceEpoch() % 2000000000;
+
+    PasswordCharSpaceLen = strlen (PasswordCharSpace);
+//    qDebug() << "PasswordCharSpaceLen " << PasswordCharSpaceLen;
+
+    for (i=0;i<PWS_CreatePWSize;i++)
+    {
+        n = qrand ();
+        n = n % PasswordCharSpaceLen;
+        RandomPassword[i] = PasswordCharSpace[n];
+//        qDebug() << "n " << n << " - " << RandomPassword[i];
+    }
+    RandomPassword[i] = 0;
+
+    Text = RandomPassword;
+    ui->PWS_EditPassword->setText(Text.toLocal8Bit());
+
+// Set new password size
+    PWS_CreatePWSize += 4;
+    if (20 < PWS_CreatePWSize)
+    {
+        PWS_CreatePWSize = 12;
+    }
+    ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
+}

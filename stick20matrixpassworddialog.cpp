@@ -623,7 +623,7 @@ void MatrixPasswordDialog::RowSelected(int SelectedRow)
     {
         QMessageBox          msgBox;
 
-        msgBox.setText("Maximum lenght reached");
+        msgBox.setText("Maximum length reached");
         msgBox.exec();
 
         SendMatrixRowDataToStick20 ();

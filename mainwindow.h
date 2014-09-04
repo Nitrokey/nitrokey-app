@@ -84,6 +84,7 @@ private:
     void getSlotNames();
 
     int PWS_Access;
+    int PWS_CreatePWSize;
 
     uint64_t currentTime;
     bool     CryptedVolumeActive;
@@ -151,6 +152,8 @@ private:
     void generateMenuForStick20();
     int  UpdateDynamicMenuEntrys (void);
     void AnalyseProductionInfos();
+
+    void on_pushButton_clicked();           // RB function used ?
 
 private slots:
     void checkConnection();
@@ -269,9 +272,13 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_PWS_ButtonClearSlot_clicked();
     void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
     void on_PWS_CheckBoxHideSecret_toggled(bool checked);
-    void on_PWS_ButtonSaveSlot_pressed();
     void on_PWS_ButtonClose_pressed();
-    void on_pushButton_clicked();
+    void on_pushButton_GotoTOTP_clicked();
+    void on_pushButton_GotoHOTP_clicked();
+    void on_pushButton_StaticPasswords_clicked();
+    void on_pushButton_GotoGenOTP_clicked();
+    void on_PWS_ButtonCreatePW_clicked();
+    void on_PWS_ButtonSaveSlot_clicked();
 };
 
 #endif // MAINWINDOW_H

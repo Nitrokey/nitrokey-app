@@ -232,7 +232,7 @@ void Device::connect()
 
   Byte  0       = 0
   Byte  1       = cmd type
-  Byte  2-59    = payload       (To do check lenght)
+  Byte  2-59    = payload       (To do check length)
   Byte 60-63    = CRC 32 from byte 0-59 = 15 long words
 
 
