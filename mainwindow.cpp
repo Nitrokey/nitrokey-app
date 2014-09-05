@@ -1304,7 +1304,7 @@ void MainWindow::generateMenuForStick20()
 
     generateMenuOTP ();
 
-    if (TRUE == SdCardNotErased)
+    if (FALSE == SdCardNotErased)
     {
         if (FALSE == CryptedVolumeActive)
         {
