@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -87,6 +87,22 @@
       </property>
       <property name="text">
        <string>HMAC-based One-Time Password (HOTP)</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cancelButton_2">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>450</y>
+        <width>99</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="text">
+       <string>Close</string>
       </property>
      </widget>
     </widget>
@@ -246,26 +262,10 @@
        </property>
       </widget>
      </widget>
-     <widget class="QPushButton" name="cancelButton">
-      <property name="geometry">
-       <rect>
-        <x>350</x>
-        <y>460</y>
-        <width>99</width>
-        <height>27</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string/>
-      </property>
-      <property name="text">
-       <string>Cancel</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="writeButton">
       <property name="geometry">
        <rect>
-        <x>130</x>
+        <x>370</x>
         <y>460</y>
         <width>99</width>
         <height>27</height>
@@ -278,8 +278,8 @@
      <widget class="QLabel" name="label_2">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>10</y>
+        <x>390</x>
+        <y>13</y>
         <width>51</width>
         <height>25</height>
        </rect>
@@ -518,9 +518,9 @@
      <widget class="QLineEdit" name="nameEdit">
       <property name="geometry">
        <rect>
-        <x>370</x>
-        <y>10</y>
-        <width>113</width>
+        <x>440</x>
+        <y>13</y>
+        <width>161</width>
         <height>24</height>
        </rect>
       </property>
@@ -692,14 +692,30 @@
      <widget class="QPushButton" name="eraseButton">
       <property name="geometry">
        <rect>
-        <x>240</x>
-        <y>460</y>
+        <x>270</x>
+        <y>10</y>
         <width>99</width>
         <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Erase</string>
+       <string>Erase Slot</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cancelButton">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>460</y>
+        <width>99</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="text">
+       <string>Cancel</string>
       </property>
      </widget>
     </widget>
@@ -710,7 +726,7 @@
      <widget class="QPushButton" name="generalCancelButton">
       <property name="geometry">
        <rect>
-        <x>350</x>
+        <x>150</x>
         <y>460</y>
         <width>99</width>
         <height>27</height>
@@ -992,7 +1008,7 @@
      <widget class="QPushButton" name="writeGeneralConfigButton">
       <property name="geometry">
        <rect>
-        <x>130</x>
+        <x>370</x>
         <y>460</y>
         <width>99</width>
         <height>27</height>
@@ -1110,40 +1126,40 @@
      <widget class="QPushButton" name="PWS_ButtonClearSlot">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>200</y>
-        <width>75</width>
-        <height>23</height>
+        <x>360</x>
+        <y>20</y>
+        <width>99</width>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Clear slot</string>
+       <string>Erase Slot</string>
       </property>
      </widget>
      <widget class="QPushButton" name="PWS_ButtonSaveSlot">
       <property name="geometry">
        <rect>
-        <x>130</x>
-        <y>200</y>
-        <width>75</width>
-        <height>23</height>
+        <x>370</x>
+        <y>460</y>
+        <width>99</width>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Save slot</string>
+       <string>Save</string>
       </property>
      </widget>
      <widget class="QPushButton" name="PWS_ButtonClose">
       <property name="geometry">
        <rect>
-        <x>230</x>
-        <y>200</y>
-        <width>75</width>
-        <height>23</height>
+        <x>150</x>
+        <y>460</y>
+        <width>99</width>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Close</string>
+       <string>Cancel</string>
       </property>
      </widget>
      <widget class="QCheckBox" name="PWS_CheckBoxHideSecret">

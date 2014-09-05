@@ -54,11 +54,14 @@ void HelpInfos (void)
 {
     printf ("Crypto Stick GUI\n");
     printf ("\n");
-    printf ("-h             This help\n");
-    printf ("--help         This help\n");
+    printf ("-h, --help     This help\n");
+    printf ("-a, --admin    Enable extra functions in the GUI for administrators.\n");
     printf ("--debug        Enable debug options\n");
+    printf ("--debugAll     Enable extensive debug options\n");
     printf ("--lockHardware Enable menu entry for hardware lock\n");
+/* Disable password matrix
     printf ("--PWM          Enable PIN entry via matrix\n");
+*/
     printf ("--cmd ....     Start a command line command\n");
     printf ("\n");
 }

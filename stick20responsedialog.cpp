@@ -332,7 +332,7 @@ void Stick20ResponseDialog::checkStick20Status()
                 OutputText.append (QString("BUSY"));
                 break;
             case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
-                OutputText.append (QString("WORNG PASSWORD"));
+                OutputText.append (QString("WRONG PASSWORD"));
                 pollStick20Timer->stop();
                 break;
             case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
