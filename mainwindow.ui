@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -1168,7 +1168,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>340</x>
+        <x>320</x>
         <y>140</y>
         <width>111</width>
         <height>24</height>
@@ -1184,14 +1184,14 @@
      <widget class="QPushButton" name="PWS_ButtonCreatePW">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>430</x>
         <y>140</y>
-        <width>191</width>
+        <width>201</width>
         <height>23</height>
        </rect>
       </property>
       <property name="text">
-       <string>Generate random password 12 Char</string>
+       <string>Generate random password</string>
       </property>
      </widget>
     </widget>

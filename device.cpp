@@ -269,13 +269,13 @@ int Device::sendCommand(Command *cmd)
     }
 */
     err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
-/*
+
     {
             char text[1000];
             int i;
             static int Counter = 0;
 
-            sprintf(text,"%6d :sendCommand: ",Counter);
+            sprintf(text,"%6d :sendCommand0: ",Counter);
             Counter++;
             DebugAppendText (text);
             for (i=0;i<=64;i++)
@@ -287,7 +287,7 @@ int Device::sendCommand(Command *cmd)
             DebugAppendText (text);
 
      }
-*/
+
     return err;
 }
 
@@ -316,6 +316,24 @@ int Device::sendCommandGetResponse(Command *cmd, Response *resp)
     cmd->crc=crc;
 
     err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
+
+    {
+            char text[1000];
+            int i;
+            static int Counter = 0;
+
+            sprintf(text,"%6d :sendCommand1: ",Counter);
+            Counter++;
+            DebugAppendText (text);
+            for (i=0;i<=64;i++)
+            {
+                sprintf(text,"%02x ",(unsigned char)report[i]);
+                DebugAppendText (text);
+            }
+            sprintf(text,"\n");
+            DebugAppendText (text);
+
+     }
 
     if (err==-1)
         return ERR_SENDING;

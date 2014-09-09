@@ -163,7 +163,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     ui->tabWidget->setCurrentIndex (0); // Set first tab active
 
-    ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
+//    ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
+    ui->PWS_ButtonCreatePW->setText(QString("Generate random password "));
 
     ui->statusBar->showMessage("Device disconnected.");
 
@@ -4689,7 +4690,7 @@ void MainWindow::on_pushButton_GotoGenOTP_clicked()
 
 *******************************************************************************/
 
-#define PWS_RANDOM_PASSWORD_CHAR_SPACE "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"§$%&/()=?[]{}~*+#_'-`,.;:><^|@\\"
+#define PWS_RANDOM_PASSWORD_CHAR_SPACE "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"$%&/()=?[]{}~*+#_'-`,.;:><^|@\\"
 
 void MainWindow::on_PWS_ButtonCreatePW_clicked()
 {
@@ -4701,23 +4702,32 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
     QString Text;
     QDateTime local(QDateTime::currentDateTime());
 
+//    qDebug() << "Password char space is" << PWS_RANDOM_PASSWORD_CHAR_SPACE;
+
+
     qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 //    qDebug() << "Seed is:" << local.currentMSecsSinceEpoch() % 2000000000;
 
     PasswordCharSpaceLen = strlen (PasswordCharSpace);
 //    qDebug() << "PasswordCharSpaceLen " << PasswordCharSpaceLen;
 
+    PWS_CreatePWSize = 20;
     for (i=0;i<PWS_CreatePWSize;i++)
     {
         n = qrand ();
         n = n % PasswordCharSpaceLen;
         RandomPassword[i] = PasswordCharSpace[n];
-//        qDebug() << "n " << n << " - " << RandomPassword[i];
+        qDebug() << "n " << n << " - " << RandomPassword[i];
     }
     RandomPassword[i] = 0;
 
     Text = RandomPassword;
     ui->PWS_EditPassword->setText(Text.toLocal8Bit());
+
+/*
+// Check password char space
+    Text = PWS_RANDOM_PASSWORD_CHAR_SPACE;
+    ui->PWS_EditPassword->setMaxLength(100);
 
 // Set new password size
     PWS_CreatePWSize += 4;
@@ -4726,4 +4736,5 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
         PWS_CreatePWSize = 12;
     }
     ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
+*/
 }

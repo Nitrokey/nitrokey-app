@@ -74,7 +74,7 @@ void Response::DebugResponse()
     int i;
     static int Counter = 0;
 
-    sprintf(text,"%6d :getResponse: ",Counter);
+    sprintf(text,"%6d :getResponse : ",Counter);
     Counter++;
     DebugAppendText (text);
     for (i=0;i<=64;i++)
