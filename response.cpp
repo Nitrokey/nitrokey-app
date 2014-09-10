@@ -158,6 +158,8 @@ void Response::DebugResponse()
         case CMD_CLEAR_WARNING :
             DebugAppendText ((char *)"         Last command        : CMD_CLEAR_WARNING\n");
             break;
+
+
         case CMD_GET_PW_SAFE_SLOT_STATUS :
             DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_STATUS\n");
             break;
@@ -186,6 +188,10 @@ void Response::DebugResponse()
         case CMD_PW_SAFE_INIT_KEY :
             DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_INIT_KEY\n");
             break;
+        case CMD_PW_SAFE_SEND_DATA :
+            DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_SEND_DATA");
+            break;
+
         case CMD_SET_TIME :
             DebugAppendText ((char *)"         Last command        : CMD_SET_TIME\n");
             break;
@@ -207,6 +213,24 @@ void Response::DebugResponse()
         case CMD_UNLOCK_USER_PASSOWRD :
             DebugAppendText ((char *)"         Last command        : CMD_UNLOCK_USER_PASSOWRD\n");
             break;
+
+        case STICK20_CMD_ENABLE_CRYPTED_PARI            :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_CRYPTED_PARI           \n");         break;
+        case STICK20_CMD_DISABLE_CRYPTED_PARI           :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_DISABLE_CRYPTED_PARI          \n");         break;
+        case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI    \n");         break;
+        case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI    :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI   \n");         break;
+        case STICK20_CMD_ENABLE_FIRMWARE_UPDATE         :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_FIRMWARE_UPDATE        \n");         break;
+        case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE        :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_EXPORT_FIRMWARE_TO_FILE       \n");         break;
+        case STICK20_CMD_GENERATE_NEW_KEYS              :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_GENERATE_NEW_KEYS             \n");         break;
+        case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS\n");         break;
+        case STICK20_CMD_WRITE_STATUS_DATA              :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_WRITE_STATUS_DATA             \n");         break;
+        case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN  :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN \n");         break;
+        case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN\n");         break;
+        case STICK20_CMD_SEND_PASSWORD_MATRIX           :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX          \n");         break;
+        case STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA   :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA  \n");         break;
+        case STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP     :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP    \n");         break;
+        case STICK20_CMD_GET_DEVICE_STATUS              :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_GET_DEVICE_STATUS             \n");         break;
+        case STICK20_CMD_SEND_DEVICE_STATUS             :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_DEVICE_STATUS            \n");         break;
+
         case STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD :
             DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD\n");
             break;
