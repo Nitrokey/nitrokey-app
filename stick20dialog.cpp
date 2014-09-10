@@ -293,7 +293,7 @@ void Stick20Dialog::on_buttonBox_accepted()
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
-                if (Accepted == ret)
+                if (QMessageBox::Yes == ret)
                 {
                     ret = cryptostick->stick20CreateNewKeys (password);
                     if (TRUE == ret)
@@ -309,7 +309,7 @@ void Stick20Dialog::on_buttonBox_accepted()
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
-                if (Accepted == ret)
+                if (QMessageBox::Yes == ret)
                 {
                     ret = cryptostick->stick20FillSDCardWithRandomChars (password,STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
                     if (TRUE == ret)

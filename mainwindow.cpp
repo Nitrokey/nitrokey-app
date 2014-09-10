@@ -2794,7 +2794,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
-                if (Accepted == ret)
+                if (QMessageBox::Yes == ret)
                 {
                     ret = cryptostick->stick20CreateNewKeys (password);
                     if (TRUE == ret)
@@ -4717,7 +4717,7 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
         n = qrand ();
         n = n % PasswordCharSpaceLen;
         RandomPassword[i] = PasswordCharSpace[n];
-        qDebug() << "n " << n << " - " << RandomPassword[i];
+//        qDebug() << "n " << n << " - " << RandomPassword[i];
     }
     RandomPassword[i] = 0;
 
