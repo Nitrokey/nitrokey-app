@@ -150,10 +150,12 @@ int main(int argc, char *argv[])
 
     MainWindow w(&StartupInfo_st);
     //w.show();
-
+/*
     QTime midnight(0, 0, 0);
     qsrand(midnight.secsTo(QTime::currentTime()));
-
+*/
+    QDateTime local(QDateTime::currentDateTime());
+    qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 
     a.setQuitOnLastWindowClosed(false);
     return a.exec();

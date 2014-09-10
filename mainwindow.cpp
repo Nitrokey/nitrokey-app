@@ -1327,7 +1327,7 @@ void MainWindow::generateMenuForStick20()
     }
 
 
-    trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+    trayMenuSubConfigure  = trayMenu->addMenu( "Configure OPT + password safe" );
     trayMenuSubConfigure->addAction(restoreAction);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
@@ -1357,7 +1357,7 @@ void MainWindow::generateMenuForStick20()
     }
 
     trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume       );
-    trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus             );
+//    trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus             );
 
 
     if (TRUE == LockHardware)
@@ -1801,8 +1801,6 @@ void MainWindow::startConfiguration()
         if (TRUE == ok)
         {
             uint8_t tempPassword[25];
-            QDateTime local(QDateTime::currentDateTime());
-            qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 
             if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
             {
@@ -3227,10 +3225,6 @@ void MainWindow::on_setToZeroButton_clicked()
 
 void MainWindow::on_setToRandomButton_clicked()
 {
-    QDateTime local(QDateTime::currentDateTime());
-
-    qsrand (local.currentMSecsSinceEpoch() % 2000000000);
-
     quint64 counter=qrand();
     counter<<=16;
     counter+=qrand();
@@ -3727,12 +3721,10 @@ void MainWindow::on_eraseButton_clicked()
 
 void MainWindow::on_randomSecretButton_clicked()
 {
-    QDateTime local(QDateTime::currentDateTime());
     int i=0;
     uint8_t secret[32];
     char temp;
 
-    qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 
    // for (i=0;i<20;i++)
    //     secret[i]=qrand()&0xFF;
@@ -4132,7 +4124,7 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-        QString actionName("Enable password safe");
+        QString actionName("Unlock password safe");
         trayMenu->addAction(actionName,this,SLOT(PWS_Clicked_EnablePWSAccess()));
         return;
     }
@@ -4257,7 +4249,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         if (ERR_NO_ERROR != ret_s32)
         {
             QMessageBox msgBox;
-            msgBox.setText("Can't enable password safe");
+            msgBox.setText("Can't unlock password safe");
             msgBox.exec();
         }
         else
@@ -4364,9 +4356,6 @@ void MainWindow::resetTime()
         if (ok)
         {
             uint8_t tempPassword[25];
-            QDateTime local(QDateTime::currentDateTime());
-
-            qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 
             if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
             {
@@ -4424,9 +4413,6 @@ int MainWindow::getNextCode(uint8_t slotNumber)
     {
         if (!cryptostick->validUserPassword)
         {
-            QDateTime local(QDateTime::currentDateTime());
-            qsrand (local.currentMSecsSinceEpoch() % 2000000000);
-
             cryptostick->getUserPasswordRetryCount();
 
             QString password = QInputDialog::getText(this, tr("Enter card user password"),tr("User password: ")+tr("(Tries left: ")+QString::number(cryptostick->userPasswordRetryCount)+")", QLineEdit::Password,"", &ok);
@@ -4700,13 +4686,9 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
     char  RandomPassword[30];
     char *PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
     QString Text;
-    QDateTime local(QDateTime::currentDateTime());
 
 //    qDebug() << "Password char space is" << PWS_RANDOM_PASSWORD_CHAR_SPACE;
 
-
-    qsrand (local.currentMSecsSinceEpoch() % 2000000000);
-//    qDebug() << "Seed is:" << local.currentMSecsSinceEpoch() % 2000000000;
 
     PasswordCharSpaceLen = strlen (PasswordCharSpace);
 //    qDebug() << "PasswordCharSpaceLen " << PasswordCharSpaceLen;
