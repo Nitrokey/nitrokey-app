@@ -240,7 +240,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
 
     ActionAboutDialog = new QAction(tr("&About Crypto Stick"), this);
-    connect(ActionAboutDialog, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
+    connect(ActionAboutDialog,  	 SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
     initActionsForStick20 ();
 
@@ -264,8 +264,9 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     {
         union {
-            unsigned char input[4];
-            unsigned int  endianCheck;
+            unsigned char input[8];
+            unsigned int  endianCheck[2];
+            unsigned long long endianCheck_ll;
         } uEndianCheck;
 
         unsigned char text[50];
@@ -279,20 +280,26 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         uEndianCheck.input[1] = 0x02;
         uEndianCheck.input[2] = 0x03;
         uEndianCheck.input[3] = 0x04;
+        uEndianCheck.input[4] = 0x05;
+        uEndianCheck.input[5] = 0x06;
+        uEndianCheck.input[6] = 0x07;
+        uEndianCheck.input[7] = 0x08;
 
-        sprintf ((char*)text,"write u8  %02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3]);
+        sprintf ((char*)text,"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
         DebugAppendText ((char*)text);
 
-        sprintf ((char*)text,"read  u32 %08x\n",uEndianCheck.endianCheck);
+        sprintf ((char*)text,"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
+        DebugAppendText ((char*)text);
+        sprintf ((char*)text,"read  u64 0x%08x%08x\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
         DebugAppendText ((char*)text);
 
         DebugAppendText ((char *)"\n");
 
-        if (0x01020304 == uEndianCheck.endianCheck)
+        if (0x01020304 == uEndianCheck.endianCheck[0])
         {
             DebugAppendText ((char *)"System is little endian\n");
         }
-        if (0x04030201 == uEndianCheck.endianCheck)
+        if (0x04030201 == uEndianCheck.endianCheck[0])
         {
             DebugAppendText ((char *)"System is big endian\n");
         }

@@ -175,6 +175,7 @@ void HID_Stick20Init (void)
 
 int HID_GetStick20Configuration (void)
 {
+    char text[50];
 //    unsigned char NewDebugBlock = 1;
 //    int len;
     static typeStick20Configuration_st SavedConfiguration_st;
@@ -193,6 +194,26 @@ int HID_GetStick20Configuration (void)
         Stick20_ConfigurationChanged = TRUE;
         SavedConfiguration_st = HID_Stick20Configuration_st;
     }
+
+    sprintf(text,"HID_GetStick20Configuration\n" );                 DebugAppendText (text);
+
+    sprintf(text,"MagicNumber_StickConfig_u16      : %d\n",HID_Stick20Configuration_st.MagicNumber_StickConfig_u16      );                 DebugAppendText (text);
+    sprintf(text,"ReadWriteFlagUncryptedVolume_u8  : %d\n",HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8  );                 DebugAppendText (text);
+    sprintf(text,"ReadWriteFlagCryptedVolume_u8    : %d\n",HID_Stick20Configuration_st.ReadWriteFlagCryptedVolume_u8    );                 DebugAppendText (text);
+    sprintf(text,"VersionInfo_au8[4]               : %d %d %d %d\n",HID_Stick20Configuration_st.VersionInfo_au8[0],HID_Stick20Configuration_st.VersionInfo_au8[1],HID_Stick20Configuration_st.VersionInfo_au8[2],HID_Stick20Configuration_st.VersionInfo_au8[3]                  );                 DebugAppendText (text);
+    sprintf(text,"ReadWriteFlagHiddenVolume_u8     : %d\n",HID_Stick20Configuration_st.ReadWriteFlagHiddenVolume_u8     );                 DebugAppendText (text);
+    sprintf(text,"FirmwareLocked_u8                : %d\n",HID_Stick20Configuration_st.FirmwareLocked_u8                );                 DebugAppendText (text);
+    sprintf(text,"NewSDCardFound_u8                : %d\n",HID_Stick20Configuration_st.NewSDCardFound_u8                );                 DebugAppendText (text);
+    sprintf(text,"SDFillWithRandomChars_u8         : %d\n",HID_Stick20Configuration_st.SDFillWithRandomChars_u8         );                 DebugAppendText (text);
+    sprintf(text,"ActiveSD_CardID_u32              : 0x%08X\n",HID_Stick20Configuration_st.ActiveSD_CardID_u32              );                 DebugAppendText (text);
+    sprintf(text,"VolumeActiceFlag_u8              : %d\n",HID_Stick20Configuration_st.VolumeActiceFlag_u8              );                 DebugAppendText (text);
+    sprintf(text,"NewSmartCardFound_u8             : %d\n",HID_Stick20Configuration_st.NewSmartCardFound_u8             );                 DebugAppendText (text);
+    sprintf(text,"UserPwRetryCount                 : %d\n",HID_Stick20Configuration_st.UserPwRetryCount                 );                 DebugAppendText (text);
+    sprintf(text,"AdminPwRetryCount                : %d\n",HID_Stick20Configuration_st.AdminPwRetryCount                );                 DebugAppendText (text);
+    sprintf(text,"ActiveSmartCardID_u32            : 0x%X\n",HID_Stick20Configuration_st.ActiveSmartCardID_u32            );                 DebugAppendText (text);
+    sprintf(text,"StickKeysNotInitiated            : %d\n",HID_Stick20Configuration_st.StickKeysNotInitiated            );                 DebugAppendText (text);
+
+
 //    if(len){}//Fix warnings
 //    if(NewDebugBlock){}//Fix warnings
 

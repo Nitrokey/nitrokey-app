@@ -1166,6 +1166,8 @@ int HID_API_EXPORT hid_send_feature_report(hid_device *dev, const unsigned char 
 	return length;
 }
 
+extern int HID_GetStick20ReceiveData (unsigned char *data);
+
 int HID_API_EXPORT hid_get_feature_report(hid_device *dev, unsigned char *data, size_t length)
 {
 	int res = -1;
