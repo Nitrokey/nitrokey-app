@@ -21,6 +21,7 @@
 
 #define HID_STICK_20_H
 
+#include <QtGlobal>
 #define FALSE               0
 #define TRUE                1
 
@@ -118,12 +119,12 @@ typedef struct {
   unsigned char   FirmwareLocked_u8;                    //                                                    1 byte
   unsigned char   NewSDCardFound_u8;                    // Bit 0 new card found, bit 1-7 change counter       1 byte
   unsigned char   SDFillWithRandomChars_u8;             // Bit 0 new card found, bit 1-7 change counter       1 byte
-  unsigned long   ActiveSD_CardID_u32;                  // Not used                                           4 byte
+  quint32   ActiveSD_CardID_u32;                  // Not used                                           4 byte
   unsigned char   VolumeActiceFlag_u8;                  // Bit 0 new card found, bit 1-7 change counter       1 byte
   unsigned char   NewSmartCardFound_u8;                 // Bit 0 new card found, bit 1-7 change counter       1 byte  // 20 Byte not packed
   unsigned char   UserPwRetryCount;                     // User password retry count                          1 byte
   unsigned char   AdminPwRetryCount;                    // Admin password retry count                         1 byte
-  unsigned long   ActiveSmartCardID_u32;                //                                                    4 byte
+  quint32   ActiveSmartCardID_u32;                //                                                    4 byte
   unsigned char   StickKeysNotInitiated;                // No AES keys computed (1 = AES are builded)         1 byte  // 25 Byte not packed
 } typeStick20Configuration_st;                                                          // Sum   25 byte
 #pragma pack(pop)
