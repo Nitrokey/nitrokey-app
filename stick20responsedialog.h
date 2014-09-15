@@ -63,9 +63,11 @@ public:
 
     QTimer *pollStick20Timer;
     void NoStopWhenStatusOK();
+    void SetActiveCommand (int Cmd);
 
 private:
     Ui::Stick20ResponseDialog *ui;
+    int  ActiveCommand;
     int Counter_u32;
     bool FlagNoStopWhenStatusOK;
 
@@ -92,6 +94,7 @@ public:
 
     Device *cryptostick;
 
+    int  ActiveCommand;
     bool FlagNoStopWhenStatusOK;
     int  ResultValue;
     int  EndFlag;

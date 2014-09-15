@@ -289,7 +289,7 @@ void Stick20Dialog::on_buttonBox_accepted()
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :   
             {
-                msgBox.setText("The generation of new AES keys will destroy the encrypted volume!");
+                msgBox.setText("The generation of new AES keys will destroy the encrypted volumes and the password safe!");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
@@ -380,17 +380,6 @@ void Stick20Dialog::on_buttonBox_accepted()
 
     if (TRUE == waitForAnswerFromStick20)
     {
-/*
-        Stick20ResponseDialog ResponseDialog(this);
-
-        if (FALSE == stopWhenStatusOKFromStick20)
-        {
-            ResponseDialog.NoStopWhenStatusOK ();
-        }
-        ResponseDialog.cryptostick=cryptostick;
-
-        ResponseDialog.exec();
-*/
         Stick20ResponseTask ResponseTask(this,cryptostick);
 
         if (FALSE == stopWhenStatusOKFromStick20)

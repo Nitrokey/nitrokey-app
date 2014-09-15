@@ -73,6 +73,7 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent) :
 {
     int Value;
 
+    ActiveCommand          = -1;
     Counter_u32            = 0;
     FlagNoStopWhenStatusOK = FALSE;
     ResultValue            = FALSE;
@@ -262,6 +263,11 @@ void Stick20ResponseDialog::checkStick20Status()
 
     if (0 == ret)
     {
+        if (-1 == ActiveCommand)
+        {
+            ActiveCommand = stick20Response->HID_Stick20Status_st.LastCommand_u8;
+        }
+
         switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
         {
             case STICK20_CMD_ENABLE_CRYPTED_PARI            :
@@ -393,7 +399,7 @@ void Stick20ResponseDialog::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_OK == stick20Response->HID_Stick20Status_st.Status_u8)
         {
-            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            switch (ActiveCommand)
             {
                 case STICK20_CMD_GET_DEVICE_STATUS              :
                     showStick20Configuration (ret);
@@ -415,7 +421,7 @@ void Stick20ResponseDialog::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK == stick20Response->HID_Stick20Status_st.Status_u8)
         {
-            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            switch (ActiveCommand)
             {
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
@@ -431,7 +437,7 @@ void Stick20ResponseDialog::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR == stick20Response->HID_Stick20Status_st.Status_u8)
         {
-            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            switch (ActiveCommand)
             {
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
@@ -447,7 +453,7 @@ void Stick20ResponseDialog::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE == stick20Response->HID_Stick20Status_st.Status_u8)
         {
-            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            switch (ActiveCommand)
             {
                 case STICK20_CMD_ENABLE_FIRMWARE_UPDATE     :
                     {
@@ -510,6 +516,23 @@ Stick20ResponseDialog::~Stick20ResponseDialog()
     setResult (ResultValue);
 }
 
+/*******************************************************************************
+
+  SetActiveCommand
+
+  Changes
+  Date      Author          Info
+  15.09.14  RB              Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void Stick20ResponseDialog::SetActiveCommand (int Cmd)
+{
+    ActiveCommand = Cmd;
+}
 
 
 
@@ -530,6 +553,7 @@ Stick20ResponseDialog::~Stick20ResponseDialog()
 
 Stick20ResponseTask::Stick20ResponseTask(QWidget *parent,Device *Cryptostick20)
 {
+    ActiveCommand             = -1;
     EndFlag                   = FALSE;
     FlagNoStopWhenStatusOK    = FALSE;
     ResultValue               = FALSE;
@@ -583,6 +607,8 @@ void Stick20ResponseTask::checkStick20Status()
 
     ret = stick20Response->getResponse(cryptostick);
 
+
+
     if (true == DebugingActive)
     {
 //        checkStick20StatusDebug (stick20Response,ret);
@@ -590,6 +616,11 @@ void Stick20ResponseTask::checkStick20Status()
 
     if (0 == ret)
     {
+        if (-1 == ActiveCommand)
+        {
+            ActiveCommand = stick20Response->HID_Stick20Status_st.LastCommand_u8;
+        }
+
         switch (stick20Response->HID_Stick20Status_st.Status_u8)
         {
             case OUTPUT_CMD_STICK20_STATUS_IDLE             :
@@ -600,6 +631,12 @@ void Stick20ResponseTask::checkStick20Status()
             case OUTPUT_CMD_STICK20_STATUS_BUSY             :
                 break;
             case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
+                {
+                        QMessageBox msgBox;
+                        msgBox.setText("Get wrong password");
+                        msgBox.exec();
+
+                }
                 EndFlag = TRUE;
                 break;
             case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
@@ -652,7 +689,7 @@ void Stick20ResponseTask::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_OK == stick20Response->HID_Stick20Status_st.Status_u8)
         {
-            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            switch (ActiveCommand)
             {
                 case STICK20_CMD_GET_DEVICE_STATUS              :
 //                    showStick20Configuration (ret);
@@ -674,7 +711,7 @@ void Stick20ResponseTask::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK == stick20Response->HID_Stick20Status_st.Status_u8)
         {
-            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            switch (ActiveCommand)
             {
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
@@ -690,7 +727,7 @@ void Stick20ResponseTask::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR == stick20Response->HID_Stick20Status_st.Status_u8)
         {
-            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            switch (ActiveCommand)
             {
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
@@ -706,7 +743,7 @@ void Stick20ResponseTask::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE == stick20Response->HID_Stick20Status_st.Status_u8)
         {
-            switch (stick20Response->HID_Stick20Status_st.LastCommand_u8)
+            switch (ActiveCommand)
             {
                 case STICK20_CMD_ENABLE_FIRMWARE_UPDATE     :
                     {
@@ -768,6 +805,8 @@ void Stick20ResponseTask::GetResponse(void)
     if (FALSE == EndFlag)
     {
         Stick20ResponseDialog ResponseDialog(Stick20ResponseTaskParent);
+
+        ResponseDialog.SetActiveCommand (ActiveCommand);
 
         if (TRUE == FlagNoStopWhenStatusOK)
         {

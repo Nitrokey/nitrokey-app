@@ -2269,6 +2269,8 @@ bool Device::stick20GetStatusData ()
     int     res;
     Command *cmd;
 
+    HID_Stick20Init ();         // Clear data
+
     cmd = new Command(STICK20_CMD_GET_DEVICE_STATUS,NULL,0);
     res = sendCommand(cmd);
     if(res){}//Fix warnings

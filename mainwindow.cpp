@@ -1273,15 +1273,18 @@ void MainWindow::generateMenuForStick20()
     //int i;
     int AddSeperator;
 
-// Enable tab for password safe for stick 2
-    if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+    if (FALSE == StickNotInitated)
     {
-        ui->tabWidget->addTab(ui->tab_3,"Password safe config");
-    }
+// Enable tab for password safe for stick 2
+        if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+        {
+            ui->tabWidget->addTab(ui->tab_3,"Password safe config");
+        }
 
 // Setup entrys for password safe
-    generateMenuPasswordSafe ();
-    trayMenu->addSeparator();
+        generateMenuPasswordSafe ();
+        trayMenu->addSeparator();
+    }
 
 // Add special entrys
     AddSeperator = FALSE;
@@ -2788,7 +2791,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :
             {
-                msgBox.setText("The generation of new AES keys will destroy the encrypted volume!");
+                msgBox.setText("The generation of new AES keys will destroy the encrypted volumes and the password safe!");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
@@ -2814,7 +2817,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                     if (TRUE == ret)
                     {
                         waitForAnswerFromStick20    = TRUE;
-                        stopWhenStatusOKFromStick20 = TRUE;
+                        stopWhenStatusOKFromStick20 = FALSE;
                     }
                 }
             }
@@ -2911,19 +2914,6 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
         }
         ResponseTask.GetResponse ();
         Result = ResponseTask.ResultValue;
-
-/*
-        Stick20ResponseDialog ResponseDialog(this);
-
-        if (FALSE == stopWhenStatusOKFromStick20)
-        {
-            ResponseDialog.NoStopWhenStatusOK ();
-        }
-        ResponseDialog.cryptostick=cryptostick;
-
-        ResponseDialog.exec();
-        Result = ResponseDialog.ResultValue;
-*/
     }
 
     if (TRUE == Result)
@@ -2976,8 +2966,11 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                 HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
                 UpdateDynamicMenuEntrys ();
                 break;
-            case STICK20_CMD_GENERATE_NEW_KEYS              :
-                HID_Stick20Configuration_st.StickKeysNotInitiated = FALSE;
+            case STICK20_CMD_GENERATE_NEW_KEYS              : // = firmware reset
+                HID_Stick20Configuration_st.StickKeysNotInitiated    = FALSE;
+                HID_Stick20Configuration_st.SDFillWithRandomChars_u8 = 0x00;
+                CryptedVolumeActive = FALSE;
+                HiddenVolumeActive  = FALSE;
                 UpdateDynamicMenuEntrys ();
                 break;
             case STICK20_CMD_PRODUCTION_TEST       :
