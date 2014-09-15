@@ -1103,7 +1103,7 @@ void MainWindow::initActionsForStick20()
     Stick20ActionLockStickHardware = new QAction(tr("&Lock stick hardware"), this);
     connect(Stick20ActionLockStickHardware, SIGNAL(triggered()), this, SLOT(startStick20LockStickHardware()));
 
-    Stick20ActionResetUserPassword = new QAction(tr("&Reset user password"), this);
+    Stick20ActionResetUserPassword = new QAction(tr("&Reset user PIN"), this);
     connect(Stick20ActionResetUserPassword, SIGNAL(triggered()), this, SLOT(startResetUserPassword()));
 
 
@@ -1390,7 +1390,7 @@ void MainWindow::generateMenuForStick20()
     }
 
 
-// Enable "reset user password" ?
+// Enable "reset user PIN" ?
     if (0 == cryptostick->userPasswordRetryCount)
     {
         trayMenu->addSeparator();

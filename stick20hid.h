@@ -137,9 +137,9 @@ extern typeStick20Configuration_st HID_Stick20Configuration_st;
 /* Look for 4 byte alignment of 32 bit values */
 typedef struct {
   unsigned char  FirmwareVersion_au8[4];               //                                                    4 byte  //  4
-  unsigned long  CPU_CardID_u32;                       //                                                    4 byte  //  8
-  unsigned long  SmartCardID_u32;                      //                                                    4 byte  // 12
-  unsigned long  SD_CardID_u32;                        //                                                    4 byte  // 16
+  quint32  CPU_CardID_u32;                       //                                                    4 byte  //  8
+  quint32  SmartCardID_u32;                      //                                                    4 byte  // 12
+  quint32  SD_CardID_u32;                        //                                                    4 byte  // 16
   unsigned char  SC_UserPwRetryCount;                  // User password retry count                          1 byte  // 17
   unsigned char  SC_AdminPwRetryCount;                 // Admin password retry count                         1 byte  // 18
   unsigned char  SD_Card_ManufacturingYear_u8;         //                                                    1 byte  // 19
