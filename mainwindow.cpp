@@ -233,7 +233,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-    restoreAction = new QAction(tr("&Configure"), this);
+    restoreAction = new QAction(tr("&Configure OTP and static password"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
     DebugAction = new QAction(tr("&Debug"), this);
@@ -1278,7 +1278,7 @@ void MainWindow::generateMenuForStick20()
 // Enable tab for password safe for stick 2
         if (-1 == ui->tabWidget->indexOf (ui->tab_3))
         {
-            ui->tabWidget->addTab(ui->tab_3,"Password safe config");
+            ui->tabWidget->addTab(ui->tab_3,"Static password config");
         }
 
 // Setup entrys for password safe
@@ -1330,7 +1330,7 @@ void MainWindow::generateMenuForStick20()
     }
 
 
-    trayMenuSubConfigure  = trayMenu->addMenu( "Configure OPT + password safe" );
+    trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
     trayMenuSubConfigure->addAction(restoreAction);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
@@ -2791,7 +2791,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :
             {
-                msgBox.setText("The generation of new AES keys will destroy the encrypted volumes and the password safe!");
+                msgBox.setText("The generation of new AES keys will destroy the encrypted volumes and the static passwords!");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
@@ -4117,7 +4117,7 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-        QString actionName("Unlock password safe");
+        QString actionName("Unlock static password");
         trayMenu->addAction(actionName,this,SLOT(PWS_Clicked_EnablePWSAccess()));
         return;
     }
@@ -4242,7 +4242,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         if (ERR_NO_ERROR != ret_s32)
         {
             QMessageBox msgBox;
-            msgBox.setText("Can't unlock password safe");
+            msgBox.setText("Can't unlock static password");
             msgBox.exec();
         }
         else

@@ -79,7 +79,7 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
     memset(password,0,50);
     memset(userPassword,0,50);
 
-// Vars for password safe
+// Vars for static passwords
     passwordSafeUnlocked = FALSE;
     memset(passwordSafeStatusDisplayed,0,PWS_SLOT_COUNT);
 

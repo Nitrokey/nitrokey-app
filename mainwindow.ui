@@ -1037,7 +1037,7 @@
       </property>
       <item>
        <property name="text">
-        <string>Password safe 0</string>
+        <string>Static password 0</string>
        </property>
       </item>
      </widget>
