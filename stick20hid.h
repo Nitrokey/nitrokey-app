@@ -108,7 +108,7 @@ extern HID_Stick20MatrixPasswordData_est HID_Stick20MatrixPasswordData_st;
 #define SD_CRYPTED_VOLUME_BIT_PLACE     1
 #define SD_HIDDEN_VOLUME_BIT_PLACE      2
 
-
+#pragma pack(push,1)
 typedef struct {
   unsigned short  MagicNumber_StickConfig_u16;          // Shows that the structure is valid                  2 byte
   unsigned char   ReadWriteFlagUncryptedVolume_u8;      // Flag stores the read/write flag in the CPU flash   1 byte
@@ -126,13 +126,13 @@ typedef struct {
   unsigned long   ActiveSmartCardID_u32;                //                                                    4 byte
   unsigned char   StickKeysNotInitiated;                // No AES keys computed (1 = AES are builded)         1 byte  // 25 Byte not packed
 } typeStick20Configuration_st;                                                          // Sum   25 byte
-
+#pragma pack(pop)
 
 extern int Stick20_ConfigurationChanged;
 extern typeStick20Configuration_st HID_Stick20Configuration_st;
 
 
-
+#pragma pack(push,1)
 /* Look for 4 byte alignment of 32 bit values */
 typedef struct {
   unsigned char  FirmwareVersion_au8[4];               //                                                    4 byte  //  4
@@ -147,6 +147,8 @@ typedef struct {
   unsigned short SD_WriteSpeed_u16;                    // in kbyte / sec                                     2 byte  // 24
   unsigned char  SD_Card_Manufacturer_u8;              //                                                    1 byte  // 25
 } typeStick20ProductionInfos_st;                                                          // Sum   25 byte (Max 25 Byte) // not packed
+
+#pragma pack(pop)
 
 extern int Stick20_ProductionInfosChanged;
 extern typeStick20ProductionInfos_st Stick20ProductionInfos_st;
