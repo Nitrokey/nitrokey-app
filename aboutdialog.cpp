@@ -99,17 +99,12 @@ void AboutDialog::showStick20Configuration (void)
 {
     QString OutputText;
 
-/*
-    if (false == cryptostick->activStick20)
+    if (99 == HID_Stick20Configuration_st.UserPwRetryCount)
     {
-        OutputText.append(QString("*** No Crypto Stick Storage found ***\n"));
+        OutputText.append(QString("No connection\nPlease retry"));
         ui->DeviceStatusLabel->setText(OutputText);
         return;
     }
-
-    GetStick20Status ();
-*/
-
 
     if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated)
     {
@@ -181,7 +176,7 @@ void AboutDialog::showStick20Configuration (void)
 
     ui->firmwareLabel->setText(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0]).append(".").append(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[1])));
 
-    ui->serialEdit->setText(QString::number(HID_Stick20Configuration_st.ActiveSmartCardID_u32,16));
+    ui->serialEdit->setText(QString("%1").sprintf("%08x",HID_Stick20Configuration_st.ActiveSmartCardID_u32));
 }
 
 
@@ -205,12 +200,6 @@ void AboutDialog::showStick10Configuration (void)
 
     cryptostick->getPasswordRetryCount();
     cryptostick->getUserPasswordRetryCount();
-
-    //OutputText.append(QString("Crypto Stick active\n\n"));
-
-    //OutputText.append(QString(" *** Not erased with random chars ***\n\n"));
-    //OutputText.append(QString("Encrypted volume     not active")).append("\n");
-    //OutputText.append(QString("\n"));
 
     OutputText.append(QString("Password retry counter\n"));
     OutputText.append(QString("Admin : "));
@@ -242,6 +231,9 @@ void AboutDialog::showNoStickFound (void)
     OutputText.append(QString("No Crypto Stick active\n\n"));
 
     ui->DeviceStatusLabel->setText(OutputText);
+
+    ui->firmwareLabel->setText("");
+    ui->serialEdit->setText("");
 }
 
 void AboutDialog::on_ButtonStickStatus_clicked()

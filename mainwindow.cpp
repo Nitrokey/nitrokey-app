@@ -304,6 +304,18 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
             DebugAppendText ((char *)"System is big endian\n");
         }
         DebugAppendText ((char *)"\n");
+
+        DebugAppendText ((char *)"Var size test\n");
+        sprintf ((char*)text,(char *)"char  size is %d byte\n",sizeof (unsigned char));
+        DebugAppendText ((char*)text);
+        sprintf ((char*)text,(char *)"short size is %d byte\n",sizeof (unsigned short));
+        DebugAppendText ((char*)text);
+        sprintf ((char*)text,(char *)"int   size is %d byte\n",sizeof (unsigned int));
+        DebugAppendText ((char*)text);
+        sprintf ((char*)text,(char *)"long  size is %d byte\n",sizeof (unsigned long));
+        DebugAppendText ((char*)text);
+        DebugAppendText ((char*)"\n");
+
     }
 
     //ui->labelQuestion1->setToolTip("Test");
@@ -528,7 +540,7 @@ void MainWindow::AnalyseProductionInfos()
 
 // Valid manufacturers
     if (    (0x74 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)     // Transcend
-            && (0x03 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)     // ScanDisk
+            && (0x03 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)     // SanDisk
             && (0x73 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)     // ? Amazon
             && (0x28 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)     // Lexar
             && (0x1b != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)     // Samsung
@@ -3871,7 +3883,20 @@ void MainWindow::SetupPasswordSafeConfig (void)
     }
     else
     {
-        ui->PWS_ComboBoxSelectSlot->addItem(QString("*** No slot access ***"));
+        ui->PWS_ComboBoxSelectSlot->addItem(QString("Unlock static password access"));
+    }
+
+    if (TRUE == PWS_Access)
+    {
+        ui->PWS_ButtonEnable->hide();
+        ui->PWS_ButtonSaveSlot->setEnabled(TRUE);
+        ui->PWS_ButtonClearSlot->setEnabled(TRUE);
+    }
+    else
+    {
+        ui->PWS_ButtonEnable->show();
+        ui->PWS_ButtonSaveSlot->setDisabled(TRUE);
+        ui->PWS_ButtonClearSlot->setDisabled(TRUE);
     }
 
     ui->PWS_EditSlotName->setMaxLength(PWS_SLOTNAME_LENGTH);
@@ -4607,6 +4632,7 @@ void MainWindow::on_testTOTPButton_clicked(){
 void MainWindow::on_pushButton_GotoTOTP_clicked()
 {
     ui->tabWidget->setCurrentWidget(ui->tab);
+    ui->slotComboBox->setCurrentIndex(0);
 }
 
 /*******************************************************************************
@@ -4625,6 +4651,7 @@ void MainWindow::on_pushButton_GotoTOTP_clicked()
 void MainWindow::on_pushButton_GotoHOTP_clicked()
 {
     ui->tabWidget->setCurrentWidget(ui->tab);
+    ui->slotComboBox->setCurrentIndex(TOTP_SlotCount+1);
 }
 
 /*******************************************************************************
@@ -4719,4 +4746,49 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
     }
     ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
 */
+}
+
+/*******************************************************************************
+
+  on_PWS_ButtonEnable_clicked
+
+  Changes
+  Date      Author        Info
+  16.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_PWS_ButtonEnable_clicked()
+{
+    uint8_t password[40];
+    bool    ret;
+    int     ret_s32;
+
+    PasswordDialog dialog(FALSE,this);
+    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.cryptostick = cryptostick;
+
+    ret = dialog.exec();
+
+    if (Accepted == ret)
+    {
+        dialog.getPassword ((char*)password);
+
+        ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+        if (ERR_NO_ERROR != ret_s32)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Can't unlock static password");
+            msgBox.exec();
+        }
+        else
+        {
+            SetupPasswordSafeConfig ();
+            generateMenu ();
+        }
+
+    }
 }

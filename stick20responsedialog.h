@@ -73,6 +73,7 @@ private:
 
 private slots:
     void checkStick20Status();
+    void on_pushButton_clicked();
 };
 
 

@@ -80,17 +80,47 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent) :
 
     ui->setupUi(this);
 
-    ui->OutputText->setText("");
-    ui->progressBar->hide();
+    QGraphicsScene Scene;
+    QSize SceneSize;
+    QMovie *ProgressMovie = new QMovie(":/images/ProgressWheel.GIF");
+
+    if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS != ActiveCommand)
+    {
+        ui->HeaderText->hide ();
+    }
 
     if (FALSE == DebugingActive)             // Resize the dialog when debugging is inactiv
     {
+// Start progress wheel
+        if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS != ActiveCommand)
+        {
+            ui->LabelProgressWheel->show();
+
+            SceneSize.setHeight(60);
+            SceneSize.setWidth(60);
+
+            ProgressMovie->setScaledSize(SceneSize);
+            ui->LabelProgressWheel->setMovie(ProgressMovie);
+            ProgressMovie->start();
+
+            ui->OutputText->setText("");
+            ui->progressBar->hide();
+        }
+
+// Resize window
+
         ui->OutputText->hide ();
         Value = ui->OutputText->height();
 
         QSize dialogSize = this->size();
         dialogSize.setHeight (dialogSize.height() - Value);
         this->resize(dialogSize);
+    }
+    else
+    {
+        ui->HeaderText->show();
+        ui->LabelProgressWheel->hide();
+        ui->progressBar->hide();
     }
 
     pollStick20Timer = new QTimer(this);
@@ -251,6 +281,11 @@ void Stick20ResponseDialog::checkStick20Status()
 
     Counter_u32++;
 
+    if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS == ActiveCommand)
+    {
+        ui->HeaderText->show ();
+    }
+
     // Get response data
     Response *stick20Response = new Response();
 
@@ -344,6 +379,7 @@ void Stick20ResponseDialog::checkStick20Status()
             case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
                 OutputText.append (QString("BUSY"));
                 ui->progressBar->show();
+                ui->LabelProgressWheel->hide();
                 ui->progressBar->setValue(stick20Response->HID_Stick20Status_st.ProgressBarValue_u8);
                 break;
             case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY   :
@@ -534,7 +570,23 @@ void Stick20ResponseDialog::SetActiveCommand (int Cmd)
     ActiveCommand = Cmd;
 }
 
+/*******************************************************************************
 
+  on_pushButton_clicked
+
+  Changes
+  Date      Author          Info
+  16.09.14  RB              Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void Stick20ResponseDialog::on_pushButton_clicked()
+{
+    done (FALSE);
+}
 
 /*******************************************************************************
 
@@ -606,8 +658,6 @@ void Stick20ResponseTask::checkStick20Status()
     Response *stick20Response = new Response();
 
     ret = stick20Response->getResponse(cryptostick);
-
-
 
     if (true == DebugingActive)
     {
@@ -834,4 +884,5 @@ void Stick20ResponseTask::GetResponse(void)
 Stick20ResponseTask::~Stick20ResponseTask()
 {
 }
+
 
