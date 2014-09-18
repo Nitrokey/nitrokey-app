@@ -794,7 +794,7 @@ void MainWindow::checkConnection()
                 QMessageBox msgBox;
                 //int ret;
 
-                msgBox.setText("Warning: Encrypted Volume not secure\nSelect -Init encrypted volume-");
+                msgBox.setText("Warning: Encrypted Volume not secure\nSelect -Init keys-");
 //                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 //                msgBox.setDefaultButton(QMessageBox::Yes);
                 ret = msgBox.exec();
@@ -1084,7 +1084,7 @@ void MainWindow::initActionsForStick20()
     Stick20ActionDestroyCryptedVolume = new QAction(tr("&Destroy encrypted volume"), this);
     connect(Stick20ActionDestroyCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20DestroyCryptedVolume()));
 
-    Stick20ActionInitCryptedVolume = new QAction(tr("&Init encrypted volume"), this);
+    Stick20ActionInitCryptedVolume = new QAction(tr("&Init keys"), this);
     connect(Stick20ActionInitCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20DestroyCryptedVolume()));
 
     Stick20ActionFillSDCardWithRandomChars = new QAction(tr("&Initialize storage with random data"), this);
@@ -1831,6 +1831,14 @@ void MainWindow::startConfiguration()
                 msgBox.exec();
             }
 
+            if (6 > strlen (password.toLatin1().data()))
+            {
+                QMessageBox   msgBox;
+                msgBox.setText("Password is too short. (Min 6 chars)");
+                msgBox.exec();
+                return;
+            }
+
             for (int i=0;i<25;i++)
                 tempPassword[i]=qrand()&0xFF;
 
@@ -1854,7 +1862,8 @@ void MainWindow::startConfiguration()
 
         showNormal();
    }
-    else if (ok){
+    else if (ok)
+    {
         QMessageBox msgBox;
          msgBox.setText("Invalid password!");
          msgBox.exec();
@@ -2796,7 +2805,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                     ret = cryptostick->stick20EnableFirmwareUpdate (password);
                     if (TRUE == ret)
                     {
-                        waitForAnswerFromStick20 = TRUE;
+                        waitForAnswerFromStick20 = FALSE;
                     }
                 }
             }
@@ -4060,12 +4069,26 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
 
     strncpy ((char*)SlotName,ui->PWS_EditSlotName->text().toLatin1(),PWS_SLOTNAME_LENGTH);
     SlotName[PWS_SLOTNAME_LENGTH] = 0;
+    if (0 == strlen ((char*)SlotName))
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Please enter a slotname");
+        msgBox.exec();
+        return;
+    }
 
     strncpy ((char*)LoginName,ui->PWS_EditLoginName->text().toLatin1(),PWS_LOGINNAME_LENGTH);
     LoginName[PWS_LOGINNAME_LENGTH] = 0;
 
     strncpy ((char*)Password,ui->PWS_EditPassword->text().toLatin1(),PWS_PASSWORD_LENGTH);
     Password[PWS_PASSWORD_LENGTH] = 0;
+    if (0 == strlen ((char*)Password))
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Please enter a password");
+        msgBox.exec();
+        return;
+    }
 
     ret = cryptostick->setPasswordSafeSlotData_1 (Slot,(uint8_t*)SlotName,(uint8_t*)Password);
     if (ERR_NO_ERROR == ret)
@@ -4388,6 +4411,12 @@ void MainWindow::resetTime()
                 msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
                 msgBox.exec();
             }
+            if (6 > strlen (password.toLatin1().data()))
+            {
+                QMessageBox   msgBox;
+                msgBox.setText("Password is too short. (Min 6 chars)");
+                msgBox.exec();
+            }
 
             for (int i=0;i<25;i++)
                 tempPassword[i]=qrand()&0xFF;
@@ -4450,6 +4479,13 @@ int MainWindow::getNextCode(uint8_t slotNumber)
                 {
                     QMessageBox   msgBox;
                     msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+                    msgBox.exec();
+                }
+
+                if (6 > strlen (password.toLatin1().data()))
+                {
+                    QMessageBox   msgBox;
+                    msgBox.setText("Password is too short. (Min 6 chars)");
                     msgBox.exec();
                 }
 

@@ -109,7 +109,7 @@ void AboutDialog::showStick20Configuration (void)
     if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated)
     {
         OutputText.append(QString(" ***  Warning stick is not securce  ***")).append("\n");
-        OutputText.append(QString(" **  Select -Init encrypted volumes- **")).append("\n").append("\n");
+        OutputText.append(QString(" ***        Select -Init keys-      ***")).append("\n").append("\n");
     }
 
 

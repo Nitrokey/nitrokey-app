@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -1184,7 +1184,7 @@
      <widget class="QPushButton" name="PWS_ButtonCreatePW">
       <property name="geometry">
        <rect>
-        <x>410</x>
+        <x>430</x>
         <y>140</y>
         <width>201</width>
         <height>23</height>
@@ -1197,9 +1197,9 @@
      <widget class="QPushButton" name="PWS_ButtonEnable">
       <property name="geometry">
        <rect>
-        <x>160</x>
+        <x>139</x>
         <y>190</y>
-        <width>131</width>
+        <width>171</width>
         <height>23</height>
        </rect>
       </property>

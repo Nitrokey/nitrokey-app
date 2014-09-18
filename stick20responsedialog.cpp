@@ -686,7 +686,7 @@ void Stick20ResponseTask::checkStick20Status()
                         msgBox.setText("Get wrong password");
                         msgBox.exec();
 
-                }
+                }            
                 EndFlag = TRUE;
                 break;
             case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
@@ -717,10 +717,13 @@ void Stick20ResponseTask::checkStick20Status()
                     break;
                 case OUTPUT_CMD_STICK20_STATUS_IDLE             :
                 case OUTPUT_CMD_STICK20_STATUS_BUSY             :
-                case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
                 case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
                 case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY   :
                     // Do nothing, wait for next hid info
+                    break;
+                case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
+                    done (FALSE);
+                    ResultValue = FALSE;
                     break;
                 case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK :
                     done (FALSE);
@@ -850,6 +853,10 @@ void Stick20ResponseTask::GetResponse(void)
     {
         OwnSleep::msleep(100);
         checkStick20Status ();
+        if (TRUE == EndFlag)
+        {
+            return;
+        }
     }
 
     if (FALSE == EndFlag)
