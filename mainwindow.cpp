@@ -1635,6 +1635,7 @@ void MainWindow::displayCurrentSlotConfig()
         ui->intervalSpinBox->hide();
         ui->checkBox->setEnabled(false);
         ui->secretEdit->setPlaceholderText("********************************");
+//        ui->counterEdit->setText("0");
 
         //slotNo=slotNo+0x10;
         ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
@@ -1644,11 +1645,13 @@ void MainWindow::displayCurrentSlotConfig()
         ui->secretEdit->setText(secret);//.toHex());
 
         QByteArray counter((char *) cryptostick->HOTPSlots[slotNo]->counter,8);
-        qDebug() << (char *) cryptostick->HOTPSlots[slotNo]->counter;
-        ui->counterEdit->setText(counter.trimmed());//.toHex());
 
-        if (cryptostick->HOTPSlots[slotNo]->counter==0)
-            ui->counterEdit->setText("0");
+        qDebug() << (char *) cryptostick->HOTPSlots[slotNo]->counter;
+        QString TextCount;
+
+        TextCount = QString ("%1").arg(counter.toInt());
+        qDebug() << TextCount;
+        ui->counterEdit->setText(TextCount);//.toHex());
 
         QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID,2);
         ui->ompEdit->setText(QString(omp));
@@ -1707,36 +1710,36 @@ void MainWindow::displayCurrentSlotConfig()
 
         ui->counterEdit->setText("0");
 
-    QByteArray omp((char *)cryptostick->TOTPSlots[slotNo]->tokenID,2);
-    ui->ompEdit->setText(QString(omp));
+        QByteArray omp((char *)cryptostick->TOTPSlots[slotNo]->tokenID,2);
+        ui->ompEdit->setText(QString(omp));
 
-    QByteArray tt((char *)cryptostick->TOTPSlots[slotNo]->tokenID+2,2);
-    ui->ttEdit->setText(QString(tt));
+        QByteArray tt((char *)cryptostick->TOTPSlots[slotNo]->tokenID+2,2);
+        ui->ttEdit->setText(QString(tt));
 
-    QByteArray mui((char *)cryptostick->TOTPSlots[slotNo]->tokenID+4,8);
-    ui->muiEdit->setText(QString(mui));
+        QByteArray mui((char *)cryptostick->TOTPSlots[slotNo]->tokenID+4,8);
+        ui->muiEdit->setText(QString(mui));
 
-    int interval = cryptostick->TOTPSlots[slotNo]->interval;
-    ui->intervalSpinBox->setValue(interval);
+        int interval = cryptostick->TOTPSlots[slotNo]->interval;
+        ui->intervalSpinBox->setValue(interval);
 
-    if (cryptostick->TOTPSlots[slotNo]->config&(1<<0))
-        ui->digits8radioButton->setChecked(true);
-    else ui->digits6radioButton->setChecked(true);
+        if (cryptostick->TOTPSlots[slotNo]->config&(1<<0))
+            ui->digits8radioButton->setChecked(true);
+        else ui->digits6radioButton->setChecked(true);
 
-    if (cryptostick->TOTPSlots[slotNo]->config&(1<<1))
-        ui->enterCheckBox->setChecked(true);
-    else ui->enterCheckBox->setChecked(false);
+        if (cryptostick->TOTPSlots[slotNo]->config&(1<<1))
+            ui->enterCheckBox->setChecked(true);
+        else ui->enterCheckBox->setChecked(false);
 
-    if (cryptostick->TOTPSlots[slotNo]->config&(1<<2))
-        ui->tokenIDCheckBox->setChecked(true);
-    else ui->tokenIDCheckBox->setChecked(false);
+        if (cryptostick->TOTPSlots[slotNo]->config&(1<<2))
+            ui->tokenIDCheckBox->setChecked(true);
+        else ui->tokenIDCheckBox->setChecked(false);
 
-    if (!cryptostick->TOTPSlots[slotNo]->isProgrammed){
-        ui->ompEdit->setText("NK");
-        ui->ttEdit->setText("01");
-        QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
-        ui->muiEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
-    }
+        if (!cryptostick->TOTPSlots[slotNo]->isProgrammed){
+            ui->ompEdit->setText("NK");
+            ui->ttEdit->setText("01");
+            QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
+            ui->muiEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
+        }
     }
     lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 }
