@@ -956,8 +956,10 @@ int Device::getPasswordRetryCount()
         Response *resp=new Response();
         resp->getResponse(this);
 
-        if (cmd->crc==resp->lastCommandCRC){
+        if (cmd->crc==resp->lastCommandCRC)
+        {
             passwordRetryCount=resp->data[0];
+            HID_Stick20Configuration_st.AdminPwRetryCount = passwordRetryCount;
         }
         else
             return ERR_WRONG_RESPONSE_CRC;
@@ -993,8 +995,10 @@ int Device::getUserPasswordRetryCount()
         Response *resp=new Response();
         resp->getResponse(this);
 
-        if (cmd->crc==resp->lastCommandCRC){
+        if (cmd->crc==resp->lastCommandCRC)
+        {
             userPasswordRetryCount=resp->data[0];
+            HID_Stick20Configuration_st.UserPwRetryCount = userPasswordRetryCount;
         }
         else
             return ERR_WRONG_RESPONSE_CRC;
@@ -1429,10 +1433,15 @@ int Device::passwordSafeEnable (char *password)
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                     passwordSafeUnlocked = TRUE;
+                    HID_Stick20Configuration_st.UserPwRetryCount = 3;
                     return (ERR_NO_ERROR);
                 }
                 else
                 {
+                    if (0 < HID_Stick20Configuration_st.UserPwRetryCount)
+                    {
+                        HID_Stick20Configuration_st.UserPwRetryCount--;
+                    }
                     return (ERR_STATUS_NOT_OK);
                 }
             }
@@ -1648,10 +1657,15 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
                 {
                     memcpy(password,tempPasswrod,25);
                     validPassword=true;
+                    HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     return 0;
                 }
                 else if (resp->lastCommandStatus==CMD_STATUS_WRONG_PASSWORD)
                 {
+                    if (0 < HID_Stick20Configuration_st.AdminPwRetryCount)
+                    {
+                        HID_Stick20Configuration_st.AdminPwRetryCount--;
+                    }
                     return -3;
                 }
 

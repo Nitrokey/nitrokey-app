@@ -724,6 +724,27 @@ void Stick20ResponseTask::checkStick20Status()
                 case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
                     done (FALSE);
                     ResultValue = FALSE;
+                    switch (ActiveCommand)
+                    {
+                        case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED :
+                        case STICK20_CMD_SEND_LOCK_STICK_HARDWARE :
+                        case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE :
+                        case STICK20_CMD_GENERATE_NEW_KEYS :
+                        case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
+                            if (0 < HID_Stick20Configuration_st.AdminPwRetryCount)
+                            {
+                                HID_Stick20Configuration_st.AdminPwRetryCount--;
+                            }
+                            break;
+                        case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN :
+                        case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
+                        case STICK20_CMD_ENABLE_CRYPTED_PARI :
+                            if (0 < HID_Stick20Configuration_st.UserPwRetryCount)
+                            {
+                                HID_Stick20Configuration_st.UserPwRetryCount--;
+                            }
+                            break;
+                    }
                     break;
                 case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK :
                     done (FALSE);
@@ -744,10 +765,22 @@ void Stick20ResponseTask::checkStick20Status()
         {
             switch (ActiveCommand)
             {
+                case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN :
+                case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
+                case STICK20_CMD_ENABLE_CRYPTED_PARI :
+                    HID_Stick20Configuration_st.UserPwRetryCount = 3;
+                    break;
+                case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED :
+                case STICK20_CMD_SEND_LOCK_STICK_HARDWARE :
+                case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE :
+                case STICK20_CMD_GENERATE_NEW_KEYS :
+                    HID_Stick20Configuration_st.AdminPwRetryCount = 3;
+                    break;
                 case STICK20_CMD_GET_DEVICE_STATUS              :
 //                    showStick20Configuration (ret);
                     break;
                 case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
+                    HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     {
                             QMessageBox msgBox;
                             msgBox.setText("Storage successfully initialized with random data");

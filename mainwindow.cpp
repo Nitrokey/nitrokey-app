@@ -4817,6 +4817,7 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
         dialog.getPassword ((char*)password);
 
         ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+
         if (ERR_NO_ERROR != ret_s32)
         {
             QMessageBox msgBox;

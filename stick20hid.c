@@ -53,7 +53,7 @@ HID_Stick20SendData_est             HID_Stick20ReceiveData_st;
 HID_Stick20MatrixPasswordData_est   HID_Stick20MatrixPasswordData_st;
 
 int Stick20_ConfigurationChanged = FALSE;
-typeStick20Configuration_st         HID_Stick20Configuration_st;
+volatile typeStick20Configuration_st         HID_Stick20Configuration_st;
 
 int Stick20_ProductionInfosChanged = FALSE;
 typeStick20ProductionInfos_st Stick20ProductionInfos_st;

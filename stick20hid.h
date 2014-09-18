@@ -130,7 +130,7 @@ typedef struct {
 #pragma pack(pop)
 
 extern int Stick20_ConfigurationChanged;
-extern typeStick20Configuration_st HID_Stick20Configuration_st;
+extern volatile typeStick20Configuration_st HID_Stick20Configuration_st;
 
 
 #pragma pack(push,1)
