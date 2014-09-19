@@ -288,6 +288,19 @@ void DialogChangePassword::ResetUserPassword (void)
 
 void DialogChangePassword::accept()
 {
+// Check the length of the old password
+    if (6 > strlen (ui->lineEdit_OldPW->text().toLatin1()))
+    {
+        QMessageBox msgBox;
+        QString OutputText;
+
+        OutputText = "The minium length of the old password is " + QString("%1").arg(6)+ "chars";
+
+        msgBox.setText(OutputText);
+        msgBox.exec();
+        return;
+    }
+
 // Check for correct new password entrys
     if (0 != strcmp (ui->lineEdit_NewPW_1->text().toLatin1(),ui->lineEdit_NewPW_2->text().toLatin1()))
     {
@@ -305,6 +318,19 @@ void DialogChangePassword::accept()
         QString OutputText;
 
         OutputText = "The maximum length of a password is " + QString("%1").arg(STICK20_PASSOWRD_LEN)+ "chars";
+
+        msgBox.setText(OutputText);
+        msgBox.exec();
+        return;
+    }
+
+// Check the new length of password
+    if (6 > strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
+    {
+        QMessageBox msgBox;
+        QString OutputText;
+
+        OutputText = "The minium length of a password is " + QString("%1").arg(6)+ "chars";
 
         msgBox.setText(OutputText);
         msgBox.exec();

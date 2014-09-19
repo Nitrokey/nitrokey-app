@@ -280,6 +280,7 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_PWS_ButtonCreatePW_clicked();
     void on_PWS_ButtonSaveSlot_clicked();
     void on_PWS_ButtonEnable_clicked();
+    void on_nameEdit_textChanged(const QString &arg1);
 };
 
 #endif // MAINWINDOW_H

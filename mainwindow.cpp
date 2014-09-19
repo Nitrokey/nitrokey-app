@@ -1640,6 +1640,15 @@ void MainWindow::displayCurrentSlotConfig()
         //slotNo=slotNo+0x10;
         ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
 
+        if (0 == ui->nameEdit->text().length())
+        {
+            ui->writeButton->setEnabled(false);
+        }
+        else
+        {
+            ui->writeButton->setEnabled(true);
+        }
+
         QByteArray secret((char *) cryptostick->HOTPSlots[slotNo]->secret,20);
         ui->base32RadioButton->setChecked(true);
         ui->secretEdit->setText(secret);//.toHex());
@@ -1703,6 +1712,14 @@ void MainWindow::displayCurrentSlotConfig()
 
         ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
 
+        if (0 == ui->nameEdit->text().length())
+        {
+            ui->writeButton->setEnabled(false);
+        }
+        else
+        {
+            ui->writeButton->setEnabled(true);
+        }
 
         QByteArray secret((char *) cryptostick->TOTPSlots[slotNo]->secret,20);
         ui->base32RadioButton->setChecked(true);
@@ -3063,13 +3080,17 @@ void MainWindow::on_writeButton_clicked()
     int res;
 
     uint8_t slotNo = ui->slotComboBox->currentIndex();
-    if(slotNo > TOTP_SlotCount){
+
+    if(slotNo > TOTP_SlotCount)
+    {
         slotNo -= (TOTP_SlotCount + 1);
-    } else {
+    } else
+    {
         slotNo += HOTP_SlotCount;
     }
-    if (cryptostick->isConnected){
 
+    if (true == cryptostick->isConnected)
+    {
         ui->base32RadioButton->toggle();
 
         if (slotNo < HOTP_SlotCount){//HOTP slot
@@ -3103,10 +3124,12 @@ void MainWindow::on_writeButton_clicked()
         generateAllConfigs();
 
     }
-    else{
+    else
+    {
         msgBox.setText("Crypto stick not connected!");
         msgBox.exec();
     }
+
     displayCurrentSlotConfig();
 }
 
@@ -4830,5 +4853,30 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
             generateMenu ();
         }
 
+    }
+}
+
+/*******************************************************************************
+
+  on_nameEdit_textChanged
+
+  Changes
+  Date      Author        Info
+  19.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::on_nameEdit_textChanged(const QString &arg1)
+{
+    if (0 == ui->nameEdit->text().length())
+    {
+        ui->writeButton->setEnabled(false);
+    }
+    else
+    {
+        ui->writeButton->setEnabled(true);
     }
 }
