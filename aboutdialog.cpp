@@ -48,6 +48,7 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
     ui->serialEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
 
     ui->ButtonStickStatus->hide();
+    ui->ButtonOK->hide();
 
     if (true == cryptostick->isConnected)
     {
@@ -166,11 +167,12 @@ void AboutDialog::showStick20Configuration (void)
     OutputText.append(QString("\n"));
     OutputText.append(QString("SD ID 0x"));
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32,16))).append("\n");
+/*
     OutputText.append(QString("SD change counter    "));
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.NewSDCardFound_u8 >> 1))).append("\n");
     OutputText.append(QString("SD erase counter     "));
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.SDFillWithRandomChars_u8 >> 1))).append("\n");
-
+*/
 
     ui->DeviceStatusLabel->setText(OutputText);
 

@@ -1081,7 +1081,7 @@ void MainWindow::initActionsForStick20()
     Stick20ActionExportFirmwareToFile = new QAction(tr("&Export firmware to file"), this);
     connect(Stick20ActionExportFirmwareToFile, SIGNAL(triggered()), this, SLOT(startStick20ExportFirmwareToFile()));
 
-    Stick20ActionDestroyCryptedVolume = new QAction(tr("&Destroy encrypted volume"), this);
+    Stick20ActionDestroyCryptedVolume = new QAction(tr("&Destroy encrypted data"), this);
     connect(Stick20ActionDestroyCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20DestroyCryptedVolume()));
 
     Stick20ActionInitCryptedVolume = new QAction(tr("&Init keys"), this);
