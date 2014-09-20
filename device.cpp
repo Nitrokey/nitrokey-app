@@ -565,32 +565,33 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
 
 //        qDebug() << "copied data to array";
 
-        if (isConnected){
-        Command *cmd=new Command(CMD_WRITE_TO_SLOT,data,COMMAND_SIZE);
-//        qDebug() << "sending";
-        authorize(cmd);
-        res=sendCommand(cmd);
-//        qDebug() << "sent";
+        if (isConnected)
+        {
+            Command *cmd=new Command(CMD_WRITE_TO_SLOT,data,COMMAND_SIZE);
+    //        qDebug() << "sending";
+            authorize(cmd);
+            res=sendCommand(cmd);
+    //        qDebug() << "sent";
 
-        if (res==-1)
-            return -1;
-        else{  //sending the command was successful
-            //return cmd->crc;
-            Sleep::msleep(100);
-            Response *resp=new Response();
-            resp->getResponse(this);
+            if (res==-1)
+                return -1;
+            else{  //sending the command was successful
+                //return cmd->crc;
+                Sleep::msleep(100);
+                Response *resp=new Response();
+                resp->getResponse(this);
 
-             if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_OK){
-//                 qDebug() << "sent sucessfully!";
-                 return 0;
+                 if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_OK){
+    //                 qDebug() << "sent sucessfully!";
+                     return 0;
 
-             } else if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_NO_NAME_ERROR){
-                 return -3;
-             }
+                 } else if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_NO_NAME_ERROR){
+                     return -3;
+                 }
 
-        }
+            }
 
-        return -2;
+            return -2;
         }
 
 
@@ -779,14 +780,20 @@ int Device::readSlot(uint8_t slotNo)
         if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
             if (resp->lastCommandStatus==CMD_STATUS_OK)
             {
-                if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount)){
+                if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
+                {
                    memcpy(HOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
                    HOTPSlots[slotNo&0x0F]->config = resp->data[15];
                    memcpy(HOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
                    memcpy(HOTPSlots[slotNo&0x0F]->counter,resp->data+29,8);
                    HOTPSlots[slotNo&0x0F]->isProgrammed=true;
+/*
+qDebug() << "Get HOTP counter slot " << (slotNo&0x0F);
+qDebug() << QString ((char*)HOTPSlots[slotNo&0x0F]->counter);
+*/
                 }
-                else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount)){
+                else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
+                {
                     memcpy(TOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
                     TOTPSlots[slotNo&0x0F]->config = resp->data[15];
                     memcpy(TOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);

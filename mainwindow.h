@@ -99,6 +99,7 @@ private:
 
     QAction *quitAction;
     QAction *restoreAction;
+    QAction *restoreActionStick20;
     QAction *Stick20Action;
     QAction *DebugAction;
     QAction *ActionAboutDialog;
@@ -162,6 +163,8 @@ private slots:
 //    void on_pushButton_clicked();
 //    void on_pushButton_2_clicked();
     void on_writeButton_clicked();
+    void displayCurrentTotpSlotConfig(uint8_t slotNo);
+    void displayCurrentHotpSlotConfig(uint8_t slotNo);
     void displayCurrentSlotConfig();
     void displayCurrentGeneralConfig();
     void on_slotComboBox_currentIndexChanged(int index);
