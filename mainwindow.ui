@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -44,10 +44,10 @@
        </rect>
       </property>
       <property name="toolTip">
-       <string>Use TOTP for login to websites</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use TOTP for login to websites&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
-       <string>Time-based One-Time Password (TOTP)</string>
+       <string>Time-based One-Time Passwords (TOTP)</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_GotoGenOTP">
@@ -72,8 +72,11 @@
         <height>27</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Manage static passwords&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
-       <string>Static Passwords</string>
+       <string>Password Safe</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_GotoHOTP">
@@ -85,8 +88,11 @@
         <height>27</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HOTP are usually used to login to local applications&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
-       <string>HMAC-based One-Time Password (HOTP)</string>
+       <string>HMAC-based One-Time Passwords (HOTP)</string>
       </property>
      </widget>
      <widget class="QPushButton" name="cancelButton_2">
@@ -131,6 +137,9 @@
          <height>21</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exampel: &amp;quot;0xA3911C05...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="text">
         <string>Hex</string>
        </property>
@@ -146,6 +155,9 @@
          <width>82</width>
          <height>21</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Example: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
         <string>Base 32</string>
@@ -191,6 +203,9 @@
          <height>25</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="text">
         <string>Secret Key:</string>
        </property>
@@ -217,6 +232,9 @@
          <height>27</height>
         </rect>
        </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;After generating a random secret, you would need to copy it into your application or service where you want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
        <property name="text">
         <string>Generate random secret</string>
        </property>
@@ -232,6 +250,9 @@
          <width>111</width>
          <height>24</height>
         </rect>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hide or show the secret.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
         <string>Hide secret</string>
@@ -988,7 +1009,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Enable OTP password</string>
+        <string>Protect OTP by user PIN</string>
        </property>
       </widget>
       <widget class="QCheckBox" name="deleteUserPasswordCheckBox">
@@ -1001,7 +1022,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Forget OTP password after 10 minutes</string>
+        <string>Forget PIN after 10 minutes</string>
        </property>
       </widget>
      </widget>
@@ -1021,7 +1042,7 @@
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
-      <string>Static Passwords</string>
+      <string>Password Safe</string>
      </attribute>
      <widget class="QComboBox" name="PWS_ComboBoxSelectSlot">
       <property name="geometry">
@@ -1099,7 +1120,7 @@
         <x>140</x>
         <y>60</y>
         <width>171</width>
-        <height>20</height>
+        <height>25</height>
        </rect>
       </property>
      </widget>
@@ -1109,7 +1130,7 @@
         <x>140</x>
         <y>100</y>
         <width>171</width>
-        <height>20</height>
+        <height>25</height>
        </rect>
       </property>
      </widget>
@@ -1119,14 +1140,14 @@
         <x>140</x>
         <y>140</y>
         <width>171</width>
-        <height>20</height>
+        <height>25</height>
        </rect>
       </property>
      </widget>
      <widget class="QPushButton" name="PWS_ButtonClearSlot">
       <property name="geometry">
        <rect>
-        <x>360</x>
+        <x>320</x>
         <y>20</y>
         <width>99</width>
         <height>27</height>
@@ -1168,8 +1189,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>140</y>
+        <x>140</x>
+        <y>170</y>
         <width>111</width>
         <height>24</height>
        </rect>
@@ -1184,10 +1205,10 @@
      <widget class="QPushButton" name="PWS_ButtonCreatePW">
       <property name="geometry">
        <rect>
-        <x>430</x>
+        <x>320</x>
         <y>140</y>
         <width>201</width>
-        <height>23</height>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
@@ -1198,13 +1219,13 @@
       <property name="geometry">
        <rect>
         <x>139</x>
-        <y>190</y>
+        <y>240</y>
         <width>171</width>
-        <height>23</height>
+        <height>27</height>
        </rect>
       </property>
       <property name="text">
-       <string>Unlock static passwords</string>
+       <string>Unlock password safe</string>
       </property>
      </widget>
     </widget>

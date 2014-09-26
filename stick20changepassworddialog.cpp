@@ -257,7 +257,7 @@ void DialogChangePassword::ResetUserPassword (void)
         return;
     }
 
-// Reset new user password
+// Reset new user PIN
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
 
     strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);

@@ -34,6 +34,7 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
 5) Change to build directory parallel to PC CryptoStickGUI directory, e.g. build-CryptoStickGUI-Win32-release
 6) <mxe root>/usr/i686-pc-mingw32/qt5/bin/qmake -spec <mxe root>/usr/i686-pc-mingw32/qt5/mkspecs/win32-g++ -o Makefile ../cryptostick.utility/CryptoStickGUI_QT5.pro
 7) make
+8) optional: use upx to compress the executable
 
 =Internals=
 All configuration data including OTP secrets are stored in clear text in the flash of Crypto Stick's Microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.

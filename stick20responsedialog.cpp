@@ -214,10 +214,10 @@ void Stick20ResponseDialog::showStick20Configuration (int Status)
         OutputText.append(QString("SD ID "));
         OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32))).append("\n");
 
-        OutputText.append(QString("Admin password retry counter "));
+        OutputText.append(QString("Admin PIN retry counter "));
         OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.AdminPwRetryCount))).append("\n");
 
-        OutputText.append(QString("User password retry counter  "));
+        OutputText.append(QString("User PIN retry counter  "));
         OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.UserPwRetryCount))).append("\n");
 
     }
@@ -494,7 +494,7 @@ void Stick20ResponseDialog::checkStick20Status()
                 case STICK20_CMD_ENABLE_FIRMWARE_UPDATE     :
                     {
                         QMessageBox msgBox;
-                        msgBox.setText("Security bit of stick is activ.\nUpdate is not possible.");
+                        msgBox.setText("Security bit of the device is activated.\nFirmware update is not possible.");
                         msgBox.exec();
                     }
                     break;
@@ -834,7 +834,7 @@ void Stick20ResponseTask::checkStick20Status()
                 case STICK20_CMD_ENABLE_FIRMWARE_UPDATE     :
                     {
                         QMessageBox msgBox;
-                        msgBox.setText("Security bit of stick is activ.\nUpdate is not possible.");
+                        msgBox.setText("Security bit of the device is activated.\nFirmware update is not possible.");
                         msgBox.exec();
                     }
                     break;

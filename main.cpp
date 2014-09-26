@@ -56,9 +56,9 @@ void HelpInfos (void)
     printf ("\n");
     printf ("-h, --help     This help\n");
     printf ("-a, --admin    Enable extra functions in the GUI for administrators.\n");
-    printf ("--debug        Enable debug options\n");
+    printf ("-d, --debug    Enable debug options\n");
     printf ("--debugAll     Enable extensive debug options\n");
-    printf ("--lockHardware Enable menu entry for hardware lock\n");
+    printf ("--lock-hardware Enable menu entry for hardware lock\n");
 /* Disable password matrix
     printf ("--PWM          Enable PIN entry via matrix\n");
 */
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
             exit (0);
         }
 
-        if (0 == strcmp (p,"--debug"))
+        if ((0 == strcmp (p,"--debug")) || (0 == strcmp (p,"-d")))
         {
             StartupInfo_st.FlagDebug = DEBUG_STATUS_LOCAL_DEBUG;
         }
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
             StartupInfo_st.PasswordMatrix = TRUE;
         }
 */
-        if (0 == strcmp (p,"--lockHardware"))
+        if (0 == strcmp (p,"--lock-hardware"))
         {
             StartupInfo_st.LockHardware = TRUE;
         }

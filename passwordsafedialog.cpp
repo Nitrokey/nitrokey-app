@@ -63,7 +63,7 @@ PasswordSafeDialog::PasswordSafeDialog(int Slot,QWidget *parent) :
     ui->radioKeyboard->setChecked(false);
     ui->spinBoxDelay->setEnabled(false);
 
-    MsgText.append("PW Safe Slot ");
+    MsgText.append("Password Safe Slot ");
     MsgText.append(QString::number(UsedSlot+1,10));
 /*
     MsgText.append(" -");

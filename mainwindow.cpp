@@ -219,11 +219,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         QMessageBox msgBox;
         if (TRUE == DebugWindowActive)
         {
-            msgBox.setText("Cryptostick GUI active - DEBUG Mode");
+            msgBox.setText("Crypto Stick GUI is active in DEBUG Mode");
         }
         else
         {
-            msgBox.setText("Cryptostick GUI active");
+            msgBox.setText("Crypto Stick GUI is active");
         }
         msgBox.exec();
     }
@@ -237,7 +237,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     restoreAction = new QAction(tr("&Configure OTP"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
-    restoreActionStick20 = new QAction(tr("&Configure OTP and static password"), this);
+    restoreActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
     connect(restoreActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
 
@@ -696,7 +696,7 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
-            ui->statusBar->showMessage("Device Stick 2.0 connected.");
+            ui->statusBar->showMessage("Crypto Stick Storage connected.");
         }
         DeviceOffline = FALSE;
     }
@@ -724,7 +724,7 @@ void MainWindow::checkConnection()
             if (TRUE == ret)
             {
                 QMessageBox msgBox;
-                msgBox.setText("Flash Cryptostick application");
+                msgBox.setText("Flash Crypto Stick application");
                 msgBox.exec();
             }
         }
@@ -774,7 +774,7 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
-            ui->statusBar->showMessage("Device Stick 2.0 connected.");
+            ui->statusBar->showMessage("Crypto Stick Storage connected.");
         }
         generateMenu();
     }
@@ -799,7 +799,7 @@ void MainWindow::checkConnection()
                 QMessageBox msgBox;
                 //int ret;
 
-                msgBox.setText("Warning: Encrypted Volume not secure\nSelect -Init keys-");
+                msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\"");
 //                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 //                msgBox.setDefaultButton(QMessageBox::Yes);
                 ret = msgBox.exec();
@@ -812,7 +812,7 @@ void MainWindow::checkConnection()
                 QMessageBox msgBox;
                 //int ret;
 
-                msgBox.setText("Warning: Encrypted Volume not secure\nSelect -Fill encrypted volume with ramdom chars-");
+                msgBox.setText("Warning: Encrypted volume is not secure,\nSelect \"Initialize storage with random data\"");
                 ret = msgBox.exec();
             }
         }
@@ -1272,7 +1272,7 @@ void MainWindow::generateMenuOTP()
 void MainWindow::generateMenuForStick10()
 {
 // Hide tab for password safe for stick 1.x
-    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = static password
+    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = password safe
 
     ui->pushButton_StaticPasswords->hide ();
 
@@ -1304,7 +1304,7 @@ void MainWindow::generateMenuForStick20()
 // Enable tab for password safe for stick 2
         if (-1 == ui->tabWidget->indexOf (ui->tab_3))
         {
-            ui->tabWidget->addTab(ui->tab_3,"Static password config");
+            ui->tabWidget->addTab(ui->tab_3,"Password Safe");
         }
         ui->pushButton_StaticPasswords->show ();
 
@@ -1896,7 +1896,7 @@ void MainWindow::startConfiguration()
     if (!cryptostick->validPassword){
         cryptostick->getPasswordRetryCount();
 
-        QString password = QInputDialog::getText(this, tr("Enter card admin password"),tr("Admin password: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
+        QString password = QInputDialog::getText(this, tr("Enter card admin PIN"),tr("Admin PIN: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
 
         if (TRUE == ok)
         {
@@ -1905,14 +1905,14 @@ void MainWindow::startConfiguration()
             if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
             {
                 QMessageBox   msgBox;
-                msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+                msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN.");
                 msgBox.exec();
             }
 
             if (6 > strlen (password.toLatin1().data()))
             {
                 QMessageBox   msgBox;
-                msgBox.setText("Password is too short. (Min 6 chars)");
+                msgBox.setText("Your PIN is too short. Use at least 6 characters.");
                 msgBox.exec();
                 return;
             }
@@ -2897,7 +2897,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :
             {
-                msgBox.setText("The generation of new AES keys will destroy the encrypted volumes and the static passwords!");
+                msgBox.setText("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
@@ -2913,7 +2913,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             break;
         case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
             {
-                msgBox.setText("This command fills the encrypted volumes with random data.\nThis will destroy all encrypted volumes!\nThis commands last very long > 1 hour for 32GB");
+                msgBox.setText("This command fills the encrypted volumes with random data.\nThis will destroy all encrypted volumes!\nThis commands requires more than 1 hour for 32GB.");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();
@@ -3166,9 +3166,9 @@ void MainWindow::on_writeButton_clicked()
         }
 
         if (res==0)
-            msgBox.setText("Config written successfully!");
+            msgBox.setText("Configuration has been written successfully.");
         else if (res == -3)
-            msgBox.setText("The name of the slot must not be empty!");
+            msgBox.setText("The name of the slot must not be empty.");
         else
             msgBox.setText("Error writing config!");
 
@@ -3184,7 +3184,7 @@ void MainWindow::on_writeButton_clicked()
     }
     else
     {
-        msgBox.setText("Crypto stick not connected!");
+        msgBox.setText("Crypto Stick is not connected!");
         msgBox.exec();
     }
 
@@ -3451,7 +3451,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
         res =cryptostick->writeGeneralConfig(data);
 
         if (res==0)
-            msgBox.setText("Config written successfully!");
+            msgBox.setText("Config written successfully.");
         else
             msgBox.setText("Error writing config!");
 
@@ -3465,7 +3465,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
 
     }
     else{
-        msgBox.setText("Crypto stick not connected!");
+        msgBox.setText("Crypto Stick not connected!");
         msgBox.exec();
     }
     displayCurrentGeneralConfig();
@@ -3682,7 +3682,7 @@ void MainWindow::getTOTP15()
 void MainWindow::on_eraseButton_clicked()
 {
     QMessageBox msgBox;
-     msgBox.setText("Are you sure you want to erase the slot?");
+     msgBox.setText("WARNING: Are you sure you want to erase the slot?");
      msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
      msgBox.setDefaultButton(QMessageBox::No);
      int ret = msgBox.exec();
@@ -3715,7 +3715,7 @@ void MainWindow::on_eraseButton_clicked()
             QApplication::restoreOverrideCursor();
             generateAllConfigs();
 
-            msgBox.setText("Slot erased!");
+            msgBox.setText("Slot has been erased successfully.");
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.exec();
 
@@ -3910,7 +3910,7 @@ void MainWindow::SetupPasswordSafeConfig (void)
     }
     else
     {
-        ui->PWS_ComboBoxSelectSlot->addItem(QString("Unlock static password access"));
+        ui->PWS_ComboBoxSelectSlot->addItem(QString("Unlock password safe"));
     }
 
     if (TRUE == PWS_Access)
@@ -3984,14 +3984,14 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked()
         else
         {
             QMessageBox msgBox;
-            msgBox.setText("Can't clear slot");
+            msgBox.setText("Can't clear slot.");
             msgBox.exec();
         }
     }
     else
     {
         QMessageBox msgBox;
-        msgBox.setText("Slot already erased");
+        msgBox.setText("Slot is erased already.");
         msgBox.exec();
     }
 
@@ -4090,7 +4090,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     if (0 == strlen ((char*)SlotName))
     {
         QMessageBox msgBox;
-        msgBox.setText("Please enter a slotname");
+        msgBox.setText("Please enter a slotname.");
         msgBox.exec();
         return;
     }
@@ -4103,7 +4103,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     if (0 == strlen ((char*)Password))
     {
         QMessageBox msgBox;
-        msgBox.setText("Please enter a password");
+        msgBox.setText("Please enter a password.");
         msgBox.exec();
         return;
     }
@@ -4118,7 +4118,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     if (ERR_NO_ERROR == ret)
     {
         QMessageBox msgBox;
-        msgBox.setText("Can't save slot");
+        msgBox.setText("Can't save slot.");
         msgBox.exec();
         return;
     }
@@ -4190,7 +4190,7 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-        QString actionName("Unlock static password");
+        QString actionName("Unlock password safe");
         trayMenu->addAction(actionName,this,SLOT(PWS_Clicked_EnablePWSAccess()));
         return;
     }
@@ -4315,7 +4315,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         if (ERR_NO_ERROR != ret_s32)
         {
             QMessageBox msgBox;
-            msgBox.setText("Can't unlock static password");
+            msgBox.setText("Can't unlock password safe.");
             msgBox.exec();
         }
         else
@@ -4366,7 +4366,7 @@ void MainWindow::PWS_ExceClickedSlot (int Slot)
     if (ERR_NO_ERROR != ret_s32)
     {
         QMessageBox msgBox;
-        msgBox.setText("Can't send password chars via HID");
+        msgBox.setText("Can't send password chars via HID.");
         msgBox.exec();
         return;
     }
@@ -4417,7 +4417,7 @@ void MainWindow::resetTime()
     if (!cryptostick->validPassword){
         cryptostick->getPasswordRetryCount();
 
-        QString password = QInputDialog::getText(this,tr("Enter card admin password"),tr("Admin password: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
+        QString password = QInputDialog::getText(this,tr("Enter card admin PIN"),tr("Admin PIN: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
 
         if (ok)
         {
@@ -4426,13 +4426,13 @@ void MainWindow::resetTime()
             if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
             {
                 QMessageBox   msgBox;
-                msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+                msgBox.setText("WARNING: Default PIN is used.\nPlease change the PIN.");
                 msgBox.exec();
             }
             if (6 > strlen (password.toLatin1().data()))
             {
                 QMessageBox   msgBox;
-                msgBox.setText("Password is too short. (Min 6 chars)");
+                msgBox.setText("Your PIN is too short. Use at least 6 characters.");
                 msgBox.exec();
             }
 
@@ -4487,7 +4487,7 @@ int MainWindow::getNextCode(uint8_t slotNumber)
         {
             cryptostick->getUserPasswordRetryCount();
 
-            QString password = QInputDialog::getText(this, tr("Enter card user password"),tr("User password: ")+tr("(Tries left: ")+QString::number(cryptostick->userPasswordRetryCount)+")", QLineEdit::Password,"", &ok);
+            QString password = QInputDialog::getText(this, tr("Enter card user PIN"),tr("User PIN: ")+tr("(Tries left: ")+QString::number(cryptostick->userPasswordRetryCount)+")", QLineEdit::Password,"", &ok);
 
             if (TRUE == ok)
             {
@@ -4496,14 +4496,14 @@ int MainWindow::getNextCode(uint8_t slotNumber)
                 if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
                 {
                     QMessageBox   msgBox;
-                    msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+                    msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN.");
                     msgBox.exec();
                 }
 
                 if (6 > strlen (password.toLatin1().data()))
                 {
                     QMessageBox   msgBox;
-                    msgBox.setText("Password is too short. (Min 6 chars)");
+                    msgBox.setText("Your PIN is too short. Use at least 6 characters.");
                     msgBox.exec();
                 }
 
@@ -4836,7 +4836,7 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
         if (ERR_NO_ERROR != ret_s32)
         {
             QMessageBox msgBox;
-            msgBox.setText("Can't unlock static password");
+            msgBox.setText("Can't unlock password safe.");
             msgBox.exec();
         }
         else

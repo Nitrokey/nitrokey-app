@@ -122,8 +122,8 @@ typedef struct {
   quint32   ActiveSD_CardID_u32;                  // Not used                                           4 byte
   unsigned char   VolumeActiceFlag_u8;                  // Bit 0 new card found, bit 1-7 change counter       1 byte
   unsigned char   NewSmartCardFound_u8;                 // Bit 0 new card found, bit 1-7 change counter       1 byte  // 20 Byte not packed
-  unsigned char   UserPwRetryCount;                     // User password retry count                          1 byte
-  unsigned char   AdminPwRetryCount;                    // Admin password retry count                         1 byte
+  unsigned char   UserPwRetryCount;                     // User PIN retry count                          1 byte
+  unsigned char   AdminPwRetryCount;                    // Admin PIN retry count                         1 byte
   quint32   ActiveSmartCardID_u32;                //                                                    4 byte
   unsigned char   StickKeysNotInitiated;                // No AES keys computed (1 = AES are builded)         1 byte  // 25 Byte not packed
 } typeStick20Configuration_st;                                                          // Sum   25 byte
@@ -140,8 +140,8 @@ typedef struct {
   quint32  CPU_CardID_u32;                       //                                                    4 byte  //  8
   quint32  SmartCardID_u32;                      //                                                    4 byte  // 12
   quint32  SD_CardID_u32;                        //                                                    4 byte  // 16
-  unsigned char  SC_UserPwRetryCount;                  // User password retry count                          1 byte  // 17
-  unsigned char  SC_AdminPwRetryCount;                 // Admin password retry count                         1 byte  // 18
+  unsigned char  SC_UserPwRetryCount;                  // User PIN retry count                          1 byte  // 17
+  unsigned char  SC_AdminPwRetryCount;                 // Admin PIN retry count                         1 byte  // 18
   unsigned char  SD_Card_ManufacturingYear_u8;         //                                                    1 byte  // 19
   unsigned char  SD_Card_ManufacturingMonth_u8;        //                                                    1 byte  // 20
   unsigned short SD_Card_OEM_u16;                      //                                                    2 byte  // 22

@@ -289,7 +289,7 @@ void Stick20Dialog::on_buttonBox_accepted()
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :   
             {
-                msgBox.setText("The generation of new AES keys will destroy the encrypted volumes and the static passwords!");
+                msgBox.setText("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 ret = msgBox.exec();

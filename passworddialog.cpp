@@ -219,14 +219,14 @@ void PasswordDialog::on_buttonBox_accepted()
         n = passwordString.size();
         if (30 <= n)
         {
-            msgBox.setText("Password too long! (Max = 30 char)");
+            msgBox.setText("Your PIN is too long! Use not more than 30 characters.");
             msgBox.exec();
             done (FALSE);
             return;
         }
         if (6  > n)
         {
-            msgBox.setText("Password too short! (Min = 6 char)");
+            msgBox.setText("Your PIN is too short. Use at least 6 characters.");
             msgBox.exec();
             done (FALSE);
             return;
@@ -234,7 +234,7 @@ void PasswordDialog::on_buttonBox_accepted()
 
         if ((0 == strcmp (passwordString, "123456")) || (0 == strcmp (passwordString, "12345678")))
         {
-            msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN");
+            msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN.");
             msgBox.exec();
         }
         memset (&password[1],0,49);
