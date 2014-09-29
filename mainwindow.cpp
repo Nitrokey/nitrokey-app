@@ -42,6 +42,7 @@
 #include "stick20hiddenvolumedialog.h"
 #include "stick20lockfirmwaredialog.h"
 #include "passwordsafedialog.h"
+#include "securitydialog.h"
 
 #include <QTimer>
 #include <QMenu>
@@ -792,12 +793,16 @@ void MainWindow::checkConnection()
 
         UpdateDynamicMenuEntrys ();
 
+
         if (TRUE == StickNotInitated)
         {
+
             if (FALSE == StickNotInitated_DontAsk)
             {
                 QMessageBox msgBox;
-                //int ret;
+                securitydialog dialog(this);
+
+                ret = dialog.exec();
 
                 msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\"");
 //                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -1376,7 +1381,7 @@ void MainWindow::generateMenuForStick20()
         trayMenuSubConfigure->addAction(Stick20ActionClearNewSDCardFound  );
     }
 
-    if (TRUE == SdCardNotErased)
+    if (FALSE == SdCardNotErased)
     {
         trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
     }
@@ -1644,7 +1649,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo)
     ui->secretEdit->setPlaceholderText("********************************");
 
     ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
-
+/*
     if (0 == ui->nameEdit->text().length())
     {
         ui->writeButton->setEnabled(false);
@@ -1653,7 +1658,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo)
     {
         ui->writeButton->setEnabled(true);
     }
-
+*/
     QByteArray secret((char *) cryptostick->TOTPSlots[slotNo]->secret,20);
     ui->base32RadioButton->setChecked(true);
     ui->secretEdit->setText(secret);//.toHex());
@@ -1724,7 +1729,7 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo)
 
     //slotNo=slotNo+0x10;
     ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
-
+/*
     if (0 == ui->nameEdit->text().length())
     {
         ui->writeButton->setEnabled(false);
@@ -1733,7 +1738,7 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo)
     {
         ui->writeButton->setEnabled(true);
     }
-
+*/
     QByteArray secret((char *) cryptostick->HOTPSlots[slotNo]->secret,20);
     ui->base32RadioButton->setChecked(true);
     ui->secretEdit->setText(secret);//.toHex());
@@ -2362,20 +2367,28 @@ void MainWindow::startStick20ExportFirmwareToFile()
 void MainWindow::startStick20DestroyCryptedVolume()
 {
     uint8_t password[40];
-    bool    ret;
+    int     ret;
+    QMessageBox msgBox;
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
-    dialog.cryptostick = cryptostick;
+    msgBox.setText("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    ret = msgBox.exec();
 
-    ret = dialog.exec();
-
-    if (Accepted == ret)
+    if (QMessageBox::Yes == ret)
     {
-//        password[0] = 'P';
-        dialog.getPassword ((char*)password);
+        PasswordDialog dialog(MatrixInputActive,this);
+        dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
+        dialog.cryptostick = cryptostick;
 
-        stick20SendCommand (STICK20_CMD_GENERATE_NEW_KEYS,password);
+        ret = dialog.exec();
+
+        if (Accepted == ret)
+        {
+            dialog.getPassword ((char*)password);
+
+            stick20SendCommand (STICK20_CMD_GENERATE_NEW_KEYS,password);
+        }
     }
 
 }
@@ -2724,6 +2737,8 @@ void MainWindow::startStick20DebugAction()
         stick20SendCommand (STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN,password);
     }
 */
+    securitydialog dialog(this);
+    ret = dialog.exec();
 }
 
 /*******************************************************************************
@@ -2896,6 +2911,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             }
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :
+/*
             {
                 msgBox.setText("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -2909,6 +2925,12 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                         waitForAnswerFromStick20 = TRUE;
                     }
                 }
+            }
+*/
+            ret = cryptostick->stick20CreateNewKeys (password);
+            if (TRUE == ret)
+            {
+                waitForAnswerFromStick20 = TRUE;
             }
             break;
         case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
@@ -3136,6 +3158,7 @@ void MainWindow::on_writeButton_clicked()
 {
     QMessageBox msgBox;
     int res;
+    uint8_t SlotName[16];
 
     uint8_t slotNo = ui->slotComboBox->currentIndex();
 
@@ -3145,6 +3168,16 @@ void MainWindow::on_writeButton_clicked()
     } else
     {
         slotNo += HOTP_SlotCount;
+    }
+
+    strncpy ((char*)SlotName,ui->nameEdit->text().toLatin1(),15);
+    SlotName[15] = 0;
+    if (0 == strlen ((char*)SlotName))
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Please enter a slotname.");
+        msgBox.exec();
+        return;
     }
 
     if (true == cryptostick->isConnected)
@@ -3918,12 +3951,27 @@ void MainWindow::SetupPasswordSafeConfig (void)
         ui->PWS_ButtonEnable->hide();
         ui->PWS_ButtonSaveSlot->setEnabled(TRUE);
         ui->PWS_ButtonClearSlot->setEnabled(TRUE);
+
+        ui->PWS_ComboBoxSelectSlot->setEnabled(TRUE);
+        ui->PWS_EditSlotName->setEnabled(TRUE);
+        ui->PWS_EditLoginName->setEnabled(TRUE);
+        ui->PWS_EditPassword->setEnabled(TRUE);
+        ui->PWS_CheckBoxHideSecret->setEnabled(TRUE);
+        ui->PWS_ButtonCreatePW->setEnabled(TRUE);
     }
     else
     {
         ui->PWS_ButtonEnable->show();
         ui->PWS_ButtonSaveSlot->setDisabled(TRUE);
         ui->PWS_ButtonClearSlot->setDisabled(TRUE);
+
+        ui->PWS_ComboBoxSelectSlot->setDisabled(TRUE);
+        ui->PWS_EditSlotName->setDisabled(TRUE);
+        ui->PWS_EditLoginName->setDisabled(TRUE);
+        ui->PWS_EditPassword->setDisabled(TRUE);
+        ui->PWS_CheckBoxHideSecret->setDisabled(TRUE);
+        ui->PWS_ButtonCreatePW->setDisabled(TRUE);
+
     }
 
     ui->PWS_EditSlotName->setMaxLength(PWS_SLOTNAME_LENGTH);
@@ -3932,21 +3980,6 @@ void MainWindow::SetupPasswordSafeConfig (void)
 
     ui->PWS_CheckBoxHideSecret->setChecked(TRUE);
     ui->PWS_EditPassword->setEchoMode(QLineEdit::Password);
-
-/*
-    ret = cryptostick->getPasswordSafeSlotName(0);
-    ret = cryptostick->getPasswordSafeSlotPassword(0);
-    ret = cryptostick->getPasswordSafeSlotLoginName(0);
-
-    ret = cryptostick->setPasswordSafeSlotData_1 (0,(uint8_t*)"Name1",(uint8_t*)"PPPPP");
-    ret = cryptostick->setPasswordSafeSlotData_2 (0,(uint8_t*)"LN11111");
-
-    ret = cryptostick->getPasswordSafeSlotName(0);
-    ret = cryptostick->getPasswordSafeSlotPassword(0);
-    ret = cryptostick->getPasswordSafeSlotLoginName(0);
-
-    ret = cryptostick->passwordSafeEraseSlot(0);
-*/
 }
 
 /*******************************************************************************
@@ -4863,6 +4896,7 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
 
 void MainWindow::on_nameEdit_textChanged(const QString &arg1)
 {
+/*
     if (0 == ui->nameEdit->text().length())
     {
         ui->writeButton->setEnabled(false);
@@ -4871,4 +4905,5 @@ void MainWindow::on_nameEdit_textChanged(const QString &arg1)
     {
         ui->writeButton->setEnabled(true);
     }
+*/
 }

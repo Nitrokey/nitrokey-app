@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     base32.cpp \
     aboutdialog.cpp \
     stick20hid.c \
-    passwordsafedialog.cpp
+    passwordsafedialog.cpp \
+    securitydialog.cpp
 
 win32 {
  SOURCES +=   hid_win.c
@@ -77,7 +78,8 @@ HEADERS  += mainwindow.h \
     command.h \
     base32.h \
     aboutdialog.h \
-    passwordsafedialog.h
+    passwordsafedialog.h \
+    securitydialog.h
 
 FORMS    += mainwindow.ui \
     stick20window.ui \
@@ -94,7 +96,8 @@ FORMS    += mainwindow.ui \
     passworddialog.ui \
     hotpdialog.ui \
     aboutdialog.ui \
-    passwordsafedialog.ui
+    passwordsafedialog.ui \
+    securitydialog.ui
 
 win32{
 LIBS= -lsetupapi

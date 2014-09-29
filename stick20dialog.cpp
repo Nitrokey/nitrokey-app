@@ -159,7 +159,7 @@ Stick20Dialog::~Stick20Dialog()
 
 void Stick20Dialog::on_buttonBox_accepted()
 {
-    bool        ret;
+    int         ret;
     bool        waitForAnswerFromStick20;
     bool        stopWhenStatusOKFromStick20;
     int         n;
@@ -288,6 +288,7 @@ void Stick20Dialog::on_buttonBox_accepted()
             }
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :   
+/*
             {
                 msgBox.setText("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -302,6 +303,13 @@ void Stick20Dialog::on_buttonBox_accepted()
                     }
                 }
             }
+*/
+            ret = cryptostick->stick20CreateNewKeys (password);
+            if (TRUE == ret)
+            {
+                waitForAnswerFromStick20 = TRUE;
+            }
+
             break;
         case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
             {

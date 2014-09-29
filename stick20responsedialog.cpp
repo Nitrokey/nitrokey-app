@@ -413,10 +413,13 @@ void Stick20ResponseDialog::checkStick20Status()
                     break;
                 case OUTPUT_CMD_STICK20_STATUS_IDLE             :
                 case OUTPUT_CMD_STICK20_STATUS_BUSY             :
-                case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
                 case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
                 case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY   :
                     // Do nothing, wait for next hid info
+                    break;
+                case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
+                    done (FALSE);
+                    ResultValue = FALSE;
                     break;
                 case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK :
                     done (FALSE);
@@ -449,6 +452,23 @@ void Stick20ResponseDialog::checkStick20Status()
                     }
                     done (TRUE);
                     ResultValue = TRUE;
+                    break;
+                default :
+                    break;
+            }
+        }
+
+
+        if (OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD == stick20Response->HID_Stick20Status_st.Status_u8)
+        {
+            switch (ActiveCommand)
+            {
+                case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Get wrong password");
+                        msgBox.exec();
+                    }
                     break;
                 default :
                     break;
@@ -795,10 +815,34 @@ void Stick20ResponseTask::checkStick20Status()
             }
         }
 
+
+        if (OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD == stick20Response->HID_Stick20Status_st.Status_u8)
+        {
+            switch (ActiveCommand)
+            {
+                case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Can't enable hidden volume");
+                        msgBox.exec();
+                    }
+                    break;
+                default :
+                    break;
+            }
+        }
+
         if (OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK == stick20Response->HID_Stick20Status_st.Status_u8)
         {
             switch (ActiveCommand)
             {
+                case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP :
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("To setup the hidden volume, please enable the encrypted volume to enable smartcard access");
+                        msgBox.exec();
+                    }
+                    break;
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
                         QMessageBox msgBox;

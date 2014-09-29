@@ -1270,21 +1270,5 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>writeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>181</x>
-     <y>499</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>318</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
 </ui>
