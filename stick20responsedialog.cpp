@@ -129,6 +129,7 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent) :
     connect(pollStick20Timer, SIGNAL(timeout()), this, SLOT(checkStick20Status()));
     pollStick20Timer->start(100);
 
+    ui->pushButton->hide ();
 }
 
 /*******************************************************************************

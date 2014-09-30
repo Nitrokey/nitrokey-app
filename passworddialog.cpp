@@ -70,6 +70,8 @@ PasswordDialog::PasswordDialog(bool ShowMatrix,QWidget *parent) :
     {
         ui->checkBox_PasswordMatrix->hide();
     }
+
+    ui->lineEdit->setFocus();
 }
 
 /*******************************************************************************

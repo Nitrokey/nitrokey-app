@@ -229,7 +229,16 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         msgBox.exec();
     }
 
-
+    if (FALSE == DebugWindowActive)
+    {
+        ui->testsGroupBox->hide();
+        ui->testHOTPButton->hide();
+        ui->testTOTPButton->hide();
+        ui->testsSpinBox->hide();
+        ui->testsSpinBox_2->hide();
+        ui->testsLabel->hide();
+        ui->testsLabel_2->hide();
+    }
 
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
@@ -1377,11 +1386,6 @@ void MainWindow::generateMenuForStick20()
         trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);      // Set readonly active
     }
 
-    if (TRUE == SdCardNotErased)
-    {
-        trayMenuSubConfigure->addAction(Stick20ActionClearNewSDCardFound  );
-    }
-
     if ((FALSE == SdCardNotErased) && (TRUE == CryptedVolumeActive))
     {
         trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
@@ -1412,7 +1416,12 @@ void MainWindow::generateMenuForStick20()
     if (TRUE == ExtendedConfigActive)
     {
         trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu( "Special Configure" );
-        trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars  );
+        trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars);
+
+        if (TRUE == SdCardNotErased)
+        {
+            trayMenuSubSpecialConfigure->addAction(Stick20ActionClearNewSDCardFound);
+        }
     }
 
 
@@ -1430,7 +1439,7 @@ void MainWindow::generateMenuForStick20()
     if (TRUE == DebugWindowActive)
     {
         trayMenu->addSeparator();
-        trayMenu->addAction(Stick20Action);
+//        trayMenu->addAction(Stick20Action);           // Old command dialog
         trayMenu->addAction(Stick20ActionDebugAction);
     }
 

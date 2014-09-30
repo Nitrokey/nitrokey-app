@@ -59,6 +59,8 @@ DialogChangePassword::DialogChangePassword(QWidget *parent) :
     ui->lineEdit_OldPW->setEchoMode(QLineEdit::Password);
     ui->lineEdit_NewPW_1->setEchoMode(QLineEdit::Password);
     ui->lineEdit_NewPW_2->setEchoMode(QLineEdit::Password);
+
+    ui->lineEdit_OldPW->setFocus();
 }
 
 /*******************************************************************************
@@ -125,20 +127,6 @@ void DialogChangePassword::InitData(void)
 
 int DialogChangePassword::CheckResponse(bool NoStopFlag)
 {
-/*
-    Stick20ResponseDialog ResponseDialog(this);
-
-    ResponseDialog.setModal(TRUE);
-
-    if (TRUE == NoStopFlag)
-    {
-        ResponseDialog.NoStopWhenStatusOK ();
-    }
-
-    ResponseDialog.cryptostick=cryptostick;
-
-    return (ResponseDialog.exec());
-*/
     Stick20ResponseTask ResponseTask(this,cryptostick,NULL);
 
     if (FALSE == NoStopFlag)
