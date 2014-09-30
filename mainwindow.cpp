@@ -804,9 +804,7 @@ void MainWindow::checkConnection()
 
                 ret = dialog.exec();
 
-                msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\"");
-//                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-//                msgBox.setDefaultButton(QMessageBox::Yes);
+                msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Init keys\"");
                 ret = msgBox.exec();
             }
         }
@@ -1351,13 +1349,16 @@ void MainWindow::generateMenuForStick20()
             trayMenu->addAction(Stick20ActionDisableCryptedVolume       );
         }
 
-        if (FALSE == HiddenVolumeActive)
+        if (TRUE == CryptedVolumeActive)
         {
-            trayMenu->addAction(Stick20ActionEnableHiddenVolume         );
-        }
-        else
-        {
-            trayMenu->addAction(Stick20ActionDisableHiddenVolume        );
+            if (FALSE == HiddenVolumeActive)
+            {
+                trayMenu->addAction(Stick20ActionEnableHiddenVolume         );
+            }
+            else
+            {
+                trayMenu->addAction(Stick20ActionDisableHiddenVolume        );
+            }
         }
     }
 
@@ -1381,7 +1382,7 @@ void MainWindow::generateMenuForStick20()
         trayMenuSubConfigure->addAction(Stick20ActionClearNewSDCardFound  );
     }
 
-    if (FALSE == SdCardNotErased)
+    if ((FALSE == SdCardNotErased) && (TRUE == CryptedVolumeActive))
     {
         trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
     }
@@ -1859,6 +1860,7 @@ void MainWindow::displayCurrentGeneralConfig()
         ui->deleteUserPasswordCheckBox->setChecked(true);
     else
         ui->deleteUserPasswordCheckBox->setChecked(false);
+
     lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 
 }
@@ -2016,7 +2018,7 @@ void MainWindow::startAboutDialog()
     // Get actual data from stick 20
         cryptostick->stick20GetStatusData ();
 
-        Stick20ResponseTask ResponseTask(this,cryptostick);
+        Stick20ResponseTask ResponseTask(this,cryptostick,trayIcon);
         ResponseTask.NoStopWhenStatusOK ();
         ResponseTask.GetResponse ();
 
@@ -2482,7 +2484,7 @@ void MainWindow::startStick20GetStickStatus()
 
 // Wait for response
 
-    Stick20ResponseTask ResponseTask(this,cryptostick);
+    Stick20ResponseTask ResponseTask(this,cryptostick,trayIcon);
     ResponseTask.NoStopWhenStatusOK ();
     ResponseTask.GetResponse ();
 
@@ -2654,6 +2656,21 @@ void MainWindow::startStick20DebugAction()
     int ret;
 //    stick20HiddenVolumeDialog HVDialog(this);
 
+
+    QMessageBox msgBox;
+    securitydialog dialog(this);
+
+    ret = dialog.exec();
+
+    msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Init keys\"");
+//                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+//                msgBox.setDefaultButton(QMessageBox::Yes);
+    ret = msgBox.exec();
+
+
+    StickNotInitated  = TRUE;
+    generateMenu();
+
 /*
     ret = HVDialog.exec();
 
@@ -2737,8 +2754,8 @@ void MainWindow::startStick20DebugAction()
         stick20SendCommand (STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN,password);
     }
 */
-    securitydialog dialog(this);
-    ret = dialog.exec();
+
+
 }
 
 /*******************************************************************************
@@ -3035,7 +3052,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
     if (TRUE == waitForAnswerFromStick20)
     {
 
-        Stick20ResponseTask ResponseTask(this,cryptostick);
+        Stick20ResponseTask ResponseTask(this,cryptostick,trayIcon);
         if (FALSE == stopWhenStatusOKFromStick20)
         {
             ResponseTask.NoStopWhenStatusOK ();
@@ -3469,14 +3486,20 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
         data[0]=ui->numLockComboBox->currentIndex()-1;
         data[1]=ui->capsLockComboBox->currentIndex()-1;
         data[2]=ui->scrollLockComboBox->currentIndex()-1;
-        if(ui->enableUserPasswordCheckBox->isChecked()){
+
+        if(ui->enableUserPasswordCheckBox->isChecked())
+        {
             data[3]=1;
-            if(ui->deleteUserPasswordCheckBox->isChecked()){
+            if(ui->deleteUserPasswordCheckBox->isChecked())
+            {
                 data[4]=1;
-            } else {
+            }
+            else
+            {
                 data[4]=0;
             }
-        } else {
+        } else
+        {
             data[3]=0;
             data[4]=0;
         }
@@ -4353,6 +4376,17 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         }
         else
         {
+            if (TRUE == trayIcon->supportsMessages ())
+            {
+                trayIcon->showMessage ("Password safe","Enabled");
+            }
+            else
+            {
+                QMessageBox msgBox;
+                msgBox.setText("Password safe is enabled");
+                msgBox.exec();
+            }
+
             SetupPasswordSafeConfig ();
             generateMenu ();
         }
@@ -4375,13 +4409,45 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
 
 void MainWindow::PWS_ExceClickedSlot (int Slot)
 {
+    QString MsgText;
+    int     ret_s32;
 
+    ret_s32 = cryptostick->getPasswordSafeSlotPassword(Slot);
+    if (ERR_NO_ERROR != ret_s32)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Pasword safe: Can't get password");
+        msgBox.exec();
+        return;
+    }
+    MsgText.append((char*)cryptostick->passwordSafePassword);
+
+    clipboard->setText(MsgText);
+
+    memset (cryptostick->passwordSafePassword,0,sizeof (cryptostick->passwordSafePassword));
+
+    MsgText.sprintf("Password slot[%s] copied to clipboard",(char*)cryptostick->passwordSafeSlotNames[Slot]);
+
+    if (TRUE == trayIcon->supportsMessages ())
+    {
+        trayIcon->showMessage ("Password safe",MsgText);
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText(MsgText);
+        msgBox.exec();
+    }
+
+
+
+/*
     PasswordSafeDialog PWS_dialog (Slot,this);
 
     PWS_dialog.cryptostick = cryptostick;
 
     PWS_dialog.exec();
-/**/
+*/
 /*
     QString MsgText ("PW Safe Slot ");
     QMessageBox msgBox;

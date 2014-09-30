@@ -139,7 +139,7 @@ int DialogChangePassword::CheckResponse(bool NoStopFlag)
 
     return (ResponseDialog.exec());
 */
-    Stick20ResponseTask ResponseTask(this,cryptostick);
+    Stick20ResponseTask ResponseTask(this,cryptostick,NULL);
 
     if (FALSE == NoStopFlag)
     {

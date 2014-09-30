@@ -862,7 +862,7 @@ void MatrixPasswordDialog::SendMatrixRowDataToStick20()
     }
 
 // Wait vor response
-    Stick20ResponseTask ResponseTask(this,cryptostick);
+    Stick20ResponseTask ResponseTask(this,cryptostick,NULL);
     ResponseTask.GetResponse ();
 
 /*

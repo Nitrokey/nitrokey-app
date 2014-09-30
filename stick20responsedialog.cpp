@@ -440,6 +440,31 @@ void Stick20ResponseDialog::checkStick20Status()
         {
             switch (ActiveCommand)
             {
+                case STICK20_CMD_ENABLE_CRYPTED_PARI            :
+                    if (TRUE == trayIcon->supportsMessages ())
+                    {
+                        trayIcon->showMessage ("Encrypted volume","Enabled");
+                    }
+                    else
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Encrypted volume enabled");
+                        msgBox.exec();
+                    }
+                    break;
+                case STICK20_CMD_DISABLE_CRYPTED_PARI           :
+                    if (TRUE == trayIcon->supportsMessages ())
+                    {
+                        trayIcon->showMessage ("Encrypted volume","Disabled");
+                    }
+                    else
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Encrypted volume disabled");
+                        msgBox.exec();
+                    }
+                    break;
+
                 case STICK20_CMD_GET_DEVICE_STATUS              :
                     showStick20Configuration (ret);
                     break;
@@ -482,7 +507,7 @@ void Stick20ResponseDialog::checkStick20Status()
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
                         QMessageBox msgBox;
-                        msgBox.setText("Encrypted volume was not enabled, please enable the encrypted volume");
+                        msgBox.setText("Please enable the encrypted volume first.");
                         msgBox.exec();
                     }
                     break;
@@ -623,7 +648,7 @@ void Stick20ResponseDialog::on_pushButton_clicked()
 
 *******************************************************************************/
 
-Stick20ResponseTask::Stick20ResponseTask(QWidget *parent,Device *Cryptostick20)
+Stick20ResponseTask::Stick20ResponseTask(QWidget *parent,Device *Cryptostick20,QSystemTrayIcon *MainWndTrayIcon)
 {
     ActiveCommand             = -1;
     EndFlag                   = FALSE;
@@ -633,6 +658,7 @@ Stick20ResponseTask::Stick20ResponseTask(QWidget *parent,Device *Cryptostick20)
     Stick20ResponseTaskParent = parent;
 
     cryptostick               = Cryptostick20;
+    trayIcon                  = MainWndTrayIcon;
 }
 
 /*******************************************************************************
@@ -785,9 +811,33 @@ void Stick20ResponseTask::checkStick20Status()
         {
             switch (ActiveCommand)
             {
+                case STICK20_CMD_ENABLE_CRYPTED_PARI            :
+                    if (TRUE == trayIcon->supportsMessages ())
+                    {
+                        trayIcon->showMessage ("Encrypted volume","Enabled");
+                    }
+                    else
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Encrypted volume enabled");
+                        msgBox.exec();
+                    }
+                    HID_Stick20Configuration_st.UserPwRetryCount = 3;
+                    break;
+                case STICK20_CMD_DISABLE_CRYPTED_PARI           :
+                    if (TRUE == trayIcon->supportsMessages ())
+                    {
+                        trayIcon->showMessage ("Encrypted volume","Disabled");
+                    }
+                    else
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText("Encrypted volume disabled");
+                        msgBox.exec();
+                    }
+                    break;
                 case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN :
                 case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
-                case STICK20_CMD_ENABLE_CRYPTED_PARI :
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
                     break;
                 case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED :
@@ -839,14 +889,15 @@ void Stick20ResponseTask::checkStick20Status()
                 case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP :
                     {
                         QMessageBox msgBox;
-                        msgBox.setText("To setup the hidden volume, please enable the encrypted volume to enable smartcard access");
+//                        msgBox.setText("To setup the hidden volume, please enable the encrypted volume to enable smartcard access");
+                        msgBox.setText("Please enable the encrypted volume first.");
                         msgBox.exec();
                     }
                     break;
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
                         QMessageBox msgBox;
-                        msgBox.setText("Encrypted volume was not enabled, please enable the encrypted volume");
+                        msgBox.setText("Please enable the encrypted volume first.");
                         msgBox.exec();
                     }
                     break;
@@ -946,7 +997,8 @@ void Stick20ResponseTask::GetResponse(void)
         {
             ResponseDialog.NoStopWhenStatusOK ();
         }
-        ResponseDialog.cryptostick=cryptostick;
+        ResponseDialog.cryptostick = cryptostick;
+        ResponseDialog.trayIcon    = trayIcon;
         ResponseDialog.exec();
         ResultValue = ResponseDialog.ResultValue;
     }

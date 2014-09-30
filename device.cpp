@@ -928,8 +928,6 @@ int Device::getStatus()
             memcpy(cardSerial,resp->data+2,4);
             memcpy(generalConfig,resp->data+6,3);
             memcpy(otpPasswordConfig,resp->data+9,2);
-
-
         }
     }
     return 0;

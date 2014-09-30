@@ -186,7 +186,7 @@ void Stick20Setup::on_pushButton_Ch_HiddenVol_clicked()
 
             ResponseDialog.exec();
 */
-            Stick20ResponseTask ResponseTask(this,cryptostick);
+            Stick20ResponseTask ResponseTask(this,cryptostick,NULL);
             ResponseTask.NoStopWhenStatusOK ();
             ResponseTask.GetResponse ();
 

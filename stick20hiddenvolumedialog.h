@@ -41,7 +41,9 @@ private slots:
     void on_ShowPasswordCheckBox_toggled(bool checked);
 
 
-    void on_buttonBox_accepted();
+//    void on_buttonBox_accepted();
+
+    void on_buttonBox_clicked(QAbstractButton *button);
 
 private:
     Ui::stick20HiddenVolumeDialog *ui;

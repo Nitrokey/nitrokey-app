@@ -60,6 +60,7 @@ public:
     void showStick20Configuration (int Status);
 
     Device *cryptostick;
+    QSystemTrayIcon *trayIcon;
 
     QTimer *pollStick20Timer;
     void NoStopWhenStatusOK();
@@ -84,7 +85,7 @@ class Stick20ResponseTask : public QObject
     Q_OBJECT
 
 public:
-    Stick20ResponseTask(QWidget *parent,Device *Cryptostick20);
+    Stick20ResponseTask(QWidget *parent,Device *Cryptostick20,QSystemTrayIcon *MainWndTrayIcon);
     ~Stick20ResponseTask();
     void done (int Status);
     void checkStick20Status();
@@ -94,6 +95,7 @@ public:
     QWidget *Stick20ResponseTaskParent;
 
     Device *cryptostick;
+    QSystemTrayIcon *trayIcon;
 
     int  ActiveCommand;
     bool FlagNoStopWhenStatusOK;

@@ -45,6 +45,10 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :
 
     ui->HVPasswordEdit->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
     ui->HVPasswordEdit->setText(QString((char*)HV_Setup_st.HiddenVolumePassword_au8));
+
+    ui->HVPasswordEdit_2->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
+    ui->HVPasswordEdit_2->setText(QString((char*)HV_Setup_st.HiddenVolumePassword_au8));
+
 }
 
 stick20HiddenVolumeDialog::~stick20HiddenVolumeDialog()
@@ -56,19 +60,48 @@ stick20HiddenVolumeDialog::~stick20HiddenVolumeDialog()
 void stick20HiddenVolumeDialog::on_ShowPasswordCheckBox_toggled(bool checked)
 {
     if (checked)
+    {
+        ui->HVPasswordEdit_2->setEchoMode(QLineEdit::Normal);
         ui->HVPasswordEdit->setEchoMode(QLineEdit::Normal);
+    }
     else
-        ui->HVPasswordEdit->setEchoMode(QLineEdit::Password);
+    {
+        ui->HVPasswordEdit_2->setEchoMode(QLineEdit::Password);
+        ui->HVPasswordEdit_2->setEchoMode(QLineEdit::Password);
+    }
 }
 
-
-
-void stick20HiddenVolumeDialog::on_buttonBox_accepted()
+void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button)
 {
-    HV_Setup_st.SlotNr_u8            = ui->comboBox->currentIndex();
-    HV_Setup_st.StartBlockPercent_u8 = ui->StartBlockSpin->value();
-    HV_Setup_st.EndBlockPercent_u8   = ui->EndBlockSpin->value();
+    if(button == ui->buttonBox->button(QDialogButtonBox::Ok))
+    {
+        if (8 > strlen (ui->HVPasswordEdit->text().toLatin1().data()))
+        {
+            QMessageBox   msgBox;
+            msgBox.setText("Your password is too short. Use at least 8 characters.");
+            msgBox.exec();
+            return;
+        }
 
-    strncpy ((char*)HV_Setup_st.HiddenVolumePassword_au8,ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-    HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
+        if (ui->HVPasswordEdit->text().toLatin1() != ui->HVPasswordEdit_2->text().toLatin1())
+        {
+            QMessageBox msgBox;
+            msgBox.setText("The passwords are not identical");
+            msgBox.exec();
+            return;
+        }
+
+        HV_Setup_st.SlotNr_u8            = ui->comboBox->currentIndex();
+        HV_Setup_st.StartBlockPercent_u8 = ui->StartBlockSpin->value();
+        HV_Setup_st.EndBlockPercent_u8   = ui->EndBlockSpin->value();
+
+        strncpy ((char*)HV_Setup_st.HiddenVolumePassword_au8,ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
+        HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
+        done (true);
+    }
+
+    if(button == ui->buttonBox->button(QDialogButtonBox::Cancel))
+    {
+        done (false);
+    }
 }

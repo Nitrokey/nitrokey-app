@@ -388,7 +388,7 @@ void Stick20Dialog::on_buttonBox_accepted()
 
     if (TRUE == waitForAnswerFromStick20)
     {
-        Stick20ResponseTask ResponseTask(this,cryptostick);
+        Stick20ResponseTask ResponseTask(this,cryptostick,NULL);
 
         if (FALSE == stopWhenStatusOKFromStick20)
         {
