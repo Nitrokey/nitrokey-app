@@ -453,6 +453,7 @@ void Stick20ResponseDialog::checkStick20Status()
                         msgBox.exec();
                     }
                     break;
+
                 case STICK20_CMD_DISABLE_CRYPTED_PARI           :
                     if (TRUE == trayIcon->supportsMessages ())
                     {
@@ -469,6 +470,18 @@ void Stick20ResponseDialog::checkStick20Status()
                 case STICK20_CMD_GET_DEVICE_STATUS              :
                     showStick20Configuration (ret);
                     break;
+
+                case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE :
+                    {
+                            QMessageBox msgBox;
+                            msgBox.setText("Firmware has been exported successfully.\nThe file 'firmware.bin' is located in the root directory of the uncrypted stick volume.\nYou may need to remount the unencrypted volume.");
+                            msgBox.exec();
+
+                    }
+                    done (TRUE);
+                    ResultValue = TRUE;
+                    break;
+
                 case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
                     {
                             QMessageBox msgBox;

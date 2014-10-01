@@ -76,6 +76,7 @@ private:
     QMenu *trayMenuSubConfigure;
     QMenu *trayMenuSubSpecialConfigure;
     QClipboard *clipboard;
+    QValidator *validator;
 
     unsigned char HOTP_SlotCount;
     unsigned char TOTP_SlotCount;
@@ -283,7 +284,7 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_PWS_ButtonCreatePW_clicked();
     void on_PWS_ButtonSaveSlot_clicked();
     void on_PWS_ButtonEnable_clicked();
-    void on_nameEdit_textChanged(const QString &arg1);
+    void on_counterEdit_editingFinished();
 };
 
 #endif // MAINWINDOW_H
