@@ -343,7 +343,7 @@ void Stick20ResponseDialog::checkStick20Status()
                 OutputText.append (QString("Enable readwrite for unencrypted volume"));
                 break;
             case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND :
-                OutputText.append (QString("Clear - Initialize storage with random data"));
+                OutputText.append (QString("Disable 'initialize storage with random data' warning"));
                 break;
             case STICK20_CMD_PRODUCTION_TEST :
                 OutputText.append (QString("Production test"));
@@ -444,12 +444,12 @@ void Stick20ResponseDialog::checkStick20Status()
                 case STICK20_CMD_ENABLE_CRYPTED_PARI            :
                     if (TRUE == trayIcon->supportsMessages ())
                     {
-                        trayIcon->showMessage ("Encrypted volume","Enabled");
+                        trayIcon->showMessage ("Crypto Stick Utility","Encrypted volume unlocked successfully");
                     }
                     else
                     {
                         QMessageBox msgBox;
-                        msgBox.setText("Encrypted volume enabled");
+                        msgBox.setText("Encrypted volume unlocked");
                         msgBox.exec();
                     }
                     break;
@@ -828,12 +828,12 @@ void Stick20ResponseTask::checkStick20Status()
                 case STICK20_CMD_ENABLE_CRYPTED_PARI            :
                     if (TRUE == trayIcon->supportsMessages ())
                     {
-                        trayIcon->showMessage ("Encrypted volume","Enabled");
+                        trayIcon->showMessage ("Crypto Stick Utility","Encrypted volume unlocked successfully");
                     }
                     else
                     {
                         QMessageBox msgBox;
-                        msgBox.setText("Encrypted volume enabled");
+                        msgBox.setText("Encrypted volume unlocked");
                         msgBox.exec();
                     }
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
@@ -841,12 +841,12 @@ void Stick20ResponseTask::checkStick20Status()
                 case STICK20_CMD_DISABLE_CRYPTED_PARI           :
                     if (TRUE == trayIcon->supportsMessages ())
                     {
-                        trayIcon->showMessage ("Encrypted volume","Disabled");
+                        trayIcon->showMessage ("Crypto Stick Utility","Encrypted volume locked successfully");
                     }
                     else
                     {
                         QMessageBox msgBox;
-                        msgBox.setText("Encrypted volume disabled");
+                        msgBox.setText("Encrypted volume locked");
                         msgBox.exec();
                     }
                     break;

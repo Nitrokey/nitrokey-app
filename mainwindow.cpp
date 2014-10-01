@@ -1127,7 +1127,7 @@ void MainWindow::initActionsForStick20()
     Stick20ActionSetupHiddenVolume = new QAction(tr("&Setup hidden volume"), this);
     connect(Stick20ActionSetupHiddenVolume, SIGNAL(triggered()), this, SLOT(startStick20SetupHiddenVolume()));
 
-    Stick20ActionClearNewSDCardFound = new QAction(tr("&Clear - Initialize storage with random data"), this);
+    Stick20ActionClearNewSDCardFound = new QAction(tr("&Disable 'initialize storage with random data' warning"), this);
     connect(Stick20ActionClearNewSDCardFound, SIGNAL(triggered()), this, SLOT(startStick20ClearNewSdCardFound()));
 
     Stick20ActionSetupPasswordMatrix = new QAction(tr("&Setup password matrix"), this);
@@ -4421,7 +4421,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         {
             if (TRUE == trayIcon->supportsMessages ())
             {
-                trayIcon->showMessage ("Password safe","Enabled");
+                trayIcon->showMessage ("Crypto Stick Utility","Password Safe unlocked successfully.");
             }
             else
             {
