@@ -1399,16 +1399,14 @@ void MainWindow::generateMenuForStick20()
             trayMenu->addAction(Stick20ActionDisableCryptedVolume       );
         }
 
-        if (TRUE == CryptedVolumeActive)
+
+        if (FALSE == HiddenVolumeActive)
         {
-            if (FALSE == HiddenVolumeActive)
-            {
-                trayMenu->addAction(Stick20ActionEnableHiddenVolume         );
-            }
-            else
-            {
-                trayMenu->addAction(Stick20ActionDisableHiddenVolume        );
-            }
+            trayMenu->addAction(Stick20ActionEnableHiddenVolume         );
+        }
+        else
+        {
+            trayMenu->addAction(Stick20ActionDisableHiddenVolume        );
         }
     }
 
@@ -1427,7 +1425,7 @@ void MainWindow::generateMenuForStick20()
         trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);      // Set readonly active
     }
 
-    if ((FALSE == SdCardNotErased) && (TRUE == CryptedVolumeActive))
+    if (FALSE == SdCardNotErased)
     {
         trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
     }
@@ -2212,6 +2210,15 @@ void MainWindow::startStick20EnableHiddenVolume()
     uint8_t password[40];
     bool    ret;
 
+    if (FALSE == CryptedVolumeActive)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Please unlock crypted volume first");
+        msgBox.exec();
+        return;
+    }
+
+
     PasswordDialog dialog(MatrixInputActive,this);
     dialog.init((char *)"Enter password for hidden volume",-1);
     dialog.cryptostick = cryptostick;
@@ -2825,6 +2832,14 @@ void MainWindow::startStick20SetupHiddenVolume()
 {
     bool    ret;
     stick20HiddenVolumeDialog HVDialog(this);
+
+    if (FALSE == CryptedVolumeActive)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Please unlock crypted volume first");
+        msgBox.exec();
+        return;
+    }
 
     ret = HVDialog.exec();
 

@@ -36,6 +36,9 @@ public:
     ~stick20HiddenVolumeDialog();
 
     HiddenVolumeSetup_tst HV_Setup_st;
+
+    int GetCharsetSpace (unsigned char *Password, size_t size);
+    double GetEntropy(unsigned char *Password, size_t size);
     
 private slots:
     void on_ShowPasswordCheckBox_toggled(bool checked);
@@ -44,6 +47,8 @@ private slots:
 //    void on_buttonBox_accepted();
 
     void on_buttonBox_clicked(QAbstractButton *button);
+
+    void on_HVPasswordEdit_textChanged(const QString &arg1);
 
 private:
     Ui::stick20HiddenVolumeDialog *ui;
