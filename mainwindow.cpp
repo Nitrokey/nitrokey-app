@@ -2213,7 +2213,7 @@ void MainWindow::startStick20EnableHiddenVolume()
     if (FALSE == CryptedVolumeActive)
     {
         QMessageBox msgBox;
-        msgBox.setText("Please unlock crypted volume first");
+        msgBox.setText("Please enable the encrypted volume first.");
         msgBox.exec();
         return;
     }
@@ -2836,7 +2836,7 @@ void MainWindow::startStick20SetupHiddenVolume()
     if (FALSE == CryptedVolumeActive)
     {
         QMessageBox msgBox;
-        msgBox.setText("Please unlock crypted volume first");
+        msgBox.setText("Please enable the encrypted volume first.");
         msgBox.exec();
         return;
     }

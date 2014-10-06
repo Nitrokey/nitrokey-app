@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>254</width>
+    <width>291</width>
     <height>267</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>50</x>
      <y>230</y>
      <width>181</width>
      <height>32</height>
@@ -36,7 +36,7 @@
   <widget class="QComboBox" name="comboBox">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>10</y>
      <width>191</width>
      <height>22</height>
@@ -66,7 +66,7 @@
   <widget class="QLineEdit" name="HVPasswordEdit">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>120</x>
      <y>110</y>
      <width>131</width>
      <height>21</height>
@@ -82,7 +82,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>110</y>
      <width>71</width>
      <height>21</height>
@@ -95,7 +95,7 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>50</y>
      <width>141</width>
      <height>21</height>
@@ -108,7 +108,7 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>80</y>
      <width>141</width>
      <height>21</height>
@@ -121,7 +121,7 @@
   <widget class="QSpinBox" name="StartBlockSpin">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>190</x>
      <y>50</y>
      <width>61</width>
      <height>22</height>
@@ -134,7 +134,7 @@
   <widget class="QSpinBox" name="EndBlockSpin">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>190</x>
      <y>80</y>
      <width>61</width>
      <height>22</height>
@@ -160,7 +160,7 @@
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>40</x>
      <y>140</y>
      <width>71</width>
      <height>21</height>
@@ -173,7 +173,7 @@
   <widget class="QLineEdit" name="HVPasswordEdit_2">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>120</x>
      <y>140</y>
      <width>131</width>
      <height>21</height>
@@ -191,8 +191,8 @@
     <rect>
      <x>20</x>
      <y>170</y>
-     <width>211</width>
-     <height>31</height>
+     <width>251</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
