@@ -70,7 +70,7 @@ void stick20HiddenVolumeDialog::on_ShowPasswordCheckBox_toggled(bool checked)
     else
     {
         ui->HVPasswordEdit_2->setEchoMode(QLineEdit::Password);
-        ui->HVPasswordEdit_2->setEchoMode(QLineEdit::Password);
+        ui->HVPasswordEdit->setEchoMode(QLineEdit::Password);
     }
 }
 
