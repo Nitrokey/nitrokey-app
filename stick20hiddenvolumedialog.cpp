@@ -30,18 +30,18 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :
     ui->setupUi(this);
 
     HV_Setup_st.SlotNr_u8                   =   0;
-    HV_Setup_st.StartBlockPercent_u8        =  80;
-    HV_Setup_st.EndBlockPercent_u8          = 100;
+    HV_Setup_st.StartBlockPercent_u8        =  70;
+    HV_Setup_st.EndBlockPercent_u8          =  90;
     HV_Setup_st.HiddenVolumePassword_au8[0] =   0;
 
     ui->comboBox->setCurrentIndex(HV_Setup_st.SlotNr_u8);
 
-    ui->StartBlockSpin->setMaximum(99);
-    ui->StartBlockSpin->setMinimum(20);
+    ui->StartBlockSpin->setMaximum(89);
+    ui->StartBlockSpin->setMinimum(10);
     ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
 
-    ui->EndBlockSpin->setMaximum(100);
-    ui->EndBlockSpin->setMinimum(21);
+    ui->EndBlockSpin->setMaximum(90);
+    ui->EndBlockSpin->setMinimum(11);
     ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
 
     ui->HVPasswordEdit->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
@@ -51,7 +51,6 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :
     ui->HVPasswordEdit_2->setText(QString((char*)HV_Setup_st.HiddenVolumePassword_au8));
 
     on_HVPasswordEdit_textChanged ("");
-
 }
 
 stick20HiddenVolumeDialog::~stick20HiddenVolumeDialog()
@@ -97,6 +96,14 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button)
         HV_Setup_st.SlotNr_u8            = ui->comboBox->currentIndex();
         HV_Setup_st.StartBlockPercent_u8 = ui->StartBlockSpin->value();
         HV_Setup_st.EndBlockPercent_u8   = ui->EndBlockSpin->value();
+
+        if (HV_Setup_st.StartBlockPercent_u8 >= HV_Setup_st.EndBlockPercent_u8)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Wrong size of hidden volume");
+            msgBox.exec();
+            return;
+        }
 
         strncpy ((char*)HV_Setup_st.HiddenVolumePassword_au8,ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
         HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
@@ -180,30 +187,12 @@ int stick20HiddenVolumeDialog::GetCharsetSpace (unsigned char *Password, size_t 
 double stick20HiddenVolumeDialog::GetEntropy(unsigned char *Password, size_t size)
 {
     double Entropy = 0.0;
-    int Histogram[256];
     int CharsetSpace;
-    int i;
-
-    memset (Histogram,0,sizeof(Histogram));
 
     CharsetSpace = GetCharsetSpace (Password,size);
 
     Entropy = (double)size * (log((double)CharsetSpace)/log(2.0));       // Entropy by CharsetSpace * size
 
-/*
-    for (i = 0; i < size; ++i)
-    {
-        ++Histogram[Password[i]];
-    }
-
-    for (i = 0; i < 256; ++i)
-    {
-        if (Histogram[i])
-        {
-            Entropy -= (double)Histogram[i] / (double)size * (log((double)Histogram[i]/(double)size)/log(2.0));
-        }
-    }
-*/
     return (Entropy);
 }
 
@@ -222,6 +211,35 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
     }
     else
     {
-        ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",0,0));
+        ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",0.0,0.0));
     }
+}
+
+void stick20HiddenVolumeDialog::setHighWaterMarkText (void)
+{
+    uint8_t HighWatermarkMin;
+    uint8_t HighWatermarkMax;
+
+    HighWatermarkMin = SdCardHighWatermark_Write_Min;
+    HighWatermarkMax = SdCardHighWatermark_Write_Max;
+
+    if (5 > HighWatermarkMin)          // Set lower limit
+    {
+        HighWatermarkMin = 10;
+    }
+    if (90 < HighWatermarkMax)          // Set higher limit
+    {
+        HighWatermarkMax = 90;
+    }
+
+    ui->HVSdCardHighWaterMark->setText(QString ("%1").sprintf("The the unwritten area after plugin is\nbetween %d %% and %d %% of the sd card size",HighWatermarkMin,HighWatermarkMax));
+
+// Set valid input range
+    ui->StartBlockSpin->setMaximum(HighWatermarkMax-1);
+    ui->StartBlockSpin->setMinimum(HighWatermarkMin);
+    ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
+
+    ui->EndBlockSpin->setMaximum(HighWatermarkMax);
+    ui->EndBlockSpin->setMinimum(HighWatermarkMin+1);
+    ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
 }

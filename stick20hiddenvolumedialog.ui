@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>291</width>
-    <height>267</height>
+    <height>299</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>230</y>
+     <y>260</y>
      <width>181</width>
      <height>32</height>
     </rect>
@@ -38,7 +38,7 @@
     <rect>
      <x>40</x>
      <y>10</y>
-     <width>191</width>
+     <width>201</width>
      <height>22</height>
     </rect>
    </property>
@@ -67,7 +67,7 @@
    <property name="geometry">
     <rect>
      <x>120</x>
-     <y>110</y>
+     <y>140</y>
      <width>131</width>
      <height>21</height>
     </rect>
@@ -83,7 +83,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>110</y>
+     <y>140</y>
      <width>71</width>
      <height>21</height>
     </rect>
@@ -96,7 +96,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>50</y>
+     <y>80</y>
      <width>141</width>
      <height>21</height>
     </rect>
@@ -109,7 +109,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>80</y>
+     <y>110</y>
      <width>141</width>
      <height>21</height>
     </rect>
@@ -122,7 +122,7 @@
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>50</y>
+     <y>80</y>
      <width>61</width>
      <height>22</height>
     </rect>
@@ -135,7 +135,7 @@
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>80</y>
+     <y>110</y>
      <width>61</width>
      <height>22</height>
     </rect>
@@ -148,7 +148,7 @@
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>210</y>
+     <y>240</y>
      <width>141</width>
      <height>21</height>
     </rect>
@@ -161,7 +161,7 @@
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>140</y>
+     <y>170</y>
      <width>71</width>
      <height>21</height>
     </rect>
@@ -174,7 +174,7 @@
    <property name="geometry">
     <rect>
      <x>120</x>
-     <y>140</y>
+     <y>170</y>
      <width>131</width>
      <height>21</height>
     </rect>
@@ -190,13 +190,29 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>170</y>
+     <y>200</y>
      <width>251</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>EntropieLabel</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="HVSdCardHighWaterMark">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>39</y>
+     <width>221</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>High water mark</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
