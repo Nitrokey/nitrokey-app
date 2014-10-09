@@ -85,7 +85,7 @@ class Response;
 #define CMD_PW_SAFE_ENABLE                0x67
 #define CMD_PW_SAFE_INIT_KEY              0x68
 #define CMD_PW_SAFE_SEND_DATA             0x69
-
+#define CMD_SD_CARD_HIGH_WATERMARK        0x70
 
 #define PWS_SEND_PASSWORD     0
 #define PWS_SEND_LOGINNAME    1
@@ -323,6 +323,7 @@ public:
     uint8_t passwordRetryCount;
     uint8_t userPasswordRetryCount;
 
+    int getHighwaterMarkFromSdCard (unsigned char *WriteLevel_Min,unsigned char *WriteLevel_Max, unsigned char *ReadLevel_Min, unsigned char *ReadLevel_Max);
 
     bool stick20EnableCryptedPartition (uint8_t *password);
     bool stick20DisableCryptedPartition (void);

@@ -191,6 +191,9 @@ void Response::DebugResponse()
         case CMD_PW_SAFE_SEND_DATA :
             DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_SEND_DATA");
             break;
+        case CMD_SD_CARD_HIGH_WATERMARK :
+            DebugAppendText ((char *)"         Last command        : CMD_SD_CARD_HIGH_WATERMARK");
+            break;
 
         case CMD_SET_TIME :
             DebugAppendText ((char *)"         Last command        : CMD_SET_TIME\n");

@@ -2841,6 +2841,29 @@ void MainWindow::startStick20SetupHiddenVolume()
         return;
     }
 
+    HVDialog.SdCardHighWatermark_Read_Min  = 0;
+    HVDialog.SdCardHighWatermark_Read_Max  = 100;
+    HVDialog.SdCardHighWatermark_Write_Min = 0;
+    HVDialog.SdCardHighWatermark_Write_Max = 100;
+
+    ret = cryptostick->getHighwaterMarkFromSdCard (&HVDialog.SdCardHighWatermark_Write_Min,
+                                                   &HVDialog.SdCardHighWatermark_Write_Max,
+                                                   &HVDialog.SdCardHighWatermark_Read_Min,
+                                                   &HVDialog.SdCardHighWatermark_Read_Max);
+/*
+    qDebug () << "High water mark : WriteMin WriteMax ReadMin ReadMax";
+    qDebug () << HVDialog.SdCardHighWatermark_Write_Min;
+    qDebug () << HVDialog.SdCardHighWatermark_Write_Max;
+    qDebug () << HVDialog.SdCardHighWatermark_Read_Min;
+    qDebug () << HVDialog.SdCardHighWatermark_Read_Max;
+*/
+    if (ERR_NO_ERROR != ret)
+    {
+        ret = 0;            // Do something ?
+    }
+
+    HVDialog.setHighWaterMarkText ();
+
     ret = HVDialog.exec();
 
     if (true == ret)

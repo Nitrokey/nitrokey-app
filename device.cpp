@@ -1563,6 +1563,74 @@ int Device::passwordSafeSendSlotDataViaHID (int Slot, int Kind)
 }
 
 
+/*******************************************************************************
+
+  getHighwaterMarkFromSdCard
+
+  Get the higest accessed SD blocks in % of SD size
+  (Only sice last poweron)
+
+  Changes
+  Date      Author        Info
+  09.10.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+#define DEVICE_HIGH_WATERMARK_SD_CARD_WRITE_MIN         0
+#define DEVICE_HIGH_WATERMARK_SD_CARD_WRITE_MAX         1
+#define DEVICE_HIGH_WATERMARK_SD_CARD_READ_MIN          2
+#define DEVICE_HIGH_WATERMARK_SD_CARD_READ_MAX          3
+
+int Device::getHighwaterMarkFromSdCard (unsigned char *WriteLevelMin,unsigned char *WriteLevelMax, unsigned char *ReadLevelMin, unsigned char *ReadLevelMax)
+{
+    int res;
+    uint8_t data[1];
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_SD_CARD_HIGH_WATERMARK,data,0);
+        res=sendCommand(cmd);
+
+        if (res==-1)
+        {
+            return (ERR_SENDING);
+        }
+        else
+        {                                       //sending the command was successful
+            Sleep::msleep(200);
+
+            Response *resp=new Response();
+
+            resp->getResponse(this);
+
+            if (cmd->crc == resp->lastCommandCRC)
+            {
+                *WriteLevelMin = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_WRITE_MIN];
+                *WriteLevelMax = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_WRITE_MAX];
+                *ReadLevelMin  = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_READ_MIN];
+                *ReadLevelMax  = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_READ_MAX];
+
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                {
+                    return (ERR_NO_ERROR);
+                }
+                else
+                {
+                    return (ERR_STATUS_NOT_OK);
+                }
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+
+    return (ERR_NOT_CONNECTED);
+}
 
 /*******************************************************************************
 
