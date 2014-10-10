@@ -474,14 +474,9 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     case QSystemTrayIcon::Context:
 //        trayMenu->hide();
 //        trayMenu->close();
-#ifdef Q_OS_MAC
         trayMenu->popup(QCursor::pos());
-#endif
         break;
     case QSystemTrayIcon::Trigger:
-#ifndef Q_OS_MAC
-        trayMenu->popup(QCursor::pos());
-#endif
         break;
     case QSystemTrayIcon::DoubleClick:
         break;
