@@ -469,13 +469,14 @@ int MainWindow::ExecStickCmd(char *Cmdline)
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
+
     switch (reason) {
     case QSystemTrayIcon::Context:
 //        trayMenu->hide();
 //        trayMenu->close();
+        trayMenu->popup(QCursor::pos());
         break;
     case QSystemTrayIcon::Trigger:
-        trayMenu->popup(QCursor::pos());
         break;
     case QSystemTrayIcon::DoubleClick:
         break;
