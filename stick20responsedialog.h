@@ -42,43 +42,6 @@ extern "C" {
 #endif
 
 
-namespace Ui {
-class Stick20ResponseDialog;
-}
-
-class Stick20ResponseDialog : public QDialog
-{
-    Q_OBJECT
-    
-public:
-    int ResultValue;
-
-    explicit Stick20ResponseDialog(QWidget *parent = 0);
-    ~Stick20ResponseDialog();
-
-    void checkStick20StatusDebug(Response *stick20Response,int Status);
-    void showStick20Configuration (int Status);
-
-    Device *cryptostick;
-    QSystemTrayIcon *trayIcon;
-
-    QTimer *pollStick20Timer;
-    void NoStopWhenStatusOK();
-    void SetActiveCommand (int Cmd);
-
-private:
-    Ui::Stick20ResponseDialog *ui;
-    int  ActiveCommand;
-    int Counter_u32;
-    bool FlagNoStopWhenStatusOK;
-
-private slots:
-    void checkStick20Status();
-    void on_pushButton_clicked();
-};
-
-
-
 
 class Stick20ResponseTask : public QObject
 {
@@ -91,17 +54,56 @@ public:
     void checkStick20Status();
     void GetResponse (void);
     void NoStopWhenStatusOK ();
+    void ShowIconMessage(QString IconText);
 
-    QWidget *Stick20ResponseTaskParent;
+    QWidget         *Stick20ResponseTaskParent;
 
-    Device *cryptostick;
+    Device          *cryptostick;
     QSystemTrayIcon *trayIcon;
+    Response        *stick20Response;
 
     int  ActiveCommand;
     bool FlagNoStopWhenStatusOK;
     int  ResultValue;
     int  EndFlag;
+    int  Counter_u32;
+    int  retStick20Respone;
 };
+
+
+
+namespace Ui {
+class Stick20ResponseDialog;
+}
+
+class Stick20ResponseDialog : public QDialog
+{
+    Q_OBJECT
+
+    
+public:
+    int ResultValue;
+    Stick20ResponseTask *Stick20Task;
+
+    explicit Stick20ResponseDialog(QWidget *parent = 0);
+    ~Stick20ResponseDialog();
+
+    void checkStick20StatusDebug(Response *stick20Response,int Status);
+    void showStick20Configuration (int Status);
+
+    QTimer *pollStick20Timer;
+
+private:
+    Ui::Stick20ResponseDialog *ui;
+//    int  ActiveCommand;
+//    int Counter_u32;
+//    bool FlagNoStopWhenStatusOK;
+
+private slots:
+    void checkStick20StatusDialog();
+    void on_pushButton_clicked();
+};
+
 
 
 
