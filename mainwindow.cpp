@@ -3148,6 +3148,8 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
         }
         ResponseTask.GetResponse ();
         Result = ResponseTask.ResultValue;
+//qDebug()<< "waitForAnswerFromStick20" << ResponseTask.ResultValue;
+
     }
 
     if (TRUE == Result)
@@ -3155,31 +3157,23 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
         switch (stick20Command)
         {
             case STICK20_CMD_ENABLE_CRYPTED_PARI            :
-                CryptedVolumeActive = TRUE;
-                HiddenVolumeActive  = FALSE;
-                generateMenu();
+                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_CRYPTED_VOLUME_BIT_PLACE);
+                UpdateDynamicMenuEntrys ();
                 break;
             case STICK20_CMD_DISABLE_CRYPTED_PARI           :
-                CryptedVolumeActive = FALSE;
-                HiddenVolumeActive  = FALSE;
-                generateMenu();
+                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
+                UpdateDynamicMenuEntrys ();
                 break;
             case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
-                HiddenVolumeActive  = TRUE;
-                CryptedVolumeActive = FALSE;
-                generateMenu();
+                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_HIDDEN_VOLUME_BIT_PLACE);
+                UpdateDynamicMenuEntrys ();
                 break;
             case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI    :
-                CryptedVolumeActive = FALSE;
-                HiddenVolumeActive  = FALSE;
-                generateMenu();
+                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
+                UpdateDynamicMenuEntrys ();
                 break;
             case STICK20_CMD_GET_DEVICE_STATUS              :
                 UpdateDynamicMenuEntrys ();
-                {
-//                    Stick20InfoDialog InfoDialog(this);
-//                   InfoDialog.exec();
-                }
                 break;
             case STICK20_CMD_SEND_STARTUP                   :
                 UpdateDynamicMenuEntrys ();
@@ -3203,8 +3197,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             case STICK20_CMD_GENERATE_NEW_KEYS              : // = firmware reset
                 HID_Stick20Configuration_st.StickKeysNotInitiated    = FALSE;
                 HID_Stick20Configuration_st.SDFillWithRandomChars_u8 = 0x00;
-                CryptedVolumeActive = FALSE;
-                HiddenVolumeActive  = FALSE;
+                HID_Stick20Configuration_st.VolumeActiceFlag_u8      = 0;
                 UpdateDynamicMenuEntrys ();
                 break;
             case STICK20_CMD_PRODUCTION_TEST       :

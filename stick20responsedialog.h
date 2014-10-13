@@ -82,7 +82,6 @@ class Stick20ResponseDialog : public QDialog
 
     
 public:
-    int ResultValue;
     Stick20ResponseTask *Stick20Task;
 
     explicit Stick20ResponseDialog(QWidget *parent = 0);
