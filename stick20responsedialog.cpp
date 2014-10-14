@@ -421,8 +421,6 @@ Stick20ResponseDialog::~Stick20ResponseDialog()
     pollStick20Timer->stop();
 
     delete pollStick20Timer;
-
-    setResult (ResultValue);
 }
 
 /*******************************************************************************
@@ -643,6 +641,8 @@ void Stick20ResponseTask::checkStick20Status()
 
         if (OUTPUT_CMD_STICK20_STATUS_OK == stick20Response->HID_Stick20Status_st.Status_u8)
         {
+            ResultValue = TRUE;
+
             switch (ActiveCommand)
             {
                 case STICK20_CMD_ENABLE_CRYPTED_PARI            :
@@ -697,7 +697,6 @@ void Stick20ResponseTask::checkStick20Status()
 
                     }
                     done (TRUE);
-                    ResultValue = TRUE;
                     break;
                 default :
                     break;
@@ -832,7 +831,6 @@ void Stick20ResponseTask::GetResponse(void)
 
         ResponseDialog.Stick20Task = this;
         ResponseDialog.exec();
-        ResultValue = ResponseDialog.ResultValue;
     }
 }
 
