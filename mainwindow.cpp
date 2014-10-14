@@ -4708,6 +4708,10 @@ int MainWindow::getNextCode(uint8_t slotNumber)
                 }
                 password.clear();
             }
+            else
+            {
+                return 1;
+            }
         }
     }
 // Start the config dialog
