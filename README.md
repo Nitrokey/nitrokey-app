@@ -36,6 +36,15 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
 7) make
 8) optional: use upx to compress the executable
 
+
+== Compiling for MAC OS ==
+1) Use Qt to compile the utility
+2) Navigate to <build_dir>/CryptoStickGUI.app/Contents
+3) Edit Info.plist file by adding:
+    <key>LSUIElement</key>
+    <string>1</string>
+under <dict> node
+
 =Internals=
 All configuration data including OTP secrets are stored in clear text in the flash of Crypto Stick's Microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.
 
