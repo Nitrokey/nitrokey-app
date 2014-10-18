@@ -219,6 +219,14 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>HVPasswordEdit</tabstop>
+  <tabstop>HVPasswordEdit_2</tabstop>
+  <tabstop>ShowPasswordCheckBox</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>StartBlockSpin</tabstop>
+  <tabstop>EndBlockSpin</tabstop>
+ </tabstops>
  <resources>
   <include location="resources.qrc"/>
  </resources>

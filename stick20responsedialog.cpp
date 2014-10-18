@@ -559,12 +559,14 @@ void Stick20ResponseTask::checkStick20Status()
             case OUTPUT_CMD_STICK20_STATUS_BUSY             :
                 break;
             case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
+                switch (ActiveCommand)
                 {
+                    default :
                         QMessageBox msgBox;
                         msgBox.setText("Get wrong password");
                         msgBox.exec();
-
-                }            
+                        break;
+                }
                 EndFlag = TRUE;
                 break;
             case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
@@ -692,7 +694,7 @@ void Stick20ResponseTask::checkStick20Status()
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     {
                             QMessageBox msgBox;
-                            msgBox.setText("Storage successfully initialized with random data");        // Dialogbox at end of very long running function
+                            msgBox.setText("Storage successfully initialized with random data\nStick is restting\n");        // Dialogbox at end of very long running function
                             msgBox.exec();
 
                     }

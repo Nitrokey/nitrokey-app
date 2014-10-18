@@ -50,6 +50,8 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :
     ui->HVPasswordEdit_2->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
     ui->HVPasswordEdit_2->setText(QString((char*)HV_Setup_st.HiddenVolumePassword_au8));
 
+    ui->HVPasswordEdit->setFocus();
+
     on_HVPasswordEdit_textChanged ("");
 }
 

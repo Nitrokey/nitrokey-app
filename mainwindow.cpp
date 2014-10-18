@@ -1023,9 +1023,6 @@ void MainWindow::generateMenu()
     }
 
 // Setup the new menu
-
-
-
     if (cryptostick->isConnected == false){
         trayMenu->addAction("Crypto Stick not connected");
     }
@@ -1041,7 +1038,7 @@ void MainWindow::generateMenu()
         }
     }
 
-    // Add debug window ?
+// Add debug window ?
     if (TRUE == DebugWindowActive)
     {
         trayMenu->addAction(DebugAction);
@@ -2076,25 +2073,12 @@ void MainWindow::startAboutDialog()
         ResponseTask.NoStopWhenStatusOK ();
         ResponseTask.GetResponse ();
 
-
-/*
-    // Wait for response
-        Stick20ResponseDialog ResponseDialog(this);
-
-        ResponseDialog.NoStopWhenStatusOK ();
-        ResponseDialog.cryptostick=cryptostick;
-        ResponseDialog.exec();
-*/
+        UpdateDynamicMenuEntrys ();             // Use new data to update menu
     }
 
 // Show dialog
     dialog.exec();
 }
-
-
-
-
-
 
 
 /*******************************************************************************
@@ -2930,12 +2914,20 @@ int MainWindow::UpdateDynamicMenuEntrys (void)
         StickNotInitated  = FALSE;
     }
 
+/*
+  SDFillWithRandomChars_u8
+  Bit 0 = 0   SD card is *** not *** filled with random chars
+  Bit 0 = 1   SD card is filled with random chars
+*/
+
     if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01))
     {
+//        qDebug () << "UpdateDynamicMenuEntrys" << HID_Stick20Configuration_st.SDFillWithRandomChars_u8 << "SdCardNotErased = TRUE";
         SdCardNotErased  = TRUE;
     }
     else
     {
+//        qDebug () << "UpdateDynamicMenuEntrys" << HID_Stick20Configuration_st.SDFillWithRandomChars_u8  << "SdCardNotErased = FALSE";
         SdCardNotErased  = FALSE;
     }
 

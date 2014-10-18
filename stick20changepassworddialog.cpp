@@ -57,8 +57,12 @@ DialogChangePassword::DialogChangePassword(QWidget *parent) :
     ui->setupUi(this);
 
     ui->lineEdit_OldPW->setEchoMode(QLineEdit::Password);
+    ui->lineEdit_OldPW->setMaxLength(20);
     ui->lineEdit_NewPW_1->setEchoMode(QLineEdit::Password);
+    ui->lineEdit_NewPW_1->setMaxLength(20);
     ui->lineEdit_NewPW_2->setEchoMode(QLineEdit::Password);
+    ui->lineEdit_NewPW_2->setMaxLength(20);
+
 
     ui->lineEdit_OldPW->setFocus();
 }
@@ -96,15 +100,15 @@ void DialogChangePassword::InitData(void)
     {
         case STICK20_PASSWORD_KIND_USER :
             ui->label->setText("Change user PIN");
-            ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New PIN");
-            ui->label_4->setText("New PIN");
+            ui->label_2->setText("User PIN");
+            ui->label_3->setText("New user PIN");
+            ui->label_4->setText("New user PIN");
             break;
         case STICK20_PASSWORD_KIND_ADMIN :
             ui->label->setText("Change admin PIN");
             ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New PIN");
-            ui->label_4->setText("New PIN");
+            ui->label_3->setText("New admin PIN");
+            ui->label_4->setText("New admin PIN");
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
             ui->label->setText("Reset user PIN");
@@ -300,7 +304,7 @@ void DialogChangePassword::accept()
     }
 
 // Check the new length of password
-    if (STICK20_PASSOWRD_LEN <= strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
+    if (STICK20_PASSOWRD_LEN < strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
     {
         QMessageBox msgBox;
         QString OutputText;
