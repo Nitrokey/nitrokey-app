@@ -216,6 +216,9 @@ void Response::DebugResponse()
         case CMD_UNLOCK_USER_PASSOWRD :
             DebugAppendText ((char *)"         Last command        : CMD_UNLOCK_USER_PASSOWRD\n");
             break;
+        case CMD_LOCK_DEVICE :
+            DebugAppendText ((char *)"         Last command        : CMD_LOCK_DEVICE");
+            break;
 
         case STICK20_CMD_ENABLE_CRYPTED_PARI            :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_CRYPTED_PARI           \n");         break;
         case STICK20_CMD_DISABLE_CRYPTED_PARI           :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_DISABLE_CRYPTED_PARI          \n");         break;
