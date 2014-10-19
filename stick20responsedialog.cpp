@@ -680,11 +680,11 @@ void Stick20ResponseTask::checkStick20Status()
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     break;
                 case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE :
-                    ShowIconMessage ("Firmware is exported");
+                    ShowIconMessage ("Firmware exported successfully");
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     break;
                 case STICK20_CMD_GENERATE_NEW_KEYS :
-                    ShowIconMessage ("New keys are generated");
+                    ShowIconMessage ("New keys generated successfully");
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     break;
                 case STICK20_CMD_GET_DEVICE_STATUS              :
@@ -694,7 +694,7 @@ void Stick20ResponseTask::checkStick20Status()
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     {
                             QMessageBox msgBox;
-                            msgBox.setText("Storage successfully initialized with random data\nStick is restting\n");        // Dialogbox at end of very long running function
+                            msgBox.setText("Storage successfully initialized with random data.\nPress OK to reset the device.\n");        // Dialogbox at end of very long running function
                             msgBox.exec();
 
                     }

@@ -822,7 +822,7 @@ void MainWindow::checkConnection()
 
                 ret = dialog.exec();
 
-                msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Init keys\"");
+                msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\"");
                 ret = msgBox.exec();
             }
         }
@@ -1108,7 +1108,7 @@ void MainWindow::initActionsForStick20()
     Stick20ActionDestroyCryptedVolume = new QAction(tr("&Destroy encrypted data"), this);
     connect(Stick20ActionDestroyCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20DestroyCryptedVolume()));
 
-    Stick20ActionInitCryptedVolume = new QAction(tr("&Init keys"), this);
+    Stick20ActionInitCryptedVolume = new QAction(tr("&Initialize keys"), this);
     connect(Stick20ActionInitCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20DestroyCryptedVolume()));
 
     Stick20ActionFillSDCardWithRandomChars = new QAction(tr("&Initialize storage with random data"), this);
@@ -2709,7 +2709,7 @@ void MainWindow::startStick20DebugAction()
 
     ret = dialog.exec();
 
-    msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Init keys\"");
+    msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\"");
 //                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 //                msgBox.setDefaultButton(QMessageBox::Yes);
     ret = msgBox.exec();
