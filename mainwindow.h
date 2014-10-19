@@ -106,7 +106,7 @@ private:
     QAction *ActionAboutDialog;
     QAction *SecPasswordAction;
     QAction *Stick20SetupAction;
-
+    QAction *LockDeviceAction;
 
     QAction *Stick20ActionEnableCryptedVolume;
     QAction *Stick20ActionDisableCryptedVolume;
@@ -273,6 +273,8 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void startStick20SetupPasswordMatrix();
     void startStick20LockStickHardware();
     void startResetUserPassword ();
+    void startLockDeviceAction ();
+
     void on_PWS_ButtonClearSlot_clicked();
     void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
     void on_PWS_CheckBoxHideSecret_toggled(bool checked);

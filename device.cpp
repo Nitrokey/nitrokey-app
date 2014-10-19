@@ -1962,6 +1962,55 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
     return ERR_NOT_CONNECTED;
 }
 
+
+/*******************************************************************************
+
+  unlockUserPassword
+
+  Changes
+  Date      Author        Info
+  02.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::lockDevice (void)
+{
+    uint8_t data[29];
+    int res;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command (CMD_LOCK_DEVICE,data,0);
+
+        res=sendCommand(cmd);
+
+        if (res==-1)
+        {
+            return ERR_SENDING;
+        }
+        else                    //sending the command was successful
+        {
+            Sleep::msleep(500);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                return (TRUE);
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
+
 /*******************************************************************************
 
     Here starts the new commands for stick 2.0

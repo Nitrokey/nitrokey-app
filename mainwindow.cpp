@@ -1142,6 +1142,8 @@ void MainWindow::initActionsForStick20()
     Stick20ActionResetUserPassword = new QAction(tr("&Reset user PIN"), this);
     connect(Stick20ActionResetUserPassword, SIGNAL(triggered()), this, SLOT(startResetUserPassword()));
 
+    LockDeviceAction = new QAction(tr("&Lock Device"), this);
+    connect(LockDeviceAction, SIGNAL(triggered()), this, SLOT(startLockDeviceAction()));
 
 }
 
@@ -1413,8 +1415,10 @@ void MainWindow::generateMenuForStick20()
         }
     }
 
+    trayMenu->addAction(LockDeviceAction);
 
     trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+
     trayMenuSubConfigure->addAction(restoreActionStick20);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
@@ -2246,6 +2250,27 @@ void MainWindow::startStick20DisableHiddenVolume()
 
 }
 
+/*******************************************************************************
+
+  startLockDevice
+
+  Changes
+  Date      Author        Info
+  18.10.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::startLockDeviceAction()
+{
+    cryptostick->lockDevice ();
+
+    HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
+
+    UpdateDynamicMenuEntrys ();
+}
 
 /*******************************************************************************
 
