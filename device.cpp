@@ -1763,14 +1763,14 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
 
 *******************************************************************************/
 
-int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
+int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[])
 {
 
     int res;
     uint8_t data[50];
     uint32_t crc;
     memcpy(data,cardPassword,25);
-    memcpy(data+25,tempPasswrod,25);
+    memcpy(data+25,tempPassword,25);
 
 
     if (isConnected)
@@ -1796,7 +1796,7 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
             { //the response was for the last command
                 if (resp->lastCommandStatus==CMD_STATUS_OK)
                 {
-                    memcpy(userPassword,tempPasswrod,25);
+                    memcpy(userPassword,tempPassword,25);
                     validUserPassword=true;
                     return 0;
                 }
