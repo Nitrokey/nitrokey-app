@@ -73,7 +73,8 @@ class Response;
 #define CMD_GET_USER_PASSWORD_RETRY_COUNT   0x0F
 #define CMD_USER_AUTHORIZE                  0x10
 #define CMD_UNLOCK_USER_PASSOWRD            0x11
-
+#define CMD_CHANGE_USER_PIN                 0x11
+#define CMD_CHANGE_ADMIN_PIN                0x12
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
 #define CMD_GET_PW_SAFE_SLOT_NAME         0x61
@@ -153,12 +154,14 @@ enum comm_errors{
     ERR_STATUS_NOT_OK      = -4
 };
 
-
-
+// TODO STICK10
+#define STICK10_PASSWORD_LEN               
 #define STICK20_PASSOWRD_LEN               20
 #define STICK20_PASSWORD_KIND_USER          0
 #define STICK20_PASSWORD_KIND_ADMIN         1
 #define STICK20_PASSWORD_KIND_RESET_USER    2
+#define STICK10_PASSWORD_KIND_USER          3
+#define STICK10_PASSWORD_KIND_ADMIN         4
 
 
 #define STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ALL_VOL              0
