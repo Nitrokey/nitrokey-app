@@ -95,12 +95,14 @@ void DialogChangePassword::InitData(void)
     switch (PasswordKind)
     {
         case STICK20_PASSWORD_KIND_USER :
+        case STICK10_PASSWORD_KIND_USER :
             ui->label->setText("Change user PIN");
             ui->label_2->setText("Admin PIN");
             ui->label_3->setText("New PIN");
             ui->label_4->setText("New PIN");
             break;
         case STICK20_PASSWORD_KIND_ADMIN :
+        case STICK10_PASSWORD_KIND_ADMIN :
             ui->label->setText("Change admin PIN");
             ui->label_2->setText("Admin PIN");
             ui->label_3->setText("New PIN");
@@ -149,6 +151,7 @@ int DialogChangePassword::CheckResponse(bool NoStopFlag)
 
 *******************************************************************************/
 
+// TODO: stick10
 void DialogChangePassword::SendNewPassword(void)
 {
     int ret;
@@ -273,7 +276,7 @@ void DialogChangePassword::ResetUserPassword (void)
   13.08.13  RB              First review
 
 *******************************************************************************/
-
+//TODO: STICK10
 void DialogChangePassword::accept()
 {
 // Check the length of the old password
