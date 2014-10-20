@@ -107,6 +107,8 @@ private:
     QAction *SecPasswordAction;
     QAction *Stick20SetupAction;
 
+    QAction *Stick10ActionChangeUserPIN;
+    QAction *Stick10ActionChangeAdminPIN;
 
     QAction *Stick20ActionEnableCryptedVolume;
     QAction *Stick20ActionDisableCryptedVolume;
@@ -252,7 +254,8 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void startMatrixPasswordDialog();
     void startStick20Setup() ;
 
-
+    void startStick10ActionChangeUserPIN();
+    void startStick10ActionChangeAdminPIN();
 
     void startStick20EnableCryptedVolume();
     void startStick20DisableCryptedVolume();

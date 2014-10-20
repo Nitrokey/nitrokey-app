@@ -250,9 +250,16 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     restoreAction = new QAction(tr("&Configure OTP"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
+    Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), this);
+    connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeUserPIN()));
+    Stick10ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), this);
+    connect(Stick10ActionChangeAdminPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeAdminPIN()));
+
     restoreActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
     connect(restoreActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
+
+        
 
     DebugAction = new QAction(tr("&Debug"), this);
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
@@ -1337,7 +1344,12 @@ void MainWindow::generateMenuForStick10()
 
     generateMenuOTP ();
 
-    trayMenu->addAction(restoreAction);
+    trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+    trayMenuSubConfigure->addAction(restoreAction);
+    //trayMenu->addAction(restoreAction);
+    trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
+    trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
+
 }
 
 /*******************************************************************************
@@ -2295,6 +2307,63 @@ void MainWindow::startStick20EnableFirmwareUpdate()
         stick20SendCommand (STICK20_CMD_ENABLE_FIRMWARE_UPDATE,password);
     }
 }
+
+/*******************************************************************************
+
+  startStick10ActionChangeUserPIN
+
+  Changes
+  Date      Author        Info
+  20.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::startStick10ActionChangeUserPIN()
+{
+    DialogChangePassword dialog(this);
+
+    dialog.setModal (TRUE);
+
+    dialog.cryptostick        = cryptostick;
+
+    dialog.PasswordKind       = STICK10_PASSWORD_KIND_USER;
+
+    dialog.InitData ();
+    dialog.exec();
+}
+
+
+/*******************************************************************************
+
+  startStick10ActionChangeAdminPIN
+
+  Changes
+  Date      Author        Info
+  20.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+
+void MainWindow::startStick10ActionChangeAdminPIN()
+{
+    DialogChangePassword dialog(this);
+
+    dialog.setModal (TRUE);
+
+    dialog.cryptostick        = cryptostick;
+
+    dialog.PasswordKind       = STICK10_PASSWORD_KIND_USER;
+
+    dialog.InitData ();
+    dialog.exec();
+}
+
 
 /*******************************************************************************
 
