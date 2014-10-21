@@ -73,8 +73,8 @@ class Response;
 #define CMD_GET_USER_PASSWORD_RETRY_COUNT   0x0F
 #define CMD_USER_AUTHORIZE                  0x10
 #define CMD_UNLOCK_USER_PASSOWRD            0x11
-#define CMD_CHANGE_USER_PIN                 0x11
-#define CMD_CHANGE_ADMIN_PIN                0x12
+#define CMD_CHANGE_USER_PIN                 0x12
+#define CMD_CHANGE_ADMIN_PIN                0x13
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
 #define CMD_GET_PW_SAFE_SLOT_NAME         0x61

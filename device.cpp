@@ -1996,38 +1996,30 @@ int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
         memset(data,0,sizeof(data));
 
         if (-1 == res)
-            return -1;
+            return ERR_SENDING;
         else
-            return 0;
-        /*
-        {  //sending the command was successful
-            //return cmd->crc;
-            Sleep::msleep(1000);
+        {
+            Sleep::msleep(800);
             Response *resp=new Response();
             resp->getResponse(this);
 
-            if (crc==resp->lastCommandCRC)
-            { //the response was for the last command
-                if (resp->lastCommandStatus==CMD_STATUS_OK)
-                {
-                    memcpy(userPassword,tempPassword,25);
-                    validUserPassword=true;
+//            if (cmd->crc == resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
                     return 0;
-                }
-                else if (resp->lastCommandStatus==CMD_STATUS_WRONG_PASSWORD)
-                {
-                    return -3;
-                }
-
+                else
+                    return CMD_STATUS_WRONG_PASSWORD;
+                
             }
-
-        }*/
-
+/*            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+*/
+        }
    }
 
-    return -2;
-
-    
+   return ERR_NOT_CONNECTED;
 }
 
 /*******************************************************************************
@@ -2058,41 +2050,35 @@ int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
         res=sendCommand(cmd);
         crc=cmd->crc;
 
-        //remove the card password from memory
+        //remove the user password from memory
         delete cmd;
         memset(data,0,sizeof(data));
 
-        if (res==-1)
-            return -1;
+        if (-1 == res)
+            return ERR_SENDING;
         else
-            return 0;
-        /*
-            //sending the command was successful
-            //return cmd->crc;
-            Sleep::msleep(1000);
+        {
+            Sleep::msleep(800);
             Response *resp=new Response();
             resp->getResponse(this);
 
-            if (crc==resp->lastCommandCRC)
-            { //the response was for the last command
-                if (resp->lastCommandStatus==CMD_STATUS_OK)
-                {
-                    memcpy(userPassword,tempPassword,25);
-                    validUserPassword=true;
+//            if (cmd->crc == resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
                     return 0;
-                }
-                else if (resp->lastCommandStatus==CMD_STATUS_WRONG_PASSWORD)
-                {
-                    return -3;
-                }
-
+                else
+                    return CMD_STATUS_WRONG_PASSWORD;
+                
             }
-
-        }*/
-
+/*           else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+*/
+        }
    }
 
-    return -2;
+   return ERR_NOT_CONNECTED;
 }
 
 

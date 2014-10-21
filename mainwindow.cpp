@@ -2358,7 +2358,7 @@ void MainWindow::startStick10ActionChangeAdminPIN()
 
     dialog.cryptostick        = cryptostick;
 
-    dialog.PasswordKind       = STICK10_PASSWORD_KIND_USER;
+    dialog.PasswordKind       = STICK10_PASSWORD_KIND_ADMIN;
 
     dialog.InitData ();
     dialog.exec();

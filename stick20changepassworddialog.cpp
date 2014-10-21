@@ -97,16 +97,16 @@ void DialogChangePassword::InitData(void)
         case STICK20_PASSWORD_KIND_USER :
         case STICK10_PASSWORD_KIND_USER :
             ui->label->setText("Change user PIN");
-            ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New PIN");
-            ui->label_4->setText("New PIN");
+            ui->label_2->setText("Old user PIN");
+            ui->label_3->setText("New user PIN");
+            ui->label_4->setText("New user PIN");
             break;
         case STICK20_PASSWORD_KIND_ADMIN :
         case STICK10_PASSWORD_KIND_ADMIN :
             ui->label->setText("Change admin PIN");
             ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New PIN");
-            ui->label_4->setText("New PIN");
+            ui->label_3->setText("New admin PIN");
+            ui->label_4->setText("New admin PIN");
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
             ui->label->setText("Reset user PIN");
@@ -229,6 +229,7 @@ void DialogChangePassword::Stick10ChangePassword(void)
     int ret;
     int password_length;
     QByteArray PasswordString;
+    QMessageBox   msgBox;          
 
     password_length = STICK10_PASSWORD_LEN;
     unsigned char old_pin[password_length + 1];
@@ -248,14 +249,11 @@ void DialogChangePassword::Stick10ChangePassword(void)
     if ( PasswordKind == STICK10_PASSWORD_KIND_ADMIN )
         ret = cryptostick->changeAdminPin (old_pin, new_pin);
         
-    if ((int)true == ret)
-    {
-        CheckResponse (FALSE);
-    }
-    else
-    {
-        // Todo
-        return;
+    msgBox.setText(tr("%1").arg(ret));
+    msgBox.exec();
+    if (ret == CMD_STATUS_WRONG_PASSWORD) {
+        msgBox.setText(tr("Wrong password."));
+        msgBox.exec();
     }
 }
 
@@ -335,7 +333,7 @@ void DialogChangePassword::accept()
         QMessageBox msgBox;
         QString OutputText;
 
-        OutputText = "The minium length of the old password is " + QString("%1").arg(6)+ "chars";
+        OutputText = "The minimum length of the old password is " + QString("%1").arg(6)+ "chars";
 
         msgBox.setText(OutputText);
         msgBox.exec();
@@ -347,7 +345,7 @@ void DialogChangePassword::accept()
     {
         QMessageBox msgBox;
 
-        msgBox.setText("The new password entrys are not the same");
+        msgBox.setText("The new password entries are not the same");
         msgBox.exec();
         return;
     }
@@ -371,7 +369,7 @@ void DialogChangePassword::accept()
         QMessageBox msgBox;
         QString OutputText;
 
-        OutputText = "The minium length of a password is " + QString("%1").arg(6)+ "chars";
+        OutputText = "The minimum length of a password is " + QString("%1").arg(6)+ "chars";
 
         msgBox.setText(OutputText);
         msgBox.exec();
