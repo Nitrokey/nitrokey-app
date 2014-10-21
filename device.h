@@ -155,7 +155,7 @@ enum comm_errors{
 };
 
 // TODO STICK10
-#define STICK10_PASSWORD_LEN               
+#define STICK10_PASSWORD_LEN               20
 #define STICK20_PASSOWRD_LEN               20
 #define STICK20_PASSWORD_KIND_USER          0
 #define STICK20_PASSWORD_KIND_ADMIN         1
@@ -377,6 +377,8 @@ public:
     int userAuthorize(Command *authorizedCmd);
 
     int unlockUserPassword (uint8_t *adminPassword);
+    int changeUserPin (uint8_t *old_pin, uint8_t* new_pin);
+    int changeAdminPin (uint8_t *old_pin, uint8_t* new_pin);
 
     int  activStick20;
     bool waitForAckStick20;

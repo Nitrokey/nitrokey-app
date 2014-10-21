@@ -1962,6 +1962,140 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
     return ERR_NOT_CONNECTED;
 }
 
+
+/*******************************************************************************
+
+  changeUserPin
+
+  Changes
+  Date      Author        Info
+  20.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
+{ 
+    int res;
+    uint8_t data[50];
+    uint32_t crc;
+    memcpy(data, old_pin, 25);
+    memcpy(data+25, new_pin, 25);
+
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_CHANGE_USER_PIN, data, 50);
+        res=sendCommand(cmd);
+        crc=cmd->crc;
+
+        //remove the user password from memory
+        delete cmd;
+        memset(data,0,sizeof(data));
+
+        if (-1 == res)
+            return -1;
+        else
+            return 0;
+        /*
+        {  //sending the command was successful
+            //return cmd->crc;
+            Sleep::msleep(1000);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (crc==resp->lastCommandCRC)
+            { //the response was for the last command
+                if (resp->lastCommandStatus==CMD_STATUS_OK)
+                {
+                    memcpy(userPassword,tempPassword,25);
+                    validUserPassword=true;
+                    return 0;
+                }
+                else if (resp->lastCommandStatus==CMD_STATUS_WRONG_PASSWORD)
+                {
+                    return -3;
+                }
+
+            }
+
+        }*/
+
+   }
+
+    return -2;
+
+    
+}
+
+/*******************************************************************************
+
+  changeAdminPin
+
+  Changes
+  Date      Author        Info
+  20.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
+{ 
+    int res;
+    uint8_t data[50];
+    uint32_t crc;
+    memcpy(data, old_pin, 25);
+    memcpy(data+25, new_pin, 25);
+
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_CHANGE_ADMIN_PIN, data, 50);
+        res=sendCommand(cmd);
+        crc=cmd->crc;
+
+        //remove the card password from memory
+        delete cmd;
+        memset(data,0,sizeof(data));
+
+        if (res==-1)
+            return -1;
+        else
+            return 0;
+        /*
+            //sending the command was successful
+            //return cmd->crc;
+            Sleep::msleep(1000);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (crc==resp->lastCommandCRC)
+            { //the response was for the last command
+                if (resp->lastCommandStatus==CMD_STATUS_OK)
+                {
+                    memcpy(userPassword,tempPassword,25);
+                    validUserPassword=true;
+                    return 0;
+                }
+                else if (resp->lastCommandStatus==CMD_STATUS_WRONG_PASSWORD)
+                {
+                    return -3;
+                }
+
+            }
+
+        }*/
+
+   }
+
+    return -2;
+}
+
+
 /*******************************************************************************
 
     Here starts the new commands for stick 2.0
