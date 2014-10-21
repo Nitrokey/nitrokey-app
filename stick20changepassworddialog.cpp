@@ -151,13 +151,14 @@ int DialogChangePassword::CheckResponse(bool NoStopFlag)
 
 *******************************************************************************/
 
-// TODO: stick10
 void DialogChangePassword::SendNewPassword(void)
 {
     int ret;
+    int password_length;
     QByteArray PasswordString;
 
-    unsigned char Data[STICK20_PASSOWRD_LEN+2];
+    password_length = STICK20_PASSOWRD_LEN;
+    unsigned char Data[password_length + 2];
 
 // Set kind of password
     switch (PasswordKind)
@@ -176,9 +177,11 @@ void DialogChangePassword::SendNewPassword(void)
 // Send old password
     PasswordString = ui->lineEdit_OldPW->text().toLatin1();
 
-    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
-    Data[STICK20_PASSOWRD_LEN+1] = 0;
+        
+    strncpy ( (char*)&Data[1], PasswordString.data(), password_length);
+    Data[password_length+1] = 0;
 
+    
     ret = cryptostick->stick20SendPassword (Data);
 
     if ((int)true == ret)
@@ -199,6 +202,52 @@ void DialogChangePassword::SendNewPassword(void)
 
     ret = cryptostick->stick20SendNewPassword (Data);
 
+    if ((int)true == ret)
+    {
+        CheckResponse (FALSE);
+    }
+    else
+    {
+        // Todo
+        return;
+    }
+}
+
+
+/*******************************************************************************
+
+  Stick10SendNewPassword
+
+  Reviews
+  Date      Reviewer        Info
+  21.10.13  GG              Created function
+
+*******************************************************************************/
+
+void DialogChangePassword::Stick10ChangePassword(void)
+{
+    int ret;
+    int password_length;
+    QByteArray PasswordString;
+
+    password_length = STICK10_PASSWORD_LEN;
+    unsigned char old_pin[password_length + 1];
+    unsigned char new_pin[password_length + 1];
+    memset(old_pin, 0, password_length + 1);
+    memset(new_pin, 0, password_length + 1);
+    
+    PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+    strncpy ( (char*)old_pin, PasswordString.data(), password_length);
+
+    PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
+    strncpy ( (char*)new_pin, PasswordString.data(), password_length);
+    
+    // Change password
+    if ( PasswordKind == STICK10_PASSWORD_KIND_USER ) 
+        ret = cryptostick->changeUserPin (old_pin, new_pin);
+    if ( PasswordKind == STICK10_PASSWORD_KIND_ADMIN )
+        ret = cryptostick->changeAdminPin (old_pin, new_pin);
+        
     if ((int)true == ret)
     {
         CheckResponse (FALSE);
@@ -275,8 +324,9 @@ void DialogChangePassword::ResetUserPassword (void)
   Date      Reviewer        Info
   13.08.13  RB              First review
 
+*
 *******************************************************************************/
-//TODO: STICK10
+
 void DialogChangePassword::accept()
 {
 // Check the length of the old password
@@ -334,6 +384,10 @@ void DialogChangePassword::accept()
         case STICK20_PASSWORD_KIND_USER :
         case STICK20_PASSWORD_KIND_ADMIN :
             SendNewPassword();
+            break;
+        case STICK10_PASSWORD_KIND_USER :
+        case STICK10_PASSWORD_KIND_ADMIN :
+            Stick10ChangePassword();
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
             ResetUserPassword ();
