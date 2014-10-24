@@ -87,6 +87,9 @@ class Response;
 #define CMD_PW_SAFE_SEND_DATA             0x69
 #define CMD_SD_CARD_HIGH_WATERMARK        0x70
 
+
+#define CMD_DETECT_SC_AES   0x71
+
 #define PWS_SEND_PASSWORD     0
 #define PWS_SEND_LOGINNAME    1
 #define PWS_SEND_TAB          2
@@ -144,6 +147,7 @@ class Response;
 #define CMD_STATUS_NOT_AUTHORIZED      5
 #define CMD_STATUS_TIMESTAMP_WARNING   6
 #define CMD_STATUS_NO_NAME_ERROR       7
+#define CMD_STATUS_NOT_SUPPORTED       8
 
 enum comm_errors{
     ERR_NO_ERROR           =  0,
