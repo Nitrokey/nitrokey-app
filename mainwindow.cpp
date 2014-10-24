@@ -2150,6 +2150,17 @@ void MainWindow::startStick20EnableCryptedVolume()
     uint8_t password[40];
     bool           ret;
 
+    if (TRUE == HiddenVolumeActive)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("This activity locks your hidden volume. Do you want to proceed?");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        ret = msgBox.exec();
+        if (QMessageBox::No == ret)
+            return;
+    }
+
     PasswordDialog dialog(MatrixInputActive,this);
     dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
     dialog.cryptostick = cryptostick;
@@ -2212,6 +2223,13 @@ void MainWindow::startStick20EnableHiddenVolume()
         return;
     }
 
+    QMessageBox msgBox;
+    msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    ret = msgBox.exec();
+    if (QMessageBox::No == ret)
+        return;
 
     PasswordDialog dialog(MatrixInputActive,this);
     dialog.init((char *)"Enter password for hidden volume",-1);
@@ -2274,7 +2292,7 @@ void MainWindow::startLockDeviceAction()
 
 /*******************************************************************************
 
-  startStick20EnableCryptedVolume
+  startStick20EnableFirmwareUpdate
 
   Changes
   Date      Author        Info
