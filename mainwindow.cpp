@@ -2156,8 +2156,7 @@ void MainWindow::startStick20EnableCryptedVolume()
         msgBox.setText("This activity locks your hidden volume. Do you want to proceed?");
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
-        ret = msgBox.exec();
-        if (QMessageBox::No == ret)
+        if (QMessageBox::No == msgBox.exec())
             return;
     }
 
@@ -2226,9 +2225,8 @@ void MainWindow::startStick20EnableHiddenVolume()
     QMessageBox msgBox;
     msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::No);
-    ret = msgBox.exec();
-    if (QMessageBox::No == ret)
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    if (QMessageBox::No == msgBox.exec())
         return;
 
     PasswordDialog dialog(MatrixInputActive,this);
@@ -2487,7 +2485,7 @@ void MainWindow::startStick20DestroyCryptedVolume()
 
 /*******************************************************************************
 
-  startStick20EnableCryptedVolume
+  startStick20FillSDCardWithRandomChars
 
   Changes
   Date      Author        Info
