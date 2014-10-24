@@ -1330,11 +1330,27 @@ void MainWindow::generateMenuOTP()
 
 void MainWindow::generateMenuForStick10()
 {
-// Hide tab for password safe for stick 1.x
-    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = password safe
+    // Hide tab for password safe for stick 1.x
+//    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = password safe
+
+    generateMenuPasswordSafe ();
+    trayMenu->addSeparator();
+
+/*
+    if (FALSE == StickNotInitated)
+    {
+        // Enable tab for password safe for stick 2
+        if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+        {
+            ui->tabWidget->addTab(ui->tab_3,"Password Safe");
+        }
+        ui->pushButton_StaticPasswords->show ();
+
+        // Setup entrys for password safe
+    }
 
     ui->pushButton_StaticPasswords->hide ();
-
+*/
     generateMenuOTP ();
 
     trayMenu->addAction(restoreAction);
