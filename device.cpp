@@ -1962,6 +1962,61 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
     return ERR_NOT_CONNECTED;
 }
 
+
+/*******************************************************************************
+
+  isAesSupported
+
+  Changes
+  Date      Author        Info
+  27.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::isAesSupported(uint8_t* password)
+{
+    int res;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command (CMD_DETECT_SC_AES, password, 30);
+
+        res = sendCommand(cmd);
+
+        if (-1 == res)
+        {
+            return ERR_SENDING;
+        }
+        else                    //sending the command was successful
+        {
+            Sleep::msleep(1000);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc == resp->lastCommandCRC)
+            {
+                if (CMD_STATUS_OK == resp->lastCommandStatus) {
+                    validUserPassword = true;
+                    return 0;
+                }
+                else {
+                    return resp->lastCommandStatus;
+                }
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
+
+
 /*******************************************************************************
 
     Here starts the new commands for stick 2.0
