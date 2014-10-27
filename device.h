@@ -302,6 +302,7 @@ public:
     int passwordSafeEnable (char *password);
     int passwordSafeInitKey (void);
     int passwordSafeSendSlotDataViaHID (int Slot,int Kind);
+    int isAesSupported(uint8_t* password);
 
     uint8_t passwordSafeUnlocked;
     uint8_t passwordSafeStatus[PWS_SLOT_COUNT];
