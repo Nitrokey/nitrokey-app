@@ -66,7 +66,6 @@ Response::Response()
 
 
 *******************************************************************************/
-
 void Response::DebugResponse()
 {
     char text[1000];
@@ -111,6 +110,12 @@ void Response::DebugResponse()
             break;
         case CMD_STATUS_NO_NAME_ERROR :
             DebugAppendText ((char *)"         Device status       : CMD_STATUS_NO_NAME_ERROR\n");
+            break;
+        case CMD_STATUS_NOT_SUPPORTED:
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_NOT_SUPPORTED\n");
+            break;
+        case CMD_STATUS_UNKNOWN_COMMAND:
+            DebugAppendText ((char *)"         Device status       : CMD_STATUS_UNKNOWN_COMMAND\n");
             break;
 
         default:
@@ -216,6 +221,9 @@ void Response::DebugResponse()
         case CMD_UNLOCK_USER_PASSOWRD :
             DebugAppendText ((char *)"         Last command        : CMD_UNLOCK_USER_PASSOWRD\n");
             break;
+        case CMD_DETECT_SC_AES :
+            DebugAppendText ((char *)"         Last command        : CMD_DETECT_SC_AES\n");
+            break;
 
         case STICK20_CMD_ENABLE_CRYPTED_PARI            :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_CRYPTED_PARI           \n");         break;
         case STICK20_CMD_DISABLE_CRYPTED_PARI           :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_DISABLE_CRYPTED_PARI          \n");         break;
@@ -293,6 +301,12 @@ void Response::DebugResponse()
             break;
         case CMD_STATUS_NO_NAME_ERROR :
             DebugAppendText ((char *)"         Last command status : CMD_STATUS_NO_NAME_ERROR\n");
+            break;
+        case CMD_STATUS_NOT_SUPPORTED:
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_NOT_SUPPORTED\n");
+            break;
+        case CMD_STATUS_UNKNOWN_COMMAND:
+            DebugAppendText ((char *)"         Last command status : CMD_STATUS_UNKNOWN_COMMAND\n");
             break;
         default:
             DebugAppendText ((char *)"         Last command status : Unknown\n");
