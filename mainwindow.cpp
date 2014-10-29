@@ -4453,7 +4453,9 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
     bool    ret;
     int     ret_s32;
 
+    QMessageBox msgBox;
     PasswordDialog dialog(FALSE,this);
+    cryptostick->getUserPasswordRetryCount();
     dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
     dialog.cryptostick = cryptostick;
 
@@ -4463,30 +4465,56 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
     {
         dialog.getPassword ((char*)password);
 
-        ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
-        if (ERR_NO_ERROR != ret_s32)
+        ret_s32 = cryptostick->isAesSupported( (uint8_t*)&password[1] );
+
+        if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't unlock password safe.");
-            msgBox.exec();
-        }
-        else
-        {
-            if (TRUE == trayIcon->supportsMessages ())
+            cryptostick->passwordSafeAvailable = TRUE;
+            trayMenu->actions().at(0)->setEnabled(TRUE);
+
+            // Continue to unlocking password safe
+            ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+            if (ERR_NO_ERROR != ret_s32)
             {
-                trayIcon->showMessage ("Crypto Stick Utility","Password Safe unlocked successfully.");
+                msgBox.setText("Can't unlock password safe.");
+                msgBox.exec();
             }
             else
             {
-                QMessageBox msgBox;
-                msgBox.setText("Password safe is enabled");
-                msgBox.exec();
+                if (TRUE == trayIcon->supportsMessages ())
+                {
+                    trayIcon->showMessage ("Crypto Stick Utility","Password Safe unlocked successfully.");
+                }
+                else
+                {
+                    msgBox.setText("Password safe is enabled");
+                    msgBox.exec();
+                }
+
+                SetupPasswordSafeConfig ();
+                generateMenu ();
             }
-
-            SetupPasswordSafeConfig ();
-            generateMenu ();
         }
-
+        else
+        {
+            msgBox.setText("-----------");
+            if (CMD_STATUS_NOT_SUPPORTED == ret_s32 ) // AES NOT supported
+            {
+                // Mark password safe as disabled feature
+                cryptostick->passwordSafeAvailable = FALSE;
+                trayMenu->actions().at(0)->setEnabled(FALSE);
+                msgBox.setText("Password safe is not supported by this device");
+            }
+            else
+            {
+                if (CMD_STATUS_WRONG_PASSWORD == ret_s32) // Wrong password
+                {
+                    msgBox.setText("Wrong user password.");
+                }
+            }
+            msgBox.exec();
+            return;
+        }
     }
 }
 
