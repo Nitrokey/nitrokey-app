@@ -4164,6 +4164,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked()
         msgBox.exec();
     }
 
+    generateMenu();
 }
 
 /*******************************************************************************
