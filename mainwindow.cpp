@@ -4474,6 +4474,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
 
             // Continue to unlocking password safe
             ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+
             if (ERR_NO_ERROR != ret_s32)
             {
                 msgBox.setText("Can't unlock password safe.");
@@ -4497,22 +4498,22 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         }
         else
         {
-            msgBox.setText("-----------");
             if (CMD_STATUS_NOT_SUPPORTED == ret_s32 ) // AES NOT supported
             {
                 // Mark password safe as disabled feature
                 cryptostick->passwordSafeAvailable = FALSE;
                 trayMenu->actions().at(0)->setEnabled(FALSE);
                 msgBox.setText("Password safe is not supported by this device");
+                msgBox.exec();
             }
             else
             {
                 if (CMD_STATUS_WRONG_PASSWORD == ret_s32) // Wrong password
                 {
                     msgBox.setText("Wrong user password.");
+                    msgBox.exec();
                 }
             }
-            msgBox.exec();
             return;
         }
     }
