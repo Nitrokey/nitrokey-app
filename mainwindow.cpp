@@ -1028,6 +1028,7 @@ void MainWindow::generateMenu()
 
     if (cryptostick->isConnected == false){
         trayMenu->addAction("Crypto Stick not connected");
+        cryptostick->passwordSafeAvailable = true;
     }
     else{
         if (false == cryptostick->activStick20)
@@ -1038,6 +1039,7 @@ void MainWindow::generateMenu()
         else {
             // Stick 20 is connected
             generateMenuForStick20 ();
+            cryptostick->passwordSafeAvailable = true;
         }
     }
 
@@ -4347,6 +4349,12 @@ void MainWindow::generateMenuPasswordSafe()
     {
         QString actionName("Unlock password safe");
         trayMenu->addAction(actionName,this,SLOT(PWS_Clicked_EnablePWSAccess()));
+
+        if(true == cryptostick->passwordSafeAvailable)
+            trayMenu->actions().at(0)->setEnabled(true);
+        else
+            trayMenu->actions().at(0)->setEnabled(false);
+
         return;
     }
 
