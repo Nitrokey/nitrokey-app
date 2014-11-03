@@ -81,6 +81,7 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
 
 // Vars for password safe
     passwordSafeUnlocked = FALSE;
+    passwordSafeAvailable = TRUE;
     memset(passwordSafeStatusDisplayed,0,PWS_SLOT_COUNT);
 
     for (i=0;i<PWS_SLOT_COUNT;i++)
@@ -173,6 +174,8 @@ int Device::checkConnection()
             HOTP_SlotCount = HOTP_SLOT_COUNT;       // For stick 1.0
             TOTP_SlotCount = TOTP_SLOT_COUNT;
 
+            passwordSafeUnlocked = FALSE;
+
             // stick 20 with no OTP
             if (true == activStick20)
             {
@@ -186,7 +189,6 @@ int Device::checkConnection()
 
         return 0;
     }
-
 }
 
 
@@ -275,7 +277,7 @@ int Device::sendCommand(Command *cmd)
             int i;
             static int Counter = 0;
 
-            sprintf(text,"%6d :sendCommand0: ",Counter);
+            sprintf(text,"%6d :sendCommand0: ", Counter);
             Counter++;
             DebugAppendText (text);
             for (i=0;i<=64;i++)
@@ -1296,6 +1298,7 @@ int Device::setPasswordSafeSlotData_1 (int Slot,uint8_t *Name,uint8_t *Password)
 
             if (cmd->crc==resp->lastCommandCRC)
             {
+                  return ERR_NO_ERROR;
 //                passwordRetryCount=resp->data[0];
             }
             else
@@ -1339,6 +1342,7 @@ int Device::setPasswordSafeSlotData_2 (int Slot,uint8_t *LoginName)
 
         if (cmd->crc == resp->lastCommandCRC)
         {
+              return ERR_NO_ERROR;
 //            passwordRetryCount=resp->data[0];
         }
         else
@@ -1383,6 +1387,7 @@ int Device::passwordSafeEraseSlot (int Slot)
 
             if (cmd->crc==resp->lastCommandCRC)
             {
+                return resp->lastCommandStatus;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                     return (ERR_NO_ERROR);
@@ -1429,12 +1434,13 @@ int Device::passwordSafeEnable (char *password)
             return ERR_SENDING;
         else
         {  //sending the command was successful
-            Sleep::msleep(500);
+            Sleep::msleep(1500);
             Response *resp=new Response();
             resp->getResponse(this);
 
             if (cmd->crc==resp->lastCommandCRC)
             {
+
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                     passwordSafeUnlocked = TRUE;
@@ -1447,7 +1453,8 @@ int Device::passwordSafeEnable (char *password)
                     {
                         HID_Stick20Configuration_st.UserPwRetryCount--;
                     }
-                    return (ERR_STATUS_NOT_OK);
+                    return resp->lastCommandStatus;
+                    // return (ERR_STATUS_NOT_OK);
                 }
             }
             else
@@ -1982,7 +1989,7 @@ int Device::isAesSupported(uint8_t* password)
 
     if (isConnected)
     {
-        Command *cmd=new Command (CMD_DETECT_SC_AES, password, 30);
+        Command *cmd=new Command (CMD_DETECT_SC_AES, password, strlen((const char*)password));
 
         res = sendCommand(cmd);
 
@@ -1992,19 +1999,16 @@ int Device::isAesSupported(uint8_t* password)
         }
         else                    //sending the command was successful
         {
-            Sleep::msleep(1000);
+            Sleep::msleep(2000);
             Response *resp=new Response();
             resp->getResponse(this);
 
             if (cmd->crc == resp->lastCommandCRC)
             {
                 if (CMD_STATUS_OK == resp->lastCommandStatus) {
-                    validUserPassword = true;
-                    return 0;
+ //                   validUserPassword = true;
                 }
-                else {
-                    return resp->lastCommandStatus;
-                }
+                return resp->lastCommandStatus;
             }
             else
             {

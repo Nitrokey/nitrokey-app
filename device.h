@@ -86,9 +86,7 @@ class Response;
 #define CMD_PW_SAFE_INIT_KEY              0x68
 #define CMD_PW_SAFE_SEND_DATA             0x69
 #define CMD_SD_CARD_HIGH_WATERMARK        0x70
-
-
-#define CMD_DETECT_SC_AES   0x71
+#define CMD_DETECT_SC_AES                 0x71
 
 #define PWS_SEND_PASSWORD     0
 #define PWS_SEND_LOGINNAME    1
@@ -148,6 +146,7 @@ class Response;
 #define CMD_STATUS_TIMESTAMP_WARNING   6
 #define CMD_STATUS_NO_NAME_ERROR       7
 #define CMD_STATUS_NOT_SUPPORTED       8
+#define CMD_STATUS_UNKNOWN_COMMAND     9
 
 enum comm_errors{
     ERR_NO_ERROR           =  0,
@@ -305,6 +304,7 @@ public:
     int isAesSupported(uint8_t* password);
 
     uint8_t passwordSafeUnlocked;
+    uint8_t passwordSafeAvailable;
     uint8_t passwordSafeStatus[PWS_SLOT_COUNT];
     uint8_t passwordSafeStatusDisplayed[PWS_SLOT_COUNT];
     uint8_t passwordSafeSlotNames[PWS_SLOT_COUNT][PWS_SLOTNAME_LENGTH+1];
