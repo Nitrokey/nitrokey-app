@@ -1353,7 +1353,10 @@ void MainWindow::generateMenuForStick10()
 */
     generateMenuOTP ();
 
-    trayMenu->addAction(restoreAction);
+    if (TRUE == cryptostick->passwordSafeAvailable)
+        trayMenu->addAction(restoreActionStick20);
+    else
+        trayMenu->addAction(restoreAction);
 }
 
 /*******************************************************************************
@@ -4494,6 +4497,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
 
                 SetupPasswordSafeConfig ();
                 generateMenu ();
+                ui->tabWidget->setTabEnabled(3, 1);
             }
         }
         else
@@ -4505,6 +4509,8 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
                 trayMenu->actions().at(0)->setEnabled(FALSE);
                 msgBox.setText("Password safe is not supported by this device");
                 msgBox.exec();
+                generateMenu ();
+                ui->tabWidget->setTabEnabled(3, 0);
             }
             else
             {
