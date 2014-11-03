@@ -4117,13 +4117,16 @@ void MainWindow::SetupPasswordSafeConfig (void)
 void MainWindow::on_PWS_ButtonClearSlot_clicked()
 {
     int Slot;
-    int ret;
+    unsigned int ret;
+    QMessageBox msgBox;
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
     if (0 != cryptostick->passwordSafeSlotNames[Slot][0])      // Is slot active ?
     {
         ret = cryptostick->passwordSafeEraseSlot(Slot);
+
+
         if (ERR_NO_ERROR == ret)
         {
             ui->PWS_EditSlotName->setText("");
@@ -4135,14 +4138,12 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked()
         }
         else
         {
-            QMessageBox msgBox;
             msgBox.setText("Can't clear slot.");
             msgBox.exec();
         }
     }
     else
     {
-        QMessageBox msgBox;
         msgBox.setText("Slot is erased already.");
         msgBox.exec();
     }
@@ -4233,7 +4234,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     uint8_t SlotName[PWS_SLOTNAME_LENGTH+1];
     uint8_t LoginName[PWS_LOGINNAME_LENGTH+1];
     uint8_t Password[PWS_PASSWORD_LENGTH+1];
-
+    QMessageBox msgBox;
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
@@ -4241,7 +4242,6 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     SlotName[PWS_SLOTNAME_LENGTH] = 0;
     if (0 == strlen ((char*)SlotName))
     {
-        QMessageBox msgBox;
         msgBox.setText("Please enter a slotname.");
         msgBox.exec();
         return;
@@ -4254,23 +4254,23 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     Password[PWS_PASSWORD_LENGTH] = 0;
     if (0 == strlen ((char*)Password))
     {
-        QMessageBox msgBox;
         msgBox.setText("Please enter a password.");
         msgBox.exec();
         return;
     }
 
     ret = cryptostick->setPasswordSafeSlotData_1 (Slot,(uint8_t*)SlotName,(uint8_t*)Password);
-    if (ERR_NO_ERROR == ret)
+    if (ERR_NO_ERROR != ret)
     {
+        msgBox.setText(tr("Can't save slot. %1").arg(ret));
+        msgBox.exec();
         return;
     }
 
     ret = cryptostick->setPasswordSafeSlotData_2 (Slot,(uint8_t*)LoginName);
-    if (ERR_NO_ERROR == ret)
+    if (ERR_NO_ERROR != ret)
     {
-        QMessageBox msgBox;
-        msgBox.setText("Can't save slot.");
+        msgBox.setText(tr("Can't save slot. %1").arg(ret));
         msgBox.exec();
         return;
     }
@@ -5047,7 +5047,7 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
   Date      Reviewer        Info
 
 *******************************************************************************/
-
+/*
 void MainWindow::on_PWS_ButtonEnable_clicked()
 {
     uint8_t password[40];
@@ -5080,7 +5080,7 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
 
     }
 }
-
+*/
 
 /*******************************************************************************
 

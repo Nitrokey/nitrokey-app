@@ -283,7 +283,7 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_pushButton_GotoGenOTP_clicked();
     void on_PWS_ButtonCreatePW_clicked();
     void on_PWS_ButtonSaveSlot_clicked();
-    void on_PWS_ButtonEnable_clicked();
+//    void on_PWS_ButtonEnable_clicked();
     void on_counterEdit_editingFinished();
 };
 
