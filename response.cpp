@@ -224,6 +224,9 @@ void Response::DebugResponse()
         case CMD_DETECT_SC_AES :
             DebugAppendText ((char *)"         Last command        : CMD_DETECT_SC_AES\n");
             break;
+        case CMD_NEW_AES_KEY :
+            DebugAppendText ((char *)"         Last command        : CMD_NEW_AES_KEY:\n");
+            break;
 
         case STICK20_CMD_ENABLE_CRYPTED_PARI            :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_CRYPTED_PARI           \n");         break;
         case STICK20_CMD_DISABLE_CRYPTED_PARI           :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_DISABLE_CRYPTED_PARI          \n");         break;

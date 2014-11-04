@@ -253,6 +253,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     restoreActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
     connect(restoreActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
+    destroyPasswordSafeActionStick10 = new QAction(tr("&Destroy password safe"), this);
+    connect(destroyPasswordSafeActionStick10, SIGNAL(triggered()), this, SLOT( destroyPasswordSafeStick10()));
 
     DebugAction = new QAction(tr("&Debug"), this);
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
@@ -1356,7 +1358,11 @@ void MainWindow::generateMenuForStick10()
     generateMenuOTP ();
 
     if (TRUE == cryptostick->passwordSafeAvailable)
-        trayMenu->addAction(restoreActionStick20);
+    {    
+        trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+        trayMenuSubConfigure->addAction(restoreActionStick20);
+        trayMenuSubConfigure->addAction( destroyPasswordSafeActionStick10);
+    }
     else
         trayMenu->addAction(restoreAction);
 }
@@ -1462,7 +1468,7 @@ void MainWindow::generateMenuForStick20()
         trayMenuSubConfigure->addAction(Stick20ActionSetupPasswordMatrix);
     }
 
-    trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume       );
+    trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
 //    trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus             );
 
 
@@ -2030,6 +2036,55 @@ void MainWindow::startConfiguration()
     }
 }
 
+
+/*******************************************************************************
+
+  destroyPasswordSafeStick10
+
+  Reviews
+  Date      Reviewer        Info
+  03.1.14  GG              First review
+
+*******************************************************************************/
+void MainWindow::destroyPasswordSafeStick10()
+{
+    uint8_t password[40];
+    bool    ret;
+    int     ret_s32;
+
+    QMessageBox msgBox;
+    PasswordDialog dialog(FALSE,this);
+    cryptostick->getUserPasswordRetryCount();
+    dialog.init((char *)"Enter admin PIN", HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.cryptostick = cryptostick;
+
+    ret = dialog.exec();
+
+    if (Accepted == ret)
+    {
+        dialog.getPassword ((char*)password);
+
+        ret_s32 = cryptostick->buildAesKey( (uint8_t*)&(password[1]) );
+
+        if (CMD_STATUS_OK == ret_s32) 
+        {
+            msgBox.setText("AES key generated");
+            msgBox.exec();
+        }
+        else
+        {
+            if ( CMD_STATUS_WRONG_PASSWORD == ret_s32)
+                msgBox.setText("Wrong passowrd");
+            else
+                msgBox.setText("Unable to create new AES key");
+
+            msgBox.exec();
+        }
+    }
+
+}
+
+
 /*******************************************************************************
 
   startStick20Configuration
@@ -2043,9 +2098,7 @@ void MainWindow::startConfiguration()
 void MainWindow::startStick20Configuration()
 {
     Stick20Dialog dialog(this);
-
     dialog.cryptostick=cryptostick;
-
     dialog.exec();
 }
 

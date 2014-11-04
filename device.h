@@ -86,7 +86,8 @@ class Response;
 #define CMD_PW_SAFE_INIT_KEY              0x68
 #define CMD_PW_SAFE_SEND_DATA             0x69
 #define CMD_SD_CARD_HIGH_WATERMARK        0x70
-#define CMD_DETECT_SC_AES                 0x71
+#define CMD_DETECT_SC_AES                 0x6a
+#define CMD_NEW_AES_KEY                   0x6b
 
 #define PWS_SEND_PASSWORD     0
 #define PWS_SEND_LOGINNAME    1
@@ -302,6 +303,7 @@ public:
     int passwordSafeInitKey (void);
     int passwordSafeSendSlotDataViaHID (int Slot,int Kind);
     int isAesSupported(uint8_t* password);
+    int buildAesKey(uint8_t* password);
 
     uint8_t passwordSafeUnlocked;
     uint8_t passwordSafeAvailable;

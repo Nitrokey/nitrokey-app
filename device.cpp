@@ -2019,7 +2019,51 @@ int Device::isAesSupported(uint8_t* password)
     return ERR_NOT_CONNECTED;
 }
 
+/*******************************************************************************
 
+  buildAesKey
+
+  Changes
+  Date      Author        Info
+  03.11.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+int Device::buildAesKey(uint8_t* password)
+{
+    int res;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command (CMD_NEW_AES_KEY, password, strlen( (const char*)password));
+
+        res = sendCommand(cmd);
+
+        if (-1 == res)
+        {
+            return ERR_SENDING;
+        }
+        else                    //sending the command was successful
+        {
+            Sleep::msleep(4000);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc == resp->lastCommandCRC)
+            {
+                return resp->lastCommandStatus;
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+    return ERR_NOT_CONNECTED;
+   
+}
 
 /*******************************************************************************
 
