@@ -561,6 +561,7 @@ void Stick20ResponseTask::checkStick20Status()
             case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
                 switch (ActiveCommand)
                 {
+                    case 0:
                     default :
                         QMessageBox msgBox;
                         msgBox.setText("Get wrong password");

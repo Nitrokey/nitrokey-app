@@ -42,7 +42,6 @@ PasswordSafeDialog::PasswordSafeDialog(int Slot,QWidget *parent) :
     ui(new Ui::PasswordSafeDialog)
 {
     QString MsgText;
-    char Text[100];
 
     ui->setupUi(this);
 
@@ -66,12 +65,13 @@ PasswordSafeDialog::PasswordSafeDialog(int Slot,QWidget *parent) :
     MsgText.append("Password Safe Slot ");
     MsgText.append(QString::number(UsedSlot+1,10));
 /*
+{
+    char Text[100];
     MsgText.append(" -");
 
     strcpy (Text,(char*)&cryptostick->passwordSafeSlotNames[UsedSlot][0]);
-
-
     MsgText.append((char*)cryptostick->passwordSafeSlotNames[UsedSlot]);
+}
 */
     MsgText.append(" clicked.\nPress <Button> to copy value to clipboard");
 
@@ -303,6 +303,8 @@ void PasswordSafeDialog::on_spinBoxDelay_valueChanged(int arg1)
 
         ui->labelInfo->setText(MsgText);
     }
+
+    arg1 = 0;           // Avoid warning
 }
 
 /*******************************************************************************

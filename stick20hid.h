@@ -51,15 +51,20 @@ typedef struct {
 #define STICK20_DEBUG_TEXT_LEN          600000
 
 extern char DebugText_Stick20[STICK20_DEBUG_TEXT_LEN];
-extern unsigned long DebugTextlen_Stick20;
+extern int  DebugTextlen_Stick20;
 extern char DebugTextHasChanged;
-extern int DebugingActive;
-extern int DebugingStick20PoolingActive;
-extern char DebugNewText[600000];               // We have it
+extern int  DebugingActive;
+extern int  DebugingStick20PoolingActive;
+extern char DebugNewText[STICK20_DEBUG_TEXT_LEN];               // We have it
 extern int  DebugNewTextLen;
 
+extern int  DebugingFileStickActive;
+extern int  DebugingFileGuiActive;
+extern char DebugingStickFilename[256];
+extern char DebugingGuiFilename[256];
 
-void DebugClearText (void);
+
+void DebugInitDebugging (void);
 void DebugAppendText (char *Text);
 
 

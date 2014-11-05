@@ -51,7 +51,7 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
 
     if (true == cryptostick->isConnected)
     {
-        if (true == cryptostick->activStick20)
+        if (TRUE == cryptostick->activStick20)
         {
             showStick20Configuration ();
         }

@@ -62,7 +62,7 @@ enum DialogCode { Rejected, Accepted };     // Why not found ?
 //extern "C" char DebugText_Stick20[600000];
 
 extern "C" void DebugAppendText (char *Text);
-extern "C" void DebugClearText (void);
+extern "C" void DebugInitDebugging (void);
 
 /*******************************************************************************
 
@@ -78,7 +78,7 @@ public:
     static void sleep (unsigned long secs) {QThread::sleep(secs);}
 };
 
-
+#define LOCAL_PASSWORD_SIZE         40
 
 
 /*******************************************************************************
@@ -265,7 +265,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
     // Init debug text
-    DebugClearText ();
+    DebugInitDebugging ();
     DebugAppendText ((char *)"Start Debug - ");
 
 #ifdef WIN32
@@ -287,7 +287,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
             unsigned long long endianCheck_ll;
         } uEndianCheck;
 
-        unsigned char text[50];
+        char text[50];
 
         DebugAppendText ((char *)"\nEndian check\n\n");
 
@@ -303,36 +303,36 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         uEndianCheck.input[6] = 0x07;
         uEndianCheck.input[7] = 0x08;
 
-        sprintf ((char*)text,"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
-        DebugAppendText ((char*)text);
+        sprintf_s(text,sizeof (text),"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
+        DebugAppendText (text);
 
-        sprintf ((char*)text,"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
-        DebugAppendText ((char*)text);
-        sprintf ((char*)text,"read  u64 0x%08x%08x\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
-        DebugAppendText ((char*)text);
+        sprintf_s(text,sizeof (text),"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
+        DebugAppendText (text);
+        sprintf_s(text,sizeof (text),"read  u64 0x%08x%08x\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
+        DebugAppendText (text);
 
-        DebugAppendText ((char *)"\n");
+        DebugAppendText ("\n");
 
         if (0x01020304 == uEndianCheck.endianCheck[0])
         {
-            DebugAppendText ((char *)"System is little endian\n");
+            DebugAppendText ("System is little endian\n");
         }
         if (0x04030201 == uEndianCheck.endianCheck[0])
         {
-            DebugAppendText ((char *)"System is big endian\n");
+            DebugAppendText ("System is big endian\n");
         }
-        DebugAppendText ((char *)"\n");
+        DebugAppendText ("\n");
 
-        DebugAppendText ((char *)"Var size test\n");
-        sprintf ((char*)text,(char *)"char  size is %d byte\n",sizeof (unsigned char));
-        DebugAppendText ((char*)text);
-        sprintf ((char*)text,(char *)"short size is %d byte\n",sizeof (unsigned short));
-        DebugAppendText ((char*)text);
-        sprintf ((char*)text,(char *)"int   size is %d byte\n",sizeof (unsigned int));
-        DebugAppendText ((char*)text);
-        sprintf ((char*)text,(char *)"long  size is %d byte\n",sizeof (unsigned long));
-        DebugAppendText ((char*)text);
-        DebugAppendText ((char*)"\n");
+        DebugAppendText ("Var size test\n");
+        sprintf_s(text,sizeof (text),"char  size is %d byte\n",sizeof (unsigned char));
+        DebugAppendText (text);
+        sprintf_s(text,sizeof (text),"short size is %d byte\n",sizeof (unsigned short));
+        DebugAppendText (text);
+        sprintf_s(text,sizeof (text),"int   size is %d byte\n",sizeof (unsigned int));
+        DebugAppendText (text);
+        sprintf_s(text,sizeof (text),"long  size is %d byte\n",sizeof (unsigned long));
+        DebugAppendText (text);
+        DebugAppendText ("\n");
 
     }
 
@@ -408,7 +408,7 @@ int MainWindow::ExecStickCmd(char *Cmdline)
     {
         uint8_t password[40];
 
-        strcpy ((char*)password,"P123456");
+        strcpy_s ((char*)password,sizeof (password),"P123456");
 
         printf ("Unlock encrypted volume: ");
 
@@ -578,9 +578,10 @@ void MainWindow::AnalyseProductionInfos()
     {
         FILE *fp;
         char *LogFile = (char *)"prodlog.txt";
+        errno_t Err_t;
 
-        fp = fopen (LogFile,"a");
-        if (NULL != fp)
+        Err_t = fopen_s (&fp,LogFile,"a+");
+        if (0 == Err_t)
         {
             fprintf (fp,"CPU:0x%08lx,",Stick20ProductionInfos_st.CPU_CardID_u32);
             fprintf (fp,"SC:0x%08lx,",Stick20ProductionInfos_st.SmartCardID_u32);
@@ -613,31 +614,31 @@ void MainWindow::AnalyseProductionInfos()
 
     DebugAppendText ((char *)"Production Infos\n");
 
-    sprintf ((char*)text,"Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
-    DebugAppendText ((char*)text);
-    sprintf ((char*)text,"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
-    DebugAppendText ((char*)text);
-    sprintf ((char*)text,"Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
-    DebugAppendText ((char*)text);
-    sprintf ((char*)text,"SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
-    DebugAppendText ((char*)text);
+    sprintf_s(text,sizeof (text),"Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
+    DebugAppendText (text);
+    sprintf_s(text,sizeof (text),"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
+    DebugAppendText (text);
+    sprintf_s(text,sizeof (text),"Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
+    DebugAppendText (text);
+    sprintf_s(text,sizeof (text),"SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
+    DebugAppendText (text);
 
 
-    DebugAppendText ((char*)"Password retry count\n");
-    sprintf ((char*)text,"Admin        %d\n",Stick20ProductionInfos_st.SC_AdminPwRetryCount);
-    DebugAppendText ((char*)text);
-    sprintf ((char*)text,"User         %d\n",Stick20ProductionInfos_st.SC_UserPwRetryCount);
-    DebugAppendText ((char*)text);
+    DebugAppendText ("Password retry count\n");
+    sprintf_s(text,sizeof (text),"Admin        %d\n",Stick20ProductionInfos_st.SC_AdminPwRetryCount);
+    DebugAppendText (text);
+    sprintf_s(text,sizeof (text),"User         %d\n",Stick20ProductionInfos_st.SC_UserPwRetryCount);
+    DebugAppendText (text);
 
-    DebugAppendText ((char*)"SD card infos\n");
-    sprintf ((char*)text,"Manufacturer 0x%02x\n",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
-    DebugAppendText ((char*)text);
-    sprintf ((char*)text,"OEM          0x%04x\n",Stick20ProductionInfos_st.SD_Card_OEM_u16);
-    DebugAppendText ((char*)text);
-    sprintf ((char*)text,"Manufa. date %d.%02d\n",Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8+2000,Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-    DebugAppendText ((char*)text);
-    sprintf ((char*)text,"Write speed  %d kB/sec\n",Stick20ProductionInfos_st.SD_WriteSpeed_u16);
-    DebugAppendText ((char*)text);
+    DebugAppendText ("SD card infos\n");
+    sprintf_s(text,sizeof (text),"Manufacturer 0x%02x\n",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
+    DebugAppendText (text);
+    sprintf_s(text,sizeof (text),"OEM          0x%04x\n",Stick20ProductionInfos_st.SD_Card_OEM_u16);
+    DebugAppendText (text);
+    sprintf_s(text,sizeof (text),"Manufa. date %d.%02d\n",Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8+2000,Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
+    DebugAppendText (text);
+    sprintf_s(text,sizeof (text),"Write speed  %d kB/sec\n",Stick20ProductionInfos_st.SD_WriteSpeed_u16);
+    DebugAppendText (text);
 
 }
 
@@ -2068,7 +2069,7 @@ void MainWindow::startAboutDialog()
 {
     AboutDialog dialog(cryptostick,this);
 
-    if (true == cryptostick->activStick20)
+    if (TRUE == cryptostick->activStick20)
     {
     // Get actual data from stick 20
         cryptostick->stick20GetStatusData ();
@@ -2147,13 +2148,13 @@ void MainWindow::startMatrixPasswordDialog()
 
 void MainWindow::startStick20EnableCryptedVolume()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool           ret;
 
     if (TRUE == HiddenVolumeActive)
     {
         QMessageBox msgBox;
-        msgBox.setText("This activity locks your hidden volume. Do you want to proceed?");
+        msgBox.setText("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         if (QMessageBox::No == msgBox.exec())
@@ -2168,7 +2169,6 @@ void MainWindow::startStick20EnableCryptedVolume()
 
     if (Accepted == ret)
     {
-//        password[0] = 'P';
         dialog.getPassword ((char*)password);
 
         stick20SendCommand (STICK20_CMD_ENABLE_CRYPTED_PARI,password);
@@ -2190,10 +2190,21 @@ void MainWindow::startStick20EnableCryptedVolume()
 
 void MainWindow::startStick20DisableCryptedVolume()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-    password[0] = 0;
-    stick20SendCommand (STICK20_CMD_DISABLE_CRYPTED_PARI,password);
+    if (TRUE == CryptedVolumeActive)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        if (QMessageBox::No == msgBox.exec())
+        {
+            return;
+        }
+        password[0] = 0;
+        stick20SendCommand (STICK20_CMD_DISABLE_CRYPTED_PARI,password);
+    }
 }
 
 /*******************************************************************************
@@ -2211,7 +2222,7 @@ void MainWindow::startStick20DisableCryptedVolume()
 
 void MainWindow::startStick20EnableHiddenVolume()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
     if (FALSE == CryptedVolumeActive)
@@ -2223,7 +2234,7 @@ void MainWindow::startStick20EnableHiddenVolume()
     }
 
     QMessageBox msgBox;
-    msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?");
+    msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::Yes);
     if (QMessageBox::No == msgBox.exec())
@@ -2259,7 +2270,16 @@ void MainWindow::startStick20EnableHiddenVolume()
 
 void MainWindow::startStick20DisableHiddenVolume()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
+
+    QMessageBox msgBox;
+    msgBox.setText("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    if (QMessageBox::No == msgBox.exec())
+    {
+        return;
+    }
 
     password[0] = 0;
     stick20SendCommand (STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI,password);
@@ -2281,6 +2301,18 @@ void MainWindow::startStick20DisableHiddenVolume()
 
 void MainWindow::startLockDeviceAction()
 {
+    if ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive))
+    {
+        QMessageBox msgBox;
+        msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        if (QMessageBox::No == msgBox.exec())
+        {
+            return;
+        }
+    }
+
     cryptostick->lockDevice ();
 
     HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
@@ -2303,7 +2335,7 @@ void MainWindow::startLockDeviceAction()
 
 void MainWindow::startStick20EnableFirmwareUpdate()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
@@ -2314,7 +2346,6 @@ void MainWindow::startStick20EnableFirmwareUpdate()
 
     if (Accepted == ret)
     {
-//        password[0] = 'P';
         dialog.getPassword ((char*)password);
 
         stick20SendCommand (STICK20_CMD_ENABLE_FIRMWARE_UPDATE,password);
@@ -2423,7 +2454,7 @@ void MainWindow::startResetUserPassword ()
 
 void MainWindow::startStick20ExportFirmwareToFile()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
@@ -2456,7 +2487,7 @@ void MainWindow::startStick20ExportFirmwareToFile()
 
 void MainWindow::startStick20DestroyCryptedVolume()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     int     ret;
     QMessageBox msgBox;
 
@@ -2531,7 +2562,7 @@ void MainWindow::startStick20FillSDCardWithRandomChars()
 
 void MainWindow::startStick20ClearNewSdCardFound()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
@@ -2604,7 +2635,7 @@ void MainWindow::startStick20GetStickStatus()
 
 void MainWindow::startStick20SetReadonlyUncryptedVolume()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
@@ -2637,7 +2668,7 @@ void MainWindow::startStick20SetReadonlyUncryptedVolume()
 
 void MainWindow::startStick20SetReadWriteUncryptedVolume()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
     PasswordDialog dialog(MatrixInputActive,this);
@@ -2671,7 +2702,7 @@ void MainWindow::startStick20SetReadWriteUncryptedVolume()
 
 void MainWindow::startStick20LockStickHardware()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
     stick20LockFirmwareDialog dialog(this);
@@ -3307,7 +3338,7 @@ void MainWindow::on_writeButton_clicked()
         slotNo += HOTP_SlotCount;
     }
 
-    strncpy ((char*)SlotName,ui->nameEdit->text().toLatin1(),15);
+    strncpy_s ((char*)SlotName,sizeof (SlotName),ui->nameEdit->text().toLatin1(),15);
     SlotName[15] = 0;
     if (0 == strlen ((char*)SlotName))
     {
@@ -4065,7 +4096,7 @@ void MainWindow::SetupPasswordSafeConfig (void)
                 if (0 == strlen ((char*)cryptostick->passwordSafeSlotNames[i]))
                 {
                     cryptostick->getPasswordSafeSlotName(i);
-                    strcpy ((char*)cryptostick->passwordSafeSlotNames[i],(char*)cryptostick->passwordSafeSlotName);
+                    strcpy_s ((char*)cryptostick->passwordSafeSlotNames[i],sizeof (cryptostick->passwordSafeSlotNames[i]),(char*)cryptostick->passwordSafeSlotName);
                 }
 //                ui->PWS_ComboBoxSelectSlot->addItem((char*)cryptostick->passwordSafeSlotNames[i]);
                 ui->PWS_ComboBoxSelectSlot->addItem(QString("Slot ").append(QString::number(i+1,10)).append(QString(" [").append((char*)cryptostick->passwordSafeSlotNames[i]).append(QString("]"))));
@@ -4255,7 +4286,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
-    strncpy ((char*)SlotName,ui->PWS_EditSlotName->text().toLatin1(),PWS_SLOTNAME_LENGTH);
+    strncpy_s ((char*)SlotName,sizeof (SlotName),ui->PWS_EditSlotName->text().toLatin1(),PWS_SLOTNAME_LENGTH);
     SlotName[PWS_SLOTNAME_LENGTH] = 0;
     if (0 == strlen ((char*)SlotName))
     {
@@ -4265,10 +4296,10 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
         return;
     }
 
-    strncpy ((char*)LoginName,ui->PWS_EditLoginName->text().toLatin1(),PWS_LOGINNAME_LENGTH);
+    strncpy_s ((char*)LoginName,sizeof (LoginName),ui->PWS_EditLoginName->text().toLatin1(),PWS_LOGINNAME_LENGTH);
     LoginName[PWS_LOGINNAME_LENGTH] = 0;
 
-    strncpy ((char*)Password,ui->PWS_EditPassword->text().toLatin1(),PWS_PASSWORD_LENGTH);
+    strncpy_s ((char*)Password,sizeof (Password),ui->PWS_EditPassword->text().toLatin1(),PWS_PASSWORD_LENGTH);
     Password[PWS_PASSWORD_LENGTH] = 0;
     if (0 == strlen ((char*)Password))
     {
@@ -4294,7 +4325,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     }
 
     cryptostick->passwordSafeStatus[Slot] = TRUE;
-    strcpy ((char*)cryptostick->passwordSafeSlotNames[Slot],(char*)SlotName);
+    strcpy_s ((char*)cryptostick->passwordSafeSlotNames[Slot],sizeof (cryptostick->passwordSafeSlotNames[Slot]),(char*)SlotName);
     ui->PWS_ComboBoxSelectSlot->setItemText (Slot,QString("Slot ").append(QString::number(Slot+1,10)).append(QString(" [").append((char*)cryptostick->passwordSafeSlotNames[Slot]).append(QString("]"))));
 
 
@@ -4319,7 +4350,7 @@ char *MainWindow::PWS_GetSlotName (int Slot)
     if (0 == strlen ((char*)cryptostick->passwordSafeSlotNames[Slot]))
     {
         cryptostick->getPasswordSafeSlotName(Slot);
-        strcpy ((char*)cryptostick->passwordSafeSlotNames[Slot],(char*)cryptostick->passwordSafeSlotName);
+        strcpy_s ((char*)cryptostick->passwordSafeSlotNames[Slot],sizeof (cryptostick->passwordSafeSlotNames[Slot]),(char*)cryptostick->passwordSafeSlotName);
     }
     return ((char*)cryptostick->passwordSafeSlotNames[Slot]);
 }
@@ -4467,7 +4498,7 @@ void MainWindow::generateMenuPasswordSafe()
 
 void MainWindow::PWS_Clicked_EnablePWSAccess ()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
     int     ret_s32;
 
@@ -5039,7 +5070,7 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
 
 void MainWindow::on_PWS_ButtonEnable_clicked()
 {
-    uint8_t password[40];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
     int     ret_s32;
 
