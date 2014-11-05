@@ -403,8 +403,8 @@ int HID_GetStick20ReceiveData (unsigned char *data)
     memcpy ((void*)&HID_Stick20ReceiveData_st,data+OUTPUT_CMD_RESULT_STICK20_DATA_START,sizeof (HID_Stick20ReceiveData_st));
 #endif
 
-#ifdef MAC
-    To Check ....
+#ifdef Q_OS_MAC
+//    To Check ....
     memcpy ((void*)&HID_Stick20ReceiveData_st,data+OUTPUT_CMD_RESULT_STICK20_DATA_START,sizeof (HID_Stick20ReceiveData_st));
 #endif
 
