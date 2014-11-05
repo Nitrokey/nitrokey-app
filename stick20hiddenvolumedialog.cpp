@@ -209,11 +209,15 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
 
     if (0 < Entropy)
     {
-        ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",Entropy,Entropy/2.0));
+        // ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",Entropy,Entropy/2.0));
+        ui->HVEntropieRealWords->setText(QString ("%1").sprintf(" %3.1lf for real words", Entropy/2.0));
+        ui->HVEntropieRandChars->setText(QString ("%1").sprintf(" %3.1lf bits for random chars", Entropy));
     }
     else
     {
-        ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",0.0,0.0));
+        // ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",0.0,0.0));
+        ui->HVEntropieRealWords->setText(QString ("%1").sprintf(" %3.1lf for real words", 0.0));
+        ui->HVEntropieRandChars->setText(QString ("%1").sprintf(" %3.1lf bits for random chars", 0.0));
     }
 }
 
