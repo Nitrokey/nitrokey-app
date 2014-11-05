@@ -174,7 +174,7 @@ int Device::checkConnection()
             TOTP_SlotCount = TOTP_SLOT_COUNT;
 
             // stick 20 with no OTP
-            if (true == activStick20)
+            if (TRUE == activStick20)
             {
                 HOTP_SlotCount = HOTP_SLOT_COUNT_MAX;
                 TOTP_SlotCount = TOTP_SLOT_COUNT_MAX;
@@ -275,15 +275,15 @@ int Device::sendCommand(Command *cmd)
             int i;
             static int Counter = 0;
 
-            sprintf(text,"%6d :sendCommand0: ",Counter);
+            sprintf_s(text,sizeof (text),"%6d :sendCommand0: ",Counter);
             Counter++;
             DebugAppendText (text);
             for (i=0;i<=64;i++)
             {
-                sprintf(text,"%02x ",(unsigned char)report[i]);
+                sprintf_s(text,sizeof (text),"%02x ",(unsigned char)report[i]);
                 DebugAppendText (text);
             }
-            sprintf(text,"\n");
+            sprintf_s(text,sizeof (text),"\n");
             DebugAppendText (text);
 
      }
@@ -322,15 +322,15 @@ int Device::sendCommandGetResponse(Command *cmd, Response *resp)
             int i;
             static int Counter = 0;
 
-            sprintf(text,"%6d :sendCommand1: ",Counter);
+            sprintf_s(text,sizeof (text),"%6d :sendCommand1: ",Counter);
             Counter++;
             DebugAppendText (text);
             for (i=0;i<=64;i++)
             {
-                sprintf(text,"%02x ",(unsigned char)report[i]);
+                sprintf_s(text,sizeof (text),"%02x ",(unsigned char)report[i]);
                 DebugAppendText (text);
             }
-            sprintf(text,"\n");
+            sprintf_s(text,sizeof (text),"\n");
             DebugAppendText (text);
 
      }
@@ -869,7 +869,7 @@ void Device::initializeConfig()
         readSlot(0x20 + i);
     }
 
-    if (true == activStick20)
+    if (TRUE == activStick20)
     {
         currentTime = QDateTime::currentDateTime().toTime_t();
         stick20SendStartup ((unsigned long long)currentTime);
@@ -1028,7 +1028,6 @@ int Device::getUserPasswordRetryCount()
 int Device::getPasswordSafeSlotStatus ()
 {
     int res;
-    int i;
     uint8_t data[1];
 
 // Clear entrys
@@ -1058,6 +1057,7 @@ int Device::getPasswordSafeSlotStatus ()
                     memcpy (passwordSafeStatus,&resp->data[0],PWS_SLOT_COUNT);
 /*
 {
+     int i;
      char text[1000];
      DebugAppendText ("PW_SAFE_SLOT_STATUS\n");
      for (i=0;i<PWS_SLOT_COUNT;i++)
@@ -1417,7 +1417,7 @@ int Device::passwordSafeEnable (char *password)
     int res;
     uint8_t data[50];
 
-    strncpy ((char*)data,password,30);
+    strncpy_s ((char*)data,sizeof(data),password,30);
     data[30+1] = 0;
 
     if (isConnected)
@@ -2244,7 +2244,7 @@ bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeF
     }
 
     data[0] = VolumeFlag;
-    strcpy ((char*)&data[1],(char*)password);
+    strcpy_s ((char*)&data[1],sizeof (data)-1,(char*)password);
 
     cmd = new Command(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS,data,n+1);
     res = sendCommand(cmd);

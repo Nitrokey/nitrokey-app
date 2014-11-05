@@ -107,7 +107,7 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button)
             return;
         }
 
-        strncpy ((char*)HV_Setup_st.HiddenVolumePassword_au8,ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
+        strncpy_s ((char*)HV_Setup_st.HiddenVolumePassword_au8,sizeof (HV_Setup_st.HiddenVolumePassword_au8),ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
         HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
         done (true);
     }
@@ -143,7 +143,7 @@ int stick20HiddenVolumeDialog::GetCharsetSpace (unsigned char *Password, size_t 
    HasSpecialChars3 = FALSE;
    CharSpace        = 0;
 
-   for (i=0;i<size;i++)
+   for (i=0;i<(int)size;i++)
    {
       if ((FALSE == HasLowerAlpha) && (0 != strchr ("abcdefghijklmnopqrstuvwxyz",Password[i])))
       {
@@ -209,11 +209,15 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
 
     if (0 < Entropy)
     {
-        ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",Entropy,Entropy/2.0));
+        // ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",Entropy,Entropy/2.0));
+        ui->HVEntropieRealWords->setText(QString ("%1").sprintf(" %3.1lf for real words", Entropy/2.0));
+        ui->HVEntropieRandChars->setText(QString ("%1").sprintf(" %3.1lf bits for random chars", Entropy));
     }
     else
     {
-        ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",0.0,0.0));
+        // ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",0.0,0.0));
+        ui->HVEntropieRealWords->setText(QString ("%1").sprintf(" %3.1lf for real words", 0.0));
+        ui->HVEntropieRandChars->setText(QString ("%1").sprintf(" %3.1lf bits for random chars", 0.0));
     }
 }
 

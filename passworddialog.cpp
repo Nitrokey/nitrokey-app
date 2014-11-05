@@ -39,6 +39,7 @@
 
 *******************************************************************************/
 
+#define LOCAL_PASSWORD_SIZE         40              // Todo make define global
 
 /*******************************************************************************
 
@@ -112,7 +113,7 @@ void PasswordDialog::init(char *text,int RetryCount)
     text1[0] = 0;
     if (-1 != RetryCount)
     {
-        sprintf (text1," (Tries left: %d)",RetryCount);
+        sprintf_s (text1,sizeof (text1)," (Tries left: %d)",RetryCount);
     }
     ui->label->setText(tr(text)+tr(text1));
 }
@@ -137,11 +138,11 @@ void PasswordDialog::getPassword(char *text)
     if (FALSE == ui->checkBox_PasswordMatrix->isChecked())
     {
         text[0] = 'P';
-        strcpy (&text[1],ui->lineEdit->text().toLatin1());
+        strcpy_s (&text[1],LOCAL_PASSWORD_SIZE-1,ui->lineEdit->text().toLatin1());
     }
     else
     {
-        strcpy (text,(char*)password);
+        strcpy_s (text,LOCAL_PASSWORD_SIZE,(char*)password);
     }
 }
 

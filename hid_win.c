@@ -67,7 +67,7 @@ extern "C" {
 #define STICK20_DEBUG
 //#define STICK20_DEBUG_ALL
 
-void DebugClearText (void);
+void DebugInitDebugging (void);
 void DebugAppendText (char *Text);
 
 

@@ -36,10 +36,10 @@
 *******************************************************************************/
 
 extern "C" char DebugText_Stick20[600000];          // todo move to header
-extern "C" unsigned long DebugTextlen_Stick20;      // todo move to header
+extern "C" int  DebugTextlen_Stick20;               // todo move to header
 extern "C" char DebugTextHasChanged;                // todo move to header
-extern "C" int DebugingActive;                      // todo move to header
-extern "C" int DebugingStick20PoolingActive;        // todo move to header
+extern "C" int  DebugingActive;                     // todo move to header
+extern "C" int  DebugingStick20PoolingActive;       // todo move to header
 
 
 extern "C" char DebugNewText[600000];               // We have it
@@ -132,7 +132,7 @@ void DebugDialog::UpdateDebugText()
     int ret;
 
 
-    if (true == DebugingStick20PoolingActive)
+    if (TRUE == DebugingStick20PoolingActive)
     {
         // Poll data from stick 20
         Response *stick20Response = new Response();
@@ -154,7 +154,7 @@ void DebugDialog::UpdateDebugText()
     {
         if (TRUE == DebugTextHasChanged)
         {
-            strcat (DebugText_Stick20,DebugNewText);
+            strcat_s (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText);
 
 //            ui->plainTextEdit->setPlainText(DebugText_Stick20);
             ui->plainTextEdit->appendPlainText(DebugNewText);
@@ -184,7 +184,7 @@ void DebugDialog::updateText(void)
 {
     if (TRUE == DebugTextHasChanged)
     {
-        strcat (DebugText_Stick20,DebugNewText);
+        strcat_s (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText);
         ui->plainTextEdit->appendPlainText(DebugNewText);
         DebugNewText[0] = 0;
         DebugNewTextLen = 0;
@@ -211,7 +211,7 @@ void DebugDialog::on_pushButton_clicked()
 {
     if (TRUE == DebugTextHasChanged)
     {
-        strcat (DebugText_Stick20,DebugNewText);
+        strcat_s (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText);
         ui->plainTextEdit->appendPlainText(DebugNewText);
         DebugNewText[0] = 0;
         DebugNewTextLen = 0;
