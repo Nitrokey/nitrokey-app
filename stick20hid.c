@@ -508,8 +508,10 @@ int HID_GetStick20ReceiveData (unsigned char *data)
 
 #ifdef Q_OS_MAC
 //    To Check ....
-    memcpy ((void*)&HID_Stick20ReceiveData_st,data+OUTPUT_CMD_RESULT_STICK20_DATA_START,sizeof (HID_Stick20ReceiveData_st));
+    memcpy ((void*)&HID_Stick20ReceiveData_st,data+1+OUTPUT_CMD_RESULT_STICK20_DATA_START,sizeof (HID_Stick20ReceiveData_st));
 #endif
+
+
 
 if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE != HID_Stick20ReceiveData_st.SendDataType_u8)
 {
@@ -526,7 +528,7 @@ if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE != HID_Stick20ReceiveData_st.SendData
         snprintf(text,sizeof (text),"\n");
         DebugAppendText (text);
 
-/*
+
         sprintf(text,"HID_GetStick20ReceiveData: SendCounter %d Typ %d - %d - Size %d\n",
                     HID_Stick20ReceiveData_st.SendCounter_u8,
                     HID_Stick20ReceiveData_st.SendDataType_u8,
@@ -535,7 +537,7 @@ if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE != HID_Stick20ReceiveData_st.SendData
                 );
 
         DebugAppendText (text);
-*/
+
 }
 
 
