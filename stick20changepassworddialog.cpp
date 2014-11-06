@@ -177,7 +177,7 @@ void DialogChangePassword::SendNewPassword(void)
 // Send old password
     PasswordString = ui->lineEdit_OldPW->text().toLatin1();
 
-    strncpy_s ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
+    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->stick20SendPassword (Data);
@@ -195,7 +195,7 @@ void DialogChangePassword::SendNewPassword(void)
 // Change password
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
 
-    strncpy_s ((char*)&Data[1],STICK20_PASSOWRD_LEN,PasswordString.data(),STICK20_PASSOWRD_LEN);
+    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->stick20SendNewPassword (Data);
@@ -234,7 +234,7 @@ void DialogChangePassword::ResetUserPassword (void)
 // Send old password
     PasswordString = ui->lineEdit_OldPW->text().toLatin1();
 
-    strncpy_s ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
+    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->stick20SendPassword (Data);
@@ -252,7 +252,7 @@ void DialogChangePassword::ResetUserPassword (void)
 // Reset new user PIN
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
 
-    strncpy_s ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
+    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->unlockUserPassword (Data);

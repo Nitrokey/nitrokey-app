@@ -17,7 +17,8 @@
 * You should have received a copy of the GNU General Public License
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include <stdio.h>
+#include <string.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "device.h"
@@ -303,12 +304,12 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         uEndianCheck.input[6] = 0x07;
         uEndianCheck.input[7] = 0x08;
 
-        sprintf_s(text,sizeof (text),"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
+        snprintf(text,sizeof (text),"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
         DebugAppendText (text);
 
-        sprintf_s(text,sizeof (text),"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
+        snprintf(text,sizeof (text),"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
         DebugAppendText (text);
-        sprintf_s(text,sizeof (text),"read  u64 0x%08x%08x\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
+        snprintf(text,sizeof (text),"read  u64 0x%08x%08x\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
         DebugAppendText (text);
 
         DebugAppendText ("\n");
@@ -324,13 +325,13 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         DebugAppendText ("\n");
 
         DebugAppendText ("Var size test\n");
-        sprintf_s(text,sizeof (text),"char  size is %d byte\n",sizeof (unsigned char));
+        snprintf(text,sizeof (text),"char  size is %d byte\n",sizeof (unsigned char));
         DebugAppendText (text);
-        sprintf_s(text,sizeof (text),"short size is %d byte\n",sizeof (unsigned short));
+        snprintf(text,sizeof (text),"short size is %d byte\n",sizeof (unsigned short));
         DebugAppendText (text);
-        sprintf_s(text,sizeof (text),"int   size is %d byte\n",sizeof (unsigned int));
+        snprintf(text,sizeof (text),"int   size is %d byte\n",sizeof (unsigned int));
         DebugAppendText (text);
-        sprintf_s(text,sizeof (text),"long  size is %d byte\n",sizeof (unsigned long));
+        snprintf(text,sizeof (text),"long  size is %d byte\n",sizeof (unsigned long));
         DebugAppendText (text);
         DebugAppendText ("\n");
 
@@ -408,7 +409,7 @@ int MainWindow::ExecStickCmd(char *Cmdline)
     {
         uint8_t password[40];
 
-        strcpy_s ((char*)password,sizeof (password),"P123456");
+        strcpy ((char*)password,"P123456");
 
         printf ("Unlock encrypted volume: ");
 
@@ -578,10 +579,9 @@ void MainWindow::AnalyseProductionInfos()
     {
         FILE *fp;
         char *LogFile = (char *)"prodlog.txt";
-        errno_t Err_t;
 
-        Err_t = fopen_s (&fp,LogFile,"a+");
-        if (0 == Err_t)
+        fp = fopen (LogFile,"a+");
+        if (NULL != fp)
         {
             fprintf (fp,"CPU:0x%08lx,",Stick20ProductionInfos_st.CPU_CardID_u32);
             fprintf (fp,"SC:0x%08lx,",Stick20ProductionInfos_st.SmartCardID_u32);
@@ -614,30 +614,30 @@ void MainWindow::AnalyseProductionInfos()
 
     DebugAppendText ((char *)"Production Infos\n");
 
-    sprintf_s(text,sizeof (text),"Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
+    snprintf(text,sizeof (text),"Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
     DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
+    snprintf(text,sizeof (text),"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
     DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
+    snprintf(text,sizeof (text),"Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
     DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
+    snprintf(text,sizeof (text),"SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
     DebugAppendText (text);
 
 
     DebugAppendText ("Password retry count\n");
-    sprintf_s(text,sizeof (text),"Admin        %d\n",Stick20ProductionInfos_st.SC_AdminPwRetryCount);
+    snprintf(text,sizeof (text),"Admin        %d\n",Stick20ProductionInfos_st.SC_AdminPwRetryCount);
     DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"User         %d\n",Stick20ProductionInfos_st.SC_UserPwRetryCount);
+    snprintf(text,sizeof (text),"User         %d\n",Stick20ProductionInfos_st.SC_UserPwRetryCount);
     DebugAppendText (text);
 
     DebugAppendText ("SD card infos\n");
-    sprintf_s(text,sizeof (text),"Manufacturer 0x%02x\n",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
+    snprintf(text,sizeof (text),"Manufacturer 0x%02x\n",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
     DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"OEM          0x%04x\n",Stick20ProductionInfos_st.SD_Card_OEM_u16);
+    snprintf(text,sizeof (text),"OEM          0x%04x\n",Stick20ProductionInfos_st.SD_Card_OEM_u16);
     DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"Manufa. date %d.%02d\n",Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8+2000,Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
+    snprintf(text,sizeof (text),"Manufa. date %d.%02d\n",Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8+2000,Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
     DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"Write speed  %d kB/sec\n",Stick20ProductionInfos_st.SD_WriteSpeed_u16);
+    snprintf(text,sizeof (text),"Write speed  %d kB/sec\n",Stick20ProductionInfos_st.SD_WriteSpeed_u16);
     DebugAppendText (text);
 
 }
@@ -3338,7 +3338,7 @@ void MainWindow::on_writeButton_clicked()
         slotNo += HOTP_SlotCount;
     }
 
-    strncpy_s ((char*)SlotName,sizeof (SlotName),ui->nameEdit->text().toLatin1(),15);
+    strncpy ((char*)SlotName,ui->nameEdit->text().toLatin1(),15);
     SlotName[15] = 0;
     if (0 == strlen ((char*)SlotName))
     {
@@ -4096,7 +4096,7 @@ void MainWindow::SetupPasswordSafeConfig (void)
                 if (0 == strlen ((char*)cryptostick->passwordSafeSlotNames[i]))
                 {
                     cryptostick->getPasswordSafeSlotName(i);
-                    strcpy_s ((char*)cryptostick->passwordSafeSlotNames[i],sizeof (cryptostick->passwordSafeSlotNames[i]),(char*)cryptostick->passwordSafeSlotName);
+                    strncpy ((char*)cryptostick->passwordSafeSlotNames[i],(char*)cryptostick->passwordSafeSlotName,sizeof (cryptostick->passwordSafeSlotName));
                 }
 //                ui->PWS_ComboBoxSelectSlot->addItem((char*)cryptostick->passwordSafeSlotNames[i]);
                 ui->PWS_ComboBoxSelectSlot->addItem(QString("Slot ").append(QString::number(i+1,10)).append(QString(" [").append((char*)cryptostick->passwordSafeSlotNames[i]).append(QString("]"))));
@@ -4286,7 +4286,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
-    strncpy_s ((char*)SlotName,sizeof (SlotName),ui->PWS_EditSlotName->text().toLatin1(),PWS_SLOTNAME_LENGTH);
+    strncpy ((char*)SlotName,ui->PWS_EditSlotName->text().toLatin1(),PWS_SLOTNAME_LENGTH);
     SlotName[PWS_SLOTNAME_LENGTH] = 0;
     if (0 == strlen ((char*)SlotName))
     {
@@ -4296,10 +4296,10 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
         return;
     }
 
-    strncpy_s ((char*)LoginName,sizeof (LoginName),ui->PWS_EditLoginName->text().toLatin1(),PWS_LOGINNAME_LENGTH);
+    strncpy ((char*)LoginName,ui->PWS_EditLoginName->text().toLatin1(),PWS_LOGINNAME_LENGTH);
     LoginName[PWS_LOGINNAME_LENGTH] = 0;
 
-    strncpy_s ((char*)Password,sizeof (Password),ui->PWS_EditPassword->text().toLatin1(),PWS_PASSWORD_LENGTH);
+    strncpy ((char*)Password,ui->PWS_EditPassword->text().toLatin1(),PWS_PASSWORD_LENGTH);
     Password[PWS_PASSWORD_LENGTH] = 0;
     if (0 == strlen ((char*)Password))
     {
@@ -4325,7 +4325,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     }
 
     cryptostick->passwordSafeStatus[Slot] = TRUE;
-    strcpy_s ((char*)cryptostick->passwordSafeSlotNames[Slot],sizeof (cryptostick->passwordSafeSlotNames[Slot]),(char*)SlotName);
+    strncpy ((char*)cryptostick->passwordSafeSlotNames[Slot],(char*)SlotName,sizeof (SlotName));
     ui->PWS_ComboBoxSelectSlot->setItemText (Slot,QString("Slot ").append(QString::number(Slot+1,10)).append(QString(" [").append((char*)cryptostick->passwordSafeSlotNames[Slot]).append(QString("]"))));
 
 
@@ -4350,7 +4350,7 @@ char *MainWindow::PWS_GetSlotName (int Slot)
     if (0 == strlen ((char*)cryptostick->passwordSafeSlotNames[Slot]))
     {
         cryptostick->getPasswordSafeSlotName(Slot);
-        strcpy_s ((char*)cryptostick->passwordSafeSlotNames[Slot],sizeof (cryptostick->passwordSafeSlotNames[Slot]),(char*)cryptostick->passwordSafeSlotName);
+        strncpy ((char*)cryptostick->passwordSafeSlotNames[Slot],(char*)cryptostick->passwordSafeSlotName,sizeof (cryptostick->passwordSafeSlotName));
     }
     return ((char*)cryptostick->passwordSafeSlotNames[Slot]);
 }
