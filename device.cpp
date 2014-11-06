@@ -275,15 +275,15 @@ int Device::sendCommand(Command *cmd)
             int i;
             static int Counter = 0;
 
-            sprintf_s(text,sizeof (text),"%6d :sendCommand0: ",Counter);
+            snprintf(text,sizeof (text),"%6d :sendCommand0: ",Counter);
             Counter++;
             DebugAppendText (text);
             for (i=0;i<=64;i++)
             {
-                sprintf_s(text,sizeof (text),"%02x ",(unsigned char)report[i]);
+                snprintf(text,sizeof (text),"%02x ",(unsigned char)report[i]);
                 DebugAppendText (text);
             }
-            sprintf_s(text,sizeof (text),"\n");
+            snprintf(text,sizeof (text),"\n");
             DebugAppendText (text);
 
      }
@@ -322,15 +322,15 @@ int Device::sendCommandGetResponse(Command *cmd, Response *resp)
             int i;
             static int Counter = 0;
 
-            sprintf_s(text,sizeof (text),"%6d :sendCommand1: ",Counter);
+            snprintf(text,sizeof (text),"%6d :sendCommand1: ",Counter);
             Counter++;
             DebugAppendText (text);
             for (i=0;i<=64;i++)
             {
-                sprintf_s(text,sizeof (text),"%02x ",(unsigned char)report[i]);
+                snprintf(text,sizeof (text),"%02x ",(unsigned char)report[i]);
                 DebugAppendText (text);
             }
-            sprintf_s(text,sizeof (text),"\n");
+            snprintf(text,sizeof (text),"\n");
             DebugAppendText (text);
 
      }
@@ -1417,7 +1417,7 @@ int Device::passwordSafeEnable (char *password)
     int res;
     uint8_t data[50];
 
-    strncpy_s ((char*)data,sizeof(data),password,30);
+    strncpy ((char*)data,password,30);
     data[30+1] = 0;
 
     if (isConnected)
@@ -2244,7 +2244,8 @@ bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeF
     }
 
     data[0] = VolumeFlag;
-    strcpy_s ((char*)&data[1],sizeof (data)-1,(char*)password);
+    if (strlen((char*)password) < sizeof(data)-1)
+        strcpy ((char*)&data[1],(char*)password);
 
     cmd = new Command(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS,data,n+1);
     res = sendCommand(cmd);

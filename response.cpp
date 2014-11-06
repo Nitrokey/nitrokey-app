@@ -74,15 +74,15 @@ void Response::DebugResponse()
     int i;
     static int Counter = 0;
 
-    sprintf_s(text,sizeof (text),"%6d :getResponse : ",Counter);
+    snprintf(text,sizeof (text),"%6d :getResponse : ",Counter);
     Counter++;
     DebugAppendText (text);
     for (i=0;i<=64;i++)
     {
-        sprintf_s(text,sizeof (text),"%02x ",(unsigned char)reportBuffer[i]);
+        snprintf(text,sizeof (text),"%02x ",(unsigned char)reportBuffer[i]);
         DebugAppendText (text);
     }
-    sprintf_s(text,sizeof (text),"\n");
+    snprintf(text,sizeof (text),"\n");
     DebugAppendText (text);
 
 // Check device status =     deviceStatus = reportBuffer[1]
@@ -129,9 +129,9 @@ void Response::DebugResponse()
             DebugAppendText ((char *)"         Last command        : CMD_WRITE_TO_SLOT\n");
             break;
         case CMD_READ_SLOT_NAME :
-            strncpy_s (text1,sizeof (text1),data,15);
+            strncpy (text1,data,15);
             text1[15] = 0;
-            sprintf_s(text,sizeof (text),"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
+            snprintf(text,sizeof (text),"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
             DebugAppendText (text);
             break;
         case CMD_READ_SLOT :
