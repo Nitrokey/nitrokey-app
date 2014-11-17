@@ -74,15 +74,31 @@ void Response::DebugResponse()
     int i;
     static int Counter = 0;
 
+    #ifdef _MSC_VER
+    sprintf_s(text,sizeof (text),"%6d :getResponse : ",Counter);
+    #else
     snprintf(text,sizeof (text),"%6d :getResponse : ",Counter);
+    #endif
+
     Counter++;
     DebugAppendText (text);
     for (i=0;i<=64;i++)
     {
+        #ifdef _MSC_VER
+        snprintf_s(text,sizeof (text),"%02x ",(unsigned char)reportBuffer[i]);
+        #else
         snprintf(text,sizeof (text),"%02x ",(unsigned char)reportBuffer[i]);
+        #endif
+
         DebugAppendText (text);
     }
+
+    #ifdef _MSC_VER
+    snprintf_s(text,sizeof (text),"\n");
+    #else
     snprintf(text,sizeof (text),"\n");
+    #endif
+
     DebugAppendText (text);
 
 // Check device status =     deviceStatus = reportBuffer[1]
@@ -129,9 +145,19 @@ void Response::DebugResponse()
             DebugAppendText ((char *)"         Last command        : CMD_WRITE_TO_SLOT\n");
             break;
         case CMD_READ_SLOT_NAME :
+
+            #ifdef _MSC_VER
+            strncpy_s (text1,sizeof (text1),data,15);
+            #else
             strncpy (text1,data,15);
+            #endif
             text1[15] = 0;
+            #ifdef _MSC_VER
+            snprintf_s(text,sizeof (text),"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
+            #else
             snprintf(text,sizeof (text),"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
+            #endif
+
             DebugAppendText (text);
             break;
         case CMD_READ_SLOT :
