@@ -231,6 +231,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
 
     quitAction = new QAction(tr("&Quit"), this);
+    quitAction->setIcon(QIcon(":/images/quit.ico"));
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
 
@@ -245,6 +246,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
 
     ActionAboutDialog = new QAction(tr("&About Crypto Stick"), this);
+    ActionAboutDialog->setIcon(QIcon(":/images/about.ico"));
     connect(ActionAboutDialog,  	 SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
     initActionsForStick20 ();
@@ -1063,12 +1065,15 @@ void MainWindow::initActionsForStick20()
     connect(Stick20SetupAction, SIGNAL(triggered()), this, SLOT(startStick20Setup()));
 
     Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), this);
+    Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.ico"));
     connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20EnableCryptedVolume()));
 
     Stick20ActionDisableCryptedVolume = new QAction(tr("&Lock encrypted volume"), this);
+    Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/harddrive.ico"));
     connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20DisableCryptedVolume()));
 
     Stick20ActionEnableHiddenVolume = new QAction(tr("&Unlock hidden volume"), this);
+    Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/harddrive.ico"));
     connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), this, SLOT(startStick20EnableHiddenVolume()));
 
     Stick20ActionDisableHiddenVolume = new QAction(tr("&Lock hidden volume"), this);
@@ -1142,114 +1147,146 @@ void MainWindow::initActionsForStick20()
 void MainWindow::generateMenuOTP()
 {
 
+    int i;
+    for (i=0; i<15; i++)
+        if (cryptostick->TOTPSlots[i]->isProgrammed == true) {
+            trayMenuTOTPSubMenu = trayMenu->addMenu("TOPT slots");
+            break;
+        }
+
     if (cryptostick->TOTPSlots[0]->isProgrammed==true){
         QString actionName("TOTP slot 1 ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[0]->slotName),this,SLOT(getTOTP1()));
+        // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[0]->slotName),this,SLOT(getTOTP1()));
+        trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[0]->slotName),this,SLOT(getTOTP1()));
     }
     if (cryptostick->TOTPSlots[1]->isProgrammed==true){
         QString actionName("TOTP slot 2 ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[1]->slotName),this,SLOT(getTOTP2()));
+        // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[1]->slotName),this,SLOT(getTOTP2()));
+        trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[1]->slotName),this,SLOT(getTOTP2()));
     }
     if (cryptostick->TOTPSlots[2]->isProgrammed==true){
         QString actionName("TOTP slot 3 ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[2]->slotName),this,SLOT(getTOTP3()));
+        // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[2]->slotName),this,SLOT(getTOTP3()));
+        trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[2]->slotName),this,SLOT(getTOTP3()));
     }
     if (cryptostick->TOTPSlots[3]->isProgrammed==true){
         QString actionName("TOTP slot 4 ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[3]->slotName),this,SLOT(getTOTP4()));
+        // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[3]->slotName),this,SLOT(getTOTP4()));
+        trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[3]->slotName),this,SLOT(getTOTP4()));
     }
 
     if (TOTP_SlotCount > 4)
     {
         if (cryptostick->TOTPSlots[4]->isProgrammed==true){
             QString actionName("TOTP slot 5 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[4]->slotName),this,SLOT(getTOTP5()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[4]->slotName),this,SLOT(getTOTP5()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[4]->slotName),this,SLOT(getTOTP5()));
         }
     }
     if (TOTP_SlotCount > 5)
     {
         if (cryptostick->TOTPSlots[5]->isProgrammed==true){
             QString actionName("TOTP slot 6 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[5]->slotName),this,SLOT(getTOTP6()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[5]->slotName),this,SLOT(getTOTP6()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[5]->slotName),this,SLOT(getTOTP6()));
         }
     }
     if (TOTP_SlotCount > 6)
     {
         if (cryptostick->TOTPSlots[6]->isProgrammed==true){
             QString actionName("TOTP slot 7 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[6]->slotName),this,SLOT(getTOTP7()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[6]->slotName),this,SLOT(getTOTP7()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[6]->slotName),this,SLOT(getTOTP7()));
         }
     }
     if (TOTP_SlotCount > 7)
     {
         if (cryptostick->TOTPSlots[7]->isProgrammed==true){
             QString actionName("TOTP slot 8 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[7]->slotName),this,SLOT(getTOTP8()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[7]->slotName),this,SLOT(getTOTP8()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[7]->slotName),this,SLOT(getTOTP8()));
         }
     }
     if (TOTP_SlotCount > 8)
     {
         if (cryptostick->TOTPSlots[8]->isProgrammed==true){
             QString actionName("TOTP slot 9 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP9()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP9()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP9()));
         }
     }
     if (TOTP_SlotCount > 9)
     {
         if (cryptostick->TOTPSlots[9]->isProgrammed==true){
             QString actionName("TOTP slot 10 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP10()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP10()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP10()));
         }
     }
     if (TOTP_SlotCount > 10)
     {
         if (cryptostick->TOTPSlots[10]->isProgrammed==true){
             QString actionName("TOTP slot 11 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[10]->slotName),this,SLOT(getTOTP11()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[10]->slotName),this,SLOT(getTOTP11()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[10]->slotName),this,SLOT(getTOTP11()));
         }
     }
     if (TOTP_SlotCount > 11)
     {
         if (cryptostick->TOTPSlots[11]->isProgrammed==true){
             QString actionName("TOTP slot 12 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[11]->slotName),this,SLOT(getTOTP12()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[11]->slotName),this,SLOT(getTOTP12()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[11]->slotName),this,SLOT(getTOTP12()));
         }
     }
     if (TOTP_SlotCount > 12)
     {
         if (cryptostick->TOTPSlots[12]->isProgrammed==true){
             QString actionName("TOTP slot 13 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[12]->slotName),this,SLOT(getTOTP13()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[12]->slotName),this,SLOT(getTOTP13()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[12]->slotName),this,SLOT(getTOTP13()));
         }
     }
     if (TOTP_SlotCount > 13)
     {
         if (cryptostick->TOTPSlots[13]->isProgrammed==true){
             QString actionName("TOTP slot 14 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[13]->slotName),this,SLOT(getTOTP14()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[13]->slotName),this,SLOT(getTOTP14()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[13]->slotName),this,SLOT(getTOTP14()));
         }
     }
     if (TOTP_SlotCount > 14)
     {
         if (cryptostick->TOTPSlots[14]->isProgrammed==true){
             QString actionName("TOTP slot 15 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[14]->slotName),this,SLOT(getTOTP15()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[14]->slotName),this,SLOT(getTOTP15()));
+            trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[14]->slotName),this,SLOT(getTOTP15()));
         }
     }
 
+
+    for (i=0; i<3; i++)
+        if (cryptostick->HOTPSlots[i]->isProgrammed == true) {
+            trayMenuHOTPSubMenu = trayMenu->addMenu("HOTP slots");
+            break;
+        }
+
     if (cryptostick->HOTPSlots[0]->isProgrammed==true){
         QString actionName("HOTP slot 1 ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[0]->slotName),this,SLOT(getHOTP1()));
+        // trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[0]->slotName),this,SLOT(getHOTP1()));
+        trayMenuHOTPSubMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[0]->slotName),this,SLOT(getHOTP1()));
     }
     if (cryptostick->HOTPSlots[1]->isProgrammed==true){
         QString actionName("HOTP slot 2 ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[1]->slotName),this,SLOT(getHOTP2()));
+        // trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[1]->slotName),this,SLOT(getHOTP2()));
+        trayMenuHOTPSubMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[1]->slotName),this,SLOT(getHOTP2()));
     }
     if (HOTP_SlotCount >= 3)
     {
         if (cryptostick->HOTPSlots[2]->isProgrammed==true){
             QString actionName("HOTP slot 3 ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[2]->slotName),this,SLOT(getHOTP3()));
+            // trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[2]->slotName),this,SLOT(getHOTP3()));
+            trayMenuHOTPSubMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[2]->slotName),this,SLOT(getHOTP3()));
         }
     }
 
@@ -1357,7 +1394,8 @@ void MainWindow::generateMenuForStick20()
     }
 
 
-    trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+    trayMenuSubConfigure = trayMenu->addMenu( "Configure" );
+    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.ico"));
     trayMenuSubConfigure->addAction(restoreActionStick20);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
@@ -4191,7 +4229,8 @@ void MainWindow::generateMenuPasswordSafe()
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
         QString actionName("Unlock password safe");
-        trayMenu->addAction(actionName,this,SLOT(PWS_Clicked_EnablePWSAccess()));
+        trayMenu->addAction(QIcon(":/images/safe2.ico"), actionName, this, SLOT(PWS_Clicked_EnablePWSAccess()));
+//        actionName->setIcon();
         return;
     }
 

@@ -74,6 +74,8 @@ private:
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     QMenu *trayMenuSubConfigure;
+    QMenu *trayMenuTOTPSubMenu;
+    QMenu *trayMenuHOTPSubMenu;
     QMenu *trayMenuSubSpecialConfigure;
     QClipboard *clipboard;
 
