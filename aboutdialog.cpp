@@ -48,7 +48,7 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
     ui->serialEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
 
     ui->ButtonStickStatus->hide();
-    ui->ButtonOK->hide();
+//    ui->ButtonOK->hide();
 
     if (true == cryptostick->isConnected)
     {
