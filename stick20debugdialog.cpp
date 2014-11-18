@@ -154,12 +154,16 @@ void DebugDialog::UpdateDebugText()
     {
         if (TRUE == DebugTextHasChanged)
         {
+
+            #ifdef _MSC_VER
+            strcat_s (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText);
+            #else
             // Check if we are going to overflow DebugText_Stick20
             if ( strlen(DebugNewText) > sizeof(DebugText_Stick20) - strlen(DebugText_Stick20) -1 )
                 return;
 
             strcat (DebugText_Stick20, DebugNewText);
-
+            #endif
 //            ui->plainTextEdit->setPlainText(DebugText_Stick20);
             ui->plainTextEdit->appendPlainText(DebugNewText);
             DebugNewText[0] = 0;
@@ -188,11 +192,16 @@ void DebugDialog::updateText(void)
 {
     if (TRUE == DebugTextHasChanged)
     {
+        #ifdef _MSC_VER
+        strcat_s (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText);
+        #else
         // Check if we are going to overflow DebugText_Stick20
         if ( strlen(DebugNewText) > sizeof(DebugText_Stick20) - strlen(DebugText_Stick20) -1 )
             return;
 
         strcat (DebugText_Stick20,DebugNewText);
+        #endif
+
         ui->plainTextEdit->appendPlainText(DebugNewText);
         DebugNewText[0] = 0;
         DebugNewTextLen = 0;
@@ -219,11 +228,16 @@ void DebugDialog::on_pushButton_clicked()
 {
     if (TRUE == DebugTextHasChanged)
     {
+        #ifdef _MSC_VER
+        strcat_s (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText);
+        #else
         // Check if we are going to overflow DebugText_Stick20
         if ( strlen(DebugNewText) > sizeof(DebugText_Stick20) - strlen(DebugText_Stick20) -1 )
             return;
 
         strcat (DebugText_Stick20,DebugNewText);
+        #endif
+
         ui->plainTextEdit->appendPlainText(DebugNewText);
         DebugNewText[0] = 0;
         DebugNewTextLen = 0;
