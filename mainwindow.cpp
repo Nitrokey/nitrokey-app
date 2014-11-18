@@ -107,6 +107,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     TOTP_SlotCount = TOTP_SLOT_COUNT;
 
     trayMenu               = NULL;
+    Stick20ScSdCardOnline          = FALSE;
     CryptedVolumeActive    = FALSE;
     HiddenVolumeActive     = FALSE;
     NormalVolumeRWActive   = FALSE;
@@ -723,6 +724,7 @@ void MainWindow::checkConnection()
     else if (result == -1)
     {
         ui->statusBar->showMessage("Device disconnected.");
+        Stick20ScSdCardOnline       = FALSE;
         CryptedVolumeActive = FALSE;
         HiddenVolumeActive  = FALSE;
         set_initial_time = FALSE;
@@ -1146,6 +1148,8 @@ void MainWindow::initActionsForStick20()
     LockDeviceAction = new QAction(tr("&Lock Device"), this);
     connect(LockDeviceAction, SIGNAL(triggered()), this, SLOT(startLockDeviceAction()));
 
+    Stick20ActionUpdateStickStatus = new QAction(tr("Smartcard or SD card are not ready"), this);
+    connect(Stick20ActionUpdateStickStatus, SIGNAL(triggered()), this, SLOT(startStick20GetStickStatus()));
 }
 
 /*******************************************************************************
@@ -1357,6 +1361,11 @@ void MainWindow::generateMenuForStick20()
 {
     //int i;
     int AddSeperator;
+
+    if (FALSE == Stick20ScSdCardOnline)
+    {
+        trayMenu->addAction(Stick20ActionInitCryptedVolume       );
+    }
 
     if (FALSE == StickNotInitated)
     {
@@ -3001,6 +3010,16 @@ int MainWindow::UpdateDynamicMenuEntrys (void)
     {
 //        qDebug () << "UpdateDynamicMenuEntrys" << HID_Stick20Configuration_st.SDFillWithRandomChars_u8  << "SdCardNotErased = FALSE";
         SdCardNotErased  = FALSE;
+    }
+
+    if ((0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) ||
+        (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32))
+    {
+        Stick20ScSdCardOnline = FALSE;                    // SD card or smartcard are not ready
+    }
+    else
+    {
+        Stick20ScSdCardOnline = TRUE;
     }
 
     generateMenu();
