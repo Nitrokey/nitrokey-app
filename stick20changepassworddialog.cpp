@@ -93,22 +93,24 @@ void DialogChangePassword::InitData(void)
     switch (PasswordKind)
     {
         case STICK20_PASSWORD_KIND_USER :
-            ui->label->setText("Change user PIN");
-            ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New PIN");
-            ui->label_4->setText("New PIN");
+            this->setWindowTitle("Change user PIN");
+            ui->label_2->setText("Admin PIN:");
+            ui->label_3->setText("New user PIN:");
+            ui->label_4->setText("New user PIN:");
             break;
         case STICK20_PASSWORD_KIND_ADMIN :
-            ui->label->setText("Change admin PIN");
-            ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New PIN");
-            ui->label_4->setText("New PIN");
+            this->setWindowTitle("Change admin PIN");
+            // ui->label->setText("Change admin PIN");
+            ui->label_2->setText("Admin PIN:");
+            ui->label_3->setText("New admin PIN:");
+            ui->label_4->setText("New admin PIN:");
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
-            ui->label->setText("Reset user PIN");
-            ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New user PIN");
-            ui->label_4->setText("New user PIN");
+            // ui->label->setText("Reset user PIN");
+            this->setWindowTitle("Reset user PIN");
+            ui->label_2->setText("Admin PIN:");
+            ui->label_3->setText("New user PIN:");
+            ui->label_4->setText("New user PIN:");
             break;
     }
 }
