@@ -109,12 +109,6 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button)
         }
 
         STRNCPY ((char*)HV_Setup_st.HiddenVolumePassword_au8,sizeof (HV_Setup_st.HiddenVolumePassword_au8),ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-        /*#ifdef _MSC_VER
-        strncpy_s ((char*)HV_Setup_st.HiddenVolumePassword_au8,sizeof (HV_Setup_st.HiddenVolumePassword_au8),ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-        #else
-        strncpy ((char*)HV_Setup_st.HiddenVolumePassword_au8,ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-        #endif*/
-
         HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
         done (true);
     }

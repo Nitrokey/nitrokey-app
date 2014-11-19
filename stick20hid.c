@@ -99,13 +99,6 @@ void DebugInitDebugging (void)
 
     STRCPY (DebugingStickFilename,sizeof (DebugingStickFilename),"Firmwarelog.txt");
     STRCPY (DebugingGuiFilename,sizeof (DebugingGuiFilename),"Guilog.txt");
-    /*#ifdef _MSC_VER
-    strcpy_s (DebugingStickFilename,sizeof (DebugingStickFilename),"Firmwarelog.txt");
-    strcpy_s (DebugingGuiFilename,sizeof (DebugingGuiFilename),"Guilog.txt");
-    #else
-    strcpy (DebugingStickFilename,"Firmwarelog.txt");
-    strcpy (DebugingGuiFilename,"Guilog.txt");
-    #endif*/
 }
 
 /*******************************************************************************
@@ -180,17 +173,6 @@ void DebugAppendFileStickText (char *Text)
     FOPEN(fp, DebugingStickFilename,"a+");
     if (0 == fp)
     {
-/*
-    #ifdef _MSC_VER
-    errno_t Err_t;
-    Err_t = fopen_s (&fp,DebugingStickFilename,"a+");
-    if (0 != Err_t)
-    #else
-    fp = fopen (DebugingStickFilename,"a+");
-    if (NULL == fp)
-    #endif
-    {
-*/
         return;
     }
 
@@ -234,18 +216,6 @@ void DebugAppendFileGuiText (char *Text)
     FOPEN(fp,DebugingGuiFilename,"a+");
     if (0 ==  fp)
     {
-
-/*
-    #ifdef _MSC_VER
-    errno_t Err_t;
-    Err_t = fopen_s (&fp,DebugingGuiFilename,"a+");
-    if (0 != Err_t)
-    #else
-    fp = fopen (DebugingGuiFilename,"a+");
-    if (NULL == fp)
-    #endif
-    {
-*/
         return;
     }
 
@@ -346,45 +316,6 @@ int HID_GetStick20Configuration (void)
     SNPRINTF(text,sizeof (text),"ActiveSmartCardID_u32            : 0x%X\n",HID_Stick20Configuration_st.ActiveSmartCardID_u32            );                 DebugAppendText (text);
     SNPRINTF(text,sizeof (text),"StickKeysNotInitiated            : %d\n",HID_Stick20Configuration_st.StickKeysNotInitiated            );                 DebugAppendText (text);
 
-
-    /*#ifdef _MSC_VER
-    sprintf_s(text,sizeof (text),"HID_GetStick20Configuration\n" );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"MagicNumber_StickConfig_u16      : %d\n",HID_Stick20Configuration_st.MagicNumber_StickConfig_u16      );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"ReadWriteFlagUncryptedVolume_u8  : %d\n",HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8  );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"ReadWriteFlagCryptedVolume_u8    : %d\n",HID_Stick20Configuration_st.ReadWriteFlagCryptedVolume_u8    );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"VersionInfo_au8[4]               : %d %d %d %d\n",HID_Stick20Configuration_st.VersionInfo_au8[0],HID_Stick20Configuration_st.VersionInfo_au8[1],HID_Stick20Configuration_st.VersionInfo_au8[2],HID_Stick20Configuration_st.VersionInfo_au8[3]                  );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"ReadWriteFlagHiddenVolume_u8     : %d\n",HID_Stick20Configuration_st.ReadWriteFlagHiddenVolume_u8     );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"FirmwareLocked_u8                : %d\n",HID_Stick20Configuration_st.FirmwareLocked_u8                );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"NewSDCardFound_u8                : %d\n",HID_Stick20Configuration_st.NewSDCardFound_u8                );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"SDFillWithRandomChars_u8         : %d\n",HID_Stick20Configuration_st.SDFillWithRandomChars_u8         );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"ActiveSD_CardID_u32              : 0x%08X\n",HID_Stick20Configuration_st.ActiveSD_CardID_u32              );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"VolumeActiceFlag_u8              : %d\n",HID_Stick20Configuration_st.VolumeActiceFlag_u8              );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"NewSmartCardFound_u8             : %d\n",HID_Stick20Configuration_st.NewSmartCardFound_u8             );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"UserPwRetryCount                 : %d\n",HID_Stick20Configuration_st.UserPwRetryCount                 );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"AdminPwRetryCount                : %d\n",HID_Stick20Configuration_st.AdminPwRetryCount                );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"ActiveSmartCardID_u32            : 0x%X\n",HID_Stick20Configuration_st.ActiveSmartCardID_u32            );                 DebugAppendText (text);
-    sprintf_s(text,sizeof (text),"StickKeysNotInitiated            : %d\n",HID_Stick20Configuration_st.StickKeysNotInitiated            );                 DebugAppendText (text);
-
-    #else
-
-    snprintf(text,sizeof (text),"HID_GetStick20Configuration\n" );                 DebugAppendText (text);
-
-    snprintf(text,sizeof (text),"MagicNumber_StickConfig_u16      : %d\n",HID_Stick20Configuration_st.MagicNumber_StickConfig_u16      );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"ReadWriteFlagUncryptedVolume_u8  : %d\n",HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8  );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"ReadWriteFlagCryptedVolume_u8    : %d\n",HID_Stick20Configuration_st.ReadWriteFlagCryptedVolume_u8    );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"VersionInfo_au8[4]               : %d %d %d %d\n",HID_Stick20Configuration_st.VersionInfo_au8[0],HID_Stick20Configuration_st.VersionInfo_au8[1],HID_Stick20Configuration_st.VersionInfo_au8[2],HID_Stick20Configuration_st.VersionInfo_au8[3]                  );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"ReadWriteFlagHiddenVolume_u8     : %d\n",HID_Stick20Configuration_st.ReadWriteFlagHiddenVolume_u8     );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"FirmwareLocked_u8                : %d\n",HID_Stick20Configuration_st.FirmwareLocked_u8                );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"NewSDCardFound_u8                : %d\n",HID_Stick20Configuration_st.NewSDCardFound_u8                );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"SDFillWithRandomChars_u8         : %d\n",HID_Stick20Configuration_st.SDFillWithRandomChars_u8         );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"ActiveSD_CardID_u32              : 0x%08X\n",HID_Stick20Configuration_st.ActiveSD_CardID_u32              );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"VolumeActiceFlag_u8              : %d\n",HID_Stick20Configuration_st.VolumeActiceFlag_u8              );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"NewSmartCardFound_u8             : %d\n",HID_Stick20Configuration_st.NewSmartCardFound_u8             );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"UserPwRetryCount                 : %d\n",HID_Stick20Configuration_st.UserPwRetryCount                 );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"AdminPwRetryCount                : %d\n",HID_Stick20Configuration_st.AdminPwRetryCount                );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"ActiveSmartCardID_u32            : 0x%X\n",HID_Stick20Configuration_st.ActiveSmartCardID_u32            );                 DebugAppendText (text);
-    snprintf(text,sizeof (text),"StickKeysNotInitiated            : %d\n",HID_Stick20Configuration_st.StickKeysNotInitiated            );                 DebugAppendText (text);
-    #endif*/
 
 //    if(len){}//Fix warnings
 //    if(NewDebugBlock){}//Fix warnings
@@ -590,29 +521,14 @@ if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE != HID_Stick20ReceiveData_st.SendData
         int i;
 
         SNPRINTF(text,sizeof (text),"HID_GetStick20ReceiveData: ");
-        /*#ifdef _MSC_VER
-        sprintf_s(text,sizeof (text),"HID_GetStick20ReceiveData: ");
-        #else
-        snprintf(text,sizeof (text),"HID_GetStick20ReceiveData: ");
-        #endif*/
 
         DebugAppendText (text);
         for (i=0;i<64;i++)
         {
             SNPRINTF(text,sizeof (text),"%02x ",data[i]);
-            /*#ifdef _MSC_VER
-            sprintf_s(text,sizeof (text),"%02x ",data[i]);
-            #else
-            snprintf(text,sizeof (text),"%02x ",data[i]);
-            #endif*/
             DebugAppendText (text);
         }
         SNPRINTF(text,sizeof (text),"\n");
-        /*#ifdef _MSC_VER
-        sprintf_s(text,sizeof (text),"\n");
-        #else
-        snprintf(text,sizeof (text),"\n");
-        #endif*/
         DebugAppendText (text);
 
 
