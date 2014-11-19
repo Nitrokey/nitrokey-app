@@ -19,6 +19,7 @@
 
 #include <QMessageBox>
 
+#include "mcvs-wrapper.h"
 #include "stick20changepassworddialog.h"
 #include "ui_stick20changepassworddialog.h"
 #include "stick20responsedialog.h"
@@ -177,11 +178,12 @@ void DialogChangePassword::SendNewPassword(void)
 // Send old password
     PasswordString = ui->lineEdit_OldPW->text().toLatin1();
 
-    #ifdef _MSC_VER
+    STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
+    /*#ifdef _MSC_VER
     strncpy_s ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
     #else
     strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
-    #endif
+    #endif*/
 
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
@@ -200,11 +202,12 @@ void DialogChangePassword::SendNewPassword(void)
 // Change password
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
 
-    #ifdef _MSC_VER
+    STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN,PasswordString.data(),STICK20_PASSOWRD_LEN);
+    /*#ifdef _MSC_VER
     strncpy_s ((char*)&Data[1],STICK20_PASSOWRD_LEN,PasswordString.data(),STICK20_PASSOWRD_LEN);
     #else
     strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
-    #endif
+    #endif*/
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->stick20SendNewPassword (Data);
@@ -243,11 +246,12 @@ void DialogChangePassword::ResetUserPassword (void)
 // Send old password
     PasswordString = ui->lineEdit_OldPW->text().toLatin1();
 
-    #ifdef _MSC_VER
+    STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
+    /*#ifdef _MSC_VER
     strncpy_s ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
     #else
     strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
-    #endif
+    #endif*/
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->stick20SendPassword (Data);
@@ -265,11 +269,12 @@ void DialogChangePassword::ResetUserPassword (void)
 // Reset new user PIN
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
 
-    #ifdef _MSC_VER
+    STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
+    /*#ifdef _MSC_VER
     strncpy_s ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
     #else
     strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
-    #endif
+    #endif*/
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->unlockUserPassword (Data);

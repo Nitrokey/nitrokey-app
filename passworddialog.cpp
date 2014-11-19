@@ -21,6 +21,7 @@
 #include <QMessageBox>
 
 #include "device.h"
+#include "mcvs-wrapper.h"
 
 #include "passworddialog.h"
 #include "ui_passworddialog.h"
@@ -113,11 +114,12 @@ void PasswordDialog::init(char *text,int RetryCount)
     text1[0] = 0;
     if (-1 != RetryCount)
     {
-        #ifdef _MSC_VER
+        SNPRINTF (text1,sizeof (text1)," (Tries left: %d)",RetryCount);
+        /*#ifdef _MSC_VER
         sprintf_s (text1,sizeof (text1)," (Tries left: %d)",RetryCount);
         #else
         snprintf (text1,sizeof (text1)," (Tries left: %d)",RetryCount);
-        #endif
+        #endif*/
     }
     ui->label->setText(tr(text)+tr(text1));
 }
@@ -141,22 +143,24 @@ void PasswordDialog::getPassword(char *text)
 {
     if (FALSE == ui->checkBox_PasswordMatrix->isChecked())
     {
-        #ifdef _MSC_VER
+        STRCPY (&text[1],LOCAL_PASSWORD_SIZE-1,ui->lineEdit->text().toLatin1());
+        /*#ifdef _MSC_VER
         strcpy_s (&text[1],LOCAL_PASSWORD_SIZE-1,ui->lineEdit->text().toLatin1());
         #else
         text[0] = 'P';
         // Check for overflow
         if (strlen(ui->lineEdit->text().toLatin1()) < LOCAL_PASSWORD_SIZE)
             strcpy (&text[1],ui->lineEdit->text().toLatin1());
-        #endif
+        #endif*/
     }
     else
     {
-        #ifdef _MSC_VER
+        STRCPY (text,LOCAL_PASSWORD_SIZE,(char*)password);
+        /*#ifdef _MSC_VER
         strcpy_s (text,LOCAL_PASSWORD_SIZE,(char*)password);
         #else
         strcpy (text,(char*)password);
-        #endif
+        #endif*/
     }
 }
 
