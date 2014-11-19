@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
 
     // Check for multiple instances
     // GUID from http://www.guidgenerator.com/online-guid-generator.aspx
+    /*
     QSharedMemory shared("6b50960df-f5f3-4562-bbdc-84c3bc004ef4");
 
     if( !shared.create( 512, QSharedMemory::ReadWrite) )
@@ -103,8 +104,9 @@ int main(int argc, char *argv[])
       exit(0);
     }
     else {
+*/
         qDebug() << "Application started successfully.";
-    }
+//    }
 
     StartupInfo_st.ExtendedConfigActive  = FALSE;
     StartupInfo_st.FlagDebug             = DEBUG_STATUS_NO_DEBUGGING;
