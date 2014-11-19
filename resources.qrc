@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/images">
         <file>CS_icon.png</file>
+        <file>logo.png</file>
         <file>quit.ico</file>
         <file>safe.ico</file>
         <file>safe2.ico</file>

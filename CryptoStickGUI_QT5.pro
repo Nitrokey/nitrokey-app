@@ -9,6 +9,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+sources.files = qss
 
 TARGET = CryptoStickGUI
 TEMPLATE = app
@@ -37,7 +38,9 @@ SOURCES += main.cpp\
     base32.cpp \
     aboutdialog.cpp \
     stick20hid.c \
-    passwordsafedialog.cpp
+    passwordsafedialog.cpp \
+    gui.cpp \
+    splash.cpp
 
 win32 {
  SOURCES +=   hid_win.c
@@ -77,7 +80,9 @@ HEADERS  += mainwindow.h \
     command.h \
     base32.h \
     aboutdialog.h \
-    passwordsafedialog.h
+    passwordsafedialog.h \
+    gui.h \
+    splash.h
 
 FORMS    += mainwindow.ui \
     stick20window.ui \
@@ -112,5 +117,6 @@ INCLUDEPATH += /usr/include/libusb-1.0
 OTHER_FILES +=
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    stylesheet.qrc
 

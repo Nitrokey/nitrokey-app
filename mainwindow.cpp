@@ -98,6 +98,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    Q_INIT_RESOURCE(stylesheet);
+
     int ret;
     QMetaObject::Connection ret_connection;
 
@@ -1147,6 +1149,7 @@ void MainWindow::initActionsForStick20()
 void MainWindow::generateMenuOTP()
 {
 
+    QAction *tmp_action;
     int i;
     for (i=0; i<15; i++)
         if (cryptostick->TOTPSlots[i]->isProgrammed == true) {
@@ -1155,23 +1158,27 @@ void MainWindow::generateMenuOTP()
         }
 
     if (cryptostick->TOTPSlots[0]->isProgrammed==true){
-        QString actionName("TOTP slot 1 ");
+        // QString actionName("TOTP slot 1 ");
         // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[0]->slotName),this,SLOT(getTOTP1()));
-        trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[0]->slotName),this,SLOT(getTOTP1()));
+        QString actionName("1. ");
+        tmp_action = trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[0]->slotName),this,SLOT(getTOTP1()));
     }
     if (cryptostick->TOTPSlots[1]->isProgrammed==true){
-        QString actionName("TOTP slot 2 ");
+        // QString actionName("TOTP slot 2 ");
         // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[1]->slotName),this,SLOT(getTOTP2()));
+        QString actionName("2. ");
         trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[1]->slotName),this,SLOT(getTOTP2()));
     }
     if (cryptostick->TOTPSlots[2]->isProgrammed==true){
-        QString actionName("TOTP slot 3 ");
+        // QString actionName("TOTP slot 3 ");
         // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[2]->slotName),this,SLOT(getTOTP3()));
+        QString actionName("3. ");
         trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[2]->slotName),this,SLOT(getTOTP3()));
     }
     if (cryptostick->TOTPSlots[3]->isProgrammed==true){
-        QString actionName("TOTP slot 4 ");
+        // QString actionName("TOTP slot 4 ");
         // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[3]->slotName),this,SLOT(getTOTP4()));
+        QString actionName("4. ");
         trayMenuTOTPSubMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[3]->slotName),this,SLOT(getTOTP4()));
     }
 

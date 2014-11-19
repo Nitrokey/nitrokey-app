@@ -19,6 +19,7 @@
 */
 
 #include <QApplication>
+#include "splash.h"
 #include "mainwindow.h"
 #include "device.h"
 #include "stick20hid.h"
@@ -79,6 +80,9 @@ void HelpInfos (void)
 
 int main(int argc, char *argv[])
 {
+
+    Q_INIT_RESOURCE(stylesheet);
+
     int i;
     //int DebugWindowActive;
     //int SpecialConfigActive;
@@ -86,6 +90,23 @@ int main(int argc, char *argv[])
     StartUpParameter_tst StartupInfo_st;
 
     QApplication a(argc, argv);
+
+    SplashScreen *splash = 0;
+      splash = new SplashScreen;
+      splash->show();
+
+    QFile qss( ":/qss/default.qss" );
+    if( ! qss.open( QIODevice::ReadOnly ) ) {
+        qss.setFileName( ":/qss/default.qss" );
+        qss.open( QIODevice::ReadOnly );
+    }
+
+    if( qss.isOpen() )
+    {
+        a.setStyleSheet( qss.readAll() );
+    }
+
+    QTimer::singleShot(3000,splash,SLOT(deleteLater()));
 
     StartupInfo_st.ExtendedConfigActive  = FALSE;
     StartupInfo_st.FlagDebug             = DEBUG_STATUS_NO_DEBUGGING;
