@@ -616,7 +616,7 @@ if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE != HID_Stick20ReceiveData_st.SendData
         DebugAppendText (text);
 
 
-        sprintf(text,"HID_GetStick20ReceiveData: SendCounter %d Typ %d - %d - Size %d\n",
+        SNPRINTF (text,sizeof (text),"HID_GetStick20ReceiveData: SendCounter %d Typ %d - %d - Size %d\n",
                     HID_Stick20ReceiveData_st.SendCounter_u8,
                     HID_Stick20ReceiveData_st.SendDataType_u8,
                     HID_Stick20ReceiveData_st.FollowBytesFlag_u8,
