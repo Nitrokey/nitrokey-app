@@ -1,13 +1,13 @@
 <RCC>
     <qresource prefix="/images">
-        <file>CS_icon.png</file>
-        <file>logo.png</file>
-        <file>quit.ico</file>
-        <file>safe.ico</file>
-        <file>safe2.ico</file>
-        <file>settings.ico</file>
-        <file>harddrive.ico</file>
-        <file>about.ico</file>
-        <file>ProgressWheel.GIF</file>
+        <file>images/CS_icon.png</file>
+        <file>images/logo.png</file>
+        <file>images/quit.ico</file>
+        <file>images/safe.ico</file>
+        <file>images/safe2.ico</file>
+        <file>images/settings.ico</file>
+        <file>images/harddrive.ico</file>
+        <file>images/about.ico</file>
+        <file>images/ProgressWheel.GIF</file>
     </qresource>
 </RCC>
