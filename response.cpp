@@ -21,6 +21,7 @@
 
 #include "response.h"
 #include "string.h"
+#include "mcvs-wrapper.h"
 
 #include "stick20responsedialog.h"
 
@@ -74,30 +75,33 @@ void Response::DebugResponse()
     int i;
     static int Counter = 0;
 
-    #ifdef _MSC_VER
+    SNPRINTF(text,sizeof (text),"%6d :getResponse : ",Counter);
+    /*#ifdef _MSC_VER
     sprintf_s(text,sizeof (text),"%6d :getResponse : ",Counter);
     #else
     snprintf(text,sizeof (text),"%6d :getResponse : ",Counter);
-    #endif
+    #endif*/
 
     Counter++;
     DebugAppendText (text);
     for (i=0;i<=64;i++)
     {
-        #ifdef _MSC_VER
+        SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)reportBuffer[i]);
+        /*#ifdef _MSC_VER
         snprintf_s(text,sizeof (text),"%02x ",(unsigned char)reportBuffer[i]);
         #else
         snprintf(text,sizeof (text),"%02x ",(unsigned char)reportBuffer[i]);
-        #endif
+        #endif*/
 
         DebugAppendText (text);
     }
 
-    #ifdef _MSC_VER
+    SNPRINTF(text,sizeof (text),"\n");
+    /*#ifdef _MSC_VER
     snprintf_s(text,sizeof (text),"\n");
     #else
     snprintf(text,sizeof (text),"\n");
-    #endif
+    #endif*/
 
     DebugAppendText (text);
 
@@ -146,17 +150,21 @@ void Response::DebugResponse()
             break;
         case CMD_READ_SLOT_NAME :
 
-            #ifdef _MSC_VER
+            STRNCPY (text1,sizeof (text1),data,15);
+            /*#ifdef _MSC_VER
             strncpy_s (text1,sizeof (text1),data,15);
             #else
             strncpy (text1,data,15);
-            #endif
+            #endif*/
             text1[15] = 0;
-            #ifdef _MSC_VER
+
+
+            SNPRINTF(text,sizeof (text),"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
+            /*#ifdef _MSC_VER
             snprintf_s(text,sizeof (text),"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
             #else
             snprintf(text,sizeof (text),"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
-            #endif
+            #endif*/
 
             DebugAppendText (text);
             break;

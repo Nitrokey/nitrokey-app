@@ -79,7 +79,8 @@ HEADERS  += mainwindow.h \
     base32.h \
     aboutdialog.h \
     passwordsafedialog.h \
-    securitydialog.h
+    securitydialog.h \
+    mcvs-wrapper.h
 
 FORMS    += mainwindow.ui \
     stick20window.ui \
