@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>355</width>
-    <height>467</height>
+    <height>483</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -54,7 +54,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Crypto Stick Utility</string>
+           <string>Crypto Stick App</string>
           </property>
          </widget>
         </item>
@@ -131,7 +131,7 @@
              <item>
               <widget class="QLabel" name="label_3">
                <property name="text">
-                <string>Utility Version:</string>
+                <string>App Version:</string>
                </property>
               </widget>
              </item>
