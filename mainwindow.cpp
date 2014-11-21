@@ -1152,7 +1152,7 @@ void MainWindow::initActionsForStick20()
     connect(LockDeviceAction, SIGNAL(triggered()), this, SLOT(startLockDeviceAction()));
 
     Stick20ActionUpdateStickStatus = new QAction(tr("Smartcard or SD card are not ready"), this);
-    connect(Stick20ActionUpdateStickStatus, SIGNAL(triggered()), this, SLOT(startStick20GetStickStatus()));
+    connect(Stick20ActionUpdateStickStatus, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 }
 
 /*******************************************************************************
@@ -1365,9 +1365,10 @@ void MainWindow::generateMenuForStick20()
     //int i;
     int AddSeperator;
 
-    if (FALSE == Stick20ScSdCardOnline)
+    if (FALSE == Stick20ScSdCardOnline)         // Is Stick 2.0 online (SD + SC accessable?)
     {
-        trayMenu->addAction(Stick20ActionInitCryptedVolume       );
+        trayMenu->addAction(Stick20ActionUpdateStickStatus);
+        return;
     }
 
     if (FALSE == StickNotInitated)
@@ -3015,15 +3016,31 @@ int MainWindow::UpdateDynamicMenuEntrys (void)
         SdCardNotErased  = FALSE;
     }
 
-    if ((0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) ||
-        (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32))
+    if ((0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) || (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32))
     {
         Stick20ScSdCardOnline = FALSE;                    // SD card or smartcard are not ready
+
+        if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32)
+        {
+            Stick20ActionUpdateStickStatus->setText(tr("SD card is not ready"));
+        }
+        if (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32)
+        {
+            Stick20ActionUpdateStickStatus->setText(tr("Smartcard is not ready"));
+        }
+        if ((0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) && (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32))
+        {
+            Stick20ActionUpdateStickStatus->setText(tr("Smartcard and SD card are not ready"));
+        }
+
     }
     else
     {
         Stick20ScSdCardOnline = TRUE;
     }
+
+
+
 
     generateMenu();
 

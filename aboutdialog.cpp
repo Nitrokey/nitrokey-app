@@ -98,6 +98,28 @@ void AboutDialog::on_ButtonOK_clicked()
 void AboutDialog::showStick20Configuration (void)
 {
     QString OutputText;
+    bool    ErrorFlag;
+
+    ErrorFlag = FALSE;
+
+    if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32)
+    {
+        OutputText.append(QString("\nSD card is not accessable\n\n"));
+        ErrorFlag = TRUE;
+    }
+
+    if (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32)
+    {
+        ui->serialEdit->setText("");
+        OutputText.append(QString("\nSmartcard is not accessable\n\n"));
+        ErrorFlag = TRUE;
+    }
+
+    if (TRUE == ErrorFlag)
+    {
+        ui->DeviceStatusLabel->setText(OutputText);
+        return;
+    }
 
     if (99 == HID_Stick20Configuration_st.UserPwRetryCount)
     {
