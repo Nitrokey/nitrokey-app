@@ -2351,6 +2351,13 @@ void MainWindow::startStick20EnableFirmwareUpdate()
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
+    UpdateDialog dialogUpdate(this);
+    ret = dialogUpdate.exec();
+    if (Accepted != ret)
+    {
+        return;
+    }
+
     PasswordDialog dialog(MatrixInputActive,this);
     dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
     dialog.cryptostick = cryptostick;
@@ -3104,17 +3111,10 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             }
             break;
         case STICK20_CMD_ENABLE_FIRMWARE_UPDATE         :
+            ret = cryptostick->stick20EnableFirmwareUpdate (password);
+            if (TRUE == ret)
             {
-                UpdateDialog dialog(this);
-                ret = dialog.exec();
-                if (Accepted == ret)
-                {
-                    ret = cryptostick->stick20EnableFirmwareUpdate (password);
-                    if (TRUE == ret)
-                    {
-                        waitForAnswerFromStick20 = FALSE;
-                    }
-                }
+                waitForAnswerFromStick20 = FALSE;
             }
             break;
         case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE        :
