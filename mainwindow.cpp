@@ -727,10 +727,11 @@ void MainWindow::checkConnection()
     else if (result == -1)
     {
         ui->statusBar->showMessage("Device disconnected.");
-        Stick20ScSdCardOnline       = FALSE;
-        CryptedVolumeActive = FALSE;
-        HiddenVolumeActive  = FALSE;
-        set_initial_time = FALSE;
+        HID_Stick20Init ();             // Clear stick 20 data
+        Stick20ScSdCardOnline = FALSE;
+        CryptedVolumeActive   = FALSE;
+        HiddenVolumeActive    = FALSE;
+        set_initial_time      = FALSE;
         if (FALSE== DeviceOffline)      // To avoid the continuous reseting of the menu
         {
             generateMenu();

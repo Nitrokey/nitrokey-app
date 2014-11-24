@@ -64,7 +64,8 @@ HID_Stick20SendData_est             HID_Stick20ReceiveData_st;
 HID_Stick20MatrixPasswordData_est   HID_Stick20MatrixPasswordData_st;
 
 int Stick20_ConfigurationChanged = FALSE;
-volatile typeStick20Configuration_st         HID_Stick20Configuration_st;
+volatile typeStick20Configuration_st HID_Stick20Configuration_st;
+volatile typeStick20Configuration_st SavedConfiguration_st;
 
 int Stick20_ProductionInfosChanged = FALSE;
 typeStick20ProductionInfos_st Stick20ProductionInfos_st;
@@ -249,6 +250,8 @@ void DebugAppendFileGuiText (char *Text)
 
 void HID_Stick20Init (void)
 {
+    Stick20_ConfigurationChanged = FALSE;
+
     HID_Stick20Configuration_st.MagicNumber_StickConfig_u16     = 0;
     HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = 0;
     HID_Stick20Configuration_st.ReadWriteFlagCryptedVolume_u8   = 0;
@@ -264,6 +267,9 @@ void HID_Stick20Init (void)
     HID_Stick20Configuration_st.AdminPwRetryCount               = 99;
     HID_Stick20Configuration_st.ActiveSmartCardID_u32           = 0;
     HID_Stick20Configuration_st.StickKeysNotInitiated           = 0;
+
+    SavedConfiguration_st.MagicNumber_StickConfig_u16           = 1;        // Flag for a difference between new and old config
+
 }
 
 /*******************************************************************************
@@ -281,7 +287,6 @@ int HID_GetStick20Configuration (void)
     char text[50];
 //    unsigned char NewDebugBlock = 1;
 //    int len;
-    static typeStick20Configuration_st SavedConfiguration_st;
 
     DebugAppendText ("GetStick20Configuration\n");
 
