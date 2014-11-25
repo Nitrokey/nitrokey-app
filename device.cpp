@@ -273,39 +273,22 @@ int Device::sendCommand(Command *cmd)
     err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
 
     {
-            char text[1000];
-            int i;
-            static int Counter = 0;
+        char text[1000];
+        int i;
+        static int Counter = 0;
 
-            SNPRINTF(text, sizeof(text), "%6d :sendCommand0: ",Counter);
-            /*#ifdef _MSC_VER
-            sprintf_s(text, sizeof(text), "%6d :sendCommand0: ",Counter);
-            #else
-            snprintf(text,sizeof (text),"%6d :sendCommand0: ",Counter);
-            #endif
-            */
-            Counter++;
+        SNPRINTF(text, sizeof(text), "%6d :sendCommand0: ",Counter);
+
+        Counter++;
+        DebugAppendText (text);
+        for (i=0;i<=64;i++)
+        {
+            SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
             DebugAppendText (text);
-            for (i=0;i<=64;i++)
-            {
-                
-                SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-            /*    #ifdef _MSC_VER
-                sprintf_s(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-                #else
-                snprintf(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-                #endif*/
+        }
+        SNPRINTF(text,sizeof (text),"\n");
 
-                DebugAppendText (text);
-            }
-                SNPRINTF(text,sizeof (text),"\n");
-                /*#ifdef _MSC_VER
-                sprintf_s(text,sizeof (text),"\n");
-                #else
-                snprintf(text,sizeof (text),"\n");
-                #endif*/
-
-            DebugAppendText (text);
+        DebugAppendText (text);
 
      }
 
@@ -344,32 +327,15 @@ int Device::sendCommandGetResponse(Command *cmd, Response *resp)
             static int Counter = 0;
 
             SNPRINTF(text,sizeof (text),"%6d :sendCommand1: ",Counter);
-            /*#ifdef _MSC_VER
-            sprintf_s(text,sizeof (text),"%6d :sendCommand1: ",Counter);
-            #else
-            snprintf(text,sizeof (text),"%6d :sendCommand1: ",Counter);
-            #endif*/
-
             Counter++;
             DebugAppendText (text);
             for (i=0;i<=64;i++)
             {
                 SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-                /*#ifdef _MSC_VER
-                sprintf_s(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-                #else
-                snprintf(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-                #endif*/
                 DebugAppendText (text);
             }
             SNPRINTF(text,sizeof (text),"\n");
-            /*#ifdef _MSC_VER
-            sprintf_s(text,sizeof (text),"\n");
-            #else
-            snprintf(text,sizeof (text),"\n");
-            #endif*/
             DebugAppendText (text);
-
      }
 
     if (err==-1)
@@ -1455,11 +1421,6 @@ int Device::passwordSafeEnable (char *password)
     uint8_t data[50];
 
     STRNCPY((char*)data,sizeof(data),password,30);
-    /*#ifdef _MSC_VER
-    strncpy_s ((char*)data,sizeof(data),password,30);
-    #else
-    strncpy ((char*)data,password,30);
-    #endifa*/
 
     data[30+1] = 0;
 
@@ -2289,12 +2250,6 @@ bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeF
     data[0] = VolumeFlag;
 
     STRCPY ((char*)&data[1],sizeof (data)-1,(char*)password);
-    /*#ifdef _MSC_VER
-    strcpy_s ((char*)&data[1],sizeof (data)-1,(char*)password);
-    #else
-    if (strlen((char*)password) < sizeof(data)-1)
-        strcpy ((char*)&data[1],(char*)password);
-    #endif*/
 
     cmd = new Command(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS,data,n+1);
     res = sendCommand(cmd);

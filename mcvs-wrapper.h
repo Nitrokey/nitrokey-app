@@ -4,10 +4,10 @@
 
 #ifdef _MSC_VER
 
-    #define STRCPY(dest, size, source                           strcpy_s( (dest), (size), (source);
+    #define STRCPY(dest, size, source)                          strcpy_s( (dest), (size), (source) );
     #define STRNCPY(dest,dest_size,source,source_size)          strncpy_s( (dest), (dest_size), (source), (source_size) );
     #define STRCAT(dest,dest_size,source)                       strcat_s ( (dest) , (dest_size), (source) );
-    #define SNPRINTF( dest, dest_size, format, ...)             _snprintf_s ( (dest), (dest_size), (format) , ##__VA_ARGS__);
+    #define SNPRINTF( dest, dest_size, format, ...)             sprintf_s ( (dest), (dest_size), (format) , ##__VA_ARGS__);
 
 
     #define FOPEN(FP, file, options)                    \

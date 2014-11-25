@@ -88,6 +88,7 @@ private:
     int PWS_CreatePWSize;
 
     uint64_t currentTime;
+    bool     Stick20ScSdCardOnline;
     bool     CryptedVolumeActive;
     bool     HiddenVolumeActive;
     bool     NormalVolumeRWActive;
@@ -120,6 +121,7 @@ private:
     QAction *Stick20ActionInitCryptedVolume;
     QAction *Stick20ActionFillSDCardWithRandomChars;
     QAction *Stick20ActionGetStickStatus;
+    QAction *Stick20ActionUpdateStickStatus;
     QAction *Stick20ActionSetReadonlyUncryptedVolume;
     QAction *Stick20ActionSetReadWriteUncryptedVolume;
     QAction *Stick20ActionDebugAction;

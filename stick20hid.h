@@ -137,7 +137,6 @@ typedef struct {
 extern int Stick20_ConfigurationChanged;
 extern volatile typeStick20Configuration_st HID_Stick20Configuration_st;
 
-
 #pragma pack(push,1)
 /* Look for 4 byte alignment of 32 bit values */
 typedef struct {
