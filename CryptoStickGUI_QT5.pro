@@ -39,6 +39,7 @@ SOURCES += main.cpp\
     aboutdialog.cpp \
     stick20hid.c \
     passwordsafedialog.cpp \
+    securitydialog.cpp \
     gui.cpp \
     splash.cpp \
     cryptostick-applet.cpp
@@ -82,14 +83,11 @@ HEADERS  += mainwindow.h \
     base32.h \
     aboutdialog.h \
     passwordsafedialog.h \
-<<<<<<< HEAD
     securitydialog.h \
-    mcvs-wrapper.h
-=======
+    mcvs-wrapper.h \
     gui.h \
     splash.h \
     cryptostick-applet.h
->>>>>>> pretify-gui
 
 FORMS    += mainwindow.ui \
     stick20window.ui \

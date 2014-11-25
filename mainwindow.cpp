@@ -239,7 +239,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     if (FALSE == DebugWindowActive)
     {
-        ui->testsGroupBox->hide();
+        //ui->testsGroupBox->hide();
         ui->testHOTPButton->hide();
         ui->testTOTPButton->hide();
         ui->testsSpinBox->hide();
@@ -1379,20 +1379,6 @@ void MainWindow::generateMenuForStick20()
     {
         trayMenu->addAction(Stick20ActionUpdateStickStatus);
         return;
-    }
-
-    if (FALSE == StickNotInitated)
-    {
-// Enable tab for password safe for stick 2
-        if (-1 == ui->tabWidget->indexOf (ui->tab_3))
-        {
-            ui->tabWidget->addTab(ui->tab_3,"Password Safe");
-        }
-        ui->pushButton_StaticPasswords->show ();
-
-// Setup entrys for password safe
-        generateMenuPasswordSafe ();
-        trayMenu->addSeparator();
     }
 
 // Add special entrys
