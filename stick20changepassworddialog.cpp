@@ -17,12 +17,10 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QMessageBox>
-
 #include "stick20changepassworddialog.h"
 #include "ui_stick20changepassworddialog.h"
 #include "stick20responsedialog.h"
-
+#include "cryptostick-applet.h"
 
 
 /*******************************************************************************
@@ -293,49 +291,40 @@ void DialogChangePassword::accept()
 // Check the length of the old password
     if (6 > strlen (ui->lineEdit_OldPW->text().toLatin1()))
     {
-        QMessageBox msgBox;
         QString OutputText;
 
         OutputText = "The minium length of the old password is " + QString("%1").arg(6)+ "chars";
 
-        msgBox.setText(OutputText);
-        msgBox.exec();
+        csApplet->warningBox(OutputText);
         return;
     }
 
 // Check for correct new password entrys
     if (0 != strcmp (ui->lineEdit_NewPW_1->text().toLatin1(),ui->lineEdit_NewPW_2->text().toLatin1()))
     {
-        QMessageBox msgBox;
-
-        msgBox.setText("The new password entrys are not the same");
-        msgBox.exec();
+        csApplet->warningBox("The new password entrys are not the same");
         return;
     }
 
 // Check the new length of password
     if (STICK20_PASSOWRD_LEN <= strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
     {
-        QMessageBox msgBox;
         QString OutputText;
 
         OutputText = "The maximum length of a password is " + QString("%1").arg(STICK20_PASSOWRD_LEN)+ "chars";
 
-        msgBox.setText(OutputText);
-        msgBox.exec();
+        csApplet->warningBox(OutputText);
         return;
     }
 
 // Check the new length of password
     if (6 > strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
     {
-        QMessageBox msgBox;
         QString OutputText;
 
         OutputText = "The minium length of a password is " + QString("%1").arg(6)+ "chars";
 
-        msgBox.setText(OutputText);
-        msgBox.exec();
+        csApplet->warningBox(OutputText);
         return;
     }
 

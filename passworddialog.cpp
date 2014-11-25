@@ -18,7 +18,6 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QMessageBox>
 
 #include "device.h"
 
@@ -26,6 +25,7 @@
 #include "ui_passworddialog.h"
 
 #include "stick20matrixpassworddialog.h"
+#include "cryptostick-applet.h"
 
 /*******************************************************************************
 
@@ -207,7 +207,6 @@ void PasswordDialog::on_buttonBox_accepted()
     int           n;
 //    unsigned char password[50];
     QByteArray    passwordString;
-    QMessageBox   msgBox;
 
     if (false == ui->checkBox_PasswordMatrix->isChecked())
     {
@@ -219,23 +218,20 @@ void PasswordDialog::on_buttonBox_accepted()
         n = passwordString.size();
         if (30 <= n)
         {
-            msgBox.setText("Your PIN is too long! Use not more than 30 characters.");
-            msgBox.exec();
+            csApplet->warningBox("Your PIN is too long! Use not more than 30 characters.");
             done (FALSE);
             return;
         }
         if (6  > n)
         {
-            msgBox.setText("Your PIN is too short. Use at least 6 characters.");
-            msgBox.exec();
+            csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
             done (FALSE);
             return;
         }
 
         if ((0 == strcmp (passwordString, "123456")) || (0 == strcmp (passwordString, "12345678")))
         {
-            msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN.");
-            msgBox.exec();
+            csApplet->warningBox("Warning: Default PIN is used.\nPlease change the PIN.");
         }
         memset (&password[1],0,49);
         memcpy(&password[1],passwordString.data(),n);

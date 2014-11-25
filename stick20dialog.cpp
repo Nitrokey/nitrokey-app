@@ -17,9 +17,9 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QMessageBox>
 #include <QPushButton>
 
+#include "cryptostick-applet.h"
 #include "stick20dialog.h"
 #include "ui_stick20dialog.h"
 
@@ -165,15 +165,13 @@ void Stick20Dialog::on_buttonBox_accepted()
     int         n;
     uint8_t     password[50];
     QByteArray  passwordString;
-    QMessageBox msgBox;
 
     waitForAnswerFromStick20    = FALSE;
     stopWhenStatusOKFromStick20 = FALSE;
 
     // No Stick no work
     if (false == cryptostick->isConnected){
-        msgBox.setText("Stick20Dialog: No stick 2.0 connected!");
-        msgBox.exec();
+        csApplet->warningBox("Stick20Dialog: No stick 2.0 connected!");
         return;
     }
 
@@ -182,8 +180,7 @@ void Stick20Dialog::on_buttonBox_accepted()
         passwordString = ui->PasswordEdit->text().toLatin1();
         // No password entered ?
         if (0 == passwordString.size()){
-            msgBox.setText("Please enter a password");
-            msgBox.exec();
+            csApplet->warningBox("Please enter a password");
             return;
         }
     }
@@ -197,8 +194,7 @@ void Stick20Dialog::on_buttonBox_accepted()
         passwordString = ui->PasswordEdit->text().toLatin1();
         n = passwordString.size();
         if (30 <= n) {
-            msgBox.setText("Password too long! (Max = 30 char)");
-            msgBox.exec();
+            csApplet->warningBox("Password too long! (Max = 30 char)");
             return;
         }
         memset (&password[1],0,49);
@@ -289,11 +285,9 @@ void Stick20Dialog::on_buttonBox_accepted()
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS              :   
             {
-                msgBox.setText("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?");
-                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                msgBox.setDefaultButton(QMessageBox::No);
-                ret = msgBox.exec();
-                if (QMessageBox::Yes == ret)
+                bool answer;
+                answer = csApplet->detailedYesOrNoBox("WARNING","Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?", 0, false);
+                if (answer)
                 {
                     ret = cryptostick->stick20CreateNewKeys (password);
                     if (TRUE == ret)
@@ -305,11 +299,9 @@ void Stick20Dialog::on_buttonBox_accepted()
             break;
         case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
             {
-                msgBox.setText("This command initializes the storage with random data. \nThis will destroy the encrypted volume and all hidden volumes!");
-                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                msgBox.setDefaultButton(QMessageBox::No);
-                ret = msgBox.exec();
-                if (QMessageBox::Yes == ret)
+                bool answer;
+                answer = csApplet->detailedYesOrNoBox("WARNING","This command initializes the storage with random data. \nThis will destroy the encrypted volume and all hidden volumes!", 0, false);
+                if (answer)
                 {
                     ret = cryptostick->stick20FillSDCardWithRandomChars (password,STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
                     if (TRUE == ret)
@@ -320,8 +312,7 @@ void Stick20Dialog::on_buttonBox_accepted()
             }
             break;
          case STICK20_CMD_WRITE_STATUS_DATA        :
-            msgBox.setText("Not implemented");
-            ret = msgBox.exec();
+            csApplet->warningBox("Not implemented");
             break;
         case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN :
             ret = cryptostick->stick20SendSetReadonlyToUncryptedVolume (password);
@@ -372,8 +363,7 @@ void Stick20Dialog::on_buttonBox_accepted()
 
         default :
         // ui->comboBox->currentIndex()
-            msgBox.setText("Stick20Dialog: Wrong combobox value! ");
-            msgBox.exec();
+            csApplet->warningBox("Stick20Dialog: Wrong combobox value! ");
             break;
 
     }
