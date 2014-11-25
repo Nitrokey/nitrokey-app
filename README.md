@@ -27,7 +27,7 @@ For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 
 
 == Cross Compiling with QT5 for Windows on Ubuntu Linux ==
 Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target
-1) sudo make install bison cmake flex intltool libtool scons
+1) sudo apt-get install bison cmake flex intltool libtool scons
 2) git clone https://github.com/mxe/mxe.git
 3) cd mxe && make qt5
 4) export PATH=<mxe root>/usr/bin:$PATH
