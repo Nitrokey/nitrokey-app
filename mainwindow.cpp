@@ -239,13 +239,13 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     if (FALSE == DebugWindowActive)
     {
-        //ui->testsGroupBox->hide();
-        ui->testHOTPButton->hide();
-        ui->testTOTPButton->hide();
-        ui->testsSpinBox->hide();
-        ui->testsSpinBox_2->hide();
-        ui->testsLabel->hide();
-        ui->testsLabel_2->hide();
+        ui->frame_6->setVisible(false);
+        ui->testHOTPButton->setVisible(false);
+        ui->testTOTPButton->setVisible(false);
+        ui->testsSpinBox->setVisible(false);
+        ui->testsSpinBox_2->setVisible(false);
+        ui->testsLabel->setVisible(false);
+        ui->testsLabel_2->setVisible(false);
     }
 
     quitAction = new QAction(tr("&Quit"), this);
