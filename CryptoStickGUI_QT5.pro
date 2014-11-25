@@ -31,6 +31,7 @@ SOURCES += main.cpp\
     stick20changepassworddialog.cpp \
     response.cpp \
     passworddialog.cpp \
+    pindialog.cpp \
     hotpdialog.cpp \
     device.cpp \
     crc32.cpp \
@@ -73,6 +74,7 @@ HEADERS  += mainwindow.h \
     sleep.h \
     response.h \
     passworddialog.h \
+    pindialog.h \
     inttypes.h \
     hotpslot.h \
     hotpdialog.h \
@@ -102,6 +104,7 @@ FORMS    += mainwindow.ui \
     stick20debugdialog.ui \
     stick20changepassworddialog.ui \
     passworddialog.ui \
+    pindialog.ui \
     hotpdialog.ui \
     aboutdialog.ui \
     passwordsafedialog.ui \
