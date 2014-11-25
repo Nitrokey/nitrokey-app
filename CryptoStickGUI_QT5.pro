@@ -40,7 +40,8 @@ SOURCES += main.cpp\
     stick20hid.c \
     passwordsafedialog.cpp \
     gui.cpp \
-    splash.cpp
+    splash.cpp \
+    cryptostick-applet.cpp
 
 win32 {
  SOURCES +=   hid_win.c
@@ -82,7 +83,8 @@ HEADERS  += mainwindow.h \
     aboutdialog.h \
     passwordsafedialog.h \
     gui.h \
-    splash.h
+    splash.h \
+    cryptostick-applet.h
 
 FORMS    += mainwindow.ui \
     stick20window.ui \
