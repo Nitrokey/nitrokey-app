@@ -23,6 +23,7 @@
 #include "mainwindow.h"
 #include "device.h"
 #include "stick20hid.h"
+#include "cryptostick-applet.h"
 
 /*******************************************************************************
 
@@ -82,6 +83,8 @@ int main(int argc, char *argv[])
 {
 
     Q_INIT_RESOURCE(stylesheet);
+
+    csApplet = new CryptostickApplet;
 
     int i;
     //int DebugWindowActive;
