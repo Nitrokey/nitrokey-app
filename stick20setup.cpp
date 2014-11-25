@@ -17,9 +17,9 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QMessageBox>
 #include "stick20setup.h"
 #include "ui_stick20setup.h"
+#include "cryptostick-applet.h"
 
 #include "device.h"
 #include "stick20matrixpassworddialog.h"
@@ -110,12 +110,10 @@ void Stick20Setup::on_pushButton_Change_AdminPW_clicked()
 
 void Stick20Setup::on_pushButton_Ch_Mat_APW_clicked()
 {
-    QMessageBox          msgBox;
     MatrixPasswordDialog dialog(this);
 
 
-    msgBox.setText("The selected lines must be greater then greatest password length");
-    msgBox.exec();
+    csApplet->warningBox("The selected lines must be greater then greatest password length");
 
     dialog.setModal (TRUE);
 
@@ -162,16 +160,12 @@ void Stick20Setup::on_pushButton_Ch_PW_clicked()
 
 void Stick20Setup::on_pushButton_Ch_HiddenVol_clicked()
 {
-    int        ret;
-    QMessageBox msgBox;
+    int ret;
 
-    msgBox.setText("Build a new base key for the hidden volume, all data get lost");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::No);
-    msgBox.setEscapeButton(QMessageBox::No);
+    bool answer;
+    answer = csApplet->yesOrNoBox("Build a new base key for the hidden volume? all data get lost");
 
-    ret = msgBox.exec();
-    if (QMessageBox::Yes == ret)
+    if (answer)
     {
         ret = cryptostick->stick20SetupHiddenVolume ();
 

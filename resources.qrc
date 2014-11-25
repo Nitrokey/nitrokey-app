@@ -1,6 +1,13 @@
 <RCC>
     <qresource prefix="/images">
-        <file>CS_icon.png</file>
-        <file>ProgressWheel.GIF</file>
+        <file alias="CS_icon.png">images/CS_icon.png</file>
+        <file alias="logo.png">images/logo.png</file>
+        <file alias="quit.ico">images/quit.ico</file>
+        <file alias="safe.ico">images/safe.ico</file>
+        <file alias="safe2.ico">images/safe2.ico</file>
+        <file alias="settings.ico">images/settings.ico</file>
+        <file alias="harddrive.ico">images/harddrive.ico</file>
+        <file alias="about.ico">images/about.ico</file>
+        <file alias="ProgressWheel.GIF">images/ProgressWheel.GIF</file>
     </qresource>
 </RCC>

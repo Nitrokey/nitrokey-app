@@ -45,6 +45,7 @@
 #include "passwordsafedialog.h"
 #include "securitydialog.h"
 #include "mcvs-wrapper.h"
+#include "cryptostick-applet.h"
 
 #include <QTimer>
 #include <QMenu>
@@ -101,6 +102,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    Q_INIT_RESOURCE(stylesheet);
+
     int ret;
     QMetaObject::Connection ret_connection;
 
@@ -173,6 +176,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 //    ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
     ui->PWS_ButtonCreatePW->setText(QString("Generate random password "));
 
+    // trayIcon->showMessage("Device disconnected.");
     ui->statusBar->showMessage("Device disconnected.");
 
     cryptostick =  new Device(VID_STICK_OTP, PID_STICK_OTP,VID_STICK_20,PID_STICK_20,VID_STICK_20_UPDATE_MODE,PID_STICK_20_UPDATE_MODE);
@@ -223,16 +227,14 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     }
     else
     {
-        QMessageBox msgBox;
         if (TRUE == DebugWindowActive)
         {
-            msgBox.setText("Crypto Stick GUI is active in DEBUG Mode");
+            csApplet->messageBox("Crypto Stick GUI is active in DEBUG Mode");
         }
         else
         {
-            msgBox.setText("Crypto Stick GUI is active");
+            csApplet->messageBox("Crypto Stick GUI is active");
         }
-        msgBox.exec();
     }
 
     if (FALSE == DebugWindowActive)
@@ -247,6 +249,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     }
 
     quitAction = new QAction(tr("&Quit"), this);
+    quitAction->setIcon(QIcon(":/images/quit.ico"));
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
 
@@ -261,6 +264,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
 
     ActionAboutDialog = new QAction(tr("&About Crypto Stick"), this);
+    ActionAboutDialog->setIcon(QIcon(":/images/about.ico"));
     connect(ActionAboutDialog,  	 SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
     initActionsForStick20 ();
@@ -678,7 +682,8 @@ void MainWindow::checkConnection()
     {
         if (false == cryptostick->activStick20)
         {
-            ui->statusBar->showMessage("Device connected.");
+            // trayIcon->showMessage("Cryptostick Classic connected.");
+            ui->statusBar->showMessage("Cryptostick Classic connected.");
 
             if(set_initial_time == FALSE) {
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
@@ -687,45 +692,33 @@ void MainWindow::checkConnection()
                 ret = 0;
             }
 
+            bool answer;
             if(ret == -2){
-                 QMessageBox msgBox;
-                 msgBox.setWindowTitle("Time is out-of-sync");
-                 msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync. Your computer may be configured with a wrong time or your Crypto Stick may have been attacked. If an attacker or malware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
-                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                 msgBox.setDefaultButton(QMessageBox::No);
-                 ret = msgBox.exec();
-
-                 switch (ret) {
-                   case QMessageBox::Yes:
+                 answer = csApplet->detailedYesOrNoBox("Time is out-of-sync",
+                 "WARNING!\n\nThe time of your computer and Crypto Stick are out of sync. Your computer may be configured with a wrong time or your Crypto Stick may have been attacked. If an attacker or malware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?",
+                 0, false);
+                 if (answer) {
                         resetTime();
                         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                         Sleep::msleep(1000);
                         QApplication::restoreOverrideCursor();
                         generateAllConfigs();
 
-                        msgBox.setText("Time reset!");
-                        msgBox.setStandardButtons(QMessageBox::Ok);
-                        msgBox.exec();
-
-                       break;
-                   case QMessageBox::No:
-
-                       break;
-                   default:
-                       // should never be reached
-                       break;
+                        csApplet->messageBox("Time reset!");
                  }
              }
 
             cryptostick->getStatus();
         } else
         {
+            // trayIcon->showMessage("Crypto Stick Storage connected.");
             ui->statusBar->showMessage("Crypto Stick Storage connected.");
         }
         DeviceOffline = FALSE;
     }
     else if (result == -1)
     {
+        // trayIcon->showMessage("Device disconnected connected.");
         ui->statusBar->showMessage("Device disconnected.");
         HID_Stick20Init ();             // Clear stick 20 data
         Stick20ScSdCardOnline = FALSE;
@@ -760,6 +753,8 @@ void MainWindow::checkConnection()
         if (false == cryptostick->activStick20)
         {
             ui->statusBar->showMessage("Device connected.");
+            // trayIcon->showMessage("Device connected.");
+
             if(set_initial_time == FALSE){
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
                 set_initial_time = TRUE;
@@ -767,39 +762,28 @@ void MainWindow::checkConnection()
                 ret = 0;
             }
 
+            bool answer;
             if(ret == -2){
-                 QMessageBox msgBox;
-                 msgBox.setWindowTitle("Time is out-of-sync");
-                 msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync. Your computer may be configured with a wrong time or your Crypto Stick may have been attacked. If an attacker or malware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
-                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                 msgBox.setDefaultButton(QMessageBox::No);
-                 ret = msgBox.exec();
+                 answer = csApplet->detailedYesOrNoBox("Time is out-of-sync",
+                 "WARNING!\n\nThe time of your computer and Crypto Stick are out of sync. Your computer may be configured with a wrong time or your Crypto Stick may have been attacked. If an attacker or malware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?",
+                 0, false);
 
-                 switch (ret) {
-                   case QMessageBox::Yes:
+                 if (answer)
+                 {
                         resetTime();
                         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                         Sleep::msleep(1000);
                         QApplication::restoreOverrideCursor();
                         generateAllConfigs();
 
-                        msgBox.setText("Time reset!");
-                        msgBox.setStandardButtons(QMessageBox::Ok);
-                        msgBox.exec();
-
-                       break;
-                   case QMessageBox::No:
-
-                       break;
-                   default:
-                       // should never be reached
-                       break;
+                        csApplet->messageBox("Time reset!");
                  }
              }
 
             cryptostick->getStatus();
         } else
         {
+            // trayIcon->showMessage("Crypto Stick Storage connected.");
             ui->statusBar->showMessage("Crypto Stick Storage connected.");
         }
         generateMenu();
@@ -824,24 +808,14 @@ void MainWindow::checkConnection()
 
             if (FALSE == StickNotInitated_DontAsk)
             {
-                QMessageBox msgBox;
-                securitydialog dialog(this);
-
-                ret = dialog.exec();
-
-                msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\"");
-                ret = msgBox.exec();
+                csApplet->warningBox("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\"");
             }
         }
         if (TRUE == SdCardNotErased)
         {
             if (FALSE == SdCardNotErased_DontAsk)
             {
-                QMessageBox msgBox;
-                //int ret;
-
-                msgBox.setText("Warning: Encrypted volume is not secure,\nSelect \"Initialize storage with random data\"");
-                ret = msgBox.exec();
+                csApplet->warningBox("Warning: Encrypted volume is not secure,\nSelect \"Initialize storage with random data\"");
             }
         }
 
@@ -1089,12 +1063,15 @@ void MainWindow::initActionsForStick20()
     connect(Stick20SetupAction, SIGNAL(triggered()), this, SLOT(startStick20Setup()));
 
     Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), this);
+    Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.ico"));
     connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20EnableCryptedVolume()));
 
     Stick20ActionDisableCryptedVolume = new QAction(tr("&Lock encrypted volume"), this);
+    Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/harddrive.ico"));
     connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20DisableCryptedVolume()));
 
     Stick20ActionEnableHiddenVolume = new QAction(tr("&Unlock hidden volume"), this);
+    Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/harddrive.ico"));
     connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), this, SLOT(startStick20EnableHiddenVolume()));
 
     Stick20ActionDisableHiddenVolume = new QAction(tr("&Lock hidden volume"), this);
@@ -1171,153 +1148,185 @@ void MainWindow::initActionsForStick20()
 
 void MainWindow::generateMenuOTP()
 {
-    if (cryptostick->TOTPSlots[0]->isProgrammed==true)
-    {
-//        QString actionName("TOTP slot 1 ");
-        QString actionName("TOTP - ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[0]->slotName),this,SLOT(getTOTP1()));
-    }
+    int i;
+    
+    trayMenuPasswdSubMenu = trayMenu->addMenu("Passwords");
 
-    if (cryptostick->TOTPSlots[1]->isProgrammed==true)
-    {
-//        QString actionName("TOTP slot 2 ");
-        QString actionName("TOTP - ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[1]->slotName),this,SLOT(getTOTP2()));
+    /* TOTP passwords */
+    if (cryptostick->TOTPSlots[0]->isProgrammed==true){
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[0]->slotName, this,SLOT(getTOTP1()));
     }
-
-    if (cryptostick->TOTPSlots[2]->isProgrammed==true)
-    {
-//        QString actionName("TOTP slot 3 ");
-        QString actionName("TOTP - ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[2]->slotName),this,SLOT(getTOTP3()));
+    if (cryptostick->TOTPSlots[1]->isProgrammed==true){
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[1]->slotName, this,SLOT(getTOTP2()));
+    }
+    if (cryptostick->TOTPSlots[2]->isProgrammed==true){
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[2]->slotName, this,SLOT(getTOTP3()));
     }
 
     if (cryptostick->TOTPSlots[3]->isProgrammed==true){
-//        QString actionName("TOTP slot 4 ");
-        QString actionName("TOTP - ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[3]->slotName),this,SLOT(getTOTP4()));
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[3]->slotName, this,SLOT(getTOTP4()));
     }
-
     if (TOTP_SlotCount > 4)
     {
         if (cryptostick->TOTPSlots[4]->isProgrammed==true){
-//            QString actionName("TOTP slot 5 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[4]->slotName),this,SLOT(getTOTP5()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[4]->slotName, this,SLOT(getTOTP5()));
         }
     }
 
     if (TOTP_SlotCount > 5)
     {
         if (cryptostick->TOTPSlots[5]->isProgrammed==true){
-//            QString actionName("TOTP slot 6 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[5]->slotName),this,SLOT(getTOTP6()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[5]->slotName, this,SLOT(getTOTP6()));
         }
     }
 
     if (TOTP_SlotCount > 6)
     {
         if (cryptostick->TOTPSlots[6]->isProgrammed==true){
-//            QString actionName("TOTP slot 7 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[6]->slotName),this,SLOT(getTOTP7()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[6]->slotName, this,SLOT(getTOTP7()));
         }
     }
 
     if (TOTP_SlotCount > 7)
     {
         if (cryptostick->TOTPSlots[7]->isProgrammed==true){
-//            QString actionName("TOTP slot 8 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[7]->slotName),this,SLOT(getTOTP8()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[7]->slotName, this,SLOT(getTOTP8()));
         }
     }
 
     if (TOTP_SlotCount > 8)
     {
         if (cryptostick->TOTPSlots[8]->isProgrammed==true){
-//            QString actionName("TOTP slot 9 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP9()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP9()));
         }
     }
 
     if (TOTP_SlotCount > 9)
     {
         if (cryptostick->TOTPSlots[9]->isProgrammed==true){
-//            QString actionName("TOTP slot 10 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP10()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP10()));
         }
     }
 
     if (TOTP_SlotCount > 10)
     {
         if (cryptostick->TOTPSlots[10]->isProgrammed==true){
-//            QString actionName("TOTP slot 11 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[10]->slotName),this,SLOT(getTOTP11()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[10]->slotName, this,SLOT(getTOTP11()));
         }
     }
 
     if (TOTP_SlotCount > 11)
     {
         if (cryptostick->TOTPSlots[11]->isProgrammed==true){
-//            QString actionName("TOTP slot 12 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[11]->slotName),this,SLOT(getTOTP12()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[11]->slotName, this,SLOT(getTOTP12()));
         }
     }
 
     if (TOTP_SlotCount > 12)
     {
         if (cryptostick->TOTPSlots[12]->isProgrammed==true){
-//            QString actionName("TOTP slot 13 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[12]->slotName),this,SLOT(getTOTP13()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[12]->slotName, this,SLOT(getTOTP13()));
         }
     }
 
     if (TOTP_SlotCount > 13)
     {
         if (cryptostick->TOTPSlots[13]->isProgrammed==true){
-//            QString actionName("TOTP slot 14 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[13]->slotName),this,SLOT(getTOTP14()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[13]->slotName, this,SLOT(getTOTP14()));
         }
     }
 
     if (TOTP_SlotCount > 14)
     {
         if (cryptostick->TOTPSlots[14]->isProgrammed==true){
-//            QString actionName("TOTP slot 15 ");
-            QString actionName("TOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[14]->slotName),this,SLOT(getTOTP15()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[14]->slotName, this,SLOT(getTOTP15()));
         }
     }
 
-    if (cryptostick->HOTPSlots[0]->isProgrammed==true)
-    {
-//        QString actionName("HOTP slot 1 ");
-        QString actionName("HOTP - ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[0]->slotName),this,SLOT(getHOTP1()));
-    }
 
-    if (cryptostick->HOTPSlots[1]->isProgrammed==true)
-    {
-//        QString actionName("HOTP slot 2 ");
-        QString actionName("HOTP - ");
-        trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[1]->slotName),this,SLOT(getHOTP2()));
+    /* HOTP passwords */
+    if (cryptostick->HOTPSlots[0]->isProgrammed==true){
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[0]->slotName, this,SLOT(getHOTP1()));
+    }
+    if (cryptostick->HOTPSlots[1]->isProgrammed==true){
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[1]->slotName, this,SLOT(getHOTP2()));
     }
 
     if (HOTP_SlotCount >= 3)
     {
         if (cryptostick->HOTPSlots[2]->isProgrammed==true){
-//            QString actionName("HOTP slot 3 ");
-            QString actionName("HOTP - ");
-            trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[2]->slotName),this,SLOT(getHOTP3()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[2]->slotName, this,SLOT(getHOTP3()));
         }
+    }
+
+
+
+    if (TRUE == cryptostick->passwordSafeUnlocked) 
+    {
+        if (cryptostick->passwordSafeStatus[0] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (0),this,SLOT(PWS_Clicked_Slot00()));
+        }
+        if (cryptostick->passwordSafeStatus[1] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (1),this,SLOT(PWS_Clicked_Slot01()));
+        }
+        if (cryptostick->passwordSafeStatus[2] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (2),this,SLOT(PWS_Clicked_Slot02()));
+        }
+        if (cryptostick->passwordSafeStatus[3] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (3),this,SLOT(PWS_Clicked_Slot03()));
+        }
+        if (cryptostick->passwordSafeStatus[4] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (4),this,SLOT(PWS_Clicked_Slot04()));
+        }
+        if (cryptostick->passwordSafeStatus[5] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (5),this,SLOT(PWS_Clicked_Slot05()));
+        }
+        if (cryptostick->passwordSafeStatus[6] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (6),this,SLOT(PWS_Clicked_Slot06()));
+        }
+        if (cryptostick->passwordSafeStatus[7] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (7),this,SLOT(PWS_Clicked_Slot07()));
+        }
+        if (cryptostick->passwordSafeStatus[8] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (8),this,SLOT(PWS_Clicked_Slot08()));
+        }
+        if (cryptostick->passwordSafeStatus[9] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (9),this,SLOT(PWS_Clicked_Slot09()));
+        }
+        if (cryptostick->passwordSafeStatus[10] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (10),this,SLOT(PWS_Clicked_Slot10()));
+        }
+        if (cryptostick->passwordSafeStatus[11] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (11),this,SLOT(PWS_Clicked_Slot11()));
+        }
+        if (cryptostick->passwordSafeStatus[12] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (12),this,SLOT(PWS_Clicked_Slot12()));
+        }
+        if (cryptostick->passwordSafeStatus[13] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (13),this,SLOT(PWS_Clicked_Slot13()));
+        }
+        if (cryptostick->passwordSafeStatus[14] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (14),this,SLOT(PWS_Clicked_Slot14()));
+        }
+        if (cryptostick->passwordSafeStatus[15] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (15),this,SLOT(PWS_Clicked_Slot15()));
+        }       
     }
 
     trayMenu->addSeparator();
@@ -1407,6 +1416,20 @@ void MainWindow::generateMenuForStick20()
     }
 
     generateMenuOTP ();
+    trayMenu->addSeparator();
+
+    if (FALSE == StickNotInitated)
+    {
+// Enable tab for password safe for stick 2
+        if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+        {
+            ui->tabWidget->addTab(ui->tab_3,"Password Safe");
+        }
+        ui->pushButton_StaticPasswords->show ();
+
+// Setup entrys for password safe
+        generateMenuPasswordSafe ();
+    }
 
     if (FALSE == SdCardNotErased)
     {
@@ -1432,8 +1455,8 @@ void MainWindow::generateMenuForStick20()
 
     trayMenu->addAction(LockDeviceAction);
 
-    trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
-
+    trayMenuSubConfigure = trayMenu->addMenu( "Configure" );
+    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.ico"));
     trayMenuSubConfigure->addAction(restoreActionStick20);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
@@ -1706,7 +1729,7 @@ void MainWindow::generateAllConfigs()
 void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo)
 {
     //ui->hotpGroupBox->hide();
-    ui->hotpGroupBox->setTitle("Parameters");
+    //ui->hotpGroupBox->setTitle("Parameters");
     ui->label_5->setText("TOTP length:");
     ui->label_6->hide();
     ui->counterEdit->hide();
@@ -1784,7 +1807,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo)
 void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo)
 {
     //ui->hotpGroupBox->show();
-    ui->hotpGroupBox->setTitle("Parameters");
+    //ui->hotpGroupBox->setTitle("Parameters");
     ui->label_5->setText("HOTP length:");
     ui->label_6->show();
     ui->counterEdit->show();
@@ -1981,16 +2004,12 @@ void MainWindow::startConfiguration()
 
             if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
             {
-                QMessageBox   msgBox;
-                msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN.");
-                msgBox.exec();
+                csApplet->warningBox("Warning: Default PIN is used.\nPlease change the PIN.");
             }
 
             if (6 > strlen (password.toLatin1().data()))
             {
-                QMessageBox   msgBox;
-                msgBox.setText("Your PIN is too short. Use at least 6 characters.");
-                msgBox.exec();
+                csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
                 return;
             }
 
@@ -2019,9 +2038,7 @@ void MainWindow::startConfiguration()
    }
     else if (ok)
     {
-        QMessageBox msgBox;
-         msgBox.setText("Invalid password!");
-         msgBox.exec();
+         csApplet->warningBox("Invalid password!");
     }
 }
 
@@ -2757,11 +2774,9 @@ void MainWindow::startStick20LockStickHardware()
 
 void MainWindow::startStick20SetupPasswordMatrix()
 {
-    QMessageBox          msgBox;
     MatrixPasswordDialog dialog(this);
 
-    msgBox.setText("The selected lines must be greater then greatest password length");
-    msgBox.exec();
+    csApplet->warningBox("The selected lines must be greater then greatest password length");
 
     dialog.setModal (TRUE);
 
@@ -3076,7 +3091,6 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
     int         Result;
 
     QByteArray  passwordString;
-    QMessageBox msgBox;
 
     waitForAnswerFromStick20    = FALSE;
     stopWhenStatusOKFromStick20 = FALSE;
@@ -3128,11 +3142,9 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
         case STICK20_CMD_GENERATE_NEW_KEYS              :
 /*
             {
-                msgBox.setText("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?");
-                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                msgBox.setDefaultButton(QMessageBox::No);
-                ret = msgBox.exec();
-                if (QMessageBox::Yes == ret)
+                bool answer = csApplet->yesOrNoBox("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?", 0, false);
+
+                if (answer)
                 {
                     ret = cryptostick->stick20CreateNewKeys (password);
                     if (TRUE == ret)
@@ -3150,11 +3162,11 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             break;
         case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
             {
-                msgBox.setText("This command fills the encrypted volumes with random data.\nThis will destroy all encrypted volumes!\nThis commands requires more than 1 hour for 32GB.");
-                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                msgBox.setDefaultButton(QMessageBox::No);
-                ret = msgBox.exec();
-                if (QMessageBox::Yes == ret)
+                bool answer = csApplet->yesOrNoBox(
+                    "This command fills the encrypted volumes with random data.\nThis will destroy all encrypted volumes!\nThis commands requires more than 1 hour for 32GB.",
+                    0, false);
+
+                if (answer)
                 {
                     ret = cryptostick->stick20FillSDCardWithRandomChars (password,STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
                     if (TRUE == ret)
@@ -3165,9 +3177,8 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                 }
             }
             break;
-         case STICK20_CMD_WRITE_STATUS_DATA        :
-            msgBox.setText("Not implemented");
-            ret = msgBox.exec();
+         case STICK20_CMD_WRITE_STATUS_DATA :
+            csApplet->messageBox("Not implemented");
             break;
         case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN :
             ret = cryptostick->stick20SendSetReadonlyToUncryptedVolume (password);
@@ -3240,8 +3251,7 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             break;
 
         default :
-            msgBox.setText("Stick20Dialog: Wrong combobox value! ");
-            msgBox.exec();
+            csApplet->messageBox("Stick20Dialog: Wrong combobox value! ");
             break;
 
     }
@@ -3364,7 +3374,6 @@ void MainWindow::getCode(uint8_t slotNo)
 
 void MainWindow::on_writeButton_clicked()
 {
-    QMessageBox msgBox;
     int res;
     uint8_t SlotName[16];
 
@@ -3408,13 +3417,11 @@ void MainWindow::on_writeButton_clicked()
         }
 
         if (res==0)
-            msgBox.setText("Configuration has been written successfully.");
+            csApplet->messageBox("Configuration has been written successfully.");
         else if (res == -3)
-            msgBox.setText("The name of the slot must not be empty.");
+            csApplet->warningBox("The name of the slot must not be empty.");
         else
-            msgBox.setText("Error writing config!");
-
-        msgBox.exec();
+            csApplet->warningBox("Error writing config!");
 
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -3426,8 +3433,7 @@ void MainWindow::on_writeButton_clicked()
     }
     else
     {
-        msgBox.setText("Crypto Stick is not connected!");
-        msgBox.exec();
+        csApplet->warningBox("Crypto Stick is not connected!");
     }
 
     displayCurrentSlotConfig();
@@ -3668,7 +3674,6 @@ void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked)
 
 void MainWindow::on_writeGeneralConfigButton_clicked()
 {
-    QMessageBox msgBox;
     int res;
     uint8_t data[5];
 
@@ -3698,11 +3703,9 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
         res =cryptostick->writeGeneralConfig(data);
 
         if (res==0)
-            msgBox.setText("Config written successfully.");
+            csApplet->messageBox("Config written successfully.");
         else
-            msgBox.setText("Error writing config!");
-
-        msgBox.exec();
+            csApplet->warningBox("Error writing config!");
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         Sleep::msleep(500);
@@ -3712,8 +3715,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
 
     }
     else{
-        msgBox.setText("Crypto Stick not connected!");
-        msgBox.exec();
+        csApplet->warningBox("Crypto Stick not connected!");
     }
     displayCurrentGeneralConfig();
 }
@@ -3922,11 +3924,7 @@ void MainWindow::getTOTP15()
 
 void MainWindow::on_eraseButton_clicked()
 {
-    QMessageBox msgBox;
-     msgBox.setText("WARNING: Are you sure you want to erase the slot?");
-     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-     msgBox.setDefaultButton(QMessageBox::No);
-     int ret = msgBox.exec();
+     bool answer = csApplet->yesOrNoBox("WARNING: Are you sure you want to erase the slot?");
      char clean[8];
 
      memset(clean,' ',8);
@@ -3948,26 +3946,16 @@ void MainWindow::on_eraseButton_clicked()
          slotNo = slotNo + 0x20 - HOTP_SlotCount;
      }
 
-     switch (ret) {
-       case QMessageBox::Yes:
-            cryptostick->eraseSlot(slotNo);
-            QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-            Sleep::msleep(1000);
-            QApplication::restoreOverrideCursor();
-            generateAllConfigs();
+     if (answer) {
+        cryptostick->eraseSlot(slotNo);
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        Sleep::msleep(1000);
+        QApplication::restoreOverrideCursor();
+        generateAllConfigs();
 
-            msgBox.setText("Slot has been erased successfully.");
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.exec();
-
-           break;
-       case QMessageBox::No:
-
-           break;
-       default:
-           // should never be reached
-           break;
+        csApplet->messageBox("Slot has been erased successfully.");
      }
+
      displayCurrentSlotConfig();
 }
 
@@ -4225,16 +4213,12 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked()
         }
         else
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't clear slot.");
-            msgBox.exec();
+            csApplet->warningBox("Can't clear slot.");
         }
     }
     else
     {
-        QMessageBox msgBox;
-        msgBox.setText("Slot is erased already.");
-        msgBox.exec();
+        csApplet->messageBox("Slot is erased already.");
     }
 
     generateMenu();
@@ -4333,9 +4317,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     SlotName[PWS_SLOTNAME_LENGTH] = 0;
     if (0 == strlen ((char*)SlotName))
     {
-        QMessageBox msgBox;
-        msgBox.setText("Please enter a slotname.");
-        msgBox.exec();
+        csApplet->warningBox("Please enter a slotname.");
         return;
     }
 
@@ -4346,9 +4328,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     Password[PWS_PASSWORD_LENGTH] = 0;
     if (0 == strlen ((char*)Password))
     {
-        QMessageBox msgBox;
-        msgBox.setText("Please enter a password.");
-        msgBox.exec();
+        csApplet->warningBox("Please enter a password.");
         return;
     }
 
@@ -4361,9 +4341,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     ret = cryptostick->setPasswordSafeSlotData_2 (Slot,(uint8_t*)LoginName);
     if (ERR_NO_ERROR == ret)
     {
-        QMessageBox msgBox;
-        msgBox.setText("Can't save slot.");
-        msgBox.exec();
+        csApplet->warningBox("Can't save slot.");
         return;
     }
 
@@ -4436,94 +4414,8 @@ void MainWindow::generateMenuPasswordSafe()
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
         QString actionName("Unlock password safe");
-        trayMenu->addAction(actionName,this,SLOT(PWS_Clicked_EnablePWSAccess()));
+        trayMenu->addAction(QIcon(":/images/safe2.ico"), actionName, this, SLOT(PWS_Clicked_EnablePWSAccess()));
         return;
-    }
-
-    if (cryptostick->passwordSafeStatus[0] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (0)),this,SLOT(PWS_Clicked_Slot00()));
-    }
-    if (cryptostick->passwordSafeStatus[1] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (1)),this,SLOT(PWS_Clicked_Slot01()));
-    }
-    if (cryptostick->passwordSafeStatus[2] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (2)),this,SLOT(PWS_Clicked_Slot02()));
-    }
-    if (cryptostick->passwordSafeStatus[3] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (3)),this,SLOT(PWS_Clicked_Slot03()));
-    }
-    if (cryptostick->passwordSafeStatus[4] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (4)),this,SLOT(PWS_Clicked_Slot04()));
-    }
-    if (cryptostick->passwordSafeStatus[5] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (5)),this,SLOT(PWS_Clicked_Slot05()));
-    }
-    if (cryptostick->passwordSafeStatus[6] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (6)),this,SLOT(PWS_Clicked_Slot06()));
-    }
-    if (cryptostick->passwordSafeStatus[7] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (7)),this,SLOT(PWS_Clicked_Slot07()));
-    }
-    if (cryptostick->passwordSafeStatus[8] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (8)),this,SLOT(PWS_Clicked_Slot08()));
-    }
-    if (cryptostick->passwordSafeStatus[9] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (9)),this,SLOT(PWS_Clicked_Slot09()));
-    }
-    if (cryptostick->passwordSafeStatus[10] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (10)),this,SLOT(PWS_Clicked_Slot10()));
-    }
-    if (cryptostick->passwordSafeStatus[10] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (10)),this,SLOT(PWS_Clicked_Slot10()));
-    }
-    if (cryptostick->passwordSafeStatus[11] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (11)),this,SLOT(PWS_Clicked_Slot11()));
-    }
-    if (cryptostick->passwordSafeStatus[12] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (12)),this,SLOT(PWS_Clicked_Slot12()));
-    }
-    if (cryptostick->passwordSafeStatus[13] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (13)),this,SLOT(PWS_Clicked_Slot13()));
-    }
-    if (cryptostick->passwordSafeStatus[14] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (14)),this,SLOT(PWS_Clicked_Slot14()));
-    }
-    if (cryptostick->passwordSafeStatus[15] == (unsigned char)true)
-    {
-        QString actionName("PW Safe - ");
-        trayMenu->addAction(actionName.append(PWS_GetSlotName (15)),this,SLOT(PWS_Clicked_Slot15()));
     }
 }
 
@@ -4549,19 +4441,15 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
     PasswordDialog dialog(FALSE,this);
     dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
     dialog.cryptostick = cryptostick;
-
     ret = dialog.exec();
 
     if (Accepted == ret)
     {
         dialog.getPassword ((char*)password);
-
-        ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+        ret_s32 = cryptostick->passwordSafeEnable ((char*)&(password[1]));
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't unlock password safe.");
-            msgBox.exec();
+            csApplet->warningBox(tr("Can't unlock password safe. (Error %1)").arg(ret_s32));
         }
         else
         {
@@ -4718,15 +4606,11 @@ void MainWindow::resetTime()
 
             if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
             {
-                QMessageBox   msgBox;
-                msgBox.setText("WARNING: Default PIN is used.\nPlease change the PIN.");
-                msgBox.exec();
+                csApplet->warningBox("WARNING: Default PIN is used.\nPlease change the PIN.");
             }
             if (6 > strlen (password.toLatin1().data()))
             {
-                QMessageBox   msgBox;
-                msgBox.setText("Your PIN is too short. Use at least 6 characters.");
-                msgBox.exec();
+                csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
             }
 
             for (int i=0;i<25;i++)
@@ -4744,9 +4628,7 @@ void MainWindow::resetTime()
         cryptostick->setTime(TOTP_SET_TIME);
    }
     else if (ok){
-        QMessageBox msgBox;
-         msgBox.setText("Invalid password!");
-         msgBox.exec();
+         csApplet->warningBox("Invalid password!");
     }
 }
 
@@ -4788,16 +4670,12 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
                 if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
                 {
-                    QMessageBox   msgBox;
-                    msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN.");
-                    msgBox.exec();
+                    csApplet->warningBox("Warning: Default PIN is used.\nPlease change the PIN.");
                 }
 
                 if (6 > strlen (password.toLatin1().data()))
                 {
-                    QMessageBox   msgBox;
-                    msgBox.setText("Your PIN is too short. Use at least 6 characters.");
-                    msgBox.exec();
+                    csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
                 }
 
                 for (int i=0;i<25;i++)
@@ -4829,34 +4707,24 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
      ret = cryptostick->setTime(TOTP_CHECK_TIME);
 
+     bool answer;
      if(ret == -2){
-         QMessageBox msgBox;
-         msgBox.setWindowTitle("Time is out-of-sync");
-         msgBox.setText("WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or\nyour Crypto Stick may have been attacked. If an attacker or\nmalware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?");
-         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-         msgBox.setDefaultButton(QMessageBox::No);
-         ret = msgBox.exec();
+         answer = csApplet->detailedYesOrNoBox("Time is out-of-sync",
+         "WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or\nyour Crypto Stick may have been attacked. If an attacker or\nmalware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?",
+         0, false);
 
-         switch (ret) {
-           case QMessageBox::Yes:
+         if (answer)
+         {
                 resetTime();
                 QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
                 Sleep::msleep(1000);
                 QApplication::restoreOverrideCursor();
                 generateAllConfigs();
-
-                msgBox.setText("Time reset!");
-                msgBox.setStandardButtons(QMessageBox::Ok);
-                msgBox.exec();
-
-               break;
-           case QMessageBox::No:
+                
+                csApplet->messageBox("Time reset!");
+          } else {
                return 1;
-               break;
-           default:
-               // should never be reached
-               break;
-         }
+          }
       }
 
      cryptostick->getCode(slotNumber,lastTOTPTime/lastInterval,lastTOTPTime,lastInterval,result);
@@ -4890,9 +4758,7 @@ int MainWindow::getNextCode(uint8_t slotNumber)
      copyToClipboard(otpInClipboard);
     }
      else if (ok){
-         QMessageBox msgBox;
-          msgBox.setText("Invalid password!");
-          msgBox.exec();
+          csApplet->warningBox("Invalid password!");
           return 1;
      }
 
@@ -5132,9 +4998,7 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
 
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't unlock password safe.");
-            msgBox.exec();
+            csApplet->warningBox("Can't unlock password safe.");
         }
         else
         {

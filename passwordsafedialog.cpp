@@ -19,6 +19,7 @@
 
 #include <QClipboard>
 
+#include "cryptostick-applet.h"
 #include "passwordsafedialog.h"
 #include "ui_passwordsafedialog.h"
 
@@ -109,9 +110,7 @@ void PasswordSafeDialog::on_ButtonSendpassword_clicked()
         ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,PWS_SEND_PASSWORD);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't send password chars via HID");
-            msgBox.exec();
+            csApplet->warningBox("Can't send password chars via HID");
             return;
         }
     }
@@ -121,9 +120,7 @@ void PasswordSafeDialog::on_ButtonSendpassword_clicked()
         ret_s32 = cryptostick->getPasswordSafeSlotPassword(UsedSlot);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't get password");
-            msgBox.exec();
+            csApplet->warningBox("Can't get password");
             return;
         }
 
@@ -156,27 +153,21 @@ void PasswordSafeDialog::on_ButtonSendPW_LN_clicked()
         ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,PWS_SEND_LOGINNAME);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't send loginname via keyboard");
-            msgBox.exec();
+            csApplet->warningBox("Can't send loginname via keyboard");
             return;
         }
 
         ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,PWS_SEND_TAB);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't send CR via keyboard");
-            msgBox.exec();
+            csApplet->warningBox("Can't send CR via keyboard");
             return;
         }
 
         ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,PWS_SEND_PASSWORD);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't send password via keyboard");
-            msgBox.exec();
+            csApplet->warningBox("Can't send password via keyboard");
             return;
         }
 
@@ -187,9 +178,7 @@ void PasswordSafeDialog::on_ButtonSendPW_LN_clicked()
         ret_s32 = cryptostick->getPasswordSafeSlotLoginName(UsedSlot);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't get password");
-            msgBox.exec();
+            csApplet->warningBox("Can't get password");
             return;
         }
 
@@ -199,9 +188,7 @@ void PasswordSafeDialog::on_ButtonSendPW_LN_clicked()
         ret_s32 = cryptostick->getPasswordSafeSlotPassword(UsedSlot);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't get password");
-            msgBox.exec();
+            csApplet->warningBox("Can't get password");
             return;
         }
         MsgText.append((char*)cryptostick->passwordSafePassword);
@@ -234,9 +221,7 @@ void PasswordSafeDialog::on_ButtonSendLoginname_clicked()
         ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,PWS_SEND_LOGINNAME);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't send loginname chars via HID");
-            msgBox.exec();
+            csApplet->warningBox("Can't send loginname chars via HID");
             return;
         }
     }
@@ -246,9 +231,7 @@ void PasswordSafeDialog::on_ButtonSendLoginname_clicked()
         ret_s32 = cryptostick->getPasswordSafeSlotLoginName(UsedSlot);
         if (ERR_NO_ERROR != ret_s32)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Can't get password");
-            msgBox.exec();
+            csApplet->warningBox("Can't get password");
             return;
         }
 

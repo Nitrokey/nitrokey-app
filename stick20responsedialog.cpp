@@ -24,6 +24,7 @@
 
 #include "device.h"
 #include "response.h"
+#include "cryptostick-applet.h"
 
 #include "stick20responsedialog.h"
 #include "ui_stick20responsedialog.h"
@@ -561,13 +562,8 @@ void Stick20ResponseTask::checkStick20Status()
             case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
                 switch (ActiveCommand)
                 {
-                    case 0:
-                    default :
-                        QMessageBox msgBox;
-                        msgBox.setText("Get wrong password");
-                        msgBox.exec();
-                        break;
-                }
+                    csApplet->warningBox("Get wrong password");
+                }            
                 EndFlag = TRUE;
                 break;
             case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
@@ -694,10 +690,7 @@ void Stick20ResponseTask::checkStick20Status()
                 case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     {
-                            QMessageBox msgBox;
-                            msgBox.setText("Storage successfully initialized with random data.\nPress OK to reset the device.\n");        // Dialogbox at end of very long running function
-                            msgBox.exec();
-
+                        csApplet->messageBox("Storage successfully initialized with random data");
                     }
                     done (TRUE);
                     break;
@@ -736,9 +729,7 @@ void Stick20ResponseTask::checkStick20Status()
                     break;
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
-                        QMessageBox msgBox;
-                        msgBox.setText("Please enable the encrypted volume first.");
-                        msgBox.exec();
+                        csApplet->messageBox("Encrypted volume was not enabled, please enable the encrypted volume");
                     }
                     break;
                 default :
@@ -752,9 +743,7 @@ void Stick20ResponseTask::checkStick20Status()
             {
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
-                        QMessageBox msgBox;
-                        msgBox.setText("Smartcard error, please retry the command");
-                        msgBox.exec();
+                        csApplet->warningBox("Smartcard error, please retry the command");
                     }
                     break;
                 default :
@@ -768,9 +757,7 @@ void Stick20ResponseTask::checkStick20Status()
             {
                 case STICK20_CMD_ENABLE_FIRMWARE_UPDATE     :
                     {
-                        QMessageBox msgBox;
-                        msgBox.setText("Security bit of the device is activated.\nFirmware update is not possible.");
-                        msgBox.exec();
+                        csApplet->messageBox("Security bit of the device is activated.\nFirmware update is not possible.");
                     }
                     break;
                 default :

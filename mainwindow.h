@@ -74,6 +74,9 @@ private:
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     QMenu *trayMenuSubConfigure;
+    QMenu *trayMenuPasswdSubMenu;
+    QMenu *trayMenuTOTPSubMenu;
+    QMenu *trayMenuHOTPSubMenu;
     QMenu *trayMenuSubSpecialConfigure;
     QClipboard *clipboard;
     QValidator *validator;
