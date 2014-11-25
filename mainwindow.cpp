@@ -42,6 +42,7 @@
 #include "stick20hiddenvolumedialog.h"
 #include "stick20lockfirmwaredialog.h"
 #include "passwordsafedialog.h"
+#include "cryptostick-applet.h"
 
 #include <QTimer>
 #include <QMenu>
@@ -168,6 +169,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 //    ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
     ui->PWS_ButtonCreatePW->setText(QString("Generate random password "));
 
+    // trayIcon->showMessage("Device disconnected.");
     ui->statusBar->showMessage("Device disconnected.");
 
     cryptostick =  new Device(VID_STICK_OTP, PID_STICK_OTP,VID_STICK_20,PID_STICK_20,VID_STICK_20_UPDATE_MODE,PID_STICK_20_UPDATE_MODE);
@@ -658,7 +660,8 @@ void MainWindow::checkConnection()
     {
         if (false == cryptostick->activStick20)
         {
-            ui->statusBar->showMessage("Device connected.");
+            // trayIcon->showMessage("Cryptostick Classic connected.");
+            ui->statusBar->showMessage("Cryptostick Classic connected.");
 
             if(set_initial_time == FALSE) {
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
@@ -700,12 +703,14 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
+            // trayIcon->showMessage("Crypto Stick Storage connected.");
             ui->statusBar->showMessage("Crypto Stick Storage connected.");
         }
         DeviceOffline = FALSE;
     }
     else if (result == -1)
     {
+        // trayIcon->showMessage("Device disconnected connected.");
         ui->statusBar->showMessage("Device disconnected.");
         CryptedVolumeActive = FALSE;
         HiddenVolumeActive  = FALSE;
@@ -738,6 +743,8 @@ void MainWindow::checkConnection()
         if (false == cryptostick->activStick20)
         {
             ui->statusBar->showMessage("Device connected.");
+            // trayIcon->showMessage("Device connected.");
+
             if(set_initial_time == FALSE){
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
                 set_initial_time = TRUE;
@@ -778,6 +785,7 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
+            // trayIcon->showMessage("Crypto Stick Storage connected.");
             ui->statusBar->showMessage("Crypto Stick Storage connected.");
         }
         generateMenu();
@@ -1153,120 +1161,169 @@ void MainWindow::generateMenuOTP()
     
     trayMenuPasswdSubMenu = trayMenu->addMenu("Passwords");
 
+    /* TOTP passwords */
     if (cryptostick->TOTPSlots[0]->isProgrammed==true){
-        // QString actionName("TOTP slot 1 ");
-        // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[0]->slotName),this,SLOT(getTOTP1()));
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[0]->slotName, this,SLOT(getTOTP1()));
     }
     if (cryptostick->TOTPSlots[1]->isProgrammed==true){
-        // QString actionName("TOTP slot 2 ");
-        // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[1]->slotName),this,SLOT(getTOTP2()));
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[1]->slotName, this,SLOT(getTOTP2()));
     }
     if (cryptostick->TOTPSlots[2]->isProgrammed==true){
-        // QString actionName("TOTP slot 3 ");
-        // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[2]->slotName),this,SLOT(getTOTP3()));
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[2]->slotName, this,SLOT(getTOTP3()));
     }
     if (cryptostick->TOTPSlots[3]->isProgrammed==true){
-        // QString actionName("TOTP slot 4 ");
-        // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[3]->slotName),this,SLOT(getTOTP4()));
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[3]->slotName, this,SLOT(getTOTP4()));
     }
-
     if (TOTP_SlotCount > 4)
     {
         if (cryptostick->TOTPSlots[4]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[4]->slotName),this,SLOT(getTOTP5()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[4]->slotName, this,SLOT(getTOTP5()));
         }
     }
     if (TOTP_SlotCount > 5)
     {
         if (cryptostick->TOTPSlots[5]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[5]->slotName),this,SLOT(getTOTP6()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[5]->slotName, this,SLOT(getTOTP6()));
         }
     }
     if (TOTP_SlotCount > 6)
     {
         if (cryptostick->TOTPSlots[6]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[6]->slotName),this,SLOT(getTOTP7()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[6]->slotName, this,SLOT(getTOTP7()));
         }
     }
     if (TOTP_SlotCount > 7)
     {
         if (cryptostick->TOTPSlots[7]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[7]->slotName),this,SLOT(getTOTP8()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[7]->slotName, this,SLOT(getTOTP8()));
         }
     }
     if (TOTP_SlotCount > 8)
     {
         if (cryptostick->TOTPSlots[8]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP9()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP9()));
         }
     }
     if (TOTP_SlotCount > 9)
     {
         if (cryptostick->TOTPSlots[9]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[8]->slotName),this,SLOT(getTOTP10()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP10()));
         }
     }
     if (TOTP_SlotCount > 10)
     {
         if (cryptostick->TOTPSlots[10]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[10]->slotName),this,SLOT(getTOTP11()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[10]->slotName, this,SLOT(getTOTP11()));
         }
     }
     if (TOTP_SlotCount > 11)
     {
         if (cryptostick->TOTPSlots[11]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[11]->slotName),this,SLOT(getTOTP12()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[11]->slotName, this,SLOT(getTOTP12()));
         }
     }
     if (TOTP_SlotCount > 12)
     {
         if (cryptostick->TOTPSlots[12]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[12]->slotName),this,SLOT(getTOTP13()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[12]->slotName, this,SLOT(getTOTP13()));
         }
     }
     if (TOTP_SlotCount > 13)
     {
         if (cryptostick->TOTPSlots[13]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[13]->slotName),this,SLOT(getTOTP14()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[13]->slotName, this,SLOT(getTOTP14()));
         }
     }
     if (TOTP_SlotCount > 14)
     {
         if (cryptostick->TOTPSlots[14]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->TOTPSlots[14]->slotName),this,SLOT(getTOTP15()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[14]->slotName, this,SLOT(getTOTP15()));
         }
     }
 
 
+    /* HOTP passwords */
     if (cryptostick->HOTPSlots[0]->isProgrammed==true){
-        // trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[0]->slotName),this,SLOT(getHOTP1()));
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[0]->slotName, this,SLOT(getHOTP1()));
     }
     if (cryptostick->HOTPSlots[1]->isProgrammed==true){
-        // trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[1]->slotName),this,SLOT(getHOTP2()));
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[1]->slotName, this,SLOT(getHOTP2()));
     }
     if (HOTP_SlotCount >= 3)
     {
         if (cryptostick->HOTPSlots[2]->isProgrammed==true){
-            // trayMenu->addAction(actionName.append((char *)cryptostick->HOTPSlots[2]->slotName),this,SLOT(getHOTP3()));
             trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[2]->slotName, this,SLOT(getHOTP3()));
         }
+    }
+
+
+
+    if (TRUE == cryptostick->passwordSafeUnlocked) 
+    {
+        if (cryptostick->passwordSafeStatus[0] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (0),this,SLOT(PWS_Clicked_Slot00()));
+        }
+        if (cryptostick->passwordSafeStatus[1] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (1),this,SLOT(PWS_Clicked_Slot01()));
+        }
+        if (cryptostick->passwordSafeStatus[2] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (2),this,SLOT(PWS_Clicked_Slot02()));
+        }
+        if (cryptostick->passwordSafeStatus[3] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (3),this,SLOT(PWS_Clicked_Slot03()));
+        }
+        if (cryptostick->passwordSafeStatus[4] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (4),this,SLOT(PWS_Clicked_Slot04()));
+        }
+        if (cryptostick->passwordSafeStatus[5] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (5),this,SLOT(PWS_Clicked_Slot05()));
+        }
+        if (cryptostick->passwordSafeStatus[6] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (6),this,SLOT(PWS_Clicked_Slot06()));
+        }
+        if (cryptostick->passwordSafeStatus[7] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (7),this,SLOT(PWS_Clicked_Slot07()));
+        }
+        if (cryptostick->passwordSafeStatus[8] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (8),this,SLOT(PWS_Clicked_Slot08()));
+        }
+        if (cryptostick->passwordSafeStatus[9] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (9),this,SLOT(PWS_Clicked_Slot09()));
+        }
+        if (cryptostick->passwordSafeStatus[10] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (10),this,SLOT(PWS_Clicked_Slot10()));
+        }
+        if (cryptostick->passwordSafeStatus[11] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (11),this,SLOT(PWS_Clicked_Slot11()));
+        }
+        if (cryptostick->passwordSafeStatus[12] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (12),this,SLOT(PWS_Clicked_Slot12()));
+        }
+        if (cryptostick->passwordSafeStatus[13] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (13),this,SLOT(PWS_Clicked_Slot13()));
+        }
+        if (cryptostick->passwordSafeStatus[14] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (14),this,SLOT(PWS_Clicked_Slot14()));
+        }
+        if (cryptostick->passwordSafeStatus[15] == (unsigned char)true)
+        {
+            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (15),this,SLOT(PWS_Clicked_Slot15()));
+        }       
     }
 
     trayMenu->addSeparator();
@@ -4328,8 +4385,8 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
     if (Accepted == ret)
     {
         dialog.getPassword ((char*)password);
-msgBox.setText(tr("%1").arg((char*) &(password[1])));
-            msgBox.exec();
+//msgBox.setText(tr("%1").arg((char*) &(password[1])));
+//            msgBox.exec();
         ret_s32 = cryptostick->passwordSafeEnable ((char*)&(password[1]));
         if (ERR_NO_ERROR != ret_s32)
         {
