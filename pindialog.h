@@ -18,12 +18,13 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PASSWORDDIALOG_H
-#define PASSWORDDIALOG_H
+#ifndef PINDIALOG_H
+#define PINDIALOG_H
 
 #include <QDialog>
 
 #include "device.h"
+#include "ui_pindialog.h"
 
 namespace Ui {
 class PinDialog;
@@ -34,25 +35,36 @@ class PinDialog : public QDialog
     Q_OBJECT
     
 public:
+    enum Usage {PLAIN, PREFIXED};
+    enum PinType {USER_PIN, ADMIN_PIN, OTHER};
+
     unsigned char password[50];
     Device *cryptostick;
 
     explicit PinDialog( const QString & title, const QString & label,
-                        Device *cryptostick, bool ShowMatrix=FALSE, QWidget *parent = 0);
+                        Device *cryptostick, Usage usage, PinType pinType,
+                        bool ShowMatrix=FALSE, QWidget *parent = NULL);
     ~PinDialog();
 
-    void init(char *text,int RetryCount);
+//    void init(char *text,int RetryCount);
     void getPassword(char *text);
+    void getPassword(QString &pin);
 
 private slots:
     void on_checkBox_toggled(bool checked);
 
     void on_checkBox_PasswordMatrix_toggled(bool checked);
 
-    void on_buttonBox_accepted();
+    void onOkButtonClicked();
 
 private:
     Ui::PinDialog *ui;
+
+    Usage _usage;
+    PinType _pinType;
+
+    void updateTryCounter();
+    void clearBuffers();
 };
 
-#endif // PASSWORDDIALOG_H
+#endif // PINDIALOG_H

@@ -22,32 +22,25 @@
 #include "device.h"
 #include "mcvs-wrapper.h"
 
-#include "passworddialog.h"
+#include "pindialog.h"
 #include "ui_passworddialog.h"
 
 #include "stick20matrixpassworddialog.h"
 #include "cryptostick-applet.h"
 
-/*******************************************************************************
-
- External declarations
-
-*******************************************************************************/
-
-/*******************************************************************************
-
- Local defines
-
-*******************************************************************************/
 
 #define LOCAL_PASSWORD_SIZE         40              // Todo make define global
 
-PinDialog( const QString & title, const QString & label, Device *cryptostick, bool ShowMatrix=FALSE, QWidget *parent = 0) :
+PinDialog::PinDialog( const QString &title, const QString & label, Device *cryptostick, Usage usage, PinType pinType, bool ShowMatrix, QWidget *parent) :
     cryptostick(cryptostick),
+    _usage(usage),
+    _pinType(pinType),
     QDialog(parent),
     ui(new Ui::PinDialog)
 {
     ui->setupUi(this);
+
+    connect(ui->okButton, SIGNAL(clicked()), this, SLOT(onOkButtonClicked()));
 
     // Setup pwd-matrix
     ui->checkBox_PasswordMatrix->setCheckState(Qt::Unchecked);
@@ -56,12 +49,13 @@ PinDialog( const QString & title, const QString & label, Device *cryptostick, bo
         ui->checkBox_PasswordMatrix->hide();
     }
 
-    // Setup title,label and text
+    // Setup title and label
     this->setWindowTitle(title);
     ui->label->setText(label);
 
-    //
-    
+    //ui->status->setVisible(false);
+    updateTryCounter();
+
     ui->lineEdit->setFocus();
 }
 
@@ -71,6 +65,8 @@ PinDialog::~PinDialog()
     delete ui;
 }
 
+
+/*
 void PinDialog::init(char *text,int RetryCount)
 {
     char text1[20];
@@ -82,24 +78,13 @@ void PinDialog::init(char *text,int RetryCount)
     }
     ui->label->setText(tr(text)+tr(text1));
 }
-
-
-
-/*******************************************************************************
-
-  getPassword
-
-  Changes
-  Date      Author        Info
-  04.02.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
+*/
 
 void PinDialog::getPassword(char *text)
 {
+    STRCPY (text,LOCAL_PASSWORD_SIZE,(char*)password);
+    clearBuffers();
+    /*
     if (FALSE == ui->checkBox_PasswordMatrix->isChecked())
     {
         STRCPY (&text[1],LOCAL_PASSWORD_SIZE-1,ui->lineEdit->text().toLatin1());
@@ -108,18 +93,14 @@ void PinDialog::getPassword(char *text)
     {
         STRCPY (text,LOCAL_PASSWORD_SIZE,(char*)password);
     }
+    */
 }
 
-
-/*******************************************************************************
-
-  on_checkBox_toggled
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
+void PinDialog::getPassword(QString &pin)
+{
+    pin = ui->lineEdit->text();
+    clearBuffers();
+}
 
 void PinDialog::on_checkBox_toggled(bool checked)
 {
@@ -129,18 +110,6 @@ void PinDialog::on_checkBox_toggled(bool checked)
         ui->lineEdit->setEchoMode(QLineEdit::Password);
 }
 
-/*******************************************************************************
-
-  on_checkBox_toggled
-
-  Changes
-  Date      Author        Info
-  07.05.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
 
 void PinDialog::on_checkBox_PasswordMatrix_toggled(bool checked)
 {
@@ -156,29 +125,22 @@ void PinDialog::on_checkBox_PasswordMatrix_toggled(bool checked)
 
 }
 
-/*******************************************************************************
 
-  on_buttonBox_accepted
-
-  Changes
-  Date      Author        Info
-  07.05.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void PinDialog::on_buttonBox_accepted()
+void PinDialog::onOkButtonClicked()
 {
     int           n;
-//    unsigned char password[50];
     QByteArray    passwordString;
+    
+    // Initialize password
+    memset(password, 0, 50);
 
     if (false == ui->checkBox_PasswordMatrix->isChecked())
     {
         // Send normal password
-        password[0] = 'P';          // For normal password
+        if ( PREFIXED == _usage)
+        {
+            password[0] = 'P';
+        }
 
         // Check the password length
         passwordString = ui->lineEdit->text().toLatin1();
@@ -186,29 +148,35 @@ void PinDialog::on_buttonBox_accepted()
         if (30 <= n)
         {
             csApplet->warningBox("Your PIN is too long! Use not more than 30 characters.");
-            done (FALSE);
+            ui->lineEdit->clear(); 
             return;
         }
         if (6  > n)
         {
             csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
-            done (FALSE);
+            ui->lineEdit->clear(); 
             return;
         }
 
+        // Check for default pin
         if ((0 == strcmp (passwordString, "123456")) || (0 == strcmp (passwordString, "12345678")))
         {
             csApplet->warningBox("Warning: Default PIN is used.\nPlease change the PIN.");
         }
-        memset (&password[1],0,49);
-        memcpy(&password[1],passwordString.data(),n);
+
+        if (PREFIXED == _usage)
+        {
+            memcpy(&password[1],passwordString.data(), n);
+        } else {
+            memcpy(password ,passwordString.data(), n);
+        }
     }
     else
     {
         if (NULL != cryptostick)
         {
             // Get matrix password
-            MatrixPinDialog dialog (this);
+            MatrixPasswordDialog dialog (this);
 
             dialog.setModal (TRUE);
 
@@ -216,7 +184,7 @@ void PinDialog::on_buttonBox_accepted()
             dialog.PasswordLen        = 19;
             dialog.SetupInterfaceFlag = false;
 
-            dialog.InitSecurePinDialog ();
+            dialog.InitSecurePasswordDialog ();
 
             if (false == dialog.exec())
             {
@@ -225,9 +193,44 @@ void PinDialog::on_buttonBox_accepted()
             }
 
             // Copy the matrix password
-            password[0] = 'M';          // For matrix password
-            dialog.CopyMatrixPassword((char*)&password[1],49);
+            if (PREFIXED == _usage)
+            {
+                password[0] = 'M';          // For matrix password
+                dialog.CopyMatrixPassword((char*)&password[1],49);
+            } else {
+                dialog.CopyMatrixPassword((char*)password, 50);
+            }
         }
     }
 
+    done(Accepted);
 }
+
+// TODO;
+void PinDialog::updateTryCounter()
+{
+    int triesLeft;
+    switch (_pinType)
+    {
+        case ADMIN_PIN:
+            triesLeft = HID_Stick20Configuration_st.AdminPwRetryCount;
+            break;
+        case USER_PIN:
+            triesLeft = HID_Stick20Configuration_st.UserPwRetryCount;
+            break;
+        case OTHER:
+            // Hide tries left field
+            ui->status->setVisible(false);
+            break;
+    }
+
+    // Update 'tries-left' field
+    ui->status->setText(tr("Tries left: %1").arg(triesLeft));
+}
+
+void PinDialog::clearBuffers()
+{
+    memset(password, 0, 50);
+    ui->lineEdit->clear();
+}
+
