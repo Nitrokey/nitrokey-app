@@ -27,6 +27,7 @@
 #include "sleep.h"
 #include "base32.h"
 #include "passworddialog.h"
+#include "pindialog.h"
 #include "hotpdialog.h"
 #include "stick20dialog.h"
 #include "stick20debugdialog.h"
@@ -53,8 +54,6 @@
 #include <QtWidgets>
 #include <QDateTime>
 #include <QThread>
-
-enum DialogCode { Rejected, Accepted };     // Why not found ?
 
 /*******************************************************************************
 
@@ -218,22 +217,22 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     {
         if (TRUE == DebugWindowActive)
         {
-            trayIcon->showMessage ("Cryptostick GUI","active - DEBUG Mode");
+            trayIcon->showMessage ("Cryptostick App","active - DEBUG Mode");
         }
         else
         {
-            trayIcon->showMessage ("Cryptostick GUI","active");
+            trayIcon->showMessage ("Cryptostick App","active");
         }
     }
     else
     {
         if (TRUE == DebugWindowActive)
         {
-            csApplet->messageBox("Crypto Stick GUI is active in DEBUG Mode");
+            csApplet->messageBox("Crypto Stick App is active in DEBUG Mode");
         }
         else
         {
-            csApplet->messageBox("Crypto Stick GUI is active");
+            csApplet->messageBox("Crypto Stick App is active");
         }
     }
 
@@ -1135,7 +1134,7 @@ void MainWindow::initActionsForStick20()
 
 /*******************************************************************************
 
-  generateMenuOTP
+  generatePasswordMenu
 
   Changes
   Date      Author        Info
@@ -1146,7 +1145,7 @@ void MainWindow::initActionsForStick20()
 
 *******************************************************************************/
 
-void MainWindow::generateMenuOTP()
+void MainWindow::generatePasswordMenu()
 {
     int i;
     
@@ -1352,7 +1351,7 @@ void MainWindow::generateMenuForStick10()
 
     ui->pushButton_StaticPasswords->hide ();
 
-    generateMenuOTP ();
+    generatePasswordMenu ();
 
     trayMenu->addAction(restoreAction);
 }
@@ -1401,7 +1400,7 @@ void MainWindow::generateMenuForStick20()
         trayMenu->addSeparator();
     }
 
-    generateMenuOTP ();
+    generatePasswordMenu ();
     trayMenu->addSeparator();
 
     if (FALSE == StickNotInitated)
@@ -1980,34 +1979,28 @@ void MainWindow::startConfiguration()
 */
 
     if (!cryptostick->validPassword){
-        cryptostick->getPasswordRetryCount();
+        do {
+            PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+            ok = dialog.exec();
+            QString password;
+            dialog.getPassword(password);
 
-        QString password = QInputDialog::getText(this, tr("Enter card admin PIN"),tr("Admin PIN: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
-
-        if (TRUE == ok)
-        {
-            uint8_t tempPassword[25];
-
-            if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
+            if (QDialog::Accepted == ok)
             {
-                csApplet->warningBox("Warning: Default PIN is used.\nPlease change the PIN.");
-            }
+                uint8_t tempPassword[25];
 
-            if (6 > strlen (password.toLatin1().data()))
-            {
-                csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
-                return;
-            }
+                for (int i=0;i<25;i++)
+                    tempPassword[i]=qrand()&0xFF;
 
-            for (int i=0;i<25;i++)
-                tempPassword[i]=qrand()&0xFF;
-
-            cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
-            if (cryptostick->validPassword){
-                lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+                cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
+                if (cryptostick->validPassword){
+                    lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+                } else {
+                    csApplet->warningBox("Wrong Pin. Please try again.");
+                }
+                password.clear();
             }
-            password.clear();
-        }
+        } while(QDialog::Accepted == ok && !cryptostick->validPassword); // While the user keeps enterning a pin and the pin is not correct..
     }
 
 // Start the config dialog
@@ -2021,10 +2014,6 @@ void MainWindow::startConfiguration()
         SetupPasswordSafeConfig ();
 
         showNormal();
-   }
-    else if (ok)
-    {
-         csApplet->warningBox("Invalid password!");
     }
 }
 
@@ -2166,25 +2155,21 @@ void MainWindow::startMatrixPasswordDialog()
 void MainWindow::startStick20EnableCryptedVolume()
 {
     uint8_t password[LOCAL_PASSWORD_SIZE];
-    bool           ret;
+    bool ret;
+    bool answer;
 
     if (TRUE == HiddenVolumeActive)
     {
-        QMessageBox msgBox;
-        msgBox.setText("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::No);
-        if (QMessageBox::No == msgBox.exec())
+        answer = csApplet->yesOrNoBox("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.",
+                                         0, false);  
+        if (false == answer)
             return;
     }
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
-    dialog.cryptostick = cryptostick;
-
+    PinDialog dialog("User pin dialog", "Enter user PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
         dialog.getPassword ((char*)password);
 
@@ -2208,14 +2193,13 @@ void MainWindow::startStick20EnableCryptedVolume()
 void MainWindow::startStick20DisableCryptedVolume()
 {
     uint8_t password[LOCAL_PASSWORD_SIZE];
+    bool answer;
 
     if (TRUE == CryptedVolumeActive)
     {
-        QMessageBox msgBox;
-        msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::No);
-        if (QMessageBox::No == msgBox.exec())
+        answer = csApplet->yesOrNoBox("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.",
+                                        0, false);
+        if (false == answer)
         {
             return;
         }
@@ -2241,29 +2225,23 @@ void MainWindow::startStick20EnableHiddenVolume()
 {
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
+    bool answer;
 
     if (FALSE == CryptedVolumeActive)
     {
-        QMessageBox msgBox;
-        msgBox.setText("Please enable the encrypted volume first.");
-        msgBox.exec();
+        csApplet->warningBox("Please enable the encrypted volume first.");
         return;
     }
 
-    QMessageBox msgBox;
-    msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::Yes);
-    if (QMessageBox::No == msgBox.exec())
+    answer = csApplet->yesOrNoBox("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.",
+                                    0, true);
+    if (false == answer)
         return;
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter password for hidden volume",-1);
-    dialog.cryptostick = cryptostick;
-
+    PinDialog dialog("Enter password for hidden volume", "Enter password for hidden volume:", cryptostick, PinDialog::PREFIXED, PinDialog::OTHER);
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
 //        password[0] = 'P';
         dialog.getPassword ((char*)password);
@@ -2288,12 +2266,11 @@ void MainWindow::startStick20EnableHiddenVolume()
 void MainWindow::startStick20DisableHiddenVolume()
 {
     uint8_t password[LOCAL_PASSWORD_SIZE];
+    bool answer;
 
-    QMessageBox msgBox;
-    msgBox.setText("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::Yes);
-    if (QMessageBox::No == msgBox.exec())
+    answer = csApplet->yesOrNoBox("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.",
+                                    0, true);
+    if (false == answer)
     {
         return;
     }
@@ -2318,13 +2295,12 @@ void MainWindow::startStick20DisableHiddenVolume()
 
 void MainWindow::startLockDeviceAction()
 {
+    bool answer;
     if ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive))
     {
-        QMessageBox msgBox;
-        msgBox.setText("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.");
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::Yes);
-        if (QMessageBox::No == msgBox.exec())
+        answer = csApplet->yesOrNoBox("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding.",
+                                        0, true);
+        if (false == answer)
         {
             return;
         }
@@ -2357,18 +2333,15 @@ void MainWindow::startStick20EnableFirmwareUpdate()
 
     UpdateDialog dialogUpdate(this);
     ret = dialogUpdate.exec();
-    if (Accepted != ret)
+    if (QDialog::Accepted != ret)
     {
         return;
     }
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
-    dialog.cryptostick = cryptostick;
-
+    PinDialog dialog("Enter admin PIN", "Enter admin PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
         dialog.getPassword ((char*)password);
 
@@ -2481,18 +2454,15 @@ void MainWindow::startStick20ExportFirmwareToFile()
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
-    dialog.cryptostick = cryptostick;
-
+    PinDialog dialog("Enter admin PIN", "Enter admin PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
 //        password[0] = 'P';
         dialog.getPassword ((char*)password);
 
-        stick20SendCommand (STICK20_CMD_EXPORT_FIRMWARE_TO_FILE,password);
+        stick20SendCommand (STICK20_CMD_EXPORT_FIRMWARE_TO_FILE, password);
     }
 }
 
@@ -2513,14 +2483,11 @@ void MainWindow::startStick20DestroyCryptedVolume()
 {
     uint8_t password[LOCAL_PASSWORD_SIZE];
     int     ret;
-    QMessageBox msgBox;
+    bool answer;
 
-    msgBox.setText("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::No);
-    ret = msgBox.exec();
-
-    if (QMessageBox::Yes == ret)
+    answer = csApplet->yesOrNoBox("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?",
+                                    0, false);
+    if (true == answer)
     {
         PasswordDialog dialog(MatrixInputActive,this);
         dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
@@ -2528,7 +2495,7 @@ void MainWindow::startStick20DestroyCryptedVolume()
 
         ret = dialog.exec();
 
-        if (Accepted == ret)
+        if (QDialog::Accepted == ret)
         {
             dialog.getPassword ((char*)password);
 
@@ -2562,7 +2529,7 @@ void MainWindow::startStick20FillSDCardWithRandomChars()
 
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
 //        password[0] = 'P';
         dialog.getPassword ((char*)password);
@@ -2595,7 +2562,7 @@ void MainWindow::startStick20ClearNewSdCardFound()
 
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
 //        password[0] = 'P';
         dialog.getPassword ((char*)password);
@@ -2668,7 +2635,7 @@ void MainWindow::startStick20SetReadonlyUncryptedVolume()
 
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
         dialog.getPassword ((char*)password);
 
@@ -2701,7 +2668,7 @@ void MainWindow::startStick20SetReadWriteUncryptedVolume()
 
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
 //        password[0] = 'P';
         dialog.getPassword ((char*)password);
@@ -2732,7 +2699,7 @@ void MainWindow::startStick20LockStickHardware()
     stick20LockFirmwareDialog dialog(this);
 
     ret = dialog.exec();
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
         PasswordDialog dialog1(MatrixInputActive,this);
         dialog1.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
@@ -2740,7 +2707,7 @@ void MainWindow::startStick20LockStickHardware()
 
         ret = dialog1.exec();
 
-        if (Accepted == ret)
+        if (QDialog::Accepted == ret)
         {
             dialog1.getPassword ((char*)password);
             stick20SendCommand (STICK20_CMD_SEND_LOCK_STICK_HARDWARE,password);
@@ -2798,15 +2765,13 @@ void MainWindow::startStick20DebugAction()
 //    stick20HiddenVolumeDialog HVDialog(this);
 
 
-    QMessageBox msgBox;
     securitydialog dialog(this);
 
     ret = dialog.exec();
 
-    msgBox.setText("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\"");
+    csApplet->warningBox("Encrypted volume is not secure.\nSelect \"Initialize keys\"");
 //                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 //                msgBox.setDefaultButton(QMessageBox::Yes);
-    ret = msgBox.exec();
 
 
     StickNotInitated  = TRUE;
@@ -2919,9 +2884,7 @@ void MainWindow::startStick20SetupHiddenVolume()
 
     if (FALSE == CryptedVolumeActive)
     {
-        QMessageBox msgBox;
-        msgBox.setText("Please enable the encrypted volume first.");
-        msgBox.exec();
+        csApplet->warningBox("Please enable the encrypted volume first.");
         return;
     }
 
@@ -3378,9 +3341,7 @@ void MainWindow::on_writeButton_clicked()
     SlotName[15] = 0;
     if (0 == strlen ((char*)SlotName))
     {
-        QMessageBox msgBox;
-        msgBox.setText("Please enter a slotname.");
-        msgBox.exec();
+        csApplet->warningBox("Please enter a slotname.");
         return;
     }
 
@@ -4424,42 +4385,45 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
     bool    ret;
     int     ret_s32;
 
-    PasswordDialog dialog(FALSE,this);
-    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
-    dialog.cryptostick = cryptostick;
-    ret = dialog.exec();
+    do {
+        PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
+        ret = dialog.exec();
 
-    if (Accepted == ret)
-    {
-        dialog.getPassword ((char*)password);
-        ret_s32 = cryptostick->passwordSafeEnable ((char*)&(password[1]));
-        if (ERR_NO_ERROR != ret_s32)
+        if (QDialog::Accepted == ret)
         {
-            csApplet->warningBox(tr("Can't unlock password safe. (Error %1)").arg(ret_s32));
-        }
-        else
-        {
-            if (TRUE == trayIcon->supportsMessages ())
+            dialog.getPassword ((char*)password);
+            ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
+            switch(ret_s32)
             {
-                trayIcon->showMessage ("Crypto Stick Utility","Password Safe unlocked successfully.");
-            }
-            else
-            {
-                QMessageBox msgBox;
-                msgBox.setText("Password safe is enabled");
-                msgBox.exec();
-            }
+                case ERR_NO_ERROR:
+                    if (TRUE == trayIcon->supportsMessages ())
+                    {
+                        trayIcon->showMessage ("Crypto Stick App","Password Safe unlocked successfully.");
+                    }
+                    else
+                    {
+                        csApplet->messageBox("Password safe is enabled");
+                    }
 
-            SetupPasswordSafeConfig ();
-            generateMenu ();
+                    SetupPasswordSafeConfig ();
+                    generateMenu ();
+                    break;
+
+                case ERR_STATUS_NOT_OK:
+                    csApplet->warningBox(tr("Wrong pin. Please try again").arg(ret_s32));
+                    break;
+
+                default:
+                    csApplet->warningBox(tr("Can't unlock password safe. (Error %1)").arg(ret_s32));
+                    break;
+            }
         }
-
-    }
+    } while(QDialog::Accepted == ret && ERR_NO_ERROR != ret_s32);
 }
 
 /*******************************************************************************
 
-  PWS_Clicked_EnablePWSAccess
+  PWS_ExceClickedSlot
 
   Changes
   Date      Author        Info
@@ -4479,9 +4443,7 @@ void MainWindow::PWS_ExceClickedSlot (int Slot)
     ret_s32 = cryptostick->getPasswordSafeSlotPassword(Slot);
     if (ERR_NO_ERROR != ret_s32)
     {
-        QMessageBox msgBox;
-        msgBox.setText("Pasword safe: Can't get password");
-        msgBox.exec();
+        csApplet->warningBox("Pasword safe: Can't get password");
         return;
     }
     MsgText.append((char*)cryptostick->passwordSafePassword);
@@ -4500,11 +4462,8 @@ void MainWindow::PWS_ExceClickedSlot (int Slot)
     }
     else
     {
-        QMessageBox msgBox;
-
         MsgText.sprintf("Password safe [%s] has been copied to clipboard",(char*)cryptostick->passwordSafeSlotNames[Slot]);
-        msgBox.setText(MsgText);
-        msgBox.exec();
+        csApplet->messageBox(MsgText);
     }
 
 
@@ -4582,40 +4541,34 @@ void MainWindow::resetTime()
     bool ok;
 
     if (!cryptostick->validPassword){
-        cryptostick->getPasswordRetryCount();
+    
+        do {
+            PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+            ok = dialog.exec();
+            QString password;
+            dialog.getPassword(password);
 
-        QString password = QInputDialog::getText(this,tr("Enter card admin PIN"),tr("Admin PIN: ")+tr("(Tries left: ")+QString::number(cryptostick->passwordRetryCount)+")", QLineEdit::Password,"", &ok);
-
-        if (ok)
-        {
-            uint8_t tempPassword[25];
-
-            if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
+            if (QDialog::Accepted == ok)
             {
-                csApplet->warningBox("WARNING: Default PIN is used.\nPlease change the PIN.");
-            }
-            if (6 > strlen (password.toLatin1().data()))
-            {
-                csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
-            }
+                uint8_t tempPassword[25];
+                for (int i=0;i<25;i++)
+                    tempPassword[i]=qrand()&0xFF;
 
-            for (int i=0;i<25;i++)
-                tempPassword[i]=qrand()&0xFF;
-            cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
-            if (cryptostick->validPassword){
-                lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+                cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
+                if (cryptostick->validPassword){
+                    lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+                } else {
+                    csApplet->warningBox("Wrong Pin. Please try again.");
+                }
+                password.clear();
             }
-            password.clear();
-        }
+        } while ( QDialog::Accepted == ok && !cryptostick->validPassword);
     }
 
 // Start the config dialog
     if (cryptostick->validPassword){
         cryptostick->setTime(TOTP_SET_TIME);
    }
-    else if (ok){
-         csApplet->warningBox("Invalid password!");
-    }
 }
 
 /*******************************************************************************
@@ -4648,21 +4601,14 @@ int MainWindow::getNextCode(uint8_t slotNumber)
         {
             cryptostick->getUserPasswordRetryCount();
 
-            QString password = QInputDialog::getText(this, tr("Enter card user PIN"),tr("User PIN: ")+tr("(Tries left: ")+QString::number(cryptostick->userPasswordRetryCount)+")", QLineEdit::Password,"", &ok);
+            PinDialog dialog("Enter card user PIN", "User PIN:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
+            ok = dialog.exec();
+            QString password;
+            dialog.getPassword(password);
 
-            if (TRUE == ok)
+            if (QDialog::Accepted == ok)
             {
                 uint8_t tempPassword[25];
-
-                if ((0 == strcmp (password.toLatin1().data(), "123456")) || (0 == strcmp (password.toLatin1().data(), "12345678")))
-                {
-                    csApplet->warningBox("Warning: Default PIN is used.\nPlease change the PIN.");
-                }
-
-                if (6 > strlen (password.toLatin1().data()))
-                {
-                    csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
-                }
 
                 for (int i=0;i<25;i++)
                     tempPassword[i]=qrand()&0xFF;
@@ -4970,29 +4916,32 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
     bool    ret;
     int     ret_s32;
 
-    PasswordDialog dialog(FALSE,this);
-    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
-    dialog.cryptostick = cryptostick;
+    do {
+        PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
+        ret = dialog.exec();
 
-    ret = dialog.exec();
-
-    if (Accepted == ret)
-    {
-        dialog.getPassword ((char*)password);
-
-        ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
-
-        if (ERR_NO_ERROR != ret_s32)
+        if (QDialog::Accepted == ret)
         {
-            csApplet->warningBox("Can't unlock password safe.");
-        }
-        else
-        {
-            SetupPasswordSafeConfig ();
-            generateMenu ();
-        }
+            dialog.getPassword ((char*)password);
 
-    }
+            ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
+            switch(ret_s32)
+            {
+                case ERR_NO_ERROR:
+                    SetupPasswordSafeConfig ();
+                    generateMenu ();
+                    break;
+
+                case ERR_STATUS_NOT_OK:
+                    csApplet->warningBox(tr("Wrong pin. Please try again").arg(ret_s32));
+                    break;
+
+                default:
+                    csApplet->warningBox(tr("Can't unlock password safe. (Error %1)").arg(ret_s32));
+                    break;
+            }
+        }
+    } while ( (QDialog::Accepted == ret) && (ret_s32 == ERR_STATUS_NOT_OK) );
 }
 
 
@@ -5022,9 +4971,7 @@ void MainWindow::on_counterEdit_editingFinished()
         Seed = (Seed / 16) * 16;
         ui->counterEdit->setText (QString ("%1").sprintf("%d",Seed));
 
-        QMessageBox msgBox;
-        msgBox.setText("Seed must be lower than 1048560 (= 2^20)");
-        msgBox.exec();
+        csApplet->warningBox("Seed must be lower than 1048560 (= 2^20)");
     }
 
     if (0 != (Seed % 16))
@@ -5032,9 +4979,7 @@ void MainWindow::on_counterEdit_editingFinished()
         Seed = (Seed / 16) * 16;
         ui->counterEdit->setText (QString ("%1").sprintf("%d",Seed));
 
-        QMessageBox msgBox;
-        msgBox.setText("Seed had to be a multiple of 16");
-        msgBox.exec();
+        csApplet->warningBox("Seed had to be a multiple of 16");
     }
 
 

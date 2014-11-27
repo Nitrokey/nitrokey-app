@@ -143,7 +143,7 @@ private:
 
     int getNextCode(uint8_t slotNumber);
 
-    void generateMenuOTP();
+    void generatePasswordMenu();
     void generateMenuForStick10();
     void initActionsForStick20();
     int  stick20SendCommand (uint8_t stick20Command, uint8_t *password);
