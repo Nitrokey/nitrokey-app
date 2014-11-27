@@ -114,7 +114,8 @@ int main(int argc, char *argv[])
 */
         qDebug() << "Application started successfully.";
 //    }
-    
+
+/*    
     SplashScreen *splash = 0;
     splash = new SplashScreen;
     splash->show();
@@ -131,6 +132,7 @@ int main(int argc, char *argv[])
     }
 
     QTimer::singleShot(3000,splash,SLOT(deleteLater()));
+*/
 
     StartupInfo_st.ExtendedConfigActive  = FALSE;
     StartupInfo_st.FlagDebug             = DEBUG_STATUS_NO_DEBUGGING;
