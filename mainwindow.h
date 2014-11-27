@@ -28,6 +28,8 @@
 
 #define uint64_t unsigned long long
 
+#define TRAY_MSG_TIMEOUT    5000
+
 namespace Ui {
 class MainWindow;
 }

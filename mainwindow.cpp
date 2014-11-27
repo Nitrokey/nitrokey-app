@@ -175,7 +175,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 //    ui->PWS_ButtonCreatePW->setText(QString("Generate random password ").append(QString::number(PWS_CreatePWSize,10).append(QString(" chars"))));
     ui->PWS_ButtonCreatePW->setText(QString("Generate random password "));
 
-    // trayIcon->showMessage("Device disconnected.");
     ui->statusBar->showMessage("Device disconnected.");
 
     cryptostick =  new Device(VID_STICK_OTP, PID_STICK_OTP,VID_STICK_20,PID_STICK_20,VID_STICK_20_UPDATE_MODE,PID_STICK_20_UPDATE_MODE);
@@ -217,11 +216,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     {
         if (TRUE == DebugWindowActive)
         {
-            trayIcon->showMessage ("Cryptostick App","active - DEBUG Mode");
+            trayIcon->showMessage ("Cryptostick App","active - DEBUG Mode", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
         else
         {
-            trayIcon->showMessage ("Cryptostick App","active");
+            trayIcon->showMessage ("Cryptostick App","active",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
     }
     else
@@ -681,7 +680,6 @@ void MainWindow::checkConnection()
     {
         if (false == cryptostick->activStick20)
         {
-            // trayIcon->showMessage("Cryptostick Classic connected.");
             ui->statusBar->showMessage("Cryptostick Classic connected.");
 
             if(set_initial_time == FALSE) {
@@ -710,14 +708,12 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
-            // trayIcon->showMessage("Crypto Stick Storage connected.");
             ui->statusBar->showMessage("Crypto Stick Storage connected.");
         }
         DeviceOffline = FALSE;
     }
     else if (result == -1)
     {
-        // trayIcon->showMessage("Device disconnected connected.");
         ui->statusBar->showMessage("Device disconnected.");
         HID_Stick20Init ();             // Clear stick 20 data
         Stick20ScSdCardOnline = FALSE;
@@ -728,6 +724,7 @@ void MainWindow::checkConnection()
         {
             generateMenu();
             DeviceOffline = TRUE;
+            trayIcon->showMessage("Device disconnected.", "", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
         cryptostick->connect();
 
@@ -752,7 +749,7 @@ void MainWindow::checkConnection()
         if (false == cryptostick->activStick20)
         {
             ui->statusBar->showMessage("Device connected.");
-            // trayIcon->showMessage("Device connected.");
+            trayIcon->showMessage("Device connected", "Crypto Stick Classic", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
 
             if(set_initial_time == FALSE){
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
@@ -782,7 +779,7 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
-            // trayIcon->showMessage("Crypto Stick Storage connected.");
+            trayIcon->showMessage("Device connected", "Crypto Stick Storage", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
             ui->statusBar->showMessage("Crypto Stick Storage connected.");
         }
         generateMenu();
@@ -3689,9 +3686,10 @@ void MainWindow::getHOTPDialog(int slot)
     if(ret == 0)
     {
         if(cryptostick->HOTPSlots[slot]->slotName[0] == '\0')
-            trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)),"One-time password has been copied to clipboard.");
+            trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)),"One-time password has been copied to clipboard.",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         else
-            trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[slot]->slotName).append("]"),"One-time password has been copied to clipboard.");
+            trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[slot]->slotName).append("]"),
+                                    "One-time password has been copied to clipboard.",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
     }
 }
 
@@ -3780,9 +3778,10 @@ void MainWindow::getTOTPDialog(int slot)
     ret = getNextCode(0x20 + slot);
     if(ret == 0){
     if(cryptostick->TOTPSlots[slot]->slotName[0] == '\0')
-        trayIcon->showMessage (QString("TOTP slot ").append(QString::number(slot+1,10)),"One-time password has been copied to clipboard.");
+        trayIcon->showMessage (QString("TOTP slot ").append(QString::number(slot+1,10)),"One-time password has been copied to clipboard.", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
     else
-        trayIcon->showMessage (QString("TOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName).append("]"),"One-time password has been copied to clipboard.");
+        trayIcon->showMessage (QString("TOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName).append("]"),
+                                "One-time password has been copied to clipboard.", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
     }
 }
 
@@ -4398,7 +4397,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
                 case ERR_NO_ERROR:
                     if (TRUE == trayIcon->supportsMessages ())
                     {
-                        trayIcon->showMessage ("Crypto Stick App","Password Safe unlocked successfully.");
+                        trayIcon->showMessage ("Crypto Stick App","Password Safe unlocked successfully.",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
                     }
                     else
                     {
@@ -4458,7 +4457,7 @@ void MainWindow::PWS_ExceClickedSlot (int Slot)
         MsgText.sprintf("Password safe [%s]",(char*)cryptostick->passwordSafeSlotNames[Slot]);
         MsgText_1.sprintf("Password has been copied to clipboard");
 
-        trayIcon->showMessage (MsgText,MsgText_1);
+        trayIcon->showMessage (MsgText,MsgText_1,QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
     }
     else
     {
