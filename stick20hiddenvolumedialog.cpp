@@ -22,6 +22,7 @@
 #include "device.h"
 #include "stick20hiddenvolumedialog.h"
 #include "ui_stick20hiddenvolumedialog.h"
+#include "cryptostick-applet.h"
 
 
 stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :
@@ -82,17 +83,13 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button)
     {
         if (8 > strlen (ui->HVPasswordEdit->text().toLatin1().data()))
         {
-            QMessageBox   msgBox;
-            msgBox.setText("Your password is too short. Use at least 8 characters.");
-            msgBox.exec();
+            csApplet->warningBox("Your password is too short. Use at least 8 characters.");
             return;
         }
 
         if (ui->HVPasswordEdit->text().toLatin1() != ui->HVPasswordEdit_2->text().toLatin1())
         {
-            QMessageBox msgBox;
-            msgBox.setText("The passwords are not identical");
-            msgBox.exec();
+            csApplet->warningBox("The passwords are not identical");
             return;
         }
 
@@ -102,9 +99,7 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button)
 
         if (HV_Setup_st.StartBlockPercent_u8 >= HV_Setup_st.EndBlockPercent_u8)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Wrong size of hidden volume");
-            msgBox.exec();
+            csApplet->warningBox("Wrong size of hidden volume");
             return;
         }
 
