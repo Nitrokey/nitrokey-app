@@ -99,7 +99,7 @@ void DialogChangePassword::InitData(void)
     {
         case STICK20_PASSWORD_KIND_USER :
             this->setWindowTitle("Change user PIN");
-            ui->label_2->setText("Admin PIN:");
+            ui->label_2->setText("Current user PIN:");
             ui->label_3->setText("New user PIN:");
             ui->label_4->setText("New user PIN:");
             break;
