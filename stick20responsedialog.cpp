@@ -705,9 +705,7 @@ void Stick20ResponseTask::checkStick20Status()
             {
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
                     {
-                        QMessageBox msgBox;
-                        msgBox.setText("Can't enable hidden volume");
-                        msgBox.exec();
+                        csApplet->warningBox("Can't enable hidden volume");
                     }
                     break;
                 default :
@@ -721,10 +719,8 @@ void Stick20ResponseTask::checkStick20Status()
             {
                 case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP :
                     {
-                        QMessageBox msgBox;
 //                        msgBox.setText("To setup the hidden volume, please enable the encrypted volume to enable smartcard access");
-                        msgBox.setText("Please enable the encrypted volume first.");
-                        msgBox.exec();
+                        csApplet->warningBox("Please enable the encrypted volume first.");
                     }
                     break;
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
