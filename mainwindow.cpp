@@ -1351,6 +1351,7 @@ void MainWindow::generateMenuForStick10()
     generatePasswordMenu ();
 
     trayMenu->addAction(restoreAction);
+    restoreAction->setIcon(QIcon(":/images/settings.png"));
 }
 
 /*******************************************************************************
