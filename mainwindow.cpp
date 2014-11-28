@@ -247,7 +247,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     }
 
     quitAction = new QAction(tr("&Quit"), this);
-    quitAction->setIcon(QIcon(":/images/quit.ico"));
+    quitAction->setIcon(QIcon(":/images/quit.png"));
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
 
@@ -262,7 +262,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
 
     ActionAboutDialog = new QAction(tr("&About Crypto Stick"), this);
-    ActionAboutDialog->setIcon(QIcon(":/images/about.ico"));
+    ActionAboutDialog->setIcon(QIcon(":/images/about.png"));
     connect(ActionAboutDialog,  	 SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
     initActionsForStick20 ();
@@ -1059,15 +1059,15 @@ void MainWindow::initActionsForStick20()
     connect(Stick20SetupAction, SIGNAL(triggered()), this, SLOT(startStick20Setup()));
 
     Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), this);
-    Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.ico"));
+    Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
     connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20EnableCryptedVolume()));
 
     Stick20ActionDisableCryptedVolume = new QAction(tr("&Lock encrypted volume"), this);
-    Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/harddrive.ico"));
+    Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
     connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20DisableCryptedVolume()));
 
     Stick20ActionEnableHiddenVolume = new QAction(tr("&Unlock hidden volume"), this);
-    Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/harddrive.ico"));
+    Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/harddrive.png"));
     connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), this, SLOT(startStick20EnableHiddenVolume()));
 
     Stick20ActionDisableHiddenVolume = new QAction(tr("&Lock hidden volume"), this);
@@ -1438,7 +1438,7 @@ void MainWindow::generateMenuForStick20()
     trayMenu->addAction(LockDeviceAction);
 
     trayMenuSubConfigure = trayMenu->addMenu( "Configure" );
-    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.ico"));
+    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
     trayMenuSubConfigure->addAction(restoreActionStick20);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
@@ -4360,7 +4360,7 @@ void MainWindow::generateMenuPasswordSafe()
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
         QString actionName("Unlock password safe");
-        trayMenu->addAction(QIcon(":/images/safe2.ico"), actionName, this, SLOT(PWS_Clicked_EnablePWSAccess()));
+        trayMenu->addAction(QIcon(":/images/safe.png"), actionName, this, SLOT(PWS_Clicked_EnablePWSAccess()));
         return;
     }
 }
