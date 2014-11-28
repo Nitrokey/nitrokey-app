@@ -21,8 +21,9 @@
 #else
 
     #define STRCPY(dest, size, source)          strncpy( (dest), (source), (size));
+    #define STRNCPY(dest, dest_size, source, source_size)          strncpy( (dest), (source), (dest_size));
 
-    #define STRNCPY(dest,dest_size,source,source_size)  \
+//    #define STRNCPY(dest,dest_size,source,source_size)  \
     do{                                                 \
         if ( (source_size) < (dest_size)) {             \
             strncpy ((dest), (source), (source_size) ); \
