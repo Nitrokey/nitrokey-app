@@ -284,10 +284,11 @@ void DialogChangePassword::accept()
 // Check the length of the old password
     if (6 > strlen (ui->lineEdit_OldPW->text().toLatin1()))
     {
+        clearFields();
         QString OutputText;
 
         OutputText = "The minium length of the old password is " + QString("%1").arg(6)+ "chars";
-
+        
         csApplet->warningBox(OutputText);
         return;
     }
@@ -295,6 +296,7 @@ void DialogChangePassword::accept()
 // Check for correct new password entrys
     if (0 != strcmp (ui->lineEdit_NewPW_1->text().toLatin1(),ui->lineEdit_NewPW_2->text().toLatin1()))
     {
+        clearFields();
         csApplet->warningBox("The new password entrys are not the same");
         return;
     }
@@ -302,6 +304,7 @@ void DialogChangePassword::accept()
 // Check the new length of password
     if (STICK20_PASSOWRD_LEN < strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
     {
+        clearFields();
         QString OutputText;
 
         OutputText = "The maximum length of a password is " + QString("%1").arg(STICK20_PASSOWRD_LEN)+ "chars";
@@ -313,6 +316,7 @@ void DialogChangePassword::accept()
 // Check the new length of password
     if (6 > strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
     {
+        clearFields();
         QString OutputText;
 
         OutputText = "The minium length of a password is " + QString("%1").arg(6)+ "chars";
@@ -367,4 +371,11 @@ void DialogChangePassword::on_checkBox_clicked(bool checked)
         ui->lineEdit_NewPW_1->setEchoMode(QLineEdit::Password);
         ui->lineEdit_NewPW_2->setEchoMode(QLineEdit::Password);
     }
+}
+
+void DialogChangePassword::clearFields()
+{
+    ui->lineEdit_OldPW->clear();
+    ui->lineEdit_NewPW_1->clear();
+    ui->lineEdit_NewPW_2->clear();
 }
