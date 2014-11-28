@@ -378,4 +378,6 @@ void DialogChangePassword::clearFields()
     ui->lineEdit_OldPW->clear();
     ui->lineEdit_NewPW_1->clear();
     ui->lineEdit_NewPW_2->clear();
+
+    ui->lineEdit_OldPW->setFocus();
 }
