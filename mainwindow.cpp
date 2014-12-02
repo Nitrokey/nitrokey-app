@@ -101,7 +101,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    Q_INIT_RESOURCE(stylesheet);
+    //Q_INIT_RESOURCE(stylesheet);
 
     int ret;
     QMetaObject::Connection ret_connection;

@@ -84,7 +84,7 @@ void HelpInfos (void)
 int main(int argc, char *argv[])
 {
 
-    Q_INIT_RESOURCE(stylesheet);
+    // Q_INIT_RESOURCE(stylesheet);
 
     csApplet = new CryptostickApplet;
 

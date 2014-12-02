@@ -126,6 +126,5 @@ INCLUDEPATH += /usr/include/libusb-1.0
 OTHER_FILES +=
 
 RESOURCES += \
-    resources.qrc \
-    stylesheet.qrc
+    resources.qrc
 
