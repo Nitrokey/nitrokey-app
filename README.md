@@ -48,6 +48,10 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
    Go to the build directory and use
      macdeployqt CryptoStickGUI.app/ -dmg
    CryptoStickGUI.dmg file will be created at the same folder. This is the final file for distributing the utility on Mac OS
+5) Compress the .dmg package:
+   Open Disk Utility
+   Select the dmg package from left column (or drag'n'drop)
+   Select Convert, check "compressed" option and then "Save"
 
 =Internals=
 All configuration data including OTP secrets are stored in clear text in the flash of Crypto Stick's Microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.
