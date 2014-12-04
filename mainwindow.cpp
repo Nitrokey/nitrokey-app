@@ -2487,10 +2487,7 @@ void MainWindow::startStick20DestroyCryptedVolume()
                                     0, false);
     if (true == answer)
     {
-        PasswordDialog dialog(MatrixInputActive,this);
-        dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
-        dialog.cryptostick = cryptostick;
-
+        PinDialog dialog("Enter admin PIN", "Admin PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
         ret = dialog.exec();
 
         if (QDialog::Accepted == ret)
@@ -2521,10 +2518,7 @@ void MainWindow::startStick20FillSDCardWithRandomChars()
     uint8_t password[40];
     bool    ret;
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
-    dialog.cryptostick = cryptostick;
-
+    PinDialog dialog("Enter admin PIN", "Admin Pin:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret)
@@ -2554,15 +2548,11 @@ void MainWindow::startStick20ClearNewSdCardFound()
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
-    dialog.cryptostick = cryptostick;
-
+    PinDialog dialog("Enter admin PIN", "Enter admin PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret)
     {
-//        password[0] = 'P';
         dialog.getPassword ((char*)password);
 
         stick20SendCommand (STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND,password);
@@ -2627,10 +2617,7 @@ void MainWindow::startStick20SetReadonlyUncryptedVolume()
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
-    dialog.cryptostick = cryptostick;
-
+    PinDialog dialog("Enter user PIN", "User PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret)
@@ -2660,15 +2647,11 @@ void MainWindow::startStick20SetReadWriteUncryptedVolume()
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
 
-    PasswordDialog dialog(MatrixInputActive,this);
-    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
-    dialog.cryptostick = cryptostick;
-
+    PinDialog dialog("Enter user PIN", "User PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret)
     {
-//        password[0] = 'P';
         dialog.getPassword ((char*)password);
 
         stick20SendCommand (STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN,password);
@@ -2699,15 +2682,12 @@ void MainWindow::startStick20LockStickHardware()
     ret = dialog.exec();
     if (QDialog::Accepted == ret)
     {
-        PasswordDialog dialog1(MatrixInputActive,this);
-        dialog1.init((char *)"Enter admin PIN",HID_Stick20Configuration_st.AdminPwRetryCount);
-        dialog1.cryptostick = cryptostick;
-
-        ret = dialog1.exec();
+        PinDialog dialog("Enter admin PIN", "Admin PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+        ret = dialog.exec();
 
         if (QDialog::Accepted == ret)
         {
-            dialog1.getPassword ((char*)password);
+            dialog.getPassword ((char*)password);
             stick20SendCommand (STICK20_CMD_SEND_LOCK_STICK_HARDWARE,password);
         }
     }
