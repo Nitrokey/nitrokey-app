@@ -254,6 +254,9 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     restoreAction = new QAction(tr("&Configure OTP"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
+    resetAction = new QAction(tr("&Factory reset"), this);
+    connect(resetAction, SIGNAL(triggered()), this, SLOT(factoryReset()));
+
     restoreActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
     connect(restoreActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
@@ -1351,6 +1354,10 @@ void MainWindow::generateMenuForStick10()
     generatePasswordMenu ();
 
     trayMenu->addAction(restoreAction);
+
+    if (ExtendedConfigActive) 
+        trayMenu->addAction(resetAction);
+
     restoreAction->setIcon(QIcon(":/images/settings.png"));
 }
 
@@ -4965,3 +4972,7 @@ void MainWindow::on_counterEdit_editingFinished()
 
 }
 
+int MainWindow::factoryReset()
+{
+    
+}

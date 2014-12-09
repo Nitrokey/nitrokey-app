@@ -106,6 +106,7 @@ private:
 
     QAction *quitAction;
     QAction *restoreAction;
+    QAction *resetAction;
     QAction *restoreActionStick20;
     QAction *Stick20Action;
     QAction *DebugAction;
@@ -167,6 +168,7 @@ private:
 private slots:
     void checkConnection();
     void startConfiguration();
+    int factoryReset();
     void getCode(uint8_t slotNo);
 //    void on_pushButton_clicked();
 //    void on_pushButton_2_clicked();
