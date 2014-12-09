@@ -4974,5 +4974,22 @@ void MainWindow::on_counterEdit_editingFinished()
 
 int MainWindow::factoryReset()
 {
-    
+    do {
+        PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+        ok = dialog.exec();
+        QString password;
+        dialog.getPassword(password);
+
+        if (QDialog::Accepted == ok)
+        {
+            if (cryptostick->validPassword){
+                cryptostick->factoryReset(password);
+            } else {
+                csApplet->warningBox("Wrong Pin. Please try again.");
+            }
+            password.clear();
+        }
+    } while(QDialog::Accepted == ok && !cryptostick->validPassword); // While the user keeps enterning a pin and the pin is not correct..
+   
 }
+

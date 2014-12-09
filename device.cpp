@@ -2014,6 +2014,38 @@ int Device::lockDevice (void)
     return ERR_NOT_CONNECTED;
 }
 
+int Device::factoryReset(const char* password)
+{
+    uint8_t n;
+    int ret;
+
+    if(isConnected)
+    {
+        n = strlen(password);
+        Command *cmd = new Command (CMD_FACTORY_RESET, password, n);
+        ret = sendCommand(cmd);
+
+        if (-1 == res)
+        {
+            return ERR_SENDING;
+        }else
+        {
+            Sleep:msleep(1000);
+            Response *resp = new Reponse();
+            resp->getResponse(this);
+
+            if (cmd->crc == resp->lastCommandCRC)
+            {
+            
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+}
+
 
 /*******************************************************************************
 
