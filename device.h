@@ -74,6 +74,7 @@ class Response;
 #define CMD_USER_AUTHORIZE                  0x10
 #define CMD_UNLOCK_USER_PASSOWRD            0x11
 #define CMD_LOCK_DEVICE                     0x12
+#define CMD_FACTORY_RESET                   0x13
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
 #define CMD_GET_PW_SAFE_SLOT_NAME         0x61
