@@ -63,7 +63,7 @@
 
 //extern "C" char DebugText_Stick20[600000];
 
-extern "C" void DebugAppendText (char *Text);
+extern "C" void DebugAppendTextGui (char *Text);
 extern "C" void DebugInitDebugging (void);
 
 /*******************************************************************************
@@ -271,10 +271,10 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     // Init debug text
     DebugInitDebugging ();
-    DebugAppendText ((char *)"Start Debug - ");
+    DebugAppendTextGui ((char *)"Start Debug - ");
 
 #ifdef WIN32
-    DebugAppendText ((char *)"WIN32 system\n");
+    DebugAppendTextGui ((char *)"WIN32 system\n");
 #endif
 
 #ifdef linux
@@ -294,10 +294,10 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
         char text[50];
 
-        DebugAppendText ((char *)"\nEndian check\n\n");
+        DebugAppendTextGui ((char *)"\nEndian check\n\n");
 
-        DebugAppendText ((char *)"Store 0x01 0x02 0x03 0x04 in memory locations x,x+1,x+2,x+3\n");
-        DebugAppendText ((char *)"then read the location x - x+3 as an unsigned int\n\n");
+        DebugAppendTextGui ((char *)"Store 0x01 0x02 0x03 0x04 in memory locations x,x+1,x+2,x+3\n");
+        DebugAppendTextGui ((char *)"then read the location x - x+3 as an unsigned int\n\n");
 
         uEndianCheck.input[0] = 0x01;
         uEndianCheck.input[1] = 0x02;
@@ -309,40 +309,40 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         uEndianCheck.input[7] = 0x08;
 
         SNPRINTF(text,sizeof (text),"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"read  u64 0x%08x%08x\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
-        DebugAppendText ("\n");
+        DebugAppendTextGui ("\n");
 
         if (0x01020304 == uEndianCheck.endianCheck[0])
         {
-            DebugAppendText ("System is little endian\n");
+            DebugAppendTextGui ("System is little endian\n");
         }
         if (0x04030201 == uEndianCheck.endianCheck[0])
         {
-            DebugAppendText ("System is big endian\n");
+            DebugAppendTextGui ("System is big endian\n");
         }
-        DebugAppendText ("\n");
+        DebugAppendTextGui ("\n");
 
-        DebugAppendText ("Var size test\n");
+        DebugAppendTextGui ("Var size test\n");
 
         SNPRINTF(text,sizeof (text),"char  size is %d byte\n",sizeof (unsigned char));
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"short size is %d byte\n",sizeof (unsigned short));
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"int   size is %d byte\n",sizeof (unsigned int));
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"long  size is %d byte\n",sizeof (unsigned long));
-        DebugAppendText (text);
-        DebugAppendText ("\n");
+        DebugAppendTextGui (text);
+        DebugAppendTextGui ("\n");
     }
 
     //ui->labelQuestion1->setToolTip("Test");
@@ -619,33 +619,33 @@ void MainWindow::AnalyseProductionInfos()
         printf ((char*)"\n**** Stick NOT OK ****\n");
     }
 
-    DebugAppendText ((char *)"Production Infos\n");
+    DebugAppendTextGui ((char *)"Production Infos\n");
 
     SNPRINTF(text,sizeof (text),"Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
 
 
-    DebugAppendText ("Password retry count\n");
+    DebugAppendTextGui ("Password retry count\n");
     SNPRINTF(text,sizeof (text),"Admin        %d\n",Stick20ProductionInfos_st.SC_AdminPwRetryCount);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"User         %d\n",Stick20ProductionInfos_st.SC_UserPwRetryCount);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
 
-    DebugAppendText ("SD card infos\n");
+    DebugAppendTextGui ("SD card infos\n");
     SNPRINTF(text,sizeof (text),"Manufacturer 0x%02x\n",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"OEM          0x%04x\n",Stick20ProductionInfos_st.SD_Card_OEM_u16);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"Manufa. date %d.%02d\n",Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8+2000,Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"Write speed  %d kB/sec\n",Stick20ProductionInfos_st.SD_WriteSpeed_u16);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
 }
 
 /*******************************************************************************

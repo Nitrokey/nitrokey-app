@@ -39,19 +39,30 @@
  Global declarations
 
 *******************************************************************************/
-
-char  DebugText_Stick20[STICK20_DEBUG_TEXT_LEN];
-char  DebugNewText[STICK20_DEBUG_TEXT_LEN];               // We have it
-
-int   DebugTextlen_Stick20          = 0;
-int   DebugNewTextLen               = 0;
-char  DebugTextHasChanged           = FALSE;
 int   DebugingActive                = FALSE;
 int   DebugingStick20PoolingActive  = FALSE;
-int   DebugingFileStickActive       = FALSE;
-int   DebugingFileGuiActive         = FALSE;
-char  DebugingStickFilename[256];
+
+char  DebugText_GUI[STICK20_DEBUG_TEXT_LEN];
+char  DebugNewText_GUI[STICK20_DEBUG_TEXT_LEN];
+
 char  DebugingGuiFilename[256];
+int   DebugingFileGuiActive         = FALSE;
+int   DebugTextlen_GUI              = 0;
+int   DebugNewTextLen_GUI           = 0;
+char  DebugTextHasChanged_GUI       = FALSE;
+
+/* Debug output fom stick 20 via HID interface */
+
+char  DebugText_Stick20[STICK20_DEBUG_TEXT_LEN];
+char  DebugNewText_Stick20[STICK20_DEBUG_TEXT_LEN];
+
+char  DebugingStickFilename[256];
+int   DebugingFileStickActive       = FALSE;
+int   DebugTextlen_Stick20          = 0;
+int   DebugNewTextLen_Stick20       = 0;
+char  DebugTextHasChanged_Stick20   = FALSE;
+
+
 
 /*
 extern int  DebugingFileStickActive;
@@ -91,20 +102,57 @@ typeStick20ProductionInfos_st Stick20ProductionInfos_st;
 
 void DebugInitDebugging (void)
 {
-    DebugText_Stick20[0] = 0;
-    DebugTextlen_Stick20 = 0;
-    DebugNewText[0]      = 0;
-    DebugNewTextLen      = 0;
+    DebugText_GUI[0] = 0;
+    DebugTextlen_GUI = 0;
+    DebugNewText_GUI[0]      = 0;
+    DebugNewTextLen_GUI      = 0;
 
-    DebugTextHasChanged  = FALSE;
+    DebugTextHasChanged_GUI  = FALSE;
 
     STRCPY (DebugingStickFilename,sizeof (DebugingStickFilename),"Firmwarelog.txt");
     STRCPY (DebugingGuiFilename,sizeof (DebugingGuiFilename),"Guilog.txt");
 }
 
+
 /*******************************************************************************
 
-  DebugAppendText
+  DebugAppendTextStick
+
+  Changes
+  Date      Author        Info
+  08.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+char *GetTimeStampForLog (void);
+
+void DebugAppendTimestampToLog (void)
+{
+    char *OutputString;
+    char CrString[2] = "\n";
+
+    OutputString = GetTimeStampForLog ();
+
+    if (0 == strlen(OutputString))
+    {
+        return;
+    }
+
+    DebugAppendTextGui_NoTimeStamp ("*** ");
+    DebugAppendTextGui_NoTimeStamp (OutputString);
+    DebugAppendTextGui_NoTimeStamp (" ***\n");
+
+    DebugAppendTextStick_NoTimeStamp ("*** ");
+    DebugAppendTextStick_NoTimeStamp (OutputString);
+    DebugAppendTextStick_NoTimeStamp (" ***\n");
+}
+
+/*******************************************************************************
+
+  DebugAppendTextGui
 
   Reviews
   Date      Reviewer        Info
@@ -112,7 +160,66 @@ void DebugInitDebugging (void)
 
 *******************************************************************************/
 
-void DebugAppendText (char *Text)
+void DebugAppendTextGui (char *Text)
+{
+    int i;
+    static int LastCharWasCr = FALSE;
+
+    if (FALSE == DebugingActive)            // Don't save text when debugging is disabled
+    {
+        return;
+    }
+
+    if (STICK20_DEBUG_TEXT_LEN <= DebugTextlen_GUI + strlen (Text) + DebugNewTextLen_GUI - 1)
+    {
+        return;
+    }
+
+    i = 0;
+    while (Text[i] != 0)
+    {
+        if (TRUE == LastCharWasCr)
+        {
+            LastCharWasCr = FALSE;
+            DebugAppendTimestampToLog ();
+        }
+
+        // Remove embedded LF
+        if ('\r' != Text[i])
+        {
+            DebugNewText_GUI[DebugNewTextLen_GUI] = Text[i];
+            DebugNewTextLen_GUI++;
+        }
+
+        // Check for writing timestamp, only after CR
+        if ('\n' == Text[i])
+        {
+            LastCharWasCr = TRUE;
+        }
+        i++;
+    }
+    DebugNewText_GUI[DebugNewTextLen_GUI] = 0;
+
+    if (0 != i)
+    {
+        DebugTextHasChanged_GUI = TRUE;
+    }
+}
+
+/*******************************************************************************
+
+  DebugAppendTextGui
+
+  Changes
+  Date      Author        Info
+  08.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void DebugAppendTextGui_NoTimeStamp (char *Text)
 {
     int i;
 
@@ -121,7 +228,7 @@ void DebugAppendText (char *Text)
         return;
     }
 
-    if (STICK20_DEBUG_TEXT_LEN <= DebugTextlen_Stick20 + strlen (Text) + DebugNewTextLen - 1)
+    if (STICK20_DEBUG_TEXT_LEN <= DebugTextlen_GUI + strlen (Text) + DebugNewTextLen_GUI - 1)
     {
         return;
     }
@@ -132,18 +239,126 @@ void DebugAppendText (char *Text)
         // Remove embedded LF
         if ('\r' != Text[i])
         {
-            DebugNewText[DebugNewTextLen] = Text[i];
-            DebugNewTextLen++;
+            DebugNewText_GUI[DebugNewTextLen_GUI] = Text[i];
+            DebugNewTextLen_GUI++;
         }
         i++;
     }
-    DebugNewText[DebugNewTextLen] = 0;
+    DebugNewText_GUI[DebugNewTextLen_GUI] = 0;
 
     if (0 != i)
     {
-        DebugTextHasChanged = TRUE;
+        DebugTextHasChanged_GUI = TRUE;
     }
 }
+
+
+/*******************************************************************************
+
+  DebugAppendTextStick
+
+  Changes
+  Date      Author        Info
+  08.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void DebugAppendTextStick (char *Text)
+{
+    int i;
+    static int LastCharWasCr = FALSE;
+
+    if (FALSE == DebugingActive)            // Don't save text when debugging is disabled
+    {
+        return;
+    }
+
+    if (STICK20_DEBUG_TEXT_LEN <= DebugTextlen_Stick20 + strlen (Text) + DebugNewTextLen_Stick20 - 1)
+    {
+        return;
+    }
+
+    i = 0;
+    while (Text[i] != 0)
+    {
+        if (TRUE == LastCharWasCr)
+        {
+            LastCharWasCr = FALSE;
+            DebugAppendTimestampToLog ();
+        }
+
+        // Remove embedded LF
+        if ('\r' != Text[i])
+        {
+            DebugNewText_Stick20[DebugNewTextLen_Stick20] = Text[i];
+            DebugNewTextLen_Stick20++;
+        }
+
+        // Check for writing timestamp, only after CR
+        if ('\n' == Text[i])
+        {
+            LastCharWasCr = TRUE;
+        }
+        i++;
+    }
+    DebugNewText_Stick20[DebugNewTextLen_Stick20] = 0;
+
+    if (0 != i)
+    {
+        DebugTextHasChanged_Stick20 = TRUE;
+    }
+}
+
+
+/*******************************************************************************
+
+  DebugAppendTextStick_NoTimeStamp
+
+  Changes
+  Date      Author        Info
+  08.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void DebugAppendTextStick_NoTimeStamp (char *Text)
+{
+    int i;
+
+    if (FALSE == DebugingActive)            // Don't save text when debugging is disabled
+    {
+        return;
+    }
+
+    if (STICK20_DEBUG_TEXT_LEN <= DebugTextlen_Stick20 + strlen (Text) + DebugNewTextLen_Stick20 - 1)
+    {
+        return;
+    }
+
+    i = 0;
+    while (Text[i] != 0)
+    {
+        // Remove embedded LF
+        if ('\r' != Text[i])
+        {
+            DebugNewText_Stick20[DebugNewTextLen_Stick20] = Text[i];
+            DebugNewTextLen_Stick20++;
+        }
+        i++;
+    }
+    DebugNewText_Stick20[DebugNewTextLen_Stick20] = 0;
+
+    if (0 != i)
+    {
+        DebugTextHasChanged_Stick20 = TRUE;
+    }
+}
+
 
 /*******************************************************************************
 
@@ -288,7 +503,7 @@ int HID_GetStick20Configuration (void)
 //    unsigned char NewDebugBlock = 1;
 //    int len;
 
-    DebugAppendText ("GetStick20Configuration\n");
+    DebugAppendTextGui ("GetStick20Configuration\n");
 
 //    NewDebugBlock = HID_Stick20ReceiveData_st.SendCounter_u8;
 //    len = HID_Stick20ReceiveData_st.SendSize_u8;
@@ -304,22 +519,22 @@ int HID_GetStick20Configuration (void)
     }
 
 
-    SNPRINTF(text,sizeof (text),"HID_GetStick20Configuration\n" );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"MagicNumber_StickConfig_u16      : %d\n",HID_Stick20Configuration_st.MagicNumber_StickConfig_u16      );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"ReadWriteFlagUncryptedVolume_u8  : %d\n",HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8  );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"ReadWriteFlagCryptedVolume_u8    : %d\n",HID_Stick20Configuration_st.ReadWriteFlagCryptedVolume_u8    );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"VersionInfo_au8[4]               : %d %d %d %d\n",HID_Stick20Configuration_st.VersionInfo_au8[0],HID_Stick20Configuration_st.VersionInfo_au8[1],HID_Stick20Configuration_st.VersionInfo_au8[2],HID_Stick20Configuration_st.VersionInfo_au8[3]                  );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"ReadWriteFlagHiddenVolume_u8     : %d\n",HID_Stick20Configuration_st.ReadWriteFlagHiddenVolume_u8     );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"FirmwareLocked_u8                : %d\n",HID_Stick20Configuration_st.FirmwareLocked_u8                );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"NewSDCardFound_u8                : %d\n",HID_Stick20Configuration_st.NewSDCardFound_u8                );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"SDFillWithRandomChars_u8         : %d\n",HID_Stick20Configuration_st.SDFillWithRandomChars_u8         );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"ActiveSD_CardID_u32              : 0x%08X\n",HID_Stick20Configuration_st.ActiveSD_CardID_u32              );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"VolumeActiceFlag_u8              : %d\n",HID_Stick20Configuration_st.VolumeActiceFlag_u8              );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"NewSmartCardFound_u8             : %d\n",HID_Stick20Configuration_st.NewSmartCardFound_u8             );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"UserPwRetryCount                 : %d\n",HID_Stick20Configuration_st.UserPwRetryCount                 );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"AdminPwRetryCount                : %d\n",HID_Stick20Configuration_st.AdminPwRetryCount                );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"ActiveSmartCardID_u32            : 0x%X\n",HID_Stick20Configuration_st.ActiveSmartCardID_u32            );                 DebugAppendText (text);
-    SNPRINTF(text,sizeof (text),"StickKeysNotInitiated            : %d\n",HID_Stick20Configuration_st.StickKeysNotInitiated            );                 DebugAppendText (text);
+    SNPRINTF(text,sizeof (text),"HID_GetStick20Configuration\n" );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"MagicNumber_StickConfig_u16      : %d\n",HID_Stick20Configuration_st.MagicNumber_StickConfig_u16      );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"ReadWriteFlagUncryptedVolume_u8  : %d\n",HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8  );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"ReadWriteFlagCryptedVolume_u8    : %d\n",HID_Stick20Configuration_st.ReadWriteFlagCryptedVolume_u8    );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"VersionInfo_au8[4]               : %d %d %d %d\n",HID_Stick20Configuration_st.VersionInfo_au8[0],HID_Stick20Configuration_st.VersionInfo_au8[1],HID_Stick20Configuration_st.VersionInfo_au8[2],HID_Stick20Configuration_st.VersionInfo_au8[3]                  );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"ReadWriteFlagHiddenVolume_u8     : %d\n",HID_Stick20Configuration_st.ReadWriteFlagHiddenVolume_u8     );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"FirmwareLocked_u8                : %d\n",HID_Stick20Configuration_st.FirmwareLocked_u8                );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"NewSDCardFound_u8                : %d\n",HID_Stick20Configuration_st.NewSDCardFound_u8                );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"SDFillWithRandomChars_u8         : %d\n",HID_Stick20Configuration_st.SDFillWithRandomChars_u8         );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"ActiveSD_CardID_u32              : 0x%08X\n",HID_Stick20Configuration_st.ActiveSD_CardID_u32              );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"VolumeActiceFlag_u8              : %d\n",HID_Stick20Configuration_st.VolumeActiceFlag_u8              );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"NewSmartCardFound_u8             : %d\n",HID_Stick20Configuration_st.NewSmartCardFound_u8             );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"UserPwRetryCount                 : %d\n",HID_Stick20Configuration_st.UserPwRetryCount                 );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"AdminPwRetryCount                : %d\n",HID_Stick20Configuration_st.AdminPwRetryCount                );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"ActiveSmartCardID_u32            : 0x%X\n",HID_Stick20Configuration_st.ActiveSmartCardID_u32            );                 DebugAppendTextGui (text);
+    SNPRINTF(text,sizeof (text),"StickKeysNotInitiated            : %d\n",HID_Stick20Configuration_st.StickKeysNotInitiated            );                 DebugAppendTextGui (text);
 
 
 //    if(len){}//Fix warnings
@@ -347,7 +562,7 @@ int HID_GetStick20ProductionInfos (void)
     int len;
     static typeStick20ProductionInfos_st SavedProductionInfos_st;
 
-    DebugAppendText ("GetStick20ProductionInfos");
+    DebugAppendTextGui ("GetStick20ProductionInfos");
 
     NewDebugBlock = HID_Stick20ReceiveData_st.SendCounter_u8;
     len = HID_Stick20ReceiveData_st.SendSize_u8;
@@ -407,42 +622,42 @@ int HID_GetStick20PasswordMatrixData (void)
             case 0 :
                 break;
             case 1 :
-                DebugAppendText ("GetStick20PasswordMatrixData 1\n");
+                DebugAppendTextGui ("GetStick20PasswordMatrixData 1\n");
                 HID_Stick20MatrixPasswordData_st.StatusFlag_u8 = STICK20_PASSWORD_MATRIX_STATUS_GET_NEW_BLOCK;
                 memset (&HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[0],-1,STICK20_PASSWORD_MATRIX_DATA_LEN);
                 break;
             case 2 :
-                DebugAppendText ("GetStick20PasswordMatrixData 2\n");
+                DebugAppendTextGui ("GetStick20PasswordMatrixData 2\n");
                 memcpy (&HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[0],
                         &HID_Stick20ReceiveData_st.SendData_u8[1],
                         20);
                 break;
             case 3 :
-                DebugAppendText ("GetStick20PasswordMatrixData 3\n");
+                DebugAppendTextGui ("GetStick20PasswordMatrixData 3\n");
                 memcpy (&HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[20],
                         &HID_Stick20ReceiveData_st.SendData_u8[1],
                         20);
                 break;
             case 4 :
-                DebugAppendText ("GetStick20PasswordMatrixData 4\n");
+                DebugAppendTextGui ("GetStick20PasswordMatrixData 4\n");
                 memcpy (&HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[40],
                         &HID_Stick20ReceiveData_st.SendData_u8[1],
                         20);
                 break;
             case 5 :
-                DebugAppendText ("GetStick20PasswordMatrixData 5\n");
+                DebugAppendTextGui ("GetStick20PasswordMatrixData 5\n");
                 memcpy (&HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[60],
                         &HID_Stick20ReceiveData_st.SendData_u8[1],
                         20);
                 break;
             case 6 :
-                DebugAppendText ("GetStick20PasswordMatrixData 6\n");
+                DebugAppendTextGui ("GetStick20PasswordMatrixData 6\n");
                 memcpy (&HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[80],
                         &HID_Stick20ReceiveData_st.SendData_u8[1],
                         20);
                 break;
             case 7 :
-                DebugAppendText ("GetStick20PasswordMatrixData 7 - All in\n");
+                DebugAppendTextGui ("GetStick20PasswordMatrixData 7 - All in\n");
                 HID_Stick20MatrixPasswordData_st.StatusFlag_u8 = STICK20_PASSWORD_MATRIX_STATUS_NEW_BLOCK_RECEIVED;
                 break;
             default :
@@ -482,7 +697,7 @@ int HID_GetStick20DebugData (void)
         HID_Stick20ReceiveData_st.SendData_u8[len] = 0;
         
         
-        DebugAppendText ((char *)&HID_Stick20ReceiveData_st.SendData_u8[0]);
+        DebugAppendTextStick ((char *)&HID_Stick20ReceiveData_st.SendData_u8[0]);
 
         LastDebugBlock = HID_Stick20ReceiveData_st.SendCounter_u8;
     }
@@ -518,23 +733,39 @@ int HID_GetStick20ReceiveData (unsigned char *data)
     memcpy ((void*)&HID_Stick20ReceiveData_st,data+1+OUTPUT_CMD_RESULT_STICK20_DATA_START,sizeof (HID_Stick20ReceiveData_st));
 #endif
 
+/*
+{
+    char text[1000];
+    int i;
 
-
-if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE != HID_Stick20ReceiveData_st.SendDataType_u8)
+    if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_DEBUG == HID_Stick20ReceiveData_st.SendDataType_u8)
+    {
+        SNPRINTF(text,sizeof (text),"<%d>",HID_Stick20ReceiveData_st.SendCounter_u8);
+        DebugAppendTextGui (text);
+    }
+    else
+    {
+        SNPRINTF(text,sizeof (text),"-%d-",HID_Stick20ReceiveData_st.SendCounter_u8);
+        DebugAppendTextGui (text);
+    }
+}
+*/
+if ((OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE  != HID_Stick20ReceiveData_st.SendDataType_u8) &&
+    (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_DEBUG != HID_Stick20ReceiveData_st.SendDataType_u8))         // Don't log debug data
 {
         char text[1000];
         int i;
 
         SNPRINTF(text,sizeof (text),"HID_GetStick20ReceiveData: ");
 
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
         for (i=0;i<64;i++)
         {
             SNPRINTF(text,sizeof (text),"%02x ",data[i]);
-            DebugAppendText (text);
+            DebugAppendTextGui (text);
         }
         SNPRINTF(text,sizeof (text),"\n");
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
 
         SNPRINTF (text,sizeof (text),"HID_GetStick20ReceiveData: SendCounter %d Typ %d - %d - Size %d\n",
@@ -544,7 +775,7 @@ if (OUTPUT_CMD_STICK20_SEND_DATA_TYPE_NONE != HID_Stick20ReceiveData_st.SendData
                     HID_Stick20ReceiveData_st.SendSize_u8
                 );
 
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
 }
 

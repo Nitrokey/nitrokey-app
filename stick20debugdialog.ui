@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>672</width>
-    <height>501</height>
+    <height>657</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,13 +17,13 @@
    <iconset resource="resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
-  <widget class="QPlainTextEdit" name="plainTextEdit">
+  <widget class="QPlainTextEdit" name="TextGUI">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>20</y>
      <width>651</width>
-     <height>421</height>
+     <height>281</height>
     </rect>
    </property>
    <property name="font">
@@ -38,14 +38,14 @@
     <bool>true</bool>
    </property>
    <property name="plainText">
-    <string>Test</string>
+    <string>Output GUI</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>460</y>
+     <y>620</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -58,7 +58,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>460</y>
+     <y>620</y>
      <width>201</width>
      <height>21</height>
     </rect>
@@ -71,7 +71,7 @@
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>460</y>
+     <y>620</y>
      <width>111</width>
      <height>21</height>
     </rect>
@@ -84,7 +84,7 @@
    <property name="geometry">
     <rect>
      <x>230</x>
-     <y>460</y>
+     <y>620</y>
      <width>156</width>
      <height>23</height>
     </rect>
@@ -94,6 +94,43 @@
    </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="TextStick">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>330</y>
+     <width>651</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+    </font>
+   </property>
+   <property name="lineWrapMode">
+    <enum>QPlainTextEdit::NoWrap</enum>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+   <property name="plainText">
+    <string>Qutput Stick</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_OutputStick">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>310</y>
+     <width>141</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Stick output logged via USB</string>
    </property>
   </widget>
  </widget>

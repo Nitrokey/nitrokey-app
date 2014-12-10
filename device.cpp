@@ -263,13 +263,7 @@ int Device::sendCommand(Command *cmd)
     ((uint32_t *)(report+1))[15]=crc;
 
     cmd->crc=crc;
-/*
-    {
-         char text[1000];
-         sprintf(text,"computed crc :%08x:\n",crc );
-         DebugAppendText (text);
-    }
-*/
+
     err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
 
     {
@@ -277,18 +271,21 @@ int Device::sendCommand(Command *cmd)
         int i;
         static int Counter = 0;
 
-        SNPRINTF(text, sizeof(text), "%6d :sendCommand0: ",Counter);
-
-        Counter++;
-        DebugAppendText (text);
-        for (i=0;i<=64;i++)
+        if (STICK20_CMD_SEND_DEBUG_DATA != report[1])                   // Log no debug infos
         {
-            SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-            DebugAppendText (text);
-        }
-        SNPRINTF(text,sizeof (text),"\n");
+            SNPRINTF(text, sizeof(text), "%6d :sendCommand0: ",Counter);
 
-        DebugAppendText (text);
+            Counter++;
+            DebugAppendTextGui (text);
+            for (i=0;i<=64;i++)
+            {
+                SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
+                DebugAppendTextGui (text);
+            }
+            SNPRINTF(text,sizeof (text),"\n");
+
+            DebugAppendTextGui (text);
+        }
 
      }
 
@@ -326,16 +323,19 @@ int Device::sendCommandGetResponse(Command *cmd, Response *resp)
             int i;
             static int Counter = 0;
 
-            SNPRINTF(text,sizeof (text),"%6d :sendCommand1: ",Counter);
-            Counter++;
-            DebugAppendText (text);
-            for (i=0;i<=64;i++)
+            if (STICK20_CMD_SEND_DEBUG_DATA != report[1])                   // Log no debug infos
             {
-                SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-                DebugAppendText (text);
+                SNPRINTF(text,sizeof (text),"%6d :sendCommand1: ",Counter);
+                Counter++;
+                DebugAppendTextGui (text);
+                for (i=0;i<=64;i++)
+                {
+                    SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
+                    DebugAppendTextGui (text);
+                }
+                SNPRINTF(text,sizeof (text),"\n");
+                DebugAppendTextGui (text);
             }
-            SNPRINTF(text,sizeof (text),"\n");
-            DebugAppendText (text);
      }
 
     if (err==-1)
@@ -2693,6 +2693,34 @@ int Device::stick20ProductionTest (void)
     return (true);
 }
 
+/*******************************************************************************
+
+  stick20GetDebugData
+
+  Changes
+  Date      Author        Info
+  10.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::stick20GetDebugData (void)
+{
+    uint8_t n;
+    int     res;
+    uint8_t TestData[10];
+    Command *cmd;
+
+    n = 0;
+
+    cmd = new Command(STICK20_CMD_SEND_DEBUG_DATA,TestData,n);
+    res = sendCommand(cmd);
+    if(res){}//Fix warnings
+
+    return (true);
+}
 
 /*******************************************************************************
 

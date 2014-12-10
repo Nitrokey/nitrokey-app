@@ -50,23 +50,34 @@ typedef struct {
 
 #define STICK20_DEBUG_TEXT_LEN          600000
 
-extern char DebugText_Stick20[STICK20_DEBUG_TEXT_LEN];
-extern int  DebugTextlen_Stick20;
-extern char DebugTextHasChanged;
+
 extern int  DebugingActive;
 extern int  DebugingStick20PoolingActive;
-extern char DebugNewText[STICK20_DEBUG_TEXT_LEN];               // We have it
-extern int  DebugNewTextLen;
 
-extern int  DebugingFileStickActive;
+
 extern int  DebugingFileGuiActive;
-extern char DebugingStickFilename[256];
+extern char DebugText_GUI[STICK20_DEBUG_TEXT_LEN];
+extern int  DebugTextlen_GUI;
+extern char DebugTextHasChanged_GUI;
+extern char DebugNewText_GUI[STICK20_DEBUG_TEXT_LEN];
+extern int  DebugNewTextLen_GUI;
 extern char DebugingGuiFilename[256];
+
+extern char DebugingStickFilename[256];
+extern int  DebugingFileStickActive;
+extern char DebugText_Stick20[STICK20_DEBUG_TEXT_LEN];
+extern int  DebugTextlen_Stick20;
+
+extern char DebugTextHasChanged_Stick20;
+extern char DebugNewText_Stick20[STICK20_DEBUG_TEXT_LEN];
+extern int  DebugNewTextLen_Stick20;
 
 
 void DebugInitDebugging (void);
-void DebugAppendText (char *Text);
-
+void DebugAppendTextGui (char *Text);
+void DebugAppendTextGui_NoTimeStamp (char *Text);
+void DebugAppendTextStick (char *Text);
+void DebugAppendTextStick_NoTimeStamp (char *Text);
 
 /** Only for debugging - End */
 
