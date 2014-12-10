@@ -2017,21 +2017,21 @@ int Device::lockDevice (void)
 int Device::factoryReset(const char* password)
 {
     uint8_t n;
-    int ret;
+    int res;
 
     if(isConnected)
     {
         n = strlen(password);
-        Command *cmd = new Command (CMD_FACTORY_RESET, password, n);
-        ret = sendCommand(cmd);
+        Command *cmd = new Command (CMD_FACTORY_RESET, (uint8_t*)password, n);
+        res = sendCommand(cmd);
 
         if (-1 == res)
         {
             return ERR_SENDING;
         }else
         {
-            Sleep:msleep(1000);
-            Response *resp = new Reponse();
+            Sleep::msleep(1000);
+            Response *resp = new Response();
             resp->getResponse(this);
 
             if (cmd->crc == resp->lastCommandCRC)
