@@ -2036,7 +2036,7 @@ int Device::factoryReset(const char* password)
 
             if (cmd->crc == resp->lastCommandCRC)
             {
-            
+                return (TRUE);
             }
             else
             {

@@ -4974,6 +4974,7 @@ void MainWindow::on_counterEdit_editingFinished()
 
 int MainWindow::factoryReset()
 {
+    int ret;
     do {
         PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
         ok = dialog.exec();
@@ -4983,7 +4984,9 @@ int MainWindow::factoryReset()
         if (QDialog::Accepted == ok)
         {
             if (cryptostick->validPassword){
-                cryptostick->factoryReset(password);
+                ret = cryptostick->factoryReset(password);
+                if (TRUE == ret)
+                    csApplet->messageBox("Factory reset was successful.");
             } else {
                 csApplet->warningBox("Wrong Pin. Please try again.");
             }
