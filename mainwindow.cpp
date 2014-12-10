@@ -4975,7 +4975,7 @@ void MainWindow::on_counterEdit_editingFinished()
 int MainWindow::factoryReset()
 {
     do {
-        PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+        PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
         ok = dialog.exec();
         QString password;
         dialog.getPassword(password);
