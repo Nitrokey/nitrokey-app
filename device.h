@@ -280,6 +280,7 @@ public:
     int getPasswordRetryCount();
     int getUserPasswordRetryCount();
     int lockDevice (void);
+    int factoryReset (const char* password);
 
     //START - OTP Test Routine --------------------------------
     /*
