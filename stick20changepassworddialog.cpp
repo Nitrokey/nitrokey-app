@@ -99,20 +99,17 @@ void DialogChangePassword::InitData(void)
     {
         case STICK20_PASSWORD_KIND_USER :
         case STICK10_PASSWORD_KIND_USER :
-            ui->label->setText("Change user PIN");
             ui->label_2->setText("Old user PIN");
             ui->label_3->setText("New user PIN");
             ui->label_4->setText("New user PIN");
             break;
         case STICK20_PASSWORD_KIND_ADMIN :
         case STICK10_PASSWORD_KIND_ADMIN :
-            ui->label->setText("Change admin PIN");
             ui->label_2->setText("Admin PIN");
             ui->label_3->setText("New admin PIN");
             ui->label_4->setText("New admin PIN");
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
-            // ui->label->setText("Reset user PIN");
             this->setWindowTitle("Reset user PIN");
             ui->label_2->setText("Admin PIN:");
             ui->label_3->setText("New user PIN:");
