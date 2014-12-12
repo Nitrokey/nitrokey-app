@@ -9,6 +9,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+sources.files = qss
 
 TARGET = CryptoStickGUI
 TEMPLATE = app
@@ -30,6 +31,7 @@ SOURCES += main.cpp\
     stick20changepassworddialog.cpp \
     response.cpp \
     passworddialog.cpp \
+    pindialog.cpp \
     hotpdialog.cpp \
     device.cpp \
     crc32.cpp \
@@ -38,7 +40,10 @@ SOURCES += main.cpp\
     aboutdialog.cpp \
     stick20hid.c \
     passwordsafedialog.cpp \
-    securitydialog.cpp
+    securitydialog.cpp \
+    gui.cpp \
+    splash.cpp \
+    cryptostick-applet.cpp
 
 win32 {
  SOURCES +=   hid_win.c
@@ -69,6 +74,7 @@ HEADERS  += mainwindow.h \
     sleep.h \
     response.h \
     passworddialog.h \
+    pindialog.h \
     inttypes.h \
     hotpslot.h \
     hotpdialog.h \
@@ -79,7 +85,11 @@ HEADERS  += mainwindow.h \
     base32.h \
     aboutdialog.h \
     passwordsafedialog.h \
-    securitydialog.h
+    securitydialog.h \
+    mcvs-wrapper.h \
+    gui.h \
+    splash.h \
+    cryptostick-applet.h
 
 FORMS    += mainwindow.ui \
     stick20window.ui \
@@ -94,6 +104,7 @@ FORMS    += mainwindow.ui \
     stick20debugdialog.ui \
     stick20changepassworddialog.ui \
     passworddialog.ui \
+    pindialog.ui \
     hotpdialog.ui \
     aboutdialog.ui \
     passwordsafedialog.ui \

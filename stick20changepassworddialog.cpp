@@ -17,12 +17,11 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QMessageBox>
-
+#include "mcvs-wrapper.h"
 #include "stick20changepassworddialog.h"
 #include "ui_stick20changepassworddialog.h"
 #include "stick20responsedialog.h"
-
+#include "cryptostick-applet.h"
 
 
 /*******************************************************************************
@@ -57,8 +56,12 @@ DialogChangePassword::DialogChangePassword(QWidget *parent) :
     ui->setupUi(this);
 
     ui->lineEdit_OldPW->setEchoMode(QLineEdit::Password);
+    ui->lineEdit_OldPW->setMaxLength(20);
     ui->lineEdit_NewPW_1->setEchoMode(QLineEdit::Password);
+    ui->lineEdit_NewPW_1->setMaxLength(20);
     ui->lineEdit_NewPW_2->setEchoMode(QLineEdit::Password);
+    ui->lineEdit_NewPW_2->setMaxLength(20);
+
 
     ui->lineEdit_OldPW->setFocus();
 }
@@ -95,22 +98,24 @@ void DialogChangePassword::InitData(void)
     switch (PasswordKind)
     {
         case STICK20_PASSWORD_KIND_USER :
-            ui->label->setText("Change user PIN");
-            ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New PIN");
-            ui->label_4->setText("New PIN");
+            this->setWindowTitle("Change user PIN");
+            ui->label_2->setText("Current user PIN:");
+            ui->label_3->setText("New user PIN:");
+            ui->label_4->setText("New user PIN:");
             break;
         case STICK20_PASSWORD_KIND_ADMIN :
-            ui->label->setText("Change admin PIN");
-            ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New PIN");
-            ui->label_4->setText("New PIN");
+            this->setWindowTitle("Change admin PIN");
+            // ui->label->setText("Change admin PIN");
+            ui->label_2->setText("Admin PIN:");
+            ui->label_3->setText("New admin PIN:");
+            ui->label_4->setText("New admin PIN:");
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
-            ui->label->setText("Reset user PIN");
-            ui->label_2->setText("Admin PIN");
-            ui->label_3->setText("New user PIN");
-            ui->label_4->setText("New user PIN");
+            // ui->label->setText("Reset user PIN");
+            this->setWindowTitle("Reset user PIN");
+            ui->label_2->setText("Admin PIN:");
+            ui->label_3->setText("New user PIN:");
+            ui->label_4->setText("New user PIN:");
             break;
     }
 }
@@ -173,7 +178,7 @@ void DialogChangePassword::SendNewPassword(void)
 // Send old password
     PasswordString = ui->lineEdit_OldPW->text().toLatin1();
 
-    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
+    STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->stick20SendPassword (Data);
@@ -191,7 +196,7 @@ void DialogChangePassword::SendNewPassword(void)
 // Change password
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
 
-    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
+    STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN,PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->stick20SendNewPassword (Data);
@@ -230,7 +235,7 @@ void DialogChangePassword::ResetUserPassword (void)
 // Send old password
     PasswordString = ui->lineEdit_OldPW->text().toLatin1();
 
-    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
+    STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->stick20SendPassword (Data);
@@ -248,7 +253,7 @@ void DialogChangePassword::ResetUserPassword (void)
 // Reset new user PIN
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
 
-    strncpy ((char*)&Data[1],PasswordString.data(),STICK20_PASSOWRD_LEN);
+    STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
     ret = cryptostick->unlockUserPassword (Data);
@@ -279,49 +284,44 @@ void DialogChangePassword::accept()
 // Check the length of the old password
     if (6 > strlen (ui->lineEdit_OldPW->text().toLatin1()))
     {
-        QMessageBox msgBox;
+        clearFields();
         QString OutputText;
 
         OutputText = "The minium length of the old password is " + QString("%1").arg(6)+ "chars";
-
-        msgBox.setText(OutputText);
-        msgBox.exec();
+        
+        csApplet->warningBox(OutputText);
         return;
     }
 
 // Check for correct new password entrys
     if (0 != strcmp (ui->lineEdit_NewPW_1->text().toLatin1(),ui->lineEdit_NewPW_2->text().toLatin1()))
     {
-        QMessageBox msgBox;
-
-        msgBox.setText("The new password entrys are not the same");
-        msgBox.exec();
+        clearFields();
+        csApplet->warningBox("The new password entrys are not the same");
         return;
     }
 
 // Check the new length of password
-    if (STICK20_PASSOWRD_LEN <= strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
+    if (STICK20_PASSOWRD_LEN < strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
     {
-        QMessageBox msgBox;
+        clearFields();
         QString OutputText;
 
         OutputText = "The maximum length of a password is " + QString("%1").arg(STICK20_PASSOWRD_LEN)+ "chars";
 
-        msgBox.setText(OutputText);
-        msgBox.exec();
+        csApplet->warningBox(OutputText);
         return;
     }
 
 // Check the new length of password
     if (6 > strlen (ui->lineEdit_NewPW_1->text().toLatin1()))
     {
-        QMessageBox msgBox;
+        clearFields();
         QString OutputText;
 
         OutputText = "The minium length of a password is " + QString("%1").arg(6)+ "chars";
 
-        msgBox.setText(OutputText);
-        msgBox.exec();
+        csApplet->warningBox(OutputText);
         return;
     }
 
@@ -371,4 +371,13 @@ void DialogChangePassword::on_checkBox_clicked(bool checked)
         ui->lineEdit_NewPW_1->setEchoMode(QLineEdit::Password);
         ui->lineEdit_NewPW_2->setEchoMode(QLineEdit::Password);
     }
+}
+
+void DialogChangePassword::clearFields()
+{
+    ui->lineEdit_OldPW->clear();
+    ui->lineEdit_NewPW_1->clear();
+    ui->lineEdit_NewPW_2->clear();
+
+    ui->lineEdit_OldPW->setFocus();
 }

@@ -31,17 +31,18 @@ public:
     Response();
     void DebugResponse();
 
-    uint8_t deviceStatus;
-    uint8_t lastCommandType;
+    uint8_t  deviceStatus;
+    uint8_t  lastCommandType;
     uint32_t lastCommandCRC;
-    uint8_t lastCommandStatus;
-    char data[PAYLOAD_SIZE];
+    uint8_t  lastCommandStatus;
+    char     data[PAYLOAD_SIZE];
     uint32_t responseCRC;
-    int getResponse(Device *device);
-    uint8_t reportBuffer[REPORT_SIZE+1];
+    int      getResponse(Device *device);
+    uint8_t  reportBuffer[REPORT_SIZE+1];
 
 
     HID_Stick20Status_est HID_Stick20Status_st;
+    uint8_t  DebugResponseFlag;
 };
 
 #endif // RESPONSE_H

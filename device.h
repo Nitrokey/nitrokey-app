@@ -73,7 +73,7 @@ class Response;
 #define CMD_GET_USER_PASSWORD_RETRY_COUNT   0x0F
 #define CMD_USER_AUTHORIZE                  0x10
 #define CMD_UNLOCK_USER_PASSOWRD            0x11
-
+#define CMD_LOCK_DEVICE                     0x12
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
 #define CMD_GET_PW_SAFE_SLOT_NAME         0x61
@@ -132,6 +132,7 @@ class Response;
 #define STICK20_CMD_SEND_LOCK_STICK_HARDWARE            (STICK20_CMD_START_VALUE + 23)
 
 #define STICK20_CMD_PRODUCTION_TEST                     (STICK20_CMD_START_VALUE + 24)
+#define STICK20_CMD_SEND_DEBUG_DATA                     (STICK20_CMD_START_VALUE + 25)
 
 #define STATUS_READY           0x00
 #define STATUS_BUSY	           0x01
@@ -282,6 +283,7 @@ public:
     int readSlot(uint8_t slotNo);
     int getPasswordRetryCount();
     int getUserPasswordRetryCount();
+    int lockDevice (void);
 
     //START - OTP Test Routine --------------------------------
     /*
@@ -359,6 +361,7 @@ public:
     int stick20SendHiddenVolumeSetup (HiddenVolumeSetup_tst *HV_Data_st);
     int stick20LockFirmware (uint8_t *password);
     int stick20ProductionTest (void);
+    int stick20GetDebugData (void);
 
     uint8_t cardSerial[4];
     uint8_t firmwareVersion[2];

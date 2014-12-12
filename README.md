@@ -27,7 +27,7 @@ For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 
 
 == Cross Compiling with QT5 for Windows on Ubuntu Linux ==
 Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target
-1) sudo make install bison cmake flex intltool libtool scons
+1) sudo apt-get install bison cmake flex intltool libtool scons
 2) git clone https://github.com/mxe/mxe.git
 3) cd mxe && make qt5
 4) export PATH=<mxe root>/usr/bin:$PATH
@@ -43,7 +43,15 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
 3) Edit Info.plist file by adding:
     <key>LSUIElement</key>
     <string>1</string>
-under <dict> node
+   under <dict> node
+4) Create a .dmg file
+   Go to the build directory and use
+     macdeployqt CryptoStickGUI.app/ -dmg
+   CryptoStickGUI.dmg file will be created at the same folder. This is the final file for distributing the utility on Mac OS
+5) Compress the .dmg package:
+   Open Disk Utility
+   Select the dmg package from left column (or drag'n'drop)
+   Select Convert, check "compressed" option and then "Save"
 
 =Internals=
 All configuration data including OTP secrets are stored in clear text in the flash of Crypto Stick's Microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.

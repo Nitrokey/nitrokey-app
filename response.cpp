@@ -21,6 +21,7 @@
 
 #include "response.h"
 #include "string.h"
+#include "mcvs-wrapper.h"
 
 #include "stick20responsedialog.h"
 
@@ -51,6 +52,7 @@
 
 Response::Response()
 {
+    DebugResponseFlag = TRUE;
 }
 
 /*******************************************************************************
@@ -73,43 +75,51 @@ void Response::DebugResponse()
     int i;
     static int Counter = 0;
 
-    sprintf(text,"%6d :getResponse : ",Counter);
+
+    if (FALSE == DebugResponseFlag)         // Don't log debug data
+    {
+        return;
+    }
+
+    SNPRINTF(text,sizeof (text),"%6d :getResponse : ",Counter);
+
     Counter++;
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     for (i=0;i<=64;i++)
     {
-        sprintf(text,"%02x ",(unsigned char)reportBuffer[i]);
-        DebugAppendText (text);
+        SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)reportBuffer[i]);
+        DebugAppendTextGui (text);
     }
-    sprintf(text,"\n");
-    DebugAppendText (text);
+
+    SNPRINTF(text,sizeof (text),"\n");
+    DebugAppendTextGui (text);
 
 // Check device status =     deviceStatus = reportBuffer[1]
     switch (deviceStatus)
     {
         case CMD_STATUS_OK :
-            DebugAppendText ((char *)"         Device status       : CMD_STATUS_OK\n");
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_OK\n");
             break;
         case CMD_STATUS_WRONG_CRC :
-            DebugAppendText ((char *)"         Device status       : CMD_STATUS_WRONG_CRC\n");
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_WRONG_CRC\n");
             break;
         case CMD_STATUS_WRONG_SLOT :
-            DebugAppendText ((char *)"         Device status       : CMD_STATUS_WRONG_SLOT\n");
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_WRONG_SLOT\n");
             break;
         case CMD_STATUS_SLOT_NOT_PROGRAMMED :
-            DebugAppendText ((char *)"         Device status       : CMD_STATUS_SLOT_NOT_PROGRAMMED\n");
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_SLOT_NOT_PROGRAMMED\n");
             break;
         case CMD_STATUS_WRONG_PASSWORD :
-            DebugAppendText ((char *)"         Device status       : CMD_STATUS_WRONG_PASSWORD\n");
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_WRONG_PASSWORD\n");
             break;
         case CMD_STATUS_NOT_AUTHORIZED :
-            DebugAppendText ((char *)"         Device status       : CMD_STATUS_NOT_AUTHORIZED\n");
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_NOT_AUTHORIZED\n");
             break;
         case CMD_STATUS_TIMESTAMP_WARNING :
-            DebugAppendText ((char *)"         Device status       : CMD_STATUS_TIMESTAMP_WARNING\n");
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_TIMESTAMP_WARNING\n");
             break;
         case CMD_STATUS_NO_NAME_ERROR :
-            DebugAppendText ((char *)"         Device status       : CMD_STATUS_NO_NAME_ERROR\n");
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_NO_NAME_ERROR\n");
             break;
         case CMD_STATUS_NOT_SUPPORTED:
             DebugAppendText ((char *)"         Device status       : CMD_STATUS_NOT_SUPPORTED\n");
@@ -119,7 +129,7 @@ void Response::DebugResponse()
             break;
 
         default:
-                DebugAppendText ((char *)"         Device status       : Unknown\n");
+                DebugAppendTextGui ((char *)"         Device status       : Unknown\n");
                 break;
     }
 
@@ -128,98 +138,101 @@ void Response::DebugResponse()
     switch (lastCommandType)
     {
         case CMD_GET_STATUS :
-            DebugAppendText ((char *)"         Last command        : CMD_GET_STATUS\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_GET_STATUS\n");
             break;
         case CMD_WRITE_TO_SLOT :
-            DebugAppendText ((char *)"         Last command        : CMD_WRITE_TO_SLOT\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_WRITE_TO_SLOT\n");
             break;
         case CMD_READ_SLOT_NAME :
-            strncpy (text1,data,15);
+            STRNCPY (text1,sizeof (text1),data,15);
             text1[15] = 0;
-            sprintf(text,"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
-            DebugAppendText (text);
+            SNPRINTF(text,sizeof (text),"         Last command        : CMD_READ_SLOT_NAME -%s-\n",text1);
+            DebugAppendTextGui (text);
             break;
         case CMD_READ_SLOT :
-            DebugAppendText ((char *)"         Last command        : CMD_READ_SLOT\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_READ_SLOT\n");
             break;
         case CMD_GET_CODE :
-            DebugAppendText ((char *)"         Last command        : CMD_GET_CODE\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_GET_CODE\n");
             break;
         case CMD_WRITE_CONFIG :
-            DebugAppendText ((char *)"         Last command        : CMD_WRITE_CONFIG\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_WRITE_CONFIG\n");
             break;
         case CMD_ERASE_SLOT :
-            DebugAppendText ((char *)"         Last command        : CMD_ERASE_SLOT\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_ERASE_SLOT\n");
             break;
         case CMD_FIRST_AUTHENTICATE :
-            DebugAppendText ((char *)"         Last command        : CMD_FIRST_AUTHENTICATE\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_FIRST_AUTHENTICATE\n");
             break;
         case CMD_AUTHORIZE :
-            DebugAppendText ((char *)"         Last command        : CMD_AUTHORIZE\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_AUTHORIZE\n");
             break;
         case CMD_GET_PASSWORD_RETRY_COUNT :
-            DebugAppendText ((char *)"         Last command        : CMD_GET_PASSWORD_RETRY_COUNT\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_GET_PASSWORD_RETRY_COUNT\n");
             break;
         case CMD_CLEAR_WARNING :
-            DebugAppendText ((char *)"         Last command        : CMD_CLEAR_WARNING\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_CLEAR_WARNING\n");
             break;
 
 
         case CMD_GET_PW_SAFE_SLOT_STATUS :
-            DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_STATUS\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_STATUS\n");
             break;
         case CMD_GET_PW_SAFE_SLOT_NAME :
-            DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_NAME\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_NAME\n");
             break;
         case CMD_GET_PW_SAFE_SLOT_PASSWORD :
-            DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_PASSWORD\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_PASSWORD\n");
             break;
 
         case CMD_GET_PW_SAFE_SLOT_LOGINNAME :
-            DebugAppendText ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_LOGINNAME\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_GET_PW_SAFE_SLOT_LOGINNAME\n");
             break;
         case CMD_SET_PW_SAFE_SLOT_DATA_1 :
-            DebugAppendText ((char *)"         Last command        : CMD_SET_PW_SAFE_SLOT_DATA_1\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_SET_PW_SAFE_SLOT_DATA_1\n");
             break;
         case CMD_SET_PW_SAFE_SLOT_DATA_2 :
-            DebugAppendText ((char *)"         Last command        : CMD_SET_PW_SAFE_SLOT_DATA_2\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_SET_PW_SAFE_SLOT_DATA_2\n");
             break;
         case CMD_PW_SAFE_ERASE_SLOT :
-            DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_ERASE_SLOT\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_PW_SAFE_ERASE_SLOT\n");
             break;
         case CMD_PW_SAFE_ENABLE :
-            DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_ENABLE\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_PW_SAFE_ENABLE\n");
             break;
         case CMD_PW_SAFE_INIT_KEY :
-            DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_INIT_KEY\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_PW_SAFE_INIT_KEY\n");
             break;
         case CMD_PW_SAFE_SEND_DATA :
-            DebugAppendText ((char *)"         Last command        : CMD_PW_SAFE_SEND_DATA");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_PW_SAFE_SEND_DATA");
             break;
         case CMD_SD_CARD_HIGH_WATERMARK :
-            DebugAppendText ((char *)"         Last command        : CMD_SD_CARD_HIGH_WATERMARK");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_SD_CARD_HIGH_WATERMARK");
             break;
 
         case CMD_SET_TIME :
-            DebugAppendText ((char *)"         Last command        : CMD_SET_TIME\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_SET_TIME\n");
             break;
         case CMD_TEST_COUNTER :
-            DebugAppendText ((char *)"         Last command        : CMD_TEST_COUNTER\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_TEST_COUNTER\n");
             break;
         case CMD_TEST_TIME :
-            DebugAppendText ((char *)"         Last command        : CMD_TEST_TIME\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_TEST_TIME\n");
             break;
         case CMD_USER_AUTHENTICATE :
-            DebugAppendText ((char *)"         Last command        : CMD_USER_AUTHENTICATE\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_USER_AUTHENTICATE\n");
             break;
         case CMD_GET_USER_PASSWORD_RETRY_COUNT :
-            DebugAppendText ((char *)"         Last command        : CMD_GET_USER_PASSWORD_RETRY_COUNT\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_GET_USER_PASSWORD_RETRY_COUNT\n");
             break;
         case CMD_USER_AUTHORIZE :
-            DebugAppendText ((char *)"         Last command        : CMD_USER_AUTHORIZE\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_USER_AUTHORIZE\n");
             break;
         case CMD_UNLOCK_USER_PASSOWRD :
-            DebugAppendText ((char *)"         Last command        : CMD_UNLOCK_USER_PASSOWRD\n");
+            DebugAppendTextGui ((char *)"         Last command        : CMD_UNLOCK_USER_PASSOWRD\n");
+            break;
+        case CMD_LOCK_DEVICE :
+            DebugAppendTextGui ((char *)"         Last command        : CMD_LOCK_DEVICE");
             break;
         case CMD_DETECT_SC_AES :
             DebugAppendText ((char *)"         Last command        : CMD_DETECT_SC_AES\n");
@@ -228,52 +241,52 @@ void Response::DebugResponse()
             DebugAppendText ((char *)"         Last command        : CMD_NEW_AES_KEY:\n");
             break;
 
-        case STICK20_CMD_ENABLE_CRYPTED_PARI            :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_CRYPTED_PARI           \n");         break;
-        case STICK20_CMD_DISABLE_CRYPTED_PARI           :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_DISABLE_CRYPTED_PARI          \n");         break;
-        case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI    \n");         break;
-        case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI    :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI   \n");         break;
-        case STICK20_CMD_ENABLE_FIRMWARE_UPDATE         :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_FIRMWARE_UPDATE        \n");         break;
-        case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE        :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_EXPORT_FIRMWARE_TO_FILE       \n");         break;
-        case STICK20_CMD_GENERATE_NEW_KEYS              :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_GENERATE_NEW_KEYS             \n");         break;
-        case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS\n");         break;
-        case STICK20_CMD_WRITE_STATUS_DATA              :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_WRITE_STATUS_DATA             \n");         break;
-        case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN  :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN \n");         break;
-        case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN\n");         break;
-        case STICK20_CMD_SEND_PASSWORD_MATRIX           :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX          \n");         break;
-        case STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA   :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA  \n");         break;
-        case STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP     :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP    \n");         break;
-        case STICK20_CMD_GET_DEVICE_STATUS              :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_GET_DEVICE_STATUS             \n");         break;
-        case STICK20_CMD_SEND_DEVICE_STATUS             :    DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_DEVICE_STATUS            \n");         break;
+        case STICK20_CMD_ENABLE_CRYPTED_PARI            :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_ENABLE_CRYPTED_PARI           \n");         break;
+        case STICK20_CMD_DISABLE_CRYPTED_PARI           :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_DISABLE_CRYPTED_PARI          \n");         break;
+        case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI    \n");         break;
+        case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI    :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI   \n");         break;
+        case STICK20_CMD_ENABLE_FIRMWARE_UPDATE         :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_ENABLE_FIRMWARE_UPDATE        \n");         break;
+        case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE        :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_EXPORT_FIRMWARE_TO_FILE       \n");         break;
+        case STICK20_CMD_GENERATE_NEW_KEYS              :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_GENERATE_NEW_KEYS             \n");         break;
+        case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS\n");         break;
+        case STICK20_CMD_WRITE_STATUS_DATA              :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_WRITE_STATUS_DATA             \n");         break;
+        case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN  :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN \n");         break;
+        case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN\n");         break;
+        case STICK20_CMD_SEND_PASSWORD_MATRIX           :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX          \n");         break;
+        case STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA   :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA  \n");         break;
+        case STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP     :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP    \n");         break;
+        case STICK20_CMD_GET_DEVICE_STATUS              :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_GET_DEVICE_STATUS             \n");         break;
+        case STICK20_CMD_SEND_DEVICE_STATUS             :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_DEVICE_STATUS            \n");         break;
 
         case STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_HIDDEN_VOLUME_PASSWORD\n");
             break;
         case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP\n");
             break;
         case STICK20_CMD_SEND_PASSWORD :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_PASSWORD\n");
             break;
         case STICK20_CMD_SEND_NEW_PASSWORD :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_NEW_PASSWORD\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_NEW_PASSWORD\n");
             break;
         case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND\n");
             break;
         case STICK20_CMD_SEND_STARTUP :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_STARTUP\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_STARTUP\n");
             break;
         case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED\n");
             break;
         case STICK20_CMD_SEND_LOCK_STICK_HARDWARE :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_SEND_LOCK_STICK_HARDWARE\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_SEND_LOCK_STICK_HARDWARE\n");
             break;
         case STICK20_CMD_PRODUCTION_TEST :
-            DebugAppendText ((char *)"         Last command        : STICK20_CMD_PRODUCTION_TEST\n");
+            DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_PRODUCTION_TEST\n");
             break;
         default:
-            DebugAppendText ((char *)"         Last command        : Unknown\n");
+            DebugAppendTextGui ((char *)"         Last command        : Unknown\n");
             break;
     }
 
@@ -282,28 +295,28 @@ void Response::DebugResponse()
     switch (lastCommandStatus)
     {
         case CMD_STATUS_OK :
-            DebugAppendText ((char *)"         Last command status : CMD_STATUS_OK\n");
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_OK\n");
             break;
         case CMD_STATUS_WRONG_CRC :
-            DebugAppendText ((char *)"         Last command status : CMD_STATUS_WRONG_CRC\n");
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_WRONG_CRC\n");
             break;
         case CMD_STATUS_WRONG_SLOT :
-            DebugAppendText ((char *)"         Last command status : CMD_STATUS_WRONG_SLOT\n");
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_WRONG_SLOT\n");
             break;
         case CMD_STATUS_SLOT_NOT_PROGRAMMED :
-            DebugAppendText ((char *)"         Last command status : CMD_STATUS_SLOT_NOT_PROGRAMMED\n");
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_SLOT_NOT_PROGRAMMED\n");
             break;
         case CMD_STATUS_WRONG_PASSWORD :
-            DebugAppendText ((char *)"         Last command status : CMD_STATUS_WRONG_PASSWORD\n");
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_WRONG_PASSWORD\n");
             break;
         case CMD_STATUS_NOT_AUTHORIZED :
-            DebugAppendText ((char *)"         Last command status : CMD_STATUS_NOT_AUTHORIZED\n");
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_NOT_AUTHORIZED\n");
             break;
         case CMD_STATUS_TIMESTAMP_WARNING :
-            DebugAppendText ((char *)"         Last command status : CMD_STATUS_TIMESTAMP_WARNING\n");
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_TIMESTAMP_WARNING\n");
             break;
         case CMD_STATUS_NO_NAME_ERROR :
-            DebugAppendText ((char *)"         Last command status : CMD_STATUS_NO_NAME_ERROR\n");
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_NO_NAME_ERROR\n");
             break;
         case CMD_STATUS_NOT_SUPPORTED:
             DebugAppendText ((char *)"         Last command status : CMD_STATUS_NOT_SUPPORTED\n");
@@ -312,7 +325,7 @@ void Response::DebugResponse()
             DebugAppendText ((char *)"         Last command status : CMD_STATUS_UNKNOWN_COMMAND\n");
             break;
         default:
-            DebugAppendText ((char *)"         Last command status : Unknown\n");
+            DebugAppendTextGui ((char *)"         Last command status : Unknown\n");
             break;
     }
 
@@ -334,7 +347,7 @@ void Response::DebugResponse()
 
 int Response::getResponse(Device *device)
 {
-     int res;
+    int res;
 
      memset(reportBuffer,0,sizeof(reportBuffer));
 
@@ -344,8 +357,10 @@ int Response::getResponse(Device *device)
      }
 
      res = hid_get_feature_report(device->dev_hid_handle, reportBuffer, sizeof(reportBuffer));
-
-//     qDebug() << "get report size:" << res;
+/*
+    static int nr = 0;
+    qDebug() << "get report size:" << res << "- " << nr++;
+*/
     if (res!=-1)
     {
         deviceStatus      = reportBuffer[1];

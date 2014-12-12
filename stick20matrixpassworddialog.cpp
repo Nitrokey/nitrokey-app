@@ -23,10 +23,10 @@
 #include "response.h"
 #include "stick20responsedialog.h"
 #include "stick20hid.h"
+#include "cryptostick-applet.h"
 
 #include <QTimer>
 #include <QPainter>
-#include <QMessageBox>
 #include <QMouseEvent>
 
 /*******************************************************************************
@@ -163,7 +163,6 @@ void MatrixPasswordDialog::InitSecurePasswordDialog()
     int         i;
     int         i1;
     QByteArray  passwordString;
-    QMessageBox msgBox;
     QString     OutputText;
 
     waitForAnswerFromStick20 = FALSE;
@@ -185,8 +184,7 @@ void MatrixPasswordDialog::InitSecurePasswordDialog()
 
     // No Stick - no work ?
     if (false == cryptostick->isConnected){
-        msgBox.setText("MatrixPasswordDialog: No cryptostick 2.0 connected!");
-        msgBox.exec();
+        csApplet->warningBox("MatrixPasswordDialog: No cryptostick 2.0 connected!");
         return;
     }
 
@@ -621,10 +619,7 @@ void MatrixPasswordDialog::RowSelected(int SelectedRow)
     }
     else
     {
-        QMessageBox          msgBox;
-
-        msgBox.setText("Maximum length reached");
-        msgBox.exec();
+        csApplet->warningBox("Maximum length reached");
 
         SendMatrixRowDataToStick20 ();
         done (true);

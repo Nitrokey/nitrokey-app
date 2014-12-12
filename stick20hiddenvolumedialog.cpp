@@ -17,10 +17,12 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "mcvs-wrapper.h"
 #include "math.h"
 #include "device.h"
 #include "stick20hiddenvolumedialog.h"
 #include "ui_stick20hiddenvolumedialog.h"
+#include "cryptostick-applet.h"
 
 
 stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :
@@ -49,6 +51,8 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :
 
     ui->HVPasswordEdit_2->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
     ui->HVPasswordEdit_2->setText(QString((char*)HV_Setup_st.HiddenVolumePassword_au8));
+
+    ui->HVPasswordEdit->setFocus();
 
     on_HVPasswordEdit_textChanged ("");
 }
@@ -79,17 +83,13 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button)
     {
         if (8 > strlen (ui->HVPasswordEdit->text().toLatin1().data()))
         {
-            QMessageBox   msgBox;
-            msgBox.setText("Your password is too short. Use at least 8 characters.");
-            msgBox.exec();
+            csApplet->warningBox("Your password is too short. Use at least 8 characters.");
             return;
         }
 
         if (ui->HVPasswordEdit->text().toLatin1() != ui->HVPasswordEdit_2->text().toLatin1())
         {
-            QMessageBox msgBox;
-            msgBox.setText("The passwords are not identical");
-            msgBox.exec();
+            csApplet->warningBox("The passwords are not identical");
             return;
         }
 
@@ -99,13 +99,11 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button)
 
         if (HV_Setup_st.StartBlockPercent_u8 >= HV_Setup_st.EndBlockPercent_u8)
         {
-            QMessageBox msgBox;
-            msgBox.setText("Wrong size of hidden volume");
-            msgBox.exec();
+            csApplet->warningBox("Wrong size of hidden volume");
             return;
         }
 
-        strncpy ((char*)HV_Setup_st.HiddenVolumePassword_au8,ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
+        STRNCPY ((char*)HV_Setup_st.HiddenVolumePassword_au8,sizeof (HV_Setup_st.HiddenVolumePassword_au8),ui->HVPasswordEdit->text().toLatin1(),MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
         HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
         done (true);
     }
@@ -141,7 +139,7 @@ int stick20HiddenVolumeDialog::GetCharsetSpace (unsigned char *Password, size_t 
    HasSpecialChars3 = FALSE;
    CharSpace        = 0;
 
-   for (i=0;i<size;i++)
+   for (i=0;i<(int)size;i++)
    {
       if ((FALSE == HasLowerAlpha) && (0 != strchr ("abcdefghijklmnopqrstuvwxyz",Password[i])))
       {
@@ -207,11 +205,15 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
 
     if (0 < Entropy)
     {
-        ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",Entropy,Entropy/2.0));
+        // ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",Entropy,Entropy/2.0));
+        ui->HVEntropieRealWords->setText(QString ("%1").sprintf(" %3.1lf for real words", Entropy/2.0));
+        ui->HVEntropieRandChars->setText(QString ("%1").sprintf(" %3.1lf bits for random chars", Entropy));
     }
     else
     {
-        ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",0.0,0.0));
+        // ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for real words",0.0,0.0));
+        ui->HVEntropieRealWords->setText(QString ("%1").sprintf(" %3.1lf for real words", 0.0));
+        ui->HVEntropieRandChars->setText(QString ("%1").sprintf(" %3.1lf bits for random chars", 0.0));
     }
 }
 

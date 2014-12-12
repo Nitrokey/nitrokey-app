@@ -28,6 +28,8 @@
 
 #define uint64_t unsigned long long
 
+#define TRAY_MSG_TIMEOUT    5000
+
 namespace Ui {
 class MainWindow;
 }
@@ -74,6 +76,9 @@ private:
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     QMenu *trayMenuSubConfigure;
+    QMenu *trayMenuPasswdSubMenu;
+    QMenu *trayMenuTOTPSubMenu;
+    QMenu *trayMenuHOTPSubMenu;
     QMenu *trayMenuSubSpecialConfigure;
     QClipboard *clipboard;
     QValidator *validator;
@@ -88,6 +93,7 @@ private:
     int PWS_CreatePWSize;
 
     uint64_t currentTime;
+    bool     Stick20ScSdCardOnline;
     bool     CryptedVolumeActive;
     bool     HiddenVolumeActive;
     bool     NormalVolumeRWActive;
@@ -106,7 +112,7 @@ private:
     QAction *ActionAboutDialog;
     QAction *SecPasswordAction;
     QAction *Stick20SetupAction;
-
+    QAction *LockDeviceAction;
 
     QAction *Stick20ActionEnableCryptedVolume;
     QAction *Stick20ActionDisableCryptedVolume;
@@ -120,6 +126,7 @@ private:
     QAction *Stick20ActionInitCryptedVolume;
     QAction *Stick20ActionFillSDCardWithRandomChars;
     QAction *Stick20ActionGetStickStatus;
+    QAction *Stick20ActionUpdateStickStatus;
     QAction *Stick20ActionSetReadonlyUncryptedVolume;
     QAction *Stick20ActionSetReadWriteUncryptedVolume;
     QAction *Stick20ActionDebugAction;
@@ -138,7 +145,7 @@ private:
 
     int getNextCode(uint8_t slotNumber);
 
-    void generateMenuOTP();
+    void generatePasswordMenu();
     void generateMenuForStick10();
     void initActionsForStick20();
     int  stick20SendCommand (uint8_t stick20Command, uint8_t *password);
@@ -274,6 +281,8 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void startStick20SetupPasswordMatrix();
     void startStick20LockStickHardware();
     void startResetUserPassword ();
+    void startLockDeviceAction ();
+
     void on_PWS_ButtonClearSlot_clicked();
     void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
     void on_PWS_CheckBoxHideSecret_toggled(bool checked);

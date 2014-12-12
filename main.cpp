@@ -21,9 +21,12 @@
 #include <QApplication>
 #include <QSharedMemory>
 #include <QDebug>
+#include "mcvs-wrapper.h"
+#include "splash.h"
 #include "mainwindow.h"
 #include "device.h"
 #include "stick20hid.h"
+#include "cryptostick-applet.h"
 
 /*******************************************************************************
 
@@ -81,6 +84,11 @@ void HelpInfos (void)
 
 int main(int argc, char *argv[])
 {
+
+    // Q_INIT_RESOURCE(stylesheet);
+
+    csApplet = new CryptostickApplet;
+
     int i;
     //int DebugWindowActive;
     //int SpecialConfigActive;
@@ -91,6 +99,7 @@ int main(int argc, char *argv[])
 
     // Check for multiple instances
     // GUID from http://www.guidgenerator.com/online-guid-generator.aspx
+    /*
     QSharedMemory shared("6b50960df-f5f3-4562-bbdc-84c3bc004ef4");
 
     if( !shared.create( 512, QSharedMemory::ReadWrite) )
@@ -103,8 +112,28 @@ int main(int argc, char *argv[])
       exit(0);
     }
     else {
+*/
         qDebug() << "Application started successfully.";
+//    }
+
+/*    
+    SplashScreen *splash = 0;
+    splash = new SplashScreen;
+    splash->show();
+
+    QFile qss( ":/qss/default.qss" );
+    if( ! qss.open( QIODevice::ReadOnly ) ) {
+        qss.setFileName( ":/qss/default.qss" );
+        qss.open( QIODevice::ReadOnly );
     }
+
+    if( qss.isOpen() )
+    {
+        a.setStyleSheet( qss.readAll() );
+    }
+
+    QTimer::singleShot(3000,splash,SLOT(deleteLater()));
+*/
 
     StartupInfo_st.ExtendedConfigActive  = FALSE;
     StartupInfo_st.FlagDebug             = DEBUG_STATUS_NO_DEBUGGING;
@@ -178,4 +207,37 @@ int main(int argc, char *argv[])
 
     a.setQuitOnLastWindowClosed(false);
     return a.exec();
+}
+
+/*******************************************************************************
+
+  GetTimeStampForLog
+
+  Changes
+  Date      Author        Info
+  09.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+extern "C" char *GetTimeStampForLog (void);
+
+char *GetTimeStampForLog (void)
+{
+    static QDateTime LastTimeStamp (QDateTime::currentDateTime());
+    QDateTime ActualTimeStamp (QDateTime::currentDateTime());
+    static char DateString[40];
+
+
+    if (ActualTimeStamp.toTime_t() != LastTimeStamp.toTime_t())
+    {
+        LastTimeStamp = ActualTimeStamp;
+        STRCPY (DateString,sizeof (DateString)-1,LastTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toLatin1());
+    }
+    else
+    {
+        DateString[0] = 0;
+    }
+    return (DateString);
 }

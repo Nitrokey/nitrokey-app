@@ -18,14 +18,15 @@
 * along with GPF Crypto Stick. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <QMessageBox>
 
 #include "device.h"
+#include "mcvs-wrapper.h"
 
 #include "passworddialog.h"
 #include "ui_passworddialog.h"
 
 #include "stick20matrixpassworddialog.h"
+#include "cryptostick-applet.h"
 
 /*******************************************************************************
 
@@ -39,6 +40,7 @@
 
 *******************************************************************************/
 
+#define LOCAL_PASSWORD_SIZE         40              // Todo make define global
 
 /*******************************************************************************
 
@@ -112,7 +114,7 @@ void PasswordDialog::init(char *text,int RetryCount)
     text1[0] = 0;
     if (-1 != RetryCount)
     {
-        sprintf (text1," (Tries left: %d)",RetryCount);
+        SNPRINTF (text1,sizeof (text1)," (Tries left: %d)",RetryCount);
     }
     ui->label->setText(tr(text)+tr(text1));
 }
@@ -136,12 +138,11 @@ void PasswordDialog::getPassword(char *text)
 {
     if (FALSE == ui->checkBox_PasswordMatrix->isChecked())
     {
-        text[0] = 'P';
-        strcpy (&text[1],ui->lineEdit->text().toLatin1());
+        STRCPY (&text[1],LOCAL_PASSWORD_SIZE-1,ui->lineEdit->text().toLatin1());
     }
     else
     {
-        strcpy (text,(char*)password);
+        STRCPY (text,LOCAL_PASSWORD_SIZE,(char*)password);
     }
 }
 
@@ -209,7 +210,6 @@ void PasswordDialog::on_buttonBox_accepted()
     int           n;
 //    unsigned char password[50];
     QByteArray    passwordString;
-    QMessageBox   msgBox;
 
     if (false == ui->checkBox_PasswordMatrix->isChecked())
     {
@@ -221,23 +221,20 @@ void PasswordDialog::on_buttonBox_accepted()
         n = passwordString.size();
         if (30 <= n)
         {
-            msgBox.setText("Your PIN is too long! Use not more than 30 characters.");
-            msgBox.exec();
+            csApplet->warningBox("Your PIN is too long! Use not more than 30 characters.");
             done (FALSE);
             return;
         }
         if (6  > n)
         {
-            msgBox.setText("Your PIN is too short. Use at least 6 characters.");
-            msgBox.exec();
+            csApplet->warningBox("Your PIN is too short. Use at least 6 characters.");
             done (FALSE);
             return;
         }
 
         if ((0 == strcmp (passwordString, "123456")) || (0 == strcmp (passwordString, "12345678")))
         {
-            msgBox.setText("Warning: Default PIN is used.\nPlease change the PIN.");
-            msgBox.exec();
+            csApplet->warningBox("Warning: Default PIN is used.\nPlease change the PIN.");
         }
         memset (&password[1],0,49);
         memcpy(&password[1],passwordString.data(),n);

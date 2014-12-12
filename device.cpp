@@ -21,6 +21,8 @@
 #include <QDebug>
 #include <QDateTime>
 
+
+#include "mcvs-wrapper.h"
 #include "response.h"
 #include "string.h"
 #include "crc32.h"
@@ -177,7 +179,7 @@ int Device::checkConnection()
             passwordSafeUnlocked = FALSE;
 
             // stick 20 with no OTP
-            if (true == activStick20)
+            if (TRUE == activStick20)
             {
                 HOTP_SlotCount = HOTP_SLOT_COUNT_MAX;
                 TOTP_SlotCount = TOTP_SLOT_COUNT_MAX;
@@ -263,30 +265,29 @@ int Device::sendCommand(Command *cmd)
     ((uint32_t *)(report+1))[15]=crc;
 
     cmd->crc=crc;
-/*
-    {
-         char text[1000];
-         sprintf(text,"computed crc :%08x:\n",crc );
-         DebugAppendText (text);
-    }
-*/
+
     err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
 
     {
-            char text[1000];
-            int i;
-            static int Counter = 0;
+        char text[1000];
+        int i;
+        static int Counter = 0;
 
-            sprintf(text,"%6d :sendCommand0: ", Counter);
+        if (STICK20_CMD_SEND_DEBUG_DATA != report[1])                   // Log no debug infos
+        {
+            SNPRINTF(text, sizeof(text), "%6d :sendCommand0: ",Counter);
+
             Counter++;
-            DebugAppendText (text);
+            DebugAppendTextGui (text);
             for (i=0;i<=64;i++)
             {
-                sprintf(text,"%02x ",(unsigned char)report[i]);
-                DebugAppendText (text);
+                SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
+                DebugAppendTextGui (text);
             }
-            sprintf(text,"\n");
-            DebugAppendText (text);
+            SNPRINTF(text,sizeof (text),"\n");
+
+            DebugAppendTextGui (text);
+        }
 
      }
 
@@ -324,17 +325,19 @@ int Device::sendCommandGetResponse(Command *cmd, Response *resp)
             int i;
             static int Counter = 0;
 
-            sprintf(text,"%6d :sendCommand1: ",Counter);
-            Counter++;
-            DebugAppendText (text);
-            for (i=0;i<=64;i++)
+            if (STICK20_CMD_SEND_DEBUG_DATA != report[1])                   // Log no debug infos
             {
-                sprintf(text,"%02x ",(unsigned char)report[i]);
-                DebugAppendText (text);
+                SNPRINTF(text,sizeof (text),"%6d :sendCommand1: ",Counter);
+                Counter++;
+                DebugAppendTextGui (text);
+                for (i=0;i<=64;i++)
+                {
+                    SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
+                    DebugAppendTextGui (text);
+                }
+                SNPRINTF(text,sizeof (text),"\n");
+                DebugAppendTextGui (text);
             }
-            sprintf(text,"\n");
-            DebugAppendText (text);
-
      }
 
     if (err==-1)
@@ -871,7 +874,7 @@ void Device::initializeConfig()
         readSlot(0x20 + i);
     }
 
-    if (true == activStick20)
+    if (TRUE == activStick20)
     {
         currentTime = QDateTime::currentDateTime().toTime_t();
         stick20SendStartup ((unsigned long long)currentTime);
@@ -1030,7 +1033,6 @@ int Device::getUserPasswordRetryCount()
 int Device::getPasswordSafeSlotStatus ()
 {
     int res;
-    int i;
     uint8_t data[1];
 
 // Clear entrys
@@ -1060,6 +1062,7 @@ int Device::getPasswordSafeSlotStatus ()
                     memcpy (passwordSafeStatus,&resp->data[0],PWS_SLOT_COUNT);
 /*
 {
+     int i;
      char text[1000];
      DebugAppendText ("PW_SAFE_SLOT_STATUS\n");
      for (i=0;i<PWS_SLOT_COUNT;i++)
@@ -1422,7 +1425,8 @@ int Device::passwordSafeEnable (char *password)
     int res;
     uint8_t data[50];
 
-    strncpy ((char*)data,password,30);
+    STRNCPY((char*)data,sizeof(data),password,30);
+
     data[30+1] = 0;
 
     if (isConnected)
@@ -1982,7 +1986,6 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
   Date      Reviewer        Info
 
 *******************************************************************************/
-
 int Device::isAesSupported(uint8_t* password)
 {
     int res;
@@ -2009,6 +2012,53 @@ int Device::isAesSupported(uint8_t* password)
  //                   validUserPassword = true;
                 }
                 return resp->lastCommandStatus;
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
+
+/*******************************************************************************
+
+  unlockUserPassword
+
+  Changes
+  Date      Author        Info
+  02.09.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+int Device::lockDevice (void)
+{
+    uint8_t data[29];
+    int res;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command (CMD_LOCK_DEVICE,data,0);
+
+        res=sendCommand(cmd);
+
+        if (res==-1)
+        {
+            return ERR_SENDING;
+        }
+        else                    //sending the command was successful
+        {
+            Sleep::msleep(500);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                return (TRUE);
             }
             else
             {
@@ -2064,6 +2114,8 @@ int Device::buildAesKey(uint8_t* password)
     return ERR_NOT_CONNECTED;
    
 }
+=======
+>>>>>>> master
 
 /*******************************************************************************
 
@@ -2298,7 +2350,8 @@ bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeF
     }
 
     data[0] = VolumeFlag;
-    strcpy ((char*)&data[1],(char*)password);
+
+    STRCPY ((char*)&data[1],sizeof (data)-1,(char*)password);
 
     cmd = new Command(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS,data,n+1);
     res = sendCommand(cmd);
@@ -2742,6 +2795,34 @@ int Device::stick20ProductionTest (void)
     return (true);
 }
 
+/*******************************************************************************
+
+  stick20GetDebugData
+
+  Changes
+  Date      Author        Info
+  10.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::stick20GetDebugData (void)
+{
+    uint8_t n;
+    int     res;
+    uint8_t TestData[10];
+    Command *cmd;
+
+    n = 0;
+
+    cmd = new Command(STICK20_CMD_SEND_DEBUG_DATA,TestData,n);
+    res = sendCommand(cmd);
+    if(res){}//Fix warnings
+
+    return (true);
+}
 
 /*******************************************************************************
 

@@ -50,6 +50,7 @@ private:
     void SendNewPassword(void);
     void ResetUserPassword (void);
     int  CheckResponse(bool NoStopFlag);
+    void clearFields();
 };
 
 #endif // DIALOGCHANGEPASSWORD_H
