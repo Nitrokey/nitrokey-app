@@ -106,7 +106,6 @@ private:
     QAction *ActionAboutDialog;
     QAction *SecPasswordAction;
     QAction *Stick20SetupAction;
-    QAction *destroyPasswordSafeActionStick10;
 
 
     QAction *Stick20ActionEnableCryptedVolume;

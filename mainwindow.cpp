@@ -253,9 +253,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     restoreActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
     connect(restoreActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
-    destroyPasswordSafeActionStick10 = new QAction(tr("&Destroy password safe"), this);
-    connect(destroyPasswordSafeActionStick10, SIGNAL(triggered()), this, SLOT( destroyPasswordSafeStick10()));
-
     DebugAction = new QAction(tr("&Debug"), this);
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
 
@@ -1361,7 +1358,6 @@ void MainWindow::generateMenuForStick10()
     {    
         trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
         trayMenuSubConfigure->addAction(restoreActionStick20);
-        trayMenuSubConfigure->addAction( destroyPasswordSafeActionStick10);
     }
     else
         trayMenu->addAction(restoreAction);
