@@ -22,12 +22,14 @@
 
 #include "device.h"
 #include "response.h"
-
+#include "mcvs-wrapper.h"
 
 #include <QTimer>
 #include <QMenu>
 #include <QtWidgets>
 #include <QDateTime>
+
+#include "stick20hid.h"
 
 /*******************************************************************************
 
@@ -35,23 +37,23 @@
 
 *******************************************************************************/
 
-extern "C" char DebugText_Stick20[600000];          // todo move to header
-extern "C" unsigned long DebugTextlen_Stick20;      // todo move to header
-extern "C" char DebugTextHasChanged;                // todo move to header
-extern "C" int DebugingActive;                      // todo move to header
-extern "C" int DebugingStick20PoolingActive;        // todo move to header
-
-
-extern "C" char DebugNewText[600000];               // We have it
-extern "C" int  DebugNewTextLen;
-
 /*******************************************************************************
 
  Local defines
 
 *******************************************************************************/
 
-#define CS20_DEBUG_DIALOG_POLL_TIME        100      // in ms
+class OwnSleep : public QThread
+{
+public:
+    static void usleep(unsigned long usecs){QThread::usleep(usecs);}
+    static void msleep(unsigned long msecs){QThread::msleep(msecs);}
+    static void sleep (unsigned long secs) {QThread::sleep(secs);}
+};
+
+
+#define CS20_DEBUG_DIALOG_POLL_TIME        200      // in ms
+#define CS20_DEBUG_DIALOG_POLL_TIME_FAST    10      // in ms
 
 //#define LOCAL_DEBUG                               // activate for debugging
 
@@ -74,8 +76,14 @@ DebugDialog::DebugDialog(QWidget *parent) :
     ui(new Ui::DebugDialog)
 {
     bool ret;
+    static int GUIOrginalSizeY = 0;
 
     ui->setupUi(this);
+
+    if (0 == GUIOrginalSizeY)
+    {
+        GUIOrginalSizeY = ui->TextGUI->size().height();
+    }
 
     // Create timer for polling the cryptostick 2.0
     RefreshTimer = new QTimer(this);
@@ -84,8 +92,25 @@ DebugDialog::DebugDialog(QWidget *parent) :
 
     RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME);
 
-    ui->plainTextEdit->clear();
-    ui->plainTextEdit->appendPlainText(DebugText_Stick20);
+    ui->TextGUI->clear();
+    ui->TextGUI->appendPlainText(DebugText_GUI);
+
+    ui->TextStick->clear();
+    ui->TextStick->appendPlainText(DebugText_Stick20);
+
+    if (FALSE == DebugingStick20PoolingActive)      // When no stick debugging is active, resize the GUI window
+    {
+       ui->TextStick->hide();
+       ui->label_OutputStick->hide ();
+       ui->TextGUI->resize (ui->TextGUI->width(),GUIOrginalSizeY+ui->TextStick->height()+20);
+    }
+    else
+    {
+        ui->TextStick->show();
+        ui->label_OutputStick->show();
+        ui->TextGUI->resize (ui->TextGUI->width(),GUIOrginalSizeY);
+    }
+
 
     if(ret){}//Fix warnings
 }
@@ -128,16 +153,26 @@ DebugDialog::~DebugDialog()
 void DebugDialog::UpdateDebugText()
 {
     static int nCallCounter = 0;
-    QString OutputText;
-    int ret;
 
-
-    if (true == DebugingStick20PoolingActive)
+    if (TRUE == DebugingStick20PoolingActive)
     {
+        // Send request
+        cryptostick->stick20GetDebugData ();
+
         // Poll data from stick 20
         Response *stick20Response = new Response();
 
-        ret = stick20Response->getResponse(cryptostick);
+        stick20Response->DebugResponseFlag = FALSE;             // Don't log response
+        stick20Response->getResponse(cryptostick);
+
+        if (TRUE == DebugTextHasChanged_Stick20)
+        {
+            RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME_FAST);
+        }
+        else
+        {
+            RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME);
+        }
     }
 
 #ifdef LOCAL_DEBUG
@@ -152,22 +187,31 @@ void DebugDialog::UpdateDebugText()
     // Check for auto scroll activ
     if (0 != ui->checkBox->checkState())
     {
-        if (TRUE == DebugTextHasChanged)
+        if (TRUE == DebugTextHasChanged_GUI)
         {
-            strcat (DebugText_Stick20,DebugNewText);
-
-//            ui->plainTextEdit->setPlainText(DebugText_Stick20);
-            ui->plainTextEdit->appendPlainText(DebugNewText);
-            DebugNewText[0] = 0;
-            DebugNewTextLen = 0;
-            DebugTextHasChanged = FALSE;
-
-            ui->plainTextEdit->moveCursor (QTextCursor::End);
+            STRCAT (DebugText_GUI,sizeof (DebugText_GUI),DebugNewText_GUI);
+            ui->TextGUI->moveCursor (QTextCursor::End);
+            ui->TextGUI->insertPlainText(DebugNewText_GUI);
+            DebugNewText_GUI[0] = 0;
+            DebugNewTextLen_GUI = 0;
+            DebugTextHasChanged_GUI = FALSE;
+            ui->TextGUI->moveCursor (QTextCursor::End);
        }
+
+        if (TRUE == DebugTextHasChanged_Stick20)
+        {
+            STRCAT (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText_Stick20);
+            ui->TextStick->moveCursor (QTextCursor::End);
+            ui->TextStick->insertPlainText (DebugNewText_Stick20);
+            DebugNewText_Stick20[0]     = 0;
+            DebugNewTextLen_Stick20     = 0;
+            ui->TextStick->moveCursor (QTextCursor::End);
+            DebugTextHasChanged_Stick20 = FALSE;
+       }
+
     }
 
     nCallCounter++;
-    if(ret){}//Fix warnings
 }
 
 /*******************************************************************************
@@ -182,16 +226,30 @@ void DebugDialog::UpdateDebugText()
 
 void DebugDialog::updateText(void)
 {
-    if (TRUE == DebugTextHasChanged)
+    if (TRUE == DebugTextHasChanged_GUI)
     {
-        strcat (DebugText_Stick20,DebugNewText);
-        ui->plainTextEdit->appendPlainText(DebugNewText);
-        DebugNewText[0] = 0;
-        DebugNewTextLen = 0;
+        STRCAT (DebugText_GUI,sizeof (DebugText_GUI),DebugNewText_GUI);
+        ui->TextGUI->moveCursor (QTextCursor::End);
+        ui->TextGUI->insertPlainText(DebugNewText_GUI);
+        DebugNewText_GUI[0] = 0;
+        DebugNewTextLen_GUI = 0;
 
-        ui->plainTextEdit->moveCursor (QTextCursor::End);
-        DebugTextHasChanged = FALSE;
-   }
+        ui->TextGUI->moveCursor (QTextCursor::End);
+        DebugTextHasChanged_GUI = FALSE;
+    }
+
+    if (TRUE == DebugTextHasChanged_Stick20)
+    {
+        STRCAT (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText_Stick20);
+        ui->TextStick->moveCursor (QTextCursor::End);
+        ui->TextStick->insertPlainText (DebugNewText_Stick20);
+        DebugNewText_Stick20[0]     = 0;
+        DebugNewTextLen_Stick20     = 0;
+
+        ui->TextStick->moveCursor (QTextCursor::End);
+        DebugTextHasChanged_Stick20 = FALSE;
+    }
+
 }
 
 
@@ -209,19 +267,27 @@ void DebugDialog::updateText(void)
 
 void DebugDialog::on_pushButton_clicked()
 {
-    if (TRUE == DebugTextHasChanged)
+    if (TRUE == DebugTextHasChanged_GUI)
     {
-        strcat (DebugText_Stick20,DebugNewText);
-        ui->plainTextEdit->appendPlainText(DebugNewText);
-        DebugNewText[0] = 0;
-        DebugNewTextLen = 0;
+        STRCAT (DebugText_GUI,sizeof (DebugText_GUI),DebugNewText_GUI);
+        ui->TextGUI->moveCursor (QTextCursor::End);
+        ui->TextGUI->insertPlainText(DebugNewText_GUI);
+        DebugNewText_GUI[0] = 0;
+        DebugNewTextLen_GUI = 0;
 
-        ui->plainTextEdit->moveCursor (QTextCursor::End);
-        DebugTextHasChanged = FALSE;
-   }
+        ui->TextGUI->moveCursor (QTextCursor::End);
+        DebugTextHasChanged_GUI = FALSE;
+    }
 
-//    UpdateDebugText ();
-//    ui->plainTextEdit->setPlainText(DebugText_Stick20);
+    if (TRUE == DebugTextHasChanged_Stick20)
+    {
+        STRCAT (DebugText_Stick20,sizeof (DebugText_Stick20),DebugNewText_Stick20);
+        ui->TextStick->moveCursor (QTextCursor::End);
+        ui->TextStick->insertPlainText (DebugNewText_Stick20);
+        DebugNewText_Stick20[0]     = 0;
+        DebugNewTextLen_Stick20     = 0;
 
-//    ui->plainTextEdit->moveCursor (QTextCursor::End);
+        ui->TextStick->moveCursor (QTextCursor::End);
+        DebugTextHasChanged_Stick20 = FALSE;
+    }
 }

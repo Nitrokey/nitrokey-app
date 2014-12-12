@@ -31,12 +31,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    extern char DebugText_Stick20[STICK20_DEBUG_TEXT_LEN];
-    extern unsigned long DebugTextlen_Stick20;
-    extern int DebugingActive;
-    extern int DebugingStick20PoolingActive;
+    extern char DebugText_GUI[STICK20_DEBUG_TEXT_LEN];
+    extern int  DebugTextlen_GUI;
+    extern int  DebugingActive;
+    extern int  DebugingStick20PoolingActive;
 
-    void DebugAppendText (char *Text);
+    void DebugAppendTextGui (char *Text);
 #ifdef __cplusplus
 } // extern "C"
 #endif
@@ -84,7 +84,7 @@ class Stick20ResponseDialog : public QDialog
 public:
     Stick20ResponseTask *Stick20Task;
 
-    explicit Stick20ResponseDialog(QWidget *parent = 0);
+    explicit Stick20ResponseDialog(QWidget *parent = 0,Stick20ResponseTask *Stick20TaskPointer = 0);
     ~Stick20ResponseDialog();
 
     void checkStick20StatusDebug(Response *stick20Response,int Status);

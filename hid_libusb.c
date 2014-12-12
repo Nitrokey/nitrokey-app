@@ -450,7 +450,7 @@ struct hid_device_info  HID_API_EXPORT *hid_enumerate(unsigned short vendor_id, 
     { // For debugging
         char text[1000];
         sprintf(text,"hid_enumerate: Start VID %04x PID %04x\n", vendor_id,product_id);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
     }
 #endif
 
@@ -482,7 +482,7 @@ struct hid_device_info  HID_API_EXPORT *hid_enumerate(unsigned short vendor_id, 
             if ((dev_vid == 0x20A0) && (dev_pid == 0x4109)&& (dev_pid == product_id))
             {
                 sprintf(text,"*** STICK FOUND\n");
-                DebugAppendText (text);
+                DebugAppendTextGui (text);
             }
         }
 #endif
@@ -534,7 +534,7 @@ struct hid_device_info  HID_API_EXPORT *hid_enumerate(unsigned short vendor_id, 
     if (res < 0) {
         char text[1000];
         sprintf(text,"libusb_open: ERROR : ret= %d - %s\n",res,  libusb_error_name(res));
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
      }
 
 }
@@ -663,7 +663,7 @@ hid_device * hid_open(unsigned short vendor_id, unsigned short product_id, const
     { // For debugging
         char text[1000];
         sprintf(text,"hid_open: VID %04x PID %04x\n", vendor_id,product_id);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
     }
 #endif
 
@@ -1200,7 +1200,7 @@ int HID_API_EXPORT hid_get_feature_report(hid_device *dev, unsigned char *data, 
         {
             char text[1000];
             sprintf(text,"hid_get_feature_report: ERROR %d : ret= %d - %s\n",CallCounter,res,  libusb_error_name(res));
-            DebugAppendText (text);
+            DebugAppendTextGui (text);
         }
 #endif
         return -1;

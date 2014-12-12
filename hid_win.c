@@ -67,8 +67,8 @@ extern "C" {
 #define STICK20_DEBUG
 //#define STICK20_DEBUG_ALL
 
-void DebugClearText (void);
-void DebugAppendText (char *Text);
+void DebugInitDebugging (void);
+void DebugAppendTextGui (char *Text);
 
 
 
@@ -179,7 +179,7 @@ static void register_error(hid_device *device, const char *op)
 
 // Write error to debug log
     wcstombs(msg_c,msg,400-1);
-    DebugAppendText (msg_c);
+    DebugAppendTextGui (msg_c);
 
 	// Get rid of the CR and LF that FormatMessage() sticks at the
 	// end of the message. Thanks Microsoft!
@@ -252,12 +252,12 @@ int HID_API_EXPORT hid_init(void)
 //        DebugClearText ();
         if (lookup_functions() < 0) {
 			hid_exit();
-            DebugAppendText ("initialized FAILED\n");
+            DebugAppendTextGui ("initialized FAILED\n");
 
             return -1;
 		}
 		initialized = TRUE;
-        DebugAppendText ("initialized = TRUE;\n");
+        DebugAppendTextGui ("initialized = TRUE;\n");
 	}
 #endif
 	return 0;
@@ -292,7 +292,7 @@ struct hid_device_info HID_API_EXPORT * HID_API_CALL hid_enumerate(unsigned shor
     { // For debugging
         char text[1000];
         sprintf(text,"hid_enumerate: Start VID %04x PID %04x\n", vendor_id,product_id);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
     }
 #endif
 	if (hid_init() < 0)
@@ -423,7 +423,7 @@ struct hid_device_info HID_API_EXPORT * HID_API_CALL hid_enumerate(unsigned shor
             if ((attrib.VendorID == 0x20A0) && (attrib.ProductID == 0x4109) && (attrib.ProductID == product_id))
             {
                 sprintf(text,"*** STICK FOUND\n");
-                DebugAppendText (text);
+                DebugAppendTextGui (text);
             }
         }
 #endif
@@ -570,7 +570,7 @@ HID_API_EXPORT hid_device * HID_API_CALL hid_open(unsigned short vendor_id, unsi
 { // For debugging
     char text[1000];
     sprintf(text,"hid_open: VID %04x PID %04x\n", vendor_id,product_id);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
 }
 #endif
 

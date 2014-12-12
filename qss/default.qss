@@ -1,0 +1,32 @@
+QCheckBox::indicator:checked            { image: url(:/images/checkbox_checked.png) }
+QCheckBox::indicator:checked:pressed    { image: url(:/images/checkbox_checked_pressed.png) }
+QCheckBox::indicator:checked:hover      { image: url(:/images/checkbox_checked_hover.png) }
+QCheckBox::indicator:unchecked          { image: url(:/images/checkbox_unchecked.png) }
+QCheckBox::indicator:unchecked:pressed  { image: url(:/images/checkbox_unchecked_pressed.png) }
+QCheckBox::indicator:unchecked:hover    { image: url(:/images/checkbox_unchecked_hover.png) }
+
+QRadioButton::indicator:checked            { image: url(:/images/radiobutton_checked.png) }
+QRadioButton::indicator:checked:pressed    { image: url(:/images/radiobutton_checked_pressed.png) }
+QRadioButton::indicator:checked:hover      { image: url(:/images/radiobutton_checked_hover.png) }
+QRadioButton::indicator:unchecked          { image: url(:/images/radiobutton_unchecked.png) }
+QRadioButton::indicator:unchecked:pressed  { image: url(:/images/radiobutton_unchecked_pressed.png) }
+QRadioButton::indicator:unchecked:hover    { image: url(:/images/radiobutton_unchecked_hover.png) }
+
+
+QPushButton::indicator            { image: url(:/images/pushbutton.png) }
+QPushButton::indicator:pressed    { image: url(:/images/pushbutton_pressed.png) }
+QPushButton::indicator:hover      { image: url(:/images/pushbutton_hover.png) }
+
+QSpinBox::up_button             { image: url(:/images/spinup.png) }
+QSpinBox::up_button:hover       { image: url(:/images/spinup_hover.png) }
+QSpinBox::up_button:pressed     { image: url(:/images/spinup_pressed.png) }
+QSpinBox::up_button:off         { image: url(:/images/spinup_off.png) }
+QSpinBox::down_button           { image: url(:/images/spindown.png) }
+QSpinBox::down_button:hover     { image: url(:/images/spindown_hover.png) }
+QSpinBox::down_button:pressed   { image: url(:/images/spindown_pressed.png) }
+QSpinBox::down_button:off       { image: url(:/images/spindown_off.png) }
+
+QComboBox::down_arrow               { image: url(:/images/down_arrow.png) }
+QComboBox::down_arrow:disabled      { image: url(:/images/down_arrow_disabled.png) }
+QComboBox::up_arrow                 { image: url(:/images/up_arrow.png) }
+QComboBox::up_arrow:disabled        { image: url(:/images/up_arrow_disabled.png) }
