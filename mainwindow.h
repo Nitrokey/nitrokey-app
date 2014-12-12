@@ -113,6 +113,7 @@ private:
     QAction *SecPasswordAction;
     QAction *Stick20SetupAction;
     QAction *LockDeviceAction;
+    QAction *UnlockPasswordSafe;
 
     QAction *Stick20ActionEnableCryptedVolume;
     QAction *Stick20ActionDisableCryptedVolume;

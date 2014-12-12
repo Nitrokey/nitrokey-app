@@ -251,6 +251,10 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
 
+    UnlockPasswordSafe = new QAction("Unlock password safe", this);
+    UnlockPasswordSafe->setIcon(QIcon(":/images/safe.png"));
+    connect(UnlockPasswordSafe, SIGNAL(triggered()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
+
     restoreAction = new QAction(tr("&Configure OTP"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
@@ -1348,9 +1352,10 @@ void MainWindow::generateMenuForStick10()
     // Hide tab for password safe for stick 1.x
 //    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = password safe
 
-    generateMenuPasswordSafe ();
+    generatePasswordMenu ();
     trayMenu->addSeparator();
 
+    generateMenuPasswordSafe ();
 /*
     if (FALSE == StickNotInitated)
     {
@@ -1367,11 +1372,11 @@ void MainWindow::generateMenuForStick10()
     ui->pushButton_StaticPasswords->hide ();
 */
 
-    generatePasswordMenu ();
 
     if (TRUE == cryptostick->passwordSafeAvailable)
     {    
         trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+        trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
         trayMenuSubConfigure->addAction(restoreActionStick20);
     }
     else {
@@ -4419,14 +4424,14 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-        QString actionName("Unlock password safe");
-        trayMenu->addAction(QIcon(":/images/safe.png"), actionName, this, SLOT(PWS_Clicked_EnablePWSAccess()));
+        trayMenu->addAction(UnlockPasswordSafe);
 
-        if(true == cryptostick->passwordSafeAvailable)
-            trayMenu->actions().at(0)->setEnabled(true);
-        else
-            trayMenu->actions().at(0)->setEnabled(false);
-
+        if(true == cryptostick->passwordSafeAvailable) {
+            UnlockPasswordSafe->setEnabled(true);
+        }
+        else {
+            UnlockPasswordSafe->setEnabled(false);
+        }
         return;
     }
 }
@@ -4469,7 +4474,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
         {
             cryptostick->passwordSafeAvailable = TRUE;
-            trayMenu->actions().at(0)->setEnabled(TRUE);
+            UnlockPasswordSafe->setEnabled(true);
 
             // Continue to unlocking password safe
             ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
@@ -4501,7 +4506,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
             {
                 // Mark password safe as disabled feature
                 cryptostick->passwordSafeAvailable = FALSE;
-                trayMenu->actions().at(0)->setEnabled(FALSE);
+                UnlockPasswordSafe->setEnabled(false);
                 csApplet->warningBox("Password safe is not supported by this device.");
                 generateMenu ();
                 ui->tabWidget->setTabEnabled(3, 0);
