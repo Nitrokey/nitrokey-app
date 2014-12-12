@@ -278,11 +278,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 #endif
 
 #ifdef linux
-    DebugAppendText ((char *)"LINUX system\n");
+    DebugAppendTextGui ((char *)"LINUX system\n");
 #endif
 
 #ifdef MAC
-    DebugAppendText ((char *)"MAC system\n");
+    DebugAppendTextGui ((char *)"MAC system\n");
 #endif
 
     {
