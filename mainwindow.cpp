@@ -723,7 +723,7 @@ void MainWindow::checkConnection()
         {
             generateMenu();
             DeviceOffline = TRUE;
-            cryptostick->passwordSafeAvailable=TRUE;
+            cryptostick->passwordSafeAvailable= true;
             trayIcon->showMessage("Device disconnected.", "", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
         cryptostick->connect();
@@ -4446,81 +4446,76 @@ void MainWindow::generateMenuPasswordSafe()
 
 void MainWindow::PWS_Clicked_EnablePWSAccess ()
 {
-    uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE]
     bool    ret;
     int     ret_s32;
 
-    bool wrong_pin;
-    do {
-        wrong_pin=false;
 
-        PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
-        ret = dialog.exec();
+    PasswordDialog dialog(FALSE,this);
+    cryptostick->getUserPasswordRetryCount();
+    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.cryptostick = cryptostick;
 
-        if (QDialog::Accepted == ret)
+//    PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
+    ret = dialog.exec();
+
+    if (QDialog::Accepted == ret)
+    {
+        dialog.getPassword ((char*)password);
+
+        ret_s32 = cryptostick->isAesSupported( (uint8_t*)&password[1] );
+        // ret_s32 = cryptostick->isAesSupported( password );
+
+        if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
         {
-            dialog.getPassword ((char*)password);
+            cryptostick->passwordSafeAvailable = TRUE;
+            trayMenu->actions().at(0)->setEnabled(TRUE);
 
-            ret_s32 = cryptostick->isAesSupported( password );
-            if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
+            // Continue to unlocking password safe
+            ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+            // ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
+
+            if (ERR_NO_ERROR != ret_s32)
             {
-                cryptostick->passwordSafeAvailable = TRUE;
-                trayMenu->actions().at(0)->setEnabled(TRUE);
-
-                ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
-                switch(ret_s32)
-                {
-                    case ERR_NO_ERROR:
-                        if (TRUE == trayIcon->supportsMessages ())
-                        {
-                            trayIcon->showMessage ("Crypto Stick App","Password Safe unlocked successfully.",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
-                        }
-                        else
-                        {
-                            csApplet->messageBox("Password safe is enabled");
-                        }
-
-                        SetupPasswordSafeConfig ();
-                        generateMenu ();
-                        break;
-
-                    case ERR_STATUS_NOT_OK:
-                        csApplet->warningBox(tr("Wrong pin. Please try again").arg(ret_s32));
-                        wrong_pin=true;
-                        break;
-
-                    default:
-                        csApplet->warningBox(tr("Can't unlock password safe. (Error %1)").arg(ret_s32));
-                        break;
-                }
+                csApplet->warningBox("Can't unlock password safe.");
             }
-            else // AES not supprted or wrong password
+            else
             {
-                switch(ret_s32)
+                if (TRUE == trayIcon->supportsMessages ())
                 {
-                    case CMD_STATUS_NOT_SUPPORTED:
-                        // Mark password safe as disabled feature
-                        cryptostick->passwordSafeAvailable = FALSE;
-                        trayMenu->actions().at(0)->setEnabled(FALSE);
-                        csApplet->warningBox("Password safe is not supported by this device");
-
-                        generateMenu ();
-                        ui->tabWidget->setTabEnabled(3, 0);
-                        break;
-
-                    case CMD_STATUS_WRONG_PASSWORD:
-                        csApplet->warningBox("Wrong pin. Pleas try again");
-                        wrong_pin=true;
-                        break;
-
-                    default:
-                        csApplet->warningBox("Something went wrong with the AES module");
-                        break;
+                    trayIcon->showMessage ("Crypto Stick Utility","Password Safe unlocked successfully.");
                 }
-            }
+                else
+                {
+                    csApplet->messageBox("Password safe is enabled");
+                }
 
+                SetupPasswordSafeConfig ();
+                generateMenu ();
+                ui->tabWidget->setTabEnabled(3, 1);
+            }
         }
-    } while(QDialog::Accepted == ret && wrong_pin);
+        else
+        {
+            if (CMD_STATUS_NOT_SUPPORTED == ret_s32 ) // AES NOT supported
+            {
+                // Mark password safe as disabled feature
+                cryptostick->passwordSafeAvailable = FALSE;
+                trayMenu->actions().at(0)->setEnabled(FALSE);
+                csApplet->warningBox("Password safe is not supported by this device.");
+                generateMenu ();
+                ui->tabWidget->setTabEnabled(3, 0);
+            }
+            else
+            {
+                if (CMD_STATUS_WRONG_PASSWORD == ret_s32) // Wrong password
+                {
+                    csApplet->warningBox("Wrong user password.");
+                }
+            }
+            return;
+        }
+    }
 }
 
 /*******************************************************************************

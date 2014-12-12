@@ -83,7 +83,7 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
 
 // Vars for password safe
     passwordSafeUnlocked = FALSE;
-    passwordSafeAvailable = TRUE;
+    passwordSafeAvailable = true;
     memset(passwordSafeStatusDisplayed,0,PWS_SLOT_COUNT);
 
     for (i=0;i<PWS_SLOT_COUNT;i++)
