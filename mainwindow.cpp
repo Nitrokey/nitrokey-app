@@ -2383,7 +2383,9 @@ void MainWindow::startLockDeviceAction()
         }
     }
 
-    cryptostick->lockDevice ();
+    if ( cryptostick->lockDevice () ) {
+        cryptostick->passwordSafeUnlocked=false;
+    }
 
     HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
 
