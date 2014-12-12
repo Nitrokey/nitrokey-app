@@ -251,12 +251,15 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
 
+    UnlockPasswordSafe = new QAction("Unlock password safe", this);
+    UnlockPasswordSafe->setIcon(QIcon(":/images/safe.png"));
+    connect(UnlockPasswordSafe, SIGNAL(triggered()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
+
     restoreAction = new QAction(tr("&Configure OTP"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
     restoreActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
     connect(restoreActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
-
 
     DebugAction = new QAction(tr("&Debug"), this);
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
@@ -724,6 +727,7 @@ void MainWindow::checkConnection()
         {
             generateMenu();
             DeviceOffline = TRUE;
+            cryptostick->passwordSafeAvailable= true;
             trayIcon->showMessage("Device disconnected.", "", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
         cryptostick->connect();
@@ -1002,6 +1006,7 @@ void MainWindow::generateMenu()
 // Setup the new menu
     if (cryptostick->isConnected == false){
         trayMenu->addAction("Crypto Stick not connected");
+        cryptostick->passwordSafeAvailable = true;
     }
     else{
         if (false == cryptostick->activStick20)
@@ -1012,6 +1017,7 @@ void MainWindow::generateMenu()
         else {
             // Stick 20 is connected
             generateMenuForStick20 ();
+            cryptostick->passwordSafeAvailable = true;
         }
     }
 
@@ -1343,15 +1349,41 @@ void MainWindow::generatePasswordMenu()
 
 void MainWindow::generateMenuForStick10()
 {
-// Hide tab for password safe for stick 1.x
-    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = password safe
-
-    ui->pushButton_StaticPasswords->hide ();
+    // Hide tab for password safe for stick 1.x
+//    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = password safe
 
     generatePasswordMenu ();
+    trayMenu->addSeparator();
 
-    trayMenu->addAction(restoreAction);
-    restoreAction->setIcon(QIcon(":/images/settings.png"));
+    generateMenuPasswordSafe ();
+/*
+    if (FALSE == StickNotInitated)
+    {
+        // Enable tab for password safe for stick 2
+        if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+        {
+            ui->tabWidget->addTab(ui->tab_3,"Password Safe");
+        }
+        ui->pushButton_StaticPasswords->show ();
+
+        // Setup entrys for password safe
+    }
+
+    ui->pushButton_StaticPasswords->hide ();
+*/
+
+
+    if (TRUE == cryptostick->passwordSafeAvailable)
+    {    
+        trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+        trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
+        trayMenuSubConfigure->addAction(restoreActionStick20);
+    }
+    else {
+        trayMenu->addAction(restoreAction);
+        restoreAction->setIcon(QIcon(":/images/settings.png"));
+    }
+
 }
 
 /*******************************************************************************
@@ -1463,7 +1495,7 @@ void MainWindow::generateMenuForStick20()
         trayMenuSubConfigure->addAction(Stick20ActionSetupPasswordMatrix);
     }
 
-    trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume       );
+    trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
 //    trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus             );
 
 
@@ -2015,6 +2047,55 @@ void MainWindow::startConfiguration()
     }
 }
 
+
+/*******************************************************************************
+
+  destroyPasswordSafeStick10
+
+  Reviews
+  Date      Reviewer        Info
+  03.1.14  GG              First review
+
+*******************************************************************************/
+void MainWindow::destroyPasswordSafeStick10()
+{
+    uint8_t password[40];
+    bool    ret;
+    int     ret_s32;
+
+    QMessageBox msgBox;
+    PasswordDialog dialog(FALSE,this);
+    cryptostick->getUserPasswordRetryCount();
+    dialog.init((char *)"Enter admin PIN", HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.cryptostick = cryptostick;
+
+    ret = dialog.exec();
+
+    if (QDialog::Accepted == ret)
+    {
+        dialog.getPassword ((char*)password);
+
+        ret_s32 = cryptostick->buildAesKey( (uint8_t*)&(password[1]) );
+
+        if (CMD_STATUS_OK == ret_s32) 
+        {
+            msgBox.setText("AES key generated");
+            msgBox.exec();
+        }
+        else
+        {
+            if ( CMD_STATUS_WRONG_PASSWORD == ret_s32)
+                msgBox.setText("Wrong passowrd");
+            else
+                msgBox.setText("Unable to create new AES key");
+
+            msgBox.exec();
+        }
+    }
+
+}
+
+
 /*******************************************************************************
 
   startStick20Configuration
@@ -2028,9 +2109,7 @@ void MainWindow::startConfiguration()
 void MainWindow::startStick20Configuration()
 {
     Stick20Dialog dialog(this);
-
     dialog.cryptostick=cryptostick;
-
     dialog.exec();
 }
 
@@ -2304,7 +2383,9 @@ void MainWindow::startLockDeviceAction()
         }
     }
 
-    cryptostick->lockDevice ();
+    if ( cryptostick->lockDevice () ) {
+        cryptostick->passwordSafeUnlocked=false;
+    }
 
     HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
 
@@ -4122,13 +4203,16 @@ void MainWindow::SetupPasswordSafeConfig (void)
 void MainWindow::on_PWS_ButtonClearSlot_clicked()
 {
     int Slot;
-    int ret;
+    unsigned int ret;
+    QMessageBox msgBox;
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
     if (0 != cryptostick->passwordSafeSlotNames[Slot][0])      // Is slot active ?
     {
         ret = cryptostick->passwordSafeEraseSlot(Slot);
+
+
         if (ERR_NO_ERROR == ret)
         {
             ui->PWS_EditSlotName->setText("");
@@ -4235,7 +4319,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     uint8_t SlotName[PWS_SLOTNAME_LENGTH+1];
     uint8_t LoginName[PWS_LOGINNAME_LENGTH+1];
     uint8_t Password[PWS_PASSWORD_LENGTH+1];
-
+    QMessageBox msgBox;
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
@@ -4260,13 +4344,15 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     }
 
     ret = cryptostick->setPasswordSafeSlotData_1 (Slot,(uint8_t*)SlotName,(uint8_t*)Password);
-    if (ERR_NO_ERROR == ret)
+    if (ERR_NO_ERROR != ret)
     {
+        msgBox.setText(tr("Can't save slot. %1").arg(ret));
+        msgBox.exec();
         return;
     }
 
     ret = cryptostick->setPasswordSafeSlotData_2 (Slot,(uint8_t*)LoginName);
-    if (ERR_NO_ERROR == ret)
+    if (ERR_NO_ERROR != ret)
     {
         csApplet->warningBox("Can't save slot.");
         return;
@@ -4340,8 +4426,14 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-        QString actionName("Unlock password safe");
-        trayMenu->addAction(QIcon(":/images/safe.png"), actionName, this, SLOT(PWS_Clicked_EnablePWSAccess()));
+        trayMenu->addAction(UnlockPasswordSafe);
+
+        if(true == cryptostick->passwordSafeAvailable) {
+            UnlockPasswordSafe->setEnabled(true);
+        }
+        else {
+            UnlockPasswordSafe->setEnabled(false);
+        }
         return;
     }
 }
@@ -4365,40 +4457,72 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
     bool    ret;
     int     ret_s32;
 
-    do {
-        PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
-        ret = dialog.exec();
 
-        if (QDialog::Accepted == ret)
+    PasswordDialog dialog(FALSE,this);
+    cryptostick->getUserPasswordRetryCount();
+    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.cryptostick = cryptostick;
+
+//    PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
+    ret = dialog.exec();
+
+    if (QDialog::Accepted == ret)
+    {
+        dialog.getPassword ((char*)password);
+
+        ret_s32 = cryptostick->isAesSupported( (uint8_t*)&password[1] );
+        // ret_s32 = cryptostick->isAesSupported( password );
+
+        if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
         {
-            dialog.getPassword ((char*)password);
-            ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
-            switch(ret_s32)
+            cryptostick->passwordSafeAvailable = TRUE;
+            UnlockPasswordSafe->setEnabled(true);
+
+            // Continue to unlocking password safe
+            ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+            // ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
+
+            if (ERR_NO_ERROR != ret_s32)
             {
-                case ERR_NO_ERROR:
-                    if (TRUE == trayIcon->supportsMessages ())
-                    {
-                        trayIcon->showMessage ("Crypto Stick App","Password Safe unlocked successfully.",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
-                    }
-                    else
-                    {
-                        csApplet->messageBox("Password safe is enabled");
-                    }
+                csApplet->warningBox("Can't unlock password safe.");
+            }
+            else
+            {
+                if (TRUE == trayIcon->supportsMessages ())
+                {
+                    trayIcon->showMessage ("Crypto Stick Utility","Password Safe unlocked successfully.");
+                }
+                else
+                {
+                    csApplet->messageBox("Password safe is enabled");
+                }
 
-                    SetupPasswordSafeConfig ();
-                    generateMenu ();
-                    break;
-
-                case ERR_STATUS_NOT_OK:
-                    csApplet->warningBox(tr("Wrong pin. Please try again").arg(ret_s32));
-                    break;
-
-                default:
-                    csApplet->warningBox(tr("Can't unlock password safe. (Error %1)").arg(ret_s32));
-                    break;
+                SetupPasswordSafeConfig ();
+                generateMenu ();
+                ui->tabWidget->setTabEnabled(3, 1);
             }
         }
-    } while(QDialog::Accepted == ret && ERR_NO_ERROR != ret_s32);
+        else
+        {
+            if (CMD_STATUS_NOT_SUPPORTED == ret_s32 ) // AES NOT supported
+            {
+                // Mark password safe as disabled feature
+                cryptostick->passwordSafeAvailable = FALSE;
+                UnlockPasswordSafe->setEnabled(false);
+                csApplet->warningBox("Password safe is not supported by this device.");
+                generateMenu ();
+                ui->tabWidget->setTabEnabled(3, 0);
+            }
+            else
+            {
+                if (CMD_STATUS_WRONG_PASSWORD == ret_s32) // Wrong password
+                {
+                    csApplet->warningBox("Wrong user password.");
+                }
+            }
+            return;
+        }
+    }
 }
 
 /*******************************************************************************
@@ -4892,6 +5016,8 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
 
 void MainWindow::on_PWS_ButtonEnable_clicked()
 {
+    PWS_Clicked_EnablePWSAccess();
+/*
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
     int     ret_s32;
@@ -4922,6 +5048,7 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
             }
         }
     } while ( (QDialog::Accepted == ret) && (ret_s32 == ERR_STATUS_NOT_OK) );
+*/
 }
 
 

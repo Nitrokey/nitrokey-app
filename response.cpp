@@ -68,7 +68,6 @@ Response::Response()
 
 
 *******************************************************************************/
-
 void Response::DebugResponse()
 {
     char text[1000];
@@ -121,6 +120,12 @@ void Response::DebugResponse()
             break;
         case CMD_STATUS_NO_NAME_ERROR :
             DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_NO_NAME_ERROR\n");
+            break;
+        case CMD_STATUS_NOT_SUPPORTED:
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_NOT_SUPPORTED\n");
+            break;
+        case CMD_STATUS_UNKNOWN_COMMAND:
+            DebugAppendTextGui ((char *)"         Device status       : CMD_STATUS_UNKNOWN_COMMAND\n");
             break;
 
         default:
@@ -229,6 +234,12 @@ void Response::DebugResponse()
         case CMD_LOCK_DEVICE :
             DebugAppendTextGui ((char *)"         Last command        : CMD_LOCK_DEVICE");
             break;
+        case CMD_DETECT_SC_AES :
+            DebugAppendTextGui ((char *)"         Last command        : CMD_DETECT_SC_AES\n");
+            break;
+        case CMD_NEW_AES_KEY :
+            DebugAppendTextGui ((char *)"         Last command        : CMD_NEW_AES_KEY:\n");
+            break;
 
         case STICK20_CMD_ENABLE_CRYPTED_PARI            :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_ENABLE_CRYPTED_PARI           \n");         break;
         case STICK20_CMD_DISABLE_CRYPTED_PARI           :    DebugAppendTextGui ((char *)"         Last command        : STICK20_CMD_DISABLE_CRYPTED_PARI          \n");         break;
@@ -306,6 +317,12 @@ void Response::DebugResponse()
             break;
         case CMD_STATUS_NO_NAME_ERROR :
             DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_NO_NAME_ERROR\n");
+            break;
+        case CMD_STATUS_NOT_SUPPORTED:
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_NOT_SUPPORTED\n");
+            break;
+        case CMD_STATUS_UNKNOWN_COMMAND:
+            DebugAppendTextGui ((char *)"         Last command status : CMD_STATUS_UNKNOWN_COMMAND\n");
             break;
         default:
             DebugAppendTextGui ((char *)"         Last command status : Unknown\n");
