@@ -4446,7 +4446,7 @@ void MainWindow::generateMenuPasswordSafe()
 
 void MainWindow::PWS_Clicked_EnablePWSAccess ()
 {
-    uint8_t password[LOCAL_PASSWORD_SIZE]
+    uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
     int     ret_s32;
 
