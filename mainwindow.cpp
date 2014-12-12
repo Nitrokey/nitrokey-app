@@ -277,7 +277,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 #endif
 
 #ifdef linux
-    DebugAppendText ((char *)"LINUX system\n");
+    //DebugAppendText ((char *)"LINUX system\n");
 #endif
 
 #ifdef MAC
@@ -723,6 +723,7 @@ void MainWindow::checkConnection()
         {
             generateMenu();
             DeviceOffline = TRUE;
+            cryptostick->passwordSafeAvailable=TRUE;
             trayIcon->showMessage("Device disconnected.", "", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
         cryptostick->connect();
@@ -2065,7 +2066,7 @@ void MainWindow::destroyPasswordSafeStick10()
 
     ret = dialog.exec();
 
-    if (Accepted == ret)
+    if (QDialog::Accepted == ret)
     {
         dialog.getPassword ((char*)password);
 
@@ -4452,6 +4453,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
     bool wrong_pin;
     do {
         wrong_pin=false;
+
         PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
         ret = dialog.exec();
 
@@ -4459,7 +4461,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         {
             dialog.getPassword ((char*)password);
 
-            ret_s32 = cryptostick->isAesSupported( (uint8_t*)&password[1] );
+            ret_s32 = cryptostick->isAesSupported( password );
             if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
             {
                 cryptostick->passwordSafeAvailable = TRUE;
@@ -4500,8 +4502,8 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
                         // Mark password safe as disabled feature
                         cryptostick->passwordSafeAvailable = FALSE;
                         trayMenu->actions().at(0)->setEnabled(FALSE);
-                        msgBox.setText("Password safe is not supported by this device");
-                        msgBox.exec();
+                        csApplet->warningBox("Password safe is not supported by this device");
+
                         generateMenu ();
                         ui->tabWidget->setTabEnabled(3, 0);
                         break;
@@ -4509,6 +4511,10 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
                     case CMD_STATUS_WRONG_PASSWORD:
                         csApplet->warningBox("Wrong pin. Pleas try again");
                         wrong_pin=true;
+                        break;
+
+                    default:
+                        csApplet->warningBox("Something went wrong with the AES module");
                         break;
                 }
             }

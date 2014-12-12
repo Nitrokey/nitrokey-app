@@ -2114,8 +2114,6 @@ int Device::buildAesKey(uint8_t* password)
     return ERR_NOT_CONNECTED;
    
 }
-=======
->>>>>>> master
 
 /*******************************************************************************
 
