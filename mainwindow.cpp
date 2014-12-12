@@ -5013,9 +5013,11 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
   Date      Reviewer        Info
 
 *******************************************************************************/
-/*
+
 void MainWindow::on_PWS_ButtonEnable_clicked()
 {
+    PWS_Clicked_EnablePWSAccess();
+/*
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
     int     ret_s32;
@@ -5046,8 +5048,9 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
             }
         }
     } while ( (QDialog::Accepted == ret) && (ret_s32 == ERR_STATUS_NOT_OK) );
-}
 */
+}
+
 
 /*******************************************************************************
 
