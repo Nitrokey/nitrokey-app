@@ -2206,6 +2206,8 @@ int Device::factoryReset(const char* password)
             }
         }
     }
+
+    return ERR_NOT_CONNECTED;
 }
 
 /*******************************************************************************
