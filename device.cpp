@@ -2017,7 +2017,7 @@ int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
 //            if (cmd->crc == resp->lastCommandCRC)
             {
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
-                    return 0;
+                    return CMD_STATUS_OK;
                 else
                     return CMD_STATUS_WRONG_PASSWORD;
             }
@@ -2125,7 +2125,7 @@ int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
 //            if (cmd->crc == resp->lastCommandCRC)
             {
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
-                    return 0;
+                    return CMD_STATUS_OK;
                 else
                     return CMD_STATUS_WRONG_PASSWORD;
             }
