@@ -181,7 +181,6 @@ void DialogChangePassword::SendNewPassword(void)
     STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
-    
     ret = cryptostick->stick20SendPassword (Data);
 
     if ((int)true == ret)
@@ -229,26 +228,26 @@ void DialogChangePassword::Stick10ChangePassword(void)
     int ret;
     int password_length;
     QByteArray PasswordString;
-    QMessageBox   msgBox;          
+    QMessageBox   msgBox;
 
     password_length = STICK10_PASSWORD_LEN;
     unsigned char old_pin[password_length + 1];
     unsigned char new_pin[password_length + 1];
     memset(old_pin, 0, password_length + 1);
     memset(new_pin, 0, password_length + 1);
-    
+
     PasswordString = ui->lineEdit_OldPW->text().toLatin1();
     strncpy ( (char*)old_pin, PasswordString.data(), password_length);
 
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
     strncpy ( (char*)new_pin, PasswordString.data(), password_length);
-    
+
     // Change password
-    if ( PasswordKind == STICK10_PASSWORD_KIND_USER ) 
+    if ( PasswordKind == STICK10_PASSWORD_KIND_USER )
         ret = cryptostick->changeUserPin (old_pin, new_pin);
     if ( PasswordKind == STICK10_PASSWORD_KIND_ADMIN )
         ret = cryptostick->changeAdminPin (old_pin, new_pin);
-        
+
     msgBox.setText(tr("%1").arg(ret));
     msgBox.exec();
     if (ret == CMD_STATUS_WRONG_PASSWORD) {

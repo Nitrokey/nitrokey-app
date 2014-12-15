@@ -1988,7 +1988,7 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
 *******************************************************************************/
 
 int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
-{ 
+{
     int res;
     uint8_t data[50];
     uint32_t crc;
@@ -2020,7 +2020,6 @@ int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
                     return 0;
                 else
                     return CMD_STATUS_WRONG_PASSWORD;
-                
             }
 /*            else
             {
@@ -2097,7 +2096,7 @@ int Device::isAesSupported(uint8_t* password)
 *******************************************************************************/
 
 int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
-{ 
+{
     int res;
     uint8_t data[50];
     uint32_t crc;
@@ -2129,7 +2128,6 @@ int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
                     return 0;
                 else
                     return CMD_STATUS_WRONG_PASSWORD;
-                
             }
 /*           else
             {
