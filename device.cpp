@@ -83,6 +83,7 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
 
 // Vars for password safe
     passwordSafeUnlocked = FALSE;
+    passwordSafeAvailable = true;
     memset(passwordSafeStatusDisplayed,0,PWS_SLOT_COUNT);
 
     for (i=0;i<PWS_SLOT_COUNT;i++)
@@ -175,6 +176,8 @@ int Device::checkConnection()
             HOTP_SlotCount = HOTP_SLOT_COUNT;       // For stick 1.0
             TOTP_SlotCount = TOTP_SLOT_COUNT;
 
+            passwordSafeUnlocked = FALSE;
+
             // stick 20 with no OTP
             if (TRUE == activStick20)
             {
@@ -188,7 +191,6 @@ int Device::checkConnection()
 
         return 0;
     }
-
 }
 
 
@@ -263,13 +265,7 @@ int Device::sendCommand(Command *cmd)
     ((uint32_t *)(report+1))[15]=crc;
 
     cmd->crc=crc;
-/*
-    {
-         char text[1000];
-         sprintf(text,"computed crc :%08x:\n",crc );
-         DebugAppendText (text);
-    }
-*/
+
     err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
 
     {
@@ -277,18 +273,21 @@ int Device::sendCommand(Command *cmd)
         int i;
         static int Counter = 0;
 
-        SNPRINTF(text, sizeof(text), "%6d :sendCommand0: ",Counter);
-
-        Counter++;
-        DebugAppendText (text);
-        for (i=0;i<=64;i++)
+        if (STICK20_CMD_SEND_DEBUG_DATA != report[1])                   // Log no debug infos
         {
-            SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-            DebugAppendText (text);
-        }
-        SNPRINTF(text,sizeof (text),"\n");
+            SNPRINTF(text, sizeof(text), "%6d :sendCommand0: ",Counter);
 
-        DebugAppendText (text);
+            Counter++;
+            DebugAppendTextGui (text);
+            for (i=0;i<=64;i++)
+            {
+                SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
+                DebugAppendTextGui (text);
+            }
+            SNPRINTF(text,sizeof (text),"\n");
+
+            DebugAppendTextGui (text);
+        }
 
      }
 
@@ -326,16 +325,19 @@ int Device::sendCommandGetResponse(Command *cmd, Response *resp)
             int i;
             static int Counter = 0;
 
-            SNPRINTF(text,sizeof (text),"%6d :sendCommand1: ",Counter);
-            Counter++;
-            DebugAppendText (text);
-            for (i=0;i<=64;i++)
+            if (STICK20_CMD_SEND_DEBUG_DATA != report[1])                   // Log no debug infos
             {
-                SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
-                DebugAppendText (text);
+                SNPRINTF(text,sizeof (text),"%6d :sendCommand1: ",Counter);
+                Counter++;
+                DebugAppendTextGui (text);
+                for (i=0;i<=64;i++)
+                {
+                    SNPRINTF(text,sizeof (text),"%02x ",(unsigned char)report[i]);
+                    DebugAppendTextGui (text);
+                }
+                SNPRINTF(text,sizeof (text),"\n");
+                DebugAppendTextGui (text);
             }
-            SNPRINTF(text,sizeof (text),"\n");
-            DebugAppendText (text);
      }
 
     if (err==-1)
@@ -1299,6 +1301,7 @@ int Device::setPasswordSafeSlotData_1 (int Slot,uint8_t *Name,uint8_t *Password)
 
             if (cmd->crc==resp->lastCommandCRC)
             {
+                  return ERR_NO_ERROR;
 //                passwordRetryCount=resp->data[0];
             }
             else
@@ -1342,6 +1345,7 @@ int Device::setPasswordSafeSlotData_2 (int Slot,uint8_t *LoginName)
 
         if (cmd->crc == resp->lastCommandCRC)
         {
+              return ERR_NO_ERROR;
 //            passwordRetryCount=resp->data[0];
         }
         else
@@ -1386,6 +1390,7 @@ int Device::passwordSafeEraseSlot (int Slot)
 
             if (cmd->crc==resp->lastCommandCRC)
             {
+                return resp->lastCommandStatus;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                     return (ERR_NO_ERROR);
@@ -1433,12 +1438,13 @@ int Device::passwordSafeEnable (char *password)
             return ERR_SENDING;
         else
         {  //sending the command was successful
-            Sleep::msleep(500);
+            Sleep::msleep(1500);
             Response *resp=new Response();
             resp->getResponse(this);
 
             if (cmd->crc==resp->lastCommandCRC)
             {
+
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                     passwordSafeUnlocked = TRUE;
@@ -1451,7 +1457,8 @@ int Device::passwordSafeEnable (char *password)
                     {
                         HID_Stick20Configuration_st.UserPwRetryCount--;
                     }
-                    return (ERR_STATUS_NOT_OK);
+                    return resp->lastCommandStatus;
+                    // return (ERR_STATUS_NOT_OK);
                 }
             }
             else
@@ -1767,14 +1774,14 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
 
 *******************************************************************************/
 
-int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
+int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[])
 {
 
     int res;
     uint8_t data[50];
     uint32_t crc;
     memcpy(data,cardPassword,25);
-    memcpy(data+25,tempPasswrod,25);
+    memcpy(data+25,tempPassword,25);
 
 
     if (isConnected)
@@ -1800,7 +1807,7 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
             { //the response was for the last command
                 if (resp->lastCommandStatus==CMD_STATUS_OK)
                 {
-                    memcpy(userPassword,tempPasswrod,25);
+                    memcpy(userPassword,tempPassword,25);
                     validUserPassword=true;
                     return 0;
                 }
@@ -1969,16 +1976,170 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
 
 /*******************************************************************************
 
-  unlockUserPassword
+  changeUserPin
 
   Changes
   Date      Author        Info
-  02.09.14  RB            Function created
+  20.10.14  GG            Function created
 
   Reviews
   Date      Reviewer        Info
 
 *******************************************************************************/
+
+int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
+{
+    int res;
+    uint8_t data[50];
+    uint32_t crc;
+    memcpy(data, old_pin, 25);
+    memcpy(data+25, new_pin, 25);
+
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_CHANGE_USER_PIN, data, 50);
+        res=sendCommand(cmd);
+        crc=cmd->crc;
+
+        //remove the user password from memory
+        delete cmd;
+        memset(data,0,sizeof(data));
+
+        if (-1 == res)
+            return ERR_SENDING;
+        else
+        {
+            Sleep::msleep(800);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+//            if (cmd->crc == resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                    return CMD_STATUS_OK;
+                else
+                    return CMD_STATUS_WRONG_PASSWORD;
+            }
+/*            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+*/
+        }
+   }
+
+   return ERR_NOT_CONNECTED;
+}
+
+
+/*******************************************************************************
+  isAesSupported
+
+  Changes
+  Date      Author        Info
+  27.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::isAesSupported(uint8_t* password)
+{
+    int res;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command (CMD_DETECT_SC_AES, password, strlen((const char*)password));
+
+        res = sendCommand(cmd);
+
+        if (-1 == res)
+        {
+            return ERR_SENDING;
+        }
+        else                    //sending the command was successful
+        {
+            Sleep::msleep(2000);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc == resp->lastCommandCRC)
+            {
+                if (CMD_STATUS_OK == resp->lastCommandStatus) {
+ //                   validUserPassword = true;
+                }
+                return resp->lastCommandStatus;
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
+
+
+/*******************************************************************************
+
+  changeAdminPin
+
+  Changes
+  Date      Author        Info
+  20.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
+{
+    int res;
+    uint8_t data[50];
+    uint32_t crc;
+    memcpy(data, old_pin, 25);
+    memcpy(data+25, new_pin, 25);
+
+
+    if (isConnected)
+    {
+        Command *cmd=new Command(CMD_CHANGE_ADMIN_PIN, data, 50);
+        res=sendCommand(cmd);
+        crc=cmd->crc;
+
+        //remove the user password from memory
+        delete cmd;
+        memset(data,0,sizeof(data));
+
+        if (-1 == res)
+            return ERR_SENDING;
+        else
+        {
+            Sleep::msleep(800);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+//            if (cmd->crc == resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                    return CMD_STATUS_OK;
+                else
+                    return CMD_STATUS_WRONG_PASSWORD;
+            }
+/*           else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+*/
+        }
+   }
+
+   return ERR_NOT_CONNECTED;
+}
+
 
 int Device::lockDevice (void)
 {
@@ -2023,6 +2184,7 @@ int Device::factoryReset(const char* password)
     {
         n = strlen(password);
         Command *cmd = new Command (CMD_FACTORY_RESET, (uint8_t*)password, n);
+
         res = sendCommand(cmd);
 
         if (-1 == res)
@@ -2046,6 +2208,49 @@ int Device::factoryReset(const char* password)
     }
 }
 
+/*******************************************************************************
+
+  buildAesKey
+
+  Changes
+  Date      Author        Info
+  03.11.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+int Device::buildAesKey(uint8_t* password)
+{
+    int res;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command (CMD_NEW_AES_KEY, password, strlen( (const char*)password));
+        res = sendCommand(cmd);
+
+        if (-1 == res)
+        {
+            return ERR_SENDING;
+        }
+        else                    //sending the command was successful
+        {
+            Sleep::msleep(4000);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc == resp->lastCommandCRC)
+            {
+                return resp->lastCommandStatus;
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
 
 /*******************************************************************************
 
@@ -2725,6 +2930,34 @@ int Device::stick20ProductionTest (void)
     return (true);
 }
 
+/*******************************************************************************
+
+  stick20GetDebugData
+
+  Changes
+  Date      Author        Info
+  10.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::stick20GetDebugData (void)
+{
+    uint8_t n;
+    int     res;
+    uint8_t TestData[10];
+    Command *cmd;
+
+    n = 0;
+
+    cmd = new Command(STICK20_CMD_SEND_DEBUG_DATA,TestData,n);
+    res = sendCommand(cmd);
+    if(res){}//Fix warnings
+
+    return (true);
+}
 
 /*******************************************************************************
 

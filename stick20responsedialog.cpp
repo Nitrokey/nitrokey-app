@@ -68,7 +68,7 @@ public:
 
 *******************************************************************************/
 
-Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent) :
+Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent,Stick20ResponseTask *Stick20TaskPointer) :
     QDialog(parent),
     ui(new Ui::Stick20ResponseDialog)
 {
@@ -79,6 +79,8 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent) :
     QGraphicsScene Scene;
     QSize SceneSize;
     QMovie *ProgressMovie = new QMovie(":/images/ProgressWheel.GIF");
+
+    Stick20Task = Stick20TaskPointer;
 
     if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS != Stick20Task->ActiveCommand)
     {
@@ -224,7 +226,7 @@ void Stick20ResponseDialog::showStick20Configuration (int Status)
 
     ui->OutputText->setText(OutputText);
 
-    DebugAppendText (OutputText.toLatin1().data());
+    DebugAppendTextGui (OutputText.toLatin1().data());
 
 }
 
@@ -813,9 +815,9 @@ void Stick20ResponseTask::GetResponse(void)
 
     if (FALSE == EndFlag)
     {
-        Stick20ResponseDialog ResponseDialog(Stick20ResponseTaskParent);
+        Stick20ResponseDialog ResponseDialog(Stick20ResponseTaskParent,this);
 
-        ResponseDialog.Stick20Task = this;
+//        ResponseDialog.Stick20Task = this;
         ResponseDialog.exec();
     }
 }

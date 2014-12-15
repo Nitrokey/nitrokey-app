@@ -63,7 +63,7 @@
 
 //extern "C" char DebugText_Stick20[600000];
 
-extern "C" void DebugAppendText (char *Text);
+extern "C" void DebugAppendTextGui (char *Text);
 extern "C" void DebugInitDebugging (void);
 
 /*******************************************************************************
@@ -251,15 +251,22 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
 
+    UnlockPasswordSafe = new QAction("Unlock password safe", this);
+    UnlockPasswordSafe->setIcon(QIcon(":/images/safe.png"));
+    connect(UnlockPasswordSafe, SIGNAL(triggered()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
+
     restoreAction = new QAction(tr("&Configure OTP"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
     resetAction = new QAction(tr("&Factory reset"), this);
     connect(resetAction, SIGNAL(triggered()), this, SLOT(factoryReset()));
+    Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), this);
+    connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeUserPIN()));
+    Stick10ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), this);
+    connect(Stick10ActionChangeAdminPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeAdminPIN()));
 
     restoreActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
     connect(restoreActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
-
 
     DebugAction = new QAction(tr("&Debug"), this);
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
@@ -274,18 +281,18 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
     // Init debug text
     DebugInitDebugging ();
-    DebugAppendText ((char *)"Start Debug - ");
+    DebugAppendTextGui ((char *)"Start Debug - ");
 
 #ifdef WIN32
-    DebugAppendText ((char *)"WIN32 system\n");
+    DebugAppendTextGui ((char *)"WIN32 system\n");
 #endif
 
 #ifdef linux
-    DebugAppendText ((char *)"LINUX system\n");
+    DebugAppendTextGui ((char *)"LINUX system\n");
 #endif
 
 #ifdef MAC
-    DebugAppendText ((char *)"MAC system\n");
+    DebugAppendTextGui ((char *)"MAC system\n");
 #endif
 
     {
@@ -297,10 +304,10 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
         char text[50];
 
-        DebugAppendText ((char *)"\nEndian check\n\n");
+        DebugAppendTextGui ((char *)"\nEndian check\n\n");
 
-        DebugAppendText ((char *)"Store 0x01 0x02 0x03 0x04 in memory locations x,x+1,x+2,x+3\n");
-        DebugAppendText ((char *)"then read the location x - x+3 as an unsigned int\n\n");
+        DebugAppendTextGui ((char *)"Store 0x01 0x02 0x03 0x04 in memory locations x,x+1,x+2,x+3\n");
+        DebugAppendTextGui ((char *)"then read the location x - x+3 as an unsigned int\n\n");
 
         uEndianCheck.input[0] = 0x01;
         uEndianCheck.input[1] = 0x02;
@@ -312,40 +319,40 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         uEndianCheck.input[7] = 0x08;
 
         SNPRINTF(text,sizeof (text),"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"read  u64 0x%08x%08x\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
-        DebugAppendText ("\n");
+        DebugAppendTextGui ("\n");
 
         if (0x01020304 == uEndianCheck.endianCheck[0])
         {
-            DebugAppendText ("System is little endian\n");
+            DebugAppendTextGui ("System is little endian\n");
         }
         if (0x04030201 == uEndianCheck.endianCheck[0])
         {
-            DebugAppendText ("System is big endian\n");
+            DebugAppendTextGui ("System is big endian\n");
         }
-        DebugAppendText ("\n");
+        DebugAppendTextGui ("\n");
 
-        DebugAppendText ("Var size test\n");
+        DebugAppendTextGui ("Var size test\n");
 
         SNPRINTF(text,sizeof (text),"char  size is %d byte\n",sizeof (unsigned char));
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"short size is %d byte\n",sizeof (unsigned short));
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"int   size is %d byte\n",sizeof (unsigned int));
-        DebugAppendText (text);
+        DebugAppendTextGui (text);
 
         SNPRINTF(text,sizeof (text),"long  size is %d byte\n",sizeof (unsigned long));
-        DebugAppendText (text);
-        DebugAppendText ("\n");
+        DebugAppendTextGui (text);
+        DebugAppendTextGui ("\n");
     }
 
     //ui->labelQuestion1->setToolTip("Test");
@@ -622,33 +629,33 @@ void MainWindow::AnalyseProductionInfos()
         printf ((char*)"\n**** Stick NOT OK ****\n");
     }
 
-    DebugAppendText ((char *)"Production Infos\n");
+    DebugAppendTextGui ((char *)"Production Infos\n");
 
     SNPRINTF(text,sizeof (text),"Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
 
 
-    DebugAppendText ("Password retry count\n");
+    DebugAppendTextGui ("Password retry count\n");
     SNPRINTF(text,sizeof (text),"Admin        %d\n",Stick20ProductionInfos_st.SC_AdminPwRetryCount);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"User         %d\n",Stick20ProductionInfos_st.SC_UserPwRetryCount);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
 
-    DebugAppendText ("SD card infos\n");
+    DebugAppendTextGui ("SD card infos\n");
     SNPRINTF(text,sizeof (text),"Manufacturer 0x%02x\n",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"OEM          0x%04x\n",Stick20ProductionInfos_st.SD_Card_OEM_u16);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"Manufa. date %d.%02d\n",Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8+2000,Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"Write speed  %d kB/sec\n",Stick20ProductionInfos_st.SD_WriteSpeed_u16);
-    DebugAppendText (text);
+    DebugAppendTextGui (text);
 }
 
 /*******************************************************************************
@@ -727,6 +734,7 @@ void MainWindow::checkConnection()
         {
             generateMenu();
             DeviceOffline = TRUE;
+            cryptostick->passwordSafeAvailable= true;
             trayIcon->showMessage("Device disconnected.", "", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
         cryptostick->connect();
@@ -1005,6 +1013,7 @@ void MainWindow::generateMenu()
 // Setup the new menu
     if (cryptostick->isConnected == false){
         trayMenu->addAction("Crypto Stick not connected");
+        cryptostick->passwordSafeAvailable = true;
     }
     else{
         if (false == cryptostick->activStick20)
@@ -1015,6 +1024,7 @@ void MainWindow::generateMenu()
         else {
             // Stick 20 is connected
             generateMenuForStick20 ();
+            cryptostick->passwordSafeAvailable = true;
         }
     }
 
@@ -1346,19 +1356,47 @@ void MainWindow::generatePasswordMenu()
 
 void MainWindow::generateMenuForStick10()
 {
-// Hide tab for password safe for stick 1.x
-    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = password safe
-
-    ui->pushButton_StaticPasswords->hide ();
+    // Hide tab for password safe for stick 1.x
+//    ui->tabWidget->removeTab(3);        // 3 = ui->tab_3 = password safe
 
     generatePasswordMenu ();
+    trayMenu->addSeparator();
 
-    trayMenu->addAction(restoreAction);
+    generateMenuPasswordSafe ();
+/*
+    if (FALSE == StickNotInitated)
+    {
+        // Enable tab for password safe for stick 2
+        if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+        {
+            ui->tabWidget->addTab(ui->tab_3,"Password Safe");
+        }
+        ui->pushButton_StaticPasswords->show ();
+
+        // Setup entrys for password safe
+    }
+
+    ui->pushButton_StaticPasswords->hide ();
+*/
+
+
+    trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
+
+    trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
+    trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
 
     if (ExtendedConfigActive) 
-        trayMenu->addAction(resetAction);
+        trayMenuSubConfigure->addAction(resetAction);
 
-    restoreAction->setIcon(QIcon(":/images/settings.png"));
+    if (TRUE == cryptostick->passwordSafeAvailable)
+    {    
+        trayMenuSubConfigure->addAction(restoreActionStick20);
+    }
+    else {
+        trayMenuSubConfigure->addAction(restoreAction);
+    }
+
 }
 
 /*******************************************************************************
@@ -1470,7 +1508,7 @@ void MainWindow::generateMenuForStick20()
         trayMenuSubConfigure->addAction(Stick20ActionSetupPasswordMatrix);
     }
 
-    trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume       );
+    trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
 //    trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus             );
 
 
@@ -2022,6 +2060,55 @@ void MainWindow::startConfiguration()
     }
 }
 
+
+/*******************************************************************************
+
+  destroyPasswordSafeStick10
+
+  Reviews
+  Date      Reviewer        Info
+  03.1.14  GG              First review
+
+*******************************************************************************/
+void MainWindow::destroyPasswordSafeStick10()
+{
+    uint8_t password[40];
+    bool    ret;
+    int     ret_s32;
+
+    QMessageBox msgBox;
+    PasswordDialog dialog(FALSE,this);
+    cryptostick->getUserPasswordRetryCount();
+    dialog.init((char *)"Enter admin PIN", HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.cryptostick = cryptostick;
+
+    ret = dialog.exec();
+
+    if (QDialog::Accepted == ret)
+    {
+        dialog.getPassword ((char*)password);
+
+        ret_s32 = cryptostick->buildAesKey( (uint8_t*)&(password[1]) );
+
+        if (CMD_STATUS_OK == ret_s32) 
+        {
+            msgBox.setText("AES key generated");
+            msgBox.exec();
+        }
+        else
+        {
+            if ( CMD_STATUS_WRONG_PASSWORD == ret_s32)
+                msgBox.setText("Wrong passowrd");
+            else
+                msgBox.setText("Unable to create new AES key");
+
+            msgBox.exec();
+        }
+    }
+
+}
+
+
 /*******************************************************************************
 
   startStick20Configuration
@@ -2035,9 +2122,7 @@ void MainWindow::startConfiguration()
 void MainWindow::startStick20Configuration()
 {
     Stick20Dialog dialog(this);
-
     dialog.cryptostick=cryptostick;
-
     dialog.exec();
 }
 
@@ -2311,7 +2396,9 @@ void MainWindow::startLockDeviceAction()
         }
     }
 
-    cryptostick->lockDevice ();
+    if ( cryptostick->lockDevice () ) {
+        cryptostick->passwordSafeUnlocked=false;
+    }
 
     HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
 
@@ -2353,6 +2440,63 @@ void MainWindow::startStick20EnableFirmwareUpdate()
         stick20SendCommand (STICK20_CMD_ENABLE_FIRMWARE_UPDATE,password);
     }
 }
+
+/*******************************************************************************
+
+  startStick10ActionChangeUserPIN
+
+  Changes
+  Date      Author        Info
+  20.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+void MainWindow::startStick10ActionChangeUserPIN()
+{
+    DialogChangePassword dialog(this);
+
+    dialog.setModal (TRUE);
+
+    dialog.cryptostick        = cryptostick;
+
+    dialog.PasswordKind       = STICK10_PASSWORD_KIND_USER;
+
+    dialog.InitData ();
+    dialog.exec();
+}
+
+
+/*******************************************************************************
+
+  startStick10ActionChangeAdminPIN
+
+  Changes
+  Date      Author        Info
+  20.10.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+
+void MainWindow::startStick10ActionChangeAdminPIN()
+{
+    DialogChangePassword dialog(this);
+
+    dialog.setModal (TRUE);
+
+    dialog.cryptostick        = cryptostick;
+
+    dialog.PasswordKind       = STICK10_PASSWORD_KIND_ADMIN;
+
+    dialog.InitData ();
+    dialog.exec();
+}
+
 
 /*******************************************************************************
 
@@ -4129,13 +4273,16 @@ void MainWindow::SetupPasswordSafeConfig (void)
 void MainWindow::on_PWS_ButtonClearSlot_clicked()
 {
     int Slot;
-    int ret;
+    unsigned int ret;
+    QMessageBox msgBox;
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
     if (0 != cryptostick->passwordSafeSlotNames[Slot][0])      // Is slot active ?
     {
         ret = cryptostick->passwordSafeEraseSlot(Slot);
+
+
         if (ERR_NO_ERROR == ret)
         {
             ui->PWS_EditSlotName->setText("");
@@ -4242,7 +4389,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     uint8_t SlotName[PWS_SLOTNAME_LENGTH+1];
     uint8_t LoginName[PWS_LOGINNAME_LENGTH+1];
     uint8_t Password[PWS_PASSWORD_LENGTH+1];
-
+    QMessageBox msgBox;
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
@@ -4267,13 +4414,15 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked()
     }
 
     ret = cryptostick->setPasswordSafeSlotData_1 (Slot,(uint8_t*)SlotName,(uint8_t*)Password);
-    if (ERR_NO_ERROR == ret)
+    if (ERR_NO_ERROR != ret)
     {
+        msgBox.setText(tr("Can't save slot. %1").arg(ret));
+        msgBox.exec();
         return;
     }
 
     ret = cryptostick->setPasswordSafeSlotData_2 (Slot,(uint8_t*)LoginName);
-    if (ERR_NO_ERROR == ret)
+    if (ERR_NO_ERROR != ret)
     {
         csApplet->warningBox("Can't save slot.");
         return;
@@ -4347,8 +4496,14 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-        QString actionName("Unlock password safe");
-        trayMenu->addAction(QIcon(":/images/safe.png"), actionName, this, SLOT(PWS_Clicked_EnablePWSAccess()));
+        trayMenu->addAction(UnlockPasswordSafe);
+
+        if(true == cryptostick->passwordSafeAvailable) {
+            UnlockPasswordSafe->setEnabled(true);
+        }
+        else {
+            UnlockPasswordSafe->setEnabled(false);
+        }
         return;
     }
 }
@@ -4372,40 +4527,72 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
     bool    ret;
     int     ret_s32;
 
-    do {
-        PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
-        ret = dialog.exec();
 
-        if (QDialog::Accepted == ret)
+    PasswordDialog dialog(FALSE,this);
+    cryptostick->getUserPasswordRetryCount();
+    dialog.init((char *)"Enter user PIN",HID_Stick20Configuration_st.UserPwRetryCount);
+    dialog.cryptostick = cryptostick;
+
+//    PinDialog dialog("Enter user PIN", "User Pin:", cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
+    ret = dialog.exec();
+
+    if (QDialog::Accepted == ret)
+    {
+        dialog.getPassword ((char*)password);
+
+        ret_s32 = cryptostick->isAesSupported( (uint8_t*)&password[1] );
+        // ret_s32 = cryptostick->isAesSupported( password );
+
+        if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
         {
-            dialog.getPassword ((char*)password);
-            ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
-            switch(ret_s32)
+            cryptostick->passwordSafeAvailable = TRUE;
+            UnlockPasswordSafe->setEnabled(true);
+
+            // Continue to unlocking password safe
+            ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
+            // ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
+
+            if (ERR_NO_ERROR != ret_s32)
             {
-                case ERR_NO_ERROR:
-                    if (TRUE == trayIcon->supportsMessages ())
-                    {
-                        trayIcon->showMessage ("Crypto Stick App","Password Safe unlocked successfully.",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
-                    }
-                    else
-                    {
-                        csApplet->messageBox("Password safe is enabled");
-                    }
+                csApplet->warningBox("Can't unlock password safe.");
+            }
+            else
+            {
+                if (TRUE == trayIcon->supportsMessages ())
+                {
+                    trayIcon->showMessage ("Crypto Stick Utility","Password Safe unlocked successfully.");
+                }
+                else
+                {
+                    csApplet->messageBox("Password safe is enabled");
+                }
 
-                    SetupPasswordSafeConfig ();
-                    generateMenu ();
-                    break;
-
-                case ERR_STATUS_NOT_OK:
-                    csApplet->warningBox(tr("Wrong pin. Please try again").arg(ret_s32));
-                    break;
-
-                default:
-                    csApplet->warningBox(tr("Can't unlock password safe. (Error %1)").arg(ret_s32));
-                    break;
+                SetupPasswordSafeConfig ();
+                generateMenu ();
+                ui->tabWidget->setTabEnabled(3, 1);
             }
         }
-    } while(QDialog::Accepted == ret && ERR_NO_ERROR != ret_s32);
+        else
+        {
+            if (CMD_STATUS_NOT_SUPPORTED == ret_s32 ) // AES NOT supported
+            {
+                // Mark password safe as disabled feature
+                cryptostick->passwordSafeAvailable = FALSE;
+                UnlockPasswordSafe->setEnabled(false);
+                csApplet->warningBox("Password safe is not supported by this device.");
+                generateMenu ();
+                ui->tabWidget->setTabEnabled(3, 0);
+            }
+            else
+            {
+                if (CMD_STATUS_WRONG_PASSWORD == ret_s32) // Wrong password
+                {
+                    csApplet->warningBox("Wrong user password.");
+                }
+            }
+            return;
+        }
+    }
 }
 
 /*******************************************************************************
@@ -4899,6 +5086,8 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
 
 void MainWindow::on_PWS_ButtonEnable_clicked()
 {
+    PWS_Clicked_EnablePWSAccess();
+/*
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
     int     ret_s32;
@@ -4929,6 +5118,7 @@ void MainWindow::on_PWS_ButtonEnable_clicked()
             }
         }
     } while ( (QDialog::Accepted == ret) && (ret_s32 == ERR_STATUS_NOT_OK) );
+*/
 }
 
 

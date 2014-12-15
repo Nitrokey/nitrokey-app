@@ -113,7 +113,10 @@ private:
     QAction *ActionAboutDialog;
     QAction *SecPasswordAction;
     QAction *Stick20SetupAction;
+    QAction *Stick10ActionChangeUserPIN;
+    QAction *Stick10ActionChangeAdminPIN;
     QAction *LockDeviceAction;
+    QAction *UnlockPasswordSafe;
 
     QAction *Stick20ActionEnableCryptedVolume;
     QAction *Stick20ActionDisableCryptedVolume;
@@ -254,14 +257,16 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
 //    void on_resetGeneralConfigButton_clicked();
     void on_randomSecretButton_clicked();
     void on_checkBox_toggled(bool checked);
-
+    
+    void destroyPasswordSafeStick10();
     void startStick20Configuration();
     void startStickDebug();
     void startAboutDialog ();
     void startMatrixPasswordDialog();
     void startStick20Setup() ;
 
-
+    void startStick10ActionChangeUserPIN();
+    void startStick10ActionChangeAdminPIN();
 
     void startStick20EnableCryptedVolume();
     void startStick20DisableCryptedVolume();

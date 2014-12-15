@@ -75,6 +75,8 @@ class Response;
 #define CMD_UNLOCK_USER_PASSOWRD            0x11
 #define CMD_LOCK_DEVICE                     0x12
 #define CMD_FACTORY_RESET                   0x13
+#define CMD_CHANGE_USER_PIN                 0x14
+#define CMD_CHANGE_ADMIN_PIN                0x15
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS       0x60
 #define CMD_GET_PW_SAFE_SLOT_NAME         0x61
@@ -87,6 +89,8 @@ class Response;
 #define CMD_PW_SAFE_INIT_KEY              0x68
 #define CMD_PW_SAFE_SEND_DATA             0x69
 #define CMD_SD_CARD_HIGH_WATERMARK        0x70
+#define CMD_DETECT_SC_AES                 0x6a
+#define CMD_NEW_AES_KEY                   0x6b
 
 #define PWS_SEND_PASSWORD     0
 #define PWS_SEND_LOGINNAME    1
@@ -131,6 +135,7 @@ class Response;
 #define STICK20_CMD_SEND_LOCK_STICK_HARDWARE            (STICK20_CMD_START_VALUE + 23)
 
 #define STICK20_CMD_PRODUCTION_TEST                     (STICK20_CMD_START_VALUE + 24)
+#define STICK20_CMD_SEND_DEBUG_DATA                     (STICK20_CMD_START_VALUE + 25)
 
 #define STATUS_READY           0x00
 #define STATUS_BUSY	           0x01
@@ -145,6 +150,8 @@ class Response;
 #define CMD_STATUS_NOT_AUTHORIZED      5
 #define CMD_STATUS_TIMESTAMP_WARNING   6
 #define CMD_STATUS_NO_NAME_ERROR       7
+#define CMD_STATUS_NOT_SUPPORTED       8
+#define CMD_STATUS_UNKNOWN_COMMAND     9
 
 enum comm_errors{
     ERR_NO_ERROR           =  0,
@@ -154,12 +161,14 @@ enum comm_errors{
     ERR_STATUS_NOT_OK      = -4
 };
 
-
-
+// TODO STICK10
+#define STICK10_PASSWORD_LEN               20
 #define STICK20_PASSOWRD_LEN               20
 #define STICK20_PASSWORD_KIND_USER          0
 #define STICK20_PASSWORD_KIND_ADMIN         1
 #define STICK20_PASSWORD_KIND_RESET_USER    2
+#define STICK10_PASSWORD_KIND_USER          3
+#define STICK10_PASSWORD_KIND_ADMIN         4
 
 
 #define STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ALL_VOL              0
@@ -301,8 +310,11 @@ public:
     int passwordSafeEnable (char *password);
     int passwordSafeInitKey (void);
     int passwordSafeSendSlotDataViaHID (int Slot,int Kind);
+    int isAesSupported(uint8_t* password);
+    int buildAesKey(uint8_t* password);
 
     uint8_t passwordSafeUnlocked;
+    uint8_t passwordSafeAvailable;
     uint8_t passwordSafeStatus[PWS_SLOT_COUNT];
     uint8_t passwordSafeStatusDisplayed[PWS_SLOT_COUNT];
     uint8_t passwordSafeSlotNames[PWS_SLOT_COUNT][PWS_SLOTNAME_LENGTH+1];
@@ -355,6 +367,7 @@ public:
     int stick20SendHiddenVolumeSetup (HiddenVolumeSetup_tst *HV_Data_st);
     int stick20LockFirmware (uint8_t *password);
     int stick20ProductionTest (void);
+    int stick20GetDebugData (void);
 
     uint8_t cardSerial[4];
     uint8_t firmwareVersion[2];
@@ -377,6 +390,8 @@ public:
     int userAuthorize(Command *authorizedCmd);
 
     int unlockUserPassword (uint8_t *adminPassword);
+    int changeUserPin (uint8_t *old_pin, uint8_t* new_pin);
+    int changeAdminPin (uint8_t *old_pin, uint8_t* new_pin);
 
     int  activStick20;
     bool waitForAckStick20;

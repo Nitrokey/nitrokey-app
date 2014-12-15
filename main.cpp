@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QSharedMemory>
 #include <QDebug>
+#include "mcvs-wrapper.h"
 #include "splash.h"
 #include "mainwindow.h"
 #include "device.h"
@@ -206,4 +207,37 @@ int main(int argc, char *argv[])
 
     a.setQuitOnLastWindowClosed(false);
     return a.exec();
+}
+
+/*******************************************************************************
+
+  GetTimeStampForLog
+
+  Changes
+  Date      Author        Info
+  09.12.14  RB            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+extern "C" char *GetTimeStampForLog (void);
+
+char *GetTimeStampForLog (void)
+{
+    static QDateTime LastTimeStamp (QDateTime::currentDateTime());
+    QDateTime ActualTimeStamp (QDateTime::currentDateTime());
+    static char DateString[40];
+
+
+    if (ActualTimeStamp.toTime_t() != LastTimeStamp.toTime_t())
+    {
+        LastTimeStamp = ActualTimeStamp;
+        STRCPY (DateString,sizeof (DateString)-1,LastTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toLatin1());
+    }
+    else
+    {
+        DateString[0] = 0;
+    }
+    return (DateString);
 }
