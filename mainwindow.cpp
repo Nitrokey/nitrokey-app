@@ -1388,8 +1388,7 @@ void MainWindow::generateMenuForStick10()
         trayMenuSubConfigure->addAction(restoreActionStick20);
     }
     else {
-        trayMenu->addAction(restoreAction);
-        restoreAction->setIcon(QIcon(":/images/settings.png"));
+        trayMenuSubConfigure->addAction(restoreAction);
     }
 
 }
