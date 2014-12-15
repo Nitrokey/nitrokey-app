@@ -228,8 +228,8 @@ void Response::DebugResponse()
         case CMD_USER_AUTHORIZE :
             DebugAppendTextGui ((char *)"         Last command        : CMD_USER_AUTHORIZE\n");
             break;
-        case CMD_UNLOCK_USER_PASSOWRD :
-            DebugAppendTextGui ((char *)"         Last command        : CMD_UNLOCK_USER_PASSOWRD\n");
+        case CMD_UNLOCK_USER_PASSWORD :
+            DebugAppendTextGui ((char *)"         Last command        : CMD_UNLOCK_USER_PASSWORD\n");
             break;
         case CMD_LOCK_DEVICE :
             DebugAppendTextGui ((char *)"         Last command        : CMD_LOCK_DEVICE");

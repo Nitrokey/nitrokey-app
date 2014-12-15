@@ -72,7 +72,7 @@ class Response;
 #define CMD_USER_AUTHENTICATE               0x0E
 #define CMD_GET_USER_PASSWORD_RETRY_COUNT   0x0F
 #define CMD_USER_AUTHORIZE                  0x10
-#define CMD_UNLOCK_USER_PASSOWRD            0x11
+#define CMD_UNLOCK_USER_PASSWORD            0x11
 #define CMD_LOCK_DEVICE                     0x12
 #define CMD_FACTORY_RESET                   0x13
 #define CMD_CHANGE_USER_PIN                 0x14
