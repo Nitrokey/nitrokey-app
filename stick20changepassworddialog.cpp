@@ -215,7 +215,7 @@ void DialogChangePassword::SendNewPassword(void)
 
 /*******************************************************************************
 
-  Stick10SendNewPassword
+  Stick10ChangePassword
 
   Reviews
   Date      Reviewer        Info
@@ -228,7 +228,6 @@ void DialogChangePassword::Stick10ChangePassword(void)
     int ret;
     int password_length;
     QByteArray PasswordString;
-    QMessageBox   msgBox;
 
     password_length = STICK10_PASSWORD_LEN;
     unsigned char old_pin[password_length + 1];
@@ -248,11 +247,10 @@ void DialogChangePassword::Stick10ChangePassword(void)
     if ( PasswordKind == STICK10_PASSWORD_KIND_ADMIN )
         ret = cryptostick->changeAdminPin (old_pin, new_pin);
 
-    msgBox.setText(tr("%1").arg(ret));
-    msgBox.exec();
     if (ret == CMD_STATUS_WRONG_PASSWORD) {
-        msgBox.setText(tr("Wrong password."));
-        msgBox.exec();
+        csApplet->warningBox("Wrong password.");
+    } else if (ret != CMD_STATUS_OK) {
+        csApplet->warningBox(tr("Couldn't change %1 password").arg((PasswordKind == STICK10_PASSWORD_KIND_USER)?"user":"admin"));
     }
 }
 
