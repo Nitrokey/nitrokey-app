@@ -1383,6 +1383,14 @@ void MainWindow::generateMenuForStick10()
 
     trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
+
+    // Enable "reset user PIN" ?
+    cryptostick->getUserPasswordRetryCount();
+    if (0 == HID_Stick20Configuration_st.UserPwRetryCount)  //cryptostick->userPasswordRetryCount)
+    {
+        trayMenuSubConfigure->addAction(Stick20ActionResetUserPassword);
+    }
+
     if (TRUE == cryptostick->passwordSafeAvailable)
     {    
         trayMenuSubConfigure->addAction(restoreActionStick20);
@@ -2571,7 +2579,10 @@ void MainWindow::startResetUserPassword ()
 
     dialog.cryptostick        = cryptostick;
 
-    dialog.PasswordKind       = STICK20_PASSWORD_KIND_RESET_USER;
+    if (cryptostick->activStick20)
+        dialog.PasswordKind       = STICK20_PASSWORD_KIND_RESET_USER;
+    else
+        dialog.PasswordKind       = STICK10_PASSWORD_KIND_RESET_USER;
 
     dialog.InitData ();
     dialog.exec();
