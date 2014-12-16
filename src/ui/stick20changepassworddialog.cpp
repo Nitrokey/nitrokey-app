@@ -321,32 +321,30 @@ void DialogChangePassword::ResetUserPasswordStick10 (void)
 {
     int ret;
     QByteArray PasswordString;
+    unsigned char new_pin[26];
+    unsigned char admin_pin[26];
 
-    unsigned char data[50+1];
-    memset(data, 0, 51);
+    unsigned char data[50];
 
-    // New User PIN
-    PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+    memset(new_pin, 0, 26);
+    memset(admin_pin, 0, 26);
+
+
+    PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
     STRNCPY ((char*)data, 25, PasswordString.data(), 25);
 
-    // Admin PIN
-    PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-    STRNCPY ((char*)&(data[25]), 25, PasswordString.data(), 25);
+    PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+    STRNCPY ((char*)(data[25]), 25, PasswordString.data(), 25);
 
     ret = cryptostick->unlockUserPasswordStick10 (data);
 
-    if ( CMD_STATUS_OK != ret)
+    if ( true == ret)
     {
-        if (CMD_STATUS_WRONG_PASSWORD == ret)
-        {
-            csApplet->warningBox("Wrong Admin PIN.");
-        }
-        else
-        {
-            csApplet->warningBox(tr("Couldn't unblock the user PIN. Error: %1").arg(ret));
-        }
-    } else {
-        csApplet->messageBox("User PIN successfully unblocked");
+        CheckResponse (FALSE);
+    }
+    else
+    {
+        csApplet->warningBox("Couldn't unblock the user pin.");
     }
 }
 
