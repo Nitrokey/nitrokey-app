@@ -328,10 +328,12 @@ void DialogChangePassword::ResetUserPasswordStick10 (void)
     memset(admin_pin, 0, 26);
 
 
-    PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
+    // New User PIN
+    PasswordString = ui->lineEdit_OldPW->text().toLatin1();
     STRNCPY ((char*)data, 25, PasswordString.data(), 25);
 
-    PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+    // Admin PIN
+    PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
     STRNCPY ((char*)(data[25]), 25, PasswordString.data(), 25);
 
     ret = cryptostick->unlockUserPasswordStick10 (data);
