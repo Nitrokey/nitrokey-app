@@ -170,6 +170,7 @@ enum comm_errors{
 #define STICK20_PASSWORD_KIND_RESET_USER    2
 #define STICK10_PASSWORD_KIND_USER          3
 #define STICK10_PASSWORD_KIND_ADMIN         4
+#define STICK10_PASSWORD_KIND_RESET_USER            5
 
 
 #define STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ALL_VOL              0
@@ -391,6 +392,7 @@ public:
     int userAuthorize(Command *authorizedCmd);
 
     int unlockUserPassword (uint8_t *adminPassword);
+    int unlockUserPasswordStick10 (uint8_t *data);
     int changeUserPin (uint8_t *old_pin, uint8_t* new_pin);
     int changeAdminPin (uint8_t *old_pin, uint8_t* new_pin);
 
