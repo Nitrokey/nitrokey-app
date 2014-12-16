@@ -1467,6 +1467,24 @@ void MainWindow::generateMenuForStorageDevice()
             generateMenuPasswordSafe ();
         }
 
+    trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
+    trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
+
+    // Enable "reset user PIN" ?
+    cryptostick->getUserPasswordRetryCount();
+    if (0 == HID_Stick20Configuration_st.UserPwRetryCount)  //cryptostick->userPasswordRetryCount)
+    {
+        trayMenuSubConfigure->addAction(Stick20ActionResetUserPassword);
+    }
+
+    if (TRUE == cryptostick->passwordSafeAvailable)
+    {    
+        trayMenuSubConfigure->addAction(restoreActionStick20);
+    }
+    else {
+        trayMenuSubConfigure->addAction(restoreAction);
+    }
+
         if (FALSE == SdCardNotErased)
         {
             if (FALSE == CryptedVolumeActive)
