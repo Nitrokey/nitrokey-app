@@ -1941,7 +1941,7 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
 
     if (isConnected)
     {
-        Command *cmd=new Command (CMD_UNLOCK_USER_PASSOWRD,adminPassword,30);
+        Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD,adminPassword,30);
 
         res=sendCommand(cmd);
 
@@ -1973,6 +1973,57 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
     return ERR_NOT_CONNECTED;
 }
 
+
+/*******************************************************************************
+
+  unlockUserPasswordStick10
+
+  Changes
+  Date      Author        Info
+  15.12.14  GG            Function created
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+int Device::unlockUserPasswordStick10 (uint8_t* data)
+{
+    int res;
+
+    if (isConnected)
+    {
+        Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD, data, 50);
+
+        res=sendCommand(cmd);
+
+        if (res==-1)
+        {
+            return ERR_SENDING;
+        }
+        else                    //sending the command was successful
+        {
+            Sleep::msleep(800);
+            Response *resp=new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                if (resp->lastCommandStatus==CMD_STATUS_OK)
+                {
+                    HID_Stick20Configuration_st.UserPwRetryCount = 3;
+                    Stick20_ConfigurationChanged = TRUE;
+                    return 0;
+                }
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+    return ERR_NOT_CONNECTED;
+}
 
 /*******************************************************************************
 
