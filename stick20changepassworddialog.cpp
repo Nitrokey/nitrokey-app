@@ -110,6 +110,7 @@ void DialogChangePassword::InitData(void)
             ui->label_4->setText("New admin PIN");
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
+        case STICK10_PASSWORD_KIND_RESET_USER :
             this->setWindowTitle("Reset user PIN");
             ui->label_2->setText("Admin PIN:");
             ui->label_3->setText("New user PIN:");
@@ -298,6 +299,8 @@ void DialogChangePassword::ResetUserPassword (void)
     STRNCPY ((char*)&Data[1],STICK20_PASSOWRD_LEN-1,PasswordString.data(),STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN+1] = 0;
 
+
+
     ret = cryptostick->unlockUserPassword (Data);
 
     if ((int)true == ret)
@@ -308,6 +311,38 @@ void DialogChangePassword::ResetUserPassword (void)
     {
         // Todo
         return;
+    }
+}
+
+
+void DialogChangePassword::ResetUserPasswordStick10 (void)
+{
+    int ret;
+    QByteArray PasswordString;
+    unsigned char new_pin[26];
+    unsigned char admin_pin[26];
+
+    unsigned char data[50];
+
+    memset(new_pin, 0, 26);
+    memset(admin_pin, 0, 26);
+
+
+    PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
+    STRNCPY ((char*)data, 25, PasswordString.data(), 25);
+
+    PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+    STRNCPY ((char*)(data[25]), 25, PasswordString.data(), 25);
+
+    ret = cryptostick->unlockUserPasswordStick10 (data);
+
+    if ( true == ret)
+    {
+        CheckResponse (FALSE);
+    }
+    else
+    {
+        csApplet->warningBox("Couldn't unblock the user pin.");
     }
 }
 
@@ -381,6 +416,9 @@ void DialogChangePassword::accept()
             break;
         case STICK20_PASSWORD_KIND_RESET_USER :
             ResetUserPassword ();
+            break;
+        case STICK10_PASSWORD_KIND_RESET_USER :
+            ResetUserPasswordStick10 ();
             break;
         default :
             break;
