@@ -2340,7 +2340,10 @@ void MainWindow::startResetUserPassword ()
 
     dialog.cryptostick        = cryptostick;
 
-    dialog.PasswordKind       = STICK20_PASSWORD_KIND_RESET_USER;
+    if (cryptostick->activStick20)
+        dialog.PasswordKind       = STICK20_PASSWORD_KIND_RESET_USER;
+    else
+        dialog.PasswordKind       = STICK10_PASSWORD_KIND_RESET_USER;
 
     dialog.InitData ();
     dialog.exec();
