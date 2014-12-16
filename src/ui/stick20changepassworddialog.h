@@ -50,6 +50,7 @@ private:
     void SendNewPassword(void);
     void Stick10ChangePassword(void);
     void ResetUserPassword (void);
+    void ResetUserPasswordStick10 (void);
     int  CheckResponse(bool NoStopFlag);
     void clearFields();
 };
