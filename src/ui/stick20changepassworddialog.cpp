@@ -326,6 +326,8 @@ void DialogChangePassword::ResetUserPasswordStick10 (void)
 
     unsigned char data[50];
 
+    memset(data, 0, 50);
+
     memset(new_pin, 0, 26);
     memset(admin_pin, 0, 26);
 
@@ -336,7 +338,7 @@ void DialogChangePassword::ResetUserPasswordStick10 (void)
 
     // Admin PIN
     PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-    STRNCPY ((char*)(data[25]), 25, PasswordString.data(), 25);
+    STRNCPY ((char*)&(data[25]), 25, PasswordString.data(), 25);
 
     ret = cryptostick->unlockUserPasswordStick10 (data);
 
@@ -346,7 +348,7 @@ void DialogChangePassword::ResetUserPasswordStick10 (void)
     }
     else
     {
-        csApplet->warningBox("Couldn't unblock the user pin.");
+        csApplet->warningBox(tr("Couldn't unblock the user pin. %1").arg(ret));
     }
 }
 
