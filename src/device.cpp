@@ -1924,7 +1924,6 @@ int Device::unlockUserPasswordStick10 (uint8_t* data)
 
     if (isConnected)
     {
-        Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD, data, 51);
         Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD, data, 50);
 
         res=sendCommand(cmd);
@@ -1936,7 +1935,6 @@ int Device::unlockUserPasswordStick10 (uint8_t* data)
         else                    //sending the command was successful
         {
             Sleep::msleep(1000);
-            Sleep::msleep(800);
             Response *resp=new Response();
             resp->getResponse(this);
 
