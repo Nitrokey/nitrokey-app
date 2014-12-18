@@ -5168,7 +5168,7 @@ int MainWindow::factoryReset()
     bool ok;
 
     do {
-        PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+        PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
         ok = dialog.exec();
         char password[LOCAL_PASSWORD_SIZE];
         dialog.getPassword(password);
@@ -5177,7 +5177,7 @@ int MainWindow::factoryReset()
         {
             ret = cryptostick->factoryReset(password);
             if (TRUE == ret) {
-                    csApplet->messageBox("Factory reset was successful.");
+                csApplet->messageBox("Factory reset was successful.");
             } else {
                 csApplet->warningBox(tr("Wrong Pin. Please try again."));
             }
