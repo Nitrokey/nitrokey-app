@@ -112,10 +112,12 @@ FORMS    += mainwindow.ui \
 
 win32{
 LIBS= -lsetupapi
+RC_FILE=appico.rc
 }
 
 macx{
 LIBS=-framework IOKit -framework CoreFoundation
+ICON= images/CS_icon.icns
 }
 
 unix:!macx{
