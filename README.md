@@ -40,15 +40,11 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
 == Compiling for MAC OS ==
 1) Use Qt to compile the utility
 2) Navigate to <build_dir>/CryptoStickGUI.app/Contents
-3) Edit Info.plist file by adding:
-    <key>LSUIElement</key>
-    <string>1</string>
-   under <dict> node
-4) Create a .dmg file
+3) Create a .dmg file
    Go to the build directory and use
      macdeployqt CryptoStickGUI.app/ -dmg
    CryptoStickGUI.dmg file will be created at the same folder. This is the final file for distributing the utility on Mac OS
-5) Compress the .dmg package:
+4) Compress the .dmg package:
    Open Disk Utility
    Select the dmg package from left column (or drag'n'drop)
    Select Convert, check "compressed" option and then "Save"

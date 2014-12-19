@@ -46,15 +46,15 @@ SOURCES += main.cpp\
     cryptostick-applet.cpp
 
 win32 {
- SOURCES +=   hid_win.c
+    SOURCES +=   hid_win.c
 }
 
 macx{
- SOURCES +=   hid_mac.c
+    SOURCES +=   hid_mac.c
 }
 
 unix:!macx{
-  SOURCES +=   hid_libusb.c
+    SOURCES +=   hid_libusb.c
 }
 
 HEADERS  += mainwindow.h \
@@ -111,18 +111,19 @@ FORMS    += mainwindow.ui \
     securitydialog.ui
 
 win32{
-LIBS= -lsetupapi
-RC_FILE=appico.rc
+    LIBS= -lsetupapi
+    RC_FILE=appico.rc
 }
 
 macx{
-LIBS=-framework IOKit -framework CoreFoundation
-ICON= images/CS_icon.icns
+    LIBS=-framework IOKit -framework CoreFoundation
+    ICON= images/CS_icon.icns
+    QMAKE_INFO_PLIST = Info.plist
 }
 
 unix:!macx{
-LIBS  = `pkg-config libusb-1.0 --libs` -lrt -lpthread
-INCLUDEPATH += /usr/include/libusb-1.0
+    LIBS  = `pkg-config libusb-1.0 --libs` -lrt -lpthread
+    INCLUDEPATH += /usr/include/libusb-1.0
 }
 
 OTHER_FILES +=
