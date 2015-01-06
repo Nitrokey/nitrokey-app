@@ -32,8 +32,8 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
 
     cryptostick = global_cryptostick;
 
-    QPixmap image(":/images/CS_icon.png");
-    QPixmap small_img = image.scaled(70,70,Qt::KeepAspectRatio,Qt::FastTransformation);
+    QPixmap image(":/images/NK-full-logo.png");
+    QPixmap small_img = image.scaled(346,100,Qt::KeepAspectRatio,Qt::FastTransformation);
 
     //cryptostick->getStatus();
     int majorFirmwareVersion = cryptostick->firmwareVersion[0]/10;
@@ -251,7 +251,7 @@ void AboutDialog::showNoStickFound (void)
 {
     QString OutputText;
 
-    OutputText.append(QString("No Crypto Stick active\n\n"));
+    OutputText.append(QString("No active Nitrokey\n\n"));
 
     ui->DeviceStatusLabel->setText(OutputText);
 
