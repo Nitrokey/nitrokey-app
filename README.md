@@ -1,11 +1,11 @@
-= Crypto Stick Tool =
-Crypto Stick Tool runs on Windows, Linux and Mac OS. It has been created with Qt Creator 2.4.1 with Qt 4.7.4 and MinGW 4.4.
+= Nitrokey App =
+Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator 2.4.1 with Qt 4.7.4 and MinGW 4.4.
 
 The implementation is compatible to the Google Authenticator application which can be used for testing purposes. See http://google-authenticator.googlecode.com/git/libpam/totp.html
 
-Using the application under Linux also requires root privileges, or configuration of device privileges in udev (because of USB communication).
+Using the application under Linux also requires root privileges, or configuration of device privileges in udev (due to USB communication).
 
-To compile the Crypto Stick Tool under Linux install the package libusb-1.0.0-dev and QT Creator. You may need to add to the .pro file:
+To compile the Nitrokey App under Linux install the package libusb-1.0.0-dev and QT Creator. You may need to add to the .pro file:
 QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
 QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
@@ -50,7 +50,7 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
    Select Convert, check "compressed" option and then "Save"
 
 =Internals=
-All configuration data including OTP secrets are stored in clear text in the flash of Crypto Stick's Microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.
+All configuration data including OTP secrets are stored in clear text in the flash of Nitrokey's Microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.
 
 By default the OTP serial number is OpenPGP Card's serial number. It can be changed within the GUI. The USB device serial number is set to the card's serial number when the device powers up.
 
