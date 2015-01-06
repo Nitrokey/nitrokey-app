@@ -511,7 +511,7 @@ void Stick20ResponseTask::ShowIconMessage(QString IconText)
 {
     if (TRUE == trayIcon->supportsMessages ())
     {
-        trayIcon->showMessage ("Crypto Stick Utility",IconText);
+        trayIcon->showMessage ("Nitrokey App",IconText);
     }
     else
     {

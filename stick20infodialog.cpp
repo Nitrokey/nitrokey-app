@@ -55,7 +55,7 @@ void Stick20InfoDialog::showStick20Configuration (void)
 {
     QString OutputText;
 
-    OutputText.append(QString("Crypto Stick Storage status\n\n"));
+    OutputText.append(QString("Nitrokey Storage status\n\n"));
 
     if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated)
     {

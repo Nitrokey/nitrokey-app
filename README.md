@@ -38,12 +38,12 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
 
 
 == Compiling for MAC OS ==
-1) Use Qt to compile the utility
+1) Use Qt to compile the Nitrokey App
 2) Navigate to <build_dir>/CryptoStickGUI.app/Contents
 3) Create a .dmg file
    Go to the build directory and use
      macdeployqt CryptoStickGUI.app/ -dmg
-   CryptoStickGUI.dmg file will be created at the same folder. This is the final file for distributing the utility on Mac OS
+   CryptoStickGUI.dmg file will be created at the same folder. This is the final file for distributing the App on Mac OS
 4) Compress the .dmg package:
    Open Disk Utility
    Select the dmg package from left column (or drag'n'drop)

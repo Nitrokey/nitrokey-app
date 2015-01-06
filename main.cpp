@@ -57,7 +57,7 @@
 
 void HelpInfos (void)
 {
-    printf ("Crypto Stick GUI\n");
+    printf ("Nitrokey App\n");
     printf ("\n");
     printf ("-h, --help     This help\n");
     printf ("-a, --admin    Enable extra functions in the GUI for administrators.\n");

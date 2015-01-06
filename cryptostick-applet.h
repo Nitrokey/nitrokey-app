@@ -5,7 +5,7 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#define CRYPTOSTICK_APP_BRAND "Cryptostick App"
+#define CRYPTOSTICK_APP_BRAND "Nitrokey App"
 QString getBrand();
 
 class CryptostickApplet : QObject {

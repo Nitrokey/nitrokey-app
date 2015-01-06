@@ -216,22 +216,22 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     {
         if (TRUE == DebugWindowActive)
         {
-            trayIcon->showMessage ("Cryptostick App","active - DEBUG Mode", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
+            trayIcon->showMessage ("Nitrokey App","active - DEBUG Mode", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
         else
         {
-            trayIcon->showMessage ("Cryptostick App","active",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
+            trayIcon->showMessage ("Nitrokey App","active",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
     }
     else
     {
         if (TRUE == DebugWindowActive)
         {
-            csApplet->messageBox("Crypto Stick App is active in DEBUG Mode");
+            csApplet->messageBox("Nitrokey App is active in DEBUG Mode");
         }
         else
         {
-            csApplet->messageBox("Crypto Stick App is active");
+            csApplet->messageBox("Nitrokey App is active");
         }
     }
 
@@ -269,7 +269,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     DebugAction = new QAction(tr("&Debug"), this);
     connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
 
-    ActionAboutDialog = new QAction(tr("&About Crypto Stick"), this);
+    ActionAboutDialog = new QAction(tr("&About Nitrokey"), this);
     ActionAboutDialog->setIcon(QIcon(":/images/about.png"));
     connect(ActionAboutDialog,  	 SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
@@ -688,7 +688,7 @@ void MainWindow::checkConnection()
     {
         if (false == cryptostick->activStick20)
         {
-            ui->statusBar->showMessage("Cryptostick Classic connected.");
+            ui->statusBar->showMessage("Nitrokey Classic connected.");
 
             if(set_initial_time == FALSE) {
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
@@ -700,7 +700,7 @@ void MainWindow::checkConnection()
             bool answer;
             if(ret == -2){
                  answer = csApplet->detailedYesOrNoBox("Time is out-of-sync",
-                 "WARNING!\n\nThe time of your computer and Crypto Stick are out of sync. Your computer may be configured with a wrong time or your Crypto Stick may have been attacked. If an attacker or malware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?",
+                 "WARNING!\n\nThe time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.\n\nReset Nitrokey's time?",
                  0, false);
                  if (answer) {
                         resetTime();
@@ -716,7 +716,7 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
-            ui->statusBar->showMessage("Crypto Stick Storage connected.");
+            ui->statusBar->showMessage("Nitrokey Storage connected.");
         }
         DeviceOffline = FALSE;
     }
@@ -748,7 +748,7 @@ void MainWindow::checkConnection()
             if (TRUE == ret)
             {
                 QMessageBox msgBox;
-                msgBox.setText("Flash Crypto Stick application");
+                msgBox.setText("Flash Nitrokey application");
                 msgBox.exec();
             }
         }
@@ -758,7 +758,7 @@ void MainWindow::checkConnection()
         if (false == cryptostick->activStick20)
         {
             ui->statusBar->showMessage("Device connected.");
-            trayIcon->showMessage("Device connected", "Crypto Stick Classic", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
+            trayIcon->showMessage("Device connected", "Nitrokey Classic", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
 
             if(set_initial_time == FALSE){
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
@@ -770,7 +770,7 @@ void MainWindow::checkConnection()
             bool answer;
             if(ret == -2){
                  answer = csApplet->detailedYesOrNoBox("Time is out-of-sync",
-                 "WARNING!\n\nThe time of your computer and Crypto Stick are out of sync. Your computer may be configured with a wrong time or your Crypto Stick may have been attacked. If an attacker or malware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?",
+                 "WARNING!\n\nThe time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.\n\nReset Nitrokey's time?",
                  0, false);
 
                  if (answer)
@@ -788,8 +788,8 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
-            trayIcon->showMessage("Device connected", "Crypto Stick Storage", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
-            ui->statusBar->showMessage("Crypto Stick Storage connected.");
+            trayIcon->showMessage("Device connected", "Nitrokey Storage", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
+            ui->statusBar->showMessage("Nitrokey Storage connected.");
         }
         generateMenu();
     }
@@ -1010,7 +1010,7 @@ void MainWindow::generateMenu()
 
 // Setup the new menu
     if (cryptostick->isConnected == false){
-        trayMenu->addAction("Crypto Stick not connected");
+        trayMenu->addAction("Nitrokey not connected");
         cryptostick->passwordSafeAvailable = true;
     }
     else{
@@ -3503,7 +3503,7 @@ void MainWindow::on_writeButton_clicked()
     }
     else
     {
-        csApplet->warningBox("Crypto Stick is not connected!");
+        csApplet->warningBox("Nitrokey is not connected!");
     }
 
     displayCurrentSlotConfig();
@@ -3785,7 +3785,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
 
     }
     else{
-        csApplet->warningBox("Crypto Stick not connected!");
+        csApplet->warningBox("Nitrokey not connected!");
     }
     displayCurrentGeneralConfig();
 }
@@ -4554,7 +4554,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
             {
                 if (TRUE == trayIcon->supportsMessages ())
                 {
-                    trayIcon->showMessage ("Crypto Stick Utility","Password Safe unlocked successfully.");
+                    trayIcon->showMessage ("Nitrokey App","Password Safe unlocked successfully.");
                 }
                 else
                 {
@@ -4810,7 +4810,7 @@ int MainWindow::getNextCode(uint8_t slotNumber)
      bool answer;
      if(ret == -2){
          answer = csApplet->detailedYesOrNoBox("Time is out-of-sync",
-         "WARNING!\n\nThe time of your computer and Crypto Stick are out of sync.\nYour computer may be configured with a wrong time or\nyour Crypto Stick may have been attacked. If an attacker or\nmalware could have used your Crypto Stick you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Crypto Stick.\n\nReset Crypto Stick's time?",
+         "WARNING!\n\nThe time of your computer and Nitrokey are out of sync.\nYour computer may be configured with a wrong time or\nyour Nitrokey may have been attacked. If an attacker or\nmalware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.\n\nReset Nitrokey's time?",
          0, false);
 
          if (answer)
