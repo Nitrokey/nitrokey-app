@@ -44,7 +44,6 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
     ui->firmwareLabel->setText(QString::number(majorFirmwareVersion).append(".").append(QString::number(minorFirmwareVersion)));
 
     QByteArray cardSerial = QByteArray((char *) cryptostick->cardSerial).toHex();
-
     ui->serialEdit->setText(QString( "%1" ).arg(QString(cardSerial),8,'0'));
 
     ui->ButtonStickStatus->hide();
@@ -110,7 +109,7 @@ void AboutDialog::showStick20Configuration (void)
 
     if (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32)
     {
-        ui->serialEdit->setText("");
+        ui->serialEdit->setText("-");
         OutputText.append(QString("\nSmartcard is not accessible\n\n"));
         ErrorFlag = TRUE;
     }
@@ -255,8 +254,8 @@ void AboutDialog::showNoStickFound (void)
 
     ui->DeviceStatusLabel->setText(OutputText);
 
-    ui->firmwareLabel->setText("");
-    ui->serialEdit->setText("");
+    ui->firmwareLabel->setText("-");
+    ui->serialEdit->setText("-");
 }
 
 void AboutDialog::on_ButtonStickStatus_clicked()
