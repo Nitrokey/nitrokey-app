@@ -688,7 +688,7 @@ void MainWindow::checkConnection()
     {
         if (false == cryptostick->activStick20)
         {
-            ui->statusBar->showMessage("Nitrokey Classic connected.");
+            ui->statusBar->showMessage("Nitrokey Pro connected.");
 
             if(set_initial_time == FALSE) {
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
@@ -758,7 +758,7 @@ void MainWindow::checkConnection()
         if (false == cryptostick->activStick20)
         {
             ui->statusBar->showMessage("Device connected.");
-            trayIcon->showMessage("Device connected", "Nitrokey Classic", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
+            trayIcon->showMessage("Device connected", "Nitrokey Pro", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
 
             if(set_initial_time == FALSE){
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
