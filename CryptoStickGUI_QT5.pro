@@ -7,6 +7,12 @@
 CONFIG   += qt
 QT       += core gui
 
+target.path = /usr/loca/bin
+desktop.path = /usr/share/applications
+desktop.files += nitrokey-app.desktop
+
+INSTALLS += target desktop
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 sources.files = qss
