@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(CryptoStickGUI)
-SET(PROJECT_VERSION "") 
+SET(PROJECT_VERSION "1.0") 
 #ADD_DEFINITIONS(-DSEAFILE_CLIENT_VERSION=${PROJECT_VERSION}) 
 
 INCLUDE(FindPkgConfig)
@@ -84,6 +84,7 @@ SET(qrc_files
     resources.qrc
 )
 
+
 # preprocess ui files
 QT5_WRAP_UI(ui_output ${ui_files})
 
@@ -93,6 +94,9 @@ QT5_WRAP_CPP(moc_output ${moc_headers})
 # resources files
 QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
 
+
+FIND_PACKAGE(PkgConfig REQUIRED)
+SET(LIBUSB_INCLUDE_DIRS "/usr/include/libusb-1.0")
 
 # c/cpp sources
 SET(nitrokey_app_sources
@@ -125,15 +129,30 @@ SET(nitrokey_app_sources
     stick20updatedialog.cpp
     stick20window.cpp
     totpslot.cpp
+    stick20hid.c
+    hid_libusb.c
+    ${platform_specific_sources}
 )
 
+IF (WIN32)
+    SET( platform_specific_sources hid_win.c)
+ELSEIF(APPLE)
+    SET( platform_specific_sources hid_mac.c)
+    SET( platform_specific_libs "-framework IOKit -framework CoreFoundation")
+ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
+    SET(EXTRA_LIBS pthread usb-1.0)
+ENDIF()
 
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}
+    ${QT_INCLUDE_DIR}
+    ${LIBUSB_INCLUDE_DIRS}
 )
 
 LINK_DIRECTORIES(
     ${QT_LIBRARY_DIR}
+    ${LIBUSB_LIBRARY_DIRS}
 )
 
 
@@ -163,11 +182,20 @@ install(FILES
 endif()
 
 
-ADD_EXECUTABLE(nitrokey-applet ${GUI_TYPE}
+ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${nitrokey_app_sources}
   ${moc_output}
   ${ui_output}
   ${resources_ouput}
 )
 
-INSTALL(TARGETS nitrokey-applet DESTINATION bin)
+INSTALL(TARGETS nitrokey-app DESTINATION bin)
+
+TARGET_LINK_LIBRARIES(nitrokey-app
+  ${QT_LIBRARIES}
+  ${LIBUSB_LIBRARIES}
+  ${EXTRA_LIBS}
+  ${platform_specific_libs}
+)
+
+qt5_use_modules( nitrokey-app Core Gui Widgets)
