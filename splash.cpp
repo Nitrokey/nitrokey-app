@@ -30,7 +30,7 @@ SplashScreen::SplashScreen() : QSplashScreen(QPixmap(),Qt::WindowStaysOnTopHint)
   QFont authorFont = qApp->font();
   QFont versionFont = qApp->font();
 
-  logo = new QPixmap(":/images/logo.png");
+  logo = new QPixmap(":/images/splash.png");
 
   QWidget *textWidget = new QWidget(this);
   QVBoxLayout *textLayout = new QVBoxLayout;
@@ -43,7 +43,7 @@ SplashScreen::SplashScreen() : QSplashScreen(QPixmap(),Qt::WindowStaysOnTopHint)
   versionFont.setPointSize(20);
   versionLabel->setFont(versionFont);
   versionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  Gui::ShadowedLabel *authorLabel = new Gui::ShadowedLabel(tr("Author:") + " Antonio Di Monaco",this);
+  Gui::ShadowedLabel *authorLabel = new Gui::ShadowedLabel(tr("Author:") + "",this);
   authorFont.setPointSize(10);
   authorLabel->setFont(authorFont);
   authorLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);

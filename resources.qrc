@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/images">
         <file alias="CS_icon.png">images/CS_icon.png</file>
-        <file alias="NK-full-logo.png">images/NK-full-logo.png</file>
+        <file alias="splash.png">images/splash.png</file>
         <file alias="quit.png">images/quit.png</file>
         <file alias="safe.png">images/safe.png</file>
         <file alias="settings.png">images/settings.png</file>
