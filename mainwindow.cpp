@@ -5176,14 +5176,21 @@ int MainWindow::factoryReset()
         if (QDialog::Accepted == ok)
         {
             ret = cryptostick->factoryReset(password);
-            if (TRUE == ret) {
-                csApplet->messageBox("Factory reset was successful.");
-            } else {
-                csApplet->warningBox(tr("Wrong Pin. Please try again."));
+            switch(ret)
+            {
+                case CMD_STATUS_OK:
+                    csApplet->messageBox("Factory reset was successful.");
+                    break;
+                case CMD_STATUS_WRONG_PASSWORD:
+                    csApplet->warningBox(tr("Wrong Pin. Please try again."));
+                    break;
+                default:
+                    csApplet->warningBox(tr("Unknown error."));
+                    break;
             }
             memset(password, 0, strlen(password));
         }
-    } while(QDialog::Accepted == ok && !cryptostick->validPassword); // While the user keeps enterning a pin and the pin is not correct..
+    } while(QDialog::Accepted == ok && CMD_STATUS_WRONG_PASSWORD==ret); // While the user keeps enterning a pin and the pin is not correct..
    
 }
 
