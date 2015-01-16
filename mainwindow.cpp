@@ -258,6 +258,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     restoreAction = new QAction(tr("&Configure OTP"), this);
     connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
+    resetAction = new QAction(tr("&Factory reset"), this);
+    connect(resetAction, SIGNAL(triggered()), this, SLOT(factoryReset()));
     Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), this);
     connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeUserPIN()));
     Stick10ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), this);
@@ -1383,6 +1385,10 @@ void MainWindow::generateMenuForStick10()
 
     trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
+
+    if (ExtendedConfigActive) 
+        trayMenuSubConfigure->addAction(resetAction);
+
     if (TRUE == cryptostick->passwordSafeAvailable)
     {    
         trayMenuSubConfigure->addAction(restoreActionStick20);
@@ -5155,5 +5161,37 @@ void MainWindow::on_counterEdit_editingFinished()
     }
 
 
+}
+
+int MainWindow::factoryReset()
+{
+    int ret;
+    bool ok;
+
+    do {
+        PinDialog dialog("Enter card admin PIN", "Admin PIN:", cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+        ok = dialog.exec();
+        char password[LOCAL_PASSWORD_SIZE];
+        dialog.getPassword(password);
+
+        if (QDialog::Accepted == ok)
+        {
+            ret = cryptostick->factoryReset(password);
+            switch(ret)
+            {
+                case CMD_STATUS_OK:
+                    csApplet->messageBox("Factory reset was successful.");
+                    break;
+                case CMD_STATUS_WRONG_PASSWORD:
+                    csApplet->warningBox(tr("Wrong Pin. Please try again."));
+                    break;
+                default:
+                    csApplet->warningBox(tr("Unknown error."));
+                    break;
+            }
+            memset(password, 0, strlen(password));
+        }
+    } while(QDialog::Accepted == ok && CMD_STATUS_WRONG_PASSWORD==ret); // While the user keeps enterning a pin and the pin is not correct..
+   
 }
 

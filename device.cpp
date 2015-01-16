@@ -2175,6 +2175,41 @@ int Device::lockDevice (void)
     return ERR_NOT_CONNECTED;
 }
 
+int Device::factoryReset(const char* password)
+{
+    uint8_t n;
+    int res;
+
+    if(isConnected)
+    {
+        n = strlen(password);
+        Command *cmd = new Command (CMD_FACTORY_RESET, (uint8_t*)password, n);
+
+        res = sendCommand(cmd);
+
+        if (-1 == res)
+        {
+            return ERR_SENDING;
+        }else
+        {
+            Sleep::msleep(1000);
+            Response *resp = new Response();
+            resp->getResponse(this);
+
+            if (cmd->crc == resp->lastCommandCRC)
+            {
+                return resp->lastCommandStatus;
+            }
+            else
+            {
+                return ERR_WRONG_RESPONSE_CRC;
+            }
+        }
+    }
+
+    return ERR_NOT_CONNECTED;
+}
+
 /*******************************************************************************
 
   buildAesKey
@@ -2194,7 +2229,6 @@ int Device::buildAesKey(uint8_t* password)
     if (isConnected)
     {
         Command *cmd=new Command (CMD_NEW_AES_KEY, password, strlen( (const char*)password));
-
         res = sendCommand(cmd);
 
         if (-1 == res)
@@ -2218,7 +2252,6 @@ int Device::buildAesKey(uint8_t* password)
         }
     }
     return ERR_NOT_CONNECTED;
-   
 }
 
 /*******************************************************************************
