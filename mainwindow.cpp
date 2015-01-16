@@ -1213,7 +1213,7 @@ void MainWindow::generatePasswordMenu()
     if (TOTP_SlotCount > 9)
     {
         if (cryptostick->TOTPSlots[9]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP10()));
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[9]->slotName, this,SLOT(getTOTP10()));
         }
     }
 
@@ -4555,7 +4555,16 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
 
             if (ERR_NO_ERROR != ret_s32)
             {
-                csApplet->warningBox("Can't unlock password safe.");
+                switch (ret_s32)
+                {
+                    case CMD_STATUS_AES_DEC_FAILED:
+                        csApplet->warningBox("AES key doen not exist!");
+                        break;
+                    default:
+                        csApplet->warningBox("Can't unlock password safe.");
+                        break;
+                }
+                // csApplet->warningBox(tr("Can't unlock password safe. %1").arg(ret_s32));
             }
             else
             {
@@ -5192,6 +5201,14 @@ int MainWindow::factoryReset()
             memset(password, 0, strlen(password));
         }
     } while(QDialog::Accepted == ok && CMD_STATUS_WRONG_PASSWORD==ret); // While the user keeps enterning a pin and the pin is not correct..
-   
+
+
+    // Disable pwd safe menu entries
+    int i;
+    for(i=0; i<=15; i++)
+        cryptostick->passwordSafeStatus[i] = false;
+
+    // Fetch configs from device
+    generateAllConfigs();
 }
 
