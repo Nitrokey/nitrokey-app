@@ -57,18 +57,18 @@
 
 void HelpInfos (void)
 {
-    printf ("Nitrokey App\n");
-    printf ("\n");
-    printf ("-h, --help     This help\n");
-    printf ("-a, --admin    Enable extra functions in the GUI for administrators.\n");
-    printf ("-d, --debug    Enable debug options\n");
-    printf ("--debugAll     Enable extensive debug options\n");
-    printf ("--lock-hardware Enable menu entry for hardware lock\n");
+    puts (
+            "Nitrokey App\n\n"
+            "-h, --help        display this help and exit\n"
+            "-a, --admin       enable extra administrativefunctions\n"
+            "-d, --debug       enable debug options\n"
+            "--debugAll       enable extensive debug options\n"
+            "--lock-hardware   enable hardware lock option\n"
 /* Disable password matrix
     printf ("--PWM          Enable PIN entry via matrix\n");
 */
-    printf ("--cmd ....     Start a command line command\n");
-    printf ("\n");
+            "--cmd ...         start a command line session\n"
+            "\n");
 }
 
 /*******************************************************************************
