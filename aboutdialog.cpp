@@ -32,7 +32,7 @@ AboutDialog::AboutDialog(Device *global_cryptostick,QWidget *parent) :
 
     cryptostick = global_cryptostick;
 
-    QPixmap image(":/images/NK-full-logo.png");
+    QPixmap image(":/images/splash.png");
     QPixmap small_img = image.scaled(346,100,Qt::KeepAspectRatio,Qt::FastTransformation);
 
     //cryptostick->getStatus();
