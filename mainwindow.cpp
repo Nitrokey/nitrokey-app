@@ -4156,6 +4156,7 @@ void MainWindow::checkPasswordTime_Valid(){
 }
 
 void MainWindow::checkTextEdited(){
+    ui->secretEdit->setText( ui->secretEdit->text().remove(" ").remove("\t") );
     if(!ui->checkBox->isEnabled()){
         ui->checkBox->setEnabled(true);
         ui->checkBox->setChecked(false);
