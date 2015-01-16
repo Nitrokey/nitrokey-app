@@ -152,6 +152,7 @@ class Response;
 #define CMD_STATUS_NO_NAME_ERROR       7
 #define CMD_STATUS_NOT_SUPPORTED       8
 #define CMD_STATUS_UNKNOWN_COMMAND     9
+#define CMD_STATUS_AES_DEC_FAILED      10
 
 enum comm_errors{
     ERR_NO_ERROR           =  0,
