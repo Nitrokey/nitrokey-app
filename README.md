@@ -1,23 +1,25 @@
-= Nitrokey App =
+Nitrokey App
+============
 Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator 2.4.1 with Qt 4.7.4 and MinGW 4.4.
 
 The implementation is compatible to the Google Authenticator application which can be used for testing purposes. See http://google-authenticator.googlecode.com/git/libpam/totp.html
 
 Using the application under Linux also requires root privileges, or configuration of device privileges in udev (due to USB communication).
 
-To compile the Nitrokey App under Linux install the package libusb-1.0.0-dev and QT Creator. You may need to add to the .pro file:
+To compile hte Nitrokey App under Linux install the package libusb-1.0.0-dev and QT Creator. You may need to add to the .pro file:
 QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
 QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
-== Compiling on Ubuntu Linux==
-=== Update for QT5 ===
+Compiling on Ubuntu Linux
+-------------------------
+#### QT5
 Prerequisite: Install QT5: https://qt-project.org/wiki/Install_Qt_5_on_Ubuntu
 Use QT Creator for compilation or perform the following steps:
 1) Change to build directory parallel to PC CryptoStickGUI directory
 2) For 64 bit system: ~/bin/qt/5.3/gcc_64/bin/qmake -spec  ~/bin/qt/5.3/gcc_64/mkspecs/linux-g++-64 -o Makefile ../cryptostick.utility/CryptoStickGUI_QT5.pro
 3) make
 
-=== QT 4 ===
+#### QT 4
 Prerequisite: sudo apt-get install qt4-default libqt4-dev libusb-1.0.0-dev qtcreator
 Use QT Creator for compilation or perform the following steps:
 1) Change to build directory parallel to PC CryptoStickGUI directory
@@ -25,7 +27,7 @@ Use QT Creator for compilation or perform the following steps:
 For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 -o Makefile ../CryptoStickGUI/CryptoStickGUI.pro
 3) make
 
-== Cross Compiling with QT5 for Windows on Ubuntu Linux ==
+#### Cross Compiling with QT5 for Windows on Ubuntu Linux
 Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target
 1) sudo apt-get install bison cmake flex intltool libtool scons
 2) git clone https://github.com/mxe/mxe.git
@@ -37,7 +39,7 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
 8) optional: use upx to compress the executable
 
 
-== Compiling for MAC OS ==
+#### Compiling for MAC OS
 1) Use Qt to compile the Nitrokey App
 2) Navigate to <build_dir>/CryptoStickGUI.app/Contents
 3) Create a .dmg file
@@ -49,7 +51,8 @@ Based on: https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for
    Select the dmg package from left column (or drag'n'drop)
    Select Convert, check "compressed" option and then "Save"
 
-=Internals=
+Internals
+---------
 All configuration data including OTP secrets are stored in clear text in the flash of Nitrokey's Microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.
 
 By default the OTP serial number is OpenPGP Card's serial number. It can be changed within the GUI. The USB device serial number is set to the card's serial number when the device powers up.
