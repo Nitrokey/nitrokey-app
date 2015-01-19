@@ -5,7 +5,7 @@
 #include <QGridLayout>
 
 
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 CryptostickApplet::CryptostickApplet()
 {

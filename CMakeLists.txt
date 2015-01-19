@@ -24,7 +24,7 @@ SET(moc_headers
     base32.h
     command.h
     crc32.h
-    cryptostick-applet.h
+    nitrokey-applet.h
     device.h
     gui.h
     hidapi.h
@@ -104,7 +104,7 @@ SET(nitrokey_app_sources
     base32.cpp
     command.cpp
     crc32.cpp
-    cryptostick-applet.cpp
+    nitrokey-applet.cpp
     device.cpp
     gui.cpp
     hotpdialog.cpp

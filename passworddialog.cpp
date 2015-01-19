@@ -26,7 +26,7 @@
 #include "ui_passworddialog.h"
 
 #include "stick20matrixpassworddialog.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 /*******************************************************************************
 

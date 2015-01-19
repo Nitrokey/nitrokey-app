@@ -19,7 +19,7 @@
 
 #include <QClipboard>
 
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 #include "passwordsafedialog.h"
 #include "ui_passwordsafedialog.h"
 

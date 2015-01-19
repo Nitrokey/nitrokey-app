@@ -49,7 +49,7 @@ SOURCES += main.cpp\
     securitydialog.cpp \
     gui.cpp \
     splash.cpp \
-    cryptostick-applet.cpp
+    nitrokey-applet.cpp
 
 win32 {
     SOURCES +=   hid_win.c
@@ -95,7 +95,7 @@ HEADERS  += mainwindow.h \
     mcvs-wrapper.h \
     gui.h \
     splash.h \
-    cryptostick-applet.h
+    nitrokey-applet.h
 
 FORMS    += mainwindow.ui \
     stick20window.ui \

@@ -22,7 +22,7 @@
 #include "device.h"
 #include "stick20hiddenvolumedialog.h"
 #include "ui_stick20hiddenvolumedialog.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 
 stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :

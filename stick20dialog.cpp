@@ -19,7 +19,7 @@
 
 #include <QPushButton>
 
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 #include "stick20dialog.h"
 #include "ui_stick20dialog.h"
 

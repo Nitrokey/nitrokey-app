@@ -19,7 +19,7 @@
 
 #include "stick20setup.h"
 #include "ui_stick20setup.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 #include "device.h"
 #include "stick20matrixpassworddialog.h"

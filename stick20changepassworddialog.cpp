@@ -21,7 +21,7 @@
 #include "stick20changepassworddialog.h"
 #include "ui_stick20changepassworddialog.h"
 #include "stick20responsedialog.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 
 /*******************************************************************************

@@ -26,7 +26,7 @@
 #include "ui_passworddialog.h"
 
 #include "stick20matrixpassworddialog.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 
 #define LOCAL_PASSWORD_SIZE         40              // Todo make define global

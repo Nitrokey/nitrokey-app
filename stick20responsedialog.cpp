@@ -24,7 +24,7 @@
 
 #include "device.h"
 #include "response.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 #include "stick20responsedialog.h"
 #include "ui_stick20responsedialog.h"

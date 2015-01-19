@@ -26,7 +26,7 @@
 #include "mainwindow.h"
 #include "device.h"
 #include "stick20hid.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 /*******************************************************************************
 

@@ -23,7 +23,7 @@
 #include "response.h"
 #include "stick20responsedialog.h"
 #include "stick20hid.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 #include <QTimer>
 #include <QPainter>

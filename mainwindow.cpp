@@ -46,7 +46,7 @@
 #include "passwordsafedialog.h"
 #include "securitydialog.h"
 #include "mcvs-wrapper.h"
-#include "cryptostick-applet.h"
+#include "nitrokey-applet.h"
 
 #include <QTimer>
 #include <QMenu>
