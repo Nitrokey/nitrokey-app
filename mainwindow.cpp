@@ -1383,8 +1383,6 @@ void MainWindow::generateMenuForStick10()
     trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
     trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
 
-    trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
-    trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
 
     if (ExtendedConfigActive) 
         trayMenuSubConfigure->addAction(resetAction);
@@ -1397,6 +1395,10 @@ void MainWindow::generateMenuForStick10()
         trayMenuSubConfigure->addAction(restoreAction);
     }
 
+    trayMenuSubConfigure->addSeparator();
+
+    trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
+    trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
 }
 
 /*******************************************************************************
@@ -1486,9 +1488,18 @@ void MainWindow::generateMenuForStick20()
     trayMenuSubConfigure = trayMenu->addMenu( "Configure" );
     trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
     trayMenuSubConfigure->addAction(restoreActionStick20);
+    trayMenuSubConfigure->addSeparator();
+
+    // Pin actions
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
+    if (TRUE == MatrixInputActive)
+    {
+        trayMenuSubConfigure->addAction(Stick20ActionSetupPasswordMatrix);
+    }
+    trayMenuSubConfigure->addSeparator();
 
+    // Storage actions
     if (FALSE == NormalVolumeRWActive)
     {
         trayMenuSubConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume );      // Set RW active
@@ -1503,15 +1514,12 @@ void MainWindow::generateMenuForStick20()
         trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
     }
 
-    if (TRUE == MatrixInputActive)
-    {
-        trayMenuSubConfigure->addAction(Stick20ActionSetupPasswordMatrix);
-    }
-
     trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
 //    trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus             );
+    trayMenuSubConfigure->addSeparator();
 
 
+    // Other actions
     if (TRUE == LockHardware)
     {
         trayMenuSubConfigure->addAction(Stick20ActionLockStickHardware);
@@ -1525,6 +1533,8 @@ void MainWindow::generateMenuForStick20()
     trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate       );
     trayMenuSubConfigure->addAction(Stick20ActionExportFirmwareToFile       );
 
+    trayMenuSubConfigure->addSeparator();
+
     if (TRUE == ExtendedConfigActive)
     {
         trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu( "Special Configure" );
@@ -1536,13 +1546,13 @@ void MainWindow::generateMenuForStick20()
         }
     }
 
-
-// Enable "reset user PIN" ?
+    // Enable "reset user PIN" ?
     if (0 == cryptostick->userPasswordRetryCount)
     {
         trayMenu->addSeparator();
         trayMenu->addAction(Stick20ActionResetUserPassword);
     }
+
 
 // Add secure password dialog test
 //    trayMenu->addAction(SecPasswordAction);
