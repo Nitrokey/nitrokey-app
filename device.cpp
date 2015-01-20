@@ -572,7 +572,7 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
 
         if (isConnected)
         {
-            Command *cmd=new Command(CMD_WRITE_TO_SLOT,data,COMMAND_SIZE);
+            Command *cmd = new Command(CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
     //        qDebug() << "sending";
             authorize(cmd);
             res=sendCommand(cmd);
@@ -647,11 +647,11 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
             Response *resp=new Response();
             resp->getResponse(this);
 
-             if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_OK){
+             if (cmd->crc == resp->lastCommandCRC && resp->lastCommandStatus == CMD_STATUS_OK){
 //                 qDebug() << "sent sucessfully!";
                  return 0;
 
-             } else if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_NO_NAME_ERROR){
+             } else if (cmd->crc == resp->lastCommandCRC && resp->lastCommandStatus == CMD_STATUS_NO_NAME_ERROR){
                  return -3;
              }
 
@@ -1673,24 +1673,31 @@ int Device::writeGeneralConfig(uint8_t data[])
 
 
     if (isConnected){
-    Command *cmd=new Command(CMD_WRITE_CONFIG,data,5);
-    authorize(cmd);
-    res=sendCommand(cmd);
+        Command *cmd=new Command(CMD_WRITE_CONFIG,data,5);
+        authorize(cmd);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return ERR_SENDING;
-    else{  //sending the command was successful
-        Sleep::msleep(100);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1)
+            return ERR_SENDING;
+        else{  //sending the command was successful
+            Sleep::msleep(100);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-        if (cmd->crc==resp->lastCommandCRC){
-        if (resp->lastCommandStatus==CMD_STATUS_OK)
-            return 0;
+            if (cmd->crc==resp->lastCommandCRC){
+            switch (resp->lastCommandStatus)
+            {
+                case CMD_STATUS_OK:
+                    return CMD_STATUS_OK;
+                case CMD_STATUS_NOT_AUTHORIZED:
+                    return CMD_STATUS_NOT_AUTHORIZED;
+            }
+            if (resp->lastCommandStatus==CMD_STATUS_OK)
+                return 0;
+            }
+            else
+                return ERR_WRONG_RESPONSE_CRC;
         }
-        else
-            return ERR_WRONG_RESPONSE_CRC;
-    }
     }
     return ERR_NOT_CONNECTED;
 
