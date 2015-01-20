@@ -628,43 +628,47 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
         memcpy(data+16,slot->secret,20);
         data[36]=slot->config;
         memcpy(data+37,slot->tokenID,13);
-	memcpy(data+50,&(slot->interval),2);
+	    memcpy(data+50,&(slot->interval),2);
 
 //        qDebug() << "copied data to array";
 
-        if (isConnected){
-        Command *cmd=new Command(CMD_WRITE_TO_SLOT,data,COMMAND_SIZE);
-//        qDebug() << "sending";
-        authorize(cmd);
-        res=sendCommand(cmd);
-//        qDebug() << "sent";
+        if (isConnected)
+        {
+            Command *cmd=new Command(CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
+    //        qDebug() << "sending";
+            authorize(cmd);
+            res=sendCommand(cmd);
+    //        qDebug() << "sent";
 
-        if (res==-1)
-            return -1;
-        else{  //sending the command was successful
-            //return cmd->crc;
-            Sleep::msleep(100);
-            Response *resp=new Response();
-            resp->getResponse(this);
+            if (res==-1)
+                return -1;
+            else //sending the command was successful
+            {
+                //return cmd->crc;
+                Sleep::msleep(100);
+                Response *resp=new Response();
+                resp->getResponse(this);
 
-             if (cmd->crc == resp->lastCommandCRC && resp->lastCommandStatus == CMD_STATUS_OK){
-//                 qDebug() << "sent sucessfully!";
-                 return 0;
+                if (cmd->crc == resp->lastCommandCRC )
+                {
+                    return resp->lastCommandStatus;
+                    switch (resp->lastCommandStatus)
+                    {
+                        case CMD_STATUS_OK:
+                            return 0;
+                        case CMD_STATUS_NO_NAME_ERROR:
+                            return -3;
+                        case CMD_STATUS_NOT_AUTHORIZED:
+                            return -3;
+                    }
+                }
+                return -2;
+            }
 
-             } else if (cmd->crc == resp->lastCommandCRC && resp->lastCommandStatus == CMD_STATUS_NO_NAME_ERROR){
-                 return -3;
-             }
 
         }
-
-        return -2;
-        }
-
-
+        return -1;
     }
-    return -1;
-
-
 }
 
 /*******************************************************************************
