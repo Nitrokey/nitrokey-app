@@ -3457,7 +3457,7 @@ void MainWindow::on_writeButton_clicked()
 
     uint8_t slotNo = ui->slotComboBox->currentIndex();
 
-    PinDialog dialog("Enter card user PIN", "User PIN:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
+    PinDialog dialog("Enter admin PIN", "Admin PIN:", cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
     bool ok;
 
     if(slotNo > TOTP_SlotCount)
@@ -3479,73 +3479,60 @@ void MainWindow::on_writeButton_clicked()
 
     if (true == cryptostick->isConnected)
     {
-        ui->base32RadioButton->toggle();
-
-        if (slotNo < HOTP_SlotCount){//HOTP slot
-            HOTPSlot *hotp=new HOTPSlot();
-
-            generateHOTPConfig(hotp);
-            //HOTPSlot *hotp=new HOTPSlot(0x10,(uint8_t *)"Herp",(uint8_t *)"123456",(uint8_t *)"0",0);
-            res = cryptostick->writeToHOTPSlot(hotp);
-
-        }
-        else{//TOTP slot
-            TOTPSlot *totp=new TOTPSlot();
-            generateTOTPConfig(totp);
-            res = cryptostick->writeToTOTPSlot(totp);
-        }
-
-        switch(res)
+        do
         {
-            case CMD_STATUS_OK:
-                csApplet->messageBox("Configuration successfully written.");
-                break;
-            case CMD_STATUS_NOT_AUTHORIZED:
-                // Ask for password
-                do {
-                    ok = dialog.exec();
-                    QString password;
-                    dialog.getPassword(password);
+            ui->base32RadioButton->toggle();
 
-                    if (QDialog::Accepted == ok)
-                    {
-                        uint8_t tempPassword[25];
+            if (slotNo < HOTP_SlotCount){//HOTP slot
+                HOTPSlot *hotp=new HOTPSlot();
 
-                        for (int i=0;i<25;i++)
-                            tempPassword[i]=qrand()&0xFF;
+                generateHOTPConfig(hotp);
+                //HOTPSlot *hotp=new HOTPSlot(0x10,(uint8_t *)"Herp",(uint8_t *)"123456",(uint8_t *)"0",0);
+                res = cryptostick->writeToHOTPSlot(hotp);
 
-                        cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
-                        if (cryptostick->validPassword){
-                            lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-                        } else {
-                            csApplet->warningBox("Wrong Pin. Please try again.");
+            }
+            else{//TOTP slot
+                TOTPSlot *totp=new TOTPSlot();
+                generateTOTPConfig(totp);
+                res = cryptostick->writeToTOTPSlot(totp);
+            }
+
+            switch(res)
+            {
+                case CMD_STATUS_OK:
+                    csApplet->messageBox("Configuration successfully written.");
+                    break;
+                case CMD_STATUS_NOT_AUTHORIZED:
+                    // Ask for password
+                    do {
+                        ok = dialog.exec();
+                        QString password;
+                        dialog.getPassword(password);
+
+                        if (QDialog::Accepted == ok)
+                        {
+                            uint8_t tempPassword[25];
+
+                            for (int i=0;i<25;i++)
+                                tempPassword[i]=qrand()&0xFF;
+
+                            cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
+                            if (cryptostick->validPassword){
+                                lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+                            } else {
+                                csApplet->warningBox("Wrong Pin. Please try again.");
+                            }
+                            password.clear();
                         }
-                        password.clear();
-                    }
-                } while(QDialog::Accepted == ok && !cryptostick->validPassword); // While the user keeps enterning a pin and the pin is not correct..
-/*
-                do {
-                    ok = dialog.exec();
-                    QString password;
-                    dialog.getPassword(password);
-
-                    res =cryptostick->writeGeneralConfig(data);
-
-                    password.clear();
-                }while(QDialog::Accepted == ok && !cryptostick->validPassword);
-*/
-                break;
-            default:
-                csApplet->warningBox(tr("Error writing configuration! %1").arg(res));
-                
-        }
-
-        if (res==0)
-            csApplet->messageBox("Configuration has been written successfully.");
-        else if (res == -3)
-            csApplet->warningBox("The name of the slot must not be empty.");
-        else
-            csApplet->warningBox("Error writing configuration!");
+                    } while(QDialog::Accepted == ok && !cryptostick->validPassword); // While the user keeps enterning a pin and the pin is not correct..
+                    break;
+                case CMD_STATUS_NO_NAME_ERROR:
+                    csApplet->warningBox("The name of the slot must not be empty.");
+                    break;
+                default:
+                    csApplet->warningBox("Error writing configuration!");
+            }
+        } while (CMD_STATUS_NOT_AUTHORIZED == res);
 
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -3801,7 +3788,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
     int res;
     uint8_t data[5];
 
-    PinDialog dialog("Enter card user PIN", "User PIN:", cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
+    PinDialog dialog("Enter admin PIN", "Admin PIN:", cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
     bool ok;
 
     if (cryptostick->isConnected){
@@ -3827,52 +3814,44 @@ void MainWindow::on_writeGeneralConfigButton_clicked()
             data[4]=0;
         }
 
-        res =cryptostick->writeGeneralConfig(data);
-
-        switch(res)
+        do
         {
-            case CMD_STATUS_OK:
-                csApplet->messageBox("Config written successfully.");
-                break;
-            case CMD_STATUS_NOT_AUTHORIZED:
-                // Ask for password
-                do {
-                    ok = dialog.exec();
-                    QString password;
-                    dialog.getPassword(password);
+            res =cryptostick->writeGeneralConfig(data);
 
-                    if (QDialog::Accepted == ok)
-                    {
-                        uint8_t tempPassword[25];
+            switch(res)
+            {
+                case CMD_STATUS_OK:
+                    csApplet->messageBox("Configuration successfully written.");
+                    break;
+                case CMD_STATUS_NOT_AUTHORIZED:
+                    // Ask for password
+                    do {
+                        ok = dialog.exec();
+                        QString password;
+                        dialog.getPassword(password);
 
-                        for (int i=0;i<25;i++)
-                            tempPassword[i]=qrand()&0xFF;
+                        if (QDialog::Accepted == ok)
+                        {
+                            uint8_t tempPassword[25];
 
-                        cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
-                        if (cryptostick->validPassword){
-                            lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-                        } else {
-                            csApplet->warningBox("Wrong Pin. Please try again.");
+                            for (int i=0;i<25;i++)
+                                tempPassword[i]=qrand()&0xFF;
+
+                            cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
+                            if (cryptostick->validPassword){
+                                lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+                            } else {
+                                csApplet->warningBox("Wrong Pin. Please try again.");
+                            }
+                            password.clear();
                         }
-                        password.clear();
-                    }
-                } while(QDialog::Accepted == ok && !cryptostick->validPassword); // While the user keeps enterning a pin and the pin is not correct..
-/*
-                do {
-                    ok = dialog.exec();
-                    QString password;
-                    dialog.getPassword(password);
-
-                    res =cryptostick->writeGeneralConfig(data);
-
-                    password.clear();
-                }while(QDialog::Accepted == ok && !cryptostick->validPassword);
-*/
-                break;
-            default:
-                csApplet->warningBox("Error writing configuration!");
-                
-        }
+                    } while(QDialog::Accepted == ok && !cryptostick->validPassword); // While the user keeps enterning a pin and the pin is not correct..
+                    break;
+                default:
+                    csApplet->warningBox("Error writing configuration!");
+                    
+            }
+        } while (CMD_STATUS_NOT_AUTHORIZED == res);
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         Sleep::msleep(500);
