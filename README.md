@@ -33,6 +33,10 @@ Use QT Creator for compilation or perform the following steps:
   * For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 -o Makefile ../CryptoStickGUI/CryptoStickGUI.pro
 3. make
 
+
+#### with cmake:
+cmake -DCMAKE_INSTALL_PREFIX=<prefix> .
+
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux
 Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
 
