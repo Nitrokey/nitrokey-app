@@ -5,3 +5,6 @@ build-*-Debug
 *.lst
 .*
 !/.gitignore
+moc_*.cpp
+ui_*.h
+*tags
