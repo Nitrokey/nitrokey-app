@@ -2,8 +2,8 @@
 Name="Nitrokey App"
 GenericName=Nitrokey Management Application
 Comment=Manage your Nitrokey devices
-TryExec=CryptoStickGUI
-Exec=CryptoStickGUI
+TryExec=nitrokey-app
+Exec=nitrokey-app
 Icon=nitrokey-app
 Type=Application
 Categories=Utility;Security;Qt;
