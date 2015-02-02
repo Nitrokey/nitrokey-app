@@ -20,101 +20,112 @@ sources.files = qss
 TARGET = CryptoStickGUI
 TEMPLATE = app
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    hotpslot.cpp \
-    totpslot.cpp \
-    stick20window.cpp \
-    stick20updatedialog.cpp \
-    stick20setup.cpp \
-    stick20responsedialog.cpp \
-    stick20matrixpassworddialog.cpp \
-    stick20lockfirmwaredialog.cpp \
-    stick20infodialog.cpp \
-    stick20hiddenvolumedialog.cpp \
-    stick20dialog.cpp \
-    stick20debugdialog.cpp \
-    stick20changepassworddialog.cpp \
-    response.cpp \
-    passworddialog.cpp \
-    pindialog.cpp \
-    hotpdialog.cpp \
-    device.cpp \
-    crc32.cpp \
-    command.cpp \
-    base32.cpp \
-    aboutdialog.cpp \
-    stick20hid.c \
-    passwordsafedialog.cpp \
-    securitydialog.cpp \
-    gui.cpp \
-    splash.cpp \
-    nitrokey-applet.cpp
+ROOTDIR=$$PWD
+UIDIR=$${ROOTDIR}/ui
+SRCDIR=$${ROOTDIR}/src
+SRCUIDIR=$${SRCDIR}/ui
+UTILSDIR=$${SRCDIR}/utils
+
+
+SOURCES +=  $${SRCDIR}/main.cpp\
+            $${SRCUIDIR}/mainwindow.cpp \
+            $${SRCDIR}/hotpslot.cpp \
+            $${SRCDIR}/totpslot.cpp \
+            $${SRCUIDIR}/stick20window.cpp \
+            $${SRCUIDIR}/stick20updatedialog.cpp \
+            $${SRCUIDIR}/stick20setup.cpp \
+            $${SRCUIDIR}/stick20responsedialog.cpp \
+            $${SRCUIDIR}/stick20matrixpassworddialog.cpp \
+            $${SRCUIDIR}/stick20lockfirmwaredialog.cpp \
+            $${SRCUIDIR}/stick20infodialog.cpp \
+            $${SRCUIDIR}/stick20hiddenvolumedialog.cpp \
+            $${SRCUIDIR}/stick20dialog.cpp \
+            $${SRCUIDIR}/stick20debugdialog.cpp \
+            $${SRCUIDIR}/stick20changepassworddialog.cpp \
+            $${SRCDIR}/response.cpp \
+            $${SRCUIDIR}/passworddialog.cpp \
+            $${SRCUIDIR}/pindialog.cpp \
+            $${SRCUIDIR}/hotpdialog.cpp \
+            $${SRCDIR}/device.cpp \
+            $${UTILSDIR}/crc32.cpp \
+            $${SRCDIR}/command.cpp \
+            $${UTILSDIR}/base32.cpp \
+            $${SRCUIDIR}/aboutdialog.cpp \
+            $${UTILSDIR}/stick20hid.c \
+            $${SRCUIDIR}/passwordsafedialog.cpp \
+            $${SRCUIDIR}/securitydialog.cpp \
+            $${UTILSDIR}/gui.cpp \
+            $${SRCUIDIR}/splash.cpp \
+            $${SRCUIDIR}/nitrokey-applet.cpp
 
 win32 {
-    SOURCES +=   hid_win.c
+    SOURCES +=   $${UTILSDIR}/hid_win.c
 }
 
 macx{
-    SOURCES +=   hid_mac.c
+    SOURCES +=   $${UTILSDIR}/hid_mac.c
 }
 
 unix:!macx{
-    SOURCES +=   hid_libusb.c
+    SOURCES +=   $${UTILSDIR}/hid_libusb.c
 }
 
-HEADERS  += mainwindow.h \
-    totpslot.h \
-    stick20window.h \
-    stick20updatedialog.h \
-    stick20setup.h \
-    stick20responsedialog.h \
-    stick20matrixpassworddialog.h \
-    stick20lockfirmwaredialog.h \
-    stick20infodialog.h \
-    stick20hiddenvolumedialog.h \
-    stick20hid.h \
-    stick20dialog.h \
-    stick20debugdialog.h \
-    stick20changepassworddialog.h \
-    sleep.h \
-    response.h \
-    passworddialog.h \
-    pindialog.h \
-    inttypes.h \
-    hotpslot.h \
-    hotpdialog.h \
-    hidapi.h \
-    device.h \
-    crc32.h \
-    command.h \
-    base32.h \
-    aboutdialog.h \
-    passwordsafedialog.h \
-    securitydialog.h \
-    mcvs-wrapper.h \
-    gui.h \
-    splash.h \
-    nitrokey-applet.h
+HEADERS  += $${SRCUIDIR}/mainwindow.h \
+            $${SRCDIR}/totpslot.h \
+            $${SRCUIDIR}/stick20window.h \
+            $${SRCUIDIR}/stick20updatedialog.h \
+            $${SRCUIDIR}/stick20setup.h \
+            $${SRCUIDIR}/stick20responsedialog.h \
+            $${SRCUIDIR}/stick20matrixpassworddialog.h \
+            $${SRCUIDIR}/stick20lockfirmwaredialog.h \
+            $${SRCUIDIR}/stick20infodialog.h \
+            $${SRCUIDIR}/stick20hiddenvolumedialog.h \
+            $${UTILSDIR}/stick20hid.h \
+            $${SRCUIDIR}/stick20dialog.h \
+            $${SRCUIDIR}/stick20debugdialog.h \
+            $${SRCUIDIR}/stick20changepassworddialog.h \
+            $${UTILSDIR}/sleep.h \
+            $${SRCDIR}/response.h \
+            $${SRCUIDIR}/passworddialog.h \
+            $${SRCUIDIR}/pindialog.h \
+            $${SRCDIR}/inttypes.h \
+            $${SRCDIR}/hotpslot.h \
+            $${SRCUIDIR}/hotpdialog.h \
+            $${UTILSDIR}/hidapi.h \
+            $${SRCDIR}/device.h \
+            $${UTILSDIR}/crc32.h \
+            $${SRCDIR}/command.h \
+            $${UTILSDIR}/base32.h \
+            $${SRCUIDIR}/aboutdialog.h \
+            $${SRCUIDIR}/passwordsafedialog.h \
+            $${SRCUIDIR}/securitydialog.h \
+            $${SRCDIR}/mcvs-wrapper.h \
+            $${UTILSDIR}/gui.h \
+            $${SRCUIDIR}/splash.h \
+            $${SRCUIDIR}/nitrokey-applet.h
 
-FORMS    += mainwindow.ui \
-    stick20window.ui \
-    stick20updatedialog.ui \
-    stick20setup.ui \
-    stick20responsedialog.ui \
-    stick20matrixpassworddialog.ui \
-    stick20lockfirmwaredialog.ui \
-    stick20infodialog.ui \
-    stick20hiddenvolumedialog.ui \
-    stick20dialog.ui \
-    stick20debugdialog.ui \
-    stick20changepassworddialog.ui \
-    passworddialog.ui \
-    pindialog.ui \
-    hotpdialog.ui \
-    aboutdialog.ui \
-    passwordsafedialog.ui \
-    securitydialog.ui
+FORMS +=    $${UIDIR}/mainwindow.ui \
+            $${UIDIR}/stick20window.ui \
+            $${UIDIR}/stick20updatedialog.ui \
+            $${UIDIR}/stick20setup.ui \
+            $${UIDIR}/stick20responsedialog.ui \
+            $${UIDIR}/stick20matrixpassworddialog.ui \
+            $${UIDIR}/stick20lockfirmwaredialog.ui \
+            $${UIDIR}/stick20infodialog.ui \
+            $${UIDIR}/stick20hiddenvolumedialog.ui \
+            $${UIDIR}/stick20dialog.ui \
+            $${UIDIR}/stick20debugdialog.ui \
+            $${UIDIR}/stick20changepassworddialog.ui \
+            $${UIDIR}/passworddialog.ui \
+            $${UIDIR}/pindialog.ui \
+            $${UIDIR}/hotpdialog.ui \
+            $${UIDIR}/aboutdialog.ui \
+            $${UIDIR}/passwordsafedialog.ui \
+            $${UIDIR}/securitydialog.ui
+
+INCLUDEPATH +=  $${SRCDIR} \
+                $${SRCUIDIR} \
+                $${UTILSDIR}
 
 win32{
     LIBS= -lsetupapi

@@ -18,64 +18,72 @@ FIND_PACKAGE(Qt5Gui)
 FIND_PACKAGE(Qt5Widgets)
 
 
+# Directory structure
+
+SET(ROOTDIR ${CMAKE_CURRENT_SOURCE_DIR})
+SET(UIDIR ${ROOTDIR}/ui)
+SET(SRCDIR ${ROOTDIR}/src)
+SET(SRCUIDIR ${SRCDIR}/ui)
+SET(UTILSDIR ${SRCDIR}/utils)
+
 # Moc files
 SET(moc_headers
-    aboutdialog.h
-    base32.h
-    command.h
-    crc32.h
-    nitrokey-applet.h
-    device.h
-    gui.h
-    hidapi.h
-    hotpdialog.h
-    hotpslot.h
-    inttypes.h
-    mainwindow.h
-    mcvs-wrapper.h
-    passworddialog.h
-    passwordsafedialog.h
-    pindialog.h
-    response.h
-    securitydialog.h
-    sleep.h
-    splash.h
-    stick20changepassworddialog.h
-    stick20debugdialog.h
-    stick20dialog.h
-    stick20hiddenvolumedialog.h
-    stick20hid.h
-    stick20infodialog.h
-    stick20lockfirmwaredialog.h
-    stick20matrixpassworddialog.h
-    stick20responsedialog.h
-    stick20setup.h
-    stick20updatedialog.h
-    stick20window.h
-    totpslot.h
+    ${SRCUIDIR}/aboutdialog.h
+    ${UTILSDIR}/base32.h
+    ${SRCDIR}/command.h
+    ${UTILSDIR}/crc32.h
+    ${SRCUIDIR}/nitrokey-applet.h
+    ${SRCDIR}/device.h
+    ${UTILSDIR}/gui.h
+    ${UTILSDIR}/hidapi.h
+    ${SRCUIDIR}/hotpdialog.h
+    ${SRCDIR}/hotpslot.h
+    ${SRCDIR}/inttypes.h
+    ${SRCUIDIR}/mainwindow.h
+    ${SRCDIR}/mcvs-wrapper.h
+    ${SRCUIDIR}/passworddialog.h
+    ${SRCUIDIR}/passwordsafedialog.h
+    ${SRCUIDIR}/pindialog.h
+    ${SRCDIR}/response.h
+    ${SRCUIDIR}/securitydialog.h
+    ${UTILSDIR}/sleep.h
+    ${SRCUIDIR}/splash.h
+    ${SRCUIDIR}/stick20changepassworddialog.h
+    ${SRCUIDIR}/stick20debugdialog.h
+    ${SRCUIDIR}/stick20dialog.h
+    ${SRCUIDIR}/stick20hiddenvolumedialog.h
+    ${UTILSDIR}/stick20hid.h
+    ${SRCUIDIR}/stick20infodialog.h
+    ${SRCUIDIR}/stick20lockfirmwaredialog.h
+    ${SRCUIDIR}/stick20matrixpassworddialog.h
+    ${SRCUIDIR}/stick20responsedialog.h
+    ${SRCUIDIR}/stick20setup.h
+    ${SRCUIDIR}/stick20updatedialog.h
+    ${SRCUIDIR}/stick20window.h
+    ${SRCDIR}/totpslot.h
 )
 
 
 # Ui files
 SET(ui_files
-    aboutdialog.ui
-    hotpdialog.ui
-    mainwindow.ui
-    passworddialog.ui
-    passwordsafedialog.ui
-    pindialog.ui
-    securitydialog.ui
-    stick20changepassworddialog.ui
-    stick20debugdialog.ui
-    stick20dialog.ui
-    stick20hiddenvolumedialog.ui
-    stick20infodialog.ui
-    stick20lockfirmwaredialog.ui
-    stick20matrixpassworddialog.ui
-    stick20responsedialog.ui
-    stick20setup.ui
-    stick20updatedialog.ui
-    stick20window.ui
+    ${UIDIR}/aboutdialog.ui
+    ${UIDIR}/hotpdialog.ui
+    ${UIDIR}/mainwindow.ui
+    ${UIDIR}/passworddialog.ui
+    ${UIDIR}/passwordsafedialog.ui
+    ${UIDIR}/pindialog.ui
+    ${UIDIR}/securitydialog.ui
+    ${UIDIR}/stick20changepassworddialog.ui
+    ${UIDIR}/stick20debugdialog.ui
+    ${UIDIR}/stick20dialog.ui
+    ${UIDIR}/stick20hiddenvolumedialog.ui
+    ${UIDIR}/stick20infodialog.ui
+    ${UIDIR}/stick20lockfirmwaredialog.ui
+    ${UIDIR}/stick20matrixpassworddialog.ui
+    ${UIDIR}/stick20responsedialog.ui
+    ${UIDIR}/stick20setup.ui
+    ${UIDIR}/stick20updatedialog.ui
+    ${UIDIR}/stick20window.ui
 )
 
 
@@ -100,37 +108,37 @@ SET(LIBUSB_INCLUDE_DIRS "/usr/include/libusb-1.0")
 
 # c/cpp sources
 SET(nitrokey_app_sources
-    aboutdialog.cpp
-    base32.cpp
-    command.cpp
-    crc32.cpp
-    nitrokey-applet.cpp
-    device.cpp
-    gui.cpp
-    hotpdialog.cpp
-    hotpslot.cpp
-    main.cpp
-    mainwindow.cpp
-    passworddialog.cpp
-    passwordsafedialog.cpp
-    pindialog.cpp
-    response.cpp
-    securitydialog.cpp
-    splash.cpp
-    stick20changepassworddialog.cpp
-    stick20debugdialog.cpp
-    stick20dialog.cpp
-    stick20hiddenvolumedialog.cpp
-    stick20infodialog.cpp
-    stick20lockfirmwaredialog.cpp
-    stick20matrixpassworddialog.cpp
-    stick20responsedialog.cpp
-    stick20setup.cpp
-    stick20updatedialog.cpp
-    stick20window.cpp
-    totpslot.cpp
-    stick20hid.c
-    hid_libusb.c
+    ${SRCUIDIR}/aboutdialog.cpp
+    ${UTILSDIR}/base32.cpp
+    ${SRCDIR}/command.cpp
+    ${UTILSDIR}/crc32.cpp
+    ${SRCUIDIR}/nitrokey-applet.cpp
+    ${SRCDIR}/device.cpp
+    ${UTILSDIR}/gui.cpp
+    ${SRCUIDIR}/hotpdialog.cpp
+    ${SRCDIR}/hotpslot.cpp
+    ${SRCDIR}/main.cpp
+    ${SRCUIDIR}/mainwindow.cpp
+    ${SRCUIDIR}/passworddialog.cpp
+    ${SRCUIDIR}/passwordsafedialog.cpp
+    ${SRCUIDIR}/pindialog.cpp
+    ${SRCDIR}/response.cpp
+    ${SRCUIDIR}/securitydialog.cpp
+    ${SRCUIDIR}/splash.cpp
+    ${SRCUIDIR}/stick20changepassworddialog.cpp
+    ${SRCUIDIR}/stick20debugdialog.cpp
+    ${SRCUIDIR}/stick20dialog.cpp
+    ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
+    ${SRCUIDIR}/stick20infodialog.cpp
+    ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
+    ${SRCUIDIR}/stick20matrixpassworddialog.cpp
+    ${SRCUIDIR}/stick20responsedialog.cpp
+    ${SRCUIDIR}/stick20setup.cpp
+    ${SRCUIDIR}/stick20updatedialog.cpp
+    ${SRCUIDIR}/stick20window.cpp
+    ${SRCDIR}/totpslot.cpp
+    ${UTILSDIR}/stick20hid.c
+    ${UTILSDIR}/hid_libusb.c
     ${platform_specific_sources}
 )
 
@@ -146,6 +154,9 @@ ENDIF()
 INCLUDE_DIRECTORIES(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${SRCDIR}
+    ${UTILSDIR}
+    ${SRCUIDIR}
     ${PROJECT_SOURCE_DIR}
     ${QT_INCLUDE_DIR}
     ${LIBUSB_INCLUDE_DIRS}
@@ -207,7 +218,7 @@ SET(CPACK_GENERATOR
 
 SET(CPACK_PACKAGE_NAME "nitrokey-app" )
 SET(CPACK_PACKAGE_VERSION "1.0" )
-SET(CPACK_PACKAGE_ARCHITECTURE )
+SET(CPACK_PACKAGE_ARCHITECTURE `dpkg --print-architecture`)
 SET(CPACK_PACKAGE_DEPENDS "" )
 SET(CPACK_PACKAGE_DESCRIPTION  "Application to manage your Nitrokey")
 
