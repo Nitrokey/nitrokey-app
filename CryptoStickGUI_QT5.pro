@@ -17,7 +17,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 sources.files = qss
 
-TARGET = CryptoStickGUI
+TARGET = nitrokey-app
 TEMPLATE = app
 
 ROOTDIR=$$PWD
