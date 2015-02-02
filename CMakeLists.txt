@@ -199,3 +199,23 @@ TARGET_LINK_LIBRARIES(nitrokey-app
 )
 
 qt5_use_modules( nitrokey-app Core Gui Widgets)
+
+# Packaging
+SET(CPACK_GENERATOR
+    "DEB;RPM")
+
+SET(CPACK_PACKAGE_NAME "nitrokey-app" )
+SET(CPACK_PACKAGE_VERSION "1.0" )
+SET(CPACK_PACKAGE_ARCHITECTURE )
+SET(CPACK_PACKAGE_DEPENDS "" )
+SET(CPACK_PACKAGE_DESCRIPTION  "Application to manage your Nitrokey")
+
+# Deb
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Georgios Gkitsas <george@nitrokey.com>" )
+SET(CPACK_PACKAGE_PRIORITY "optional")
+SET(CPACK_PACKAGE_SECTION "utils")
+
+# Rpm
+
+
+INCLUDE(CPack)
