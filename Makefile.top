@@ -1,0 +1,25 @@
+mkfile_path := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+
+ROOT_DIR := ${mkfile_path}
+BUILD_DIR ?= ${ROOT_DIR}/build
+INSTALL_DIR ?= ${ROOT_DIR}/install
+RELEASE_DIR ?= ${ROOT_DIR}/release
+
+.PHONY: release prepare build
+
+build: prepare
+	cd ${BUILD_DIR} && \
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} .. && \
+	make
+
+release:
+	cd ${BUILD_DIR} && \
+	make package && \
+	mv *.deb *.rpm ${RELEASE_DIR} && cd ${RELEASE_DIR} && \
+	find . -name *.deb -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5' && \
+	find . -name *.rpm -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5'
+
+prepare:
+	mkdir -p ${BUILD_DIR} && \
+	mkdir -p ${INSTALL_DIR} && \
+	mkdir -p ${RELEASE_DIR}
