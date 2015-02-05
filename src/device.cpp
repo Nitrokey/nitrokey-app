@@ -111,7 +111,7 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
 
     newConnection=true;
 
-// Init data for stick 20
+    // Init data for stick 20
 
    this->vidStick20             = vidStick20;
    this->pidStick20             = pidStick20;
