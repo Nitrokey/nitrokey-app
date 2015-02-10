@@ -12,6 +12,9 @@ build: prepare
 	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} .. && \
 	make
 
+install: build
+	cd ${BUILD_DIR} && make install
+
 release:
 	cd ${BUILD_DIR} && \
 	make package && \
