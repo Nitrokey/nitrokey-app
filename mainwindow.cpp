@@ -1384,8 +1384,6 @@ void MainWindow::generateMenuForStick10()
     trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
 
 
-    if (ExtendedConfigActive) 
-        trayMenuSubConfigure->addAction(resetAction);
 
     if (TRUE == cryptostick->passwordSafeAvailable)
     {    
@@ -1399,6 +1397,11 @@ void MainWindow::generateMenuForStick10()
 
     trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
+
+    if (ExtendedConfigActive) {
+        trayMenuSubConfigure->addSeperator();
+        trayMenuSubConfigure->addAction(resetAction);
+    }
 }
 
 /*******************************************************************************
