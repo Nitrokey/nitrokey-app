@@ -423,11 +423,20 @@ int MainWindow::ExecStickCmd(char *Cmdline)
         p++;  // Points now to 1. parameter
     }
 
-    if (0 == strcmp (Cmdline,"unlockencrypted"))
+    if (0 == strncmp (Cmdline,"unlockencrypted",strlen ("unlockencrypted")))
     {
         uint8_t password[40];
 
-        STRCPY ((char*)password,sizeof (password),"P123456");
+        // Check password
+        if (0 == strlen (p))
+        {
+            printf ("No password found\n");
+            return (1);
+        }
+
+        // Get Password
+        password[0] = 'p';                                          // Send a clear password
+        STRCPY ((char*)&password[1],sizeof (password)-1,(char*)p);
         printf ("Unlock encrypted volume: ");
 
         ret = cryptostick->stick20EnableCryptedPartition (password);
@@ -438,6 +447,7 @@ int MainWindow::ExecStickCmd(char *Cmdline)
             return (1);
         }
     }
+
 
     if (0 == strcmp (Cmdline,"prodinfo"))
     {

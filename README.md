@@ -10,6 +10,11 @@ To compile hte Nitrokey App under Linux install the package libusb-1.0.0-dev and
 QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
 QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
+KDE
+---
+
+Note that the Nitrokey App's graphical interface is based on a QT system tray widget. If you are using a non-KDE Linux desktop environment that does not support system tray widgets, then you may be unable to access the graphical interface.
+
 Compiling on Ubuntu Linux
 -------------------------
 #### QT5
@@ -34,8 +39,29 @@ Use QT Creator for compilation or perform the following steps:
 3. make
 
 
-#### with cmake:
-cmake -DCMAKE_INSTALL_PREFIX=<prefix> .
+#### Using cmake:
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=\<prefix\> \<path to this project's root dir\>
+make
+make install
+
+Out of the source build is highly recomended. Eg:
+mkdir build
+mkdir install
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install ..
+make
+make install
+
+#### Using qmake:
+qmake
+make
+make install
+
+You can use out-of-the-source build again:
+mkdir build
+cd build
+qmake ..
+make && make install
 
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux
 Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
