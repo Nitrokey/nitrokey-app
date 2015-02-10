@@ -10,6 +10,11 @@ To compile hte Nitrokey App under Linux install the package libusb-1.0.0-dev and
 QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
 QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
+KDE
+---
+
+Note that the Nitrokey App's graphical interface is based on a QT system tray widget. If you are using a non-KDE Linux desktop environment that does not support system tray widgets, then you may be unable to access the graphical interface.
+
 Compiling on Ubuntu Linux
 -------------------------
 #### QT5

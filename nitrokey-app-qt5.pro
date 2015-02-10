@@ -7,7 +7,7 @@
 CONFIG   += qt
 QT       += core gui
 
-target.path = /usr/loca/bin
+target.path = /usr/local/bin
 desktop.path = /usr/share/applications
 desktop.files += nitrokey-app.desktop
 
