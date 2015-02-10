@@ -1409,7 +1409,7 @@ void MainWindow::generateMenuForStick10()
     trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
 
     if (ExtendedConfigActive) {
-        trayMenuSubConfigure->addSeperator();
+        trayMenuSubConfigure->addSeparator();
         trayMenuSubConfigure->addAction(resetAction);
     }
 }
