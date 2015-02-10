@@ -6,7 +6,7 @@ The implementation is compatible to the Google Authenticator application which c
 
 Using the application under Linux also requires root privileges, or configuration of device privileges in udev (due to USB communication).
 
-To compile hte Nitrokey App under Linux install the package libusb-1.0.0-dev and QT Creator. You may need to add to the .pro file:
+To compile the Nitrokey App under Linux install the package libusb-1.0.0-dev and QT Creator. You may need to add to the .pro file:
 QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
 QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
