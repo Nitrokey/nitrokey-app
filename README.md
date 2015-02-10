@@ -39,6 +39,8 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=\<prefix\> \<path to thi
 make
 make install
 
+Note: You may need to set CMAKE_PREFIX_PATH to your corresponding Qt path.
+
 Out of the source build is highly recomended. Eg:
 mkdir build
 mkdir install
