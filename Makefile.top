@@ -5,6 +5,8 @@ BUILD_DIR ?= ${ROOT_DIR}/build
 INSTALL_DIR ?= ${ROOT_DIR}/install
 RELEASE_DIR ?= ${ROOT_DIR}/release
 
+DEPS=cmake qtdeclarative5-dev libusb-1.0-0-dev
+
 .PHONY: release prepare build
 
 build: prepare
@@ -26,3 +28,6 @@ prepare:
 	mkdir -p ${BUILD_DIR} && \
 	mkdir -p ${INSTALL_DIR} && \
 	mkdir -p ${RELEASE_DIR}
+
+deps:
+	sudo apt-get install ${DEPS}
