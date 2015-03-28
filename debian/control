@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Georgios Gkitsas <george@nitrokey.com>
 Build-Depends:
-    debhelper (>= 7),
+    debhelper (>= 9),
     libqt4-dev
 Standards-Version: 3.9.4
 Homepage: http://nitrokey.com
