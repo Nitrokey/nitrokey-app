@@ -31,4 +31,4 @@ after_success:
     - lcov --directory . --capture --output-file coverage.info # capture coverage info
     - lcov --remove coverage.info 'tests/*' '/usr/*' --output-file coverage.info # filter out system and test code
     - lcov --list coverage.info # debug before upload
-    - coveralls-lcov --repo-token <your coveralls repo token> coverage.info # uploads to coveralls
+    - coveralls-lcov --repo-token wufeJBfUBFEdKHp8zAZMIJFb3zTkHPYNR coverage.info # uploads to coveralls
