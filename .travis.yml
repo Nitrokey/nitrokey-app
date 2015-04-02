@@ -24,7 +24,7 @@ before_script: #(optional: for paranoiacs only)
 compiler: g++
 script: 
     - cd ${TRAVIS_BUILD_DIR}
-    - make -f Makefile.top build
+    - make -f Makefile.top build-coverage
 
 after_success:
     - cd ${TRAVIS_BUILD_DIR}
