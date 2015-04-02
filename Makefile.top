@@ -14,7 +14,7 @@ build: prepare
 	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} .. && \
 	make
 
-build-coverage:
+build-coverage: prepare
 	cd ${BUILD_DIR} && \
 	cmake -DENABLE_COVERAGE="true" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} .. && \
 	make
