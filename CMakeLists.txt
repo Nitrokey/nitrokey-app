@@ -6,6 +6,11 @@ SET(PROJECT_VERSION "0.2")
 
 INCLUDE(FindPkgConfig)
 
+IF (${ENABLE_COVERAGE} MATCHES "true")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0") # debug, no optimisation
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage") # enabling coverage
+ENDIF()
+
 IF (NOT (${CMAKE_BUILD_TYPE} MATCHES Release))
   SET(CMAKE_BUILD_TYPE Debug) 
 ENDIF()
