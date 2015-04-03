@@ -12,7 +12,7 @@ script: make -f Makefile.top build
 
 env:
   global:
-   - secure: "GHcHPH3dkljU6ro8NsPcDe9YtC3FE4lOrBNUGqUKmN/VkGcf6bePVIx4LnHwfZI3XedUC3QOj/6f/qWK86zWtuJJA4RFBNR2kyZczCWV0nKDZ7zvWCMGomdq8ZeycBeYKEvlunJY5iVO8YWdQ6b1HJ2nt2oPaAUk4Axs8+rFjDw="
+   - secure: "iyIBw47ujazvyk2xDYd4zg9xQ3GDLjqsa3t/egU8ygSU0No5c6SxQUcceaGeCyIrd9kUWy/+TTnlYhaevOBJ8LCNt346mjK4/9lVi0k0ZMeqxJKeSHI97RZ+54ps8hccNJhWVYWBxx+sJjbYsrzY8MhsIJ+V8td9xVUSv/gsyq8="
 
 addons:
   coverity_scan:
