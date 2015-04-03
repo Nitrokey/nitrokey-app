@@ -17,7 +17,7 @@ env:
 addons:
   coverity_scan:
     project:
-      name: "Nitrokey/nitrokey-pro-firmware"
+      name: "Nitrokey/nitrokey-app"
       description: "Build submitted via Travis CI"
     notification_email: george@nitrokey.com
     build_command_prepend: ""
