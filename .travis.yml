@@ -22,4 +22,4 @@ addons:
     notification_email: george@nitrokey.com
     build_command_prepend: ""
     build_command:   "make -f Makefile.top build"
-    branch_pattern: coverity_scan
+    branch_pattern: coverity-scan
