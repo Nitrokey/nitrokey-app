@@ -4,6 +4,7 @@ build-*-Debug
 *.o
 *.lst
 .*
+*.exe
 !/.travis.yml
 !/.gitignore
 moc_*.cpp
