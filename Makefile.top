@@ -2,35 +2,93 @@ mkfile_path := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 
 ROOT_DIR := ${mkfile_path}
 BUILD_DIR ?= ${ROOT_DIR}/build
+BUILD_LINUX ?= ${BUILD_DIR}/linux
+BUILD_WIN ?= ${BUILD_DIR}/win
 INSTALL_DIR ?= ${ROOT_DIR}/install
 RELEASE_DIR ?= ${ROOT_DIR}/release
+WIN_RELEASE_DIR ?= ${RELEASE_DIR}/windows
+LINUX_RELEASE_DIR ?= ${RELEASE_DIR}/linux
 
 DEPS=cmake qtdeclarative5-dev libusb-1.0-0-dev
+EXTRA_DEPS: rpm
 
-.PHONY: release prepare build clean
+#.PHONY: release prepare build clean windows windows-installer
 
-build: prepare
-	cd ${BUILD_DIR} && \
-	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} .. && \
-	make
-
-install: build
-	cd ${BUILD_DIR} && make install
-
-release:
-	cd ${BUILD_DIR} && \
-	make package && \
-	mv *.deb *.rpm ${RELEASE_DIR} && cd ${RELEASE_DIR} && \
-	find . -name *.deb -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5' && \
-	find . -name *.rpm -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5'
+.PHONY: deps prepare linux-clean windows-clean clean
 
 prepare:
-	mkdir -p ${BUILD_DIR} && \
-	mkdir -p ${INSTALL_DIR} && \
+	mkdir -p ${BUILD_LINUX}
+	mkdir -p ${BUILD_WIN}
+	mkdir -p ${INSTALL_DIR}
 	mkdir -p ${RELEASE_DIR}
 
+$(BUILD_LINUX):
+	mkdir -p ${BUILD_LINUX}
+
+$(BUILD_WIN):
+	mkdir -p ${BUILD_WIN}
+
+$(INSTALL_DIR):
+	mkdir -p ${INSTALL_DIR}
+
+$(LINUX_RELEASE_DIR):
+	mkdir -p ${LINUX_RELEASE_DIR}
+
+$(WIN_RELEASE_DIR):
+	mkdir -p ${WIN_RELEASE_DIR}
 deps:
 	sudo apt-get install ${DEPS}
 
-clean:
-	cd ${BUILD_DIR} && make clean
+
+
+### Linux
+$(BUILD_LINUX)/nitrokey-app: | ${BUILD_LINUX}
+	cd ${BUILD_LINUX} && \
+	cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} ${ROOT_DIR} && \
+	make
+
+build: $(BUILD_LINUX)/nitrokey-app
+
+install: build | ${INSTALL_DIR}
+	cd ${BUILD_LINUX} && make install
+
+
+
+### Windows
+$(BUILD_WIN)/release/nitrokey-app.exe: | ${BUILD_WIN}
+	export PATH=${MXE_ROOT}/usr/bin/:${PATH} && \
+	cd ${BUILD_WIN} && \
+	${MXE_ROOT}/usr/i686-w64-mingw32.static/qt5/bin/qmake -spec ${MXE_ROOT}/usr/i686-w64-mingw32.static/qt5/mkspecs/win32-g++ -o Makefile ${ROOT_DIR}/nitrokey-app-qt5.pro && \
+	make
+
+windows: $(BUILD_WIN)/release/nitrokey-app.exe
+
+
+
+### Releasing
+linux-release: build $(LINUX_RELEASE_DIR)/nitrokey-app-0.2-Linux.rpm $(LINUX_RELEASE_DIR)/nitrokey-app-0.2-Linux.deb | $(LINUX_RELEASE_DIR)
+	cd ${BUILD_LINUX} && \
+	make package && \
+	mv *.deb *.rpm ${LINUX_RELEASE_DIR} && cd ${LINUX_RELEASE_DIR} && \
+	find . -name *.deb -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5' && \
+	find . -name *.rpm -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5'
+
+windows-release: windows | $(WIN_RELEASE_DIR)
+	cd ${ROOT_DIR}/nsis && \
+	cp ${BUILD_WIN}/release/nitrokey-app.exe . && \
+	makensis nitrokey-app.nsis
+
+release-all: linux-release windows-release
+
+
+
+### Cleaning
+linux-clean:
+	cd ${BUILD_LINUX} && make clean
+windows-clean:
+	cd ${BUILD_WIN} && make clean
+clean: linux-clean windows-clean
+
+purge:
+	rm -rf ${BUILD_DIR}
+	rm -rf ${RELEASE_DIR}
