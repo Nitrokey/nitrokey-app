@@ -1,6 +1,8 @@
 notifications:
 email: false
 language: c++
+os:
+- linux
 before_install:
     - sudo apt-add-repository ppa:ubuntu-sdk-team/ppa -y
     - sudo apt-get update -qq
