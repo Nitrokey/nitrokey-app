@@ -301,6 +301,8 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void on_PWS_ButtonSaveSlot_clicked();
     void on_PWS_ButtonEnable_clicked();
     void on_counterEdit_editingFinished();
+    void on_radioButton_2_toggled(bool checked);
+    void on_radioButton_toggled(bool checked);
 };
 
 #endif // MAINWINDOW_H

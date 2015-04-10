@@ -1468,7 +1468,7 @@ void MainWindow::generateMenuForStick20()
         {
             ui->tabWidget->addTab(ui->tab_3,"Password Safe");
         }
-        ui->pushButton_StaticPasswords->show ();
+        //ui->pushButton_StaticPasswords->show ();
 
 // Setup entrys for password safe
         generateMenuPasswordSafe ();
@@ -5305,3 +5305,15 @@ int MainWindow::factoryReset()
     generateAllConfigs();
 }
 
+
+void MainWindow::on_radioButton_2_toggled(bool checked)
+{
+    if(checked)
+        ui->slotComboBox->setCurrentIndex(0);
+}
+
+void MainWindow::on_radioButton_toggled(bool checked)
+{
+    if(checked)
+        ui->slotComboBox->setCurrentIndex(TOTP_SlotCount+1);
+}
