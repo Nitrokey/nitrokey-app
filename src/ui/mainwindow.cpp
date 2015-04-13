@@ -1780,7 +1780,6 @@ void MainWindow::generateAllConfigs()
 void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo)
 {
     //ui->hotpGroupBox->hide();
-    //ui->hotpGroupBox->setTitle("Parameters");
     ui->label_5->setText("TOTP length:");
     ui->label_6->hide();
     ui->counterEdit->hide();
@@ -1858,7 +1857,6 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo)
 void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo)
 {
     //ui->hotpGroupBox->show();
-    //ui->hotpGroupBox->setTitle("Parameters");
     ui->label_5->setText("HOTP length:");
     ui->label_6->show();
     ui->counterEdit->show();
@@ -1870,7 +1868,6 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo)
     ui->intervalSpinBox->hide();
     ui->checkBox->setEnabled(false);
     ui->secretEdit->setPlaceholderText("********************************");
-//        ui->counterEdit->setText("0");
 
     //slotNo=slotNo+0x10;
     ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
