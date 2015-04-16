@@ -629,8 +629,8 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
                 return -2;
             }
         }
-        return -1;
     }
+    return -1;
 }
 
 /*******************************************************************************
@@ -1622,9 +1622,9 @@ int Device::writeGeneralConfig(uint8_t data[])
             resp->getResponse(this);
 
             if (cmd->crc==resp->lastCommandCRC){
+                delete cmd;
                 switch (resp->lastCommandStatus)
                 {
-                    delete cmd;
                     case CMD_STATUS_OK:
                         return CMD_STATUS_OK;
                     case CMD_STATUS_NOT_AUTHORIZED:
@@ -1865,7 +1865,7 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
 
     if (isConnected)
     {
-        Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD,adminPassword,30);
+        Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD,adminPassword, STICK20_PASSOWRD_LEN+2);
 
         res=sendCommand(cmd);
 
@@ -2092,13 +2092,14 @@ int Device::lockDevice (void)
             Response *resp=new Response();
             resp->getResponse(this);
 
-            delete cmd;
             if (cmd->crc==resp->lastCommandCRC)
             {
+                delete cmd;
                 return (TRUE);
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
@@ -2127,13 +2128,14 @@ int Device::factoryReset(const char* password)
             Response *resp = new Response();
             resp->getResponse(this);
 
-            delete cmd;
             if (cmd->crc == resp->lastCommandCRC)
             {
+                delete cmd;
                 return resp->lastCommandStatus;
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
@@ -2173,13 +2175,14 @@ int Device::buildAesKey(uint8_t* password)
             Response *resp=new Response();
             resp->getResponse(this);
 
-            delete cmd;
             if (cmd->crc == resp->lastCommandCRC)
             {
+                delete cmd;
                 return resp->lastCommandStatus;
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
