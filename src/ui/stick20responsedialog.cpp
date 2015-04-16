@@ -219,11 +219,11 @@ void Stick20ResponseDialog::showStick20Configuration (int Status)
         OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.UserPwRetryCount))).append("\n");
 
     }
-    else
+/*    else
     {
         OutputText.append(QString("Can't read HID interface\n"));
     }
-
+*/
     ui->OutputText->setText(OutputText);
 
     DebugAppendTextGui (OutputText.toLatin1().data());
