@@ -1611,6 +1611,7 @@ int Device::getHighwaterMarkFromSdCard (unsigned char *WriteLevelMin,unsigned ch
 
         if (res==-1)
         {
+            delete cmd;
             return (ERR_SENDING);
         }
         else
@@ -1628,6 +1629,7 @@ int Device::getHighwaterMarkFromSdCard (unsigned char *WriteLevelMin,unsigned ch
                 *ReadLevelMin  = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_READ_MIN];
                 *ReadLevelMax  = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_READ_MAX];
 
+                delete cmd;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                     return (ERR_NO_ERROR);
@@ -1639,6 +1641,7 @@ int Device::getHighwaterMarkFromSdCard (unsigned char *WriteLevelMin,unsigned ch
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
