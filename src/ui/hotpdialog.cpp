@@ -29,6 +29,11 @@ HOTPDialog::HOTPDialog( QWidget *parent) :
     QDialog(parent),
     ui(new Ui::HOTPDialog)
 {
+    device = NULL;
+    slotNumber = 0;
+    lastTOTPTime = 0;
+    lastInterval = 0;
+    lastClipboardTime = 0;
     TOTP_ValidTimer = new QTimer(this);
 
     // Start timer for polling stick response

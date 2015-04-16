@@ -56,6 +56,7 @@ Stick20Setup::Stick20Setup(QWidget *parent) :
     ui(new Ui::Stick20Setup)
 {
     ui->setupUi(this);
+    cryptostick = NULL;
 }
 
 /*******************************************************************************

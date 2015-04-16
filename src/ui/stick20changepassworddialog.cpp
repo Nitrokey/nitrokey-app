@@ -64,6 +64,7 @@ DialogChangePassword::DialogChangePassword(QWidget *parent) :
 
 
     ui->lineEdit_OldPW->setFocus();
+    cryptostick = NULL;
 }
 
 /*******************************************************************************

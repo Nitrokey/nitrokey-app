@@ -40,7 +40,7 @@ HOTPSlot::HOTPSlot(uint8_t slotNumber,uint8_t slotName[20],uint8_t secret[20],ui
     memcpy(this->secret,secret,20);
     memcpy(this->counter,counter,8);
     this->config=config;
-
+    isProgrammed = FALSE;
 }
 
 

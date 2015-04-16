@@ -58,6 +58,11 @@ Response::Response()
     lastCommandStatus = 0;
     responseCRC = 0;
     DebugResponseFlag = TRUE;
+
+    HID_Stick20Status_st.CommandCounter_u8 = 0;
+    HID_Stick20Status_st.LastCommand_u8 = 0;
+    HID_Stick20Status_st.Status_u8 = 0;
+    HID_Stick20Status_st.ProgressBarValue_u8 = 0;
 }
 
 /*******************************************************************************

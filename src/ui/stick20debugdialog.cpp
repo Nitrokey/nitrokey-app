@@ -75,6 +75,7 @@ DebugDialog::DebugDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DebugDialog)
 {
+    cryptostick = NULL;
     bool ret;
     static int GUIOrginalSizeY = 0;
 

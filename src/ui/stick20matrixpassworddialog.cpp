@@ -63,6 +63,17 @@ MatrixPasswordDialog::MatrixPasswordDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MatrixPasswordDialog)
 {
+    // Initializations
+    PasswordLen = 0;
+    SetupInterfaceFlag = FALSE;
+    SetupPasswordLen = 0;
+    HideMatrix = 0;
+    InputPasswordLength = 0;
+    InputPasswordLengthPointer = 0;
+    SetupMode = FALSE;
+    HighLightVerticalBar = 0;
+    SetupModeActiveRow = 0;
+
     ui->setupUi(this);
     QPainter painter(ui->frame);
     QRect Rect;

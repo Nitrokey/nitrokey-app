@@ -124,6 +124,7 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
     activStick20       = false;
     waitForAckStick20  = false;
     lastBlockNrStick20 = 0;
+    passwordRetryCount = 0;
 
     this->userPasswordRetryCount = 99;
 }

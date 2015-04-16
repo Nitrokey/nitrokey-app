@@ -31,6 +31,11 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    SdCardHighWatermark_Read_Min = 0;
+    SdCardHighWatermark_Read_Max = 0;
+    SdCardHighWatermark_Write_Min = 0;
+    SdCardHighWatermark_Write_Max = 0;
+
     HV_Setup_st.SlotNr_u8                   =   0;
     HV_Setup_st.StartBlockPercent_u8        =  70;
     HV_Setup_st.EndBlockPercent_u8          =  90;

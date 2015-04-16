@@ -95,6 +95,7 @@ Stick20Dialog::Stick20Dialog(QWidget *parent) :
     ui(new Ui::Stick20Dialog)
 {
     int i;
+    cryptostick = NULL;
     ui->setupUi(this);
 
     // At start always on

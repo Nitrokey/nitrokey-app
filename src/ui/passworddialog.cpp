@@ -74,6 +74,8 @@ PasswordDialog::PasswordDialog(bool ShowMatrix,QWidget *parent) :
     }
 
     ui->lineEdit->setFocus();
+
+    cryptostick = NULL;
 }
 
 /*******************************************************************************
