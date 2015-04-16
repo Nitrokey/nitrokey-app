@@ -3395,9 +3395,11 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
             case STICK20_CMD_GET_DEVICE_STATUS              :
                 UpdateDynamicMenuEntrys ();
                 break;
+            /* Dead code 
             case STICK20_CMD_SEND_STARTUP                   :
                 UpdateDynamicMenuEntrys ();
                 break;
+            */
             case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
                HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_WRITE_ACTIVE;
                UpdateDynamicMenuEntrys ();
