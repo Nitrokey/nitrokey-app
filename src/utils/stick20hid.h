@@ -20,7 +20,7 @@
 #ifndef HID_STICK_20_H
 #define HID_STICK_20_H
 
-#include <stdint.h>
+#include <inttypes.h>
 
 #include <QtGlobal>
 #define FALSE               0
