@@ -435,7 +435,7 @@ int MainWindow::ExecStickCmd(char *Cmdline)
         }
 
         // Get Password
-        password[0] = 'p';                                          // Send a clear password
+        password[0] = 'p'; // Send a clear password
         STRCPY ((char*)&password[1],sizeof (password)-1,(char*)p);
         printf ("Unlock encrypted volume: ");
 
