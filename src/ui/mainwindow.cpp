@@ -4852,8 +4852,10 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
     uint16_t lastInterval = 30;
 
+/*
     if (lastInterval<1)
         lastInterval=1;
+*/
 
     if(cryptostick->otpPasswordConfig[0] == 1)
     {
