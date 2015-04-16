@@ -1228,7 +1228,6 @@ int Device::setPasswordSafeSlotData_1 (int Slot,uint8_t *Name,uint8_t *Password)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1275,7 +1274,6 @@ int Device::setPasswordSafeSlotData_2 (int Slot,uint8_t *LoginName)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1330,7 +1328,6 @@ int Device::passwordSafeEraseSlot (int Slot)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1395,7 +1392,6 @@ int Device::passwordSafeEnable (char *password)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1451,7 +1447,6 @@ int Device::passwordSafeInitKey (void)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1504,9 +1499,9 @@ int Device::passwordSafeSendSlotDataViaHID (int Slot, int Kind)
             } else {
                 free(cmd);
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1580,8 +1575,6 @@ int Device::getHighwaterMarkFromSdCard (unsigned char *WriteLevelMin,unsigned ch
             }
         }
     }
-
-    free(cmd);
     return (ERR_NOT_CONNECTED);
 }
 
@@ -1646,7 +1639,6 @@ int Device::writeGeneralConfig(uint8_t data[])
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 /*******************************************************************************
@@ -1710,7 +1702,6 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
         }
 
    }
-   free(cmd);
    return -2;
 }
 
@@ -1767,9 +1758,8 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[])
             }
         }
    }
-   free(cmd);
    return -2;
-
+}
 /*******************************************************************************
 
   authorize
@@ -1812,7 +1802,6 @@ int Device::authorize(Command *authorizedCmd)
            return -2;
        }
    }
-   free(cmd);
    return -1;
 }
 
@@ -1860,10 +1849,8 @@ int Device::userAuthorize(Command *authorizedCmd)
            return -2;
        }
    }
-   free(cmd);
    return -1;
 }
-
 
 
 /*******************************************************************************
@@ -1917,7 +1904,6 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1979,7 +1965,6 @@ int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
 */
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -2032,7 +2017,6 @@ int Device::isAesSupported(uint8_t* password)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -2094,7 +2078,6 @@ int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
 */
         }
    }
-   free(cmd);
    return ERR_NOT_CONNECTED;
 }
 
@@ -2132,7 +2115,6 @@ int Device::lockDevice (void)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -2168,7 +2150,6 @@ int Device::factoryReset(const char* password)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -2215,7 +2196,6 @@ int Device::buildAesKey(uint8_t* password)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -2440,7 +2420,7 @@ bool Device::stick20CreateNewKeys (uint8_t *password)
 *******************************************************************************/
 
 bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeFlag)
-{
+    {
     uint8_t  n;
     int      res;
     Command *cmd;
@@ -2558,7 +2538,6 @@ bool Device::stick20SendPasswordMatrixSetup (uint8_t *Setupdata)
     n = strlen ((const char*)Setupdata);
     if (STICK20_PASSOWRD_LEN + 1 <= n)
     {
-        free(cmd);
         return (false);
     }
 
@@ -2613,7 +2592,6 @@ int Device::stick20SendPassword (uint8_t *Pindata)
     n = strlen ((const char*)Pindata);
     if (STICK20_PASSOWRD_LEN + 2 <= n)      // Kind byte + End byte 0
     {
-        free(cmd);
         return (false);
     }
 
@@ -2644,7 +2622,6 @@ int Device::stick20SendNewPassword (uint8_t *NewPindata)
     n = strlen ((const char*)NewPindata);
     if (STICK20_PASSOWRD_LEN + 2 <= n)      // Kind byte + End byte 0
     {
-        free(cmd);
         return (false);
     }
 
@@ -2675,7 +2652,6 @@ int Device::stick20SendSetReadonlyToUncryptedVolume (uint8_t *Pindata)
     n = strlen ((const char*)Pindata);
     if (STICK20_PASSOWRD_LEN + 2 <= n)      // Kind byte + End byte 0
     {
-        free(cmd);
         return (false);
     }
 
@@ -2706,7 +2682,6 @@ int Device::stick20SendSetReadwriteToUncryptedVolume (uint8_t *Pindata)
     n = strlen ((const char*)Pindata);
     if (STICK20_PASSOWRD_LEN + 2 <= n)      // Kind byte + End byte 0
     {
-        free(cmd);
         return (false);
     }
 
@@ -2740,7 +2715,6 @@ int Device::stick20SendClearNewSdCardFound (uint8_t *Pindata)
     n = strlen ((const char*)Pindata);
     if (STICK20_PASSOWRD_LEN + 2 <= n)      // Kind byte + End byte 0
     {
-        free(cmd);
         return (false);
     }
 
@@ -2831,7 +2805,6 @@ int Device::stick20LockFirmware (uint8_t *password)
     n = strlen ((const char*)password);
     if (CS20_MAX_PASSWORD_LEN <= n)
     {
-        free(cmd);
         return (false);
     }
 
