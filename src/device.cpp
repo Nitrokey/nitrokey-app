@@ -1562,12 +1562,10 @@ int Device::getHighwaterMarkFromSdCard (unsigned char *WriteLevelMin,unsigned ch
                 delete cmd;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
-                    delete cmd;
                     return (ERR_NO_ERROR);
                 }
                 else
                 {
-                    delete cmd;
                     return (ERR_STATUS_NOT_OK);
                 }
             }
