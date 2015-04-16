@@ -3500,7 +3500,7 @@ void MainWindow::on_writeButton_clicked()
                 TOTPSlot *totp=new TOTPSlot();
                 generateTOTPConfig(totp);
                 res = cryptostick->writeToTOTPSlot(totp);
-                free(totp);
+                delete totp;
             }
 
             switch(res)

@@ -781,7 +781,6 @@ void Stick20ResponseTask::checkStick20Status()
 
 void Stick20ResponseTask::done (int Status)
 {
-    Status = 0;             // Status not used
     EndFlag = TRUE;
 }
 
