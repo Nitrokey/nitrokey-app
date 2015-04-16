@@ -324,7 +324,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         SNPRINTF(text,sizeof (text),"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
         DebugAppendTextGui (text);
 
-        SNPRINTF(text,sizeof (text),"read  u64 0x%08x%08x\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
+        SNPRINTF(text,sizeof (text),"read  u64 0x%08lx%08lx\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
         DebugAppendTextGui (text);
 
         DebugAppendTextGui ("\n");
@@ -341,16 +341,16 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
 
         DebugAppendTextGui ("Var size test\n");
 
-        SNPRINTF(text,sizeof (text),"char  size is %d byte\n",sizeof (unsigned char));
+        SNPRINTF(text,sizeof (text),"char  size is %d byte\n", (int)sizeof (unsigned char));
         DebugAppendTextGui (text);
 
-        SNPRINTF(text,sizeof (text),"short size is %d byte\n",sizeof (unsigned short));
+        SNPRINTF(text,sizeof (text),"short size is %d byte\n", (int)sizeof (unsigned short));
         DebugAppendTextGui (text);
 
-        SNPRINTF(text,sizeof (text),"int   size is %d byte\n",sizeof (unsigned int));
+        SNPRINTF(text,sizeof (text),"int   size is %d byte\n", (int)sizeof (unsigned int));
         DebugAppendTextGui (text);
 
-        SNPRINTF(text,sizeof (text),"long  size is %d byte\n",sizeof (unsigned long));
+        SNPRINTF(text,sizeof (text),"long  size is %d byte\n", (int)sizeof (unsigned long));
         DebugAppendTextGui (text);
         DebugAppendTextGui ("\n");
     }
@@ -572,7 +572,8 @@ void MainWindow::AnalyseProductionInfos()
 
     printf ("\nGet production infos\n");
 
-    printf ("Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
+    printf ("Firmware     %d.%d\n", (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0],
+                                    (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
     printf ("CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
     printf ("Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
     printf ("SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
@@ -641,7 +642,8 @@ void MainWindow::AnalyseProductionInfos()
 
     DebugAppendTextGui ((char *)"Production Infos\n");
 
-    SNPRINTF(text,sizeof (text),"Firmware     %d.%d\n",Stick20ProductionInfos_st.FirmwareVersion_au8[0],Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
+    SNPRINTF(text,sizeof (text),"Firmware     %d.%d\n", (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0], 
+                                                        (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
     DebugAppendTextGui (text);
     SNPRINTF(text,sizeof (text),"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
     DebugAppendTextGui (text);
