@@ -1637,7 +1637,6 @@ int Device::writeGeneralConfig(uint8_t data[])
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
-        delete cmd;
     }
     return ERR_NOT_CONNECTED;
 }
