@@ -3494,7 +3494,7 @@ void MainWindow::on_writeButton_clicked()
                 generateHOTPConfig(hotp);
                 //HOTPSlot *hotp=new HOTPSlot(0x10,(uint8_t *)"Herp",(uint8_t *)"123456",(uint8_t *)"0",0);
                 res = cryptostick->writeToHOTPSlot(hotp);
-
+                delete hotp;
             }
             else{//TOTP slot
                 TOTPSlot *totp=new TOTPSlot();
