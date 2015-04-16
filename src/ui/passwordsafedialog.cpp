@@ -44,6 +44,7 @@ PasswordSafeDialog::PasswordSafeDialog(int Slot,QWidget *parent) :
 {
     QString MsgText;
 
+    cryptostick = NULL;
     ui->setupUi(this);
 
 
