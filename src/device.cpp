@@ -1626,6 +1626,7 @@ int Device::writeGeneralConfig(uint8_t data[])
             resp->getResponse(this);
 
             if (cmd->crc==resp->lastCommandCRC){
+                delete cmd;
                 switch (resp->lastCommandStatus)
                 {
                     case CMD_STATUS_OK:
@@ -1634,7 +1635,6 @@ int Device::writeGeneralConfig(uint8_t data[])
                         return CMD_STATUS_NOT_AUTHORIZED;
                 }
                 if (resp->lastCommandStatus==CMD_STATUS_OK) {
-                    delete cmd;
                     return 0;
                 }
             } else {
