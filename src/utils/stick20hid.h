@@ -135,12 +135,12 @@ typedef struct {
   unsigned char   FirmwareLocked_u8;                    //                                                    1 byte
   unsigned char   NewSDCardFound_u8;                    // Bit 0 new card found, bit 1-7 change counter       1 byte
   unsigned char   SDFillWithRandomChars_u8;             // Bit 0 new card found, bit 1-7 change counter       1 byte
-  quint32   ActiveSD_CardID_u32;                  // Not used                                           4 byte
+  uint32_t   ActiveSD_CardID_u32;                  // Not used                                           4 byte
   unsigned char   VolumeActiceFlag_u8;                  // Bit 0 new card found, bit 1-7 change counter       1 byte
   unsigned char   NewSmartCardFound_u8;                 // Bit 0 new card found, bit 1-7 change counter       1 byte  // 20 Byte not packed
   unsigned char   UserPwRetryCount;                     // User PIN retry count                          1 byte
   unsigned char   AdminPwRetryCount;                    // Admin PIN retry count                         1 byte
-  quint32   ActiveSmartCardID_u32;                //                                                    4 byte
+  uint32_t   ActiveSmartCardID_u32;                //                                                    4 byte
   unsigned char   StickKeysNotInitiated;                // No AES keys computed (1 = AES are builded)         1 byte  // 25 Byte not packed
 } typeStick20Configuration_st;                                                          // Sum   25 byte
 #pragma pack(pop)
@@ -152,9 +152,9 @@ extern volatile typeStick20Configuration_st HID_Stick20Configuration_st;
 /* Look for 4 byte alignment of 32 bit values */
 typedef struct {
   unsigned char  FirmwareVersion_au8[4];               //                                                    4 byte  //  4
-  quint32  CPU_CardID_u32;                       //                                                    4 byte  //  8
-  quint32  SmartCardID_u32;                      //                                                    4 byte  // 12
-  quint32  SD_CardID_u32;                        //                                                    4 byte  // 16
+  uint32_t  CPU_CardID_u32;                       //                                                    4 byte  //  8
+  uint32_t  SmartCardID_u32;                      //                                                    4 byte  // 12
+  uint32_t  SD_CardID_u32;                        //                                                    4 byte  // 16
   unsigned char  SC_UserPwRetryCount;                  // User PIN retry count                          1 byte  // 17
   unsigned char  SC_AdminPwRetryCount;                 // Admin PIN retry count                         1 byte  // 18
   unsigned char  SD_Card_ManufacturingYear_u8;         //                                                    1 byte  // 19
