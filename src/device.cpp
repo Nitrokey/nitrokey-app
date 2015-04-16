@@ -615,6 +615,7 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
                 {
                     delete cmd;
                     return resp->lastCommandStatus;
+                    /* Dead code
                     switch (resp->lastCommandStatus)
                     {
                         case CMD_STATUS_OK:
@@ -624,6 +625,7 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
                         case CMD_STATUS_NOT_AUTHORIZED:
                             return -3;
                     }
+                    */
                 }
                 delete cmd;
                 return -2;
@@ -1316,6 +1318,7 @@ int Device::passwordSafeEraseSlot (int Slot)
             {
                 delete cmd;
                 return resp->lastCommandStatus;
+                /* dead code
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                     return (ERR_NO_ERROR);
@@ -1324,6 +1327,7 @@ int Device::passwordSafeEraseSlot (int Slot)
                 {
                     return (ERR_STATUS_NOT_OK);
                 }
+                */
             } else {
                 delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
