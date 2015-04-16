@@ -5286,5 +5286,6 @@ int MainWindow::factoryReset()
 
     // Fetch configs from device
     generateAllConfigs();
+    return 0;
 }
 
