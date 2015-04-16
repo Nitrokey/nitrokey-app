@@ -1147,15 +1147,14 @@ int Device::getPasswordSafeSlotLoginName (int Slot)
 
     data[0] = Slot;
 
-    if (isConnected){
+    if (isConnected) {
         Command *cmd=new Command(CMD_GET_PW_SAFE_SLOT_LOGINNAME,data,1);
         res=sendCommand(cmd);
 
         if (res==-1) {
             free(cmd);
             return ERR_SENDING;
-        }
-        else{  //sending the command was successful
+        } else {  //sending the command was successful
             Sleep::msleep(200);
             Response *resp=new Response();
             resp->getResponse(this);
@@ -1177,6 +1176,7 @@ int Device::getPasswordSafeSlotLoginName (int Slot)
             } else {
                 free(cmd);
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
     return ERR_NOT_CONNECTED;
