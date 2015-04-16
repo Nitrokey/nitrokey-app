@@ -77,5 +77,6 @@ TOTPSlot::TOTPSlot(uint8_t slotNumber, uint8_t slotName[], uint8_t secret[], uin
     memcpy(this->secret,secret,20);
     this->config=config;
     isProgrammed = false;
+    interval = 30;
 }
 
