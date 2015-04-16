@@ -1622,7 +1622,6 @@ int Device::writeGeneralConfig(uint8_t data[])
             resp->getResponse(this);
 
             if (cmd->crc==resp->lastCommandCRC){
-                delete cmd;
                 switch (resp->lastCommandStatus)
                 {
                     case CMD_STATUS_OK:
