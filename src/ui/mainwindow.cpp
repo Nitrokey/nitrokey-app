@@ -389,7 +389,7 @@ int MainWindow::ExecStickCmd(char *Cmdline)
 
     printf ("Connect to crypto stick\n");
 
-// Wait for connect
+    // Wait for connect
     for (i=0;i<MAX_CONNECT_WAIT_TIME_IN_SEC;i++)
     {
         if (cryptostick->isConnected == true)
@@ -408,10 +408,10 @@ int MainWindow::ExecStickCmd(char *Cmdline)
         printf ("ERROR: Can't get connection to crypto stick\n");
         return (1);
     }
-// Check device
+    // Check device
     printf ("Get connection to crypto stick\n");
 
-// Get command
+    // Get command
     p = strchr (Cmdline,'=');
     if (NULL == p)
     {
