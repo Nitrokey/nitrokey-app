@@ -3360,31 +3360,31 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
     {
         switch (stick20Command)
         {
-            case STICK20_CMD_ENABLE_CRYPTED_PARI            :
+            case STICK20_CMD_ENABLE_CRYPTED_PARI:
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_CRYPTED_VOLUME_BIT_PLACE);
                 UpdateDynamicMenuEntrys ();
                 break;
-            case STICK20_CMD_DISABLE_CRYPTED_PARI           :
+            case STICK20_CMD_DISABLE_CRYPTED_PARI:
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
                 UpdateDynamicMenuEntrys ();
                 break;
-            case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
+            case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_HIDDEN_VOLUME_BIT_PLACE);
                 UpdateDynamicMenuEntrys ();
                 break;
-            case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI    :
+            case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
                 UpdateDynamicMenuEntrys ();
                 break;
-            case STICK20_CMD_GET_DEVICE_STATUS              :
+            case STICK20_CMD_GET_DEVICE_STATUS:
                 UpdateDynamicMenuEntrys ();
                 break;
             /* Dead code 
-            case STICK20_CMD_SEND_STARTUP                   :
+            case STICK20_CMD_SEND_STARTUP:
                 UpdateDynamicMenuEntrys ();
                 break;
             */
-            case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
+            case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
                HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_WRITE_ACTIVE;
                UpdateDynamicMenuEntrys ();
                break;
@@ -3392,33 +3392,29 @@ int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t *password)
                HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_ONLY_ACTIVE;
                UpdateDynamicMenuEntrys ();
                break;
-            case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND        :
+            case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND:
                HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
                UpdateDynamicMenuEntrys ();
                break;
-            case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
+            case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
                 HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
                 UpdateDynamicMenuEntrys ();
                 break;
-            case STICK20_CMD_GENERATE_NEW_KEYS              : // = firmware reset
+            case STICK20_CMD_GENERATE_NEW_KEYS: // = firmware reset
                 HID_Stick20Configuration_st.StickKeysNotInitiated    = FALSE;
                 HID_Stick20Configuration_st.SDFillWithRandomChars_u8 = 0x00;
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8      = 0;
                 UpdateDynamicMenuEntrys ();
                 break;
-            case STICK20_CMD_PRODUCTION_TEST       :
+            case STICK20_CMD_PRODUCTION_TEST:
                 break;
 
             default :
                 break;
         }
     }
-
-
     return (true);
 }
-
-
 
 
 /*******************************************************************************
@@ -3437,16 +3433,9 @@ void MainWindow::getCode(uint8_t slotNo)
     memset(result,0,18);
     uint32_t code;
 
-
-     cryptostick->getCode(slotNo,currentTime/30,currentTime,30,result);
-     //cryptostick->getCode(slotNo,1,result);
-     code=result[0]+(result[1]<<8)+(result[2]<<16)+(result[3]<<24);
-     code=code%100000000;
-
-//     qDebug() << "Current time:" << currentTime;
-//     qDebug() << "Counter:" << currentTime/30;
-//     qDebug() << "TOTP:" << code;
-
+    cryptostick->getCode(slotNo,currentTime/30,currentTime,30,result);
+    code=result[0]+(result[1]<<8)+(result[2]<<16)+(result[3]<<24);
+    code=code%100000000;
 }
 
 /*******************************************************************************
@@ -3573,7 +3562,6 @@ void MainWindow::on_writeButton_clicked()
 void MainWindow::on_slotComboBox_currentIndexChanged(int index)
 {
     index = index;      // avoid warning
-
     displayCurrentSlotConfig();
 }
 
@@ -3613,7 +3601,6 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
     if (checked){
 
         secret = ui->secretEdit->text().toLatin1();
-// qDebug() << "encoded secret:" << QString(secret);
         if(secret.size() != 0){
         memset(encoded,'A',32);
         memcpy(encoded,secret.data(),secret.length());
@@ -3621,18 +3608,11 @@ void MainWindow::on_hexRadioButton_toggled(bool checked)
         base32_clean(encoded,32,data);
         base32_decode(data,decoded,20);
 
-        //ui->secretEdit->setInputMask("HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH HH;");
-        //ui->secretEdit->setInputMask("hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh hh;");
-        //ui->secretEdit->setInputMask("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH;0");
-        //ui->secretEdit->setMaxLength(59);
-
         secret = QByteArray((char *)decoded,20).toHex();
 
-        //ui->secretEdit->setMaxLength(20);
         ui->secretEdit->setText(QString(secret));
         secretInClipboard = ui->secretEdit->text();
         copyToClipboard(secretInClipboard);
-//qDebug() << QString(secret);
         }
     }
 }
@@ -3660,13 +3640,9 @@ void MainWindow::on_base32RadioButton_toggled(bool checked)
 
         base32_encode(decoded,secret.length(),encoded,128);
 
-        //ui->secretEdit->setInputMask("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN;");
-        //ui->secretEdit->setInputMask("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn;");
-        //ui->secretEdit->setMaxLength(32);
         ui->secretEdit->setText(QString((char *)encoded));
         secretInClipboard = ui->secretEdit->text();
         copyToClipboard(secretInClipboard);
-//qDebug() << QString((char *)encoded);
         }
     }
 }
@@ -3748,8 +3724,6 @@ void MainWindow::on_tokenIDCheckBox_toggled(bool checked)
         ui->ompEdit->setEnabled(false);
         ui->ttEdit->setEnabled(false);
         ui->muiEdit->setEnabled(false);
-
-
     }
 }
 
@@ -3765,13 +3739,11 @@ void MainWindow::on_tokenIDCheckBox_toggled(bool checked)
 
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked)
 {
-
     if (checked){
         ui->deleteUserPasswordCheckBox->setEnabled(true);
         ui->deleteUserPasswordCheckBox->setChecked(false);
         cryptostick->otpPasswordConfig[0] = 1;
         cryptostick->otpPasswordConfig[1] = 0;
-
     }
     else{
         ui->deleteUserPasswordCheckBox->setEnabled(false);
@@ -3779,7 +3751,6 @@ void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked)
         cryptostick->otpPasswordConfig[0] = 0;
         cryptostick->otpPasswordConfig[1] = 0;
     }
-
 }
 
 
@@ -3898,10 +3869,17 @@ void MainWindow::getHOTPDialog(int slot)
     if(ret == 0)
     {
         if(cryptostick->HOTPSlots[slot]->slotName[0] == '\0')
-            trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)),"One-time password has been copied to clipboard.",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
+            trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)),
+                                   "One-time password has been copied to clipboard.",
+                                   QSystemTrayIcon::Information,
+                                   TRAY_MSG_TIMEOUT);
         else
-            trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[slot]->slotName).append("]"),
-                                    "One-time password has been copied to clipboard.",QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
+            trayIcon->showMessage (QString("HOTP slot ").append(QString::number(slot+1,10))
+                                                        .append(" [")
+                                                        .append((char *)cryptostick->HOTPSlots[slot]->slotName)
+                                                        .append("]"),
+                                    "One-time password has been copied to clipboard.",
+                                    QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
     }
 }
 
@@ -4151,9 +4129,6 @@ void MainWindow::on_randomSecretButton_clicked()
     uint8_t secret[32];
     char temp;
 
-
-   // for (i=0;i<20;i++)
-   //     secret[i]=qrand()&0xFF;
     while(i<32){
         temp = qrand()&0xFF;
         if((temp >= 'A' && temp <= 'Z') || (temp >= '2' && temp <= '7')){
@@ -4164,13 +4139,11 @@ void MainWindow::on_randomSecretButton_clicked()
 
     QByteArray secretArray((char *) secret,32);
     ui->base32RadioButton->setChecked(true);
-    //ui->secretEdit->setText(secretArray.toHex());
     ui->secretEdit->setText(secretArray);
     ui->checkBox->setEnabled(true);
     ui->checkBox->setChecked(true);
     secretInClipboard = ui->secretEdit->text();
     copyToClipboard(secretInClipboard);
-
 }
 
 /*******************************************************************************
@@ -4206,7 +4179,6 @@ void MainWindow::copyToClipboard(QString text)
 void MainWindow::checkClipboard_Valid()
 {
     uint64_t currentTime;
-    //uint64_t checkTime;
 
     currentTime = QDateTime::currentDateTime().toTime_t();
     if((currentTime >= (lastClipboardTime + (uint64_t)60)) && (clipboard->text() == otpInClipboard)){
@@ -4271,12 +4243,12 @@ void MainWindow::SetupPasswordSafeConfig (void)
     ui->PWS_ComboBoxSelectSlot->clear();
     PWS_Access = FALSE;
 
-// Get active password slots
+    // Get active password slots
     ret = cryptostick->getPasswordSafeSlotStatus();
     if (ERR_NO_ERROR == ret)
     {
         PWS_Access = TRUE;
-    // Setup combobox
+        // Setup combobox
         for (i=0;i<PWS_SLOT_COUNT;i++)
         {
             if (TRUE == cryptostick->passwordSafeStatus[i])
@@ -4285,10 +4257,12 @@ void MainWindow::SetupPasswordSafeConfig (void)
                 {
                     cryptostick->getPasswordSafeSlotName(i);
 
-                    STRCPY ((char*)cryptostick->passwordSafeSlotNames[i],sizeof (cryptostick->passwordSafeSlotNames[i]),(char*)cryptostick->passwordSafeSlotName);
+                    STRCPY ((char*)cryptostick->passwordSafeSlotNames[i], sizeof (cryptostick->passwordSafeSlotNames[i]),(char*)cryptostick->passwordSafeSlotName);
                 }
-//                ui->PWS_ComboBoxSelectSlot->addItem((char*)cryptostick->passwordSafeSlotNames[i]);
-                ui->PWS_ComboBoxSelectSlot->addItem(QString("Slot ").append(QString::number(i+1,10)).append(QString(" [").append((char*)cryptostick->passwordSafeSlotNames[i]).append(QString("]"))));
+                ui->PWS_ComboBoxSelectSlot->addItem(QString("Slot ").append(QString::number(i+1,10))
+                                                                    .append(QString(" [")
+                                                                    .append((char*)cryptostick->passwordSafeSlotNames[i])
+                                                                    .append(QString("]"))));
             }
             else
             {
