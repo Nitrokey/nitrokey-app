@@ -36,7 +36,7 @@
 Command::Command(uint8_t commandType, uint8_t *data, uint8_t len)
 {
     this->commandType = commandType;
-
+    this->crc = 0;
     memset(this->data,0,COMMAND_SIZE);
 
     if (COMMAND_SIZE < len)
