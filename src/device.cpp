@@ -378,8 +378,8 @@ int Device::getSlotName(uint8_t slotNo){
 
 
      if (isConnected){
-     Command *cmd=new Command(CMD_READ_SLOT_NAME,data,1);
-     res=sendCommand(cmd);
+         Command *cmd=new Command(CMD_READ_SLOT_NAME,data,1);
+         res=sendCommand(cmd);
 
      if (res==-1) {
          free(cmd);
@@ -389,9 +389,6 @@ int Device::getSlotName(uint8_t slotNo){
          Sleep::msleep(100);
          Response *resp=new Response();
          resp->getResponse(this);
-
-//         qDebug() << cmd->crc;
-//         qDebug() << resp->lastCommandCRC;
 
          if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
              if (resp->lastCommandStatus==CMD_STATUS_OK)
@@ -426,7 +423,6 @@ int Device::getSlotName(uint8_t slotNo){
      }
 
     }
-    free(cmd);
     return -1;
 }
 
@@ -466,9 +462,7 @@ int Device::eraseSlot(uint8_t slotNo)
         free(cmd);
         return 0;
     }
-    free(cmd);
     return -1;
-
 }
 
 /*******************************************************************************
@@ -484,23 +478,24 @@ int Device::eraseSlot(uint8_t slotNo)
 
 *******************************************************************************/
 
-int Device::setTime(int reset){
-     int res;
-     uint8_t data[30];
-     uint64_t time = QDateTime::currentDateTime().toTime_t();
+int Device::setTime(int reset)
+{
+    int res;
+    uint8_t data[30];
+    uint64_t time = QDateTime::currentDateTime().toTime_t();
 
-     memset(data,0,30);
-     data[0] = reset;
-     memcpy(data+1,&time,8);
+    memset(data,0,30);
+    data[0] = reset;
+    memcpy(data+1,&time,8);
 
-     if (isConnected){
-     Command *cmd=new Command(CMD_SET_TIME,data,9);
-     res=sendCommand(cmd);
+    if (isConnected){
+        Command *cmd=new Command(CMD_SET_TIME,data,9);
+        res=sendCommand(cmd);
 
-     if (res==-1) {
+        if (res==-1) {
          free(cmd);
          return -1;
-     }else{  //sending the command was successful
+        }else{  //sending the command was successful
          Sleep::msleep(100);
          Response *resp=new Response();
          resp->getResponse(this);
@@ -518,10 +513,8 @@ int Device::setTime(int reset){
          }
          free(cmd);
          return 0;
-     }
-
+        }
     }
-    free(cmd);
     return -1;
 }
 
@@ -559,7 +552,6 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
                 free(cmd);
                 return -1;
             }else{  //sending the command was successful
-                //return cmd->crc;
                 Sleep::msleep(100);
                 Response *resp=new Response();
                 resp->getResponse(this);
@@ -576,7 +568,6 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
             return -2;
         }
     }
-    free(cmd);
     return -1;
 }
 
@@ -638,7 +629,6 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
                 return -2;
             }
         }
-        free(cmd);
         return -1;
     }
 }
@@ -689,7 +679,6 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
             return 0;
         }
    }
-   free(cmd);
    return -1;
 }
 
@@ -782,7 +771,6 @@ int Device::readSlot(uint8_t slotNo)
         }
 
     }
-    free(cmd);
     return -1;
 }
 /*******************************************************************************
@@ -879,7 +867,6 @@ int Device::getStatus()
         free(cmd);
         return 0;
     }
-    free(cmd);
     return -2;
 }
 
@@ -921,7 +908,6 @@ int Device::getPasswordRetryCount()
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -963,7 +949,6 @@ int Device::getUserPasswordRetryCount()
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1026,7 +1011,6 @@ int Device::getPasswordSafeSlotStatus ()
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1085,7 +1069,6 @@ int Device::getPasswordSafeSlotName (int Slot)
             }
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1141,7 +1124,6 @@ int Device::getPasswordSafeSlotPassword (int Slot)
                 return ERR_WRONG_RESPONSE_CRC;
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
@@ -1197,7 +1179,6 @@ int Device::getPasswordSafeSlotLoginName (int Slot)
                 return ERR_WRONG_RESPONSE_CRC;
         }
     }
-    free(cmd);
     return ERR_NOT_CONNECTED;
 }
 
