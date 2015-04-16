@@ -49,7 +49,7 @@ private slots:
 
     void on_ButtonOk_clicked();
 
-    void on_spinBoxDelay_valueChanged(int arg1);
+    void on_spinBoxDelay_valueChanged();
 
     void on_radioCutUPaste_clicked();
 

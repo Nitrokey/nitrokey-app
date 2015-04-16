@@ -435,7 +435,7 @@ int MainWindow::ExecStickCmd(char *Cmdline)
         }
 
         // Get Password
-        password[0] = 'p';                                          // Send a clear password
+        password[0] = 'p'; // Send a clear password
         STRCPY ((char*)&password[1],sizeof (password)-1,(char*)p);
         printf ("Unlock encrypted volume: ");
 
@@ -686,15 +686,14 @@ void MainWindow::AnalyseProductionInfos()
 
 void MainWindow::checkConnection()
 {
-    //static int Stick20CheckFlashMode = TRUE;
     static int DeviceOffline         = TRUE;
-    int ret;
+    int ret = 0;
 
     currentTime = QDateTime::currentDateTime().toTime_t();
 
     int result = cryptostick->checkConnection();
 
-// Set new slot counts
+    // Set new slot counts
     HOTP_SlotCount = cryptostick->HOTP_SlotCount;
     TOTP_SlotCount = cryptostick->TOTP_SlotCount;
 
@@ -750,23 +749,6 @@ void MainWindow::checkConnection()
             trayIcon->showMessage("Device disconnected.", "", QSystemTrayIcon::Information, TRAY_MSG_TIMEOUT);
         }
         cryptostick->connect();
-
-
-
-/* Don't work :-(
-        // Check for stick 20 flash mode, only one time
-        if (TRUE == Stick20CheckFlashMode)
-        {
-            ret = cryptostick->checkUsbDeviceActive (VID_STICK_20_UPDATE_MODE,PID_STICK_20_UPDATE_MODE);
- //           Stick20CheckFlashMode = FALSE;
-            if (TRUE == ret)
-            {
-                QMessageBox msgBox;
-                msgBox.setText("Flash Nitrokey application");
-                msgBox.exec();
-            }
-        }
-*/
     }
     else if (result == 1){ //recreate the settings and menus
         if (false == cryptostick->activStick20)
@@ -3516,12 +3498,13 @@ void MainWindow::on_writeButton_clicked()
                 generateHOTPConfig(hotp);
                 //HOTPSlot *hotp=new HOTPSlot(0x10,(uint8_t *)"Herp",(uint8_t *)"123456",(uint8_t *)"0",0);
                 res = cryptostick->writeToHOTPSlot(hotp);
-
+                delete hotp;
             }
             else{//TOTP slot
                 TOTPSlot *totp=new TOTPSlot();
                 generateTOTPConfig(totp);
                 res = cryptostick->writeToTOTPSlot(totp);
+                delete totp;
             }
 
             switch(res)
@@ -4873,8 +4856,10 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
     uint16_t lastInterval = 30;
 
+/*
     if (lastInterval<1)
         lastInterval=1;
+*/
 
     if(cryptostick->otpPasswordConfig[0] == 1)
     {
@@ -5307,5 +5292,6 @@ int MainWindow::factoryReset()
 
     // Fetch configs from device
     generateAllConfigs();
+    return 0;
 }
 

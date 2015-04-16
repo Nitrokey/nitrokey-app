@@ -52,6 +52,11 @@
 
 Response::Response()
 {
+    deviceStatus = 0;
+    lastCommandType = 0;
+    lastCommandCRC = 0;
+    lastCommandStatus = 0;
+    responseCRC = 0;
     DebugResponseFlag = TRUE;
 }
 

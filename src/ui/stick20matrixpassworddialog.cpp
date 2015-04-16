@@ -121,6 +121,7 @@ MatrixPasswordDialog::MatrixPasswordDialog(QWidget *parent) :
 
     Stick20MatrixDataReceived = 0;
     HID_Stick20MatrixPasswordData_st.StatusFlag_u8 = STICK20_PASSWORD_MATRIX_STATUS_IDLE;
+    SelectedRowCounter = 0;
     if(ret){}//Fix warnings
     if(height){}//Fix warnings
 }
@@ -158,7 +159,7 @@ MatrixPasswordDialog::~MatrixPasswordDialog()
 
 void MatrixPasswordDialog::InitSecurePasswordDialog()
 {
-    bool        ret;
+    bool        ret = FALSE;
     bool        waitForAnswerFromStick20;
     int         i;
     int         i1;

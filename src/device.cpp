@@ -125,7 +125,7 @@ Device::Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20Upd
     waitForAckStick20  = false;
     lastBlockNrStick20 = 0;
 
-
+    this->userPasswordRetryCount = 99;
 }
 
 /*******************************************************************************
@@ -378,19 +378,17 @@ int Device::getSlotName(uint8_t slotNo){
 
 
      if (isConnected){
-     Command *cmd=new Command(CMD_READ_SLOT_NAME,data,1);
-     res=sendCommand(cmd);
+         Command *cmd=new Command(CMD_READ_SLOT_NAME,data,1);
+         res=sendCommand(cmd);
 
-     if (res==-1)
+     if (res==-1) {
+         delete cmd;
          return -1;
-     else{  //sending the command was successful
+     }else{  //sending the command was successful
          //return cmd->crc;
          Sleep::msleep(100);
          Response *resp=new Response();
          resp->getResponse(this);
-
-//         qDebug() << cmd->crc;
-//         qDebug() << resp->lastCommandCRC;
 
          if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
              if (resp->lastCommandStatus==CMD_STATUS_OK)
@@ -420,28 +418,12 @@ int Device::getSlotName(uint8_t slotNo){
              }
 
          }
-/*
-         {
-
-             QMessageBox message;
-             QString str;
-             QByteArray *data =new QByteArray((char*)resp->reportBuffer,REPORT_SIZE+1);
-
- //            str.append(QString::number(testResponse->lastCommandCRC,16));
-             str.append(QString(data->toHex()));
-
-             message.setText(str);
-             message.exec();
-
-             str.clear();
-         }
-*/
+         delete cmd;
          return 0;
      }
 
     }
-
-     return -1;
+    return -1;
 }
 
 /*******************************************************************************
@@ -464,28 +446,23 @@ int Device::eraseSlot(uint8_t slotNo)
 
 
     if (isConnected){
-    Command *cmd=new Command(CMD_ERASE_SLOT,data,1);
-    authorize(cmd);
-    res=sendCommand(cmd);
+        Command *cmd=new Command(CMD_ERASE_SLOT,data,1);
+        authorize(cmd);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return -1;
-    else{  //sending the command was successful
-        //return cmd->crc;
-        Sleep::msleep(100);
-        Response *resp=new Response();
-        resp->getResponse(this);
-
-//        qDebug() << cmd->crc;
-//        qDebug() << resp->lastCommandCRC;
-
+        if (res==-1) {
+            delete cmd;
+            return -1;
+        }else{  //sending the command was successful
+            //return cmd->crc;
+            Sleep::msleep(100);
+            Response *resp=new Response();
+            resp->getResponse(this);
         }
-
+        delete cmd;
         return 0;
     }
-
     return -1;
-
 }
 
 /*******************************************************************************
@@ -501,22 +478,24 @@ int Device::eraseSlot(uint8_t slotNo)
 
 *******************************************************************************/
 
-int Device::setTime(int reset){
-     int res;
-     uint8_t data[30];
-     uint64_t time = QDateTime::currentDateTime().toTime_t();
+int Device::setTime(int reset)
+{
+    int res;
+    uint8_t data[30];
+    uint64_t time = QDateTime::currentDateTime().toTime_t();
 
-     memset(data,0,30);
-     data[0] = reset;
-     memcpy(data+1,&time,8);
+    memset(data,0,30);
+    data[0] = reset;
+    memcpy(data+1,&time,8);
 
-     if (isConnected){
-     Command *cmd=new Command(CMD_SET_TIME,data,9);
-     res=sendCommand(cmd);
+    if (isConnected){
+        Command *cmd=new Command(CMD_SET_TIME,data,9);
+        res=sendCommand(cmd);
 
-     if (res==-1)
+        if (res==-1) {
+         delete cmd;
          return -1;
-     else{  //sending the command was successful
+        }else{  //sending the command was successful
          Sleep::msleep(100);
          Response *resp=new Response();
          resp->getResponse(this);
@@ -527,16 +506,16 @@ int Device::setTime(int reset){
              }
              else if (resp->lastCommandStatus==CMD_STATUS_TIMESTAMP_WARNING)
              {
+                 delete cmd;
                  return -2;
              }
 
          }
+         delete cmd;
          return 0;
-     }
-
+        }
     }
-
-     return -1;
+    return -1;
 }
 
 /*******************************************************************************
@@ -551,15 +530,10 @@ int Device::setTime(int reset){
 
 int Device::writeToHOTPSlot(HOTPSlot *slot)
 {
-//    qDebug() << "preparing to send";
-//    qDebug() << slot->slotNumber;
-//    qDebug() << QString((char *)slot->slotName);
-
     if ((slot->slotNumber >= 0x10) && (slot->slotNumber < 0x10 + HOTP_SlotCount)){
         int res;
         uint8_t data[COMMAND_SIZE];
         memset(data,0,COMMAND_SIZE);
-//        qDebug() << "prepared data array";
 
         data[0]=slot->slotNumber;
         memcpy(data+1,slot->slotName,15);
@@ -568,38 +542,31 @@ int Device::writeToHOTPSlot(HOTPSlot *slot)
         memcpy(data+37,slot->tokenID,13);
         memcpy(data+50,slot->counter,8);
 
-//        qDebug() << "copied data to array";
-
         if (isConnected)
         {
             Command *cmd = new Command(CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
-    //        qDebug() << "sending";
             authorize(cmd);
             res=sendCommand(cmd);
-    //        qDebug() << "sent";
 
-            if (res==-1)
+            if (res==-1) {
+                delete cmd;
                 return -1;
-            else{  //sending the command was successful
-                //return cmd->crc;
+            }else{  //sending the command was successful
                 Sleep::msleep(100);
                 Response *resp=new Response();
                 resp->getResponse(this);
 
                  if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_OK){
-    //                 qDebug() << "sent sucessfully!";
-                     return 0;
-
+                    delete cmd; 
+                    return 0;
                  } else if (cmd->crc==resp->lastCommandCRC&&resp->lastCommandStatus==CMD_STATUS_NO_NAME_ERROR){
-                     return -3;
+                    delete cmd; 
+                    return -3;
                  }
-
             }
-
+            delete cmd;
             return -2;
         }
-
-
     }
     return -1;
 }
@@ -621,7 +588,6 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
         int res;
         uint8_t data[COMMAND_SIZE];
         memset(data,0,COMMAND_SIZE);
-//        qDebug() << "prepared data array";
 
         data[0]=slot->slotNumber;
         memcpy(data+1,slot->slotName,15);
@@ -630,27 +596,24 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
         memcpy(data+37,slot->tokenID,13);
 	    memcpy(data+50,&(slot->interval),2);
 
-//        qDebug() << "copied data to array";
 
         if (isConnected)
         {
             Command *cmd=new Command(CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
-    //        qDebug() << "sending";
             authorize(cmd);
             res=sendCommand(cmd);
-    //        qDebug() << "sent";
 
-            if (res==-1)
+            if (res==-1) {
+                delete cmd;
                 return -1;
-            else //sending the command was successful
-            {
-                //return cmd->crc;
+            }else{ //sending the command was successful
                 Sleep::msleep(100);
                 Response *resp=new Response();
                 resp->getResponse(this);
 
                 if (cmd->crc == resp->lastCommandCRC )
                 {
+                    delete cmd;
                     return resp->lastCommandStatus;
                     switch (resp->lastCommandStatus)
                     {
@@ -662,13 +625,12 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
                             return -3;
                     }
                 }
+                delete cmd;
                 return -2;
             }
-
-
         }
-        return -1;
     }
+    return -1;
 }
 
 /*******************************************************************************
@@ -684,7 +646,6 @@ int Device::writeToTOTPSlot(TOTPSlot *slot)
 int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uint8_t  lastInterval,uint8_t result[18])
 {
 
-//    qDebug() << "getting code" << slotNo;
     int res;
     uint8_t data[30];
 
@@ -696,61 +657,46 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uin
     memcpy(data+17,&lastInterval,1);
 
     if (isConnected){
-//       qDebug() << "sending command";
 
-    Command *cmd=new Command(CMD_GET_CODE,data,18);
-    userAuthorize(cmd);
-    res=sendCommand(cmd);
+        Command *cmd=new Command(CMD_GET_CODE,data,18);
+        userAuthorize(cmd);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return -1;
-    else{  //sending the command was successful
-        //return cmd->crc;
-//         qDebug() << "command sent";
-        Sleep::msleep(100);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1) {
+            delete cmd;
+            return -1;
+        }else{  //sending the command was successful
+            Sleep::msleep(100);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-
-        if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
-            if (resp->lastCommandStatus==CMD_STATUS_OK){
-                memcpy(result,resp->data,18);
-
+            if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+                if (resp->lastCommandStatus==CMD_STATUS_OK){
+                    memcpy(result,resp->data,18);
+                }
             }
-
+            delete cmd;
+            return 0;
         }
-
-        return 0;
-    }
-
    }
-
-    return -1;
-
+   return -1;
 }
 
 
 int Device::getHOTP(uint8_t slotNo)
 {
-
-//    qDebug() << "getting code" << slotNo;
     int res;
     uint8_t data[9];
 
     data[0]=slotNo;
-
     //memcpy(data+1,&challenge,8);
-
 
     Command *cmd=new Command(CMD_GET_CODE,data,9);
     Response *resp=new Response();
     res=sendCommandGetResponse(cmd,resp);
 
-        //    if (res==0)
-        //        memcpy(result,resp->data,18);
-
+    delete cmd;
     return res;
-
 }
 
 /*******************************************************************************
@@ -771,82 +717,60 @@ int Device::readSlot(uint8_t slotNo)
     data[0]=slotNo;
 
 
-    if (isConnected){
-    Command *cmd=new Command(CMD_READ_SLOT,data,1);
-    res=sendCommand(cmd);
+    if (isConnected) {
+        Command *cmd=new Command(CMD_READ_SLOT,data,1);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return -1;
-    else{  //sending the command was successful
-        //return cmd->crc;
-        Sleep::msleep(100);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1) {
+            delete cmd;
+            return -1;
+        }else{  //sending the command was successful
+            //return cmd->crc;
+            Sleep::msleep(100);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-//         qDebug() << cmd->crc;
-//         qDebug() << resp->lastCommandCRC;
-
-        if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
-            if (resp->lastCommandStatus==CMD_STATUS_OK)
-            {
-                if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
+            if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+                if (resp->lastCommandStatus==CMD_STATUS_OK)
                 {
-                   memcpy(HOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
-                   HOTPSlots[slotNo&0x0F]->config = resp->data[15];
-                   memcpy(HOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
-                   memcpy(HOTPSlots[slotNo&0x0F]->counter,resp->data+29,8);
-                   HOTPSlots[slotNo&0x0F]->isProgrammed=true;
-/*
-qDebug() << "Get HOTP counter slot " << (slotNo&0x0F);
-qDebug() << QString ((char*)HOTPSlots[slotNo&0x0F]->counter);
-*/
+                    if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
+                    {
+                       memcpy(HOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
+                       HOTPSlots[slotNo&0x0F]->config = resp->data[15];
+                       memcpy(HOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
+                       memcpy(HOTPSlots[slotNo&0x0F]->counter,resp->data+29,8);
+                       HOTPSlots[slotNo&0x0F]->isProgrammed=true;
+                    }
+                    else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
+                    {
+                        memcpy(TOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
+                        TOTPSlots[slotNo&0x0F]->config = resp->data[15];
+                        memcpy(TOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
+                        memcpy(&(TOTPSlots[slotNo&0x0F]->interval),resp->data+29,2);
+                        TOTPSlots[slotNo&0x0F]->isProgrammed=true;
+                    }
+
                 }
-                else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
+                else if (resp->lastCommandStatus==CMD_STATUS_SLOT_NOT_PROGRAMMED)
                 {
-                    memcpy(TOTPSlots[slotNo&0x0F]->slotName,resp->data,15);
-                    TOTPSlots[slotNo&0x0F]->config = resp->data[15];
-                    memcpy(TOTPSlots[slotNo&0x0F]->tokenID,resp->data+16,13);
-                    memcpy(&(TOTPSlots[slotNo&0x0F]->interval),resp->data+29,2);
-                    TOTPSlots[slotNo&0x0F]->isProgrammed=true;
+                    if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
+                    {
+                       HOTPSlots[slotNo&0x0F]->isProgrammed=false;
+                       HOTPSlots[slotNo&0x0F]->slotName[0] = 0;
+                    }
+                    else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
+                    {
+                       TOTPSlots[slotNo&0x0F]->isProgrammed=false;
+                       TOTPSlots[slotNo&0x0F]->slotName[0] = 0;
+                    }
                 }
 
             }
-            else if (resp->lastCommandStatus==CMD_STATUS_SLOT_NOT_PROGRAMMED)
-            {
-                if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
-                {
-                   HOTPSlots[slotNo&0x0F]->isProgrammed=false;
-                   HOTPSlots[slotNo&0x0F]->slotName[0] = 0;
-                }
-                else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
-                {
-                   TOTPSlots[slotNo&0x0F]->isProgrammed=false;
-                   TOTPSlots[slotNo&0x0F]->slotName[0] = 0;
-                }
-            }
-
+            delete cmd;
+            return 0;
         }
-/*
-        {
 
-            QMessageBox message;
-            QString str;
-            QByteArray *data =new QByteArray((char*)resp->reportBuffer,REPORT_SIZE+1);
-
-//            str.append(QString::number(testResponse->lastCommandCRC,16));
-            str.append(QString(data->toHex()));
-
-            message.setText(str);
-            message.exec();
-
-            str.clear();
-        }
-*/
-        return 0;
     }
-
-   }
-
     return -1;
 }
 /*******************************************************************************
@@ -922,24 +846,26 @@ int Device::getStatus()
 
 
     if (isConnected){
-    Command *cmd=new Command(CMD_GET_STATUS,data,0);
-    res=sendCommand(cmd);
+        Command *cmd=new Command(CMD_GET_STATUS,data,0);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return -1;
-    else{  //sending the command was successful
-        Sleep::msleep(100);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1) {
+            delete cmd;
+            return -1;
+        }else{  //sending the command was successful
+            Sleep::msleep(100);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-        if (cmd->crc==resp->lastCommandCRC){
-            memcpy(firmwareVersion,resp->data,2);
-            memcpy(cardSerial,resp->data+2,4);
-            memcpy(generalConfig,resp->data+6,3);
-            memcpy(otpPasswordConfig,resp->data+9,2);
+            if (cmd->crc==resp->lastCommandCRC){
+                memcpy(firmwareVersion,resp->data,2);
+                memcpy(cardSerial,resp->data+2,4);
+                memcpy(generalConfig,resp->data+6,3);
+                memcpy(otpPasswordConfig,resp->data+9,2);
+            }
         }
-    }
-    return 0;
+        delete cmd;
+        return 0;
     }
     return -2;
 }
@@ -959,25 +885,29 @@ int Device::getPasswordRetryCount()
     uint8_t data[1];
 
 
-    if (isConnected){
-    Command *cmd=new Command(CMD_GET_PASSWORD_RETRY_COUNT,data,0);
-    res=sendCommand(cmd);
+    if (isConnected) {
+        Command *cmd=new Command(CMD_GET_PASSWORD_RETRY_COUNT,data,0);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return ERR_SENDING;
-    else{  //sending the command was successful
-        Sleep::msleep(1000);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1) {
+            delete cmd;
+            return ERR_SENDING;
+        } else {  //sending the command was successful
+            Sleep::msleep(1000);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-        if (cmd->crc==resp->lastCommandCRC)
-        {
-            passwordRetryCount=resp->data[0];
-            HID_Stick20Configuration_st.AdminPwRetryCount = passwordRetryCount;
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                passwordRetryCount=resp->data[0];
+                HID_Stick20Configuration_st.AdminPwRetryCount = passwordRetryCount;
+            }
+            else {
+                delete cmd;
+                return ERR_WRONG_RESPONSE_CRC;
+            }
         }
-        else
-            return ERR_WRONG_RESPONSE_CRC;
-    }
+        delete cmd;
     }
     return ERR_NOT_CONNECTED;
 }
@@ -998,25 +928,28 @@ int Device::getUserPasswordRetryCount()
     uint8_t data[1];
 
 
-    if (isConnected){
-    Command *cmd=new Command(CMD_GET_USER_PASSWORD_RETRY_COUNT,data,0);
-    res=sendCommand(cmd);
+    if (isConnected) {
+        Command *cmd=new Command(CMD_GET_USER_PASSWORD_RETRY_COUNT,data,0);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return ERR_SENDING;
-    else{  //sending the command was successful
-        Sleep::msleep(1000);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1) {
+            delete cmd;
+            return ERR_SENDING;
+        }else{  //sending the command was successful
+            Sleep::msleep(1000);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-        if (cmd->crc==resp->lastCommandCRC)
-        {
-            userPasswordRetryCount=resp->data[0];
-            HID_Stick20Configuration_st.UserPwRetryCount = userPasswordRetryCount;
+            if (cmd->crc==resp->lastCommandCRC)
+            {
+                userPasswordRetryCount=resp->data[0];
+                HID_Stick20Configuration_st.UserPwRetryCount = userPasswordRetryCount;
+             }else {
+                delete cmd;
+                return ERR_WRONG_RESPONSE_CRC;
+            }
         }
-        else
-            return ERR_WRONG_RESPONSE_CRC;
-    }
+        delete cmd;
     }
     return ERR_NOT_CONNECTED;
 }
@@ -1039,7 +972,7 @@ int Device::getPasswordSafeSlotStatus ()
     int res;
     uint8_t data[1];
 
-// Clear entrys
+    // Clear entries
     memset (passwordSafeStatus,0,PWS_SLOT_COUNT);
 
     if (isConnected)
@@ -1049,6 +982,7 @@ int Device::getPasswordSafeSlotStatus ()
 
         if (res==-1)
         {
+            delete cmd;
             return ERR_SENDING;
         }
         else
@@ -1064,29 +998,19 @@ int Device::getPasswordSafeSlotStatus ()
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                     memcpy (passwordSafeStatus,&resp->data[0],PWS_SLOT_COUNT);
-/*
-{
-     int i;
-     char text[1000];
-     DebugAppendText ("PW_SAFE_SLOT_STATUS\n");
-     for (i=0;i<PWS_SLOT_COUNT;i++)
-     {
-         sprintf(text,"  %2d : %3d\n",i,passwordSafeStatus[i]);
-         DebugAppendText (text);
-     }
-}
-*/
-
+                    delete cmd;
                     return (ERR_NO_ERROR);
                 }
                 else
                 {
+                    delete cmd;
                     return (ERR_STATUS_NOT_OK);
                 }
 
-            }
-            else
+            } else {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
     return ERR_NOT_CONNECTED;
@@ -1117,8 +1041,10 @@ int Device::getPasswordSafeSlotName (int Slot)
         Command *cmd=new Command(CMD_GET_PW_SAFE_SLOT_NAME,data,1);
         res=sendCommand(cmd);
 
-        if (res==-1)
+        if (res==-1) {
+            delete cmd;
             return ERR_SENDING;
+        }
         else{  //sending the command was successful
             Sleep::msleep(200);
             Response *resp=new Response();
@@ -1130,22 +1056,19 @@ int Device::getPasswordSafeSlotName (int Slot)
                 passwordSafeSlotName[PWS_SLOTNAME_LENGTH] = 0;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
+                    delete cmd;
                     return (ERR_NO_ERROR);
                 }
                 else
                 {
+                    delete cmd;
                     return (ERR_STATUS_NOT_OK);
                 }
-/*
-{
-    char text[1000];
-    sprintf(text,"getPasswordSafeSlotName: Slot %2d : -%s-\n",Slot,passwordSafeSlotName);
-    DebugAppendText (text);
-}
-*/
             }
-            else
+            else {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
     return ERR_NOT_CONNECTED;
@@ -1171,41 +1094,38 @@ int Device::getPasswordSafeSlotPassword (int Slot)
 
     data[0] = Slot;
 
-    if (isConnected){
-    Command *cmd=new Command(CMD_GET_PW_SAFE_SLOT_PASSWORD,data,1);
-    res=sendCommand(cmd);
+    if (isConnected) {
+        Command *cmd=new Command(CMD_GET_PW_SAFE_SLOT_PASSWORD,data,1);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return ERR_SENDING;
-    else{  //sending the command was successful
-        Sleep::msleep(200);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1) {
+            delete cmd;
+            return ERR_SENDING;
+        } else {  //sending the command was successful
+            Sleep::msleep(200);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-        if (cmd->crc==resp->lastCommandCRC)
-        {
-            memcpy (passwordSafePassword,&resp->data[0],PWS_PASSWORD_LENGTH);
-            passwordSafePassword[PWS_PASSWORD_LENGTH] = 0;
-
-            if (resp->lastCommandStatus == CMD_STATUS_OK)
+            if (cmd->crc==resp->lastCommandCRC)
             {
-                return (ERR_NO_ERROR);
+                memcpy (passwordSafePassword,&resp->data[0],PWS_PASSWORD_LENGTH);
+                passwordSafePassword[PWS_PASSWORD_LENGTH] = 0;
+
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                {
+                    delete cmd;
+                    return (ERR_NO_ERROR);
+                }
+                else
+                {
+                    delete cmd;
+                    return (ERR_STATUS_NOT_OK);
+                }
+            } else {
+                delete cmd;
+                return ERR_WRONG_RESPONSE_CRC;
             }
-            else
-            {
-                return (ERR_STATUS_NOT_OK);
-            }
-/*
-{
-    char text[1000];
-    sprintf(text,"getPasswordSafeSlotPassword: Slot %2d : -%s-\n",Slot,passwordSafePassword);
-    DebugAppendText (text);
-}
-*/
         }
-        else
-            return ERR_WRONG_RESPONSE_CRC;
-    }
     }
     return ERR_NOT_CONNECTED;
 }
@@ -1230,40 +1150,37 @@ int Device::getPasswordSafeSlotLoginName (int Slot)
 
     data[0] = Slot;
 
-    if (isConnected){
-    Command *cmd=new Command(CMD_GET_PW_SAFE_SLOT_LOGINNAME,data,1);
-    res=sendCommand(cmd);
+    if (isConnected) {
+        Command *cmd=new Command(CMD_GET_PW_SAFE_SLOT_LOGINNAME,data,1);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return ERR_SENDING;
-    else{  //sending the command was successful
-        Sleep::msleep(200);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1) {
+            delete cmd;
+            return ERR_SENDING;
+        } else {  //sending the command was successful
+            Sleep::msleep(200);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-        if (cmd->crc==resp->lastCommandCRC)
-        {
-            memcpy (passwordSafeLoginName,&resp->data[0],PWS_LOGINNAME_LENGTH);
-            passwordSafeLoginName[PWS_LOGINNAME_LENGTH] = 0;
-            if (resp->lastCommandStatus == CMD_STATUS_OK)
+            if (cmd->crc==resp->lastCommandCRC)
             {
-                return (ERR_NO_ERROR);
+                memcpy (passwordSafeLoginName,&resp->data[0],PWS_LOGINNAME_LENGTH);
+                passwordSafeLoginName[PWS_LOGINNAME_LENGTH] = 0;
+                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                {
+                    delete cmd;
+                    return (ERR_NO_ERROR);
+                }
+                else
+                {
+                    delete cmd;
+                    return (ERR_STATUS_NOT_OK);
+                }
+            } else {
+                delete cmd;
+                return ERR_WRONG_RESPONSE_CRC;
             }
-            else
-            {
-                return (ERR_STATUS_NOT_OK);
-            }
-/*
-{
-    char text[1000];
-    sprintf(text,"getPasswordSafeSlotLoginName: Slot %2d : -%s-\n",Slot,passwordSafeLoginName);
-    DebugAppendText (text);
-}
-*/
         }
-        else
-            return ERR_WRONG_RESPONSE_CRC;
-    }
     }
     return ERR_NOT_CONNECTED;
 }
@@ -1295,21 +1212,22 @@ int Device::setPasswordSafeSlotData_1 (int Slot,uint8_t *Name,uint8_t *Password)
         Command *cmd = new Command(CMD_SET_PW_SAFE_SLOT_DATA_1,data,1+PWS_SLOTNAME_LENGTH+PWS_PASSWORD_LENGTH);
         res = sendCommand(cmd);
 
-        if (res==-1)
+        if (res==-1) {
+            delete cmd;
             return ERR_SENDING;
-        else
-        {  //sending the command was successful
+        } else {  //sending the command was successful
             Sleep::msleep(200);
             Response *resp=new Response();
             resp->getResponse(this);
 
             if (cmd->crc==resp->lastCommandCRC)
             {
-                  return ERR_NO_ERROR;
-//                passwordRetryCount=resp->data[0];
-            }
-            else
+                delete cmd;
+                return ERR_NO_ERROR;
+            } else {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
     return ERR_NOT_CONNECTED;
@@ -1337,24 +1255,26 @@ int Device::setPasswordSafeSlotData_2 (int Slot,uint8_t *LoginName)
     memcpy (&data[1],LoginName,PWS_LOGINNAME_LENGTH);
 
     if (isConnected){
-    Command *cmd=new Command(CMD_SET_PW_SAFE_SLOT_DATA_2,data,1+PWS_LOGINNAME_LENGTH);
-    res=sendCommand(cmd);
+        Command *cmd=new Command(CMD_SET_PW_SAFE_SLOT_DATA_2,data,1+PWS_LOGINNAME_LENGTH);
+        res=sendCommand(cmd);
 
-    if (res==-1)
-        return ERR_SENDING;
-    else{  //sending the command was successful
-        Sleep::msleep(400);
-        Response *resp=new Response();
-        resp->getResponse(this);
+        if (res==-1) {
+            delete cmd;
+            return ERR_SENDING;
+        }else{  //sending the command was successful
+            Sleep::msleep(400);
+            Response *resp=new Response();
+            resp->getResponse(this);
 
-        if (cmd->crc == resp->lastCommandCRC)
-        {
-              return ERR_NO_ERROR;
-//            passwordRetryCount=resp->data[0];
+            if (cmd->crc == resp->lastCommandCRC)
+            {
+                delete cmd;
+                return ERR_NO_ERROR;
+            } else {
+                delete cmd;
+                return ERR_WRONG_RESPONSE_CRC;
+            }
         }
-        else
-            return ERR_WRONG_RESPONSE_CRC;
-    }
     }
     return ERR_NOT_CONNECTED;
 }
@@ -1384,16 +1304,17 @@ int Device::passwordSafeEraseSlot (int Slot)
         Command *cmd=new Command(CMD_PW_SAFE_ERASE_SLOT,data,1);
         res=sendCommand(cmd);
 
-        if (res==-1)
+        if (res==-1) {
+            delete cmd;
             return ERR_SENDING;
-        else
-        {  //sending the command was successful
+        } else {  //sending the command was successful
             Sleep::msleep(500);
             Response *resp=new Response();
             resp->getResponse(this);
 
             if (cmd->crc==resp->lastCommandCRC)
             {
+                delete cmd;
                 return resp->lastCommandStatus;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
@@ -1403,9 +1324,10 @@ int Device::passwordSafeEraseSlot (int Slot)
                 {
                     return (ERR_STATUS_NOT_OK);
                 }
-            }
-            else
+            } else {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
     return ERR_NOT_CONNECTED;
@@ -1438,10 +1360,10 @@ int Device::passwordSafeEnable (char *password)
         Command *cmd=new Command(CMD_PW_SAFE_ENABLE,data,strlen ((char*)data));
         res=sendCommand(cmd);
 
-        if (res==-1)
+        if (res==-1) {
+            delete cmd;
             return ERR_SENDING;
-        else
-        {  //sending the command was successful
+        } else {  //sending the command was successful
             Sleep::msleep(1500);
             Response *resp=new Response();
             resp->getResponse(this);
@@ -1453,6 +1375,7 @@ int Device::passwordSafeEnable (char *password)
                 {
                     passwordSafeUnlocked = TRUE;
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
+                    delete cmd;
                     return (ERR_NO_ERROR);
                 }
                 else
@@ -1461,12 +1384,14 @@ int Device::passwordSafeEnable (char *password)
                     {
                         HID_Stick20Configuration_st.UserPwRetryCount--;
                     }
+                    delete cmd;
                     return resp->lastCommandStatus;
                     // return (ERR_STATUS_NOT_OK);
                 }
-            }
-            else
+            } else {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
     return ERR_NOT_CONNECTED;
@@ -1493,16 +1418,15 @@ int Device::passwordSafeInitKey (void)
 
     data[0] = 0;
 
-
     if (isConnected)
     {
         Command *cmd=new Command(CMD_PW_SAFE_INIT_KEY,data,1);
         res=sendCommand(cmd);
 
-        if (res==-1)
+        if (res==-1) {
+            delete cmd;
             return ERR_SENDING;
-        else
-        {  //sending the command was successful
+        } else {  //sending the command was successful
             Sleep::msleep(500);
             Response *resp=new Response();
             resp->getResponse(this);
@@ -1511,15 +1435,18 @@ int Device::passwordSafeInitKey (void)
             {
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
+                    delete cmd;
                     return (ERR_NO_ERROR);
                 }
                 else
                 {
+                    delete cmd;
                     return (ERR_STATUS_NOT_OK);
                 }
-            }
-            else
+            } else {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
     return ERR_NOT_CONNECTED;
@@ -1551,10 +1478,10 @@ int Device::passwordSafeSendSlotDataViaHID (int Slot, int Kind)
         Command *cmd=new Command(CMD_PW_SAFE_SEND_DATA,data,2);
         res=sendCommand(cmd);
 
-        if (res==-1)
+        if (res==-1) {
+            delete cmd;
             return ERR_SENDING;
-        else
-        {  //sending the command was successful
+        } else {  //sending the command was successful
             Sleep::msleep(200);
             Response *resp=new Response();
             resp->getResponse(this);
@@ -1563,15 +1490,18 @@ int Device::passwordSafeSendSlotDataViaHID (int Slot, int Kind)
             {
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
+                    delete cmd;
                     return (ERR_NO_ERROR);
                 }
                 else
                 {
+                    delete cmd;
                     return (ERR_STATUS_NOT_OK);
                 }
-            }
-            else
+            } else {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
     }
     return ERR_NOT_CONNECTED;
@@ -1632,10 +1562,12 @@ int Device::getHighwaterMarkFromSdCard (unsigned char *WriteLevelMin,unsigned ch
                 delete cmd;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
+                    delete cmd;
                     return (ERR_NO_ERROR);
                 }
                 else
                 {
+                    delete cmd;
                     return (ERR_STATUS_NOT_OK);
                 }
             }
@@ -1646,7 +1578,6 @@ int Device::getHighwaterMarkFromSdCard (unsigned char *WriteLevelMin,unsigned ch
             }
         }
     }
-
     return (ERR_NOT_CONNECTED);
 }
 
@@ -1678,37 +1609,39 @@ int Device::writeGeneralConfig(uint8_t data[])
 {
     int res;
 
-
     if (isConnected){
         Command *cmd=new Command(CMD_WRITE_CONFIG,data,5);
         authorize(cmd);
         res=sendCommand(cmd);
 
-        if (res==-1)
+        if (res==-1) {
+            delete cmd;
             return ERR_SENDING;
-        else{  //sending the command was successful
+        } else {  //sending the command was successful
             Sleep::msleep(100);
             Response *resp=new Response();
             resp->getResponse(this);
 
             if (cmd->crc==resp->lastCommandCRC){
-            switch (resp->lastCommandStatus)
-            {
-                case CMD_STATUS_OK:
-                    return CMD_STATUS_OK;
-                case CMD_STATUS_NOT_AUTHORIZED:
-                    return CMD_STATUS_NOT_AUTHORIZED;
-            }
-            if (resp->lastCommandStatus==CMD_STATUS_OK)
-                return 0;
-            }
-            else
+                switch (resp->lastCommandStatus)
+                {
+                    case CMD_STATUS_OK:
+                        return CMD_STATUS_OK;
+                    case CMD_STATUS_NOT_AUTHORIZED:
+                        return CMD_STATUS_NOT_AUTHORIZED;
+                }
+                if (resp->lastCommandStatus==CMD_STATUS_OK) {
+                    delete cmd;
+                    return 0;
+                }
+            } else {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
+            }
         }
+        delete cmd;
     }
     return ERR_NOT_CONNECTED;
-
-
 }
 /*******************************************************************************
 
@@ -1722,13 +1655,11 @@ int Device::writeGeneralConfig(uint8_t data[])
 
 int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
 {
-
     int res;
     uint8_t data[50];
     uint32_t crc;
     memcpy(data,cardPassword,25);
     memcpy(data+25,tempPasswrod,25);
-
 
     if (isConnected)
     {
@@ -1740,11 +1671,9 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
         delete cmd;
         memset(data,0,sizeof(data));
 
-        if (res==-1)
+        if (res==-1) {
             return -1;
-        else
-        {  //sending the command was successful
-            //return cmd->crc;
+        } else {  //sending the command was successful
             Sleep::msleep(1000);
             Response *resp=new Response();
             resp->getResponse(this);
@@ -1766,16 +1695,10 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
                     }
                     return -3;
                 }
-
             }
-
         }
-
    }
-
-    return -2;
-
-
+   return -2;
 }
 
 /*******************************************************************************
@@ -1790,13 +1713,11 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[])
 
 int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[])
 {
-
     int res;
     uint8_t data[50];
     uint32_t crc;
     memcpy(data,cardPassword,25);
     memcpy(data+25,tempPassword,25);
-
 
     if (isConnected)
     {
@@ -1808,11 +1729,9 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[])
         delete cmd;
         memset(data,0,sizeof(data));
 
-        if (res==-1)
+        if (res==-1) {
             return -1;
-        else
-        {  //sending the command was successful
-            //return cmd->crc;
+        } else {  //sending the command was successful
             Sleep::msleep(1000);
             Response *resp=new Response();
             resp->getResponse(this);
@@ -1829,18 +1748,11 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[])
                 {
                     return -3;
                 }
-
             }
-
         }
-
    }
-
-    return -2;
-
-
+   return -2;
 }
-
 /*******************************************************************************
 
   authorize
@@ -1862,28 +1774,27 @@ int Device::authorize(Command *authorizedCmd)
    memcpy(data+4,password,25);
 
    if (isConnected){
-   Command *cmd=new Command(CMD_AUTHORIZE,data,29);
-   res=sendCommand(cmd);
+       Command *cmd=new Command(CMD_AUTHORIZE,data,29);
+       res=sendCommand(cmd);
 
+       if (res==-1) {
+           delete cmd;
+           return -1;
+       } else {
+           Sleep::msleep(200);
+           Response *resp=new Response();
+           resp->getResponse(this);
 
-   if (res==-1)
-       return -1;
-   else{
-
-       Sleep::msleep(200);
-       Response *resp=new Response();
-       resp->getResponse(this);
-
-       if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
-           if (resp->lastCommandStatus==CMD_STATUS_OK){
-               return 0;
+           if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+               if (resp->lastCommandStatus==CMD_STATUS_OK){
+                   delete cmd;
+                   return 0;
+               }
            }
-
+           delete cmd;
+           return -2;
        }
-       return -2;
    }
-   }
-
    return -1;
 }
 
@@ -1908,32 +1819,31 @@ int Device::userAuthorize(Command *authorizedCmd)
    memcpy(data,&crc,4);
    memcpy(data+4,userPassword,25);
 
-   if (isConnected){
-   Command *cmd=new Command(CMD_USER_AUTHORIZE,data,29);
-   res=sendCommand(cmd);
+   if (isConnected) {
+       Command *cmd=new Command(CMD_USER_AUTHORIZE,data,29);
+       res=sendCommand(cmd);
 
+       if (res==-1) {
+           delete cmd;
+           return -1;
+       } else {
+           Sleep::msleep(200);
+           Response *resp=new Response();
+           resp->getResponse(this);
 
-   if (res==-1)
-       return -1;
-   else{
+           if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
+               if (resp->lastCommandStatus==CMD_STATUS_OK){
+                   delete cmd;
+                   return 0;
+               }
 
-       Sleep::msleep(200);
-       Response *resp=new Response();
-       resp->getResponse(this);
-
-       if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command
-           if (resp->lastCommandStatus==CMD_STATUS_OK){
-               return 0;
            }
-
+           delete cmd;
+           return -2;
        }
-       return -2;
    }
-   }
-
    return -1;
 }
-
 
 
 /*******************************************************************************
@@ -1955,12 +1865,13 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
 
     if (isConnected)
     {
-        Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD,adminPassword,30);
+        Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD,adminPassword, STICK20_PASSOWRD_LEN+2);
 
         res=sendCommand(cmd);
 
         if (res==-1)
         {
+            delete cmd;
             return ERR_SENDING;
         }
         else                    //sending the command was successful
@@ -1975,14 +1886,17 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
                 {
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
                     Stick20_ConfigurationChanged = TRUE;
+                    delete cmd;
                     return 0;
                 }
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
+        delete cmd;
     }
     return ERR_NOT_CONNECTED;
 }
@@ -2020,20 +1934,20 @@ int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
         delete cmd;
         memset(data,0,sizeof(data));
 
-        if (-1 == res)
+        if (-1 == res) {
             return ERR_SENDING;
-        else
-        {
+        } else {
             Sleep::msleep(800);
             Response *resp=new Response();
             resp->getResponse(this);
 
 //            if (cmd->crc == resp->lastCommandCRC)
             {
-                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                if (resp->lastCommandStatus == CMD_STATUS_OK) {
                     return CMD_STATUS_OK;
-                else
+                } else {
                     return CMD_STATUS_WRONG_PASSWORD;
+                }
             }
 /*            else
             {
@@ -2041,9 +1955,8 @@ int Device::changeUserPin( uint8_t* old_pin, uint8_t* new_pin)
             }
 */
         }
-   }
-
-   return ERR_NOT_CONNECTED;
+    }
+    return ERR_NOT_CONNECTED;
 }
 
 
@@ -2071,6 +1984,7 @@ int Device::isAesSupported(uint8_t* password)
 
         if (-1 == res)
         {
+            delete cmd;
             return ERR_SENDING;
         }
         else                    //sending the command was successful
@@ -2084,10 +1998,12 @@ int Device::isAesSupported(uint8_t* password)
                 if (CMD_STATUS_OK == resp->lastCommandStatus) {
  //                   validUserPassword = true;
                 }
+                delete cmd;
                 return resp->lastCommandStatus;
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
@@ -2128,20 +2044,20 @@ int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
         delete cmd;
         memset(data,0,sizeof(data));
 
-        if (-1 == res)
+        if (-1 == res) {
             return ERR_SENDING;
-        else
-        {
+        } else {
             Sleep::msleep(800);
             Response *resp=new Response();
             resp->getResponse(this);
 
 //            if (cmd->crc == resp->lastCommandCRC)
             {
-                if (resp->lastCommandStatus == CMD_STATUS_OK)
+                if (resp->lastCommandStatus == CMD_STATUS_OK) {
                     return CMD_STATUS_OK;
-                else
+                } else {
                     return CMD_STATUS_WRONG_PASSWORD;
+                }
             }
 /*           else
             {
@@ -2150,7 +2066,6 @@ int Device::changeAdminPin( uint8_t* old_pin, uint8_t* new_pin)
 */
         }
    }
-
    return ERR_NOT_CONNECTED;
 }
 
@@ -2168,6 +2083,7 @@ int Device::lockDevice (void)
 
         if (res==-1)
         {
+            delete cmd;
             return ERR_SENDING;
         }
         else                    //sending the command was successful
@@ -2178,10 +2094,12 @@ int Device::lockDevice (void)
 
             if (cmd->crc==resp->lastCommandCRC)
             {
+                delete cmd;
                 return (TRUE);
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
@@ -2203,24 +2121,25 @@ int Device::factoryReset(const char* password)
 
         if (-1 == res)
         {
+            delete cmd;
             return ERR_SENDING;
-        }else
-        {
+        } else {
             Sleep::msleep(1000);
             Response *resp = new Response();
             resp->getResponse(this);
 
             if (cmd->crc == resp->lastCommandCRC)
             {
+                delete cmd;
                 return resp->lastCommandStatus;
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
     }
-
     return ERR_NOT_CONNECTED;
 }
 
@@ -2247,6 +2166,7 @@ int Device::buildAesKey(uint8_t* password)
 
         if (-1 == res)
         {
+            delete cmd;
             return ERR_SENDING;
         }
         else                    //sending the command was successful
@@ -2257,10 +2177,12 @@ int Device::buildAesKey(uint8_t* password)
 
             if (cmd->crc == resp->lastCommandCRC)
             {
+                delete cmd;
                 return resp->lastCommandStatus;
             }
             else
             {
+                delete cmd;
                 return ERR_WRONG_RESPONSE_CRC;
             }
         }
@@ -2309,6 +2231,7 @@ bool Device::stick20EnableCryptedPartition  (uint8_t *password)
     res = sendCommand(cmd);
 
     if(res){}//Fix warnings
+    delete cmd;
     return (true);
 }
 /*******************************************************************************
@@ -2330,6 +2253,7 @@ bool Device::stick20DisableCryptedPartition  (void)
     res = sendCommand(cmd);
 
     if(res){}//Fix warnings
+    delete cmd;
     return (true);
 }
 
@@ -2360,7 +2284,7 @@ bool Device::stick20EnableHiddenCryptedPartition  (uint8_t *password)
     cmd = new Command(STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI,password,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2382,7 +2306,7 @@ bool Device::stick20DisableHiddenCryptedPartition  (void)
     cmd = new Command(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI,NULL,0);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2412,7 +2336,7 @@ bool Device::stick20EnableFirmwareUpdate (uint8_t *password)
     cmd = new Command(STICK20_CMD_ENABLE_FIRMWARE_UPDATE,password,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2442,7 +2366,7 @@ bool Device::stick20ExportFirmware (uint8_t *password)
     cmd = new Command(STICK20_CMD_EXPORT_FIRMWARE_TO_FILE,password,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2472,7 +2396,7 @@ bool Device::stick20CreateNewKeys (uint8_t *password)
     cmd = new Command(STICK20_CMD_GENERATE_NEW_KEYS,password,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2487,7 +2411,7 @@ bool Device::stick20CreateNewKeys (uint8_t *password)
 *******************************************************************************/
 
 bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeFlag)
-{
+    {
     uint8_t  n;
     int      res;
     Command *cmd;
@@ -2507,7 +2431,7 @@ bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeF
     cmd = new Command(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS,data,n+1);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2523,29 +2447,13 @@ bool Device::stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeF
 
 bool Device::stick20SetupHiddenVolume (void)
 {
-//    uint8_t n;
     int     res;
     Command *cmd;
-//    Response *resp;
 
     cmd = new Command(STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP,NULL,0);
     res = sendCommand(cmd);
-
-
-/*
-    Sleep::msleep(200);
-    Response *resp=new Response();
-    resp->getResponse(this);
-
-    if (cmd->crc==resp->lastCommandCRC)
-    { //the response was for the last command
-        if (resp->lastCommandStatus!=CMD_STATUS_OK){
-            return (FALSE);
-        }
-    }
-*/
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2561,29 +2469,13 @@ bool Device::stick20SetupHiddenVolume (void)
 
 bool Device::stick20GetPasswordMatrix (void)
 {
-//    uint8_t n;
     int     res;
     Command *cmd;
-//    Response *resp;
 
     cmd = new Command(STICK20_CMD_SEND_PASSWORD_MATRIX,NULL,0);
     res = sendCommand(cmd);
-
-/*
-
-    Sleep::msleep(200);
-    Response *resp=new Response();
-    resp->getResponse(this);
-
-    if (cmd->crc==resp->lastCommandCRC)
-    { //the response was for the last command
-        if (resp->lastCommandStatus==CMD_STATUS_OK){
-            return 0;
-        }
-    }
-*/
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2602,7 +2494,6 @@ bool Device::stick20SendPasswordMatrixPinData (uint8_t *Pindata)
     uint8_t n;
     int     res;
     Command *cmd;
-//    Response *resp;
 
     // Check pin data length
     n = strlen ((const char*)Pindata);
@@ -2614,7 +2505,7 @@ bool Device::stick20SendPasswordMatrixPinData (uint8_t *Pindata)
     cmd = new Command(STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA,Pindata,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2644,7 +2535,7 @@ bool Device::stick20SendPasswordMatrixSetup (uint8_t *Setupdata)
     cmd = new Command(STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP,Setupdata,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2668,7 +2559,7 @@ bool Device::stick20GetStatusData ()
     cmd = new Command(STICK20_CMD_GET_DEVICE_STATUS,NULL,0);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2698,7 +2589,7 @@ int Device::stick20SendPassword (uint8_t *Pindata)
     cmd = new Command(STICK20_CMD_SEND_PASSWORD,Pindata,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2728,7 +2619,7 @@ int Device::stick20SendNewPassword (uint8_t *NewPindata)
     cmd = new Command(STICK20_CMD_SEND_NEW_PASSWORD,NewPindata,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2758,7 +2649,7 @@ int Device::stick20SendSetReadonlyToUncryptedVolume (uint8_t *Pindata)
     cmd = new Command(STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN,Pindata,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2788,7 +2679,7 @@ int Device::stick20SendSetReadwriteToUncryptedVolume (uint8_t *Pindata)
     cmd = new Command(STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN,Pindata,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2821,7 +2712,7 @@ int Device::stick20SendClearNewSdCardFound (uint8_t *Pindata)
     cmd = new Command(STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND,Pindata,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2849,7 +2740,7 @@ int Device::stick20SendStartup (uint64_t localTime)
     cmd = new Command (STICK20_CMD_SEND_STARTUP,data,8);
     res = sendCommand (cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (TRUE);
 }
 
@@ -2878,7 +2769,7 @@ int Device::stick20SendHiddenVolumeSetup (HiddenVolumeSetup_tst *HV_Data_st)
     cmd = new Command (STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP,data,sizeof (HiddenVolumeSetup_tst));
     res = sendCommand (cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (TRUE);
 }
 
@@ -2911,7 +2802,7 @@ int Device::stick20LockFirmware (uint8_t *password)
     cmd = new Command(STICK20_CMD_SEND_LOCK_STICK_HARDWARE,password,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2942,7 +2833,7 @@ int Device::stick20ProductionTest (void)
     cmd = new Command(STICK20_CMD_PRODUCTION_TEST,TestData,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 
@@ -2971,7 +2862,7 @@ int Device::stick20GetDebugData (void)
     cmd = new Command(STICK20_CMD_SEND_DEBUG_DATA,TestData,n);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
-
+    delete cmd;
     return (true);
 }
 

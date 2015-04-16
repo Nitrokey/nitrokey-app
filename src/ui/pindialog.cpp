@@ -209,7 +209,7 @@ void PinDialog::onOkButtonClicked()
 // TODO;
 void PinDialog::updateTryCounter()
 {
-    int triesLeft;
+    int triesLeft = 0;
     switch (_pinType)
     {
         case ADMIN_PIN:
