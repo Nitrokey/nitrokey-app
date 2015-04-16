@@ -158,7 +158,7 @@ MatrixPasswordDialog::~MatrixPasswordDialog()
 
 void MatrixPasswordDialog::InitSecurePasswordDialog()
 {
-    bool        ret;
+    bool        ret = FALSE;
     bool        waitForAnswerFromStick20;
     int         i;
     int         i1;
