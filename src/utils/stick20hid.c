@@ -690,9 +690,9 @@ int HID_GetStick20DebugData (void)
 
     if ((LastDebugBlock != NewDebugBlock) && (len != 0))
     {
-        if (OUTPUT_CMD_STICK20_SEND_DATA_SIZE < len)
+        if (OUTPUT_CMD_STICK20_SEND_DATA_SIZE =< len)
         {
-            len = OUTPUT_CMD_STICK20_SEND_DATA_SIZE;
+            len = OUTPUT_CMD_STICK20_SEND_DATA_SIZE-1;
         }
         HID_Stick20ReceiveData_st.SendData_u8[len] = 0;
         
