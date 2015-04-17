@@ -5005,83 +5005,10 @@ void MainWindow::on_testTOTPButton_clicked(){
 */
 //END - OTP Test Routine ----------------------------------
 
-/*******************************************************************************
-
-  on_pushButton_GotoTOTP_clicked
-
-  Changes
-  Date      Author        Info
-  04.09.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void MainWindow::on_pushButton_GotoTOTP_clicked()
-{
-    ui->tabWidget->setCurrentWidget(ui->tab);
-    ui->slotComboBox->setCurrentIndex(0);
-}
 
 /*******************************************************************************
 
-  on_pushButton_GotoHOTP_clicked
-
-  Changes
-  Date      Author        Info
-  04.09.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void MainWindow::on_pushButton_GotoHOTP_clicked()
-{
-    ui->tabWidget->setCurrentWidget(ui->tab);
-    ui->slotComboBox->setCurrentIndex(TOTP_SlotCount+1);
-}
-
-/*******************************************************************************
-
-  on_pushButton_StaticPasswords_clicked
-
-  Changes
-  Date      Author        Info
-  04.09.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void MainWindow::on_pushButton_StaticPasswords_clicked()
-{
-    ui->tabWidget->setCurrentWidget(ui->tab_3);
-}
-
-/*******************************************************************************
-
-  on_pushButton_GotoGenOTP_clicked
-
-  Changes
-  Date      Author        Info
-  04.09.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void MainWindow::on_pushButton_GotoGenOTP_clicked()
-{
-    ui->tabWidget->setCurrentWidget(ui->tab_2);
-}
-
-/*******************************************************************************
-
-  on_pushButton_GotoGenOTP_clicked
+  on_PWS_ButtonCreatePW_clicked
 
   Changes
   Date      Author        Info
@@ -5103,11 +5030,7 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
     char *PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
     QString Text;
 
-//    qDebug() << "Password char space is" << PWS_RANDOM_PASSWORD_CHAR_SPACE;
-
-
     PasswordCharSpaceLen = strlen (PasswordCharSpace);
-//    qDebug() << "PasswordCharSpaceLen " << PasswordCharSpaceLen;
 
     PWS_CreatePWSize = 20;
     for (i=0;i<PWS_CreatePWSize;i++)
@@ -5115,7 +5038,6 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
         n = qrand ();
         n = n % PasswordCharSpaceLen;
         RandomPassword[i] = PasswordCharSpace[n];
-//        qDebug() << "n " << n << " - " << RandomPassword[i];
     }
     RandomPassword[i] = 0;
 
