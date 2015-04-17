@@ -63,6 +63,17 @@ MatrixPasswordDialog::MatrixPasswordDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MatrixPasswordDialog)
 {
+    // Initializations
+    PasswordLen = 0;
+    SetupInterfaceFlag = FALSE;
+    SetupPasswordLen = 0;
+    HideMatrix = 0;
+    InputPasswordLength = 0;
+    InputPasswordLengthPointer = 0;
+    SetupMode = FALSE;
+    HighLightVerticalBar = 0;
+    SetupModeActiveRow = 0;
+
     ui->setupUi(this);
     QPainter painter(ui->frame);
     QRect Rect;
@@ -121,6 +132,7 @@ MatrixPasswordDialog::MatrixPasswordDialog(QWidget *parent) :
 
     Stick20MatrixDataReceived = 0;
     HID_Stick20MatrixPasswordData_st.StatusFlag_u8 = STICK20_PASSWORD_MATRIX_STATUS_IDLE;
+    SelectedRowCounter = 0;
     if(ret){}//Fix warnings
     if(height){}//Fix warnings
 }
@@ -158,7 +170,7 @@ MatrixPasswordDialog::~MatrixPasswordDialog()
 
 void MatrixPasswordDialog::InitSecurePasswordDialog()
 {
-    bool        ret;
+    bool        ret = FALSE;
     bool        waitForAnswerFromStick20;
     int         i;
     int         i1;

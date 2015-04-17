@@ -64,6 +64,8 @@ DialogChangePassword::DialogChangePassword(QWidget *parent) :
 
 
     ui->lineEdit_OldPW->setFocus();
+    cryptostick = NULL;
+    PasswordKind = 0;
 }
 
 /*******************************************************************************
@@ -242,10 +244,10 @@ void DialogChangePassword::Stick10ChangePassword(void)
     strncpy ( (char*)new_pin, PasswordString.data(), password_length);
 
     // Change password
-    if ( PasswordKind == STICK10_PASSWORD_KIND_USER )
-        ret = cryptostick->changeUserPin (old_pin, new_pin);
     if ( PasswordKind == STICK10_PASSWORD_KIND_ADMIN )
         ret = cryptostick->changeAdminPin (old_pin, new_pin);
+    else //if ( PasswordKind == STICK10_PASSWORD_KIND_USER )
+        ret = cryptostick->changeUserPin (old_pin, new_pin);
 
     if (ret == CMD_STATUS_WRONG_PASSWORD) {
         csApplet->warningBox("Wrong password.");

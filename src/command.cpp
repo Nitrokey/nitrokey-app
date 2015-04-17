@@ -35,18 +35,19 @@
 
 Command::Command(uint8_t commandType, uint8_t *data, uint8_t len)
 {
+    uint8_t length = len;
     this->commandType = commandType;
-
+    this->crc = 0;
     memset(this->data,0,COMMAND_SIZE);
 
-    if (COMMAND_SIZE < len)
+    if (COMMAND_SIZE < length)
     {
-        len = COMMAND_SIZE;
+        length = COMMAND_SIZE;
     }
 
-    if ((0 != len) && (NULL != data))
+    if ((0 != length) && (NULL != data))
     {
-        memcpy(this->data,data,len);
+        memcpy(this->data,data,length);
     }
 }
 

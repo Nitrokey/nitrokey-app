@@ -961,7 +961,6 @@ hid_device * HID_API_EXPORT hid_open_path(const char *path)
 		free_hid_device(dev);
 		return NULL;
 	}
-    if(num_devs){}//Fix warnings
 }
 
 

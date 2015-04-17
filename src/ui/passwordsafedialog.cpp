@@ -44,6 +44,7 @@ PasswordSafeDialog::PasswordSafeDialog(int Slot,QWidget *parent) :
 {
     QString MsgText;
 
+    cryptostick = NULL;
     ui->setupUi(this);
 
 
@@ -270,7 +271,7 @@ void PasswordSafeDialog::on_ButtonOk_clicked()
 
 *******************************************************************************/
 
-void PasswordSafeDialog::on_spinBoxDelay_valueChanged(int arg1)
+void PasswordSafeDialog::on_spinBoxDelay_valueChanged()
 {
     QString MsgText;
 
@@ -286,8 +287,6 @@ void PasswordSafeDialog::on_spinBoxDelay_valueChanged(int arg1)
 
         ui->labelInfo->setText(MsgText);
     }
-
-    arg1 = 0;           // Avoid warning
 }
 
 /*******************************************************************************

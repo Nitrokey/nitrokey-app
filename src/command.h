@@ -31,7 +31,6 @@ public:
     Command(uint8_t commandType, uint8_t *data,uint8_t len);
     uint8_t commandType;
     uint8_t data[COMMAND_SIZE];
-    uint8_t len;
     uint32_t crc;
 
     void generateCRC();

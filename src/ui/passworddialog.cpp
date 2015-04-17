@@ -62,6 +62,8 @@ PasswordDialog::PasswordDialog(bool ShowMatrix,QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PasswordDialog)
 {
+    cryptostick = NULL;
+
     ui->setupUi(this);
 
     cryptostick = NULL;     // Set it manuel
@@ -74,6 +76,8 @@ PasswordDialog::PasswordDialog(bool ShowMatrix,QWidget *parent) :
     }
 
     ui->lineEdit->setFocus();
+
+    cryptostick = NULL;
 }
 
 /*******************************************************************************
