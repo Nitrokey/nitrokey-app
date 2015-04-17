@@ -11,17 +11,3 @@ before_install:
 
 compiler: g++
 script: make -f Makefile.top build
-
-env:
-  global:
-   - secure: "iyIBw47ujazvyk2xDYd4zg9xQ3GDLjqsa3t/egU8ygSU0No5c6SxQUcceaGeCyIrd9kUWy/+TTnlYhaevOBJ8LCNt346mjK4/9lVi0k0ZMeqxJKeSHI97RZ+54ps8hccNJhWVYWBxx+sJjbYsrzY8MhsIJ+V8td9xVUSv/gsyq8="
-
-addons:
-  coverity_scan:
-    project:
-      name: "Nitrokey/nitrokey-app"
-      description: "Build submitted via Travis CI"
-    notification_email: george@nitrokey.com
-    build_command_prepend: ""
-    build_command:   "make -f Makefile.top build"
-    branch_pattern: coverity-scan
