@@ -38,7 +38,7 @@
     #define STRCAT(dest,dest_size,source)                                           \
     do{                                                                             \
         if ( strlen((source)) <= (dest_size) - strlen((dest)) -1 ){                 \
-            printf("%d %d %d\n", strlen((source)), (int)sizeof((dest)), strlen((dest))); \
+            printf("%zu %zu %zu\n", strlen((source)), sizeof((dest)), strlen((dest))); \
             strcat ((dest), (source));                                              \
         } else {                                                                    \
             (void)0;                                                                \

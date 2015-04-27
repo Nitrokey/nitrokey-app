@@ -36,7 +36,7 @@ extern "C" {
     extern int  DebugingActive;
     extern int  DebugingStick20PoolingActive;
 
-    void DebugAppendTextGui (char *Text);
+    void DebugAppendTextGui (const char *Text);
 #ifdef __cplusplus
 } // extern "C"
 #endif

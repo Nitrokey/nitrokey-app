@@ -160,7 +160,7 @@ void DebugAppendTimestampToLog (void)
 
 *******************************************************************************/
 
-void DebugAppendTextGui (char *Text)
+void DebugAppendTextGui (const char *Text)
 {
     int i;
     static int LastCharWasCr = FALSE;

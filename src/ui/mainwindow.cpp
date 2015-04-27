@@ -63,7 +63,7 @@
 
 //extern "C" char DebugText_Stick20[600000];
 
-extern "C" void DebugAppendTextGui (char *Text);
+extern "C" void DebugAppendTextGui (const char *Text);
 extern "C" void DebugInitDebugging (void);
 
 /*******************************************************************************
@@ -574,9 +574,9 @@ void MainWindow::AnalyseProductionInfos()
 
     printf ("Firmware     %d.%d\n", (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0],
                                     (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
-    printf ("CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
-    printf ("Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
-    printf ("SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
+    printf ("CPU ID       0x%08x\n",Stick20ProductionInfos_st.CPU_CardID_u32);
+    printf ("Smartcard ID 0x%08x\n",Stick20ProductionInfos_st.SmartCardID_u32);
+    printf ("SD card ID   0x%08x\n",Stick20ProductionInfos_st.SD_CardID_u32);
 
     printf ((char*)"\nSD card infos\n");
     printf ("Manufacturer 0x%02x\n",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
@@ -611,9 +611,9 @@ void MainWindow::AnalyseProductionInfos()
         FOPEN( fp, LogFile,"a+");
         if (0 != fp)
         {
-            fprintf (fp,"CPU:0x%08lx,",Stick20ProductionInfos_st.CPU_CardID_u32);
-            fprintf (fp,"SC:0x%08lx,",Stick20ProductionInfos_st.SmartCardID_u32);
-            fprintf (fp,"SD:0x%08lx,",Stick20ProductionInfos_st.SD_CardID_u32);
+            fprintf (fp,"CPU:0x%08x,",Stick20ProductionInfos_st.CPU_CardID_u32);
+            fprintf (fp,"SC:0x%08x,",Stick20ProductionInfos_st.SmartCardID_u32);
+            fprintf (fp,"SD:0x%08x,",Stick20ProductionInfos_st.SD_CardID_u32);
             fprintf (fp,"SCM:0x%02x,",Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
             fprintf (fp,"SCO:0x%04x,",Stick20ProductionInfos_st.SD_Card_OEM_u16);
             fprintf (fp,"DAT:%d.%02d,",Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8+2000,Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
@@ -645,11 +645,11 @@ void MainWindow::AnalyseProductionInfos()
     SNPRINTF(text,sizeof (text),"Firmware     %d.%d\n", (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0], 
                                                         (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
     DebugAppendTextGui (text);
-    SNPRINTF(text,sizeof (text),"CPU ID       0x%08lx\n",Stick20ProductionInfos_st.CPU_CardID_u32);
+    SNPRINTF(text,sizeof (text),"CPU ID       0x%08x\n",Stick20ProductionInfos_st.CPU_CardID_u32);
     DebugAppendTextGui (text);
-    SNPRINTF(text,sizeof (text),"Smartcard ID 0x%08lx\n",Stick20ProductionInfos_st.SmartCardID_u32);
+    SNPRINTF(text,sizeof (text),"Smartcard ID 0x%08x\n",Stick20ProductionInfos_st.SmartCardID_u32);
     DebugAppendTextGui (text);
-    SNPRINTF(text,sizeof (text),"SD card ID   0x%08lx\n",Stick20ProductionInfos_st.SD_CardID_u32);
+    SNPRINTF(text,sizeof (text),"SD card ID   0x%08x\n",Stick20ProductionInfos_st.SD_CardID_u32);
     DebugAppendTextGui (text);
 
 
@@ -5024,7 +5024,7 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked()
     int   n;
     int   PasswordCharSpaceLen;
     char  RandomPassword[30];
-    char *PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
+    const char *PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
     QString Text;
 
     PasswordCharSpaceLen = strlen (PasswordCharSpace);

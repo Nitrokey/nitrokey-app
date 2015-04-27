@@ -75,7 +75,7 @@ extern int  DebugNewTextLen_Stick20;
 
 
 void DebugInitDebugging (void);
-void DebugAppendTextGui (char *Text);
+void DebugAppendTextGui (const char *Text);
 void DebugAppendTextGui_NoTimeStamp (char *Text);
 void DebugAppendTextStick (char *Text);
 void DebugAppendTextStick_NoTimeStamp (char *Text);
