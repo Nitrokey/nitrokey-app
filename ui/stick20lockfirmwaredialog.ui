@@ -20,7 +20,7 @@
    <string>Lock firmware</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -102,7 +102,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>

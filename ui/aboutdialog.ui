@@ -23,7 +23,7 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <property name="autoFillBackground">
@@ -219,8 +219,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>351</width>
-           <height>76</height>
+           <width>363</width>
+           <height>79</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -351,7 +351,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

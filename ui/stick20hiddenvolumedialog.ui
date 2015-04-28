@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>349</width>
-    <height>389</height>
+    <height>321</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,7 @@
    <string>Setup hidden volume</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -297,7 +297,7 @@
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>
