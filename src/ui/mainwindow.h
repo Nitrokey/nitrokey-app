@@ -94,6 +94,7 @@ private:
 
     Ui::MainWindow *ui;
     AppIndicator* indicator;
+    GtkWidget* indicatorMenu;
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     QMenu *trayMenuSubConfigure;

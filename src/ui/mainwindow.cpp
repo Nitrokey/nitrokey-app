@@ -85,7 +85,7 @@ public:
 extern "C"
 {
     void onQuit(GtkMenu *, gpointer);
-    void onAbout(MainWindow *, gpointer);
+    void onAbout(GtkMenu *, gpointer);
     bool isUnity(void);
 }
 
@@ -96,14 +96,15 @@ void onQuit(GtkMenu *menu, gpointer data)
     self->quit();
 }
 
-void onAbout(MainWindow* menu, gpointer data)
+void onAbout(GtkMenu *menu, gpointer data)
 {
-    menu->startAboutDialog();
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startAboutDialog();
 }
 
 bool isUnity()
 {
-    return false;
+//    return false;
     QString desktop = getenv("XDG_CURRENT_DESKTOP");
     return (desktop.toLower() == "unity");
 }
@@ -123,7 +124,20 @@ void MainWindow::showTrayMessage(const QString& title, const QString& msg, enum 
     else
     {
         if (TRUE == trayIcon->supportsMessages ())
-            showTrayMessage (title, msg, type, timeout);
+        {
+            switch(type)
+            {
+                case INFORMATION:
+                    trayIcon->showMessage (title, msg, QSystemTrayIcon::Information, timeout);
+                    break;
+                case WARNING:
+                    trayIcon->showMessage (title, msg, QSystemTrayIcon::Warning, timeout);
+                    break;
+                case CRITICAL:
+                    trayIcon->showMessage (title, msg, QSystemTrayIcon::Critical, timeout);
+                    break;
+            }
+        }
         else
             csApplet->messageBox(msg);
     }
@@ -147,7 +161,6 @@ void MainWindow::createIndicator()
     {
         trayIcon = new QSystemTrayIcon(this);
         trayIcon->setIcon(QIcon(":/images/CS_icon.png"));
-
         connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                 this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
@@ -384,7 +397,6 @@ MainWindow::MainWindow (StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     ui->deleteUserPasswordCheckBox->setChecked(false);
 
     cryptostick->getStatus();
-
     generateMenu();
 }
 
@@ -862,49 +874,49 @@ void MainWindow::generateMenu()
 {
     if (isUnity())
     {
-        //AppIndicator *indicator;
-        GtkWidget *menu;
-        GtkWidget *notConnItem;
+        GtkWidget *notConnItem = gtk_menu_item_new_with_label("Nitrokey not connected");;
         GtkWidget *debugItem;
-        GtkWidget *aboutItem;
-        GtkWidget *quitItem;
+        GtkWidget *aboutItem = gtk_menu_item_new_with_label("Nitrokey not connected");;
+        GtkWidget *quitItem = gtk_menu_item_new_with_label("Quit");
 
-        menu = gtk_menu_new();
-        app_indicator_set_menu(indicator, GTK_MENU(menu));
+        GtkWidget *separItem1 = gtk_separator_menu_item_new();
+        GtkWidget *separItem2 = gtk_separator_menu_item_new();
 
-        notConnItem = gtk_menu_item_new_with_label("Nitrokey not connected");
-        g_signal_connect(notConnItem, "activate", G_CALLBACK(NULL), qApp);
+        indicatorMenu = gtk_menu_new();
 
-        aboutItem = gtk_menu_item_new_with_label("About");
         g_signal_connect(aboutItem, "activate", G_CALLBACK(onAbout), this);
-
-        quitItem = gtk_menu_item_new_with_label("Quit");
         g_signal_connect(quitItem, "activate", G_CALLBACK(onQuit), qApp);
 
 
-        if (cryptostick->isConnected == false) 
-            gtk_menu_shell_append(GTK_MENU_SHELL(menu), notConnItem);
+        if (cryptostick->isConnected == false)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), notConnItem);
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem1);
+        }
         else
         {
             if (false == cryptostick->activStick20)
             {
-                
+                generateMenuForProDevice ();
             }
             else
             {
-                
+                generateMenuForStorageDevice ();
             }
         }
 
         if (TRUE == DebugWindowActive){}
 
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), aboutItem);
-        gtk_menu_shell_append(GTK_MENU_SHELL(menu), quitItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), aboutItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), quitItem);
 
 
         gtk_widget_show(notConnItem);
+        gtk_widget_show(separItem1);
         gtk_widget_show(aboutItem);
         gtk_widget_show(quitItem);
+
+        app_indicator_set_menu(indicator, GTK_MENU(indicatorMenu));
     }
     else
     {
@@ -1029,16 +1041,9 @@ void MainWindow::initActionsForStick20()
 }
 
 
-#define ADD_TOTP_ACTION(text, num) (trayMenuPasswdSubMenu->addAction( (text), this, SLOT(getTOTP(num)())))
-
 void MainWindow::generatePasswordMenu()
 {
     trayMenuPasswdSubMenu = trayMenu->addMenu("Passwords");
-
-    for (int i = 0; i < TOTP_SlotCount; i++)
-    {
-        ADD_TOTP_ACTION((char *)cryptostick->TOTPSlots[0]->slotName, i);
-    }
 
     /* TOTP passwords */
     if (cryptostick->TOTPSlots[0]->isProgrammed==true)
@@ -1047,101 +1052,39 @@ void MainWindow::generatePasswordMenu()
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[1]->slotName, this, SLOT(getTOTP2()));
     if (cryptostick->TOTPSlots[2]->isProgrammed==true)
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[2]->slotName, this, SLOT(getTOTP3()));
-
     if (cryptostick->TOTPSlots[3]->isProgrammed==true)
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[3]->slotName, this, SLOT(getTOTP4()));
-    if (TOTP_SlotCount > 4)
-    {
-        if (cryptostick->TOTPSlots[4]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[4]->slotName, this, SLOT(getTOTP5()));
-        }
-    }
-
-    if (TOTP_SlotCount > 5)
-    {
-        if (cryptostick->TOTPSlots[5]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[5]->slotName, this,SLOT(getTOTP6()));
-        }
-    }
-
-    if (TOTP_SlotCount > 6)
-    {
-        if (cryptostick->TOTPSlots[6]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[6]->slotName, this,SLOT(getTOTP7()));
-        }
-    }
-
-    if (TOTP_SlotCount > 7)
-    {
-        if (cryptostick->TOTPSlots[7]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[7]->slotName, this,SLOT(getTOTP8()));
-        }
-    }
-
-    if (TOTP_SlotCount > 8)
-    {
-        if (cryptostick->TOTPSlots[8]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP9()));
-        }
-    }
-
-    if (TOTP_SlotCount > 9)
-    {
-        if (cryptostick->TOTPSlots[9]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[9]->slotName, this,SLOT(getTOTP10()));
-        }
-    }
-
-    if (TOTP_SlotCount > 10)
-    {
-        if (cryptostick->TOTPSlots[10]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[10]->slotName, this,SLOT(getTOTP11()));
-        }
-    }
-
-    if (TOTP_SlotCount > 11)
-    {
-        if (cryptostick->TOTPSlots[11]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[11]->slotName, this,SLOT(getTOTP12()));
-        }
-    }
-
-    if (TOTP_SlotCount > 12)
-    {
-        if (cryptostick->TOTPSlots[12]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[12]->slotName, this,SLOT(getTOTP13()));
-        }
-    }
-
-    if (TOTP_SlotCount > 13)
-    {
-        if (cryptostick->TOTPSlots[13]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[13]->slotName, this,SLOT(getTOTP14()));
-        }
-    }
-
-    if (TOTP_SlotCount > 14)
-    {
-        if (cryptostick->TOTPSlots[14]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[14]->slotName, this,SLOT(getTOTP15()));
-        }
-    }
+    if (cryptostick->TOTPSlots[4]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[4]->slotName, this, SLOT(getTOTP5()));
+    if (cryptostick->TOTPSlots[5]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[5]->slotName, this,SLOT(getTOTP6()));
+    if (cryptostick->TOTPSlots[6]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[6]->slotName, this,SLOT(getTOTP7()));
+    if (cryptostick->TOTPSlots[7]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[7]->slotName, this,SLOT(getTOTP8()));
+    if (cryptostick->TOTPSlots[8]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP9()));
+    if (cryptostick->TOTPSlots[9]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[9]->slotName, this,SLOT(getTOTP10()));
+    if (cryptostick->TOTPSlots[10]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[10]->slotName, this,SLOT(getTOTP11()));
+    if (cryptostick->TOTPSlots[11]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[11]->slotName, this,SLOT(getTOTP12()));
+    if (cryptostick->TOTPSlots[12]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[12]->slotName, this,SLOT(getTOTP13()));
+    if (cryptostick->TOTPSlots[13]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[13]->slotName, this,SLOT(getTOTP14()));
+    if (cryptostick->TOTPSlots[14]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[14]->slotName, this,SLOT(getTOTP15()));
 
 
     /* HOTP passwords */
-    if (cryptostick->HOTPSlots[0]->isProgrammed==true){
+    if (cryptostick->HOTPSlots[0]->isProgrammed==true)
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[0]->slotName, this,SLOT(getHOTP1()));
-    }
-    if (cryptostick->HOTPSlots[1]->isProgrammed==true){
+    if (cryptostick->HOTPSlots[1]->isProgrammed==true)
         trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[1]->slotName, this,SLOT(getHOTP2()));
-    }
-
-    if (HOTP_SlotCount >= 3)
-    {
-        if (cryptostick->HOTPSlots[2]->isProgrammed==true){
-            trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[2]->slotName, this,SLOT(getHOTP3()));
-        }
-    }
+    if (cryptostick->HOTPSlots[2]->isProgrammed==true)
+        trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[2]->slotName, this,SLOT(getHOTP3()));
 
     if (TRUE == cryptostick->passwordSafeUnlocked) 
     {
@@ -1185,153 +1128,175 @@ void MainWindow::generatePasswordMenu()
 
 void MainWindow::generateMenuForProDevice()
 {
-    generatePasswordMenu ();
-    trayMenu->addSeparator();
-    generateMenuPasswordSafe ();
-
-    trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
-    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
-
-
-    if (TRUE == cryptostick->passwordSafeAvailable)
-        trayMenuSubConfigure->addAction(restoreActionStick20);
+    if (isUnity())
+    {
+        /*
+        GtkWidget* configureSubMenu = gtk_menu_new("Configure");
+        gtk_menu_item_set_submenu(GTK_MENU_ITEM(configureSubMenu), indicatorMenu);
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), configureSubMenu);
+*/
+        GtkWidget *submenu1 = gtk_menu_new();
+        GtkWidget *submenu1_item = gtk_menu_item_new_with_label("SubMenu1");
+        gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu1_item), submenu1);
+        //adding submenu to main menu
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), submenu1_item);
+    }
     else
-        trayMenuSubConfigure->addAction(restoreAction);
+    {
+        generatePasswordMenu ();
+        trayMenu->addSeparator();
+        generateMenuPasswordSafe ();
 
-    trayMenuSubConfigure->addSeparator();
+        trayMenuSubConfigure  = trayMenu->addMenu( "Configure" );
+        trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
 
-    trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
-    trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
 
-    if (ExtendedConfigActive) {
+        if (TRUE == cryptostick->passwordSafeAvailable)
+            trayMenuSubConfigure->addAction(restoreActionStick20);
+        else
+            trayMenuSubConfigure->addAction(restoreAction);
+
         trayMenuSubConfigure->addSeparator();
-        trayMenuSubConfigure->addAction(resetAction);
+
+        trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
+        trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
+
+        if (ExtendedConfigActive) {
+            trayMenuSubConfigure->addSeparator();
+            trayMenuSubConfigure->addAction(resetAction);
+        }
     }
 }
 
 
 void MainWindow::generateMenuForStorageDevice()
 {
-    int AddSeperator;
-
-    if (FALSE == Stick20ScSdCardOnline)         // Is Stick 2.0 online (SD + SC accessable?)
+    if ( isUnity() )
     {
-        trayMenu->addAction(Stick20ActionUpdateStickStatus);
-        return;
+
     }
-
-    // Add special entrys
-    AddSeperator = FALSE;
-
-    if (TRUE == StickNotInitated)
-    {
-        trayMenu->addAction(Stick20ActionInitCryptedVolume       );
-        AddSeperator = TRUE;
-    }
-
-    if (TRUE == SdCardNotErased)
-    {
-        trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars  );
-        AddSeperator = TRUE;
-    }
-
-    if (TRUE == AddSeperator)
-        trayMenu->addSeparator();
-
-    generatePasswordMenu ();
-    trayMenu->addSeparator();
-
-    if (FALSE == StickNotInitated)
-    {
-        // Enable tab for password safe for stick 2
-        if (-1 == ui->tabWidget->indexOf (ui->tab_3))
-        {
-            ui->tabWidget->addTab(ui->tab_3,"Password Safe");
-        }
-        //ui->pushButton_StaticPasswords->show ();
-
-        // Setup entrys for password safe
-        generateMenuPasswordSafe ();
-    }
-
-    if (FALSE == SdCardNotErased)
-    {
-        if (FALSE == CryptedVolumeActive)
-            trayMenu->addAction(Stick20ActionEnableCryptedVolume);
-        else
-            trayMenu->addAction(Stick20ActionDisableCryptedVolume);
-
-        if (FALSE == HiddenVolumeActive)
-            trayMenu->addAction(Stick20ActionEnableHiddenVolume);
-        else
-            trayMenu->addAction(Stick20ActionDisableHiddenVolume);
-    }
-
-    trayMenu->addAction(LockDeviceAction);
-
-    trayMenuSubConfigure = trayMenu->addMenu( "Configure" );
-    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
-    trayMenuSubConfigure->addAction(restoreActionStick20);
-    trayMenuSubConfigure->addSeparator();
-
-    // Pin actions
-    trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
-    trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
-    if (TRUE == MatrixInputActive)
-        trayMenuSubConfigure->addAction(Stick20ActionSetupPasswordMatrix);
-    trayMenuSubConfigure->addSeparator();
-
-    // Storage actions
-    if (FALSE == NormalVolumeRWActive)
-        trayMenuSubConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume );      // Set RW active
     else
-        trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);      // Set readonly active
-
-    if (FALSE == SdCardNotErased)
-        trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
-
-    trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
-//    trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus             );
-    trayMenuSubConfigure->addSeparator();
-
-
-    // Other actions
-    if (TRUE == LockHardware)
-        trayMenuSubConfigure->addAction(Stick20ActionLockStickHardware);
-
-    if (TRUE == HiddenVolumeAccessable)
-    { }
-
-    trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate);
-    trayMenuSubConfigure->addAction(Stick20ActionExportFirmwareToFile);
-
-    trayMenuSubConfigure->addSeparator();
-
-    if (TRUE == ExtendedConfigActive)
     {
-        trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu( "Special Configure" );
-        trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars);
+        int AddSeperator;
+
+        if (FALSE == Stick20ScSdCardOnline)         // Is Stick 2.0 online (SD + SC accessable?)
+        {
+            trayMenu->addAction(Stick20ActionUpdateStickStatus);
+            return;
+        }
+
+        // Add special entrys
+        AddSeperator = FALSE;
+
+        if (TRUE == StickNotInitated)
+        {
+            trayMenu->addAction(Stick20ActionInitCryptedVolume       );
+            AddSeperator = TRUE;
+        }
 
         if (TRUE == SdCardNotErased)
-            trayMenuSubSpecialConfigure->addAction(Stick20ActionClearNewSDCardFound);
-    }
+        {
+            trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars  );
+            AddSeperator = TRUE;
+        }
 
-    // Enable "reset user PIN" ?
-    if (0 == cryptostick->userPasswordRetryCount)
-    {
+        if (TRUE == AddSeperator)
+            trayMenu->addSeparator();
+
+        generatePasswordMenu ();
         trayMenu->addSeparator();
-        trayMenu->addAction(Stick20ActionResetUserPassword);
-    }
 
-    // Add debug window ?
-    if (TRUE == DebugWindowActive)
-    {
-        trayMenu->addSeparator();
-        trayMenu->addAction(Stick20ActionDebugAction);
-    }
+        if (FALSE == StickNotInitated)
+        {
+            // Enable tab for password safe for stick 2
+            if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+            {
+                ui->tabWidget->addTab(ui->tab_3,"Password Safe");
+            }
+            //ui->pushButton_StaticPasswords->show ();
 
-    // Setup OTP combo box
-    generateComboBoxEntrys ();
+            // Setup entrys for password safe
+            generateMenuPasswordSafe ();
+        }
+
+        if (FALSE == SdCardNotErased)
+        {
+            if (FALSE == CryptedVolumeActive)
+                trayMenu->addAction(Stick20ActionEnableCryptedVolume);
+            else
+                trayMenu->addAction(Stick20ActionDisableCryptedVolume);
+
+            if (FALSE == HiddenVolumeActive)
+                trayMenu->addAction(Stick20ActionEnableHiddenVolume);
+            else
+                trayMenu->addAction(Stick20ActionDisableHiddenVolume);
+        }
+
+        trayMenu->addAction(LockDeviceAction);
+
+        trayMenuSubConfigure = trayMenu->addMenu( "Configure" );
+        trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
+        trayMenuSubConfigure->addAction(restoreActionStick20);
+        trayMenuSubConfigure->addSeparator();
+
+        // Pin actions
+        trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
+        trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
+        if (TRUE == MatrixInputActive)
+            trayMenuSubConfigure->addAction(Stick20ActionSetupPasswordMatrix);
+        trayMenuSubConfigure->addSeparator();
+
+        // Storage actions
+        if (FALSE == NormalVolumeRWActive)
+            trayMenuSubConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume );      // Set RW active
+        else
+            trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);      // Set readonly active
+
+        if (FALSE == SdCardNotErased)
+            trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
+
+        trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
+        // trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus);
+        trayMenuSubConfigure->addSeparator();
+
+        // Other actions
+        if (TRUE == LockHardware)
+            trayMenuSubConfigure->addAction(Stick20ActionLockStickHardware);
+
+        if (TRUE == HiddenVolumeAccessable)
+        { }
+
+        trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate);
+        trayMenuSubConfigure->addAction(Stick20ActionExportFirmwareToFile);
+
+        trayMenuSubConfigure->addSeparator();
+
+        if (TRUE == ExtendedConfigActive)
+        {
+            trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu( "Special Configure" );
+            trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars);
+
+            if (TRUE == SdCardNotErased)
+                trayMenuSubSpecialConfigure->addAction(Stick20ActionClearNewSDCardFound);
+        }
+
+        // Enable "reset user PIN" ?
+        if (0 == cryptostick->userPasswordRetryCount)
+        {
+            trayMenu->addSeparator();
+            trayMenu->addAction(Stick20ActionResetUserPassword);
+        }
+
+        // Add debug window ?
+        if (TRUE == DebugWindowActive)
+        {
+            trayMenu->addSeparator();
+            trayMenu->addAction(Stick20ActionDebugAction);
+        }
+
+        // Setup OTP combo box
+        generateComboBoxEntrys ();
+    }
 }
 
 
