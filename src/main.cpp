@@ -1,7 +1,6 @@
 /*
 * Author: Copyright (C) Andrzej Surowiec 2012
 *
-*
 * This file is part of Nitrokey.
 *
 * Nitrokey is free software: you can redistribute it and/or modify
@@ -28,32 +27,6 @@
 #include "stick20hid.h"
 #include "nitrokey-applet.h"
 
-/*******************************************************************************
-
- External declarations
-
-*******************************************************************************/
-
-
-/*******************************************************************************
-
- Local defines
-
-*******************************************************************************/
-
-
-/*******************************************************************************
-
-  HelpInfos
-
-  Changes
-  Date      Author        Info
-  09.07.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
 
 void HelpInfos (void)
 {
@@ -71,16 +44,6 @@ void HelpInfos (void)
             "\n");
 }
 
-/*******************************************************************************
-
-  main
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
-
 
 int main(int argc, char *argv[])
 {
@@ -90,8 +53,6 @@ int main(int argc, char *argv[])
     csApplet = new CryptostickApplet;
 
     int i;
-    //int DebugWindowActive;
-    //int SpecialConfigActive;
     char *p;
     StartUpParameter_tst StartupInfo_st;
 
@@ -143,8 +104,7 @@ int main(int argc, char *argv[])
 
     HID_Stick20Init ();
 
-// Check for commandline parameter
-    //    if (2 == argc)
+    // Check for commandline parameter
     for (i=2;i<=argc;i++)
     {
         p = argv[i-1];
@@ -173,9 +133,8 @@ int main(int argc, char *argv[])
         }
 */
         if (0 == strcmp (p,"--lock-hardware"))
-        {
             StartupInfo_st.LockHardware = TRUE;
-        }
+
         if (0 == strcmp (p,"--cmd"))
         {
             StartupInfo_st.Cmd = TRUE;
@@ -194,14 +153,7 @@ int main(int argc, char *argv[])
         }
     }
 
-
-
     MainWindow w(&StartupInfo_st);
-    //w.show();
-/*
-    QTime midnight(0, 0, 0);
-    qsrand(midnight.secsTo(QTime::currentTime()));
-*/
     QDateTime local(QDateTime::currentDateTime());
     qsrand (local.currentMSecsSinceEpoch() % 2000000000);
 
@@ -209,18 +161,7 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-/*******************************************************************************
 
-  GetTimeStampForLog
-
-  Changes
-  Date      Author        Info
-  09.12.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
 extern "C" char *GetTimeStampForLog (void);
 
 char *GetTimeStampForLog (void)
@@ -236,8 +177,7 @@ char *GetTimeStampForLog (void)
         STRCPY (DateString,sizeof (DateString)-1,LastTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toLatin1());
     }
     else
-    {
         DateString[0] = 0;
-    }
+
     return (DateString);
 }

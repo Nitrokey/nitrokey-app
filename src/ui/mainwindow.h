@@ -30,6 +30,15 @@
 
 #define TRAY_MSG_TIMEOUT    5000
 
+#undef signals
+extern "C"
+{
+        #include <libappindicator/app-indicator.h>
+        #include <libnotify/notify.h>
+        #include <gtk/gtk.h>
+}
+#define signals public
+
 namespace Ui {
 class MainWindow;
 }
@@ -42,6 +51,12 @@ typedef struct {
     int  Cmd;
     char *CmdLine;
 } StartUpParameter_tst;
+
+enum trayMessageType {
+    INFORMATION,
+    WARNING,
+    CRITICAL
+};
 
 
 class MainWindow : public QMainWindow
@@ -72,7 +87,13 @@ protected:
      void closeEvent(QCloseEvent *event);
 
 private:
+    void InitState();
+    void createIndicator();
+    void startDebug();
+    void showTrayMessage(const QString& title, const QString& msg, enum trayMessageType type, int timeout);
+
     Ui::MainWindow *ui;
+    AppIndicator* indicator;
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     QMenu *trayMenuSubConfigure;
@@ -150,7 +171,7 @@ private:
     int getNextCode(uint8_t slotNumber);
 
     void generatePasswordMenu();
-    void generateMenuForStick10();
+    void generateMenuForProDevice();
     void initActionsForStick20();
     int  stick20SendCommand (uint8_t stick20Command, uint8_t *password);
 
@@ -162,11 +183,14 @@ private:
     void generateTOTPConfig(TOTPSlot *slot);
     void generateAllConfigs();
 
-    void generateMenuForStick20();
+    void generateMenuForStorageDevice();
     int  UpdateDynamicMenuEntrys (void);
     void AnalyseProductionInfos();
 
     void on_pushButton_clicked();           // RB function used ?
+
+public slots:
+    void startAboutDialog ();
 
 private slots:
     void resizeMin();
@@ -174,20 +198,16 @@ private slots:
     void startConfiguration();
     int factoryReset();
     void getCode(uint8_t slotNo);
-//    void on_pushButton_clicked();
-//    void on_pushButton_2_clicked();
     void on_writeButton_clicked();
     void displayCurrentTotpSlotConfig(uint8_t slotNo);
     void displayCurrentHotpSlotConfig(uint8_t slotNo);
     void displayCurrentSlotConfig();
     void displayCurrentGeneralConfig();
     void on_slotComboBox_currentIndexChanged(int index);
-//    void on_resetButton_clicked();
     void on_hexRadioButton_toggled(bool checked);
     void on_base32RadioButton_toggled(bool checked);
     void on_setToZeroButton_clicked();
     void on_setToRandomButton_clicked();
-//    void on_checkBox_2_toggled(bool checked);
     void on_tokenIDCheckBox_toggled(bool checked);
     void on_enableUserPasswordCheckBox_toggled(bool checked);
     void on_writeGeneralConfigButton_clicked();
@@ -255,14 +275,12 @@ private slots:
     void getTOTP14();
     void getTOTP15();
     void on_eraseButton_clicked();
-//    void on_resetGeneralConfigButton_clicked();
     void on_randomSecretButton_clicked();
     void on_checkBox_toggled(bool checked);
     
     void destroyPasswordSafeStick10();
     void startStick20Configuration();
     void startStickDebug();
-    void startAboutDialog ();
     void startMatrixPasswordDialog();
     void startStick20Setup() ;
 
@@ -294,10 +312,6 @@ private slots:
     void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
     void on_PWS_CheckBoxHideSecret_toggled(bool checked);
     void on_PWS_ButtonClose_pressed();
-    //void on_pushButton_GotoTOTP_clicked();
-    //void on_pushButton_GotoHOTP_clicked();
-    //void on_pushButton_StaticPasswords_clicked();
-    //void on_pushButton_GotoGenOTP_clicked();
     void on_PWS_ButtonCreatePW_clicked();
     void on_PWS_ButtonSaveSlot_clicked();
     void on_PWS_ButtonEnable_clicked();
