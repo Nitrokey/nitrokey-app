@@ -169,6 +169,7 @@ private:
     void on_pushButton_clicked();           // RB function used ?
 
 private slots:
+    void resizeMin();
     void checkConnection();
     void startConfiguration();
     int factoryReset();
@@ -203,10 +204,10 @@ private slots:
     */
     //END - OTP Test Routine ----------------------------------
 
-bool eventFilter (QObject *obj, QEvent *event);
-void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    bool eventFilter (QObject *obj, QEvent *event);
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
-// Functions for password safe
+    // Functions for password safe
     void SetupPasswordSafeConfig (void);
     void generateMenuPasswordSafe();
     char *PWS_GetSlotName (int Slot);
@@ -231,7 +232,7 @@ void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void PWS_Clicked_Slot15 ();
 
 
-// Functions for OTP
+    // Functions for OTP
     void getHOTPDialog (int slot);
     void getHOTP1();
     void getHOTP2();

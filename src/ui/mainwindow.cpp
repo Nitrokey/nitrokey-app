@@ -2062,9 +2062,14 @@ void MainWindow::startConfiguration()
         SetupPasswordSafeConfig ();
 
         showNormal();
+        QTimer::singleShot(0, this, SLOT(resizeMin()));
     }
 }
 
+void MainWindow::resizeMin()
+{
+    resize(minimumSizeHint());
+}
 
 /*******************************************************************************
 
