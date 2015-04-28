@@ -73,7 +73,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Waiting device...</string>
+          <string/>
          </property>
         </widget>
        </item>

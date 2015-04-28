@@ -8,5 +8,6 @@
         <file alias="harddrive.png">images/harddrive.png</file>
         <file alias="about.png">images/about.png</file>
         <file alias="ProgressWheel.GIF">images/ProgressWheel.GIF</file>
+        <file alias="progressWheel2.gif">images/progressWheel2.gif</file>
     </qresource>
 </RCC>

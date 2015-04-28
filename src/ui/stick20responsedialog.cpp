@@ -48,7 +48,8 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent, Stick20ResponseTas
 
     QGraphicsScene Scene;
     QSize SceneSize;
-    QMovie *ProgressMovie = new QMovie(":/images/ProgressWheel.GIF");
+    QMovie *ProgressMovie = new QMovie(":/images/progressWheel2.gif");
+    ui->LabelProgressWheel->setAttribute( Qt::WA_TranslucentBackground, true );
 
     // Center dialog to the screen
     this->setGeometry(QStyle::alignedRect(
@@ -353,6 +354,7 @@ void Stick20ResponseDialog::checkStick20StatusDialog(void)
         }
         OutputText.append (QString(")"));
         ui->HeaderText->setText(OutputText);
+        ui->label->setText(OutputText);
    }
 }
 
