@@ -876,11 +876,10 @@ void MainWindow::generateMenu()
     {
         GtkWidget *notConnItem = gtk_menu_item_new_with_label("Nitrokey not connected");;
         GtkWidget *debugItem;
-        GtkWidget *aboutItem = gtk_menu_item_new_with_label("Nitrokey not connected");;
+        GtkWidget *aboutItem = gtk_menu_item_new_with_label("About");;
         GtkWidget *quitItem = gtk_menu_item_new_with_label("Quit");
 
-        GtkWidget *separItem1 = gtk_separator_menu_item_new();
-        GtkWidget *separItem2 = gtk_separator_menu_item_new();
+        GtkWidget *separItem = gtk_separator_menu_item_new();
 
         indicatorMenu = gtk_menu_new();
 
@@ -891,7 +890,7 @@ void MainWindow::generateMenu()
         if (cryptostick->isConnected == false)
         {
             gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), notConnItem);
-            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem1);
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem);
         }
         else
         {
@@ -901,6 +900,7 @@ void MainWindow::generateMenu()
             }
             else
             {
+                generateMenuForProDevice ();
                 generateMenuForStorageDevice ();
             }
         }
@@ -912,7 +912,7 @@ void MainWindow::generateMenu()
 
 
         gtk_widget_show(notConnItem);
-        gtk_widget_show(separItem1);
+        gtk_widget_show(separItem);
         gtk_widget_show(aboutItem);
         gtk_widget_show(quitItem);
 
@@ -1130,16 +1130,7 @@ void MainWindow::generateMenuForProDevice()
 {
     if (isUnity())
     {
-        /*
-        GtkWidget* configureSubMenu = gtk_menu_new("Configure");
-        gtk_menu_item_set_submenu(GTK_MENU_ITEM(configureSubMenu), indicatorMenu);
-        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), configureSubMenu);
-*/
-        GtkWidget *submenu1 = gtk_menu_new();
-        GtkWidget *submenu1_item = gtk_menu_item_new_with_label("SubMenu1");
-        gtk_menu_item_set_submenu(GTK_MENU_ITEM(submenu1_item), submenu1);
-        //adding submenu to main menu
-        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), submenu1_item);
+
     }
     else
     {
