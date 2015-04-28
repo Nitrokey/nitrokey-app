@@ -35,6 +35,7 @@
 
 #include "device.h"
 #include "response.h"
+#include "stick20-response-task.h"
 #include "stick20responsedialog.h"
 #include "stick20matrixpassworddialog.h"
 #include "stick20setup.h"

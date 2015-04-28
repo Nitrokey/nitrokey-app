@@ -57,6 +57,7 @@ SET(moc_headers
     ${SRCUIDIR}/stick20lockfirmwaredialog.h
     ${SRCUIDIR}/stick20matrixpassworddialog.h
     ${SRCUIDIR}/stick20responsedialog.h
+    ${SRCUIDIR}/stick20-response-task.h
     ${SRCUIDIR}/stick20setup.h
     ${SRCUIDIR}/stick20updatedialog.h
     ${SRCUIDIR}/stick20window.h
@@ -133,6 +134,7 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
     ${SRCUIDIR}/stick20matrixpassworddialog.cpp
     ${SRCUIDIR}/stick20responsedialog.cpp
+    ${SRCUIDIR}/stick20-response-task.cpp
     ${SRCUIDIR}/stick20setup.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${SRCUIDIR}/stick20window.cpp

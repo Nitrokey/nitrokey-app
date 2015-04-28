@@ -24,6 +24,7 @@
 #include <QTimer>
 #include "device.h"
 #include "response.h"
+#include "stick20-response-task.h"
 
 
 #define STICK20_DEBUG_TEXT_LEN          600000
@@ -42,38 +43,8 @@ extern "C" {
 #endif
 
 
-
-class Stick20ResponseTask : public QObject
-{
-    Q_OBJECT
-
-public:
-    Stick20ResponseTask(QWidget *parent,Device *Cryptostick20,QSystemTrayIcon *MainWndTrayIcon);
-    ~Stick20ResponseTask();
-    void done (int Status);
-    void checkStick20Status();
-    void GetResponse (void);
-    void NoStopWhenStatusOK ();
-    void ShowIconMessage(QString IconText);
-
-    QWidget         *Stick20ResponseTaskParent;
-
-    Device          *cryptostick;
-    QSystemTrayIcon *trayIcon;
-    Response        *stick20Response;
-
-    int  ActiveCommand;
-    bool FlagNoStopWhenStatusOK;
-    int  ResultValue;
-    int  EndFlag;
-    int  Counter_u32;
-    int  retStick20Respone;
-};
-
-
-
 namespace Ui {
-class Stick20ResponseDialog;
+    class Stick20ResponseDialog;
 }
 
 class Stick20ResponseDialog : public QDialog
@@ -94,16 +65,9 @@ public:
 
 private:
     Ui::Stick20ResponseDialog *ui;
-//    int  ActiveCommand;
-//    int Counter_u32;
-//    bool FlagNoStopWhenStatusOK;
 
 private slots:
     void checkStick20StatusDialog();
-    void on_pushButton_clicked();
 };
-
-
-
 
 #endif // STICK20RESPONSEDIALOG_H

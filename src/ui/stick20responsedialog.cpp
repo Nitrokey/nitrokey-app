@@ -19,21 +19,17 @@
 
 #include <QTimer>
 #include <QMenu>
-#include <QtGui>
 #include <QDateTime>
+#include <QDesktopWidget>
 
 #include "device.h"
 #include "response.h"
 #include "nitrokey-applet.h"
 
 #include "stick20responsedialog.h"
+#include "stick20-response-task.h"
 #include "ui_stick20responsedialog.h"
 
-/*******************************************************************************
-
- Local defines
-
-*******************************************************************************/
 
 class OwnSleep : public QThread
 {
@@ -44,52 +40,38 @@ public:
 };
 
 
-/*******************************************************************************
-
- External declarations
-
-*******************************************************************************/
-
-/*******************************************************************************
-
- Local defines
-
-*******************************************************************************/
-
-/*******************************************************************************
-
-  Stick20ResponseDialog
-
-  Constructor Stick20ResponseDialog
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
-
-Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent,Stick20ResponseTask *Stick20TaskPointer) :
+Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent, Stick20ResponseTask *Stick20TaskPointer) :
     QDialog(parent),
     ui(new Ui::Stick20ResponseDialog)
 {
-    int Value;
-
     ui->setupUi(this);
 
     QGraphicsScene Scene;
     QSize SceneSize;
     QMovie *ProgressMovie = new QMovie(":/images/ProgressWheel.GIF");
 
+    // Center dialog to the screen
+    this->setGeometry(QStyle::alignedRect(
+                            Qt::LeftToRight,
+                            Qt::AlignCenter,
+                            this->size(),
+                            QApplication::desktop()->availableGeometry()
+                            ));
+
+
     Stick20Task = Stick20TaskPointer;
 
     if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS != Stick20Task->ActiveCommand)
     {
+        this->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
         ui->HeaderText->hide ();
     }
 
-    if (FALSE == DebugingActive)             // Resize the dialog when debugging is inactiv
+    if (FALSE == DebugingActive) // Resize the dialog when debugging is inactive
     {
-// Start progress wheel
+        ui->OutputText->hide();
+        ui->OutputText->setText("");
+        // Start progress wheel
         if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS != Stick20Task->ActiveCommand)
         {
             ui->LabelProgressWheel->show();
@@ -101,17 +83,12 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent,Stick20ResponseTask
             ui->LabelProgressWheel->setMovie(ProgressMovie);
             ProgressMovie->start();
 
-            ui->OutputText->setText("");
             ui->progressBar->hide();
         }
-
-// Resize window
-        ui->OutputText->hide ();
-        Value = ui->OutputText->height();
-
-        QSize dialogSize = this->size();
-        dialogSize.setHeight (dialogSize.height() - Value);
-        this->resize(dialogSize);
+        else
+        {
+            ui->label->hide();
+        }
     }
     else
     {
@@ -126,26 +103,24 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent,Stick20ResponseTask
     connect(pollStick20Timer, SIGNAL(timeout()), this, SLOT(checkStick20StatusDialog()));
     pollStick20Timer->start(100);
 
-    ui->pushButton->hide ();
+    this->layout()->setSizeConstraint( QLayout::SetFixedSize );
 }
 
-/*******************************************************************************
 
-  ShowStick20Configuration
+Stick20ResponseDialog::~Stick20ResponseDialog()
+{
+    delete ui;
 
-  Changes
-  Date      Author        Info
-  05.02.14  RB            Function created
+    // Kill timer
+    pollStick20Timer->stop();
 
-  Reviews
-  Date      Reviewer        Info
+    delete pollStick20Timer;
+}
 
-*******************************************************************************/
 
 void Stick20ResponseDialog::showStick20Configuration (int Status)
 {
     QString OutputText;
-
 
     Status = 0;
     if (0 == Status)
@@ -225,20 +200,11 @@ void Stick20ResponseDialog::showStick20Configuration (int Status)
     }
 */
     ui->OutputText->setText(OutputText);
-
+    ui->OutputText->show();
     DebugAppendTextGui (OutputText.toLatin1().data());
 
 }
 
-/*******************************************************************************
-
-  checkStick20StatusDebug
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
 
 void Stick20ResponseDialog::checkStick20StatusDebug(Response *stick20Response,int Status)
 {
@@ -259,23 +225,11 @@ void Stick20ResponseDialog::checkStick20StatusDebug(Response *stick20Response,in
     }
 
     ui->OutputText->setText(OutputText);
+    ui->OutputText->show();
 }
 
-/*******************************************************************************
 
-  checkStick20StatusDialog
-
-  Changes
-  Date      Author        Info
-  10.10.14  RB            Use the function checkStick20Status of Stick20ResponseTask
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
-
-void Stick20ResponseDialog::checkStick20StatusDialog()
+void Stick20ResponseDialog::checkStick20StatusDialog(void)
 {
     QString OutputText;
 
@@ -296,43 +250,43 @@ void Stick20ResponseDialog::checkStick20StatusDialog()
         switch (Stick20Task->stick20Response->HID_Stick20Status_st.LastCommand_u8)
         {
             case STICK20_CMD_ENABLE_CRYPTED_PARI            :
-                OutputText.append (QString("Enable encrypted volume"));
+                OutputText.append (QString("Enabling encrypted volume"));
                 break;
             case STICK20_CMD_DISABLE_CRYPTED_PARI           :
-                OutputText.append (QString("Disable encrypted volume"));
+                OutputText.append (QString("Disabling encrypted volume"));
                 break;
             case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
-                OutputText.append (QString("Enable encrypted volume"));
+                OutputText.append (QString("Enabling encrypted volume"));
                 break;
             case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI    :
-                OutputText.append (QString("Disable encrypted volume"));
+                OutputText.append (QString("Disabling encrypted volume"));
                 break;
             case STICK20_CMD_SEND_NEW_PASSWORD    :
-                OutputText.append (QString("Change PIN"));
+                OutputText.append (QString("Changing PIN"));
                 break;
             case STICK20_CMD_ENABLE_FIRMWARE_UPDATE         :
-                OutputText.append (QString("Enable firmeware update"));
+                OutputText.append (QString("Enabling firmeware update"));
                 break;
             case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE        :
-                OutputText.append (QString("Export firmware to file"));
+                OutputText.append (QString("Exporting firmware to file"));
                 break;
             case STICK20_CMD_GENERATE_NEW_KEYS              :
-                OutputText.append (QString("Generate new keys"));
+                OutputText.append (QString("Generating new keys"));
                 break;
             case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
-                OutputText.append (QString("Initialize storage with random data"));
+                OutputText.append (QString("Initializing storage with random data"));
                 break;
             case STICK20_CMD_GET_DEVICE_STATUS              :
-                OutputText.append (QString("Get device configuration"));
+                OutputText.append (QString("Getting device configuration"));
                 break;
             case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN  :
-                OutputText.append (QString("Enable readonly for unencrypted volume"));
+                OutputText.append (QString("Enabling read-only configuration for the unencrypted volume"));
                 break;
             case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
-                OutputText.append (QString("Enable readwrite for unencrypted volume"));
+                OutputText.append (QString("Enabling read-write configuration for the unencrypted volume"));
                 break;
             case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND :
-                OutputText.append (QString("Disable 'initialize storage with random data' warning"));
+                OutputText.append (QString("Disabling 'initialize storage with random data' warning"));
                 break;
             case STICK20_CMD_PRODUCTION_TEST :
                 OutputText.append (QString("Production test"));
@@ -341,14 +295,14 @@ void Stick20ResponseDialog::checkStick20StatusDialog()
                 OutputText.append (QString("Startup infos"));
                 break;
             case STICK20_CMD_SEND_LOCK_STICK_HARDWARE :
-                OutputText.append (QString("Lock stick hardware"));
+                OutputText.append (QString("Locking"));
                 break;
 
             default :
                 break;
         }
 
-        OutputText.append (QString(" - "));
+        OutputText.append (QString(" ("));
 
         switch (Stick20Task->stick20Response->HID_Stick20Status_st.Status_u8)
         {
@@ -397,446 +351,9 @@ void Stick20ResponseDialog::checkStick20StatusDialog()
             default :
                 break;
         }
+        OutputText.append (QString(")"));
         ui->HeaderText->setText(OutputText);
    }
-}
-
-
-/*******************************************************************************
-
-  ~Stick20ResponseDialog
-
-  Changes
-  Date      Author        Info
-  02.07.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
-
-Stick20ResponseDialog::~Stick20ResponseDialog()
-{
-    delete ui;
-
-// Kill timer
-    pollStick20Timer->stop();
-
-    delete pollStick20Timer;
-}
-
-/*******************************************************************************
-
-  on_pushButton_clicked
-
-  Changes
-  Date      Author          Info
-  16.09.14  RB              Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void Stick20ResponseDialog::on_pushButton_clicked()
-{
-    done (FALSE);
-}
-
-/*******************************************************************************
-
-  Stick20ResponseDialog
-
-  Constructor Stick20ResponseDialog
-
-  Changes
-  Date      Author          Info
-  02.09.14  RB              Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-Stick20ResponseTask::Stick20ResponseTask(QWidget *parent,Device *Cryptostick20,QSystemTrayIcon *MainWndTrayIcon)
-{
-    ActiveCommand             = -1;
-    EndFlag                   = FALSE;
-    FlagNoStopWhenStatusOK    = FALSE;
-    ResultValue               = FALSE;
-    Counter_u32               = 0;
-    retStick20Respone         = 0;
-
-    Stick20ResponseTaskParent = parent;
-
-    cryptostick               = Cryptostick20;
-    trayIcon                  = MainWndTrayIcon;
-
-    stick20Response           = new Response();
-}
-
-/*******************************************************************************
-
-  NoStopWhenStatusOK
-
-  Changes
-  Date      Author          Info
-  02.09.14  RB              Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void Stick20ResponseTask::NoStopWhenStatusOK()
-{
-    FlagNoStopWhenStatusOK = TRUE;
-}
-
-/*******************************************************************************
-
-  ShowIconMessage
-
-  Changes
-  Date      Author          Info
-  10.10.14  RB              Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void Stick20ResponseTask::ShowIconMessage(QString IconText)
-{
-    if (TRUE == trayIcon->supportsMessages ())
-    {
-        trayIcon->showMessage ("Nitrokey App",IconText);
-    }
-    else
-    {
-        QMessageBox msgBox;
-        msgBox.setText(IconText);
-        msgBox.exec();
-    }
-}
-
-
-/*******************************************************************************
-
-  checkStick20Status
-
-  Changes
-  Date      Author          Info
-  02.09.14  RB              Function created
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
-#define RESPONSE_DIALOG_TIME_TO_SHOW_DIALOG 30 // a 100 ms = 3 sec
-
-void Stick20ResponseTask::checkStick20Status()
-{
-    QString OutputText;
-
-    Counter_u32++;
-
-    retStick20Respone = stick20Response->getResponse(cryptostick);
-
-    if (0 == retStick20Respone)
-    {
-        if (-1 == ActiveCommand)
-        {
-            ActiveCommand = stick20Response->HID_Stick20Status_st.LastCommand_u8;
-        }
-
-        switch (stick20Response->HID_Stick20Status_st.Status_u8)
-        {
-            case OUTPUT_CMD_STICK20_STATUS_IDLE             :
-                break;
-            case OUTPUT_CMD_STICK20_STATUS_OK               :
-                EndFlag = TRUE;
-                break;
-            case OUTPUT_CMD_STICK20_STATUS_BUSY             :
-                break;
-            case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
-                switch (ActiveCommand)
-                {
-                    csApplet->warningBox("Get wrong password");
-                }            
-                EndFlag = TRUE;
-                break;
-            case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
-                break;
-            case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY   :
-                EndFlag = TRUE;
-                break;
-            case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK   :
-                EndFlag = TRUE;
-                break;
-            case OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR   :
-                EndFlag = TRUE;
-                break;
-            case OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE   :
-                EndFlag = TRUE;
-                break;
-            default :
-                break;
-        }
-
-        if (TRUE == FlagNoStopWhenStatusOK)
-        {
-            switch (stick20Response->HID_Stick20Status_st.Status_u8)
-            {
-                case OUTPUT_CMD_STICK20_STATUS_OK               :
-                    done (TRUE);
-                    ResultValue = TRUE;
-                    break;
-                case OUTPUT_CMD_STICK20_STATUS_IDLE             :
-                case OUTPUT_CMD_STICK20_STATUS_BUSY             :
-                case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR :
-                case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY   :
-                    // Do nothing, wait for next hid info
-                    break;
-                case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD   :
-                    done (FALSE);
-                    ResultValue = FALSE;
-                    switch (ActiveCommand)
-                    {
-                        case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED :
-                        case STICK20_CMD_SEND_LOCK_STICK_HARDWARE :
-                        case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE :
-                        case STICK20_CMD_GENERATE_NEW_KEYS :
-                        case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
-                            if (0 < HID_Stick20Configuration_st.AdminPwRetryCount)
-                            {
-                                HID_Stick20Configuration_st.AdminPwRetryCount--;
-                            }
-                            break;
-                        case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN :
-                        case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
-                        case STICK20_CMD_ENABLE_CRYPTED_PARI :
-                            if (0 < HID_Stick20Configuration_st.UserPwRetryCount)
-                            {
-                                HID_Stick20Configuration_st.UserPwRetryCount--;
-                            }
-                            break;
-                    }
-                    break;
-                case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK :
-                    done (FALSE);
-                    ResultValue = FALSE;
-                    break;
-                case OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR  :
-                    done (FALSE);
-                    ResultValue = FALSE;
-                    break;
-                case OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE  :
-                    done (FALSE);
-                    ResultValue = FALSE;
-                    break;
-            }
-        }
-
-        if (OUTPUT_CMD_STICK20_STATUS_OK == stick20Response->HID_Stick20Status_st.Status_u8)
-        {
-            ResultValue = TRUE;
-
-            switch (ActiveCommand)
-            {
-                case STICK20_CMD_ENABLE_CRYPTED_PARI            :
-                    ShowIconMessage ("Encrypted volume unlocked successfully");
-                    HID_Stick20Configuration_st.UserPwRetryCount = 3;
-                    break;
-                case STICK20_CMD_DISABLE_CRYPTED_PARI           :
-                    ShowIconMessage ("Encrypted volume locked successfully");
-                    break;
-                case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI            :
-                    ShowIconMessage ("Hidden volume unlocked successfully");
-                    break;
-                case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI           :
-                    ShowIconMessage ("Hidden volume locked successfully");
-                    break;
-                case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP           :
-                    ShowIconMessage ("Hidden volume setup successfully");
-                    break;
-                case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN :
-                    ShowIconMessage ("Uncrypted volume is in readonly mode");
-                    HID_Stick20Configuration_st.UserPwRetryCount = 3;
-                    break;
-                case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN :
-                    ShowIconMessage ("Uncrypted volume is in readwrite mode");
-                    HID_Stick20Configuration_st.UserPwRetryCount = 3;
-                    break;
-                case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED :
-                    ShowIconMessage ("Warning disabled");
-                    HID_Stick20Configuration_st.AdminPwRetryCount = 3;
-                    break;
-                case STICK20_CMD_SEND_LOCK_STICK_HARDWARE :
-                    ShowIconMessage ("Firmware is locked");
-                    HID_Stick20Configuration_st.AdminPwRetryCount = 3;
-                    break;
-                case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE :
-                    ShowIconMessage ("Firmware exported successfully");
-                    HID_Stick20Configuration_st.AdminPwRetryCount = 3;
-                    break;
-                case STICK20_CMD_GENERATE_NEW_KEYS :
-                    ShowIconMessage ("New keys generated successfully");
-                    HID_Stick20Configuration_st.AdminPwRetryCount = 3;
-                    break;
-                case STICK20_CMD_GET_DEVICE_STATUS              :
-//                    showStick20Configuration (ret);
-                    break;
-                case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS :
-                    HID_Stick20Configuration_st.AdminPwRetryCount = 3;
-                    {
-                        csApplet->messageBox("Storage successfully initialized with random data");
-                    }
-                    done (TRUE);
-                    break;
-                default :
-                    break;
-            }
-        }
-
-        if (OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD == stick20Response->HID_Stick20Status_st.Status_u8)
-        {
-            switch (ActiveCommand)
-            {
-                case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
-                    {
-                        csApplet->warningBox("Can't enable hidden volume");
-                    }
-                    break;
-                default :
-                    break;
-            }
-        }
-
-        if (OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK == stick20Response->HID_Stick20Status_st.Status_u8)
-        {
-            switch (ActiveCommand)
-            {
-                case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP :
-                    {
-//                        msgBox.setText("To setup the hidden volume, please enable the encrypted volume to enable smartcard access");
-                        csApplet->warningBox("Please enable the encrypted volume first.");
-                    }
-                    break;
-                case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
-                    {
-                        csApplet->messageBox("Encrypted volume was not enabled, please enable the encrypted volume");
-                    }
-                    break;
-                default :
-                    break;
-            }
-        }
-
-        if (OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR == stick20Response->HID_Stick20Status_st.Status_u8)
-        {
-            switch (ActiveCommand)
-            {
-                case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI     :
-                    {
-                        csApplet->warningBox("Smartcard error, please retry the command");
-                    }
-                    break;
-                default :
-                    break;
-            }
-        }
-
-        if (OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE == stick20Response->HID_Stick20Status_st.Status_u8)
-        {
-            switch (ActiveCommand)
-            {
-                case STICK20_CMD_ENABLE_FIRMWARE_UPDATE     :
-                    {
-                        csApplet->messageBox("Security bit of the device is activated.\nFirmware update is not possible.");
-                    }
-                    break;
-                default :
-                    break;
-            }
-        }
-
-    }
-}
-
-/*******************************************************************************
-
-  done
-
-  Changes
-  Date      Author          Info
-  02.09.14  RB              Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void Stick20ResponseTask::done (int Status)
-{
-    EndFlag = TRUE;
-}
-
-
-/*******************************************************************************
-
-  GetResponse
-
-  Changes
-  Date      Author          Info
-  02.09.14  RB              Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-void Stick20ResponseTask::GetResponse(void)
-{
-    int i;
-
-    for (i=0;i<15;i++)
-    {
-        OwnSleep::msleep(100);
-        checkStick20Status ();
-        if (TRUE == EndFlag)
-        {
-            return;
-        }
-    }
-
-    if (FALSE == EndFlag)
-    {
-        Stick20ResponseDialog ResponseDialog(Stick20ResponseTaskParent,this);
-
-//        ResponseDialog.Stick20Task = this;
-        ResponseDialog.exec();
-    }
-}
-
-/*******************************************************************************
-
-  ~Stick20ResponseTask
-
-  Changes
-  Date      Author          Info
-  02.09.14  RB              Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
-Stick20ResponseTask::~Stick20ResponseTask()
-{
-    delete stick20Response;
 }
 
 
