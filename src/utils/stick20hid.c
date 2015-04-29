@@ -81,26 +81,8 @@ volatile typeStick20Configuration_st SavedConfiguration_st;
 int Stick20_ProductionInfosChanged = FALSE;
 typeStick20ProductionInfos_st Stick20ProductionInfos_st;
 
-/*******************************************************************************
 
- External declarations
-
-*******************************************************************************/
-
-/** Only for debugging */
-
-
-/*******************************************************************************
-
-  DebugInitDebugging
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
-
-void DebugInitDebugging (void)
+void initDebugging (void)
 {
     DebugText_GUI[0] = 0;
     DebugTextlen_GUI = 0;
@@ -111,6 +93,77 @@ void DebugInitDebugging (void)
 
     STRCPY (DebugingStickFilename,sizeof (DebugingStickFilename),"Firmwarelog.txt");
     STRCPY (DebugingGuiFilename,sizeof (DebugingGuiFilename),"Guilog.txt");
+
+    DebugAppendTextGui ((char *)"Start Debug - ");
+#ifdef WIN32
+    DebugAppendTextGui ((char *)"WIN32 system\n");
+#endif
+
+#ifdef linux
+    DebugAppendTextGui ((char *)"LINUX system\n");
+#endif
+
+#ifdef MAC
+    DebugAppendTextGui ((char *)"MAC system\n");
+#endif
+
+   union {
+        unsigned char input[8];
+        unsigned int  endianCheck[2];
+        unsigned long long endianCheck_ll;
+    } uEndianCheck;
+
+    char text[50];
+
+    DebugAppendTextGui ((char *)"\nEndian check\n\n");
+
+    DebugAppendTextGui ((char *)"Store 0x01 0x02 0x03 0x04 in memory locations x,x+1,x+2,x+3\n");
+    DebugAppendTextGui ((char *)"then read the location x - x+3 as an unsigned int\n\n");
+
+    uEndianCheck.input[0] = 0x01;
+    uEndianCheck.input[1] = 0x02;
+    uEndianCheck.input[2] = 0x03;
+    uEndianCheck.input[3] = 0x04;
+    uEndianCheck.input[4] = 0x05;
+    uEndianCheck.input[5] = 0x06;
+    uEndianCheck.input[6] = 0x07;
+    uEndianCheck.input[7] = 0x08;
+
+    SNPRINTF(text,sizeof (text),"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
+    DebugAppendTextGui (text);
+
+    SNPRINTF(text,sizeof (text),"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
+    DebugAppendTextGui (text);
+
+    SNPRINTF(text,sizeof (text),"read  u64 0x%08lx%08lx\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
+    DebugAppendTextGui (text);
+
+    DebugAppendTextGui ("\n");
+
+    if (0x01020304 == uEndianCheck.endianCheck[0])
+    {
+        DebugAppendTextGui ("System is little endian\n");
+    }
+    if (0x04030201 == uEndianCheck.endianCheck[0])
+    {
+        DebugAppendTextGui ("System is big endian\n");
+    }
+    DebugAppendTextGui ("\n");
+
+    DebugAppendTextGui ("Var size test\n");
+
+    SNPRINTF(text,sizeof (text),"char  size is %d byte\n", (int)sizeof (unsigned char));
+    DebugAppendTextGui (text);
+
+    SNPRINTF(text,sizeof (text),"short size is %d byte\n", (int)sizeof (unsigned short));
+    DebugAppendTextGui (text);
+
+    SNPRINTF(text,sizeof (text),"int   size is %d byte\n", (int)sizeof (unsigned int));
+    DebugAppendTextGui (text);
+
+    SNPRINTF(text,sizeof (text),"long  size is %d byte\n", (int)sizeof (unsigned long));
+    DebugAppendTextGui (text);
+    DebugAppendTextGui ("\n");
 }
 
 

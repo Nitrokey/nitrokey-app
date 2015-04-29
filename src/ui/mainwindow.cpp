@@ -296,116 +296,15 @@ MainWindow::MainWindow (StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
         ui->testsLabel_2->setVisible(false);
     }
 
-    quitAction = new QAction(tr("&Quit"), this);
-    quitAction->setIcon(QIcon(":/images/quit.png"));
-    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-
-
-    UnlockPasswordSafe = new QAction("Unlock password safe", this);
-    UnlockPasswordSafe->setIcon(QIcon(":/images/safe.png"));
-    connect(UnlockPasswordSafe, SIGNAL(triggered()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
-
-    restoreAction = new QAction(tr("&Configure OTP"), this);
-    connect(restoreAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
-
-    resetAction = new QAction(tr("&Factory reset"), this);
-    connect(resetAction, SIGNAL(triggered()), this, SLOT(factoryReset()));
-    Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), this);
-    connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeUserPIN()));
-    Stick10ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), this);
-    connect(Stick10ActionChangeAdminPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeAdminPIN()));
-
-    restoreActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
-    connect(restoreActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
-
-    DebugAction = new QAction(tr("&Debug"), this);
-    connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
-
-    ActionAboutDialog = new QAction(tr("&About Nitrokey"), this);
-    ActionAboutDialog->setIcon(QIcon(":/images/about.png"));
-    connect(ActionAboutDialog, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
-
+    initActionsForStick10 ();
     initActionsForStick20 ();
+    initCommonActions();
 
     connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
     // Init debug text
-    DebugInitDebugging ();
-    DebugAppendTextGui ((char *)"Start Debug - ");
+    initDebugging ();
 
-#ifdef WIN32
-    DebugAppendTextGui ((char *)"WIN32 system\n");
-#endif
-
-#ifdef linux
-    DebugAppendTextGui ((char *)"LINUX system\n");
-#endif
-
-#ifdef MAC
-    DebugAppendTextGui ((char *)"MAC system\n");
-#endif
-
-    {
-        union {
-            unsigned char input[8];
-            unsigned int  endianCheck[2];
-            unsigned long long endianCheck_ll;
-        } uEndianCheck;
-
-        char text[50];
-
-        DebugAppendTextGui ((char *)"\nEndian check\n\n");
-
-        DebugAppendTextGui ((char *)"Store 0x01 0x02 0x03 0x04 in memory locations x,x+1,x+2,x+3\n");
-        DebugAppendTextGui ((char *)"then read the location x - x+3 as an unsigned int\n\n");
-
-        uEndianCheck.input[0] = 0x01;
-        uEndianCheck.input[1] = 0x02;
-        uEndianCheck.input[2] = 0x03;
-        uEndianCheck.input[3] = 0x04;
-        uEndianCheck.input[4] = 0x05;
-        uEndianCheck.input[5] = 0x06;
-        uEndianCheck.input[6] = 0x07;
-        uEndianCheck.input[7] = 0x08;
-
-        SNPRINTF(text,sizeof (text),"write u8  %02x%02x%02x%02x%02x%02x%02x%02x\n",uEndianCheck.input[0],uEndianCheck.input[1],uEndianCheck.input[2],uEndianCheck.input[3],uEndianCheck.input[4],uEndianCheck.input[5],uEndianCheck.input[6],uEndianCheck.input[7]);
-        DebugAppendTextGui (text);
-
-        SNPRINTF(text,sizeof (text),"read  u32 0x%08x  u32 0x%08x\n",uEndianCheck.endianCheck[0],uEndianCheck.endianCheck[1]);
-        DebugAppendTextGui (text);
-
-        SNPRINTF(text,sizeof (text),"read  u64 0x%08lx%08lx\n",(unsigned long)(uEndianCheck.endianCheck_ll>>32),(unsigned long)uEndianCheck.endianCheck_ll);
-        DebugAppendTextGui (text);
-
-        DebugAppendTextGui ("\n");
-
-        if (0x01020304 == uEndianCheck.endianCheck[0])
-        {
-            DebugAppendTextGui ("System is little endian\n");
-        }
-        if (0x04030201 == uEndianCheck.endianCheck[0])
-        {
-            DebugAppendTextGui ("System is big endian\n");
-        }
-        DebugAppendTextGui ("\n");
-
-        DebugAppendTextGui ("Var size test\n");
-
-        SNPRINTF(text,sizeof (text),"char  size is %d byte\n", (int)sizeof (unsigned char));
-        DebugAppendTextGui (text);
-
-        SNPRINTF(text,sizeof (text),"short size is %d byte\n", (int)sizeof (unsigned short));
-        DebugAppendTextGui (text);
-
-        SNPRINTF(text,sizeof (text),"int   size is %d byte\n", (int)sizeof (unsigned int));
-        DebugAppendTextGui (text);
-
-        SNPRINTF(text,sizeof (text),"long  size is %d byte\n", (int)sizeof (unsigned long));
-        DebugAppendTextGui (text);
-        DebugAppendTextGui ("\n");
-    }
-
-    //ui->labelQuestion1->setToolTip("Test");
     ui->deleteUserPasswordCheckBox->setEnabled(false);
     ui->deleteUserPasswordCheckBox->setChecked(false);
 
@@ -824,31 +723,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 
 
-void MainWindow::on_pushButton_clicked()
-{
-    if (cryptostick->isConnected){
-        int64_t crc = cryptostick->getSlotName(0x11);
-
-        Sleep::msleep(100);
-        Response *testResponse=new Response();
-        testResponse->getResponse(cryptostick);
-
-        if (crc==testResponse->lastCommandCRC){
-
-            QMessageBox message;
-            QString str;
-            //str.append(QString::number(testResponse->lastCommandCRC,16));
-            QByteArray *data =new QByteArray(testResponse->data);
-            str.append(QString(data->toHex()));
-
-            message.setText(str);
-            message.exec();
-
-        }
-    }
-}
-
-
 void MainWindow::getSlotNames() {}
 
 
@@ -861,22 +735,20 @@ void MainWindow::generateComboBoxEntrys()
 
     for (i=0;i<TOTP_SlotCount;i++)
     {
-        if ((char)cryptostick->TOTPSlots[i]->slotName[0] == '\0') {
+        if ((char)cryptostick->TOTPSlots[i]->slotName[0] == '\0')
             ui->slotComboBox->addItem(QString("TOTP slot ").append(QString::number(i+1,10)));
-        } else {
+        else
             ui->slotComboBox->addItem(QString("TOTP slot ").append(QString::number(i+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[i]->slotName).append("]"));
-        }
     }
 
     ui->slotComboBox->insertSeparator(TOTP_SlotCount+1);
 
     for (i=0;i<HOTP_SlotCount;i++)
     {
-        if ((char)cryptostick->HOTPSlots[i]->slotName[0] == '\0') {
+        if ((char)cryptostick->HOTPSlots[i]->slotName[0] == '\0')
             ui->slotComboBox->addItem(QString("HOTP slot ").append(QString::number(i+1,10)));
-        } else {
+        else
             ui->slotComboBox->addItem(QString("HOTP slot ").append(QString::number(i+1,10)).append(" [").append((char *)cryptostick->HOTPSlots[i]->slotName).append("]"));
-        }
     }
 
     ui->slotComboBox->setCurrentIndex(0);
@@ -969,13 +841,46 @@ void MainWindow::generateMenu()
 }
 
 
+void MainWindow::initActionsForStick10()
+{
+    UnlockPasswordSafe = new QAction("Unlock password safe", this);
+    UnlockPasswordSafe->setIcon(QIcon(":/images/safe.png"));
+    connect(UnlockPasswordSafe, SIGNAL(triggered()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
+
+    configureAction = new QAction(tr("&Configure OTP"), this);
+    connect(configureAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
+
+    resetAction = new QAction(tr("&Factory reset"), this);
+    connect(resetAction, SIGNAL(triggered()), this, SLOT(factoryReset()));
+
+    Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), this);
+    connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeUserPIN()));
+
+    Stick10ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), this);
+    connect(Stick10ActionChangeAdminPIN, SIGNAL(triggered()), this, SLOT(startStick10ActionChangeAdminPIN()));
+}
+
+void MainWindow::initCommonActions()
+{
+    DebugAction = new QAction(tr("&Debug"), this);
+    connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
+
+    quitAction = new QAction(tr("&Quit"), this);
+    quitAction->setIcon(QIcon(":/images/quit.png"));
+    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+
+    ActionAboutDialog = new QAction(tr("&About Nitrokey"), this);
+    ActionAboutDialog->setIcon(QIcon(":/images/about.png"));
+    connect(ActionAboutDialog, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
+}
+
 void MainWindow::initActionsForStick20()
 {
+    configureActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
+    connect(configureActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
+
     SecPasswordAction = new QAction(tr("&SecPassword"), this);
     connect(SecPasswordAction, SIGNAL(triggered()), this, SLOT(startMatrixPasswordDialog()));
-
-    Stick20Action = new QAction(tr("&Stick 20"), this);
-    connect(Stick20Action, SIGNAL(triggered()), this, SLOT(startStick20Configuration()));
 
     Stick20SetupAction = new QAction(tr("&Stick 20 Setup"), this);
     connect(Stick20SetupAction, SIGNAL(triggered()), this, SLOT(startStick20Setup()));
@@ -1018,7 +923,6 @@ void MainWindow::initActionsForStick20()
 
     Stick20ActionGetStickStatus = new QAction(tr("&Get stick status"), this);
     connect(Stick20ActionGetStickStatus, SIGNAL(triggered()), this, SLOT(startStick20GetStickStatus()));
-//    connect(Stick20ActionGetStickStatus, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 
     Stick20ActionSetReadonlyUncryptedVolume = new QAction(tr("&Set unencrypted volume read-only"), this);
     connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20SetReadonlyUncryptedVolume()));
@@ -1170,9 +1074,9 @@ void MainWindow::generateMenuForProDevice()
 
 
         if (TRUE == cryptostick->passwordSafeAvailable)
-            trayMenuSubConfigure->addAction(restoreActionStick20);
+            trayMenuSubConfigure->addAction(configureActionStick20);
         else
-            trayMenuSubConfigure->addAction(restoreAction);
+            trayMenuSubConfigure->addAction(configureAction);
 
         trayMenuSubConfigure->addSeparator();
 
@@ -1254,7 +1158,7 @@ void MainWindow::generateMenuForStorageDevice()
 
         trayMenuSubConfigure = trayMenu->addMenu( "Configure" );
         trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
-        trayMenuSubConfigure->addAction(restoreActionStick20);
+        trayMenuSubConfigure->addAction(configureActionStick20);
         trayMenuSubConfigure->addSeparator();
 
         // Pin actions
@@ -1274,7 +1178,6 @@ void MainWindow::generateMenuForStorageDevice()
             trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
 
         trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
-        // trayMenuSubConfigure->addAction(Stick20ActionGetStickStatus);
         trayMenuSubConfigure->addSeparator();
 
         // Other actions

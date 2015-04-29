@@ -74,11 +74,8 @@ public:
     bool LockHardware;
 
     uint64_t lastTOTPTime;
-
     uint64_t lastClipboardTime;
-
     uint64_t lastAuthenticateTime;
-
     uint64_t lastUserAuthenticateTime;
 
     void resetTime();
@@ -127,10 +124,9 @@ private:
     bool     set_initial_time;
 
     QAction *quitAction;
-    QAction *restoreAction;
+    QAction *configureAction;
     QAction *resetAction;
-    QAction *restoreActionStick20;
-    QAction *Stick20Action;
+    QAction *configureActionStick20;
     QAction *DebugAction;
     QAction *ActionAboutDialog;
     QAction *SecPasswordAction;
@@ -166,17 +162,15 @@ private:
     QString otpInClipboard;
     QString secretInClipboard;
 
-
     int ExecStickCmd(char *Cmdline);
-
     int getNextCode(uint8_t slotNumber);
 
     void generatePasswordMenu();
     void generateMenuForProDevice();
+    void initActionsForStick10();
     void initActionsForStick20();
+    void initCommonActions();
     int  stick20SendCommand (uint8_t stick20Command, uint8_t *password);
-
-    //QAction *totp1Action;
 
     void generateComboBoxEntrys();
     void generateMenu();
@@ -187,8 +181,6 @@ private:
     void generateMenuForStorageDevice();
     int  UpdateDynamicMenuEntrys (void);
     void AnalyseProductionInfos();
-
-    void on_pushButton_clicked();           // RB function used ?
 
 public slots:
     void startAboutDialog ();
