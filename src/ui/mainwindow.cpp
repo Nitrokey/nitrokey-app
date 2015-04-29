@@ -86,6 +86,8 @@ extern "C"
 {
     void onQuit(GtkMenu *, gpointer);
     void onAbout(GtkMenu *, gpointer);
+    void onChangeUserPin(GtkMenu *, gpointer);
+    void onChangeAdminPin(GtkMenu *, gpointer);
     bool isUnity(void);
 }
 
@@ -102,9 +104,20 @@ void onAbout(GtkMenu *menu, gpointer data)
     window->startAboutDialog();
 }
 
+void onChangeUserPin(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick10ActionChangeUserPIN();
+}
+void onChangeAdminPin(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick10ActionChangeAdminPIN();
+}
+
 bool isUnity()
 {
-//    return false;
+ //   return false;
     QString desktop = getenv("XDG_CURRENT_DESKTOP");
     return (desktop.toLower() == "unity");
 }
@@ -874,14 +887,13 @@ void MainWindow::generateMenu()
 {
     if (isUnity())
     {
+        indicatorMenu = gtk_menu_new();
+
         GtkWidget *notConnItem = gtk_menu_item_new_with_label("Nitrokey not connected");;
         GtkWidget *debugItem;
         GtkWidget *aboutItem = gtk_menu_item_new_with_label("About");;
         GtkWidget *quitItem = gtk_menu_item_new_with_label("Quit");
-
         GtkWidget *separItem = gtk_separator_menu_item_new();
-
-        indicatorMenu = gtk_menu_new();
 
         g_signal_connect(aboutItem, "activate", G_CALLBACK(onAbout), this);
         g_signal_connect(quitItem, "activate", G_CALLBACK(onQuit), qApp);
@@ -900,7 +912,6 @@ void MainWindow::generateMenu()
             }
             else
             {
-                generateMenuForProDevice ();
                 generateMenuForStorageDevice ();
             }
         }
@@ -1130,7 +1141,23 @@ void MainWindow::generateMenuForProDevice()
 {
     if (isUnity())
     {
+        GtkWidget *notConnItem = gtk_menu_item_new_with_label("Nitrokey not connected");;
+        GtkWidget *passwordsItem = gtk_menu_item_new_with_label("Passwords");
+        GtkWidget *changeUserPinItem = gtk_menu_item_new_with_label("Change user PIN");
+        GtkWidget *changeAdminPinItem = gtk_menu_item_new_with_label("Change admin PIN");;
+        GtkWidget *separItem = gtk_separator_menu_item_new();
 
+        g_signal_connect(changeUserPinItem, "activate", G_CALLBACK(onChangeUserPin), this);
+        g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPin), this);
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), passwordsItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), changeUserPinItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), changeAdminPinItem);
+
+        gtk_widget_show(passwordsItem);
+        gtk_widget_show(changeUserPinItem);
+        gtk_widget_show(changeAdminPinItem);
     }
     else
     {

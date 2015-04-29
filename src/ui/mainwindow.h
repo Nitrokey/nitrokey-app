@@ -192,6 +192,8 @@ private:
 
 public slots:
     void startAboutDialog ();
+    void startStick10ActionChangeUserPIN();
+    void startStick10ActionChangeAdminPIN();
 
 private slots:
     void resizeMin();
@@ -285,8 +287,6 @@ private slots:
     void startMatrixPasswordDialog();
     void startStick20Setup() ;
 
-    void startStick10ActionChangeUserPIN();
-    void startStick10ActionChangeAdminPIN();
 
     void startStick20EnableCryptedVolume();
     void startStick20DisableCryptedVolume();
