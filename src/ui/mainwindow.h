@@ -187,11 +187,14 @@ public slots:
     void startStick10ActionChangeUserPIN();
     void startStick10ActionChangeAdminPIN();
     void startConfiguration();
+    void PWS_Clicked_EnablePWSAccess ();
+    int factoryReset();
+    void getTOTPDialog (int slot);
+    void getHOTPDialog (int slot);
 
 private slots:
     void resizeMin();
     void checkConnection();
-    int factoryReset();
     void getCode(uint8_t slotNo);
     void on_writeButton_clicked();
     void displayCurrentTotpSlotConfig(uint8_t slotNo);
@@ -228,7 +231,6 @@ private slots:
     char *PWS_GetSlotName (int Slot);
     void PWS_ExceClickedSlot (int Slot);
 
-    void PWS_Clicked_EnablePWSAccess ();
     void PWS_Clicked_Slot00 ();
     void PWS_Clicked_Slot01 ();
     void PWS_Clicked_Slot02 ();
@@ -248,12 +250,10 @@ private slots:
 
 
     // Functions for OTP
-    void getHOTPDialog (int slot);
     void getHOTP1();
     void getHOTP2();
     void getHOTP3();
 
-    void getTOTPDialog (int slot);
     void getTOTP1();
     void getTOTP2();
     void getTOTP3();

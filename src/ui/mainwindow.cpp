@@ -89,6 +89,10 @@ extern "C"
     void onChangeUserPin(GtkMenu *, gpointer);
     void onChangeAdminPin(GtkMenu *, gpointer);
     void onConfigure(GtkMenu *, gpointer);
+    void onEnablePasswordSafe(GtkMenu *, gpointer);
+    void onReset(GtkMenu *, gpointer);
+    void onGetTOTP(GtkMenu *, gpointer);
+    void onGetHOTP(GtkMenu *, gpointer);
     bool isUnity(void);
 }
 
@@ -122,9 +126,39 @@ void onConfigure(GtkMenu *menu, gpointer data)
     window->startConfiguration();
 }
 
+void onEnablePasswordSafe(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->PWS_Clicked_EnablePWSAccess();
+}
+
+void onReset(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->factoryReset();
+}
+
+struct getOTPData
+{
+    MainWindow *window;
+    int slot;
+};
+
+void onGetTOTP(GtkMenu *menu, gpointer data)
+{
+    struct getOTPData *otp_data = static_cast<struct getOTPData*>(data);
+    otp_data->window->getTOTPDialog( otp_data->slot );
+}
+
+void onGetHOTP(GtkMenu *menu, gpointer data)
+{
+    struct getOTPData *otp_data = static_cast<struct getOTPData*>(data);
+    otp_data->window->getHOTPDialog( otp_data->slot );
+}
+
 bool isUnity()
 {
-    return false;
+//    return false;
     QString desktop = getenv("XDG_CURRENT_DESKTOP");
     return (desktop.toLower() == "unity");
 }
@@ -1064,11 +1098,49 @@ void MainWindow::generateMenuForProDevice()
         GtkWidget *separItem1 = gtk_separator_menu_item_new();
         GtkWidget *separItem2 = gtk_separator_menu_item_new();
 
-        g_signal_connect(configureItem, "activate", G_CALLBACK(onConfigure), this);
+        GtkWidget *configureSubMenu = gtk_menu_new();
+        GtkWidget *passwordsSubMenu = gtk_menu_new();
+        
+        g_signal_connect(passwordSafeItem, "activate", G_CALLBACK(onEnablePasswordSafe), this);
         g_signal_connect(changeUserPinItem, "activate", G_CALLBACK(onChangeUserPin), this);
         g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPin), this);
+        g_signal_connect(resetItem, "activate", G_CALLBACK(onReset), this);
 
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), passwordsItem);
+        for (int i = 0; i < TOTP_SlotCount; i++)
+        {
+            GtkWidget *currPasswdItem;
+            struct getOTPData* otp_data;
+            if (cryptostick->TOTPSlots[i]->isProgrammed)
+            {
+                otp_data = (struct getOTPData*)malloc(sizeof(struct getOTPData));
+                otp_data->window = this;
+                otp_data->slot = i;
+
+                currPasswdItem = gtk_menu_item_new_with_label((const char*)cryptostick->TOTPSlots[i]->slotName);
+                g_signal_connect(currPasswdItem, "activate", G_CALLBACK(onGetTOTP), otp_data);
+                gtk_menu_shell_append(GTK_MENU_SHELL(passwordsSubMenu), currPasswdItem);
+                gtk_widget_show(currPasswdItem);
+            }
+        }
+        for (int i = 0; i < HOTP_SlotCount; i++)
+        {
+            GtkWidget *currPasswdItem;
+            struct getOTPData* otp_data;
+            if (cryptostick->HOTPSlots[i]->isProgrammed)
+            {
+                otp_data = (struct getOTPData*)malloc(sizeof(struct getOTPData));
+                otp_data->window = this;
+                otp_data->slot = i;
+
+                currPasswdItem = gtk_menu_item_new_with_label((const char*)cryptostick->HOTPSlots[i]->slotName);
+                g_signal_connect(currPasswdItem, "activate", G_CALLBACK(onGetHOTP), otp_data);
+                gtk_menu_shell_append(GTK_MENU_SHELL(passwordsSubMenu), currPasswdItem);
+                gtk_widget_show(currPasswdItem);
+            }
+        }
+
+        gtk_menu_item_set_submenu(GTK_MENU_ITEM(passwordsItem), passwordsSubMenu);
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem1);
 
         if (TRUE == cryptostick->passwordSafeAvailable)
@@ -1077,27 +1149,32 @@ void MainWindow::generateMenuForProDevice()
             configurePasswordsItem = gtk_menu_item_new_with_label("OTP and Password safe");
         }
         else
-        {
             configurePasswordsItem = gtk_menu_item_new_with_label("OTP");
-        }
+
+        g_signal_connect(configurePasswordsItem, "activate", G_CALLBACK(onConfigure), this);
 
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), configureItem);
-        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), configurePasswordsItem);
-        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), changeUserPinItem);
-        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), changeAdminPinItem);
-
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), configurePasswordsItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeUserPinItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeAdminPinItem);
         if (ExtendedConfigActive)
         {
-            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem2);
-            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), resetItem);
+            gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), separItem2);
+            gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), resetItem);
         }
+        gtk_menu_item_set_submenu(GTK_MENU_ITEM(configureItem), configureSubMenu);
 
         gtk_widget_show(passwordsItem);
+        gtk_widget_show(passwordsSubMenu);
+        gtk_widget_show(separItem1);
+        gtk_widget_show(separItem2);
         gtk_widget_show(passwordSafeItem);
         gtk_widget_show(configureItem);
         gtk_widget_show(configurePasswordsItem);
         gtk_widget_show(changeUserPinItem);
         gtk_widget_show(changeAdminPinItem);
+        gtk_widget_show(resetItem);
+        gtk_widget_show(configureSubMenu);
     }
     else
     {
@@ -2692,7 +2769,6 @@ void MainWindow::getHOTPDialog(int slot)
     int ret;
 
     ret = getNextCode(0x10 + slot);
-
     if(ret == 0)
     {
         if(cryptostick->HOTPSlots[slot]->slotName[0] == '\0')
@@ -2710,19 +2786,9 @@ void MainWindow::getHOTPDialog(int slot)
     }
 }
 
-void MainWindow::getHOTP1()
-{
-    getHOTPDialog (0);
-}
-void MainWindow::getHOTP2()
-{
-    getHOTPDialog (1);
-}
-void MainWindow::getHOTP3()
-{
-    getHOTPDialog (2);
-}
-
+void MainWindow::getHOTP1() { getHOTPDialog (0); }
+void MainWindow::getHOTP2() { getHOTPDialog (1); }
+void MainWindow::getHOTP3() { getHOTPDialog (2); }
 
 void MainWindow::getTOTPDialog(int slot)
 {
@@ -2731,10 +2797,15 @@ void MainWindow::getTOTPDialog(int slot)
     ret = getNextCode(0x20 + slot);
     if(ret == 0){
     if(cryptostick->TOTPSlots[slot]->slotName[0] == '\0')
-        showTrayMessage (QString("TOTP slot ").append(QString::number(slot+1,10)),"One-time password has been copied to clipboard.", INFORMATION, TRAY_MSG_TIMEOUT);
+        showTrayMessage (QString("TOTP slot ").append(QString::number(slot+1,10)),
+                                "One-time password has been copied to clipboard.",
+                                INFORMATION, TRAY_MSG_TIMEOUT);
     else
-        showTrayMessage (QString("TOTP slot ").append(QString::number(slot+1,10)).append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName).append("]"),
-                                "One-time password has been copied to clipboard.", INFORMATION, TRAY_MSG_TIMEOUT);
+        showTrayMessage (QString("TOTP slot ").append(QString::number(slot+1,10))
+                                              .append(" [").append((char *)cryptostick->TOTPSlots[slot]->slotName)
+                                              .append("]"),
+                                "One-time password has been copied to clipboard.",
+                                INFORMATION, TRAY_MSG_TIMEOUT);
     }
 }
 
@@ -3307,11 +3378,6 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
     uint16_t lastInterval = 30;
 
-/*
-    if (lastInterval<1)
-        lastInterval=1;
-*/
-
     if(cryptostick->otpPasswordConfig[0] == 1)
     {
         if (!cryptostick->validUserPassword)
@@ -3332,15 +3398,12 @@ int MainWindow::getNextCode(uint8_t slotNumber)
 
                 cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(),tempPassword);
 
-                if (cryptostick->validUserPassword){
+                if (cryptostick->validUserPassword)
                     lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-                }
                 password.clear();
             }
             else
-            {
                 return 1;
-            }
         }
     }
     // Start the config dialog
@@ -3395,7 +3458,6 @@ int MainWindow::getNextCode(uint8_t slotNumber)
      }
 
      return 0;
-
 }
 
 
