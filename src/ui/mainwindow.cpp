@@ -94,6 +94,25 @@ extern "C"
     void onGetTOTP(GtkMenu *, gpointer);
     void onGetHOTP(GtkMenu *, gpointer);
     void onGetPasswordSafeSlot(GtkMenu *, gpointer);
+    void onInitEncryptedVolume(GtkMenu *, gpointer);
+    void onFillSDCardWithRandomChars(GtkMenu *, gpointer);
+    void onEnableEncryptedVolume(GtkMenu *, gpointer);
+    void onDisableEncryptedVolume(GtkMenu *, gpointer);
+    void onEnableHiddenVolume(GtkMenu *, gpointer);
+    void onDisableHiddenVolume(GtkMenu *, gpointer);
+    void onLockDevice(GtkMenu *, gpointer);
+    void onSetReadOnlyUnencryptedVolumeItem(GtkMenu *, gpointer);
+    void onSetReadWriteUnencryptedVolumeItem(GtkMenu *, gpointer);
+    void onChangeUserPinStorage(GtkMenu *, gpointer);
+    void onChangeAdminPinStorage(GtkMenu *, gpointer);
+    void onLockHardware(GtkMenu *, gpointer);
+    void onEnableFirmwareUpdate(GtkMenu *, gpointer);
+    void onExportFirmwareToFile(GtkMenu *, gpointer);
+    void onResetUserPassword(GtkMenu *, gpointer);
+    void onDebug(GtkMenu *, gpointer);
+    void onClearNewSDCardFound(GtkMenu *, gpointer);
+    void onSetupHiddenVolume(GtkMenu *, gpointer);
+    void onSetupPasswordMatrix(GtkMenu *, gpointer);
     bool isUnity(void);
 }
 
@@ -161,6 +180,121 @@ void onGetPasswordSafeSlot(GtkMenu *menu, gpointer data)
 {
     struct getOTPData *otp_data = static_cast<struct getOTPData*>(data);
     otp_data->window->PWS_ExceClickedSlot( otp_data->slot );
+}
+
+void onInitEncryptedVolume(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20DestroyCryptedVolume();
+}
+
+void onFillSDCardWithRandomChars(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20FillSDCardWithRandomChars();
+}
+
+void onEnableEncryptedVolume(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20EnableCryptedVolume();
+}
+
+void onDisableEncryptedVolume(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20DisableCryptedVolume();
+}
+
+void onEnableHiddenVolume(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20EnableHiddenVolume();
+}
+
+void onDisableHiddenVolume(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20DisableHiddenVolume();
+}
+
+void onLockDevice(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startLockDeviceAction();
+}
+
+
+void onChangeUserPinStorage(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20ActionChangeUserPIN ();
+}
+
+void onChangeAdminPinStorage(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20ActionChangeAdminPIN ();
+}
+
+void onSetReadOnlyUnencryptedVolumeItem(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20SetReadOnlyUncryptedVolume();
+}
+
+void onSetReadWriteUnencryptedVolumeItem(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20SetReadWriteUncryptedVolume();
+}
+
+void onLockHardware(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20LockStickHardware();
+}
+
+void onEnableFirmwareUpdate(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20EnableFirmwareUpdate();
+}
+
+void onExportFirmwareToFile(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20ExportFirmwareToFile();
+}
+
+void onResetUserPassword(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startResetUserPassword();
+}
+
+void onDebug(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20DebugAction();
+}
+
+void onClearNewSDCardFound(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20ClearNewSdCardFound();
+}
+
+void onSetupHiddenVolume(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20SetupHiddenVolume();
+}
+
+void onSetupPasswordMatrix(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20SetupPasswordMatrix();
 }
 
 bool isUnity()
@@ -828,13 +962,9 @@ void MainWindow::generateMenu()
         else
         {
             if (false == cryptostick->activStick20)
-            {
                 generateMenuForProDevice ();
-            }
             else
-            {
                 generateMenuForStorageDevice ();
-            }
         }
 
         if (TRUE == DebugWindowActive){}
@@ -973,12 +1103,12 @@ void MainWindow::initActionsForStick20()
     connect(Stick20ActionGetStickStatus, SIGNAL(triggered()), this, SLOT(startStick20GetStickStatus()));
 
     Stick20ActionSetReadonlyUncryptedVolume = new QAction(tr("&Set unencrypted volume read-only"), this);
-    connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20SetReadonlyUncryptedVolume()));
+    connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20SetReadOnlyUncryptedVolume()));
 
     Stick20ActionSetReadWriteUncryptedVolume = new QAction(tr("&Set unencrypted volume read-write"), this);
     connect(Stick20ActionSetReadWriteUncryptedVolume, SIGNAL(triggered()), this, SLOT(startStick20SetReadWriteUncryptedVolume()));
 
-    Stick20ActionDebugAction = new QAction(tr("&Debug Action"), this);
+    Stick20ActionDebugAction = new QAction(tr("&Debug"), this);
     connect(Stick20ActionDebugAction, SIGNAL(triggered()), this, SLOT(startStick20DebugAction()));
 
     Stick20ActionSetupHiddenVolume = new QAction(tr("&Setup hidden volume"), this);
@@ -1006,110 +1136,11 @@ void MainWindow::initActionsForStick20()
 
 void MainWindow::generatePasswordMenu()
 {
-    trayMenuPasswdSubMenu = trayMenu->addMenu("Passwords");
-
-    /* TOTP passwords */
-    if (cryptostick->TOTPSlots[0]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[0]->slotName, this, SLOT(getTOTP1()));
-    if (cryptostick->TOTPSlots[1]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[1]->slotName, this, SLOT(getTOTP2()));
-    if (cryptostick->TOTPSlots[2]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[2]->slotName, this, SLOT(getTOTP3()));
-    if (cryptostick->TOTPSlots[3]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[3]->slotName, this, SLOT(getTOTP4()));
-    if (cryptostick->TOTPSlots[4]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[4]->slotName, this, SLOT(getTOTP5()));
-    if (cryptostick->TOTPSlots[5]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[5]->slotName, this,SLOT(getTOTP6()));
-    if (cryptostick->TOTPSlots[6]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[6]->slotName, this,SLOT(getTOTP7()));
-    if (cryptostick->TOTPSlots[7]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[7]->slotName, this,SLOT(getTOTP8()));
-    if (cryptostick->TOTPSlots[8]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP9()));
-    if (cryptostick->TOTPSlots[9]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[9]->slotName, this,SLOT(getTOTP10()));
-    if (cryptostick->TOTPSlots[10]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[10]->slotName, this,SLOT(getTOTP11()));
-    if (cryptostick->TOTPSlots[11]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[11]->slotName, this,SLOT(getTOTP12()));
-    if (cryptostick->TOTPSlots[12]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[12]->slotName, this,SLOT(getTOTP13()));
-    if (cryptostick->TOTPSlots[13]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[13]->slotName, this,SLOT(getTOTP14()));
-    if (cryptostick->TOTPSlots[14]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[14]->slotName, this,SLOT(getTOTP15()));
-
-
-    /* HOTP passwords */
-    if (cryptostick->HOTPSlots[0]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[0]->slotName, this,SLOT(getHOTP1()));
-    if (cryptostick->HOTPSlots[1]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[1]->slotName, this,SLOT(getHOTP2()));
-    if (cryptostick->HOTPSlots[2]->isProgrammed==true)
-        trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[2]->slotName, this,SLOT(getHOTP3()));
-
-    if (TRUE == cryptostick->passwordSafeUnlocked) 
-    {
-        if (cryptostick->passwordSafeStatus[0] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (0),this,SLOT(PWS_Clicked_Slot00()));
-        if (cryptostick->passwordSafeStatus[1] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (1),this,SLOT(PWS_Clicked_Slot01()));
-        if (cryptostick->passwordSafeStatus[2] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (2),this,SLOT(PWS_Clicked_Slot02()));
-        if (cryptostick->passwordSafeStatus[3] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (3),this,SLOT(PWS_Clicked_Slot03()));
-        if (cryptostick->passwordSafeStatus[4] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (4),this,SLOT(PWS_Clicked_Slot04()));
-        if (cryptostick->passwordSafeStatus[5] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (5),this,SLOT(PWS_Clicked_Slot05()));
-        if (cryptostick->passwordSafeStatus[6] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (6),this,SLOT(PWS_Clicked_Slot06()));
-        if (cryptostick->passwordSafeStatus[7] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (7),this,SLOT(PWS_Clicked_Slot07()));
-        if (cryptostick->passwordSafeStatus[8] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (8),this,SLOT(PWS_Clicked_Slot08()));
-        if (cryptostick->passwordSafeStatus[9] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (9),this,SLOT(PWS_Clicked_Slot09()));
-        if (cryptostick->passwordSafeStatus[10] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (10),this,SLOT(PWS_Clicked_Slot10()));
-        if (cryptostick->passwordSafeStatus[11] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (11),this,SLOT(PWS_Clicked_Slot11()));
-        if (cryptostick->passwordSafeStatus[12] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (12),this,SLOT(PWS_Clicked_Slot12()));
-        if (cryptostick->passwordSafeStatus[13] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (13),this,SLOT(PWS_Clicked_Slot13()));
-        if (cryptostick->passwordSafeStatus[14] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (14),this,SLOT(PWS_Clicked_Slot14()));
-        if (cryptostick->passwordSafeStatus[15] == (unsigned char)true)
-            trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (15),this,SLOT(PWS_Clicked_Slot15()));
-    }
-
-    trayMenu->addSeparator();
-}
-
-
-void MainWindow::generateMenuForProDevice()
-{
     if (isUnity())
     {
         GtkWidget *passwordsItem = gtk_menu_item_new_with_label("Passwords");
-        GtkWidget *passwordSafeItem = gtk_menu_item_new_with_label("Unlock password safe");
-        GtkWidget *configureItem = gtk_menu_item_new_with_label("Configure");
-        GtkWidget *configurePasswordsItem;
-        GtkWidget *changeUserPinItem = gtk_menu_item_new_with_label("Change user PIN");
-        GtkWidget *changeAdminPinItem = gtk_menu_item_new_with_label("Change admin PIN");
-        GtkWidget *resetItem = gtk_menu_item_new_with_label("Factory reset");
         GtkWidget *separItem1 = gtk_separator_menu_item_new();
-        GtkWidget *separItem2 = gtk_separator_menu_item_new();
-
-        GtkWidget *configureSubMenu = gtk_menu_new();
         GtkWidget *passwordsSubMenu = gtk_menu_new();
-        
-        g_signal_connect(passwordSafeItem, "activate", G_CALLBACK(onEnablePasswordSafe), this);
-        g_signal_connect(changeUserPinItem, "activate", G_CALLBACK(onChangeUserPin), this);
-        g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPin), this);
-        g_signal_connect(resetItem, "activate", G_CALLBACK(onReset), this);
 
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), passwordsItem);
         for (int i = 0; i < TOTP_SlotCount; i++)
@@ -1156,7 +1187,7 @@ void MainWindow::generateMenuForProDevice()
                     otp_data->window = this;
                     otp_data->slot = i;
 
-                    currPasswdItem = gtk_menu_item_new_with_label((const char*)cryptostick->HOTPSlots[i]->slotName);
+                    currPasswdItem = gtk_menu_item_new_with_label( PWS_GetSlotName(i) );
                     g_signal_connect(currPasswdItem, "activate", G_CALLBACK(onGetPasswordSafeSlot), otp_data);
                     gtk_menu_shell_append(GTK_MENU_SHELL(passwordsSubMenu), currPasswdItem);
                     gtk_widget_show(currPasswdItem);
@@ -1167,11 +1198,118 @@ void MainWindow::generateMenuForProDevice()
         gtk_menu_item_set_submenu(GTK_MENU_ITEM(passwordsItem), passwordsSubMenu);
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem1);
 
-        if (TRUE == cryptostick->passwordSafeAvailable)
+        gtk_widget_show(passwordsItem);
+        gtk_widget_show(passwordsSubMenu);
+        gtk_widget_show(separItem1);
+    }
+    else
+    {
+        trayMenuPasswdSubMenu = trayMenu->addMenu("Passwords");
+
+        /* TOTP passwords */
+        if (cryptostick->TOTPSlots[0]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[0]->slotName, this, SLOT(getTOTP1()));
+        if (cryptostick->TOTPSlots[1]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[1]->slotName, this, SLOT(getTOTP2()));
+        if (cryptostick->TOTPSlots[2]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[2]->slotName, this, SLOT(getTOTP3()));
+        if (cryptostick->TOTPSlots[3]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[3]->slotName, this, SLOT(getTOTP4()));
+        if (cryptostick->TOTPSlots[4]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[4]->slotName, this, SLOT(getTOTP5()));
+        if (cryptostick->TOTPSlots[5]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[5]->slotName, this,SLOT(getTOTP6()));
+        if (cryptostick->TOTPSlots[6]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[6]->slotName, this,SLOT(getTOTP7()));
+        if (cryptostick->TOTPSlots[7]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[7]->slotName, this,SLOT(getTOTP8()));
+        if (cryptostick->TOTPSlots[8]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[8]->slotName, this,SLOT(getTOTP9()));
+        if (cryptostick->TOTPSlots[9]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[9]->slotName, this,SLOT(getTOTP10()));
+        if (cryptostick->TOTPSlots[10]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[10]->slotName, this,SLOT(getTOTP11()));
+        if (cryptostick->TOTPSlots[11]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[11]->slotName, this,SLOT(getTOTP12()));
+        if (cryptostick->TOTPSlots[12]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[12]->slotName, this,SLOT(getTOTP13()));
+        if (cryptostick->TOTPSlots[13]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[13]->slotName, this,SLOT(getTOTP14()));
+        if (cryptostick->TOTPSlots[14]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->TOTPSlots[14]->slotName, this,SLOT(getTOTP15()));
+
+
+        /* HOTP passwords */
+        if (cryptostick->HOTPSlots[0]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[0]->slotName, this,SLOT(getHOTP1()));
+        if (cryptostick->HOTPSlots[1]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[1]->slotName, this,SLOT(getHOTP2()));
+        if (cryptostick->HOTPSlots[2]->isProgrammed==true)
+            trayMenuPasswdSubMenu->addAction((char *)cryptostick->HOTPSlots[2]->slotName, this,SLOT(getHOTP3()));
+
+        if (TRUE == cryptostick->passwordSafeUnlocked) 
         {
-            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), passwordSafeItem);
-            configurePasswordsItem = gtk_menu_item_new_with_label("OTP and Password safe");
+            if (cryptostick->passwordSafeStatus[0] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (0),this,SLOT(PWS_Clicked_Slot00()));
+            if (cryptostick->passwordSafeStatus[1] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (1),this,SLOT(PWS_Clicked_Slot01()));
+            if (cryptostick->passwordSafeStatus[2] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (2),this,SLOT(PWS_Clicked_Slot02()));
+            if (cryptostick->passwordSafeStatus[3] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (3),this,SLOT(PWS_Clicked_Slot03()));
+            if (cryptostick->passwordSafeStatus[4] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (4),this,SLOT(PWS_Clicked_Slot04()));
+            if (cryptostick->passwordSafeStatus[5] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (5),this,SLOT(PWS_Clicked_Slot05()));
+            if (cryptostick->passwordSafeStatus[6] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (6),this,SLOT(PWS_Clicked_Slot06()));
+            if (cryptostick->passwordSafeStatus[7] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (7),this,SLOT(PWS_Clicked_Slot07()));
+            if (cryptostick->passwordSafeStatus[8] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (8),this,SLOT(PWS_Clicked_Slot08()));
+            if (cryptostick->passwordSafeStatus[9] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (9),this,SLOT(PWS_Clicked_Slot09()));
+            if (cryptostick->passwordSafeStatus[10] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (10),this,SLOT(PWS_Clicked_Slot10()));
+            if (cryptostick->passwordSafeStatus[11] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (11),this,SLOT(PWS_Clicked_Slot11()));
+            if (cryptostick->passwordSafeStatus[12] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (12),this,SLOT(PWS_Clicked_Slot12()));
+            if (cryptostick->passwordSafeStatus[13] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (13),this,SLOT(PWS_Clicked_Slot13()));
+            if (cryptostick->passwordSafeStatus[14] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (14),this,SLOT(PWS_Clicked_Slot14()));
+            if (cryptostick->passwordSafeStatus[15] == (unsigned char)true)
+                trayMenuPasswdSubMenu->addAction(PWS_GetSlotName (15),this,SLOT(PWS_Clicked_Slot15()));
         }
+
+        trayMenu->addSeparator();
+    }
+}
+
+
+void MainWindow::generateMenuForProDevice()
+{
+    if (isUnity())
+    {
+        GtkWidget *configureItem = gtk_menu_item_new_with_label("Configure");
+        GtkWidget *configurePasswordsItem;
+        GtkWidget *changeUserPinItem = gtk_menu_item_new_with_label("Change user PIN");
+        GtkWidget *changeAdminPinItem = gtk_menu_item_new_with_label("Change admin PIN");
+        GtkWidget *resetItem = gtk_menu_item_new_with_label("Factory reset");
+        GtkWidget *separItem2 = gtk_separator_menu_item_new();
+
+        GtkWidget *configureSubMenu = gtk_menu_new();
+        
+        g_signal_connect(changeUserPinItem, "activate", G_CALLBACK(onChangeUserPin), this);
+        g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPin), this);
+        g_signal_connect(resetItem, "activate", G_CALLBACK(onReset), this);
+
+        generatePasswordMenu ();
+        generateMenuPasswordSafe ();
+
+        if (TRUE == cryptostick->passwordSafeAvailable)
+            configurePasswordsItem = gtk_menu_item_new_with_label("OTP and Password safe");
         else
             configurePasswordsItem = gtk_menu_item_new_with_label("OTP");
 
@@ -1188,11 +1326,7 @@ void MainWindow::generateMenuForProDevice()
         }
         gtk_menu_item_set_submenu(GTK_MENU_ITEM(configureItem), configureSubMenu);
 
-        gtk_widget_show(passwordsItem);
-        gtk_widget_show(passwordsSubMenu);
-        gtk_widget_show(separItem1);
         gtk_widget_show(separItem2);
-        gtk_widget_show(passwordSafeItem);
         gtk_widget_show(configureItem);
         gtk_widget_show(configurePasswordsItem);
         gtk_widget_show(changeUserPinItem);
@@ -1230,13 +1364,204 @@ void MainWindow::generateMenuForProDevice()
 
 void MainWindow::generateMenuForStorageDevice()
 {
+    int AddSeperator = FALSE;
+
     if ( isUnity() )
     {
+        GtkWidget *updateStorageStatusItem = gtk_menu_item_new_with_label("Smartcard or SD card are not ready");
+        GtkWidget *initEncryptedVolumeItem = gtk_menu_item_new_with_label("Initialize keys");
+        GtkWidget *fillSDCardWithRandomCharsItem = gtk_menu_item_new_with_label("Initialize storage with random data");
+        GtkWidget *enableEncryptedVolumeItem = gtk_menu_item_new_with_label("Unlock encrypted volume");
+        GtkWidget *disableEncryptedVolumeItem = gtk_menu_item_new_with_label("Lock encrypted volume");
+        GtkWidget *enableHiddenVolumeItem = gtk_menu_item_new_with_label("Unlock hidden volume");
+        GtkWidget *disableHiddenVolumeItem = gtk_menu_item_new_with_label("Lock hidden volume");
+        GtkWidget *lockDeviceItem = gtk_menu_item_new_with_label("Lock device");
+        GtkWidget *setReadOnlyUnencryptedVolumeItem = gtk_menu_item_new_with_label("Set unencrypted volume read-only");
+        GtkWidget *setReadWriteUnencryptedVolumeItem = gtk_menu_item_new_with_label("Set unencrypted volume read-write");
+        GtkWidget *destroyEncryptedVolumeItem = gtk_menu_item_new_with_label("Destroy encrypted data");
+        GtkWidget *enableFirmwareUpdateItem = gtk_menu_item_new_with_label("Enable firmware update");
+        GtkWidget *exportFirmwareToFileItem = gtk_menu_item_new_with_label("Export firmware to file");
+        GtkWidget *lockHardwareItem = gtk_menu_item_new_with_label("Lock hardware");
+        GtkWidget *resetUserPasswordItem = gtk_menu_item_new_with_label("Reset user PIN");
+        GtkWidget *debugItem = gtk_menu_item_new_with_label("Debug");
+        GtkWidget *clearNewSDCardFoundItem = gtk_menu_item_new_with_label("Disable 'Initialize storage with random data' warning");
+        GtkWidget *configureItem = gtk_menu_item_new_with_label("Configure");
+        GtkWidget *extendedConfigureItem = gtk_menu_item_new_with_label("Advanced configure");
+        GtkWidget *setupHiddenVolumeItem = gtk_menu_item_new_with_label("");
+        GtkWidget *setupPasswordMatrixItem = gtk_menu_item_new_with_label("");
+        GtkWidget *configurePasswordsItem;
+        GtkWidget *changeUserPinItem = gtk_menu_item_new_with_label("Change user PIN");
+        GtkWidget *changeAdminPinItem = gtk_menu_item_new_with_label("Change admin PIN");
 
+        GtkWidget *separItem1 = gtk_separator_menu_item_new();
+        GtkWidget *separItem2 = gtk_separator_menu_item_new();
+
+        GtkWidget *configureSubMenu = gtk_menu_new();
+        GtkWidget *extendedConfigureSubMenu = gtk_menu_new();
+        
+        g_signal_connect(updateStorageStatusItem, "activate", G_CALLBACK(onAbout), this);
+        g_signal_connect(initEncryptedVolumeItem, "activate", G_CALLBACK(onInitEncryptedVolume), this);
+        g_signal_connect(fillSDCardWithRandomCharsItem, "activate", G_CALLBACK(onFillSDCardWithRandomChars), this);
+        g_signal_connect(enableEncryptedVolumeItem, "activate", G_CALLBACK(onEnableEncryptedVolume), this);
+        g_signal_connect(disableEncryptedVolumeItem, "activate", G_CALLBACK(onDisableEncryptedVolume), this);
+        g_signal_connect(enableHiddenVolumeItem, "activate", G_CALLBACK(onEnableHiddenVolume), this);
+        g_signal_connect(disableHiddenVolumeItem, "activate", G_CALLBACK(onDisableHiddenVolume), this);
+        g_signal_connect(lockDeviceItem, "activate", G_CALLBACK(onLockDevice), this);
+        g_signal_connect(setReadOnlyUnencryptedVolumeItem, "activate", G_CALLBACK(onSetReadOnlyUnencryptedVolumeItem), this);
+        g_signal_connect(setReadWriteUnencryptedVolumeItem, "activate", G_CALLBACK(onSetReadWriteUnencryptedVolumeItem), this);
+        g_signal_connect(destroyEncryptedVolumeItem, "activate", G_CALLBACK(onInitEncryptedVolume), this);
+        g_signal_connect(enableFirmwareUpdateItem, "activate", G_CALLBACK(onEnableFirmwareUpdate), this);
+        g_signal_connect(exportFirmwareToFileItem, "activate", G_CALLBACK(onExportFirmwareToFile), this);
+        g_signal_connect(lockHardwareItem, "activate", G_CALLBACK(onLockHardware), this);
+        g_signal_connect(debugItem, "activate", G_CALLBACK(onDebug), this);
+        g_signal_connect(setupHiddenVolumeItem, "activate", G_CALLBACK(onSetupHiddenVolume), this);
+        g_signal_connect(setupPasswordMatrixItem, "activate", G_CALLBACK(onSetupPasswordMatrix), this);
+        g_signal_connect(clearNewSDCardFoundItem, "activate", G_CALLBACK(onClearNewSDCardFound), this);
+        g_signal_connect(resetUserPasswordItem, "activate", G_CALLBACK(onResetUserPassword), this);
+        g_signal_connect(changeUserPinItem, "activate", G_CALLBACK(onChangeUserPinStorage), this);
+        g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPinStorage), this);
+        g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPinStorage), this);
+
+        if (FALSE == Stick20ScSdCardOnline) // Is Stick 2.0 online (SD + SC accessable?)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), updateStorageStatusItem); 
+            return;
+        }
+
+        if (TRUE == StickNotInitated)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), initEncryptedVolumeItem); 
+            AddSeperator = TRUE;
+        }
+
+        if (TRUE == SdCardNotErased)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), fillSDCardWithRandomCharsItem); 
+            AddSeperator = TRUE;
+        }
+
+        if (TRUE == AddSeperator)
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem1); 
+
+        generatePasswordMenu ();
+        if (FALSE == StickNotInitated)
+        {
+            // Enable tab for password safe for stick 2
+            if (-1 == ui->tabWidget->indexOf (ui->tab_3))
+                ui->tabWidget->addTab(ui->tab_3,"Password Safe");
+
+            // Setup entrys for password safe
+            generateMenuPasswordSafe ();
+        }
+
+        if (FALSE == SdCardNotErased)
+        {
+            if (FALSE == CryptedVolumeActive)
+                gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), enableEncryptedVolumeItem); 
+            else
+                gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), disableEncryptedVolumeItem); 
+
+            if (FALSE == HiddenVolumeActive)
+                gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), enableHiddenVolumeItem); 
+            else
+                gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), disableHiddenVolumeItem); 
+        }
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), lockDeviceItem); 
+
+        if (TRUE == cryptostick->passwordSafeAvailable)
+            configurePasswordsItem = gtk_menu_item_new_with_label("OTP and Password safe");
+        else
+            configurePasswordsItem = gtk_menu_item_new_with_label("OTP");
+
+        g_signal_connect(configurePasswordsItem, "activate", G_CALLBACK(onConfigure), this);
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), configureItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), configurePasswordsItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeUserPinItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeAdminPinItem);
+
+        if (TRUE == MatrixInputActive)
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), setupPasswordMatrixItem);
+
+        // Storage actions
+        if (FALSE == NormalVolumeRWActive)
+            gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), setReadOnlyUnencryptedVolumeItem); 
+        else
+            gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), setReadWriteUnencryptedVolumeItem); 
+
+        if (FALSE == SdCardNotErased)
+            gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), setupHiddenVolumeItem);
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), destroyEncryptedVolumeItem); 
+
+        // Other actions
+        if (TRUE == LockHardware)
+            gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), lockHardwareItem);
+
+        if (TRUE == HiddenVolumeAccessable)
+        { }
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), enableFirmwareUpdateItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), exportFirmwareToFileItem);
+
+        gtk_menu_item_set_submenu(GTK_MENU_ITEM(configureItem), configureSubMenu);
+
+        if (TRUE == ExtendedConfigActive)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), extendedConfigureItem);
+            gtk_menu_shell_append(GTK_MENU_SHELL(extendedConfigureSubMenu), fillSDCardWithRandomCharsItem); 
+            if (TRUE == SdCardNotErased)
+                gtk_menu_shell_append(GTK_MENU_SHELL(extendedConfigureSubMenu), clearNewSDCardFoundItem); 
+
+            gtk_menu_item_set_submenu(GTK_MENU_ITEM(extendedConfigureItem), extendedConfigureSubMenu);
+            gtk_widget_show(extendedConfigureItem);
+            gtk_widget_show(extendedConfigureSubMenu);
+            gtk_widget_show(fillSDCardWithRandomCharsItem);
+            gtk_widget_show(clearNewSDCardFoundItem);
+        }
+
+        // Enable "reset user PIN" ?
+        if (0 == cryptostick->userPasswordRetryCount)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), resetUserPasswordItem); 
+        }
+
+        // Add debug window ?
+        if (TRUE == DebugWindowActive)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), debugItem); 
+        }
+
+        // Setup OTP combo box
+        generateComboBoxEntrys ();
+
+        gtk_widget_show(enableFirmwareUpdateItem);
+        gtk_widget_show(exportFirmwareToFileItem);
+        gtk_widget_show(updateStorageStatusItem);
+        gtk_widget_show(initEncryptedVolumeItem);
+        gtk_widget_show(fillSDCardWithRandomCharsItem);
+        gtk_widget_show(enableEncryptedVolumeItem);
+        gtk_widget_show(disableEncryptedVolumeItem);
+        gtk_widget_show(enableHiddenVolumeItem);
+        gtk_widget_show(disableHiddenVolumeItem);
+        gtk_widget_show(lockDeviceItem);
+        gtk_widget_show(setReadOnlyUnencryptedVolumeItem);
+        gtk_widget_show(setReadWriteUnencryptedVolumeItem);
+        gtk_widget_show(destroyEncryptedVolumeItem);
+        gtk_widget_show(lockHardwareItem);
+        gtk_widget_show(resetUserPasswordItem);
+        gtk_widget_show(debugItem);
+        gtk_widget_show(configureItem);
+        gtk_widget_show(configurePasswordsItem);
+        gtk_widget_show(changeUserPinItem);
+        gtk_widget_show(changeAdminPinItem);
+        gtk_widget_show(configureSubMenu);
+        gtk_widget_show(separItem1);
+        gtk_widget_show(separItem2);
     }
     else
     {
-        int AddSeperator;
 
         if (FALSE == Stick20ScSdCardOnline)         // Is Stick 2.0 online (SD + SC accessable?)
         {
@@ -1245,17 +1570,15 @@ void MainWindow::generateMenuForStorageDevice()
         }
 
         // Add special entrys
-        AddSeperator = FALSE;
-
         if (TRUE == StickNotInitated)
         {
-            trayMenu->addAction(Stick20ActionInitCryptedVolume       );
+            trayMenu->addAction(Stick20ActionInitCryptedVolume);
             AddSeperator = TRUE;
         }
 
         if (TRUE == SdCardNotErased)
         {
-            trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars  );
+            trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars);
             AddSeperator = TRUE;
         }
 
@@ -1272,7 +1595,6 @@ void MainWindow::generateMenuForStorageDevice()
             {
                 ui->tabWidget->addTab(ui->tab_3,"Password Safe");
             }
-            //ui->pushButton_StaticPasswords->show ();
 
             // Setup entrys for password safe
             generateMenuPasswordSafe ();
@@ -2113,7 +2435,7 @@ void MainWindow::startStick20GetStickStatus()
 }
 
 
-void MainWindow::startStick20SetReadonlyUncryptedVolume()
+void MainWindow::startStick20SetReadOnlyUncryptedVolume()
 {
     uint8_t password[LOCAL_PASSWORD_SIZE];
     bool    ret;
@@ -3200,15 +3522,24 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-        trayMenu->addAction(UnlockPasswordSafeAction);
+        if (isUnity())
+        {
+            GtkWidget *passwordSafeItem = gtk_menu_item_new_with_label("Unlock password safe");
+            g_signal_connect(passwordSafeItem, "activate", G_CALLBACK(onEnablePasswordSafe), this);
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), passwordSafeItem);
+            gtk_widget_show(passwordSafeItem);
+        }
+        else
+        {
+            trayMenu->addAction(UnlockPasswordSafeAction);
 
-        if(true == cryptostick->passwordSafeAvailable) {
-            UnlockPasswordSafeAction->setEnabled(true);
+            if(true == cryptostick->passwordSafeAvailable) {
+                UnlockPasswordSafeAction->setEnabled(true);
+            }
+            else {
+                UnlockPasswordSafeAction->setEnabled(false);
+            }
         }
-        else {
-            UnlockPasswordSafeAction->setEnabled(false);
-        }
-        return;
     }
 }
 

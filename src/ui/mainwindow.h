@@ -192,6 +192,25 @@ public slots:
     void getTOTPDialog (int slot);
     void getHOTPDialog (int slot);
     void PWS_ExceClickedSlot (int Slot);
+    void startStick20DestroyCryptedVolume();
+    void startStick20FillSDCardWithRandomChars();
+    void startStick20EnableCryptedVolume();
+    void startStick20DisableCryptedVolume();
+    void startStick20EnableHiddenVolume();
+    void startStick20DisableHiddenVolume();
+    void startLockDeviceAction();
+    void startStick20ActionChangeUserPIN ();
+    void startStick20ActionChangeAdminPIN ();
+    void startStick20SetReadOnlyUncryptedVolume();
+    void startStick20SetReadWriteUncryptedVolume();
+    void startStick20LockStickHardware();
+    void startStick20EnableFirmwareUpdate();
+    void startStick20ExportFirmwareToFile();
+    void startResetUserPassword();
+    void startStick20DebugAction();
+    void startStick20ClearNewSdCardFound();
+    void startStick20SetupHiddenVolume();
+    void startStick20SetupPasswordMatrix();
 
 private slots:
     void resizeMin();
@@ -280,26 +299,7 @@ private slots:
     void startStick20Setup() ;
 
 
-    void startStick20EnableCryptedVolume();
-    void startStick20DisableCryptedVolume();
-    void startStick20EnableHiddenVolume();
-    void startStick20DisableHiddenVolume();
-    void startStick20ActionChangeUserPIN ();
-    void startStick20ActionChangeAdminPIN ();
-    void startStick20EnableFirmwareUpdate();
-    void startStick20ExportFirmwareToFile();
-    void startStick20DestroyCryptedVolume();
-    void startStick20FillSDCardWithRandomChars();
     void startStick20GetStickStatus();
-    void startStick20SetReadonlyUncryptedVolume();
-    void startStick20SetReadWriteUncryptedVolume();
-    void startStick20DebugAction();
-    void startStick20SetupHiddenVolume();
-    void startStick20ClearNewSdCardFound();
-    void startStick20SetupPasswordMatrix();
-    void startStick20LockStickHardware();
-    void startResetUserPassword ();
-    void startLockDeviceAction ();
 
     void on_PWS_ButtonClearSlot_clicked();
     void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
