@@ -134,7 +134,7 @@ private:
     QAction *Stick10ActionChangeUserPIN;
     QAction *Stick10ActionChangeAdminPIN;
     QAction *LockDeviceAction;
-    QAction *UnlockPasswordSafe;
+    QAction *UnlockPasswordSafeAction;
 
     QAction *Stick20ActionEnableCryptedVolume;
     QAction *Stick20ActionDisableCryptedVolume;
@@ -186,11 +186,11 @@ public slots:
     void startAboutDialog ();
     void startStick10ActionChangeUserPIN();
     void startStick10ActionChangeAdminPIN();
+    void startConfiguration();
 
 private slots:
     void resizeMin();
     void checkConnection();
-    void startConfiguration();
     int factoryReset();
     void getCode(uint8_t slotNo);
     void on_writeButton_clicked();

@@ -88,6 +88,7 @@ extern "C"
     void onAbout(GtkMenu *, gpointer);
     void onChangeUserPin(GtkMenu *, gpointer);
     void onChangeAdminPin(GtkMenu *, gpointer);
+    void onConfigure(GtkMenu *, gpointer);
     bool isUnity(void);
 }
 
@@ -115,9 +116,15 @@ void onChangeAdminPin(GtkMenu *menu, gpointer data)
     window->startStick10ActionChangeAdminPIN();
 }
 
+void onConfigure(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startConfiguration();
+}
+
 bool isUnity()
 {
- //   return false;
+    return false;
     QString desktop = getenv("XDG_CURRENT_DESKTOP");
     return (desktop.toLower() == "unity");
 }
@@ -158,7 +165,9 @@ void MainWindow::showTrayMessage(const QString& title, const QString& msg, enum 
 
 
 /*
- * Create the indicator with two menu options, show/hide and quit application
+ * Create the tray menu.
+ * In Unity we create an AppIndicator
+ * In all other systems we use Qt's tray
  */
 void MainWindow::createIndicator()
 {
@@ -843,11 +852,11 @@ void MainWindow::generateMenu()
 
 void MainWindow::initActionsForStick10()
 {
-    UnlockPasswordSafe = new QAction("Unlock password safe", this);
-    UnlockPasswordSafe->setIcon(QIcon(":/images/safe.png"));
-    connect(UnlockPasswordSafe, SIGNAL(triggered()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
+    UnlockPasswordSafeAction = new QAction("Unlock password safe", this);
+    UnlockPasswordSafeAction->setIcon(QIcon(":/images/safe.png"));
+    connect(UnlockPasswordSafeAction, SIGNAL(triggered()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
 
-    configureAction = new QAction(tr("&Configure OTP"), this);
+    configureAction = new QAction(tr("&OTP"), this);
     connect(configureAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
     resetAction = new QAction(tr("&Factory reset"), this);
@@ -876,7 +885,7 @@ void MainWindow::initCommonActions()
 
 void MainWindow::initActionsForStick20()
 {
-    configureActionStick20 = new QAction(tr("&Configure OTP and password safe"), this);
+    configureActionStick20 = new QAction(tr("&OTP and Password safe"), this);
     connect(configureActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
 
     SecPasswordAction = new QAction(tr("&SecPassword"), this);
@@ -1045,21 +1054,48 @@ void MainWindow::generateMenuForProDevice()
 {
     if (isUnity())
     {
-        GtkWidget *notConnItem = gtk_menu_item_new_with_label("Nitrokey not connected");;
         GtkWidget *passwordsItem = gtk_menu_item_new_with_label("Passwords");
+        GtkWidget *passwordSafeItem = gtk_menu_item_new_with_label("Unlock password safe");
+        GtkWidget *configureItem = gtk_menu_item_new_with_label("Configure");
+        GtkWidget *configurePasswordsItem;
         GtkWidget *changeUserPinItem = gtk_menu_item_new_with_label("Change user PIN");
-        GtkWidget *changeAdminPinItem = gtk_menu_item_new_with_label("Change admin PIN");;
-        GtkWidget *separItem = gtk_separator_menu_item_new();
+        GtkWidget *changeAdminPinItem = gtk_menu_item_new_with_label("Change admin PIN");
+        GtkWidget *resetItem = gtk_menu_item_new_with_label("Factory reset");
+        GtkWidget *separItem1 = gtk_separator_menu_item_new();
+        GtkWidget *separItem2 = gtk_separator_menu_item_new();
 
+        g_signal_connect(configureItem, "activate", G_CALLBACK(onConfigure), this);
         g_signal_connect(changeUserPinItem, "activate", G_CALLBACK(onChangeUserPin), this);
         g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPin), this);
 
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), passwordsItem);
-        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem1);
+
+        if (TRUE == cryptostick->passwordSafeAvailable)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), passwordSafeItem);
+            configurePasswordsItem = gtk_menu_item_new_with_label("OTP and Password safe");
+        }
+        else
+        {
+            configurePasswordsItem = gtk_menu_item_new_with_label("OTP");
+        }
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), configureItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), configurePasswordsItem);
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), changeUserPinItem);
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), changeAdminPinItem);
 
+        if (ExtendedConfigActive)
+        {
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem2);
+            gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), resetItem);
+        }
+
         gtk_widget_show(passwordsItem);
+        gtk_widget_show(passwordSafeItem);
+        gtk_widget_show(configureItem);
+        gtk_widget_show(configurePasswordsItem);
         gtk_widget_show(changeUserPinItem);
         gtk_widget_show(changeAdminPinItem);
     }
@@ -3074,13 +3110,13 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-        trayMenu->addAction(UnlockPasswordSafe);
+        trayMenu->addAction(UnlockPasswordSafeAction);
 
         if(true == cryptostick->passwordSafeAvailable) {
-            UnlockPasswordSafe->setEnabled(true);
+            UnlockPasswordSafeAction->setEnabled(true);
         }
         else {
-            UnlockPasswordSafe->setEnabled(false);
+            UnlockPasswordSafeAction->setEnabled(false);
         }
         return;
     }
@@ -3112,7 +3148,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
         {
             cryptostick->passwordSafeAvailable = TRUE;
-            UnlockPasswordSafe->setEnabled(true);
+            UnlockPasswordSafeAction->setEnabled(true);
 
             // Continue to unlocking password safe
             ret_s32 = cryptostick->passwordSafeEnable ((char*)&password[1]);
@@ -3155,7 +3191,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
             {
                 // Mark password safe as disabled feature
                 cryptostick->passwordSafeAvailable = FALSE;
-                UnlockPasswordSafe->setEnabled(false);
+                UnlockPasswordSafeAction->setEnabled(false);
                 csApplet->warningBox("Password safe is not supported by this device.");
                 generateMenu ();
                 ui->tabWidget->setTabEnabled(3, 0);
