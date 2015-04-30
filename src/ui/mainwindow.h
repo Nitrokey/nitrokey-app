@@ -191,6 +191,7 @@ public slots:
     int factoryReset();
     void getTOTPDialog (int slot);
     void getHOTPDialog (int slot);
+    void PWS_ExceClickedSlot (int Slot);
 
 private slots:
     void resizeMin();
@@ -229,7 +230,6 @@ private slots:
     void SetupPasswordSafeConfig (void);
     void generateMenuPasswordSafe();
     char *PWS_GetSlotName (int Slot);
-    void PWS_ExceClickedSlot (int Slot);
 
     void PWS_Clicked_Slot00 ();
     void PWS_Clicked_Slot01 ();

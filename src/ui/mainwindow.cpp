@@ -93,6 +93,7 @@ extern "C"
     void onReset(GtkMenu *, gpointer);
     void onGetTOTP(GtkMenu *, gpointer);
     void onGetHOTP(GtkMenu *, gpointer);
+    void onGetPasswordSafeSlot(GtkMenu *, gpointer);
     bool isUnity(void);
 }
 
@@ -156,9 +157,14 @@ void onGetHOTP(GtkMenu *menu, gpointer data)
     otp_data->window->getHOTPDialog( otp_data->slot );
 }
 
+void onGetPasswordSafeSlot(GtkMenu *menu, gpointer data)
+{
+    struct getOTPData *otp_data = static_cast<struct getOTPData*>(data);
+    otp_data->window->PWS_ExceClickedSlot( otp_data->slot );
+}
+
 bool isUnity()
 {
-//    return false;
     QString desktop = getenv("XDG_CURRENT_DESKTOP");
     return (desktop.toLower() == "unity");
 }
@@ -836,7 +842,6 @@ void MainWindow::generateMenu()
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), aboutItem);
         gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), quitItem);
 
-
         gtk_widget_show(notConnItem);
         gtk_widget_show(separItem);
         gtk_widget_show(aboutItem);
@@ -1137,6 +1142,25 @@ void MainWindow::generateMenuForProDevice()
                 g_signal_connect(currPasswdItem, "activate", G_CALLBACK(onGetHOTP), otp_data);
                 gtk_menu_shell_append(GTK_MENU_SHELL(passwordsSubMenu), currPasswdItem);
                 gtk_widget_show(currPasswdItem);
+            }
+        }
+        if (TRUE == cryptostick->passwordSafeUnlocked)
+        {
+            for (int i = 0; i < HOTP_SlotCount; i++)
+            {
+                GtkWidget *currPasswdItem;
+                struct getOTPData* otp_data;
+                if (cryptostick->passwordSafeStatus[i] == (unsigned char)true )
+                {
+                    otp_data = (struct getOTPData*)malloc(sizeof(struct getOTPData));
+                    otp_data->window = this;
+                    otp_data->slot = i;
+
+                    currPasswdItem = gtk_menu_item_new_with_label((const char*)cryptostick->HOTPSlots[i]->slotName);
+                    g_signal_connect(currPasswdItem, "activate", G_CALLBACK(onGetPasswordSafeSlot), otp_data);
+                    gtk_menu_shell_append(GTK_MENU_SHELL(passwordsSubMenu), currPasswdItem);
+                    gtk_widget_show(currPasswdItem);
+                }
             }
         }
 
@@ -3042,7 +3066,6 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked()
     {
         ret = cryptostick->passwordSafeEraseSlot(Slot);
 
-
         if (ERR_NO_ERROR == ret)
         {
             ui->PWS_EditSlotName->setText("");
@@ -3053,14 +3076,10 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked()
             ui->PWS_ComboBoxSelectSlot->setItemText(Slot,QString("Slot ").append(QString::number(Slot+1,10)));
         }
         else
-        {
             csApplet->warningBox("Can't clear slot.");
-        }
     }
     else
-    {
         csApplet->messageBox("Slot is erased already.");
-    }
 
     generateMenu();
 }
