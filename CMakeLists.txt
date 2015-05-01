@@ -150,7 +150,19 @@ ELSEIF(APPLE)
     SET( platform_specific_sources hid_mac.c)
     SET( platform_specific_libs "-framework IOKit -framework CoreFoundation")
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
-    SET(EXTRA_LIBS pthread usb-1.0)
+    pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
+    SET(GTK2_INCLUDE_DIRS
+            ${GTK2_INCLUDE_DIRS}
+            /usr/include/libappindicator-0.1
+            /usr/include/gtk-2.0
+            /usr/lib/gtk-2.0/include
+            /usr/include/glib-2.0
+            /usr/lib/glib-2.0/include
+            /usr/include/cairo
+            /usr/include/atk-1.0
+            /usr/include/pango-1.0
+    )
+    SET(EXTRA_LIBS ${GTK2_LIBRARIES} pthread usb-1.0 appindicator notify)
 ENDIF()
 
 INCLUDE_DIRECTORIES(
@@ -162,38 +174,50 @@ INCLUDE_DIRECTORIES(
     ${PROJECT_SOURCE_DIR}
     ${QT_INCLUDE_DIR}
     ${LIBUSB_INCLUDE_DIRS}
+    ${GTK2_INCLUDE_DIRS}
 )
 
 LINK_DIRECTORIES(
     ${QT_LIBRARY_DIR}
     ${LIBUSB_LIBRARY_DIRS}
+    ${GTK2_LIBRARY_DIRS}
 )
+
+add_definitions(${GTK2_CFLAGS_OTHER})
 
 
 # Freedesktop files
-if(NOT WIN32)
-install(DIRECTORY
-  ${CMAKE_SOURCE_DIR}/data/icons/16x16
-  ${CMAKE_SOURCE_DIR}/data/icons/22x22
-  ${CMAKE_SOURCE_DIR}/data/icons/24x24
-  ${CMAKE_SOURCE_DIR}/data/icons/32x32
-  ${CMAKE_SOURCE_DIR}/data/icons/48x48
-  ${CMAKE_SOURCE_DIR}/data/icons/128x128
-  ${CMAKE_SOURCE_DIR}/data/icons/scalable
-  DESTINATION share/icons/hicolor
-)
+IF(NOT WIN32)
+    install(DIRECTORY
+      ${CMAKE_SOURCE_DIR}/data/icons/16x16
+      ${CMAKE_SOURCE_DIR}/data/icons/22x22
+      ${CMAKE_SOURCE_DIR}/data/icons/24x24
+      ${CMAKE_SOURCE_DIR}/data/icons/32x32
+      ${CMAKE_SOURCE_DIR}/data/icons/48x48
+      ${CMAKE_SOURCE_DIR}/data/icons/128x128
+      ${CMAKE_SOURCE_DIR}/data/icons/scalable
+      DESTINATION share/icons/hicolor
+    )
 
-install(FILES
-  ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
-  DESTINATION share/applications
-)
+    install(FILES
+      ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
+      DESTINATION share/applications
+    )
 
-install(FILES
-  ${CMAKE_SOURCE_DIR}/data/icons/128x128/apps/nitrokey-app.png
-  DESTINATION share/pixmaps
-)
+    install(FILES
+      ${CMAKE_SOURCE_DIR}/data/icons/128x128/apps/nitrokey-app.png
+      DESTINATION share/pixmaps
+    )
 
-endif()
+    install(FILES
+        ${CMAKE_SOURCE_DIR}/images/cs-icon.png
+        DESTINATION share/nitrokey-app)
+
+    install(FILES
+        ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
+        DESTINATION /etc/udev/rules.d
+        )
+ENDIF()
 
 
 ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
@@ -238,6 +262,8 @@ ENDIF("${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Georgios Gkitsas <george@nitrokey.com>" )
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+
+SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/debian/postinst")
 
 # Rpm
 #execute_process(COMMAND dpkg --print-architecture OUTPUT_VARIABLE CPACK_RPM_PACKAGE_ARCHITECTURE)
