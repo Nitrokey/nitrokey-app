@@ -66,7 +66,7 @@ windows: $(BUILD_WIN)/release/nitrokey-app.exe
 
 
 ### Releasing
-linux-release: build $(LINUX_RELEASE_DIR)/nitrokey-app-0.2-Linux.rpm $(LINUX_RELEASE_DIR)/nitrokey-app-0.2-Linux.deb | $(LINUX_RELEASE_DIR)
+linux-release: build | $(LINUX_RELEASE_DIR)
 	cd ${BUILD_LINUX} && \
 	make package && \
 	mv *.deb *.rpm ${LINUX_RELEASE_DIR} && cd ${LINUX_RELEASE_DIR} && \
