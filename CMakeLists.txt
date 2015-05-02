@@ -263,7 +263,10 @@ SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Georgios Gkitsas <george@nitrokey.com>" )
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
+
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libappindicator1, libnotify4, qtdeclarative5-dev")
 SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/debian/postinst")
+
 
 # Rpm
 #execute_process(COMMAND dpkg --print-architecture OUTPUT_VARIABLE CPACK_RPM_PACKAGE_ARCHITECTURE)
