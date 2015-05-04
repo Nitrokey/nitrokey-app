@@ -300,7 +300,7 @@ void onSetupPasswordMatrix(GtkMenu *menu, gpointer data)
 bool isUnity()
 {
     QString desktop = getenv("XDG_CURRENT_DESKTOP");
-    return (desktop.toLower() == "unity");
+    return (desktop.toLower() == "unity" || desktop.toLower() == "kde" || desktop.toLower() == "lxde");
 }
 
 void MainWindow::showTrayMessage(const QString& title, const QString& msg, enum trayMessageType type, int timeout)
@@ -348,9 +348,9 @@ void MainWindow::createIndicator()
     if(isUnity())
     {
         indicator = app_indicator_new_with_path("Nitrokey App", 
-                                                "cs-icon", 
+                                                "nitrokey-app",
                                                  APP_INDICATOR_CATEGORY_OTHER,
-                                                 "/usr/share/nitrokey-app/");
+                                                 "/usr/share/icons/hicolor/scalable/apps");
         app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ACTIVE);
     }
     else //other DE's and OS's
