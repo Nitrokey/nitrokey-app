@@ -1,6 +1,7 @@
 mkfile_path := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 
 ROOT_DIR := ${mkfile_path}
+SCRIPTS_DIR := ${ROOT_DIR}/scripts
 BUILD_DIR ?= ${ROOT_DIR}/build
 BUILD_LINUX ?= ${BUILD_DIR}/linux
 BUILD_WIN ?= ${BUILD_DIR}/win
@@ -70,6 +71,7 @@ linux-release: build | $(LINUX_RELEASE_DIR)
 	cd ${BUILD_LINUX} && \
 	make package && \
 	mv *.deb *.rpm ${LINUX_RELEASE_DIR} && cd ${LINUX_RELEASE_DIR} && \
+	find . -name *.deb -type f -printf '%f' | xargs -0 -n1 -I{} sh -c '${SCRIPTS_DIR}/fix-deb.sh {}' && \
 	find . -name *.deb -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5' && \
 	find . -name *.rpm -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5'
 
