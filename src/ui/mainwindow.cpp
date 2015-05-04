@@ -300,7 +300,7 @@ void onSetupPasswordMatrix(GtkMenu *menu, gpointer data)
 bool isUnity()
 {
     QString desktop = getenv("XDG_CURRENT_DESKTOP");
-    return (desktop.toLower() == "unity" || desktop.toLower() == "kde" || desktop.toLower() == "lxde");
+    return (desktop.toLower() == "unity" || desktop.toLower() == "kde" || desktop.toLower() == "lxde" || desktop.toLower() == "xfce");
 }
 
 void MainWindow::showTrayMessage(const QString& title, const QString& msg, enum trayMessageType type, int timeout)
