@@ -79,6 +79,8 @@ public:
 
 #define LOCAL_PASSWORD_SIZE         40
 
+
+#ifdef Q_OS_LINUX
 /*
  * Indicator call backs
  */
@@ -302,6 +304,8 @@ bool isUnity()
     QString desktop = getenv("XDG_CURRENT_DESKTOP");
     return (desktop.toLower() == "unity" || desktop.toLower() == "kde" || desktop.toLower() == "lxde" || desktop.toLower() == "xfce");
 }
+
+#endif // Q_OS_LINUX
 
 void MainWindow::showTrayMessage(const QString& title, const QString& msg, enum trayMessageType type, int timeout)
 {
