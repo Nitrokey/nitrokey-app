@@ -305,6 +305,7 @@ bool isUnity()
 
 void MainWindow::showTrayMessage(const QString& title, const QString& msg, enum trayMessageType type, int timeout)
 {
+#ifdef Q_OS_LINUX
     if (isUnity())
     {
         if(!notify_init("example"))
@@ -316,6 +317,7 @@ void MainWindow::showTrayMessage(const QString& title, const QString& msg, enum 
         notify_uninit();       
     }
     else
+#endif //Q_OS_LINUX
     {
         if (TRUE == trayIcon->supportsMessages ())
         {
@@ -345,6 +347,7 @@ void MainWindow::showTrayMessage(const QString& title, const QString& msg, enum 
  */
 void MainWindow::createIndicator()
 {
+#ifdef Q_OS_LINUX
     if(isUnity())
     {
         indicator = app_indicator_new_with_path("Nitrokey App", 
@@ -354,6 +357,7 @@ void MainWindow::createIndicator()
         app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ACTIVE);
     }
     else //other DE's and OS's
+#endif // Q_OS_LINUX
     {
         trayIcon = new QSystemTrayIcon(this);
         trayIcon->setIcon(QIcon(":/images/CS_icon.png"));
@@ -940,6 +944,7 @@ void MainWindow::generateComboBoxEntrys()
 
 void MainWindow::generateMenu()
 {
+#ifdef Q_OS_LINUX
     if (isUnity())
     {
         indicatorMenu = gtk_menu_new();
@@ -980,6 +985,7 @@ void MainWindow::generateMenu()
         app_indicator_set_menu(indicator, GTK_MENU(indicatorMenu));
     }
     else
+#endif // Q_OS_LINUX
     {
         if (NULL == trayMenu)
             trayMenu = new QMenu();
@@ -1136,6 +1142,7 @@ void MainWindow::initActionsForStick20()
 
 void MainWindow::generatePasswordMenu()
 {
+#ifdef Q_OS_LINUX
     if (isUnity())
     {
         GtkWidget *passwordsItem = gtk_menu_item_new_with_label("Passwords");
@@ -1203,6 +1210,7 @@ void MainWindow::generatePasswordMenu()
         gtk_widget_show(separItem1);
     }
     else
+#endif // Q_OS_LINUX
     {
         trayMenuPasswdSubMenu = trayMenu->addMenu("Passwords");
 
@@ -1290,6 +1298,7 @@ void MainWindow::generatePasswordMenu()
 
 void MainWindow::generateMenuForProDevice()
 {
+#ifdef Q_OS_LINUX
     if (isUnity())
     {
         GtkWidget *configureItem = gtk_menu_item_new_with_label("Configure");
@@ -1335,6 +1344,7 @@ void MainWindow::generateMenuForProDevice()
         gtk_widget_show(configureSubMenu);
     }
     else
+#endif // Q_OS_LINUX
     {
         generatePasswordMenu ();
         trayMenu->addSeparator();
@@ -1365,7 +1375,7 @@ void MainWindow::generateMenuForProDevice()
 void MainWindow::generateMenuForStorageDevice()
 {
     int AddSeperator = FALSE;
-
+#ifdef Q_OS_LINUX
     if ( isUnity() )
     {
         GtkWidget *updateStorageStatusItem = gtk_menu_item_new_with_label("Smartcard or SD card are not ready");
@@ -1561,6 +1571,7 @@ void MainWindow::generateMenuForStorageDevice()
         gtk_widget_show(separItem2);
     }
     else
+#endif // Q_OS_LINUX
     {
 
         if (FALSE == Stick20ScSdCardOnline)         // Is Stick 2.0 online (SD + SC accessable?)
@@ -3522,6 +3533,7 @@ void MainWindow::generateMenuPasswordSafe()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
+#ifdef Q_OS_LINUX
         if (isUnity())
         {
             GtkWidget *passwordSafeItem = gtk_menu_item_new_with_label("Unlock password safe");
@@ -3530,6 +3542,7 @@ void MainWindow::generateMenuPasswordSafe()
             gtk_widget_show(passwordSafeItem);
         }
         else
+#endif // Q_OS_LINUX
         {
             trayMenu->addAction(UnlockPasswordSafeAction);
 
