@@ -189,14 +189,14 @@ add_definitions(${GTK2_CFLAGS_OTHER})
 # Freedesktop files
 IF(NOT WIN32)
     install(DIRECTORY
-      ${CMAKE_SOURCE_DIR}/data/icons/16x16
-      ${CMAKE_SOURCE_DIR}/data/icons/22x22
-      ${CMAKE_SOURCE_DIR}/data/icons/24x24
-      ${CMAKE_SOURCE_DIR}/data/icons/32x32
-      ${CMAKE_SOURCE_DIR}/data/icons/48x48
-      ${CMAKE_SOURCE_DIR}/data/icons/128x128
-      ${CMAKE_SOURCE_DIR}/data/icons/scalable
-      DESTINATION share/icons/hicolor
+        #      ${CMAKE_SOURCE_DIR}/data/icons/16x16
+        #      ${CMAKE_SOURCE_DIR}/data/icons/22x22
+        #      ${CMAKE_SOURCE_DIR}/data/icons/24x24
+        #      ${CMAKE_SOURCE_DIR}/data/icons/32x32
+        #      ${CMAKE_SOURCE_DIR}/data/icons/48x48
+        #      ${CMAKE_SOURCE_DIR}/data/icons/128x128
+      ${CMAKE_SOURCE_DIR}/data/icons/
+      DESTINATION share/icons/
     )
 
     install(FILES
@@ -205,14 +205,11 @@ IF(NOT WIN32)
     )
 
     install(FILES
-      ${CMAKE_SOURCE_DIR}/data/icons/128x128/apps/nitrokey-app.png
+      ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
       DESTINATION share/pixmaps
     )
 
-    install(FILES
-        ${CMAKE_SOURCE_DIR}/images/cs-icon.png
-        DESTINATION share/nitrokey-app)
-
+    # Install Nitrokey udev rules
     install(FILES
         ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
         DESTINATION /etc/udev/rules.d

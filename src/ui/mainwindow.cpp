@@ -354,10 +354,9 @@ void MainWindow::createIndicator()
 #ifdef Q_OS_LINUX
     if(isUnity())
     {
-        indicator = app_indicator_new_with_path("Nitrokey App", 
-                                                "nitrokey-app",
-                                                 APP_INDICATOR_CATEGORY_OTHER,
-                                                 "/usr/share/icons/hicolor/scalable/apps");
+        indicator = app_indicator_new("Nitrokey App",
+                                        "nitrokey-app",
+                                         APP_INDICATOR_CATEGORY_OTHER);
         app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ACTIVE);
     }
     else //other DE's and OS's
