@@ -446,7 +446,7 @@ MainWindow::MainWindow (StartUpParameter_tst *StartupInfo_st,QWidget *parent) :
     validator = new QIntValidator(0, 9999999, this);
     ui->counterEdit->setValidator(validator);
     ui->PWS_ButtonCreatePW->setText(QString("Generate random password "));
-    ui->statusBar->showMessage("Device disconnected.");
+    ui->statusBar->showMessage("Nitrokey disconnected.");
     cryptostick =  new Device(VID_STICK_OTP, PID_STICK_OTP,VID_STICK_20,PID_STICK_20,VID_STICK_20_UPDATE_MODE,PID_STICK_20_UPDATE_MODE);
 
     // Check for comamd line execution after init "cryptostick"
@@ -805,7 +805,7 @@ void MainWindow::checkConnection()
     }
     else if (result == -1)
     {
-        ui->statusBar->showMessage("Device disconnected.");
+        ui->statusBar->showMessage("Nitrokey disconnected.");
         HID_Stick20Init ();             // Clear stick 20 data
         Stick20ScSdCardOnline = FALSE;
         CryptedVolumeActive   = FALSE;
@@ -816,15 +816,15 @@ void MainWindow::checkConnection()
             generateMenu();
             DeviceOffline = TRUE;
             cryptostick->passwordSafeAvailable= true;
-            showTrayMessage("Device disconnected.", "", INFORMATION, TRAY_MSG_TIMEOUT);
+            showTrayMessage("Nitrokey disconnected.", "", INFORMATION, TRAY_MSG_TIMEOUT);
         }
         cryptostick->connect();
     }
     else if (result == 1){ //recreate the settings and menus
         if (false == cryptostick->activStick20)
         {
-            ui->statusBar->showMessage("Device connected.");
-            showTrayMessage("Device connected", "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
+            ui->statusBar->showMessage("Nitrokey connected.");
+            showTrayMessage("Nitrokey connected", "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
 
             if(set_initial_time == FALSE){
                 ret = cryptostick->setTime(TOTP_CHECK_TIME);
@@ -854,7 +854,7 @@ void MainWindow::checkConnection()
             cryptostick->getStatus();
         } else
         {
-            showTrayMessage("Device connected", "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
+            showTrayMessage("Nitrokey connected", "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
             ui->statusBar->showMessage("Nitrokey Storage connected.");
         }
         generateMenu();
