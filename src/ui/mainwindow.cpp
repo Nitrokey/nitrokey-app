@@ -90,6 +90,7 @@ extern "C"
     void onAbout(GtkMenu *, gpointer);
     void onChangeUserPin(GtkMenu *, gpointer);
     void onChangeAdminPin(GtkMenu *, gpointer);
+    void onResetUserPin(GtkMenu *, gpointer);
     void onConfigure(GtkMenu *, gpointer);
     void onEnablePasswordSafe(GtkMenu *, gpointer);
     void onReset(GtkMenu *, gpointer);
@@ -140,6 +141,12 @@ void onChangeAdminPin(GtkMenu *menu, gpointer data)
 {
     MainWindow *window = static_cast<MainWindow *>(data);
     window->startStick10ActionChangeAdminPIN();
+}
+
+void onResetUserPin(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startResetUserPassword();
 }
 
 void onConfigure(GtkMenu *menu, gpointer data)
@@ -1308,6 +1315,7 @@ void MainWindow::generateMenuForProDevice()
         GtkWidget *configurePasswordsItem;
         GtkWidget *changeUserPinItem = gtk_menu_item_new_with_label("Change user PIN");
         GtkWidget *changeAdminPinItem = gtk_menu_item_new_with_label("Change admin PIN");
+        GtkWidget *resetUserPinItem = gtk_menu_item_new_with_label("Reset User PIN");
         GtkWidget *resetItem = gtk_menu_item_new_with_label("Factory reset");
         GtkWidget *separItem2 = gtk_separator_menu_item_new();
 
@@ -1315,6 +1323,7 @@ void MainWindow::generateMenuForProDevice()
         
         g_signal_connect(changeUserPinItem, "activate", G_CALLBACK(onChangeUserPin), this);
         g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPin), this);
+        g_signal_connect(resetUserPinItem, "activate", G_CALLBACK(onResetUserPin), this);
         g_signal_connect(resetItem, "activate", G_CALLBACK(onReset), this);
 
         generatePasswordMenu ();
@@ -1331,6 +1340,7 @@ void MainWindow::generateMenuForProDevice()
         gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), configurePasswordsItem);
         gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeUserPinItem);
         gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeAdminPinItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), resetUserPinItem);
         if (ExtendedConfigActive)
         {
             gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), separItem2);
@@ -1343,6 +1353,12 @@ void MainWindow::generateMenuForProDevice()
         gtk_widget_show(configurePasswordsItem);
         gtk_widget_show(changeUserPinItem);
         gtk_widget_show(changeAdminPinItem);
+
+        cryptostick->getUserPasswordRetryCount();
+        // if (0 == cryptostick->getUserPasswordRetryCount() )
+        if (0 == HID_Stick20Configuration_st.UserPwRetryCount)  //cryptostick->userPasswordRetryCount)
+            gtk_widget_show(resetUserPinItem);
+
         gtk_widget_show(resetItem);
         gtk_widget_show(configureSubMenu);
     }
@@ -1366,6 +1382,13 @@ void MainWindow::generateMenuForProDevice()
 
         trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
         trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
+
+        // Enable "reset user PIN" ?
+        cryptostick->getUserPasswordRetryCount();
+        if (0 == HID_Stick20Configuration_st.UserPwRetryCount)  //cryptostick->userPasswordRetryCount)
+        {
+            trayMenuSubConfigure->addAction(Stick20ActionResetUserPassword);
+        }
 
         if (ExtendedConfigActive) {
             trayMenuSubConfigure->addSeparator();
@@ -1467,23 +1490,6 @@ void MainWindow::generateMenuForStorageDevice()
             generateMenuPasswordSafe ();
         }
 
-    trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
-    trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
-
-    // Enable "reset user PIN" ?
-    cryptostick->getUserPasswordRetryCount();
-    if (0 == HID_Stick20Configuration_st.UserPwRetryCount)  //cryptostick->userPasswordRetryCount)
-    {
-        trayMenuSubConfigure->addAction(Stick20ActionResetUserPassword);
-    }
-
-    if (TRUE == cryptostick->passwordSafeAvailable)
-    {    
-        trayMenuSubConfigure->addAction(restoreActionStick20);
-    }
-    else {
-        trayMenuSubConfigure->addAction(restoreAction);
-    }
 
         if (FALSE == SdCardNotErased)
         {
