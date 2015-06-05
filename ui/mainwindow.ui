@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>719</width>
-    <height>622</height>
+    <width>801</width>
+    <height>781</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -390,6 +390,22 @@
               </layout>
              </item>
             </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_26">
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+               <italic>true</italic>
+              </font>
+             </property>
+             <property name="text">
+              <string>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren't protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
