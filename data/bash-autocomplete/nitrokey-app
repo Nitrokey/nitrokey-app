@@ -9,6 +9,9 @@ _nitrokey_app()
     if [[ ${cur} == -* ]] ; then
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
         return 0
+    else
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
     fi
+
 }
 complete -F _nitrokey_app nitrokey-app
