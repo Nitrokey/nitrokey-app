@@ -3633,16 +3633,6 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
             }
             else
             {
-/*
-                if (TRUE == trayIcon->supportsMessages ())
-                {
-                    showTrayMessage (QString("Nitrokey App"),QString("Password Safe unlocked successfully."));
-                }
-                else
-                {
-                    csApplet->messageBox("Password safe is enabled");
-                }
-*/
                 showTrayMessage ("Nitrokey App", "Password Safe unlocked successfully.", INFORMATION, TRAY_MSG_TIMEOUT);
                 SetupPasswordSafeConfig ();
                 generateMenu ();
