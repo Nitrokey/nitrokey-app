@@ -1868,7 +1868,6 @@ int Device::unlockUserPassword (uint8_t *adminPassword)
     if (isConnected)
     {
         Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD,adminPassword, STICK20_PASSOWRD_LEN+2);
-        Command *cmd=new Command (CMD_UNLOCK_USER_PASSWORD,adminPassword,30);
 
         res=sendCommand(cmd);
 
