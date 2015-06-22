@@ -2376,20 +2376,64 @@ bool Device::stick20DisableHiddenCryptedPartition  (void)
 
 *******************************************************************************/
 
+#define CS20_MAX_UPDATE_PASSWORD_LEN       15
+
 bool Device::stick20EnableFirmwareUpdate (uint8_t *password)
 {
     uint8_t n;
-    int     res;
+    int      res;
     Command *cmd;
 
     // Check password length
     n = strlen ((const char*)password);
-    if (CS20_MAX_PASSWORD_LEN <= n)
+    if (CS20_MAX_UPDATE_PASSWORD_LEN <= n)
     {
         return (false);
     }
 
     cmd = new Command(STICK20_CMD_ENABLE_FIRMWARE_UPDATE,password,n);
+    res = sendCommand(cmd);
+    if(res){}//Fix warnings
+    delete cmd;
+    return (true);
+}
+
+
+/*******************************************************************************
+
+  stick20EnableFirmwareUpdate
+
+  21.06.15  RB              First review
+
+  Reviews
+  Date      Reviewer        Info
+
+*******************************************************************************/
+
+
+bool Device::stick20NewUpdatePassword (uint8_t *old_password,uint8_t *new_password)
+{
+    uint8_t n;
+    int      res;
+    uint8_t SendString[33];
+    Command *cmd;
+
+    // Check password length
+    n = strlen ((const char*)old_password);
+    if (CS20_MAX_UPDATE_PASSWORD_LEN <= n)
+    {
+        return (false);
+    }
+    n = strlen ((const char*)new_password);
+    if (CS20_MAX_UPDATE_PASSWORD_LEN <= n)
+    {
+        return (false);
+    }
+
+    STRNCPY ((char*)&SendString[ 1],sizeof (SendString)   ,(char*)old_password,CS20_MAX_UPDATE_PASSWORD_LEN);
+    STRNCPY ((char*)&SendString[16],sizeof (SendString)-15,(char*)new_password,CS20_MAX_UPDATE_PASSWORD_LEN);
+
+    cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN,SendString,33);
     res = sendCommand(cmd);
     if(res){}//Fix warnings
     delete cmd;

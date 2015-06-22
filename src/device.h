@@ -137,6 +137,9 @@ class Response;
 #define STICK20_CMD_PRODUCTION_TEST                     (STICK20_CMD_START_VALUE + 24)
 #define STICK20_CMD_SEND_DEBUG_DATA                     (STICK20_CMD_START_VALUE + 25)
 
+#define STICK20_CMD_CHANGE_UPDATE_PIN                   (STICK20_CMD_START_VALUE + 26)
+
+
 #define STATUS_READY           0x00
 #define STATUS_BUSY	           0x01
 #define STATUS_ERROR           0x02
@@ -349,6 +352,7 @@ public:
     bool stick20DisableHiddenCryptedPartition (void);
 
     bool stick20EnableFirmwareUpdate (uint8_t *password);
+    bool stick20NewUpdatePassword (uint8_t *old_password,uint8_t *new_password);
     bool stick20ExportFirmware (uint8_t *password);
 
     bool stick20CreateNewKeys (uint8_t *password);

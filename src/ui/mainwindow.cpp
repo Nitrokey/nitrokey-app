@@ -2552,13 +2552,16 @@ void MainWindow::startStick20SetupPasswordMatrix()
 void MainWindow::startStick20DebugAction()
 {
     int ret;
-
+/*
     securitydialog dialog(this);
     ret = dialog.exec();
     csApplet->warningBox("Encrypted volume is not secure.\nSelect \"Initialize keys\"");
 
     StickNotInitated  = TRUE;
     generateMenu();
+*/
+
+//    cryptostick->stick20NewUpdatePassword((uint8_t *)"12345678",(uint8_t *)"123456");
 }
 
 
