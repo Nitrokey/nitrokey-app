@@ -100,10 +100,10 @@ Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-
    * Select Convert, check "compressed" option and then "Save"
 
 
-KDE
+Tray
 ---
 
-Note that the Nitrokey App's graphical interface is based on a QT system tray widget. If you are using a non-KDE Linux desktop environment that does not support system tray widgets, then you may be unable to access the graphical interface.
+Note that the Nitrokey App's graphical interface is based on a QT system tray widget. If you are using a Linux desktop environment that does not support system tray widgets, then you may be unable to access the graphical interface.
 
 
 Internals
