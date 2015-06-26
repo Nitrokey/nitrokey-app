@@ -51,6 +51,7 @@ private:
     void Stick10ChangePassword(void);
     void ResetUserPassword (void);
     void ResetUserPasswordStick10 (void);
+    void Stick20ChangeUpdatePassword(void);
     int  CheckResponse(bool NoStopFlag);
     void clearFields();
 };

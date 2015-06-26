@@ -216,6 +216,7 @@ public slots:
     void startStick20ClearNewSdCardFound();
     void startStick20SetupHiddenVolume();
     void startStick20SetupPasswordMatrix();
+    void startStick20ActionChangeUpdatePIN();
 
 private slots:
     void resizeMin();

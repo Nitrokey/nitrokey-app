@@ -90,6 +90,7 @@ extern "C"
     void onAbout(GtkMenu *, gpointer);
     void onChangeUserPin(GtkMenu *, gpointer);
     void onChangeAdminPin(GtkMenu *, gpointer);
+    void onChangeUpdatePin(GtkMenu *, gpointer);
     void onResetUserPin(GtkMenu *, gpointer);
     void onConfigure(GtkMenu *, gpointer);
     void onEnablePasswordSafe(GtkMenu *, gpointer);
@@ -141,6 +142,11 @@ void onChangeAdminPin(GtkMenu *menu, gpointer data)
 {
     MainWindow *window = static_cast<MainWindow *>(data);
     window->startStick10ActionChangeAdminPIN();
+}
+void onChangeUpdatePin(GtkMenu *menu, gpointer data)
+{
+    MainWindow *window = static_cast<MainWindow *>(data);
+    window->startStick20ActionChangeUpdatePIN();
 }
 
 void onResetUserPin(GtkMenu *menu, gpointer data)
@@ -1428,6 +1434,7 @@ void MainWindow::generateMenuForStorageDevice()
         GtkWidget *configurePasswordsItem;
         GtkWidget *changeUserPinItem = gtk_menu_item_new_with_label("Change user PIN");
         GtkWidget *changeAdminPinItem = gtk_menu_item_new_with_label("Change admin PIN");
+        GtkWidget *changeUpdatePinItem = gtk_menu_item_new_with_label("Change Update PIN");
 
         GtkWidget *separItem1 = gtk_separator_menu_item_new();
         GtkWidget *separItem2 = gtk_separator_menu_item_new();
@@ -1456,7 +1463,7 @@ void MainWindow::generateMenuForStorageDevice()
         g_signal_connect(resetUserPasswordItem, "activate", G_CALLBACK(onResetUserPassword), this);
         g_signal_connect(changeUserPinItem, "activate", G_CALLBACK(onChangeUserPinStorage), this);
         g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPinStorage), this);
-        g_signal_connect(changeAdminPinItem, "activate", G_CALLBACK(onChangeAdminPinStorage), this);
+        g_signal_connect(changeUpdatePinItem, "activate", G_CALLBACK(onChangeUpdatePin), this);
 
         if (FALSE == Stick20ScSdCardOnline) // Is Stick 2.0 online (SD + SC accessable?)
         {
@@ -1517,6 +1524,7 @@ void MainWindow::generateMenuForStorageDevice()
         gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), configurePasswordsItem);
         gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeUserPinItem);
         gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeAdminPinItem);
+        gtk_menu_shell_append(GTK_MENU_SHELL(configureSubMenu), changeUpdatePinItem);
 
         if (TRUE == MatrixInputActive)
             gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), setupPasswordMatrixItem);
@@ -1593,6 +1601,7 @@ void MainWindow::generateMenuForStorageDevice()
         gtk_widget_show(configurePasswordsItem);
         gtk_widget_show(changeUserPinItem);
         gtk_widget_show(changeAdminPinItem);
+        gtk_widget_show(changeUpdatePinItem);
         gtk_widget_show(configureSubMenu);
         gtk_widget_show(separItem1);
         gtk_widget_show(separItem2);
@@ -2314,17 +2323,22 @@ void MainWindow::startStick10ActionChangeUserPIN()
 void MainWindow::startStick10ActionChangeAdminPIN()
 {
     DialogChangePassword dialog(this);
-
     dialog.setModal (TRUE);
-
     dialog.cryptostick        = cryptostick;
-
     dialog.PasswordKind       = STICK10_PASSWORD_KIND_ADMIN;
-
     dialog.InitData ();
     dialog.exec();
 }
 
+void MainWindow::startStick20ActionChangeUpdatePIN()
+{
+    DialogChangePassword dialog(this);
+    dialog.setModal (TRUE);
+    dialog.cryptostick = cryptostick;
+    dialog.PasswordKind = STICK20_PASSWORD_KIND_UPDATE;
+    dialog.InitData();
+    dialog.exec();
+}
 
 void MainWindow::startStick20ActionChangeUserPIN()
 {

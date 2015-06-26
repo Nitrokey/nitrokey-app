@@ -2376,7 +2376,6 @@ bool Device::stick20DisableHiddenCryptedPartition  (void)
 
 *******************************************************************************/
 
-#define CS20_MAX_UPDATE_PASSWORD_LEN       15
 
 bool Device::stick20EnableFirmwareUpdate (uint8_t *password)
 {
@@ -2430,9 +2429,8 @@ bool Device::stick20NewUpdatePassword (uint8_t *old_password,uint8_t *new_passwo
         return (false);
     }
 
-    STRNCPY ((char*)&SendString[ 1],sizeof (SendString)   ,(char*)old_password,CS20_MAX_UPDATE_PASSWORD_LEN);
-    STRNCPY ((char*)&SendString[16],sizeof (SendString)-15,(char*)new_password,CS20_MAX_UPDATE_PASSWORD_LEN);
-
+    STRNCPY ((char*)&SendString[ 1],sizeof (SendString)-1   ,(char*)old_password,CS20_MAX_UPDATE_PASSWORD_LEN);
+    STRNCPY ((char*)&SendString[16],sizeof (SendString)-16,(char*)new_password,CS20_MAX_UPDATE_PASSWORD_LEN);
     cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN,SendString,33);
     res = sendCommand(cmd);
     if(res){}//Fix warnings

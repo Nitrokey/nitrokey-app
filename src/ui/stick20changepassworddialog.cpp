@@ -118,6 +118,12 @@ void DialogChangePassword::InitData(void)
             ui->label_3->setText("New user PIN:");
             ui->label_4->setText("New user PIN:");
             break;
+        case STICK20_PASSWORD_KIND_UPDATE:
+            this->setWindowTitle("Change Update PIN");
+            ui->label_2->setText("Update PIN:");
+            ui->label_3->setText("New Update PIN:");
+            ui->label_4->setText("New Update PIN (confirm):");
+            break;
     }
 }
 
@@ -350,6 +356,31 @@ void DialogChangePassword::ResetUserPasswordStick10 (void)
     }
 }
 
+void DialogChangePassword::Stick20ChangeUpdatePassword(void)
+{
+    int ret;
+    int password_length;
+    QByteArray PasswordString;
+
+    password_length = CS20_MAX_UPDATE_PASSWORD_LEN;
+    unsigned char old_pin[password_length + 1];
+    unsigned char new_pin[password_length + 1];
+    memset(old_pin, 0, password_length + 1);
+    memset(new_pin, 0, password_length + 1);
+
+    PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+    strncpy ( (char*)old_pin, PasswordString.data(), password_length);
+
+    PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
+    strncpy ( (char*)new_pin, PasswordString.data(), password_length);
+
+    // Change password
+    ret = cryptostick->stick20NewUpdatePassword ((uint8_t *)old_pin,(uint8_t *)new_pin);
+
+    if (!ret)
+        csApplet->warningBox("Wrong password.");
+}
+
 /*******************************************************************************
 
   accept
@@ -423,6 +454,9 @@ void DialogChangePassword::accept()
             break;
         case STICK10_PASSWORD_KIND_RESET_USER :
             ResetUserPasswordStick10 ();
+            break;
+        case STICK20_PASSWORD_KIND_UPDATE:
+            Stick20ChangeUpdatePassword();
             break;
         default :
             break;
