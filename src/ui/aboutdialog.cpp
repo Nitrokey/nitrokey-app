@@ -103,14 +103,14 @@ void AboutDialog::showStick20Configuration (void)
 
     if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32)
     {
-        OutputText.append(QString("\nSD card is not accessible\n\n"));
+        OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
         ErrorFlag = TRUE;
     }
 
     if (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32)
     {
         ui->serialEdit->setText("-");
-        OutputText.append(QString("\nSmartcard is not accessible\n\n"));
+        OutputText.append(QString(tr("\nSmartcard is not accessible\n\n")));
         ErrorFlag = TRUE;
     }
 
@@ -122,65 +122,65 @@ void AboutDialog::showStick20Configuration (void)
 
     if (99 == HID_Stick20Configuration_st.UserPwRetryCount)
     {
-        OutputText.append(QString("No connection\nPlease retry"));
+        OutputText.append(QString(tr("No connection\nPlease retry")));
         ui->DeviceStatusLabel->setText(OutputText);
         return;
     }
 
     if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated)
     {
-        OutputText.append(QString(" ***  Warning stick is not securce  ***")).append("\n");
-        OutputText.append(QString(" ***        Select -Init keys-      ***")).append("\n").append("\n");
+        OutputText.append(QString(tr(" ***  Warning stick is not securce  ***")).append("\n"));
+        OutputText.append(QString(tr(" ***        Select -Init keys-      ***")).append("\n").append("\n"));
     }
 
 
     if (TRUE == HID_Stick20Configuration_st.FirmwareLocked_u8)
     {
-        OutputText.append(QString("      *** Firmware is locked *** ")).append("\n");
+        OutputText.append(QString(tr("      *** Firmware is locked *** ")).append("\n"));
     }
 
     if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01))
     {
-        OutputText.append(QString("      *** New SD card found  ***\n"));
+        OutputText.append(QString(tr("      *** New SD card found  ***\n")));
     }
 
     if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01))
     {
-        OutputText.append(QString(" *** Not erased with random chars ***\n"));
+        OutputText.append(QString(tr(" *** Not erased with random chars ***\n")));
     }
 
 
     if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8)
     {
-        OutputText.append(QString("Unencrypted volume   READ/WRITE mode ")).append("\n");
+        OutputText.append(QString(tr("Unencrypted volume   READ/WRITE mode ")).append("\n"));
     }
     else
     {
-        OutputText.append(QString("Unencrypted volume   READ ONLY mode ")).append("\n");
+        OutputText.append(QString(tr("Unencrypted volume   READ ONLY mode ")).append("\n"));
     }
 
     if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE)))
     {
-        OutputText.append(QString("Hidden volume        active")).append("\n");
+        OutputText.append(QString(tr("Hidden volume        active")).append("\n"));
     }
     else
     {
         if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE)))
         {
-            OutputText.append(QString("Encrypted volume     active")).append("\n");
+            OutputText.append(QString(tr("Encrypted volume     active")).append("\n"));
         }
         else
         {
-            OutputText.append(QString("Encrypted volume     not active")).append("\n");
+            OutputText.append(QString(tr("Encrypted volume     not active")).append("\n"));
         }
     }
 
     OutputText.append(QString("\n"));
 
-    OutputText.append(QString("Password retry counter\n"));
-    OutputText.append(QString("Admin : "));
+    OutputText.append(QString(tr("Password retry counter\n")));
+    OutputText.append(QString(tr("Admin : ")));
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.AdminPwRetryCount))).append("\n");
-    OutputText.append(QString("User  : "));
+    OutputText.append(QString(tr("User  : ")));
     OutputText.append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.UserPwRetryCount))).append("\n");
 
 
@@ -223,11 +223,11 @@ void AboutDialog::showStick10Configuration (void)
     cryptostick->getPasswordRetryCount();
     cryptostick->getUserPasswordRetryCount();
 
-    OutputText.append(QString("Password retry counter\n"));
-    OutputText.append(QString("Admin : "));
+    OutputText.append(QString(tr("Password retry counter\n")));
+    OutputText.append(QString(tr("Admin : ")));
     OutputText.append(QString("%1").arg(QString::number(cryptostick->passwordRetryCount))).append("\n");
 
-    OutputText.append(QString("User  : "));
+    OutputText.append(QString(tr("User  : ")));
     OutputText.append(QString("%1").arg(QString::number(cryptostick->userPasswordRetryCount))).append("\n");
 
     ui->DeviceStatusLabel->setText(OutputText);
@@ -250,7 +250,7 @@ void AboutDialog::showNoStickFound (void)
 {
     QString OutputText;
 
-    OutputText.append(QString("No active Nitrokey\n\n"));
+    OutputText.append(QString(tr("No active Nitrokey\n\n")));
 
     ui->DeviceStatusLabel->setText(OutputText);
 

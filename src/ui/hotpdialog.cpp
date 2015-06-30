@@ -102,9 +102,9 @@ void HOTPDialog::getNextCode()
 
 void HOTPDialog::setToHOTP()
 {
-    ui->label->setText("Your HOTP:");
-    ui->nextButton->setText("Next HOTP");
-    ui->labelNotify->setText("HOTP copied to clipboard");
+    ui->label->setText(tr("Your HOTP:"));
+    ui->nextButton->setText(tr("Next HOTP"));
+    ui->labelNotify->setText(tr("HOTP copied to clipboard"));
     this->setWindowTitle(title);
     ui->intervalLabel->hide();
     ui->intervalSpinBox->hide();
@@ -114,11 +114,11 @@ void HOTPDialog::setToHOTP()
 
 void HOTPDialog::setToTOTP()
 {
-    ui->label->setText("Your TOTP:");
-    ui->nextButton->setText("Generate TOTP");
+    ui->label->setText(tr("Your TOTP:"));
+    ui->nextButton->setText(tr("Generate TOTP"));
     this->setWindowTitle(title);
     ui->intervalLabel->show();
-    ui->labelNotify->setText("TOTP copied to clipboard");
+    ui->labelNotify->setText(tr("TOTP copied to clipboard"));
 
     ui->intervalSpinBox->setValue(device->TOTPSlots[slotNumber-0x20]->interval);
     ui->intervalSpinBox->show();
@@ -196,15 +196,15 @@ void HOTPDialog::checkTOTP_Valid()
     switch (state)
     {
         case TOTP_MORE_THAN_5_SEC_TO_INVALID :
-            ui->validTimer->setText("Valid");
+            ui->validTimer->setText(tr("Valid"));
             palette.setColor(ui->validTimer->backgroundRole(), Qt::green);
             break;
         case TOTP_LESS_THAN_5_SEC_TO_INVALID :
-            ui->validTimer->setText("Valid");
+            ui->validTimer->setText(tr("Valid"));
             palette.setColor(ui->validTimer->backgroundRole(), Qt::yellow);
             break;
         case TOTP_IS_INVALID :
-            ui->validTimer->setText("Invalid");
+            ui->validTimer->setText(tr("Invalid"));
             palette.setColor(ui->validTimer->backgroundRole(), Qt::red);
             break;
     }

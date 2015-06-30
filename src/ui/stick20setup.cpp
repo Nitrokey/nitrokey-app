@@ -114,7 +114,7 @@ void Stick20Setup::on_pushButton_Ch_Mat_APW_clicked()
     MatrixPasswordDialog dialog(this);
 
 
-    csApplet->warningBox("The selected lines must be greater then greatest password length");
+    csApplet->warningBox(tr("The selected lines must be greater then greatest password length"));
 
     dialog.setModal (TRUE);
 
@@ -164,7 +164,7 @@ void Stick20Setup::on_pushButton_Ch_HiddenVol_clicked()
     int ret;
 
     bool answer;
-    answer = csApplet->yesOrNoBox("Build a new base key for the hidden volume? all data get lost");
+    answer = csApplet->yesOrNoBox(tr("Build a new base key for the hidden volume? all data get lost"));
 
     if (answer)
     {
