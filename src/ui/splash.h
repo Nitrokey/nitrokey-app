@@ -24,15 +24,13 @@
 #include <QtGui>
 #include <QSplashScreen>
 
-class SplashScreen : public QSplashScreen
+class SplashScreen:public QSplashScreen
 {
-  Q_OBJECT
+    Q_OBJECT QPixmap * logo;
 
-  QPixmap *logo;
-
-public:
-  SplashScreen();
-  virtual ~SplashScreen();
+  public:
+    SplashScreen ();
+    virtual ~ SplashScreen ();
 };
 
 #endif

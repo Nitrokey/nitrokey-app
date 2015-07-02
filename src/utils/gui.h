@@ -37,176 +37,241 @@
 
 namespace Gui
 {
-  class EngineButton : public QPushButton
-  {
-    Q_OBJECT
+    class EngineButton:public QPushButton
+    {
+        Q_OBJECT int _height;
+        QPixmap _pixmap;
+        bool _isOver;
+        bool _isActive;
 
-    int _height;
-    QPixmap _pixmap;
-    bool _isOver;
-    bool _isActive;
+        void setup ();
 
-    void setup();
+      protected:
+        void paintEvent (QPaintEvent * event);
+        void enterEvent (QEvent * event);
+        void leaveEvent (QEvent * event);
 
-  protected:
-    void paintEvent(QPaintEvent *event);
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
+      public:
+          EngineButton (QWidget * parent = 0);
+          EngineButton (const QString & text, QWidget * parent = 0);
+          EngineButton (const QIcon & icon, const QString & text,
+                        QWidget * parent = 0);
+          virtual ~ EngineButton ()
+        {
+        }
 
-  public:
-    EngineButton(QWidget *parent = 0);
-    EngineButton(const QString &text, QWidget *parent = 0);
-    EngineButton(const QIcon &icon, const QString &text, QWidget *parent = 0);
-    virtual ~EngineButton() { }
+        void setHeight (int height)
+        {
+            _height = height;
+            updateGeometry ();
+        }
+        void setPixmap (const QPixmap & pixmap);
 
-    void setHeight(int height) { _height = height; updateGeometry(); }
-    void setPixmap(const QPixmap &pixmap);
+        QSize sizeHint () const;
+    };
 
-    QSize sizeHint() const;
-  };
+    class ColorButton:public QPushButton
+    {
+        Q_OBJECT QColor _color;
 
-  class ColorButton : public QPushButton
-  {
-    Q_OBJECT
+      protected:
+        void paintEvent (QPaintEvent * event);
+        void nextCheckState ();
 
-    QColor _color;
+      public:
+        ColorButton (QWidget * parent = 0):QPushButton (parent),
+            _color (Qt::black)
+        {
+        }
+      ColorButton (const QColor & color, QWidget * parent = 0):QPushButton (parent),
+            _color
+            (color)
+        {
+        }
+        virtual ~ ColorButton ()
+        {
+        }
 
-  protected:
-    void paintEvent(QPaintEvent *event);
-    void nextCheckState();
+        void setColor (const QColor & color);
 
-  public:
-    ColorButton(QWidget *parent = 0) : QPushButton(parent), _color(Qt::black) { }
-    ColorButton(const QColor &color, QWidget *parent = 0) : QPushButton(parent), _color(color) { }
-    virtual ~ColorButton() { }
+        QColor color () const
+        {
+            return _color;
+        }
 
-    void setColor(const QColor &color);
+        QSize sizeHint () const
+        {
+            return QSize (90, QPushButton::sizeHint ().height ());
+        }
 
-    QColor color() const { return _color; }
+        signals:void colorChanged (const QColor & color);
+    };
 
-    QSize sizeHint() const { return QSize(90,QPushButton::sizeHint().height()); }
+    class Dialog:public QDialog
+    {
+      Q_OBJECT public:
+        enum Position
+        { CenterOfScreen, TopOfScreen };
 
-  signals:
-    void colorChanged(const QColor &color);
-  };
+      private:
+          bool fired;
+        Position _position;
 
-  class Dialog : public QDialog
-  {
-    Q_OBJECT
+      protected:
+        void showEvent (QShowEvent * event);
+        void closeEvent (QCloseEvent * event);
 
-  public:
-    enum Position { CenterOfScreen, TopOfScreen };
+      public:
+        Dialog (Position position, QWidget * parent = 0, Qt::WindowFlags f = 0):
+        QDialog (parent, f | Qt::WindowSystemMenuHint), fired (false),
+            _position (position)
+        {
+            setWindowModality (Qt::ApplicationModal);
+            setMaximumWidth (QApplication::desktop ()->availableGeometry ().
+                             width () * 9 / 10);
+            setMaximumHeight (QApplication::desktop ()->availableGeometry ().
+                              height () * 8 / 10);
+        }
+        virtual ~ Dialog ()
+        {
+        }
 
-  private:
-    bool fired;
-    Position _position;
+      signals:
+        void executed ();
 
-  protected:
-    void showEvent(QShowEvent *event);
-    void closeEvent(QCloseEvent *event);
+        void closed ();
+    };
 
-  public:
-    Dialog(Position position, QWidget *parent = 0,
-           Qt::WindowFlags f = 0) :
-      QDialog(parent,f | Qt::WindowSystemMenuHint), fired(false), _position(position)
-       { setWindowModality(Qt::ApplicationModal);
-         setMaximumWidth(QApplication::desktop()->availableGeometry().width() * 9 / 10);
-         setMaximumHeight(QApplication::desktop()->availableGeometry().height() * 8 / 10); }
-    virtual ~Dialog() { }
+    class ScrollableButtons:public QFrame
+    {
+        Q_OBJECT bool firstShowEvent;
+        QPushButton* buttonUp;
+        QPushButton* buttonDown;
+        QScrollArea* scrollArea;
+        QVBoxLayout* buttonLayout;
+        QButtonGroup* buttonGroup;
 
-  signals:
-    void executed();
-    void closed();
-  };
+        private slots: void on_buttonUp_clicked ();
+        void on_buttonDown_clicked ();
+        void on_scrollBar_valueChanged (int value);
 
-  class ScrollableButtons : public QFrame
-  {
-    Q_OBJECT
+      protected:
+        void resizeEvent (QResizeEvent * event);
+        void showEvent (QShowEvent * event);
 
-    bool firstShowEvent;
-    QPushButton *buttonUp;
-    QPushButton *buttonDown;
-    QScrollArea *scrollArea;
-    QVBoxLayout *buttonLayout;
-    QButtonGroup *buttonGroup;
+      public:
+          ScrollableButtons (QWidget * parent = 0);
+          virtual ~ ScrollableButtons ()
+        {
+        }
 
-  private slots:
-    void on_buttonUp_clicked();
-    void on_buttonDown_clicked();
-    void on_scrollBar_valueChanged(int value);
+        void addButton (QAbstractButton * button);
 
-  protected:
-    void resizeEvent(QResizeEvent *event);
-    void showEvent(QShowEvent *event);
+        void addButton (QAbstractButton * button, int id);
 
-  public:
-    ScrollableButtons(QWidget *parent = 0);
-    virtual ~ScrollableButtons() { }
+        QAbstractButton* button (int id) const;
 
-    void addButton(QAbstractButton *button);
-    void addButton(QAbstractButton *button, int id);
-    QAbstractButton *button(int id) const;
-    QList<QAbstractButton *> buttons() const;
-    QAbstractButton *checkedButton() const;
-    int checkedId() const;
-    bool exclusive() const;
-    int id(QAbstractButton *button) const;
-    void insertButton(int index, QAbstractButton *button);
-    void insertButton(int index, QAbstractButton *button, int id);
-    void removeButton(QAbstractButton *button);
-    void setExclusive(bool exclusive);
-    void setId(QAbstractButton *button, int id);
+        QList < QAbstractButton * >buttons ()const;
 
-  signals:
-    void buttonClicked(QAbstractButton *button);
-    void buttonClicked(int id);
-    void buttonPressed(QAbstractButton *button);
-    void buttonPressed(int id);
-    void buttonReleased(QAbstractButton *button);
-    void buttonReleased(int id);
+        QAbstractButton* checkedButton () const;
 
-  public slots:
-    void scrollAllUp() { scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->minimum()); }
-    void scrollAllDown() { scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum()); }
-    void scrollToButton(QAbstractButton *button) { scrollArea->ensureWidgetVisible(button); }
-    void scrollToSelected();
-  };
+        int checkedId () const;
 
-  class ShadowedLabel : public QLabel
-  {
-    QColor _labelColor;
-    QColor _shadowColor;
+        bool exclusive () const;
 
-  protected:
-    void paintEvent(QPaintEvent *event);
+        int id (QAbstractButton * button) const;
 
-  public:
-    ShadowedLabel(QWidget *parent = 0) :
-      QLabel(parent), _labelColor(Qt::white), _shadowColor(Qt::black) { }
-    ShadowedLabel(const QString &text, QWidget *parent = 0) :
-      QLabel(text,parent), _labelColor(Qt::white), _shadowColor(Qt::black) { }
-    virtual ~ShadowedLabel() { }
+        void insertButton (int index, QAbstractButton * button);
 
-    void setLabelColor(const QColor &color);
-    void setShadowColor(const QColor &color);
+        void insertButton (int index, QAbstractButton * button, int id);
 
-    QColor labelColor() const { return _labelColor; }
-    QColor shadowColor() const { return _shadowColor; }
+        void removeButton (QAbstractButton * button);
 
-    QSize sizeHint() const;
-  };
+        void setExclusive (bool exclusive);
 
-  class ShrinkableTableWidget : public QTableWidget
-  {
-    Q_OBJECT
+        void setId (QAbstractButton * button, int id);
 
-  public:
-    ShrinkableTableWidget(QWidget *parent = 0);
-    ShrinkableTableWidget(int rows, int columns, QWidget *parent = 0);
-    virtual ~ShrinkableTableWidget() { }
+      signals:
+        void buttonClicked (QAbstractButton * button);
 
-    QSize sizeHint() const;
-  };
+        void buttonClicked (int id);
+
+        void buttonPressed (QAbstractButton * button);
+
+        void buttonPressed (int id);
+
+        void buttonReleased (QAbstractButton * button);
+
+        void buttonReleased (int id);
+
+        public slots:void scrollAllUp ()
+        {
+            scrollArea->verticalScrollBar ()->setValue (scrollArea->
+                                                        verticalScrollBar ()->
+                                                        minimum ());
+        }
+        void scrollAllDown ()
+        {
+            scrollArea->verticalScrollBar ()->setValue (scrollArea->
+                                                        verticalScrollBar ()->
+                                                        maximum ());
+        }
+        void scrollToButton (QAbstractButton * button)
+        {
+            scrollArea->ensureWidgetVisible (button);
+        }
+        void scrollToSelected ();
+    };
+
+    class ShadowedLabel:public QLabel
+    {
+        QColor _labelColor;
+        QColor _shadowColor;
+
+      protected:
+        void paintEvent (QPaintEvent * event);
+
+      public:
+        ShadowedLabel (QWidget * parent = 0):
+        QLabel (parent), _labelColor (Qt::white), _shadowColor (Qt::black)
+        {
+        }
+      ShadowedLabel (const QString & text, QWidget * parent = 0):
+        QLabel (text, parent), _labelColor (Qt::white),
+            _shadowColor (Qt::black)
+        {
+        }
+        virtual ~ ShadowedLabel ()
+        {
+        }
+
+        void setLabelColor (const QColor & color);
+
+        void setShadowColor (const QColor & color);
+
+        QColor labelColor () const
+        {
+            return _labelColor;
+        }
+        QColor shadowColor () const
+        {
+            return _shadowColor;
+        }
+
+        QSize sizeHint () const;
+    };
+
+    class ShrinkableTableWidget:public QTableWidget
+    {
+      Q_OBJECT public:
+        ShrinkableTableWidget (QWidget * parent = 0);
+        ShrinkableTableWidget (int rows, int columns, QWidget * parent = 0);
+          virtual ~ ShrinkableTableWidget ()
+        {
+        }
+
+        QSize sizeHint () const;
+    };
 }
 
 #endif

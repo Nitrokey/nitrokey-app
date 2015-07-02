@@ -6,33 +6,32 @@
 #include "response.h"
 #include "nitrokey-applet.h"
 
-class Stick20ResponseTask : public QObject
+class Stick20ResponseTask:public QObject
 {
-    Q_OBJECT
+  Q_OBJECT public:
+    Stick20ResponseTask (QWidget * parent, Device * Cryptostick20,
+                         QSystemTrayIcon * MainWndTrayIcon);
+    ~Stick20ResponseTask ();
 
-public:
-    Stick20ResponseTask(QWidget *parent,Device *Cryptostick20,QSystemTrayIcon *MainWndTrayIcon);
-    ~Stick20ResponseTask();
-    
     void done (int Status);
     void GetResponse (void);
     void NoStopWhenStatusOK (void);
     void checkStick20Status (void);
 
-    QWidget         *Stick20ResponseTaskParent;
+    QWidget* Stick20ResponseTaskParent;
 
-    Device          *cryptostick;
-    QSystemTrayIcon *trayIcon;
-    Response        *stick20Response;
+    Device* cryptostick;
+    QSystemTrayIcon* trayIcon;
+    Response* stick20Response;
 
-    int  ActiveCommand;
+    int ActiveCommand;
     bool FlagNoStopWhenStatusOK;
-    int  ResultValue;
-    int  EndFlag;
-    int  Counter_u32;
-    int  retStick20Respone;
+    int ResultValue;
+    int EndFlag;
+    int Counter_u32;
+    int retStick20Respone;
 
-private:
+  private:
     void ShowIconMessage (QString IconText);
     void setDescription (void);
 };

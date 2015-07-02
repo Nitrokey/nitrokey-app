@@ -1,22 +1,22 @@
 /*
-* Author: Copyright (C) Andrzej Surowiec 2012
-*
-*
-* This file is part of Nitrokey.
-*
-* Nitrokey is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* Nitrokey is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Author: Copyright (C) Andrzej Surowiec 2012
+ *
+ *
+ * This file is part of Nitrokey.
+ *
+ * Nitrokey is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * Nitrokey is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef TOTPSLOT_H
 #define TOTPSLOT_H
@@ -25,15 +25,16 @@
 #define uint8_t unsigned char
 #define uint16_t unsigned short
 #else
-    #include "inttypes.h"
+#include "inttypes.h"
 #endif
 
 
 class TOTPSlot
 {
-public:
-    TOTPSlot();
-    TOTPSlot(uint8_t slotNumber,uint8_t slotName[20],uint8_t secret[20],uint8_t config);
+  public:
+    TOTPSlot ();
+    TOTPSlot (uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[20],
+              uint8_t config);
     uint8_t slotNumber;
     uint8_t slotName[15];
     uint8_t secret[20];
