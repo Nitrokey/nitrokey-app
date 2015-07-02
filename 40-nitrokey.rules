@@ -1,0 +1,19 @@
+SUBSYSTEM!="usb", GOTO="gnupg_rules_end"
+ACTION!="add", GOTO="gnupg_rules_end"
+
+# USB SmartCard Readers
+## Crypto Stick 1.2
+ATTR{idVendor}=="20a0", ATTR{idProduct}=="4107", ENV{ID_SMARTCARD_READER}="1", ENV{ID_SMARTCARD_READER_DRIVER}="gnupg", GROUP+="nitrokey", TAG+="uaccess"
+## Nitrokey Pro
+ATTR{idVendor}=="20a0", ATTR{idProduct}=="4108", ENV{ID_SMARTCARD_READER}="1", ENV{ID_SMARTCARD_READER_DRIVER}="gnupg", GROUP+="nitrokey", TAG+="uaccess"
+## Nitrokey Storage
+ATTR{idVendor}=="20a0", ATTR{idProduct}=="4109", ENV{ID_SMARTCARD_READER}="1", ENV{ID_SMARTCARD_READER_DRIVER}="gnupg", GROUP+="nitrokey", TAG+="uaccess"
+## Nitrokey Light
+ATTR{idVendor}=="20a0", ATTR{idProduct}=="4211", ENV{ID_SMARTCARD_READER}="1", ENV{ID_SMARTCARD_READER_DRIVER}="gnupg", GROUP+="nitrokey", TAG+="uaccess"
+
+LABEL="gnupg_rules_end"
+
+# Nitrokey U2F
+ACTION!="add|change", GOTO="u2f_end"
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2581", ATTRS{idProduct}=="f1d0", GROUP+="nitrokey", TAG+="uaccess"
+LABEL="u2f_end"

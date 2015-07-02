@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+GenericName=Nitrokey management application
+GenericName[de]=Nitrokeyverwaltungsapplikation
+GenericName[fr]=Programme de gestion de la Nitrokey
+Comment=Manage Nitrokey devices
+Comment[de]=Nitrokey Laufwerk verwalten
+Comment[fr]=Gérer des périphériques Nitrokey
+Icon=nitrokey-app
+Exec=nitrokey-app
+Terminal=false
+NoDisplay=true
