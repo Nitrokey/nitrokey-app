@@ -150,6 +150,7 @@ class MainWindow:public QMainWindow
     QAction* Stick20ActionDisableHiddenVolume;
     QAction* Stick20ActionChangeUserPIN;
     QAction* Stick20ActionChangeAdminPIN;
+    QAction* Stick20ActionChangeUpdatePIN;
     QAction* Stick20ActionEnableFirmwareUpdate;
     QAction* Stick20ActionExportFirmwareToFile;
     QAction* Stick20ActionDestroyCryptedVolume;

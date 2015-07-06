@@ -114,6 +114,7 @@ extern "C"
     void onDisableEncryptedVolume (GtkMenu *, gpointer);
     void onEnableHiddenVolume (GtkMenu *, gpointer);
     void onDisableHiddenVolume (GtkMenu *, gpointer);
+    void onSetupHiddenVolumeItem (GtkMenu *, gpointer);
     void onLockDevice (GtkMenu *, gpointer);
     void onSetReadOnlyUnencryptedVolumeItem (GtkMenu *, gpointer);
     void onSetReadWriteUnencryptedVolumeItem (GtkMenu *, gpointer);
@@ -260,6 +261,12 @@ void onDisableHiddenVolume (GtkMenu * menu, gpointer data)
 {
 MainWindow* window = static_cast < MainWindow * >(data);
 
+    window->startStick20DisableHiddenVolume ();
+}
+
+void onSetupHiddenVolumeItem (GtkMenu *menu, gpointer data)
+{
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20DisableHiddenVolume ();
 }
 
@@ -1290,6 +1297,11 @@ void MainWindow::initActionsForStick20 ()
     connect (Stick20ActionChangeAdminPIN, SIGNAL (triggered ()), this,
              SLOT (startStick20ActionChangeAdminPIN ()));
 
+    Stick20ActionChangeUpdatePIN =
+        new QAction (tr ("&Change Update PIN"), this);
+    connect (Stick20ActionChangeUpdatePIN, SIGNAL (triggered ()), this,
+             SLOT (startStick20ActionChangeUpdatePIN ()));
+
     Stick20ActionEnableFirmwareUpdate =
         new QAction (tr ("&Enable firmware update"), this);
     connect (Stick20ActionEnableFirmwareUpdate, SIGNAL (triggered ()), this,
@@ -1741,65 +1753,66 @@ int AddSeperator = FALSE;
 #ifdef Q_OS_LINUX
     if (isUnity ())
     {
-GtkWidget* updateStorageStatusItem =
-    gtk_menu_item_new_with_label ("Smartcard or SD card are not ready");
-GtkWidget* initEncryptedVolumeItem =
-    gtk_menu_item_new_with_label ("Initialize keys");
-GtkWidget* fillSDCardWithRandomCharsItem =
-    gtk_menu_item_new_with_label ("Initialize storage with random data");
-GtkWidget* enableEncryptedVolumeItem =
-    gtk_menu_item_new_with_label ("Unlock encrypted volume");
-GtkWidget* disableEncryptedVolumeItem =
-    gtk_menu_item_new_with_label ("Lock encrypted volume");
-GtkWidget* enableHiddenVolumeItem =
-    gtk_menu_item_new_with_label ("Unlock hidden volume");
-GtkWidget* disableHiddenVolumeItem =
-    gtk_menu_item_new_with_label ("Lock hidden volume");
-GtkWidget* lockDeviceItem = gtk_menu_item_new_with_label ("Lock device");
+        GtkWidget* updateStorageStatusItem =
+            gtk_menu_item_new_with_label ("Smartcard or SD card are not ready");
+        GtkWidget* initEncryptedVolumeItem =
+            gtk_menu_item_new_with_label ("Initialize keys");
+        GtkWidget* fillSDCardWithRandomCharsItem =
+            gtk_menu_item_new_with_label ("Initialize storage with random data");
+        GtkWidget* enableEncryptedVolumeItem =
+            gtk_menu_item_new_with_label ("Unlock encrypted volume");
+        GtkWidget* disableEncryptedVolumeItem =
+            gtk_menu_item_new_with_label ("Lock encrypted volume");
+        GtkWidget* enableHiddenVolumeItem =
+            gtk_menu_item_new_with_label ("Unlock hidden volume");
+        GtkWidget* disableHiddenVolumeItem =
+            gtk_menu_item_new_with_label ("Lock hidden volume");
+        GtkWidget* setupHiddenVolumeItem = gtk_menu_item_new_with_label("Setup hidden volume");
+        GtkWidget* lockDeviceItem = gtk_menu_item_new_with_label ("Lock device");
 
-GtkWidget* setReadOnlyUnencryptedVolumeItem =
-    gtk_menu_item_new_with_label ("Set unencrypted volume read-only");
-GtkWidget* setReadWriteUnencryptedVolumeItem =
-    gtk_menu_item_new_with_label ("Set unencrypted volume read-write");
-GtkWidget* destroyEncryptedVolumeItem =
-    gtk_menu_item_new_with_label ("Destroy encrypted data");
-GtkWidget* enableFirmwareUpdateItem =
-    gtk_menu_item_new_with_label ("Enable firmware update");
-GtkWidget* exportFirmwareToFileItem =
-    gtk_menu_item_new_with_label ("Export firmware to file");
-GtkWidget* lockHardwareItem = gtk_menu_item_new_with_label ("Lock hardware");
+        GtkWidget* setReadOnlyUnencryptedVolumeItem =
+            gtk_menu_item_new_with_label ("Set unencrypted volume read-only");
+        GtkWidget* setReadWriteUnencryptedVolumeItem =
+            gtk_menu_item_new_with_label ("Set unencrypted volume read-write");
+        GtkWidget* destroyEncryptedVolumeItem =
+            gtk_menu_item_new_with_label ("Destroy encrypted data");
+        GtkWidget* enableFirmwareUpdateItem =
+            gtk_menu_item_new_with_label ("Enable firmware update");
+        GtkWidget* exportFirmwareToFileItem =
+            gtk_menu_item_new_with_label ("Export firmware to file");
+        GtkWidget* lockHardwareItem = gtk_menu_item_new_with_label ("Lock hardware");
 
-GtkWidget* resetUserPasswordItem =
-    gtk_menu_item_new_with_label ("Reset user PIN");
-GtkWidget* debugItem = gtk_menu_item_new_with_label ("Debug");
+        GtkWidget* resetUserPasswordItem =
+            gtk_menu_item_new_with_label ("Reset user PIN");
+        GtkWidget* debugItem = gtk_menu_item_new_with_label ("Debug");
 
-GtkWidget* clearNewSDCardFoundItem =
-    gtk_menu_item_new_with_label
-    ("Disable 'Initialize storage with random data' warning");
-GtkWidget* configureItem = gtk_menu_item_new_with_label ("Configure");
+        GtkWidget* clearNewSDCardFoundItem =
+            gtk_menu_item_new_with_label
+            ("Disable 'Initialize storage with random data' warning");
+        GtkWidget* configureItem = gtk_menu_item_new_with_label ("Configure");
 
-GtkWidget* extendedConfigureItem =
-    gtk_menu_item_new_with_label ("Advanced configure");
-GtkWidget* setupHiddenVolumeItem = gtk_menu_item_new_with_label ("");
+        GtkWidget* extendedConfigureItem =
+            gtk_menu_item_new_with_label ("Advanced configure");
 
-GtkWidget* setupPasswordMatrixItem = gtk_menu_item_new_with_label ("");
+        GtkWidget* setupPasswordMatrixItem = gtk_menu_item_new_with_label ("");
 
-GtkWidget* configurePasswordsItem;
+        GtkWidget* configurePasswordsItem;
 
-GtkWidget* changeUserPinItem =
-    gtk_menu_item_new_with_label ("Change user PIN");
-GtkWidget* changeAdminPinItem =
-    gtk_menu_item_new_with_label ("Change admin PIN");
-GtkWidget* changeUpdatePinItem =
-    gtk_menu_item_new_with_label ("Change Update PIN");
+        GtkWidget* changeUserPinItem =
+            gtk_menu_item_new_with_label ("Change user PIN");
+        GtkWidget* changeAdminPinItem =
+            gtk_menu_item_new_with_label ("Change admin PIN");
+        GtkWidget* changeUpdatePinItem =
+            gtk_menu_item_new_with_label ("Change Update PIN");
 
-GtkWidget* separItem1 = gtk_separator_menu_item_new ();
 
-GtkWidget* separItem2 = gtk_separator_menu_item_new ();
+        GtkWidget* separItem1 = gtk_separator_menu_item_new ();
 
-GtkWidget* configureSubMenu = gtk_menu_new ();
+        GtkWidget* separItem2 = gtk_separator_menu_item_new ();
 
-GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
+        GtkWidget* configureSubMenu = gtk_menu_new ();
+
+        GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
 
         g_signal_connect (updateStorageStatusItem, "activate",
                           G_CALLBACK (onAbout), this);
@@ -1815,6 +1828,8 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
                           G_CALLBACK (onEnableHiddenVolume), this);
         g_signal_connect (disableHiddenVolumeItem, "activate",
                           G_CALLBACK (onDisableHiddenVolume), this);
+        g_signal_connect (setupHiddenVolumeItem, "activate",
+                         G_CALLBACK (onSetupHiddenVolumeItem), this);
         g_signal_connect (lockDeviceItem, "activate",
                           G_CALLBACK (onLockDevice), this);
         g_signal_connect (setReadOnlyUnencryptedVolumeItem, "activate",
@@ -1832,8 +1847,6 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
         g_signal_connect (lockHardwareItem, "activate",
                           G_CALLBACK (onLockHardware), this);
         g_signal_connect (debugItem, "activate", G_CALLBACK (onDebug), this);
-        g_signal_connect (setupHiddenVolumeItem, "activate",
-                          G_CALLBACK (onSetupHiddenVolume), this);
         g_signal_connect (setupPasswordMatrixItem, "activate",
                           G_CALLBACK (onSetupPasswordMatrix), this);
         g_signal_connect (clearNewSDCardFoundItem, "activate",
@@ -2004,6 +2017,7 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
         gtk_widget_show (disableEncryptedVolumeItem);
         gtk_widget_show (enableHiddenVolumeItem);
         gtk_widget_show (disableHiddenVolumeItem);
+        gtk_widget_show (setupHiddenVolumeItem);
         gtk_widget_show (lockDeviceItem);
         gtk_widget_show (setReadOnlyUnencryptedVolumeItem);
         gtk_widget_show (setReadWriteUnencryptedVolumeItem);
@@ -2085,6 +2099,7 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
         // Pin actions
         trayMenuSubConfigure->addAction (Stick20ActionChangeUserPIN);
         trayMenuSubConfigure->addAction (Stick20ActionChangeAdminPIN);
+        trayMenuSubConfigure->addAction (Stick20ActionChangeUpdatePIN);
         if (TRUE == MatrixInputActive)
             trayMenuSubConfigure->
                 addAction (Stick20ActionSetupPasswordMatrix);
