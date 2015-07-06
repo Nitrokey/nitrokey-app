@@ -263,7 +263,7 @@ SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
 
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libappindicator1, libnotify4, qtdeclarative5-dev")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libappindicator1, libnotify4")
 SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/debian/postinst")
 
 
