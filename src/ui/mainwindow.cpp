@@ -268,7 +268,7 @@ void onSetupHiddenVolumeItem (GtkMenu *menu, gpointer data)
 {
     Q_UNUSED (menu);
     MainWindow* window = static_cast < MainWindow * >(data);
-    window->startStick20DisableHiddenVolume ();
+    window->startStick20SetupHiddenVolume ();
 }
 
 void onLockDevice (GtkMenu * menu, gpointer data)
