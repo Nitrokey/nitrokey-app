@@ -92,7 +92,9 @@ Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-
 2. Navigate to <build_dir>/CryptoStickGUI.app/Contents
 3. Create a .dmg file
    Go to the build directory and use
-     macdeployqt CryptoStickGUI.app/ -dmg
+
+     `macdeployqt CryptoStickGUI.app/ -dmg`
+     
    CryptoStickGUI.dmg file will be created at the same folder. This is the final file for distributing the App on Mac OS
 4. Compress the .dmg package:
    * Open Disk Utility
