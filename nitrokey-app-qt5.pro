@@ -55,8 +55,6 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${UTILSDIR}/stick20hid.c \
             $${SRCUIDIR}/passwordsafedialog.cpp \
             $${SRCUIDIR}/securitydialog.cpp \
-            $${UTILSDIR}/gui.cpp \
-            $${SRCUIDIR}/splash.cpp \
             $${SRCUIDIR}/nitrokey-applet.cpp
 
 win32 {
@@ -102,8 +100,6 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCUIDIR}/passwordsafedialog.h \
             $${SRCUIDIR}/securitydialog.h \
             $${SRCDIR}/mcvs-wrapper.h \
-            $${UTILSDIR}/gui.h \
-            $${SRCUIDIR}/splash.h \
             $${SRCUIDIR}/nitrokey-applet.h
 
 FORMS +=    $${UIDIR}/mainwindow.ui \
