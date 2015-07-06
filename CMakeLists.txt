@@ -34,8 +34,6 @@ SET(moc_headers
     ${UTILSDIR}/crc32.h
     ${SRCUIDIR}/nitrokey-applet.h
     ${SRCDIR}/device.h
-    ${UTILSDIR}/gui.h
-    ${UTILSDIR}/hidapi.h
     ${SRCUIDIR}/hotpdialog.h
     ${SRCDIR}/hotpslot.h
     ${SRCDIR}/inttypes.h
@@ -47,7 +45,6 @@ SET(moc_headers
     ${SRCDIR}/response.h
     ${SRCUIDIR}/securitydialog.h
     ${UTILSDIR}/sleep.h
-    ${SRCUIDIR}/splash.h
     ${SRCUIDIR}/stick20changepassworddialog.h
     ${SRCUIDIR}/stick20debugdialog.h
     ${SRCUIDIR}/stick20dialog.h
@@ -115,7 +112,6 @@ SET(nitrokey_app_sources
     ${UTILSDIR}/crc32.cpp
     ${SRCUIDIR}/nitrokey-applet.cpp
     ${SRCDIR}/device.cpp
-    ${UTILSDIR}/gui.cpp
     ${SRCUIDIR}/hotpdialog.cpp
     ${SRCDIR}/hotpslot.cpp
     ${SRCDIR}/main.cpp
@@ -125,7 +121,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/pindialog.cpp
     ${SRCDIR}/response.cpp
     ${SRCUIDIR}/securitydialog.cpp
-    ${SRCUIDIR}/splash.cpp
     ${SRCUIDIR}/stick20changepassworddialog.cpp
     ${SRCUIDIR}/stick20debugdialog.cpp
     ${SRCUIDIR}/stick20dialog.cpp

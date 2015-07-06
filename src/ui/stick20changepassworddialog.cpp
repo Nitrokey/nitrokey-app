@@ -429,8 +429,8 @@ void DialogChangePassword::accept ()
 QString OutputText;
 
         OutputText =
-            tr ("The minimum length of the old password is " +
-                QString ("%1").arg (6) + "chars");
+            tr ("The minimum length of the old password is ") +
+                QString ("%1").arg (6) + "chars";
 
         csApplet->warningBox (OutputText);
         return;
@@ -455,8 +455,8 @@ QString OutputText;
 QString OutputText;
 
         OutputText =
-            tr ("The maximum length of a password is " +
-                QString ("%1").arg (STICK20_PASSOWRD_LEN) + "chars");
+            tr ("The maximum length of a password is ") +
+                QString ("%1").arg (STICK20_PASSOWRD_LEN) + "chars";
 
         csApplet->warningBox (OutputText);
         return;
@@ -469,8 +469,8 @@ QString OutputText;
 QString OutputText;
 
         OutputText =
-            tr ("The minimum length of a password is " +
-                QString ("%1").arg (6) + "chars");
+            tr ("The minimum length of a password is ") +
+                QString ("%1").arg (6) + "chars";
 
         csApplet->warningBox (OutputText);
         return;
