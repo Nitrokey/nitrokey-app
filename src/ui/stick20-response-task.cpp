@@ -20,6 +20,16 @@
 
 #include "stick20-response-task.h"
 #include "stick20responsedialog.h"
+
+#ifdef Q_OS_LINUX
+#undef signals
+extern "C"
+{
+#include <libnotify/notify.h>
+}
+#define signals public
+#endif // Q_OS_LINUX
+
 // #include "ui_stick20-response-task.h"
 
 class OwnSleep:public QThread
@@ -66,6 +76,48 @@ void Stick20ResponseTask::NoStopWhenStatusOK ()
 }
 
 
+bool isUnity ()
+{
+QString desktop = getenv ("XDG_CURRENT_DESKTOP");
+
+    return (desktop.toLower () == "unity" || desktop.toLower () == "kde"
+            || desktop.toLower () == "lxde" || desktop.toLower () == "xfce");
+}
+
+
+void Stick20ResponseTask::ShowIconMessage (const QString  msg)
+{
+    QString title = QString("Nitrokey App");
+    int timeout = 3000;
+#ifdef Q_OS_LINUX
+    if (isUnity ())
+    {  
+        if (!notify_init ("example"))
+            return;
+
+    NotifyNotification* notf;
+
+        notf =
+            notify_notification_new (title.toUtf8 ().data (),
+                                     msg.toUtf8 ().data (), NULL);
+        notify_notification_show (notf, NULL);
+        notify_uninit ();
+    }  
+    else
+#endif // Q_OS_LINUX
+    {  
+        if (TRUE == trayIcon->supportsMessages ())
+        {
+            trayIcon->showMessage (title, msg,
+                               QSystemTrayIcon::Information,
+                               timeout);
+        }
+        else
+            csApplet->messageBox (msg);
+    }
+} 
+
+/*
 void Stick20ResponseTask::ShowIconMessage (QString IconText)
 {
     if (TRUE == trayIcon->supportsMessages ())
@@ -74,12 +126,12 @@ void Stick20ResponseTask::ShowIconMessage (QString IconText)
     }
     else
     {
-QMessageBox msgBox;
+        QMessageBox msgBox;
 
         msgBox.setText (IconText);
         msgBox.exec ();
     }
-}
+}*/
 
 
 #define RESPONSE_DIALOG_TIME_TO_SHOW_DIALOG 30  // a 100 ms = 3 sec
@@ -112,7 +164,7 @@ QString OutputText;
             case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD:
                 switch (ActiveCommand)
                 {
-                        csApplet->warningBox ("Get wrong password");
+                        csApplet->warningBox (tr("Wrong password"));
                 }
                 EndFlag = TRUE;
                 break;
@@ -133,7 +185,6 @@ QString OutputText;
             default:
                 break;
         }
-
         if (TRUE == FlagNoStopWhenStatusOK)
         {
             switch (stick20Response->HID_Stick20Status_st.Status_u8)
@@ -201,43 +252,43 @@ QString OutputText;
             {
                 case STICK20_CMD_ENABLE_CRYPTED_PARI:
                     ShowIconMessage
-                        ("Encrypted volume unlocked successfully");
+                        (tr("Encrypted volume unlocked successfully"));
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
                     break;
                 case STICK20_CMD_DISABLE_CRYPTED_PARI:
-                    ShowIconMessage ("Encrypted volume locked successfully");
+                    ShowIconMessage (tr("Encrypted volume locked successfully"));
                     break;
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
-                    ShowIconMessage ("Hidden volume unlocked successfully");
+                    ShowIconMessage (tr("Hidden volume unlocked successfully"));
                     break;
                 case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
-                    ShowIconMessage ("Hidden volume locked successfully");
+                    ShowIconMessage (tr("Hidden volume locked successfully"));
                     break;
                 case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP:
-                    ShowIconMessage ("Hidden volume setup successfully");
+                    ShowIconMessage (tr("Hidden volume setup successfully"));
                     break;
                 case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
-                    ShowIconMessage ("Uncrypted volume is in readonly mode");
+                    ShowIconMessage (tr("Uncrypted volume is in readonly mode"));
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
                     break;
                 case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
-                    ShowIconMessage ("Uncrypted volume is in readwrite mode");
+                    ShowIconMessage (tr("Uncrypted volume is in readwrite mode"));
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
                     break;
                 case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED:
-                    ShowIconMessage ("Warning disabled");
+                    ShowIconMessage (tr("Warning disabled"));
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     break;
                 case STICK20_CMD_SEND_LOCK_STICK_HARDWARE:
-                    ShowIconMessage ("Firmware is locked");
+                    ShowIconMessage (tr("Firmware is locked"));
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     break;
                 case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE:
-                    ShowIconMessage ("Firmware exported successfully");
+                    ShowIconMessage (tr("Firmware exported successfully"));
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     break;
                 case STICK20_CMD_GENERATE_NEW_KEYS:
-                    ShowIconMessage ("New keys generated successfully");
+                    ShowIconMessage (tr("New keys generated successfully"));
                     HID_Stick20Configuration_st.AdminPwRetryCount = 3;
                     break;
                 case STICK20_CMD_GET_DEVICE_STATUS:
@@ -248,7 +299,7 @@ QString OutputText;
                     {
                         csApplet->
                             messageBox
-                            ("Storage successfully initialized with random data");
+                            (tr("Storage successfully initialized with random data"));
                     }
                     done (TRUE);
                     break;
@@ -264,7 +315,7 @@ QString OutputText;
             {
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
                 {
-                    csApplet->warningBox ("Can't enable hidden volume");
+                    csApplet->warningBox (tr("Can't enable hidden volume"));
                 }
                     break;
                 default:
@@ -284,14 +335,14 @@ QString OutputText;
                     // access");
                     csApplet->
                         warningBox
-                        ("Please enable the encrypted volume first.");
+                        (tr("Please enable the encrypted volume first."));
                 }
                     break;
                 case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
                 {
                     csApplet->
                         messageBox
-                        ("Encrypted volume was not enabled, please enable the encrypted volume");
+                        (tr("Encrypted volume was not enabled, please enable the encrypted volume"));
                 }
                     break;
                 default:
@@ -308,7 +359,7 @@ QString OutputText;
                 {
                     csApplet->
                         warningBox
-                        ("Smartcard error, please retry the command");
+                        (tr("Smartcard error, please retry the command"));
                 }
                     break;
                 default:
@@ -325,7 +376,7 @@ QString OutputText;
                 {
                     csApplet->
                         messageBox
-                        ("Security bit of the device is activated.\nFirmware update is not possible.");
+                        (tr("Security bit of the device is activated.\nFirmware update is not possible."));
                 }
                     break;
                 default:
