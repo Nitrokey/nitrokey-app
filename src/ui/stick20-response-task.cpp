@@ -244,11 +244,11 @@ QString OutputText;
                     ShowIconMessage (tr ("Hidden volume setup successfully"));
                     break;
                 case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
-                    ShowIconMessage (tr ("Uncrypted volume is in readonly mode"));
+                    ShowIconMessage (tr ("Cleartext volume is in readonly mode"));
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
                     break;
                 case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
-                    ShowIconMessage (tr ("Uncrypted volume is in readwrite mode"));
+                    ShowIconMessage (tr ("Cleartext volume is in readwrite mode"));
                     HID_Stick20Configuration_st.UserPwRetryCount = 3;
                     break;
                 case STICK20_CMD_SEND_CLEAR_STICK_KEYS_NOT_INITIATED:

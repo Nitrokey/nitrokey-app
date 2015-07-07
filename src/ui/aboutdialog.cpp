@@ -178,7 +178,7 @@ void AboutDialog::showStick20Configuration (void)
 
     OutputText.append (QString ("\n"));
 
-    OutputText.append (QString (tr ("Password retry counter\n")));
+    OutputText.append (QString (tr ("PIN retry counter\n")));
     OutputText.append (QString (tr ("Admin : ")));
     OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.AdminPwRetryCount))).append ("\n");
     OutputText.append (QString (tr ("User  : ")));
@@ -224,7 +224,7 @@ void AboutDialog::showStick10Configuration (void)
     cryptostick->getPasswordRetryCount ();
     cryptostick->getUserPasswordRetryCount ();
 
-    OutputText.append (QString (tr ("Password retry counter\n")));
+    OutputText.append (QString (tr ("PIN retry counter\n")));
     OutputText.append (QString (tr ("Admin : ")));
     OutputText.append (QString ("%1").arg (QString::number (cryptostick->passwordRetryCount))).append ("\n");
 

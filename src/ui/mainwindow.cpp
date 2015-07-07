@@ -509,7 +509,7 @@ int ret;
     validator = new QIntValidator (0, 9999999, this);
     ui->counterEdit->setValidator (validator);
     ui->PWS_ButtonCreatePW->setText (QString (tr ("Generate random password ")));
-    ui->statusBar->showMessage (tr ("Nitrokey disconnected."));
+    ui->statusBar->showMessage (tr ("Nitrokey disconnected"));
     cryptostick = new Device (VID_STICK_OTP, PID_STICK_OTP, VID_STICK_20, PID_STICK_20, VID_STICK_20_UPDATE_MODE, PID_STICK_20_UPDATE_MODE);
 
     // Check for comamd line execution after init "cryptostick"
@@ -840,7 +840,7 @@ int result = cryptostick->checkConnection ();
     {
         if (false == cryptostick->activStick20)
         {
-            ui->statusBar->showMessage (tr ("Nitrokey Pro connected."));
+            ui->statusBar->showMessage (tr ("Nitrokey Pro connected"));
 
             if (set_initial_time == FALSE)
             {
@@ -876,12 +876,12 @@ bool answer;
             cryptostick->getStatus ();
         }
         else
-            ui->statusBar->showMessage (tr ("Nitrokey Storage connected."));
+            ui->statusBar->showMessage (tr ("Nitrokey Storage connected"));
         DeviceOffline = FALSE;
     }
     else if (result == -1)
     {
-        ui->statusBar->showMessage (tr ("Nitrokey disconnected."));
+        ui->statusBar->showMessage (tr ("Nitrokey disconnected"));
         HID_Stick20Init (); // Clear stick 20 data
         Stick20ScSdCardOnline = FALSE;
         CryptedVolumeActive = FALSE;
@@ -893,7 +893,7 @@ bool answer;
             generateMenu ();
             DeviceOffline = TRUE;
             cryptostick->passwordSafeAvailable = true;
-            showTrayMessage (tr ("Nitrokey disconnected."), "", INFORMATION, TRAY_MSG_TIMEOUT);
+            showTrayMessage (tr ("Nitrokey disconnected"), "", INFORMATION, TRAY_MSG_TIMEOUT);
         }
         cryptostick->connect ();
     }
@@ -901,7 +901,7 @@ bool answer;
     {   // recreate the settings and menus
         if (false == cryptostick->activStick20)
         {
-            ui->statusBar->showMessage (tr ("Nitrokey connected."));
+            ui->statusBar->showMessage (tr ("Nitrokey connected"));
             showTrayMessage (tr ("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
 
             if (set_initial_time == FALSE)
@@ -941,7 +941,7 @@ bool answer;
         else
         {
             showTrayMessage (tr ("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
-            ui->statusBar->showMessage (tr ("Nitrokey Storage connected."));
+            ui->statusBar->showMessage (tr ("Nitrokey Storage connected"));
         }
         generateMenu ();
     }
@@ -2212,7 +2212,7 @@ uint8_t tempPassword[25];
                 }
                 else
                 {
-                    csApplet->warningBox (tr ("Wrong Pin. Please try again."));
+                    csApplet->warningBox (tr ("Wrong PIN. Please try again."));
                 }
                 password.clear ();
             }
@@ -2280,9 +2280,9 @@ PasswordDialog dialog (FALSE, this);
         else
         {
             if (CMD_STATUS_WRONG_PASSWORD == ret_s32)
-                msgBox.setText (tr ("Wrong passowrd"));
+                msgBox.setText (tr ("Wrong password"));
             else
-                msgBox.setText (tr ("Unable to create new AES key"));
+                msgBox.setText (tr ("Unable to create AES key"));
 
             msgBox.exec ();
         }
@@ -3171,7 +3171,7 @@ uint8_t tempPassword[25];
                             }
                             else
                             {
-                                csApplet->warningBox (tr ("Wrong Pin. Please try again."));
+                                csApplet->warningBox (tr ("Wrong PIN. Please try again."));
                             }
                             password.clear ();
                         }
@@ -3393,7 +3393,7 @@ uint8_t tempPassword[25];
                             }
                             else
                             {
-                                csApplet->warningBox (tr ("Wrong Pin. Please try again."));
+                                csApplet->warningBox (tr ("Wrong PIN. Please try again."));
                             }
                             password.clear ();
                         }

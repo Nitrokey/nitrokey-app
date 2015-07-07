@@ -118,10 +118,10 @@ void DialogChangePassword::InitData (void)
             ui->label_4->setText (tr ("New user PIN:"));
             break;
         case STICK20_PASSWORD_KIND_UPDATE:
-            this->setWindowTitle (tr ("Change Update PIN"));
-            ui->label_2->setText (tr ("Update PIN:"));
-            ui->label_3->setText (tr ("New Update PIN:"));
-            ui->label_4->setText (tr ("New Update PIN (confirm):"));
+            this->setWindowTitle (tr ("Change Update Password"));
+            ui->label_2->setText (tr ("Update Password:"));
+            ui->label_3->setText (tr ("New Update Password:"));
+            ui->label_4->setText (tr ("New Update Password (confirm):"));
             break;
     }
 }

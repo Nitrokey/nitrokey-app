@@ -58,7 +58,7 @@
        <item>
         <widget class="QLabel" name="LabelProgressWheel">
          <property name="text">
-          <string>LabelProgressWheell</string>
+          <string>LabelProgressWheel</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
