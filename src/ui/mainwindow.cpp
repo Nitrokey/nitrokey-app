@@ -4470,8 +4470,6 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
                  HID_Stick20Configuration_st.UserPwRetryCount);
     dialog.cryptostick = cryptostick;
 
-    // PinDialog dialog("Enter user PIN", "User Pin:", cryptostick,
-    // PinDialog::PREFIXED, PinDialog::USER_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -4479,7 +4477,6 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
         dialog.getPassword ((char *) password);
 
         ret_s32 = cryptostick->isAesSupported ((uint8_t *) & password[1]);
-        // ret_s32 = cryptostick->isAesSupported( password );
 
         if (CMD_STATUS_OK == ret_s32)   // AES supported, continue
         {
@@ -4488,7 +4485,6 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
 
             // Continue to unlocking password safe
             ret_s32 = cryptostick->passwordSafeEnable ((char *) &password[1]);
-            // ret_s32 = cryptostick->passwordSafeEnable ((char*)password);
 
             if (ERR_NO_ERROR != ret_s32)
             {
@@ -4517,6 +4513,11 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
 
                                 msgBox.exec ();
                             }
+                            else
+                            {
+                                Sleep::msleep (3000);
+                                ret_s32 = cryptostick->passwordSafeEnable ((char *) &password[1]);
+                            }
                         }
 
                         break;
@@ -4525,8 +4526,6 @@ void MainWindow::PWS_Clicked_EnablePWSAccess ()
                             warningBox (tr ("Can't unlock password safe."));
                         break;
                 }
-                // csApplet->warningBox(tr("Can't unlock password safe.
-                // %1").arg(ret_s32));
             }
             else
             {
