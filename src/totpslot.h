@@ -33,8 +33,7 @@ class TOTPSlot
 {
   public:
     TOTPSlot ();
-    TOTPSlot (uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[20],
-              uint8_t config);
+    TOTPSlot (uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[20], uint8_t config);
     uint8_t slotNumber;
     uint8_t slotName[15];
     uint8_t secret[20];

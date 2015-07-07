@@ -52,12 +52,9 @@ namespace Ui
 class Stick20ResponseDialog:public QDialog
 {
   Q_OBJECT public:
-    Stick20ResponseTask * Stick20Task;
+      Stick20ResponseTask * Stick20Task;
 
-    explicit Stick20ResponseDialog (QWidget * parent =
-                                    0,
-                                    Stick20ResponseTask * Stick20TaskPointer =
-                                    0);
+    explicit Stick20ResponseDialog (QWidget * parent = 0, Stick20ResponseTask * Stick20TaskPointer = 0);
      ~Stick20ResponseDialog ();
 
     void checkStick20StatusDebug (Response * stick20Response, int Status);

@@ -1,0 +1,14 @@
+Executing(%prep): /bin/sh -e /var/tmp/rpm-tmp.nmu8D1
+Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.1KilqV
+Processing files: nitrokey-app-0.2-1.x86_64
+Provides: application() application(nitrokey-app.desktop) nitrokey-app = 0.2-1 nitrokey-app(x86-64) = 0.2-1
+Requires(interp): /bin/sh /bin/sh /bin/sh /bin/sh
+Requires(rpmlib): rpmlib(CompressedFileNames) <= 3.0.4-1 rpmlib(PayloadFilesHavePrefix) <= 4.0-1
+Requires(pre): /bin/sh
+Requires(post): /bin/sh
+Requires(preun): /bin/sh
+Requires(postun): /bin/sh
+Requires: libQt5Core.so.5()(64bit) libQt5Gui.so.5()(64bit) libQt5Widgets.so.5()(64bit) libc.so.6()(64bit) libc.so.6(GLIBC_2.14)(64bit) libc.so.6(GLIBC_2.17)(64bit) libc.so.6(GLIBC_2.2.5)(64bit) libc.so.6(GLIBC_2.3)(64bit) libc.so.6(GLIBC_2.3.4)(64bit) libc.so.6(GLIBC_2.4)(64bit) libgcc_s.so.1()(64bit) libgcc_s.so.1(GCC_3.0)(64bit) libm.so.6()(64bit) libm.so.6(GLIBC_2.2.5)(64bit) libpthread.so.0()(64bit) libpthread.so.0(GLIBC_2.2.5)(64bit) libpthread.so.0(GLIBC_2.3.2)(64bit) libpthread.so.0(GLIBC_2.3.3)(64bit) libstdc++.so.6()(64bit) libstdc++.so.6(CXXABI_1.3)(64bit) libstdc++.so.6(GLIBCXX_3.4)(64bit) libusb-1.0.so.0()(64bit) rtld(GNU_HASH)
+Checking for unpackaged file(s): /usr/lib/rpm/check-files /home/george/Projects/nitrokey/nitrokey-app/build/_CPack_Packages/Linux/RPM/nitrokey-app-0.2-Linux
+Wrote: /home/george/Projects/nitrokey/nitrokey-app/build/_CPack_Packages/Linux/RPM/nitrokey-app-0.2-Linux.rpm
+Executing(%clean): /bin/sh -e /var/tmp/rpm-tmp.vZL02J

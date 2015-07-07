@@ -98,9 +98,7 @@ static int GUIOrginalSizeY = 0;
     // Create timer for polling the cryptostick 2.0
     RefreshTimer = new QTimer (this);
 
-    ret =
-        connect (RefreshTimer, SIGNAL (timeout ()), this,
-                 SLOT (UpdateDebugText ()));
+    ret = connect (RefreshTimer, SIGNAL (timeout ()), this, SLOT (UpdateDebugText ()));
 
     RefreshTimer->start (CS20_DEBUG_DIALOG_POLL_TIME);
 
@@ -111,13 +109,12 @@ static int GUIOrginalSizeY = 0;
     ui->TextStick->appendPlainText (DebugText_Stick20);
 
     if (FALSE == DebugingStick20PoolingActive)  // When no stick debugging is
-                                                // active, resize the GUI
-                                                // window
+        // active, resize the GUI
+        // window
     {
         ui->TextStick->hide ();
         ui->label_OutputStick->hide ();
-        ui->TextGUI->resize (ui->TextGUI->width (),
-                             GUIOrginalSizeY + ui->TextStick->height () + 20);
+        ui->TextGUI->resize (ui->TextGUI->width (), GUIOrginalSizeY + ui->TextStick->height () + 20);
     }
     else
     {
@@ -196,8 +193,7 @@ Response* stick20Response = new Response ();
     {   // For debugging
 char text[1000];
 
-        sprintf (text, "Calls %5d, Bytes %7d", nCallCounter,
-                 DebugTextlen_Stick20);
+        sprintf (text, "Calls %5d, Bytes %7d", nCallCounter, DebugTextlen_Stick20);
 
         ui->label->setText (text);
     }
@@ -219,8 +215,7 @@ char text[1000];
 
         if (TRUE == DebugTextHasChanged_Stick20)
         {
-            STRCAT (DebugText_Stick20, sizeof (DebugText_Stick20),
-                    DebugNewText_Stick20);
+            STRCAT (DebugText_Stick20, sizeof (DebugText_Stick20), DebugNewText_Stick20);
             ui->TextStick->moveCursor (QTextCursor::End);
             ui->TextStick->insertPlainText (DebugNewText_Stick20);
             DebugNewText_Stick20[0] = 0;
@@ -260,8 +255,7 @@ void DebugDialog::updateText (void)
 
     if (TRUE == DebugTextHasChanged_Stick20)
     {
-        STRCAT (DebugText_Stick20, sizeof (DebugText_Stick20),
-                DebugNewText_Stick20);
+        STRCAT (DebugText_Stick20, sizeof (DebugText_Stick20), DebugNewText_Stick20);
         ui->TextStick->moveCursor (QTextCursor::End);
         ui->TextStick->insertPlainText (DebugNewText_Stick20);
         DebugNewText_Stick20[0] = 0;
@@ -302,8 +296,7 @@ void DebugDialog::on_pushButton_clicked ()
 
     if (TRUE == DebugTextHasChanged_Stick20)
     {
-        STRCAT (DebugText_Stick20, sizeof (DebugText_Stick20),
-                DebugNewText_Stick20);
+        STRCAT (DebugText_Stick20, sizeof (DebugText_Stick20), DebugNewText_Stick20);
         ui->TextStick->moveCursor (QTextCursor::End);
         ui->TextStick->insertPlainText (DebugNewText_Stick20);
         DebugNewText_Stick20[0] = 0;

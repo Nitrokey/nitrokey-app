@@ -34,13 +34,11 @@
 PinDialog::PinDialog (const QString & title, const QString & label,
                       Device * cryptostick, Usage usage, PinType pinType,
                       bool ShowMatrix,
-                      QWidget * parent):cryptostick (cryptostick),
-_usage (usage), _pinType (pinType), QDialog (parent), ui (new Ui::PinDialog)
+                      QWidget * parent):cryptostick (cryptostick), _usage (usage), _pinType (pinType), QDialog (parent), ui (new Ui::PinDialog)
 {
     ui->setupUi (this);
 
-    connect (ui->okButton, SIGNAL (clicked ()), this,
-             SLOT (onOkButtonClicked ()));
+    connect (ui->okButton, SIGNAL (clicked ()), this, SLOT (onOkButtonClicked ()));
 
     // Setup pwd-matrix
     ui->checkBox_PasswordMatrix->setCheckState (Qt::Unchecked);
@@ -69,17 +67,15 @@ delete ui;
 /*
    void PinDialog::init(char *text,int RetryCount) { char text1[20];
 
-   text1[0] = 0; if (-1 != RetryCount) { SNPRINTF (text1,sizeof (text1),"
-   (Tries left: %d)",RetryCount); } ui->label->setText(tr(text)+tr(text1)); } */
+   text1[0] = 0; if (-1 != RetryCount) { SNPRINTF (text1,sizeof (text1)," (Tries left: %d)",RetryCount); } ui->label->setText(tr(text)+tr(text1)); } */
 
 void PinDialog::getPassword (char* text)
 {
     STRCPY (text, LOCAL_PASSWORD_SIZE, (char *) password);
     clearBuffers ();
     /*
-       if (FALSE == ui->checkBox_PasswordMatrix->isChecked()) { STRCPY
-       (&text[1],LOCAL_PASSWORD_SIZE-1,ui->lineEdit->text().toLatin1()); }
-       else { STRCPY (text,LOCAL_PASSWORD_SIZE,(char*)password); } */
+       if (FALSE == ui->checkBox_PasswordMatrix->isChecked()) { STRCPY (&text[1],LOCAL_PASSWORD_SIZE-1,ui->lineEdit->text().toLatin1()); } else {
+       STRCPY (text,LOCAL_PASSWORD_SIZE,(char*)password); } */
 }
 
 void PinDialog::getPassword (QString & pin)
@@ -134,28 +130,21 @@ QByteArray passwordString;
         n = passwordString.size ();
         if (30 <= n)
         {
-            csApplet->
-                warningBox (tr
-                            ("Your PIN is too long! Use not more than 30 characters."));
+            csApplet->warningBox (tr ("Your PIN is too long! Use not more than 30 characters."));
             ui->lineEdit->clear ();
             return;
         }
         if (6 > n)
         {
-            csApplet->
-                warningBox (tr
-                            ("Your PIN is too short. Use at least 6 characters."));
+            csApplet->warningBox (tr ("Your PIN is too short. Use at least 6 characters."));
             ui->lineEdit->clear ();
             return;
         }
 
         // Check for default pin
-        if ((0 == strcmp (passwordString, "123456"))
-            || (0 == strcmp (passwordString, "12345678")))
+        if ((0 == strcmp (passwordString, "123456")) || (0 == strcmp (passwordString, "12345678")))
         {
-            csApplet->
-                warningBox (tr
-                            ("Warning: Default PIN is used.\nPlease change the PIN."));
+            csApplet->warningBox (tr ("Warning: Default PIN is used.\nPlease change the PIN."));
         }
 
         if (PREFIXED == _usage)

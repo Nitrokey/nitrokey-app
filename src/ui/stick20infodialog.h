@@ -30,8 +30,8 @@ namespace Ui
 class Stick20InfoDialog:public QDialog
 {
   Q_OBJECT public:
-    explicit Stick20InfoDialog (QWidget * parent = 0);
-    ~Stick20InfoDialog ();
+      explicit Stick20InfoDialog (QWidget * parent = 0);
+     ~Stick20InfoDialog ();
 
     private slots:void on_pushButton_clicked ();
 

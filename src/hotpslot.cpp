@@ -34,8 +34,7 @@ HOTPSlot::HOTPSlot ()
 
 }
 
-HOTPSlot::HOTPSlot (uint8_t slotNumber, uint8_t slotName[20],
-                    uint8_t secret[20], uint8_t counter[8], uint8_t config)
+HOTPSlot::HOTPSlot (uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[20], uint8_t counter[8], uint8_t config)
 {
     this->slotNumber = slotNumber;
     memcpy (this->slotName, slotName, 15);

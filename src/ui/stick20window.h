@@ -11,11 +11,11 @@ namespace Ui
 class Stick20Window:public QMainWindow
 {
   Q_OBJECT public:
-    explicit Stick20Window (QWidget * parent = 0);
-    ~Stick20Window ();
+      explicit Stick20Window (QWidget * parent = 0);
+     ~Stick20Window ();
 
   private:
-    Ui::Stick20Window * ui;
+      Ui::Stick20Window * ui;
 };
 
 #endif // STICK20WINDOW_H

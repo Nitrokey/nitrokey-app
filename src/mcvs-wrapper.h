@@ -24,10 +24,8 @@
 #define STRNCPY(dest, dest_size, source, source_size)          strncpy( (dest), (source), (dest_size));
 
 /*
-   #define STRNCPY(dest,dest_size,source,source_size) \ do{ \ if (
-   (source_size) < (dest_size)) { \ strncpy ((dest), (source), (source_size)
-   ); \ (dest)[ (source_size) ] = '\0'; \ } else { \ (void)0; \ } \
-   }while(0); */
+   #define STRNCPY(dest,dest_size,source,source_size) \ do{ \ if ( (source_size) < (dest_size)) { \ strncpy ((dest), (source), (source_size) ); \
+   (dest)[ (source_size) ] = '\0'; \ } else { \ (void)0; \ } \ }while(0); */
 
 #define STRCAT(dest,dest_size,source)                                           \
     do{                                                                             \

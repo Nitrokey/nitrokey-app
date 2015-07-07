@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name="Nitrokey App"
+GenericName=Nitrokey Management Application
+Comment=Manage your Nitrokey devices
+TryExec=CryptoStickGUI
+Exec=CryptoStickGUI
+Icon=nitrokey-app
+Type=Application
+Categories=Utility;Security;Qt;
+Keywords=Nitrokey;OpenPGP;smart card;
+URL=www.nitrokey.com

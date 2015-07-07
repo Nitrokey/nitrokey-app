@@ -1,0 +1,9 @@
+Package: nitrokey-app
+Version: 0.2
+Section: utils
+Priority: optional
+Architecture: amd64
+Installed-Size: 925
+Maintainer: Georgios Gkitsas <george@nitrokey.com>
+Description: Use and manage your Nitrokey
+

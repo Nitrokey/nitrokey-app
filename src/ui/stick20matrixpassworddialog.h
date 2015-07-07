@@ -32,8 +32,8 @@ namespace Ui
 class MatrixPasswordDialog:public QDialog
 {
   Q_OBJECT public:
-    explicit MatrixPasswordDialog (QWidget * parent = 0);
-    ~MatrixPasswordDialog ();
+      explicit MatrixPasswordDialog (QWidget * parent = 0);
+     ~MatrixPasswordDialog ();
 
     void InitSecurePasswordDialog (void);
     bool CopyMatrixPassword (char* Password, int len);
@@ -43,7 +43,7 @@ class MatrixPasswordDialog:public QDialog
     bool SetupInterfaceFlag;
     // int PasswordKind;
 
-    private slots: void on_pushButton_0_clicked ();
+    private slots:void on_pushButton_0_clicked ();
     void on_pushButton_1_clicked ();
     void on_pushButton_2_clicked ();
     void on_pushButton_3_clicked ();
@@ -80,13 +80,13 @@ class MatrixPasswordDialog:public QDialog
     int InputPasswordLength;
     int InputPasswordLengthPointer;
     unsigned char SelectedColumns[OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS + 1];  // +
-                                                                            // 1
-                                                                            // for
-                                                                            // 0
-                                                                            // at
-                                                                            // end
-                                                                            // of
-                                                                            // string
+    // 1
+    // for
+    // 0
+    // at
+    // end
+    // of
+    // string
 
 
     // Vars for setup

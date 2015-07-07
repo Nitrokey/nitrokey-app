@@ -188,8 +188,7 @@ void DialogChangePassword::SendNewPassword (void)
     // Send old password
     PasswordString = ui->lineEdit_OldPW->text ().toLatin1 ();
 
-    STRNCPY ((char *) &Data[1], STICK20_PASSOWRD_LEN - 1,
-             PasswordString.data (), STICK20_PASSOWRD_LEN);
+    STRNCPY ((char *) &Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data (), STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
     ret = cryptostick->stick20SendPassword (Data);
@@ -207,8 +206,7 @@ void DialogChangePassword::SendNewPassword (void)
     // Change password
     PasswordString = ui->lineEdit_NewPW_1->text ().toLatin1 ();
 
-    STRNCPY ((char *) &Data[1], STICK20_PASSOWRD_LEN, PasswordString.data (),
-             STICK20_PASSOWRD_LEN);
+    STRNCPY ((char *) &Data[1], STICK20_PASSOWRD_LEN, PasswordString.data (), STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
     ret = cryptostick->stick20SendNewPassword (Data);
@@ -269,10 +267,7 @@ void DialogChangePassword::Stick10ChangePassword (void)
     }
     else if (ret != CMD_STATUS_OK)
     {
-        csApplet->warningBox (tr ("Couldn't change %1 password").
-                              arg ((PasswordKind ==
-                                    STICK10_PASSWORD_KIND_USER) ? "user" :
-                                   "admin"));
+        csApplet->warningBox (tr ("Couldn't change %1 password").arg ((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
     }
 }
 
@@ -300,8 +295,7 @@ void DialogChangePassword::ResetUserPassword (void)
     // Send old password
     PasswordString = ui->lineEdit_OldPW->text ().toLatin1 ();
 
-    STRNCPY ((char *) &Data[1], STICK20_PASSOWRD_LEN - 1,
-             PasswordString.data (), STICK20_PASSOWRD_LEN);
+    STRNCPY ((char *) &Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data (), STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
     ret = cryptostick->stick20SendPassword (Data);
@@ -319,8 +313,7 @@ void DialogChangePassword::ResetUserPassword (void)
     // Reset new user PIN
     PasswordString = ui->lineEdit_NewPW_1->text ().toLatin1 ();
 
-    STRNCPY ((char *) &Data[1], STICK20_PASSOWRD_LEN - 1,
-             PasswordString.data (), STICK20_PASSOWRD_LEN);
+    STRNCPY ((char *) &Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data (), STICK20_PASSOWRD_LEN);
     Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
 
@@ -367,9 +360,7 @@ void DialogChangePassword::ResetUserPasswordStick10 (void)
         }
         else
         {
-            csApplet->
-                warningBox (tr ("Couldn't unblock the user PIN. Error: %1").
-                            arg (ret));
+            csApplet->warningBox (tr ("Couldn't unblock the user PIN. Error: %1").arg (ret));
         }
     }
     else
@@ -401,9 +392,7 @@ void DialogChangePassword::Stick20ChangeUpdatePassword (void)
     strncpy ((char *) new_pin, PasswordString.data (), password_length);
 
     // Change password
-    ret =
-        cryptostick->stick20NewUpdatePassword ((uint8_t *) old_pin,
-                                               (uint8_t *) new_pin);
+    ret = cryptostick->stick20NewUpdatePassword ((uint8_t *) old_pin, (uint8_t *) new_pin);
 
     if (!ret)
         csApplet->warningBox (tr ("Wrong password."));
@@ -428,35 +417,27 @@ void DialogChangePassword::accept ()
         clearFields ();
 QString OutputText;
 
-        OutputText =
-            tr ("The minimum length of the old password is ") +
-                QString ("%1").arg (6) + "chars";
+        OutputText = tr ("The minimum length of the old password is ") + QString ("%1").arg (6) + "chars";
 
         csApplet->warningBox (OutputText);
         return;
     }
 
     // Check for correct new password entrys
-    if (0 !=
-        strcmp (ui->lineEdit_NewPW_1->text ().toLatin1 (),
-                ui->lineEdit_NewPW_2->text ().toLatin1 ()))
+    if (0 != strcmp (ui->lineEdit_NewPW_1->text ().toLatin1 (), ui->lineEdit_NewPW_2->text ().toLatin1 ()))
     {
         clearFields ();
-        csApplet->
-            warningBox (tr ("The new password entrys are not the same"));
+        csApplet->warningBox (tr ("The new password entrys are not the same"));
         return;
     }
 
     // Check the new length of password
-    if (STICK20_PASSOWRD_LEN <
-        strlen (ui->lineEdit_NewPW_1->text ().toLatin1 ()))
+    if (STICK20_PASSOWRD_LEN < strlen (ui->lineEdit_NewPW_1->text ().toLatin1 ()))
     {
         clearFields ();
 QString OutputText;
 
-        OutputText =
-            tr ("The maximum length of a password is ") +
-                QString ("%1").arg (STICK20_PASSOWRD_LEN) + "chars";
+        OutputText = tr ("The maximum length of a password is ") + QString ("%1").arg (STICK20_PASSOWRD_LEN) + "chars";
 
         csApplet->warningBox (OutputText);
         return;
@@ -468,9 +449,7 @@ QString OutputText;
         clearFields ();
 QString OutputText;
 
-        OutputText =
-            tr ("The minimum length of a password is ") +
-                QString ("%1").arg (6) + "chars";
+        OutputText = tr ("The minimum length of a password is ") + QString ("%1").arg (6) + "chars";
 
         csApplet->warningBox (OutputText);
         return;

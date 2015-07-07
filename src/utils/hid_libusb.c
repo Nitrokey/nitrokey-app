@@ -68,12 +68,9 @@ extern "C"
 #define STICK20_DEBUG
     // #define STICK20_DEBUG_ALL
 
-    /* Uncomment to enable the retrieval of Usage and Usage Page in
-       hid_enumerate(). Warning, on platforms different from FreeBSD this is
-       very invasive as it requires the detach and re-attach of the kernel
-       driver. See comments inside hid_enumerate(). libusb HIDAPI programs
-       are encouraged to use the interface number instead to differentiate
-       between interfaces on a composite HID device. */
+    /* Uncomment to enable the retrieval of Usage and Usage Page in hid_enumerate(). Warning, on platforms different from FreeBSD this is very
+       invasive as it requires the detach and re-attach of the kernel driver. See comments inside hid_enumerate(). libusb HIDAPI programs are
+       encouraged to use the interface number instead to differentiate between interfaces on a composite HID device. */
     /* #define INVASIVE_GET_USAGE */
 
     /* Linked List of input reports received from the device. */
@@ -121,8 +118,7 @@ extern "C"
     static libusb_context* usb_context = NULL;
 
     uint16_t get_usb_code_for_current_locale (void);
-    static int return_data (hid_device * dev, unsigned char* data,
-                            size_t length);
+    static int return_data (hid_device * dev, unsigned char* data, size_t length);
 
     static hid_device* new_hid_device (void)
     {
@@ -156,10 +152,8 @@ extern "C"
 #endif
 
 #ifdef INVASIVE_GET_USAGE
-    /* Get bytes from a HID Report Descriptor. Only call with a num_bytes of
-       0, 1, 2, or 4. */
-    static uint32_t get_bytes (uint8_t * rpt, size_t len, size_t num_bytes,
-                               size_t cur)
+    /* Get bytes from a HID Report Descriptor. Only call with a num_bytes of 0, 1, 2, or 4. */
+    static uint32_t get_bytes (uint8_t * rpt, size_t len, size_t num_bytes, size_t cur)
     {
         /* Return if there aren't enough bytes. */
         if (cur + num_bytes >= len)
@@ -177,20 +171,15 @@ extern "C"
         }
         else if (num_bytes == 4)
         {
-            return (rpt[cur + 4] * 0x01000000 +
-                    rpt[cur + 3] * 0x00010000 +
-                    rpt[cur + 2] * 0x00000100 + rpt[cur + 1] * 0x00000001);
+            return (rpt[cur + 4] * 0x01000000 + rpt[cur + 3] * 0x00010000 + rpt[cur + 2] * 0x00000100 + rpt[cur + 1] * 0x00000001);
         }
         else
             return 0;
     }
 
-    /* Retrieves the device's Usage Page and Usage from the report
-       descriptor. The algorithm is simple, as it just returns the first
-       Usage and Usage Page that it finds in the descriptor. The return value
-       is 0 on success and -1 on failure. */
-    static int get_usage (uint8_t * report_descriptor, size_t size,
-                          unsigned short* usage_page, unsigned short* usage)
+    /* Retrieves the device's Usage Page and Usage from the report descriptor. The algorithm is simple, as it just returns the first Usage and Usage
+       Page that it finds in the descriptor. The return value is 0 on success and -1 on failure. */
+    static int get_usage (uint8_t * report_descriptor, size_t size, unsigned short* usage_page, unsigned short* usage)
     {
         int i = 0;
 
@@ -210,10 +199,8 @@ extern "C"
 
             if ((key & 0xf0) == 0xf0)
             {
-                /* This is a Long Item. The next byte contains the length of
-                   the data section (value) for this key. See the HID
-                   specification, version 1.11, section 6.2.2.3, titled "Long
-                   Items." */
+                /* This is a Long Item. The next byte contains the length of the data section (value) for this key. See the HID specification,
+                   version 1.11, section 6.2.2.3, titled "Long Items." */
                 if (i + 1 < size)
                     data_len = report_descriptor[i + 1];
                 else
@@ -222,10 +209,8 @@ extern "C"
             }
             else
             {
-                /* This is a Short Item. The bottom two bits of the key
-                   contain the size code for the data section (value) for
-                   this key.  Refer to the HID specification, version 1.11,
-                   section 6.2.2.2, titled "Short Items." */
+                /* This is a Short Item. The bottom two bits of the key contain the size code for the data section (value) for this key.  Refer to
+                   the HID specification, version 1.11, section 6.2.2.2, titled "Short Items." */
                 size_code = key & 0x3;
                 switch (size_code)
                 {
@@ -247,8 +232,7 @@ extern "C"
 
             if (key_cmd == 0x4)
             {
-                *usage_page =
-                    get_bytes (report_descriptor, size, data_len, i);
+                *usage_page = get_bytes (report_descriptor, size, data_len, i);
                 usage_page_found = 1;
                 // printf("Usage Page: %x\n", (uint32_t)*usage_page);
             }
@@ -271,34 +255,22 @@ extern "C"
 #endif // INVASIVE_GET_USAGE
 
 #ifdef __FreeBSD__
-    /* The FreeBSD version of libusb doesn't have this funciton. In mainline
-       libusb, it's inlined in libusb.h. This function will bear a striking
+    /* The FreeBSD version of libusb doesn't have this funciton. In mainline libusb, it's inlined in libusb.h. This function will bear a striking
        resemblence to that one, because there's about one way to code it.
 
-       Note that the data parameter is Unicode in UTF-16LE encoding. Return
-       value is the number of bytes in data, or LIBUSB_ERROR_*. */
+       Note that the data parameter is Unicode in UTF-16LE encoding. Return value is the number of bytes in data, or LIBUSB_ERROR_*. */
     static inline int libusb_get_string_descriptor (libusb_device_handle *
-                                                    dev,
-                                                    uint8_t descriptor_index,
-                                                    uint16_t lang_id,
-                                                    unsigned char* data,
-                                                    int length)
+                                                    dev, uint8_t descriptor_index, uint16_t lang_id, unsigned char* data, int length)
     {
-        return libusb_control_transfer (dev, LIBUSB_ENDPOINT_IN | 0x0,  /* Endpoint
-                                                                           0
-                                                                           IN
-                                                                         */
+        return libusb_control_transfer (dev, LIBUSB_ENDPOINT_IN | 0x0,  /* Endpoint 0 IN */
                                         LIBUSB_REQUEST_GET_DESCRIPTOR,
-                                        (LIBUSB_DT_STRING << 8) |
-                                        descriptor_index, lang_id, data,
-                                        (uint16_t) length, 1000);
+                                        (LIBUSB_DT_STRING << 8) | descriptor_index, lang_id, data, (uint16_t) length, 1000);
     }
 
 #endif
 
 
-    /* Get the first language the device says it reports. This comes from USB
-       string #0. */
+    /* Get the first language the device says it reports. This comes from USB string #0. */
     static uint16_t get_first_language (libusb_device_handle * dev)
     {
     uint16_t buf[32];
@@ -308,16 +280,14 @@ extern "C"
         /* Get the string from libusb. */
         len = libusb_get_string_descriptor (dev, 0x0,   /* String ID */
                                             0x0,    /* Language */
-                                            (unsigned char *) buf,
-                                            sizeof (buf));
+                                            (unsigned char *) buf, sizeof (buf));
         if (len < 4)
             return 0x0;
 
         return buf[1];  // First two bytes are len and descriptor type.
     }
 
-    static int is_language_supported (libusb_device_handle * dev,
-                                      uint16_t lang)
+    static int is_language_supported (libusb_device_handle * dev, uint16_t lang)
     {
     uint16_t buf[32];
 
@@ -328,8 +298,7 @@ extern "C"
         /* Get the string from libusb. */
         len = libusb_get_string_descriptor (dev, 0x0,   /* String ID */
                                             0x0,    /* Language */
-                                            (unsigned char *) buf,
-                                            sizeof (buf));
+                                            (unsigned char *) buf, sizeof (buf));
         if (len < 4)
             return 0x0;
 
@@ -346,8 +315,7 @@ extern "C"
     }
 
 
-    /* This function returns a newly allocated wide string containing the USB
-       device string numbered by the index. The returned string must be freed
+    /* This function returns a newly allocated wide string containing the USB device string numbered by the index. The returned string must be freed
        by using free(). */
     static wchar_t* get_usb_string (libusb_device_handle * dev, uint8_t idx)
     {
@@ -383,16 +351,11 @@ extern "C"
             lang = get_first_language (dev);
 
         /* Get the string from libusb. */
-        len = libusb_get_string_descriptor (dev,
-                                            idx,
-                                            lang,
-                                            (unsigned char *) buf,
-                                            sizeof (buf));
+        len = libusb_get_string_descriptor (dev, idx, lang, (unsigned char *) buf, sizeof (buf));
         if (len < 0)
             return NULL;
 
-        /* buf does not need to be explicitly NULL-terminated because it is
-           only passed into iconv() which does not need it. */
+        /* buf does not need to be explicitly NULL-terminated because it is only passed into iconv() which does not need it. */
 
         /* Initialize iconv. */
         ic = iconv_open ("WCHAR_T", "UTF-16LE");
@@ -402,8 +365,7 @@ extern "C"
             return NULL;
         }
 
-        /* Convert to native wchar_t (UTF-32 on glibc/BSD systems). Skip the
-           first character (2-bytes). */
+        /* Convert to native wchar_t (UTF-32 on glibc/BSD systems). Skip the first character (2-bytes). */
         inptr = buf + 2;
         inbytes = len - 2;
         outptr = (char *) wbuf;
@@ -433,9 +395,7 @@ extern "C"
     {
         char str[64];
 
-        snprintf (str, sizeof (str), "%04x:%04x:%02x",
-                  libusb_get_bus_number (dev),
-                  libusb_get_device_address (dev), interface_number);
+        snprintf (str, sizeof (str), "%04x:%04x:%02x", libusb_get_bus_number (dev), libusb_get_device_address (dev), interface_number);
         str[sizeof (str) - 1] = '\0';
 
         return strdup (str);
@@ -472,10 +432,7 @@ extern "C"
         return 0;
     }
 
-    struct hid_device_info HID_API_EXPORT* hid_enumerate (unsigned short
-                                                          vendor_id,
-                                                          unsigned short
-                                                          product_id)
+    struct hid_device_info HID_API_EXPORT* hid_enumerate (unsigned short vendor_id, unsigned short product_id)
     {
         libusb_device** devs;
 
@@ -495,8 +452,7 @@ extern "C"
         {   // For debugging
         char text[1000];
 
-            sprintf (text, "hid_enumerate: Start VID %04x PID %04x\n",
-                     vendor_id, product_id);
+            sprintf (text, "hid_enumerate: Start VID %04x PID %04x\n", vendor_id, product_id);
             DebugAppendTextGui (text);
         }
 #endif
@@ -534,8 +490,7 @@ extern "C"
                 // sprintf(text,"Check Product-Vendor: Start VID %04x PID
                 // %04x\n",dev_vid, dev_pid);
                 // DebugAppendText (text);
-                if ((dev_vid == 0x20A0) && (dev_pid == 0x4109)
-                    && (dev_pid == product_id))
+                if ((dev_vid == 0x20A0) && (dev_pid == 0x4109) && (dev_pid == product_id))
                 {
                     sprintf (text, "*** STICK FOUND\n");
                     DebugAppendTextGui (text);
@@ -570,16 +525,12 @@ extern "C"
                             interface_num = intf_desc->bInterfaceNumber;
 
                             /* Check the VID/PID against the arguments */
-                            if ((vendor_id == 0x0 && product_id == 0x0) ||
-                                (vendor_id == dev_vid
-                                 && product_id == dev_pid))
+                            if ((vendor_id == 0x0 && product_id == 0x0) || (vendor_id == dev_vid && product_id == dev_pid))
                             {
         struct hid_device_info* tmp;
 
                                 /* VID/PID match. Create the record. */
-                                tmp =
-                                    calloc (1,
-                                            sizeof (struct hid_device_info));
+                                tmp = calloc (1, sizeof (struct hid_device_info));
                                 if (cur_dev)
                                 {
                                     cur_dev->next = tmp;
@@ -592,8 +543,7 @@ extern "C"
 
                                 /* Fill out the record */
                                 cur_dev->next = NULL;
-                                cur_dev->path =
-                                    make_path (dev, interface_num);
+                                cur_dev->path = make_path (dev, interface_num);
 
                                 res = libusb_open (dev, &handle);
 #ifdef STICK20_DEBUG
@@ -602,10 +552,7 @@ extern "C"
                                     {
         char text[1000];
 
-                                        sprintf (text,
-                                                 "libusb_open: ERROR : ret= %d - %s\n",
-                                                 res,
-                                                 libusb_error_name (res));
+                                        sprintf (text, "libusb_open: ERROR : ret= %d - %s\n", res, libusb_error_name (res));
                                         DebugAppendTextGui (text);
                                     }
 
@@ -615,65 +562,39 @@ extern "C"
                                 {
                                     /* Serial Number */
                                     if (desc.iSerialNumber > 0)
-                                        cur_dev->serial_number =
-                                            get_usb_string (handle,
-                                                            desc.
-                                                            iSerialNumber);
+                                        cur_dev->serial_number = get_usb_string (handle, desc.iSerialNumber);
 
                                     /* Manufacturer and Product strings */
                                     if (desc.iManufacturer > 0)
-                                        cur_dev->manufacturer_string =
-                                            get_usb_string (handle,
-                                                            desc.
-                                                            iManufacturer);
+                                        cur_dev->manufacturer_string = get_usb_string (handle, desc.iManufacturer);
                                     if (desc.iProduct > 0)
-                                        cur_dev->product_string =
-                                            get_usb_string (handle,
-                                                            desc.iProduct);
+                                        cur_dev->product_string = get_usb_string (handle, desc.iProduct);
 
 #ifdef INVASIVE_GET_USAGE
                                     /*
-                                       This section is removed because it is
-                                       too invasive on the system. Getting a
-                                       Usage Page and Usage requires parsing
-                                       the HID Report descriptor. Getting a
-                                       HID Report descriptor involves
-                                       claiming the interface. Claiming the
-                                       interface involves detaching the
-                                       kernel driver. Detaching the kernel
-                                       driver is hard on the system because
-                                       it will unclaim interfaces (if another
-                                       app has them claimed) and the
-                                       re-attachment of the driver will
-                                       sometimes change /dev entry names. It
-                                       is for these reasons that this section
-                                       is #if 0. For composite devices, use
-                                       the interface field in the
-                                       hid_device_info struct to distinguish
-                                       between interfaces. */
+                                       This section is removed because it is too invasive on the system. Getting a Usage Page and Usage requires
+                                       parsing the HID Report descriptor. Getting a HID Report descriptor involves claiming the interface. Claiming
+                                       the interface involves detaching the kernel driver. Detaching the kernel driver is hard on the system because
+                                       it will unclaim interfaces (if another app has them claimed) and the re-attachment of the driver will
+                                       sometimes change /dev entry names. It is for these reasons that this section is #if 0. For composite devices,
+                                       use the interface field in the hid_device_info struct to distinguish between interfaces. */
         unsigned char data[256];
 
 #ifdef DETACH_KERNEL_DRIVER
         int detached = 0;
 
                                     /* Usage Page and Usage */
-                                    res =
-                                        libusb_kernel_driver_active (handle,
-                                                                     interface_num);
+                                    res = libusb_kernel_driver_active (handle, interface_num);
                                     if (res == 1)
                                     {
-                                        res =
-                                            libusb_detach_kernel_driver
-                                            (handle, interface_num);
+                                        res = libusb_detach_kernel_driver (handle, interface_num);
                                         if (res < 0)
                                             LOG ("Couldn't detach kernel driver, even though a kernel driver was attached.");
                                         else
                                             detached = 1;
                                     }
 #endif
-                                    res =
-                                        libusb_claim_interface (handle,
-                                                                interface_num);
+                                    res = libusb_claim_interface (handle, interface_num);
                                     if (res >= 0)
                                     {
                                         /* Get the HID Report Descriptor. */
@@ -683,21 +604,13 @@ extern "C"
                                                                      |
                                                                      LIBUSB_RECIPIENT_INTERFACE,
                                                                      LIBUSB_REQUEST_GET_DESCRIPTOR,
-                                                                     (LIBUSB_DT_REPORT
-                                                                      << 8) |
-                                                                     interface_num,
-                                                                     0, data,
-                                                                     sizeof
-                                                                     (data),
-                                                                     5000);
+                                                                     (LIBUSB_DT_REPORT << 8) | interface_num, 0, data, sizeof (data), 5000);
                                         if (res >= 0)
                                         {
         unsigned short page = 0, usage = 0;
 
-                                            /* Parse the usage and usage page
-                                               out of the report descriptor. */
-                                            get_usage (data, res, &page,
-                                                       &usage);
+                                            /* Parse the usage and usage page out of the report descriptor. */
+                                            get_usage (data, res, &page, &usage);
                                             cur_dev->usage_page = page;
                                             cur_dev->usage = usage;
                                         }
@@ -705,22 +618,17 @@ extern "C"
                                             LOG ("libusb_control_transfer() for getting the HID report failed with %d\n", res);
 
                                         /* Release the interface */
-                                        res =
-                                            libusb_release_interface (handle,
-                                                                      interface_num);
+                                        res = libusb_release_interface (handle, interface_num);
                                         if (res < 0)
                                             LOG ("Can't release the interface.\n");
                                     }
                                     else
-                                        LOG ("Can't claim interface %d\n",
-                                             res);
+                                        LOG ("Can't claim interface %d\n", res);
 #ifdef DETACH_KERNEL_DRIVER
                                     /* Re-attach kernel driver if necessary. */
                                     if (detached)
                                     {
-                                        res =
-                                            libusb_attach_kernel_driver
-                                            (handle, interface_num);
+                                        res = libusb_attach_kernel_driver (handle, interface_num);
                                         if (res < 0)
                                             LOG ("Couldn't re-attach kernel driver.\n");
                                     }
@@ -769,8 +677,7 @@ extern "C"
         }
     }
 
-    hid_device* hid_open (unsigned short vendor_id, unsigned short product_id,
-                          const wchar_t * serial_number)
+    hid_device* hid_open (unsigned short vendor_id, unsigned short product_id, const wchar_t * serial_number)
     {
         struct hid_device_info* devs,* cur_dev;
 
@@ -782,8 +689,7 @@ extern "C"
         {   // For debugging
         char text[1000];
 
-            sprintf (text, "hid_open: VID %04x PID %04x\n", vendor_id,
-                     product_id);
+            sprintf (text, "hid_open: VID %04x PID %04x\n", vendor_id, product_id);
             DebugAppendTextGui (text);
         }
 #endif
@@ -792,8 +698,7 @@ extern "C"
         cur_dev = devs;
         while (cur_dev)
         {
-            if (cur_dev->vendor_id == vendor_id &&
-                cur_dev->product_id == product_id)
+            if (cur_dev->vendor_id == vendor_id && cur_dev->product_id == product_id)
             {
                 if (serial_number)
                 {
@@ -862,9 +767,7 @@ extern "C"
                 }
                 cur->next = rpt;
 
-                /* Pop one off if we've reached 30 in the queue. This way we
-                   don't grow forever if the user never reads anything from
-                   the device. */
+                /* Pop one off if we've reached 30 in the queue. This way we don't grow forever if the user never reads anything from the device. */
                 if (num_queued > 30)
                 {
                     return_data (dev, NULL, 0);
@@ -912,16 +815,9 @@ extern "C"
         /* Set up the transfer object. */
         buf = malloc (length);
         dev->transfer = libusb_alloc_transfer (0);
-        libusb_fill_interrupt_transfer (dev->transfer,
-                                        dev->device_handle,
-                                        dev->input_endpoint,
-                                        buf,
-                                        length,
-                                        read_callback,
-                                        dev, 5000 /* timeout */ );
+        libusb_fill_interrupt_transfer (dev->transfer, dev->device_handle, dev->input_endpoint, buf, length, read_callback, dev, 5000 /* timeout */ );
 
-        /* Make the first submission. Further submissions are made from
-           inside read_callback() */
+        /* Make the first submission. Further submissions are made from inside read_callback() */
         libusb_submit_transfer (dev->transfer);
 
         // Notify the main thread that the read thread is up and running.
@@ -939,40 +835,29 @@ extern "C"
                 LOG ("read_thread(): libusb reports error # %d\n", res);
 
                 /* Break out of this loop only on fatal error. */
-                if (res != LIBUSB_ERROR_BUSY &&
-                    res != LIBUSB_ERROR_TIMEOUT &&
-                    res != LIBUSB_ERROR_OVERFLOW &&
-                    res != LIBUSB_ERROR_INTERRUPTED)
+                if (res != LIBUSB_ERROR_BUSY && res != LIBUSB_ERROR_TIMEOUT && res != LIBUSB_ERROR_OVERFLOW && res != LIBUSB_ERROR_INTERRUPTED)
                 {
                     break;
                 }
             }
         }
 
-        /* Cancel any transfer that may be pending. This call will fail if no
-           transfers are pending, but that's OK. */
+        /* Cancel any transfer that may be pending. This call will fail if no transfers are pending, but that's OK. */
         if (libusb_cancel_transfer (dev->transfer) == 0)
         {
             /* The transfer was cancelled, so wait for its completion. */
             libusb_handle_events (usb_context);
         }
 
-        /* Now that the read thread is stopping, Wake any threads which are
-           waiting on data (in hid_read_timeout()). Do this under a mutex to
-           make sure that a thread which is about to go to sleep waiting on
-           the condition acutally will go to sleep before the condition is
-           signaled. */
+        /* Now that the read thread is stopping, Wake any threads which are waiting on data (in hid_read_timeout()). Do this under a mutex to make
+           sure that a thread which is about to go to sleep waiting on the condition acutally will go to sleep before the condition is signaled. */
         pthread_mutex_lock (&dev->mutex);
         pthread_cond_broadcast (&dev->condition);
         pthread_mutex_unlock (&dev->mutex);
 
-        /* The dev->transfer->buffer and dev->transfer objects are cleaned up
-           in hid_close(). They are not cleaned up here because this thread
-           could end either due to a disconnect or due to a user call to
-           hid_close(). In both cases the objects can be safely cleaned up
-           after the call to pthread_join() (in hid_close()), but since
-           hid_close() calls libusb_cancel_transfer(), on these objects, they
-           can not be cleaned up here. */
+        /* The dev->transfer->buffer and dev->transfer objects are cleaned up in hid_close(). They are not cleaned up here because this thread could
+           end either due to a disconnect or due to a user call to hid_close(). In both cases the objects can be safely cleaned up after the call to
+           pthread_join() (in hid_close()), but since hid_close() calls libusb_cancel_transfer(), on these objects, they can not be cleaned up here. */
 
         return NULL;
     }
@@ -1038,17 +923,10 @@ extern "C"
                             }
                             good_open = 1;
 #ifdef DETACH_KERNEL_DRIVER
-                            /* Detach the kernel driver, but only if the
-                               device is managed by the kernel */
-                            if (libusb_kernel_driver_active
-                                (dev->device_handle,
-                                 intf_desc->bInterfaceNumber) == 1)
+                            /* Detach the kernel driver, but only if the device is managed by the kernel */
+                            if (libusb_kernel_driver_active (dev->device_handle, intf_desc->bInterfaceNumber) == 1)
                             {
-                                res =
-                                    libusb_detach_kernel_driver (dev->
-                                                                 device_handle,
-                                                                 intf_desc->
-                                                                 bInterfaceNumber);
+                                res = libusb_detach_kernel_driver (dev->device_handle, intf_desc->bInterfaceNumber);
                                 if (res < 0)
                                 {
                                     libusb_close (dev->device_handle);
@@ -1059,14 +937,10 @@ extern "C"
                                 }
                             }
 #endif
-                            res =
-                                libusb_claim_interface (dev->device_handle,
-                                                        intf_desc->
-                                                        bInterfaceNumber);
+                            res = libusb_claim_interface (dev->device_handle, intf_desc->bInterfaceNumber);
                             if (res < 0)
                             {
-                                LOG ("can't claim interface %d: %d\n",
-                                     intf_desc->bInterfaceNumber, res);
+                                LOG ("can't claim interface %d: %d\n", intf_desc->bInterfaceNumber, res);
                                 free (dev_path);
                                 libusb_close (dev->device_handle);
                                 good_open = 0;
@@ -1081,46 +955,31 @@ extern "C"
                             /* Store off the interface number */
                             dev->interface = intf_desc->bInterfaceNumber;
 
-                            /* Find the INPUT and OUTPUT endpoints. An OUTPUT
-                               endpoint is not required. */
+                            /* Find the INPUT and OUTPUT endpoints. An OUTPUT endpoint is not required. */
                             for (i = 0; i < intf_desc->bNumEndpoints; i++)
                             {
     const struct libusb_endpoint_descriptor* ep = &intf_desc->endpoint[i];
 
-                                /* Determine the type and direction of this
-                                   endpoint. */
-    int is_interrupt =
-        (ep->bmAttributes & LIBUSB_TRANSFER_TYPE_MASK)
-                     == LIBUSB_TRANSFER_TYPE_INTERRUPT;
-    int is_output =
-        (ep->bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK)
-                        == LIBUSB_ENDPOINT_OUT;
-    int is_input =
-        (ep->bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK)
-                         == LIBUSB_ENDPOINT_IN;
+                                /* Determine the type and direction of this endpoint. */
+    int is_interrupt = (ep->bmAttributes & LIBUSB_TRANSFER_TYPE_MASK) == LIBUSB_TRANSFER_TYPE_INTERRUPT;
+    int is_output = (ep->bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK) == LIBUSB_ENDPOINT_OUT;
+    int is_input = (ep->bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK) == LIBUSB_ENDPOINT_IN;
 
-                                /* Decide whether to use it for intput or
-                                   output. */
-                                if (dev->input_endpoint == 0 &&
-                                    is_interrupt && is_input)
+                                /* Decide whether to use it for intput or output. */
+                                if (dev->input_endpoint == 0 && is_interrupt && is_input)
                                 {
                                     /* Use this endpoint for INPUT */
-                                    dev->input_endpoint =
-                                        ep->bEndpointAddress;
-                                    dev->input_ep_max_packet_size =
-                                        ep->wMaxPacketSize;
+                                    dev->input_endpoint = ep->bEndpointAddress;
+                                    dev->input_ep_max_packet_size = ep->wMaxPacketSize;
                                 }
-                                if (dev->output_endpoint == 0 &&
-                                    is_interrupt && is_output)
+                                if (dev->output_endpoint == 0 && is_interrupt && is_output)
                                 {
                                     /* Use this endpoint for OUTPUT */
-                                    dev->output_endpoint =
-                                        ep->bEndpointAddress;
+                                    dev->output_endpoint = ep->bEndpointAddress;
                                 }
                             }
 
-                            pthread_create (&dev->thread, NULL, read_thread,
-                                            dev);
+                            pthread_create (&dev->thread, NULL, read_thread, dev);
 
                             // Wait here for the read thread to be
                             // initialized.
@@ -1151,8 +1010,7 @@ extern "C"
     }
 
 
-    int HID_API_EXPORT hid_write (hid_device * dev, const unsigned char* data,
-                                  size_t length)
+    int HID_API_EXPORT hid_write (hid_device * dev, const unsigned char* data, size_t length)
     {
         int res;
 
@@ -1172,11 +1030,10 @@ extern "C"
         {
             /* No interrput out endpoint. Use the Control Endpoint */
             res = libusb_control_transfer (dev->device_handle, LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE | LIBUSB_ENDPOINT_OUT, 0x09   /* HID
-                                                                                                                                                       Set_Report */ ,
+                                                                                                                                                       Set_Report
+                                                                                                                                                     */ ,
                                            (2 /* HID output */  << 8) |
-                                           report_number,
-                                           dev->interface, (unsigned char *) data, length, 1000 /* timeout
-                                                                                                   millis */ );
+                                           report_number, dev->interface, (unsigned char *) data, length, 1000 /* timeout millis */ );
 
             if (res < 0)
                 return -1;
@@ -1191,10 +1048,7 @@ extern "C"
             /* Use the interrupt out endpoint */
         int actual_length;
 
-            res = libusb_interrupt_transfer (dev->device_handle,
-                                             dev->output_endpoint,
-                                             (unsigned char *) data,
-                                             length, &actual_length, 1000);
+            res = libusb_interrupt_transfer (dev->device_handle, dev->output_endpoint, (unsigned char *) data, length, &actual_length, 1000);
 
             if (res < 0)
                 return -1;
@@ -1206,13 +1060,10 @@ extern "C"
         }
     }
 
-    /* Helper function, to simplify hid_read(). This should be called with
-       dev->mutex locked. */
-    static int return_data (hid_device * dev, unsigned char* data,
-                            size_t length)
+    /* Helper function, to simplify hid_read(). This should be called with dev->mutex locked. */
+    static int return_data (hid_device * dev, unsigned char* data, size_t length)
     {
-        /* Copy the data out of the linked list item (rpt) into the return
-           buffer (data), and delete the liked list item. */
+        /* Copy the data out of the linked list item (rpt) into the return buffer (data), and delete the liked list item. */
         struct input_report* rpt = dev->input_reports;
 
         size_t len = (length < rpt->len) ? length : rpt->len;
@@ -1233,19 +1084,16 @@ extern "C"
     }
 
 
-    int HID_API_EXPORT hid_read_timeout (hid_device * dev,
-                                         unsigned char* data, size_t length,
-                                         int milliseconds)
+    int HID_API_EXPORT hid_read_timeout (hid_device * dev, unsigned char* data, size_t length, int milliseconds)
     {
         int bytes_read = -1;
 
 #if 0
         int transferred;
 
-        int res =
-            libusb_interrupt_transfer (dev->device_handle,
-                                       dev->input_endpoint, data, length,
-                                       &transferred, 5000);
+        int res = libusb_interrupt_transfer (dev->device_handle,
+                                             dev->input_endpoint, data, length,
+                                             &transferred, 5000);
         LOG ("transferred: %d\n", transferred);
         return transferred;
 #endif
@@ -1263,8 +1111,7 @@ extern "C"
 
         if (dev->shutdown_thread)
         {
-            /* This means the device has been disconnected. An error code of
-               -1 should be returned. */
+            /* This means the device has been disconnected. An error code of -1 should be returned. */
             bytes_read = -1;
             goto ret;
         }
@@ -1299,9 +1146,7 @@ extern "C"
 
             while (!dev->input_reports && !dev->shutdown_thread)
             {
-                res =
-                    pthread_cond_timedwait (&dev->condition, &dev->mutex,
-                                            &ts);
+                res = pthread_cond_timedwait (&dev->condition, &dev->mutex, &ts);
                 if (res == 0)
                 {
                     if (dev->input_reports)
@@ -1310,9 +1155,7 @@ extern "C"
                         break;
                     }
 
-                    /* If we're here, there was a spurious wake up or the
-                       read thread was shutdown. Run the loop again (ie:
-                       don't break). */
+                    /* If we're here, there was a spurious wake up or the read thread was shutdown. Run the loop again (ie: don't break). */
                 }
                 else if (res == ETIMEDOUT)
                 {
@@ -1341,8 +1184,7 @@ extern "C"
         return bytes_read;
     }
 
-    int HID_API_EXPORT hid_read (hid_device * dev, unsigned char* data,
-                                 size_t length)
+    int HID_API_EXPORT hid_read (hid_device * dev, unsigned char* data, size_t length)
     {
         return hid_read_timeout (dev, data, length, dev->blocking ? -1 : 0);
     }
@@ -1355,9 +1197,7 @@ extern "C"
     }
 
 
-    int HID_API_EXPORT hid_send_feature_report (hid_device * dev,
-                                                const unsigned char* data,
-                                                size_t length)
+    int HID_API_EXPORT hid_send_feature_report (hid_device * dev, const unsigned char* data, size_t length)
     {
         int res = -1;
 
@@ -1373,11 +1213,10 @@ extern "C"
         }
 
         res = libusb_control_transfer (dev->device_handle, LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE | LIBUSB_ENDPOINT_OUT, 0x09   /* HID
-                                                                                                                                                   set_report */ ,
+                                                                                                                                                   set_report
+                                                                                                                                                 */ ,
                                        (3 /* HID feature */  << 8) |
-                                       report_number,
-                                       dev->interface, (unsigned char *) data, length, 1000 /* timeout
-                                                                                               millis */ );
+                                       report_number, dev->interface, (unsigned char *) data, length, 1000 /* timeout millis */ );
 
         if (res < 0)
             return -1;
@@ -1391,9 +1230,7 @@ extern "C"
 
     extern int HID_GetStick20ReceiveData (unsigned char* data);
 
-    int HID_API_EXPORT hid_get_feature_report (hid_device * dev,
-                                               unsigned char* data,
-                                               size_t length)
+    int HID_API_EXPORT hid_get_feature_report (hid_device * dev, unsigned char* data, size_t length)
     {
         int res = -1;
 
@@ -1409,19 +1246,17 @@ extern "C"
 
         if (report_number == 0x0)
         {
-            /* Offset the return buffer by 1, so that the report ID will
-               remain in byte 0. */
+            /* Offset the return buffer by 1, so that the report ID will remain in byte 0. */
             data++;
             length--;
             skipped_report_id = 1;
         }
 
         res = libusb_control_transfer (dev->device_handle, LIBUSB_REQUEST_TYPE_CLASS | LIBUSB_RECIPIENT_INTERFACE | LIBUSB_ENDPOINT_IN, 0x01    /* HID
-                                                                                                                                                   get_report */ ,
+                                                                                                                                                   get_report
+                                                                                                                                                 */ ,
                                        (3 /* HID feature */  << 8) |
-                                       report_number,
-                                       dev->interface, (unsigned char *) data, length, 1000 /* timeout
-                                                                                               millis */ );
+                                       report_number, dev->interface, (unsigned char *) data, length, 1000 /* timeout millis */ );
 
         if (res < 0)
         {
@@ -1429,9 +1264,7 @@ extern "C"
             {
         char text[1000];
 
-                sprintf (text,
-                         "hid_get_feature_report: ERROR %d : ret= %d - %s\n",
-                         CallCounter, res, libusb_error_name (res));
+                sprintf (text, "hid_get_feature_report: ERROR %d : ret= %d - %s\n", CallCounter, res, libusb_error_name (res));
                 DebugAppendTextGui (text);
             }
 #endif
@@ -1482,34 +1315,22 @@ extern "C"
     }
 
 
-    int HID_API_EXPORT_CALL hid_get_manufacturer_string (hid_device * dev,
-                                                         wchar_t * string,
-                                                         size_t maxlen)
+    int HID_API_EXPORT_CALL hid_get_manufacturer_string (hid_device * dev, wchar_t * string, size_t maxlen)
     {
-        return hid_get_indexed_string (dev, dev->manufacturer_index, string,
-                                       maxlen);
+        return hid_get_indexed_string (dev, dev->manufacturer_index, string, maxlen);
     }
 
-    int HID_API_EXPORT_CALL hid_get_product_string (hid_device * dev,
-                                                    wchar_t * string,
-                                                    size_t maxlen)
+    int HID_API_EXPORT_CALL hid_get_product_string (hid_device * dev, wchar_t * string, size_t maxlen)
     {
-        return hid_get_indexed_string (dev, dev->product_index, string,
-                                       maxlen);
+        return hid_get_indexed_string (dev, dev->product_index, string, maxlen);
     }
 
-    int HID_API_EXPORT_CALL hid_get_serial_number_string (hid_device * dev,
-                                                          wchar_t * string,
-                                                          size_t maxlen)
+    int HID_API_EXPORT_CALL hid_get_serial_number_string (hid_device * dev, wchar_t * string, size_t maxlen)
     {
-        return hid_get_indexed_string (dev, dev->serial_index, string,
-                                       maxlen);
+        return hid_get_indexed_string (dev, dev->serial_index, string, maxlen);
     }
 
-    int HID_API_EXPORT_CALL hid_get_indexed_string (hid_device * dev,
-                                                    int string_index,
-                                                    wchar_t * string,
-                                                    size_t maxlen)
+    int HID_API_EXPORT_CALL hid_get_indexed_string (hid_device * dev, int string_index, wchar_t * string, size_t maxlen)
     {
         wchar_t* str;
 

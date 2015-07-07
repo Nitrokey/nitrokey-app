@@ -60,8 +60,7 @@
 
 *******************************************************************************/
 
-Device::Device (int vid, int pid, int vidStick20, int pidStick20,
-                int vidStick20UpdateMode, int pidStick20UpdateMode)
+Device::Device (int vid, int pid, int vidStick20, int pidStick20, int vidStick20UpdateMode, int pidStick20UpdateMode)
 {
     int i;
 
@@ -293,8 +292,7 @@ static int Counter = 0;
             DebugAppendTextGui (text);
             for (i = 0; i <= 64; i++)
             {
-                SNPRINTF (text, sizeof (text), "%02x ",
-                          (unsigned char) report[i]);
+                SNPRINTF (text, sizeof (text), "%02x ", (unsigned char) report[i]);
                 DebugAppendTextGui (text);
             }
             SNPRINTF (text, sizeof (text), "\n");
@@ -351,8 +349,7 @@ static int Counter = 0;
             DebugAppendTextGui (text);
             for (i = 0; i <= 64; i++)
             {
-                SNPRINTF (text, sizeof (text), "%02x ",
-                          (unsigned char) report[i]);
+                SNPRINTF (text, sizeof (text), "%02x ", (unsigned char) report[i]);
                 DebugAppendTextGui (text);
             }
             SNPRINTF (text, sizeof (text), "\n");
@@ -425,29 +422,24 @@ Response* resp = new Response ();
                 {
                     if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
                     {
-                        memcpy (HOTPSlots[slotNo & 0x0F]->slotName,
-                                resp->data, 15);
+                        memcpy (HOTPSlots[slotNo & 0x0F]->slotName, resp->data, 15);
                         HOTPSlots[slotNo & 0x0F]->isProgrammed = true;
                     }
-                    else if ((slotNo >= 0x20)
-                             && (slotNo < 0x20 + TOTP_SlotCount))
+                    else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
                     {
-                        memcpy (TOTPSlots[slotNo & 0x0F]->slotName,
-                                resp->data, 15);
+                        memcpy (TOTPSlots[slotNo & 0x0F]->slotName, resp->data, 15);
                         TOTPSlots[slotNo & 0x0F]->isProgrammed = true;
                     }
 
                 }
-                else if (resp->lastCommandStatus ==
-                         CMD_STATUS_SLOT_NOT_PROGRAMMED)
+                else if (resp->lastCommandStatus == CMD_STATUS_SLOT_NOT_PROGRAMMED)
                 {
                     if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
                     {
                         HOTPSlots[slotNo & 0x0F]->isProgrammed = false;
                         HOTPSlots[slotNo & 0x0F]->slotName[0] = 0;
                     }
-                    else if ((slotNo >= 0x20)
-                             && (slotNo < 0x20 + TOTP_SlotCount))
+                    else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
                     {
                         TOTPSlots[slotNo & 0x0F]->isProgrammed = false;
                         TOTPSlots[slotNo & 0x0F]->slotName[0] = 0;
@@ -561,8 +553,7 @@ int Device::setTime (int reset)
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
                 }
-                else if (resp->lastCommandStatus ==
-                         CMD_STATUS_TIMESTAMP_WARNING)
+                else if (resp->lastCommandStatus == CMD_STATUS_TIMESTAMP_WARNING)
                 {
     delete cmd;
 
@@ -590,8 +581,7 @@ int Device::setTime (int reset)
 
 int Device::writeToHOTPSlot (HOTPSlot * slot)
 {
-    if ((slot->slotNumber >= 0x10)
-        && (slot->slotNumber < 0x10 + HOTP_SlotCount))
+    if ((slot->slotNumber >= 0x10) && (slot->slotNumber < 0x10 + HOTP_SlotCount))
     {
 int res;
 
@@ -626,16 +616,13 @@ Response* resp = new Response ();
 
                 resp->getResponse (this);
 
-                if (cmd->crc == resp->lastCommandCRC
-                    && resp->lastCommandStatus == CMD_STATUS_OK)
+                if (cmd->crc == resp->lastCommandCRC && resp->lastCommandStatus == CMD_STATUS_OK)
                 {
 delete cmd;
 
                     return 0;
                 }
-                else if (cmd->crc == resp->lastCommandCRC
-                         && resp->lastCommandStatus ==
-                         CMD_STATUS_NO_NAME_ERROR)
+                else if (cmd->crc == resp->lastCommandCRC && resp->lastCommandStatus == CMD_STATUS_NO_NAME_ERROR)
                 {
 delete cmd;
 
@@ -662,8 +649,7 @@ delete cmd;
 
 int Device::writeToTOTPSlot (TOTPSlot * slot)
 {
-    if ((slot->slotNumber >= 0x20)
-        && (slot->slotNumber < 0x20 + TOTP_SlotCount))
+    if ((slot->slotNumber >= 0x20) && (slot->slotNumber < 0x20 + TOTP_SlotCount))
     {
 int res;
 
@@ -704,9 +690,7 @@ Response* resp = new Response ();
 delete cmd;
 
                     return resp->lastCommandStatus;
-                    /* Dead code switch (resp->lastCommandStatus) { case
-                       CMD_STATUS_OK: return 0; case
-                       CMD_STATUS_NO_NAME_ERROR: return -3; case
+                    /* Dead code switch (resp->lastCommandStatus) { case CMD_STATUS_OK: return 0; case CMD_STATUS_NO_NAME_ERROR: return -3; case
                        CMD_STATUS_NOT_AUTHORIZED: return -3; } */
                 }
 delete cmd;
@@ -728,9 +712,7 @@ delete cmd;
 
 *******************************************************************************/
 
-int Device::getCode (uint8_t slotNo, uint64_t challenge,
-                     uint64_t lastTOTPTime, uint8_t lastInterval,
-                     uint8_t result[18])
+int Device::getCode (uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval, uint8_t result[18])
 {
 
 int res;
@@ -742,9 +724,9 @@ uint8_t data[30];
     memcpy (data + 1, &challenge, 8);
 
     memcpy (data + 9, &lastTOTPTime, 8);    // Time of challenge: Warning:
-                                            // it's better to tranfer time
-                                            // and interval, to avoid attacks
-                                            // with wrong timestamps
+    // it's better to tranfer time
+    // and interval, to avoid attacks
+    // with wrong timestamps
     memcpy (data + 17, &lastInterval, 1);
 
     if (isConnected)
@@ -849,39 +831,30 @@ Response* resp = new Response ();
                 {
                     if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
                     {
-                        memcpy (HOTPSlots[slotNo & 0x0F]->slotName,
-                                resp->data, 15);
+                        memcpy (HOTPSlots[slotNo & 0x0F]->slotName, resp->data, 15);
                         HOTPSlots[slotNo & 0x0F]->config = resp->data[15];
-                        memcpy (HOTPSlots[slotNo & 0x0F]->tokenID,
-                                resp->data + 16, 13);
-                        memcpy (HOTPSlots[slotNo & 0x0F]->counter,
-                                resp->data + 29, 8);
+                        memcpy (HOTPSlots[slotNo & 0x0F]->tokenID, resp->data + 16, 13);
+                        memcpy (HOTPSlots[slotNo & 0x0F]->counter, resp->data + 29, 8);
                         HOTPSlots[slotNo & 0x0F]->isProgrammed = true;
                     }
-                    else if ((slotNo >= 0x20)
-                             && (slotNo < 0x20 + TOTP_SlotCount))
+                    else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
                     {
-                        memcpy (TOTPSlots[slotNo & 0x0F]->slotName,
-                                resp->data, 15);
+                        memcpy (TOTPSlots[slotNo & 0x0F]->slotName, resp->data, 15);
                         TOTPSlots[slotNo & 0x0F]->config = resp->data[15];
-                        memcpy (TOTPSlots[slotNo & 0x0F]->tokenID,
-                                resp->data + 16, 13);
-                        memcpy (&(TOTPSlots[slotNo & 0x0F]->interval),
-                                resp->data + 29, 2);
+                        memcpy (TOTPSlots[slotNo & 0x0F]->tokenID, resp->data + 16, 13);
+                        memcpy (&(TOTPSlots[slotNo & 0x0F]->interval), resp->data + 29, 2);
                         TOTPSlots[slotNo & 0x0F]->isProgrammed = true;
                     }
 
                 }
-                else if (resp->lastCommandStatus ==
-                         CMD_STATUS_SLOT_NOT_PROGRAMMED)
+                else if (resp->lastCommandStatus == CMD_STATUS_SLOT_NOT_PROGRAMMED)
                 {
                     if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount))
                     {
                         HOTPSlots[slotNo & 0x0F]->isProgrammed = false;
                         HOTPSlots[slotNo & 0x0F]->slotName[0] = 0;
                     }
-                    else if ((slotNo >= 0x20)
-                             && (slotNo < 0x20 + TOTP_SlotCount))
+                    else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount))
                     {
                         TOTPSlots[slotNo & 0x0F]->isProgrammed = false;
                         TOTPSlots[slotNo & 0x0F]->slotName[0] = 0;
@@ -947,8 +920,7 @@ unsigned int currentTime;
 
 void Device::getSlotConfigs ()
 {
-    /* Removed from firmware readSlot(0x10); readSlot(0x11); readSlot(0x20);
-       readSlot(0x21); readSlot(0x22); readSlot(0x23); */
+    /* Removed from firmware readSlot(0x10); readSlot(0x11); readSlot(0x20); readSlot(0x21); readSlot(0x22); readSlot(0x23); */
 }
 
 /*******************************************************************************
@@ -1040,8 +1012,7 @@ Response* resp = new Response ();
             if (cmd->crc == resp->lastCommandCRC)
             {
                 passwordRetryCount = resp->data[0];
-                HID_Stick20Configuration_st.AdminPwRetryCount =
-                    passwordRetryCount;
+                HID_Stick20Configuration_st.AdminPwRetryCount = passwordRetryCount;
             }
             else
             {
@@ -1094,8 +1065,7 @@ Response* resp = new Response ();
             if (cmd->crc == resp->lastCommandCRC)
             {
                 userPasswordRetryCount = resp->data[0];
-                HID_Stick20Configuration_st.UserPwRetryCount =
-                    userPasswordRetryCount;
+                HID_Stick20Configuration_st.UserPwRetryCount = userPasswordRetryCount;
             }
             else
             {
@@ -1156,8 +1126,7 @@ Response* resp = new Response ();
             {
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
-                    memcpy (passwordSafeStatus, &resp->data[0],
-                            PWS_SLOT_COUNT);
+                    memcpy (passwordSafeStatus, &resp->data[0], PWS_SLOT_COUNT);
 delete cmd;
 
                     return (ERR_NO_ERROR);
@@ -1223,8 +1192,7 @@ int Device::getPasswordSafeSlotName (int Slot)
 
             if (cmd->crc == resp->lastCommandCRC)
             {
-                memcpy (passwordSafeSlotName, &resp->data[0],
-                        PWS_SLOTNAME_LENGTH);
+                memcpy (passwordSafeSlotName, &resp->data[0], PWS_SLOTNAME_LENGTH);
                 passwordSafeSlotName[PWS_SLOTNAME_LENGTH] = 0;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
@@ -1292,8 +1260,7 @@ int Device::getPasswordSafeSlotPassword (int Slot)
 
             if (cmd->crc == resp->lastCommandCRC)
             {
-                memcpy (passwordSafePassword, &resp->data[0],
-                        PWS_PASSWORD_LENGTH);
+                memcpy (passwordSafePassword, &resp->data[0], PWS_PASSWORD_LENGTH);
                 passwordSafePassword[PWS_PASSWORD_LENGTH] = 0;
 
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
@@ -1362,8 +1329,7 @@ int Device::getPasswordSafeSlotLoginName (int Slot)
 
             if (cmd->crc == resp->lastCommandCRC)
             {
-                memcpy (passwordSafeLoginName, &resp->data[0],
-                        PWS_LOGINNAME_LENGTH);
+                memcpy (passwordSafeLoginName, &resp->data[0], PWS_LOGINNAME_LENGTH);
                 passwordSafeLoginName[PWS_LOGINNAME_LENGTH] = 0;
                 if (resp->lastCommandStatus == CMD_STATUS_OK)
                 {
@@ -1402,8 +1368,7 @@ int Device::getPasswordSafeSlotLoginName (int Slot)
 
 *******************************************************************************/
 
-int Device::setPasswordSafeSlotData_1 (int Slot, uint8_t * Name,
-                                       uint8_t * Password)
+int Device::setPasswordSafeSlotData_1 (int Slot, uint8_t * Name, uint8_t * Password)
 {
     int res;
 
@@ -1415,9 +1380,8 @@ int Device::setPasswordSafeSlotData_1 (int Slot, uint8_t * Name,
 
     if (isConnected)
     {
-    Command* cmd =
-        new Command (CMD_SET_PW_SAFE_SLOT_DATA_1, data,
-                     1 + PWS_SLOTNAME_LENGTH + PWS_PASSWORD_LENGTH);
+    Command* cmd = new Command (CMD_SET_PW_SAFE_SLOT_DATA_1, data,
+                                1 + PWS_SLOTNAME_LENGTH + PWS_PASSWORD_LENGTH);
         res = sendCommand (cmd);
 
         if (res == -1)
@@ -1474,9 +1438,8 @@ int Device::setPasswordSafeSlotData_2 (int Slot, uint8_t * LoginName)
 
     if (isConnected)
     {
-    Command* cmd =
-        new Command (CMD_SET_PW_SAFE_SLOT_DATA_2, data,
-                     1 + PWS_LOGINNAME_LENGTH);
+    Command* cmd = new Command (CMD_SET_PW_SAFE_SLOT_DATA_2, data,
+                                1 + PWS_LOGINNAME_LENGTH);
         res = sendCommand (cmd);
 
         if (res == -1)
@@ -1554,9 +1517,7 @@ int Device::passwordSafeEraseSlot (int Slot)
     delete cmd;
 
                 return resp->lastCommandStatus;
-                /* dead code if (resp->lastCommandStatus == CMD_STATUS_OK) {
-                   return (ERR_NO_ERROR); } else { return
-                   (ERR_STATUS_NOT_OK); } */
+                /* dead code if (resp->lastCommandStatus == CMD_STATUS_OK) { return (ERR_NO_ERROR); } else { return (ERR_STATUS_NOT_OK); } */
             }
             else
             {
@@ -1594,8 +1555,7 @@ int Device::passwordSafeEnable (char* password)
 
     if (isConnected)
     {
-    Command* cmd =
-        new Command (CMD_PW_SAFE_ENABLE, data, strlen ((char *) data));
+    Command* cmd = new Command (CMD_PW_SAFE_ENABLE, data, strlen ((char *) data));
         res = sendCommand (cmd);
 
         if (res == -1)
@@ -1802,9 +1762,7 @@ int Device::passwordSafeSendSlotDataViaHID (int Slot, int Kind)
 #define DEVICE_HIGH_WATERMARK_SD_CARD_READ_MAX          3
 
 int Device::getHighwaterMarkFromSdCard (unsigned char* WriteLevelMin,
-                                        unsigned char* WriteLevelMax,
-                                        unsigned char* ReadLevelMin,
-                                        unsigned char* ReadLevelMax)
+                                        unsigned char* WriteLevelMax, unsigned char* ReadLevelMin, unsigned char* ReadLevelMax)
 {
     int res;
 
@@ -1832,14 +1790,10 @@ int Device::getHighwaterMarkFromSdCard (unsigned char* WriteLevelMin,
 
             if (cmd->crc == resp->lastCommandCRC)
             {
-                *WriteLevelMin =
-                    resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_WRITE_MIN];
-                *WriteLevelMax =
-                    resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_WRITE_MAX];
-                *ReadLevelMin =
-                    resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_READ_MIN];
-                *ReadLevelMax =
-                    resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_READ_MAX];
+                *WriteLevelMin = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_WRITE_MIN];
+                *WriteLevelMax = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_WRITE_MAX];
+                *ReadLevelMin = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_READ_MIN];
+                *ReadLevelMax = resp->data[DEVICE_HIGH_WATERMARK_SD_CARD_READ_MAX];
 
     delete cmd;
 
@@ -2205,9 +2159,8 @@ int res;
 
     if (isConnected)
     {
-Command* cmd =
-    new Command (CMD_UNLOCK_USER_PASSWORD, adminPassword,
-                 STICK20_PASSOWRD_LEN + 2);
+Command* cmd = new Command (CMD_UNLOCK_USER_PASSWORD, adminPassword,
+                            STICK20_PASSOWRD_LEN + 2);
 
         res = sendCommand (cmd);
 
@@ -2388,9 +2341,8 @@ int res;
 
     if (isConnected)
     {
-Command* cmd =
-    new Command (CMD_DETECT_SC_AES, password,
-                 strlen ((const char *) password));
+Command* cmd = new Command (CMD_DETECT_SC_AES, password,
+                            strlen ((const char *) password));
 
         res = sendCommand (cmd);
 
@@ -2598,8 +2550,7 @@ int res;
 
     if (isConnected)
     {
-Command* cmd =
-    new Command (CMD_NEW_AES_KEY, password, strlen ((const char *) password));
+Command* cmd = new Command (CMD_NEW_AES_KEY, password, strlen ((const char *) password));
         res = sendCommand (cmd);
 
         if (-1 == res)
@@ -2820,8 +2771,7 @@ delete cmd;
 *******************************************************************************/
 
 
-bool Device::stick20NewUpdatePassword (uint8_t * old_password,
-                                       uint8_t * new_password)
+bool Device::stick20NewUpdatePassword (uint8_t * old_password, uint8_t * new_password)
 {
 uint8_t n;
 
@@ -2843,10 +2793,8 @@ Command* cmd;
         return (false);
     }
 
-    STRNCPY ((char *) &SendString[1], sizeof (SendString) - 1,
-             (char *) old_password, CS20_MAX_UPDATE_PASSWORD_LEN);
-    STRNCPY ((char *) &SendString[16], sizeof (SendString) - 16,
-             (char *) new_password, CS20_MAX_UPDATE_PASSWORD_LEN);
+    STRNCPY ((char *) &SendString[1], sizeof (SendString) - 1, (char *) old_password, CS20_MAX_UPDATE_PASSWORD_LEN);
+    STRNCPY ((char *) &SendString[16], sizeof (SendString) - 16, (char *) new_password, CS20_MAX_UPDATE_PASSWORD_LEN);
     cmd = new Command (STICK20_CMD_CHANGE_UPDATE_PIN, SendString, 33);
     res = sendCommand (cmd);
     if (res)
@@ -2937,8 +2885,7 @@ delete cmd;
 
 *******************************************************************************/
 
-bool Device::stick20FillSDCardWithRandomChars (uint8_t * password,
-                                               uint8_t VolumeFlag)
+bool Device::stick20FillSDCardWithRandomChars (uint8_t * password, uint8_t VolumeFlag)
 {
 uint8_t n;
 
@@ -2959,8 +2906,7 @@ uint8_t data[CS20_MAX_PASSWORD_LEN + 2];
 
     STRCPY ((char *) &data[1], sizeof (data) - 1, (char *) password);
 
-    cmd =
-        new Command (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, data, n + 1);
+    cmd = new Command (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, data, n + 1);
     res = sendCommand (cmd);
     if (res)
     {
@@ -3250,8 +3196,7 @@ Command* cmd;
         return (false);
     }
 
-    cmd =
-        new Command (STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN, Pindata, n);
+    cmd = new Command (STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN, Pindata, n);
     res = sendCommand (cmd);
     if (res)
     {
@@ -3357,9 +3302,7 @@ Command* cmd;
 
     memcpy (data, HV_Data_st, sizeof (HiddenVolumeSetup_tst));
 
-    cmd =
-        new Command (STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP, data,
-                     sizeof (HiddenVolumeSetup_tst));
+    cmd = new Command (STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP, data, sizeof (HiddenVolumeSetup_tst));
     res = sendCommand (cmd);
     if (res)
     {
@@ -3489,8 +3432,7 @@ int Device::stick20GetDebugData (void)
 
 *******************************************************************************/
 /*
-   int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t
-   lastTOTPTime,uint8_t lastInterval,uint8_t result[18]) {
+   int Device::getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uint8_t lastInterval,uint8_t result[18]) {
 
    qDebug() << "getting code" << slotNo; int res; uint8_t data[30];
 
@@ -3498,21 +3440,18 @@ int Device::stick20GetDebugData (void)
 
    memcpy(data+ 1,&challenge,8);
 
-   memcpy(data+ 9,&lastTOTPTime,8); // Time of challenge: Warning: it's
-   better to tranfer time and interval, to avoid attacks with wrong
-   timestamps memcpy(data+17,&lastInterval,1);
+   memcpy(data+ 9,&lastTOTPTime,8); // Time of challenge: Warning: it's better to tranfer time and interval, to avoid attacks with wrong timestamps
+   memcpy(data+17,&lastInterval,1);
 
    if (isConnected){ qDebug() << "sending command";
 
    Command *cmd=new Command(CMD_GET_CODE,data,18); res=sendCommand(cmd);
 
-   if (res==-1) return -1; else{ //sending the command was successful
-   //return cmd->crc; qDebug() << "command sent"; Sleep::msleep(100);
-   Response *resp=new Response(); resp->getResponse(this);
+   if (res==-1) return -1; else{ //sending the command was successful //return cmd->crc; qDebug() << "command sent"; Sleep::msleep(100); Response
+   *resp=new Response(); resp->getResponse(this);
 
 
-   if (cmd->crc==resp->lastCommandCRC){ //the response was for the last
-   command if (resp->lastCommandStatus==CMD_STATUS_OK){
+   if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command if (resp->lastCommandStatus==CMD_STATUS_OK){
    memcpy(result,resp->data,18);
 
    }
@@ -3550,16 +3489,12 @@ int Device::stick20GetDebugData (void)
 
    Command *cmd=new Command(CMD_TEST_COUNTER,data,3); res=sendCommand(cmd);
 
-   if (res==-1) return -2; else{ //sending the command was successful
-   //return cmd->crc; qDebug() << "command sent";
-   Sleep::msleep(100*tests_number); Response *resp=new Response();
-   resp->getResponse(this);
+   if (res==-1) return -2; else{ //sending the command was successful //return cmd->crc; qDebug() << "command sent"; Sleep::msleep(100*tests_number);
+   Response *resp=new Response(); resp->getResponse(this);
 
 
-   if (cmd->crc==resp->lastCommandCRC){ //the response was for the last
-   command if (resp->lastCommandStatus==CMD_STATUS_OK){
-   //memcpy(&result,resp->data,2); result = *((uint16_t *)resp->data); return
-   result; }
+   if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command if (resp->lastCommandStatus==CMD_STATUS_OK){
+   //memcpy(&result,resp->data,2); result = *((uint16_t *)resp->data); return result; }
 
    }
 
@@ -3596,16 +3531,12 @@ int Device::stick20GetDebugData (void)
 
    Command *cmd=new Command(CMD_TEST_TIME,data,3); res=sendCommand(cmd);
 
-   if (res==-1) return -2; else{ //sending the command was successful
-   //return cmd->crc; qDebug() << "command sent";
-   Sleep::msleep(100*tests_number); Response *resp=new Response();
-   resp->getResponse(this);
+   if (res==-1) return -2; else{ //sending the command was successful //return cmd->crc; qDebug() << "command sent"; Sleep::msleep(100*tests_number);
+   Response *resp=new Response(); resp->getResponse(this);
 
 
-   if (cmd->crc==resp->lastCommandCRC){ //the response was for the last
-   command if (resp->lastCommandStatus==CMD_STATUS_OK){
-   //memcpy(&result,resp->data,2); result = *((uint16_t *)resp->data); return
-   result; }
+   if (cmd->crc==resp->lastCommandCRC){ //the response was for the last command if (resp->lastCommandStatus==CMD_STATUS_OK){
+   //memcpy(&result,resp->data,2); result = *((uint16_t *)resp->data); return result; }
 
    }
 

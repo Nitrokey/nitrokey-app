@@ -54,8 +54,7 @@ namespace Gui
       public:
           EngineButton (QWidget * parent = 0);
           EngineButton (const QString & text, QWidget * parent = 0);
-          EngineButton (const QIcon & icon, const QString & text,
-                        QWidget * parent = 0);
+          EngineButton (const QIcon & icon, const QString & text, QWidget * parent = 0);
           virtual ~ EngineButton ()
         {
         }
@@ -79,13 +78,10 @@ namespace Gui
         void nextCheckState ();
 
       public:
-        ColorButton (QWidget * parent = 0):QPushButton (parent),
-            _color (Qt::black)
+        ColorButton (QWidget * parent = 0):QPushButton (parent), _color (Qt::black)
         {
         }
-      ColorButton (const QColor & color, QWidget * parent = 0):QPushButton (parent),
-            _color
-            (color)
+      ColorButton (const QColor & color, QWidget * parent = 0):QPushButton (parent), _color (color)
         {
         }
         virtual ~ ColorButton ()
@@ -123,14 +119,11 @@ namespace Gui
 
       public:
         Dialog (Position position, QWidget * parent = 0, Qt::WindowFlags f = 0):
-        QDialog (parent, f | Qt::WindowSystemMenuHint), fired (false),
-            _position (position)
+        QDialog (parent, f | Qt::WindowSystemMenuHint), fired (false), _position (position)
         {
             setWindowModality (Qt::ApplicationModal);
-            setMaximumWidth (QApplication::desktop ()->availableGeometry ().
-                             width () * 9 / 10);
-            setMaximumHeight (QApplication::desktop ()->availableGeometry ().
-                              height () * 8 / 10);
+            setMaximumWidth (QApplication::desktop ()->availableGeometry ().width () * 9 / 10);
+            setMaximumHeight (QApplication::desktop ()->availableGeometry ().height () * 8 / 10);
         }
         virtual ~ Dialog ()
         {
@@ -151,7 +144,7 @@ namespace Gui
         QVBoxLayout* buttonLayout;
         QButtonGroup* buttonGroup;
 
-        private slots: void on_buttonUp_clicked ();
+        private slots:void on_buttonUp_clicked ();
         void on_buttonDown_clicked ();
         void on_scrollBar_valueChanged (int value);
 
@@ -206,15 +199,11 @@ namespace Gui
 
         public slots:void scrollAllUp ()
         {
-            scrollArea->verticalScrollBar ()->setValue (scrollArea->
-                                                        verticalScrollBar ()->
-                                                        minimum ());
+            scrollArea->verticalScrollBar ()->setValue (scrollArea->verticalScrollBar ()->minimum ());
         }
         void scrollAllDown ()
         {
-            scrollArea->verticalScrollBar ()->setValue (scrollArea->
-                                                        verticalScrollBar ()->
-                                                        maximum ());
+            scrollArea->verticalScrollBar ()->setValue (scrollArea->verticalScrollBar ()->maximum ());
         }
         void scrollToButton (QAbstractButton * button)
         {
@@ -237,8 +226,7 @@ namespace Gui
         {
         }
       ShadowedLabel (const QString & text, QWidget * parent = 0):
-        QLabel (text, parent), _labelColor (Qt::white),
-            _shadowColor (Qt::black)
+        QLabel (text, parent), _labelColor (Qt::white), _shadowColor (Qt::black)
         {
         }
         virtual ~ ShadowedLabel ()
@@ -264,8 +252,8 @@ namespace Gui
     class ShrinkableTableWidget:public QTableWidget
     {
       Q_OBJECT public:
-        ShrinkableTableWidget (QWidget * parent = 0);
-        ShrinkableTableWidget (int rows, int columns, QWidget * parent = 0);
+          ShrinkableTableWidget (QWidget * parent = 0);
+          ShrinkableTableWidget (int rows, int columns, QWidget * parent = 0);
           virtual ~ ShrinkableTableWidget ()
         {
         }

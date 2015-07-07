@@ -51,12 +51,10 @@ QDialog (parent), ui (new Ui::stick20HiddenVolumeDialog)
     ui->EndBlockSpin->setValue (HV_Setup_st.EndBlockPercent_u8);
 
     ui->HVPasswordEdit->setMaxLength (MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-    ui->HVPasswordEdit->
-        setText (QString ((char *) HV_Setup_st.HiddenVolumePassword_au8));
+    ui->HVPasswordEdit->setText (QString ((char *) HV_Setup_st.HiddenVolumePassword_au8));
 
     ui->HVPasswordEdit_2->setMaxLength (MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-    ui->HVPasswordEdit_2->
-        setText (QString ((char *) HV_Setup_st.HiddenVolumePassword_au8));
+    ui->HVPasswordEdit_2->setText (QString ((char *) HV_Setup_st.HiddenVolumePassword_au8));
 
     ui->HVPasswordEdit->setFocus ();
 
@@ -83,21 +81,17 @@ void stick20HiddenVolumeDialog::on_ShowPasswordCheckBox_toggled (bool checked)
     }
 }
 
-void stick20HiddenVolumeDialog::on_buttonBox_clicked (QAbstractButton *
-                                                      button)
+void stick20HiddenVolumeDialog::on_buttonBox_clicked (QAbstractButton * button)
 {
     if (button == ui->buttonBox->button (QDialogButtonBox::Ok))
     {
         if (8 > strlen (ui->HVPasswordEdit->text ().toLatin1 ().data ()))
         {
-            csApplet->
-                warningBox (tr
-                            ("Your password is too short. Use at least 8 characters."));
+            csApplet->warningBox (tr ("Your password is too short. Use at least 8 characters."));
             return;
         }
 
-        if (ui->HVPasswordEdit->text ().toLatin1 () !=
-            ui->HVPasswordEdit_2->text ().toLatin1 ())
+        if (ui->HVPasswordEdit->text ().toLatin1 () != ui->HVPasswordEdit_2->text ().toLatin1 ())
         {
             csApplet->warningBox (tr ("The passwords are not identical"));
             return;
@@ -107,19 +101,15 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked (QAbstractButton *
         HV_Setup_st.StartBlockPercent_u8 = ui->StartBlockSpin->value ();
         HV_Setup_st.EndBlockPercent_u8 = ui->EndBlockSpin->value ();
 
-        if (HV_Setup_st.StartBlockPercent_u8 >=
-            HV_Setup_st.EndBlockPercent_u8)
+        if (HV_Setup_st.StartBlockPercent_u8 >= HV_Setup_st.EndBlockPercent_u8)
         {
             csApplet->warningBox (tr ("Wrong size of hidden volume"));
             return;
         }
 
         STRNCPY ((char *) HV_Setup_st.HiddenVolumePassword_au8,
-                 sizeof (HV_Setup_st.HiddenVolumePassword_au8),
-                 ui->HVPasswordEdit->text ().toLatin1 (),
-                 MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-        HV_Setup_st.
-            HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
+                 sizeof (HV_Setup_st.HiddenVolumePassword_au8), ui->HVPasswordEdit->text ().toLatin1 (), MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
+        HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
         done (true);
     }
 
@@ -135,8 +125,7 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked (QAbstractButton *
 
 
 
-int stick20HiddenVolumeDialog::GetCharsetSpace (unsigned char* Password,
-                                                size_t size)
+int stick20HiddenVolumeDialog::GetCharsetSpace (unsigned char* Password, size_t size)
 {
     int i;
 
@@ -167,20 +156,17 @@ int stick20HiddenVolumeDialog::GetCharsetSpace (unsigned char* Password,
 
     for (i = 0; i < (int) size; i++)
     {
-        if ((FALSE == HasLowerAlpha)
-            && (0 != strchr ("abcdefghijklmnopqrstuvwxyz", Password[i])))
+        if ((FALSE == HasLowerAlpha) && (0 != strchr ("abcdefghijklmnopqrstuvwxyz", Password[i])))
         {
             CharSpace += 26;
             HasLowerAlpha = TRUE;
         }
-        if ((FALSE == HasUpperAlpha)
-            && (0 != strchr ("ABCDEFGHIJKLMNOPQRSTUVWXYZ", Password[i])))
+        if ((FALSE == HasUpperAlpha) && (0 != strchr ("ABCDEFGHIJKLMNOPQRSTUVWXYZ", Password[i])))
         {
             CharSpace += 26;
             HasUpperAlpha = TRUE;
         }
-        if ((FALSE == HasGermanChars)
-            && (0 != strchr ("öäüÖÄÜß", Password[i])))
+        if ((FALSE == HasGermanChars) && (0 != strchr ("öäüÖÄÜß", Password[i])))
         {
             CharSpace += 7;
             HasGermanChars = TRUE;
@@ -190,20 +176,17 @@ int stick20HiddenVolumeDialog::GetCharsetSpace (unsigned char* Password,
             CharSpace += 10;
             HasNumber = TRUE;
         }
-        if ((FALSE == HasSpecialChars1)
-            && (0 != strchr ("!\"§$%&/()=?'", Password[i])))
+        if ((FALSE == HasSpecialChars1) && (0 != strchr ("!\"§$%&/()=?'", Password[i])))
         {
             CharSpace += 11;
             HasSpecialChars1 = TRUE;
         }
-        if ((FALSE == HasSpecialChars2)
-            && (0 != strchr ("',.-#+´;:_*<>^°`", Password[i])))
+        if ((FALSE == HasSpecialChars2) && (0 != strchr ("',.-#+´;:_*<>^°`", Password[i])))
         {
             CharSpace += 16;
             HasSpecialChars2 = TRUE;
         }
-        if ((FALSE == HasSpecialChars3)
-            && (0 != strchr ("~[{]}\\|€@", Password[i])))
+        if ((FALSE == HasSpecialChars3) && (0 != strchr ("~[{]}\\|€@", Password[i])))
         {
             CharSpace += 9;
             HasSpecialChars3 = TRUE;
@@ -214,8 +197,7 @@ int stick20HiddenVolumeDialog::GetCharsetSpace (unsigned char* Password,
 }
 
 
-double stick20HiddenVolumeDialog::GetEntropy (unsigned char* Password,
-                                              size_t size)
+double stick20HiddenVolumeDialog::GetEntropy (unsigned char* Password, size_t size)
 {
     double Entropy = 0.0;
 
@@ -224,17 +206,16 @@ double stick20HiddenVolumeDialog::GetEntropy (unsigned char* Password,
     CharsetSpace = GetCharsetSpace (Password, size);
 
     Entropy = (double) size* (log ((double) CharsetSpace) / log (2.0)); // Entropy
-                                                                        // by
-                                                                        // CharsetSpace
-                                                                        // *
-                                                                        // size
+    // by
+    // CharsetSpace
+    // *
+    // size
 
     return (Entropy);
 }
 
 
-void stick20HiddenVolumeDialog::
-on_HVPasswordEdit_textChanged (const QString & arg1)
+void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged (const QString & arg1)
 {
     int Len;
 
@@ -248,26 +229,16 @@ on_HVPasswordEdit_textChanged (const QString & arg1)
         // ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy
         // guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for
         // real words",Entropy,Entropy/2.0));
-        ui->HVEntropieRealWords->setText (QString ("%1").
-                                          sprintf (" %3.1lf for real words",
-                                                   Entropy / 2.0));
-        ui->HVEntropieRandChars->setText (QString ("%1").
-                                          sprintf
-                                          (" %3.1lf bits for random chars",
-                                           Entropy));
+        ui->HVEntropieRealWords->setText (QString ("%1").sprintf (" %3.1lf for real words", Entropy / 2.0));
+        ui->HVEntropieRandChars->setText (QString ("%1").sprintf (" %3.1lf bits for random chars", Entropy));
     }
     else
     {
         // ui->HVEntropieLabel->setText(QString ("%1").sprintf("Entropy
         // guess: %3.1lf bits for random chars\nEntropy guess: %3.1lf for
         // real words",0.0,0.0));
-        ui->HVEntropieRealWords->setText (QString ("%1").
-                                          sprintf (" %3.1lf for real words",
-                                                   0.0));
-        ui->HVEntropieRandChars->setText (QString ("%1").
-                                          sprintf
-                                          (" %3.1lf bits for random chars",
-                                           0.0));
+        ui->HVEntropieRealWords->setText (QString ("%1").sprintf (" %3.1lf for real words", 0.0));
+        ui->HVEntropieRandChars->setText (QString ("%1").sprintf (" %3.1lf bits for random chars", 0.0));
     }
 }
 
@@ -289,8 +260,7 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText (void)
         HighWatermarkMax = 90;
     }
 
-    ui->HVSdCardHighWaterMark->setText (QString ("%1").
-                                        sprintf
+    ui->HVSdCardHighWaterMark->setText (QString ("%1").sprintf
                                         ("The the unwritten area after plugin is\nbetween %d %% and %d %% of the sd card size",
                                          HighWatermarkMin, HighWatermarkMax));
 

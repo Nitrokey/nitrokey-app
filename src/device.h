@@ -224,8 +224,7 @@ typedef struct
     unsigned char SlotNr_u8;
     unsigned char StartBlockPercent_u8;
     unsigned char EndBlockPercent_u8;
-    unsigned char HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE +
-                                           1];
+    unsigned char HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE + 1];
 } HiddenVolumeSetup_tst;
 
 #pragma pack(pop)
@@ -279,8 +278,7 @@ class Device
 
 
   public:
-    Device (int vid, int pid, int vidStick20, int pidStick20,
-            int vidStick20UpdateMode, int pidStick20UpdateMode);
+    Device (int vid, int pid, int vidStick20, int pidStick20, int vidStick20UpdateMode, int pidStick20UpdateMode);
     hid_device* dev_hid_handle;
     int checkConnection ();
     bool isConnected;
@@ -292,8 +290,7 @@ class Device
     int setTime (int reset);
     int writeToHOTPSlot (HOTPSlot * slot);
     int writeToTOTPSlot (TOTPSlot * slot);
-    int getCode (uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime,
-                 uint8_t lastInterval, uint8_t result[18]);
+    int getCode (uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval, uint8_t result[18]);
     int getHOTP (uint8_t slotNo);
     int readSlot (uint8_t slotNo);
     int getPasswordRetryCount ();
@@ -303,8 +300,7 @@ class Device
 
     // START - OTP Test Routine --------------------------------
     /*
-       uint16_t testHOTP(uint16_t tests_number,uint8_t counter_number);
-       uint16_t testTOTP(uint16_t tests_number); */
+       uint16_t testHOTP(uint16_t tests_number,uint8_t counter_number); uint16_t testTOTP(uint16_t tests_number); */
     // END - OTP Test Routine ----------------------------------
 
 
@@ -313,8 +309,7 @@ class Device
     int getPasswordSafeSlotName (int Slot);
     int getPasswordSafeSlotPassword (int Slot);
     int getPasswordSafeSlotLoginName (int Slot);
-    int setPasswordSafeSlotData_1 (int Slot, uint8_t * Name,
-                                   uint8_t * Password);
+    int setPasswordSafeSlotData_1 (int Slot, uint8_t * Name, uint8_t * Password);
     int setPasswordSafeSlotData_2 (int Slot, uint8_t * LoginName);
     int passwordSafeEraseSlot (int Slot);
     int passwordSafeEnable (char* password);
@@ -349,9 +344,7 @@ class Device
     uint8_t userPasswordRetryCount;
 
     int getHighwaterMarkFromSdCard (unsigned char* WriteLevel_Min,
-                                    unsigned char* WriteLevel_Max,
-                                    unsigned char* ReadLevel_Min,
-                                    unsigned char* ReadLevel_Max);
+                                    unsigned char* WriteLevel_Max, unsigned char* ReadLevel_Min, unsigned char* ReadLevel_Max);
 
     bool stick20EnableCryptedPartition (uint8_t * password);
     bool stick20DisableCryptedPartition (void);
@@ -360,13 +353,11 @@ class Device
     bool stick20DisableHiddenCryptedPartition (void);
 
     bool stick20EnableFirmwareUpdate (uint8_t * password);
-    bool stick20NewUpdatePassword (uint8_t * old_password,
-                                   uint8_t * new_password);
+    bool stick20NewUpdatePassword (uint8_t * old_password, uint8_t * new_password);
     bool stick20ExportFirmware (uint8_t * password);
 
     bool stick20CreateNewKeys (uint8_t * password);
-    bool stick20FillSDCardWithRandomChars (uint8_t * password,
-                                           uint8_t VolumeFlag);
+    bool stick20FillSDCardWithRandomChars (uint8_t * password, uint8_t VolumeFlag);
 
     bool stick20SetupHiddenVolume (void);
     bool stick20GetPasswordMatrix (void);
@@ -399,8 +390,7 @@ class Device
     void getGeneralConfig ();
     int writeGeneralConfig (uint8_t data[3]);
 
-    int firstAuthenticate (uint8_t cardPassword[25],
-                           uint8_t tempPasswrod[25]);
+    int firstAuthenticate (uint8_t cardPassword[25], uint8_t tempPasswrod[25]);
     int authorize (Command * authorizedCmd);
 
     int userAuthenticate (uint8_t cardPassword[25], uint8_t tempPasswrod[25]);

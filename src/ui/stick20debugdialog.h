@@ -32,8 +32,8 @@ namespace Ui
 class DebugDialog:public QDialog
 {
   Q_OBJECT public:
-    explicit DebugDialog (QWidget * parent = 0);
-    ~DebugDialog ();
+      explicit DebugDialog (QWidget * parent = 0);
+     ~DebugDialog ();
 
     QString DebugText;
 
