@@ -2591,21 +2591,16 @@ void MainWindow::resizeMin ()
 
 void MainWindow::destroyPasswordSafeStick10 ()
 {
-uint8_t password[40];
-
-bool ret;
-
-int ret_s32;
-
-QMessageBox msgBox;
-
-PasswordDialog dialog (FALSE, this);
+    uint8_t password[40];
+    bool ret;
+    int ret_s32;
+    QMessageBox msgBox;
+    PasswordDialog dialog (FALSE, this);
 
     cryptostick->getUserPasswordRetryCount ();
     dialog.init ((char *) (tr ("Enter admin PIN").toUtf8 ().data ()),
                  HID_Stick20Configuration_st.UserPwRetryCount);
     dialog.cryptostick = cryptostick;
-
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -4463,14 +4458,12 @@ GtkWidget* passwordSafeItem =
 
 void MainWindow::PWS_Clicked_EnablePWSAccess ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
+    bool ret;
+    int ret_s32;
 
-bool ret;
-
-int ret_s32;
-
-
-PasswordDialog dialog (FALSE, this);
+    QMessageBox msgBox;
+    PasswordDialog dialog (FALSE, this);
 
     cryptostick->getUserPasswordRetryCount ();
     dialog.init ((char *) (tr ("Enter user PIN").toUtf8 ().data ()),
@@ -4502,7 +4495,30 @@ PasswordDialog dialog (FALSE, this);
                 switch (ret_s32)
                 {
                     case CMD_STATUS_AES_DEC_FAILED:
-                        csApplet->warningBox (tr ("AES key doen not exist!"));
+                        uint8_t admin_password[40];
+                        cryptostick->getUserPasswordRetryCount ();
+                        dialog.init ((char *) (tr ("Enter admin PIN").toUtf8 ().data ()),
+                                     HID_Stick20Configuration_st.UserPwRetryCount);
+                        dialog.cryptostick = cryptostick;
+                        ret = dialog.exec ();
+
+                        if (QDialog::Accepted == ret)
+                        {
+                            dialog.getPassword ((char *) admin_password);
+
+                            ret_s32 = cryptostick->buildAesKey ((uint8_t *) & (admin_password[1]));
+
+                            if (CMD_STATUS_OK != ret_s32)
+                            {
+                                if (CMD_STATUS_WRONG_PASSWORD == ret_s32)
+                                    msgBox.setText (tr ("Wrong password"));
+                                else
+                                    msgBox.setText (tr ("Unable to create new AES key"));
+
+                                msgBox.exec ();
+                            }
+                        }
+
                         break;
                     default:
                         csApplet->
