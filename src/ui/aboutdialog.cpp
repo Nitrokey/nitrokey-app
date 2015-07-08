@@ -34,9 +34,14 @@ QPixmap image (":/images/splash.png");
 
 QPixmap small_img = image.scaled (346, 100, Qt::KeepAspectRatio, Qt::FastTransformation);
 
+QPixmap warning (":/images/warning.png");
+QPixmap small_warning = warning.scaled(50,50, Qt::KeepAspectRatio, Qt::FastTransformation);
+
     QPixmap info_img (":/images/info-icon.png");
     QPixmap small_info = info_img.scaled (15, 15, Qt::KeepAspectRatio, Qt::FastTransformation);
+
     ui->info_icon->setPixmap (small_info);
+    ui->warning_sign->setPixmap (warning);
     // cryptostick->getStatus();
 int majorFirmwareVersion = cryptostick->firmwareVersion[0] / 10;
 
@@ -69,7 +74,6 @@ QByteArray cardSerial = QByteArray ((char *) cryptostick->cardSerial).toHex ();
         // ui->ButtonStickStatus->hide();
     }
 
-
 }
 
 AboutDialog::~AboutDialog ()
@@ -100,10 +104,12 @@ void AboutDialog::on_ButtonOK_clicked ()
 void AboutDialog::showStick20Configuration (void)
 {
     QString OutputText;
-
     bool ErrorFlag;
-
     ErrorFlag = FALSE;
+
+
+    showPasswordCounters();
+    showStick20Menu();
 
     if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32)
     {
@@ -133,78 +139,66 @@ void AboutDialog::showStick20Configuration (void)
 
     if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated)
     {
-        OutputText.append (QString (tr (" ***  Warning stick is not securce  ***")).append ("\n"));
-        OutputText.append (QString (tr (" ***        Select -Init keys-      ***")).append ("\n").append ("\n"));
+        showWarning();
+    }
+    else
+    {
+        hideWarning();
     }
 
 
     if (TRUE == HID_Stick20Configuration_st.FirmwareLocked_u8)
     {
-        OutputText.append (QString (tr ("      *** Firmware is locked *** ")).append ("\n"));
+        // OutputText.append (QString (tr ("      *** Firmware is locked *** ")).append ("\n"));
     }
 
     if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01))
     {
-        OutputText.append (QString (tr ("      *** New SD card found  ***\n")));
+        ui->newsd_label->show();
     }
 
     if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01))
     {
-        OutputText.append (QString (tr (" *** Not erased with random chars ***\n")));
+        ui->not_erased_sd_label->show();
     }
 
 
     if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8)
     {
-        OutputText.append (QString (tr ("Unencrypted volume   READ/WRITE mode ")).append ("\n"));
+        ui->sd_id_label->setText(tr("READ/WRITE"));
     }
     else
     {
-        OutputText.append (QString (tr ("Unencrypted volume   READ ONLY mode ")).append ("\n"));
+        ui->sd_id_label->setText(tr("READ ONLY"));
     }
 
     if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE)))
     {
-        OutputText.append (QString (tr ("Hidden volume        active")).append ("\n"));
+        ui->hidden_volume_label->setText(tr("Active"));
     }
     else
     {
+        ui->hidden_volume_label->setText(tr("Not active"));
         if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE)))
         {
-            OutputText.append (QString (tr ("Encrypted volume     active")).append ("\n"));
+            ui->encrypted_volume_label->setText(tr("Active"));
         }
         else
         {
-            OutputText.append (QString (tr ("Encrypted volume     not active")).append ("\n"));
+            ui->encrypted_volume_label->setText(tr("Not active"));
         }
     }
 
-    OutputText.append (QString ("\n"));
-/*
-    OutputText.append (QString (tr ("PIN retry counter\n")));
-    OutputText.append (QString (tr ("Admin : ")));
-    OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.AdminPwRetryCount))).append ("\n");
-    OutputText.append (QString (tr ("User  : ")));
-    OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.UserPwRetryCount))).append ("\n");
-*/
+    ui->sd_id_label->setText(QString("0x").append(QString::number (HID_Stick20Configuration_st.ActiveSD_CardID_u32, 16)));
+
     ui->admin_retry_label->setText(QString::number (HID_Stick20Configuration_st.AdminPwRetryCount));
     ui->user_retry_label->setText(QString::number (HID_Stick20Configuration_st.UserPwRetryCount));
-
-    OutputText.append (QString ("\n"));
-    OutputText.append (QString ("SD ID 0x"));
-    OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.ActiveSD_CardID_u32, 16))).append ("\n");
-    /*
-       OutputText.append(QString("SD change counter "));
-       OutputText.append(QString("st.NewSDCardFoun::number(HID_Stick20Configuration_st.NewSDCardFound_u8 >> 1))).append("\n");
-       OutputText.append(QString("SD erase counter "));
-       OutputText.append(QString("%1t.SDFillWithRandnumber(HID_Stick20Configuration_st.SDFillWithRandomChars_u8 >> 1))).append("\n"); */
-
-    ui->DeviceStatusLabel->setText (OutputText);
-
     ui->firmwareLabel->setText (QString::number (HID_Stick20Configuration_st.VersionInfo_au8[0]).append (".").append
                                 (QString::number (HID_Stick20Configuration_st.VersionInfo_au8[1])));
-
     ui->serialEdit->setText (QString ("%1").sprintf ("%08x", HID_Stick20Configuration_st.ActiveSmartCardID_u32));
+
+    ui->DeviceStatusLabel->setText (OutputText);
+    this->adjustSize ();
 }
 
 
@@ -224,24 +218,80 @@ void AboutDialog::showStick20Configuration (void)
 
 void AboutDialog::showStick10Configuration (void)
 {
-    QString OutputText;
-
+    showPasswordCounters();
+    hideStick20Menu ();
     cryptostick->getPasswordRetryCount ();
     cryptostick->getUserPasswordRetryCount ();
 
-    /*
-    OutputText.append (QString (tr ("PIN retry counter\n")));
-    OutputText.append (QString (tr ("Admin : ")));
-    OutputText.append (QString ("%1").arg (QString::number (cryptostick->passwordRetryCount))).append ("\n");
-
-    OutputText.append (QString (tr ("User  : ")));
-    OutputText.append (QString ("%1").arg (QString::number (cryptostick->userPasswordRetryCount))).append ("\n");
-*/
     ui->admin_retry_label->setText(QString::number (cryptostick->passwordRetryCount));
     ui->user_retry_label->setText(QString::number (cryptostick->userPasswordRetryCount));
-    ui->DeviceStatusLabel->setText (OutputText);
+    this->adjustSize ();
 }
 
+void AboutDialog::hideWarning(void)
+{
+    ui->label_12->hide();
+    ui->label_13->hide();
+    ui->warning_sign->hide();
+    this->adjustSize ();
+}
+
+void AboutDialog::showWarning(void)
+{
+    ui->label_12->show();
+    ui->label_13->show();
+    ui->warning_sign->show();
+    this->adjustSize ();
+}
+
+void AboutDialog::hideStick20Menu (void)
+{
+    hideWarning();
+    ui->hidden_volume_label->hide();
+    ui->not_erased_sd_label->hide();
+    ui->newsd_label->hide();
+    ui->label_8->hide();
+    ui->label_9->hide();
+    ui->label_10->hide();
+    ui->label_11->hide();
+    ui->sd_id_label->hide();
+    ui->unencrypted_volume_label->hide();
+    ui->encrypted_volume_label->hide();
+    this->adjustSize ();
+}
+
+void AboutDialog::showStick20Menu (void)
+{
+    ui->hidden_volume_label->show();
+    ui->label_8->show();
+    ui->label_9->show();
+    ui->label_10->show();
+    ui->label_11->show();
+    ui->sd_id_label->show();
+    ui->unencrypted_volume_label->show();
+    ui->encrypted_volume_label->show();
+    this->adjustSize ();
+}
+
+void AboutDialog::hidePasswordCounters (void)
+{
+    ui->label_2->hide();
+    ui->user_retry_label->hide();
+    ui->admin_retry_label->hide();
+    ui->label1->hide();
+    ui->label2->hide();
+    this->adjustSize ();
+}
+
+void AboutDialog::showPasswordCounters (void)
+{
+    ui->label_2->show();
+    ui->user_retry_label->show();
+    ui->admin_retry_label->show();
+    ui->label1->show();
+    ui->label2->show();
+    this->adjustSize ();
+}
 /*******************************************************************************
 
   showNoStickFound
@@ -259,12 +309,15 @@ void AboutDialog::showNoStickFound (void)
 {
     QString OutputText;
 
+    hideStick20Menu();
+    hidePasswordCounters();
     OutputText.append (QString (tr ("No active Nitrokey\n\n")));
 
     ui->DeviceStatusLabel->setText (OutputText);
 
     ui->firmwareLabel->setText ("-");
     ui->serialEdit->setText ("-");
+    this->adjustSize ();
 }
 
 void AboutDialog::on_ButtonStickStatus_clicked ()

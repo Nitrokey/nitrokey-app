@@ -20,6 +20,12 @@ class AboutDialog:public QDialog
     void showStick20Configuration (void);
     void showStick10Configuration (void);
     void showNoStickFound (void);
+    void hideStick20Menu (void);
+    void showStick20Menu (void);
+    void hidePasswordCounters (void);
+    void showPasswordCounters (void);
+    void hideWarning(void);
+    void showWarning(void);
     Device* cryptostick;
 
     private slots:void on_ButtonOK_clicked ();
