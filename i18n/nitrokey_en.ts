@@ -814,11 +814,6 @@ Please retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="960"/>
-        <source>Nitrokey connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="1217"/>
         <source>&amp;OTP</source>
         <translation type="unfinished"></translation>
@@ -1031,12 +1026,7 @@ Please retry</source>
         <location filename="../src/ui/mainwindow.cpp" line="2605"/>
         <location filename="../src/ui/mainwindow.cpp" line="2847"/>
         <location filename="../src/ui/mainwindow.cpp" line="2951"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2980"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3001"/>
         <location filename="../src/ui/mainwindow.cpp" line="3022"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3111"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3512"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3759"/>
         <source>Enter admin PIN</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1267,6 +1257,7 @@ Reset Nitrokey&apos;s time?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/ui/mainwindow.cpp" line="960"/>
         <location filename="../src/ui/mainwindow.cpp" line="961"/>
         <location filename="../src/ui/mainwindow.cpp" line="1001"/>
         <source>Nitrokey connected</source>
