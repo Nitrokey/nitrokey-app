@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-08 20:44+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/ui/mainwindow.cpp:1065
+msgid "About"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1552
+msgid "Advanced configure"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1560
+msgid "Change Update PIN"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1435 src/ui/mainwindow.cpp:1559
+msgid "Change admin PIN"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1434 src/ui/mainwindow.cpp:1558
+msgid "Change user PIN"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1430 src/ui/mainwindow.cpp:1550
+msgid "Configure"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1547
+msgid "Debug"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1541
+msgid "Destroy encrypted data"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1549
+msgid "Disable 'Initialize storage with random data' warning"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1542
+msgid "Enable firmware update"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1543
+msgid "Export firmware to file"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1438
+msgid "Factory reset"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1530
+msgid "Initialize keys"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1531
+msgid "Initialize storage with random data"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1537
+msgid "Lock device"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1533
+msgid "Lock encrypted volume"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1544
+msgid "Lock hardware"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1535
+msgid "Lock hidden volume"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1062
+msgid "Nitrokey not connected"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1455
+msgid "OTP"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1453
+msgid "OTP and Password safe"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1266
+msgid "Passwords"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1066
+msgid "Quit"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1436
+msgid "Reset User PIN"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1546
+msgid "Reset user PIN"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1539
+msgid "Set unencrypted volume read-only"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1540
+msgid "Set unencrypted volume read-write"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1536
+msgid "Setup hidden volume"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1529
+msgid "Smartcard or SD card are not ready"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1532
+msgid "Unlock encrypted volume"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:1534
+msgid "Unlock hidden volume"
+msgstr ""
+
+#: src/ui/mainwindow.cpp:3964
+msgid "Unlock password safe"
+msgstr ""
