@@ -35,6 +35,9 @@ QPixmap image (":/images/splash.png");
 QPixmap small_img =
     image.scaled (346, 100, Qt::KeepAspectRatio, Qt::FastTransformation);
 
+    QPixmap info_img (":/images/info-icon.png");
+    QPixmap small_info = info_img.scaled (15, 15, Qt::KeepAspectRatio, Qt::FastTransformation);
+    ui->info_icon->setPixmap (small_info);
     // cryptostick->getStatus();
 int majorFirmwareVersion = cryptostick->firmwareVersion[0] / 10;
 
