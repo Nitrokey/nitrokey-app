@@ -180,13 +180,15 @@ void AboutDialog::showStick20Configuration (void)
     }
 
     OutputText.append (QString ("\n"));
-
+/*
     OutputText.append (QString (tr ("PIN retry counter\n")));
     OutputText.append (QString (tr ("Admin : ")));
     OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.AdminPwRetryCount))).append ("\n");
     OutputText.append (QString (tr ("User  : ")));
     OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.UserPwRetryCount))).append ("\n");
-
+*/
+    ui->admin_retry_label->setText(QString::number (HID_Stick20Configuration_st.AdminPwRetryCount));
+    ui->user_retry_label->setText(QString::number (HID_Stick20Configuration_st.UserPwRetryCount));
 
     OutputText.append (QString ("\n"));
     OutputText.append (QString ("SD ID 0x"));
@@ -227,13 +229,16 @@ void AboutDialog::showStick10Configuration (void)
     cryptostick->getPasswordRetryCount ();
     cryptostick->getUserPasswordRetryCount ();
 
+    /*
     OutputText.append (QString (tr ("PIN retry counter\n")));
     OutputText.append (QString (tr ("Admin : ")));
     OutputText.append (QString ("%1").arg (QString::number (cryptostick->passwordRetryCount))).append ("\n");
 
     OutputText.append (QString (tr ("User  : ")));
     OutputText.append (QString ("%1").arg (QString::number (cryptostick->userPasswordRetryCount))).append ("\n");
-
+*/
+    ui->admin_retry_label->setText(QString::number (cryptostick->passwordRetryCount));
+    ui->user_retry_label->setText(QString::number (cryptostick->userPasswordRetryCount));
     ui->DeviceStatusLabel->setText (OutputText);
 }
 
