@@ -198,6 +198,7 @@ void AboutDialog::showStick20Configuration (void)
     ui->serialEdit->setText (QString ("%1").sprintf ("%08x", HID_Stick20Configuration_st.ActiveSmartCardID_u32));
 
     ui->DeviceStatusLabel->setText (OutputText);
+    this->resize(0,0);
     this->adjustSize ();
 }
 
@@ -225,6 +226,7 @@ void AboutDialog::showStick10Configuration (void)
 
     ui->admin_retry_label->setText(QString::number (cryptostick->passwordRetryCount));
     ui->user_retry_label->setText(QString::number (cryptostick->userPasswordRetryCount));
+    this->resize(0,0);
     this->adjustSize ();
 }
 
@@ -233,6 +235,7 @@ void AboutDialog::hideWarning(void)
     ui->label_12->hide();
     ui->label_13->hide();
     ui->warning_sign->hide();
+    this->resize(0,0);
     this->adjustSize ();
 }
 
@@ -241,6 +244,7 @@ void AboutDialog::showWarning(void)
     ui->label_12->show();
     ui->label_13->show();
     ui->warning_sign->show();
+    this->resize(0,0);
     this->adjustSize ();
 }
 
@@ -257,6 +261,7 @@ void AboutDialog::hideStick20Menu (void)
     ui->sd_id_label->hide();
     ui->unencrypted_volume_label->hide();
     ui->encrypted_volume_label->hide();
+    this->resize(0,0);
     this->adjustSize ();
 }
 
@@ -270,6 +275,7 @@ void AboutDialog::showStick20Menu (void)
     ui->sd_id_label->show();
     ui->unencrypted_volume_label->show();
     ui->encrypted_volume_label->show();
+    this->resize(0,0);
     this->adjustSize ();
 }
 
@@ -280,6 +286,7 @@ void AboutDialog::hidePasswordCounters (void)
     ui->admin_retry_label->hide();
     ui->label1->hide();
     ui->label2->hide();
+    this->resize(0,0);
     this->adjustSize ();
 }
 
@@ -290,6 +297,7 @@ void AboutDialog::showPasswordCounters (void)
     ui->admin_retry_label->show();
     ui->label1->show();
     ui->label2->show();
+    this->resize(0,0);
     this->adjustSize ();
 }
 /*******************************************************************************
@@ -317,6 +325,7 @@ void AboutDialog::showNoStickFound (void)
 
     ui->firmwareLabel->setText ("-");
     ui->serialEdit->setText ("-");
+    this->resize(0,0);
     this->adjustSize ();
 }
 
