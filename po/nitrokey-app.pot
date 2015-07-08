@@ -19,128 +19,128 @@ msgstr ""
 
 #: src/ui/mainwindow.cpp:1065
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: src/ui/mainwindow.cpp:1552
 msgid "Advanced configure"
-msgstr ""
+msgstr "Fortgeschrittene Konfiguration"
 
 #: src/ui/mainwindow.cpp:1560
 msgid "Change Update PIN"
-msgstr ""
+msgstr "Aktualisierungs-Passwort ändern"
 
 #: src/ui/mainwindow.cpp:1435 src/ui/mainwindow.cpp:1559
 msgid "Change admin PIN"
-msgstr ""
+msgstr "Administrator-PIN ändern"
 
 #: src/ui/mainwindow.cpp:1434 src/ui/mainwindow.cpp:1558
 msgid "Change user PIN"
-msgstr ""
+msgstr "Benutzer-PIN ändern"
 
 #: src/ui/mainwindow.cpp:1430 src/ui/mainwindow.cpp:1550
 msgid "Configure"
-msgstr ""
+msgstr "Konfigurieren"
 
 #: src/ui/mainwindow.cpp:1547
 msgid "Debug"
-msgstr ""
+msgstr "Fehlersuche"
 
 #: src/ui/mainwindow.cpp:1541
 msgid "Destroy encrypted data"
-msgstr ""
+msgstr "Verschlüsselte Daten zerstören"
 
 #: src/ui/mainwindow.cpp:1549
 msgid "Disable 'Initialize storage with random data' warning"
-msgstr ""
+msgstr "Warnung 'Speicher mit Zufallsdaten initialisieren' deaktivieren"
 
 #: src/ui/mainwindow.cpp:1542
 msgid "Enable firmware update"
-msgstr ""
+msgstr "Firmware-Aktualisierung aktivieren"
 
 #: src/ui/mainwindow.cpp:1543
 msgid "Export firmware to file"
-msgstr ""
+msgstr "Firmware als Datei exportieren"
 
 #: src/ui/mainwindow.cpp:1438
 msgid "Factory reset"
-msgstr ""
+msgstr "Auslieferungszustand"
 
 #: src/ui/mainwindow.cpp:1530
 msgid "Initialize keys"
-msgstr ""
+msgstr "Schlüssel initialisieren"
 
 #: src/ui/mainwindow.cpp:1531
 msgid "Initialize storage with random data"
-msgstr ""
+msgstr "Speicher mit Zufallsdaten initialisieren"
 
 #: src/ui/mainwindow.cpp:1537
 msgid "Lock device"
-msgstr ""
+msgstr "Gerät sperren"
 
 #: src/ui/mainwindow.cpp:1533
 msgid "Lock encrypted volume"
-msgstr ""
+msgstr "Verschlüsseltes Volumen sperren"
 
 #: src/ui/mainwindow.cpp:1544
 msgid "Lock hardware"
-msgstr ""
+msgstr "Hardware sperren"
 
 #: src/ui/mainwindow.cpp:1535
 msgid "Lock hidden volume"
-msgstr ""
+msgstr "Versteckte Volumen sperren"
 
 #: src/ui/mainwindow.cpp:1062
 msgid "Nitrokey not connected"
-msgstr ""
+msgstr "Nitrokey ist nicht verbunden"
 
 #: src/ui/mainwindow.cpp:1455
 msgid "OTP"
-msgstr ""
+msgstr "Einmalpasswörter"
 
 #: src/ui/mainwindow.cpp:1453
 msgid "OTP and Password safe"
-msgstr ""
+msgstr "Einmalpasswörter und Passwort-Safe"
 
 #: src/ui/mainwindow.cpp:1266
 msgid "Passwords"
-msgstr ""
+msgstr "Passwörter"
 
 #: src/ui/mainwindow.cpp:1066
 msgid "Quit"
-msgstr ""
+msgstr "Verlassen"
 
 #: src/ui/mainwindow.cpp:1436
 msgid "Reset User PIN"
-msgstr ""
+msgstr "Benutzer-PIN zurücksetzen"
 
 #: src/ui/mainwindow.cpp:1546
 msgid "Reset user PIN"
-msgstr ""
+msgstr "Benutzer-PIN zurücksetzen"
 
 #: src/ui/mainwindow.cpp:1539
 msgid "Set unencrypted volume read-only"
-msgstr ""
+msgstr "Klartext-Volumen als Nur-Lesen setzen"
 
 #: src/ui/mainwindow.cpp:1540
 msgid "Set unencrypted volume read-write"
-msgstr ""
+msgstr "Klartext-Volumen als Lesen-Schreiben setzen"
 
 #: src/ui/mainwindow.cpp:1536
 msgid "Setup hidden volume"
-msgstr ""
+msgstr "Versteckte Volumen einrichten"
 
 #: src/ui/mainwindow.cpp:1529
 msgid "Smartcard or SD card are not ready"
-msgstr ""
+msgstr "Chipkarte oder Speicher sind nicht bereit"
 
 #: src/ui/mainwindow.cpp:1532
 msgid "Unlock encrypted volume"
-msgstr ""
+msgstr "Verschlüsseltes Volumen freischalten"
 
 #: src/ui/mainwindow.cpp:1534
 msgid "Unlock hidden volume"
-msgstr ""
+msgstr "Verstecktes Volumen freischalten"
 
 #: src/ui/mainwindow.cpp:3964
 msgid "Unlock password safe"
-msgstr ""
+msgstr "Passwort-Safe freischalten"
