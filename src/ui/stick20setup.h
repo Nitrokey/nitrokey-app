@@ -31,8 +31,8 @@ namespace Ui
 class Stick20Setup:public QDialog
 {
   Q_OBJECT public:
-    explicit Stick20Setup (QWidget * parent = 0);
-    ~Stick20Setup ();
+      explicit Stick20Setup (QWidget * parent = 0);
+     ~Stick20Setup ();
 
     Device* cryptostick;
 

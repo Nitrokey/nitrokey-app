@@ -9,9 +9,8 @@
 class Stick20ResponseTask:public QObject
 {
   Q_OBJECT public:
-    Stick20ResponseTask (QWidget * parent, Device * Cryptostick20,
-                         QSystemTrayIcon * MainWndTrayIcon);
-    ~Stick20ResponseTask ();
+      Stick20ResponseTask (QWidget * parent, Device * Cryptostick20, QSystemTrayIcon * MainWndTrayIcon);
+     ~Stick20ResponseTask ();
 
     void done (int Status);
     void GetResponse (void);

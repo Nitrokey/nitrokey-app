@@ -134,37 +134,37 @@ extern "C"
     typedef struct
     {
         unsigned short MagicNumber_StickConfig_u16; // Shows that the
-                                                    // structure is valid 2
-                                                    // byte
+        // structure is valid 2
+        // byte
         unsigned char ReadWriteFlagUncryptedVolume_u8;  // Flag stores the
-                                                        // read/write flag in
-                                                        // the CPU flash 1
-                                                        // byte
+        // read/write flag in
+        // the CPU flash 1
+        // byte
         unsigned char ReadWriteFlagCryptedVolume_u8;    // Flag stores the
-                                                        // read/write flag in
-                                                        // the CPU flash 1
-                                                        // byte
+        // read/write flag in
+        // the CPU flash 1
+        // byte
         unsigned char VersionInfo_au8[4];   // 4 byte
         unsigned char ReadWriteFlagHiddenVolume_u8; // Flag stores the
-                                                    // read/write flag in the
-                                                    // CPU flash 1 byte
+        // read/write flag in the
+        // CPU flash 1 byte
         unsigned char FirmwareLocked_u8;    // 1 byte
         unsigned char NewSDCardFound_u8;    // Bit 0 new card found, bit 1-7
-                                            // change counter 1 byte
+        // change counter 1 byte
         unsigned char SDFillWithRandomChars_u8; // Bit 0 new card found, bit
-                                                // 1-7 change counter 1 byte
+        // 1-7 change counter 1 byte
         uint32_t ActiveSD_CardID_u32;   // Not used 4 byte
         unsigned char VolumeActiceFlag_u8;  // Bit 0 new card found, bit 1-7
-                                            // change counter 1 byte
+        // change counter 1 byte
         unsigned char NewSmartCardFound_u8; // Bit 0 new card found, bit 1-7
-                                            // change counter 1 byte // 20
-                                            // Byte not packed
+        // change counter 1 byte // 20
+        // Byte not packed
         unsigned char UserPwRetryCount; // User PIN retry count 1 byte
         unsigned char AdminPwRetryCount;    // Admin PIN retry count 1 byte
         uint32_t ActiveSmartCardID_u32; // 4 byte
         unsigned char StickKeysNotInitiated;    // No AES keys computed (1 =
-                                                // AES are builded) 1 byte //
-                                                // 25 Byte not packed
+        // AES are builded) 1 byte //
+        // 25 Byte not packed
     } typeStick20Configuration_st;  // Sum 25 byte
 #pragma pack(pop)
 
@@ -180,16 +180,16 @@ extern "C"
         uint32_t SmartCardID_u32;   // 4 byte // 12
         uint32_t SD_CardID_u32; // 4 byte // 16
         unsigned char SC_UserPwRetryCount;  // User PIN retry count 1 byte //
-                                            // 17
+        // 17
         unsigned char SC_AdminPwRetryCount; // Admin PIN retry count 1 byte
-                                            // // 18
+        // // 18
         unsigned char SD_Card_ManufacturingYear_u8; // 1 byte // 19
         unsigned char SD_Card_ManufacturingMonth_u8;    // 1 byte // 20
         unsigned short SD_Card_OEM_u16; // 2 byte // 22
         unsigned short SD_WriteSpeed_u16;   // in kbyte / sec 2 byte // 24
         unsigned char SD_Card_Manufacturer_u8;  // 1 byte // 25
     } typeStick20ProductionInfos_st;    // Sum 25 byte (Max 25 Byte) // not
-                                        // packed
+    // packed
 
 #pragma pack(pop)
 

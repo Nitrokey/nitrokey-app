@@ -117,7 +117,7 @@
     <bool>true</bool>
    </property>
    <property name="plainText">
-    <string>Qutput Stick</string>
+    <string>Device Output</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_OutputStick">
@@ -130,7 +130,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Stick output logged via USB</string>
+    <string>Device output logged via USB</string>
    </property>
   </widget>
  </widget>

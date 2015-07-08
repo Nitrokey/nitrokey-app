@@ -33,7 +33,7 @@ namespace Ui
 class HOTPDialog:public QDialog
 {
   Q_OBJECT public:
-    explicit HOTPDialog (QWidget * parent);
+      explicit HOTPDialog (QWidget * parent);
     Device* device;
     uint8_t slotNumber;
     QString title;
@@ -53,7 +53,7 @@ class HOTPDialog:public QDialog
 
 
 
-    private slots: void on_nextButton_clicked ();
+    private slots:void on_nextButton_clicked ();
 
     void copyToClipboard (QString text);
 

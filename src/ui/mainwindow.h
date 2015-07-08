@@ -68,8 +68,7 @@ enum trayMessageType
 class MainWindow:public QMainWindow
 {
   Q_OBJECT public:
-    explicit MainWindow (StartUpParameter_tst * StartupInfo_st,
-                         QWidget * parent = 0);
+      explicit MainWindow (StartUpParameter_tst * StartupInfo_st, QWidget * parent = 0);
     void startTimer ();
      ~MainWindow ();
 
@@ -92,8 +91,7 @@ class MainWindow:public QMainWindow
     void InitState ();
     void createIndicator ();
     void startDebug ();
-    void showTrayMessage (const QString & title, const QString & msg,
-                          enum trayMessageType type, int timeout);
+    void showTrayMessage (const QString & title, const QString & msg, enum trayMessageType type, int timeout);
 
       Ui::MainWindow * ui;
 #ifdef Q_OS_LINUX
@@ -191,7 +189,7 @@ class MainWindow:public QMainWindow
     int UpdateDynamicMenuEntrys (void);
     void AnalyseProductionInfos ();
 
-    public slots: void startAboutDialog ();
+    public slots:void startAboutDialog ();
     void startStick10ActionChangeUserPIN ();
     void startStick10ActionChangeAdminPIN ();
     void startConfiguration ();
@@ -221,7 +219,7 @@ class MainWindow:public QMainWindow
     void startStick20SetupPasswordMatrix ();
     void startStick20ActionChangeUpdatePIN ();
 
-    private slots: void resizeMin ();
+    private slots:void resizeMin ();
     void checkConnection ();
     void getCode (uint8_t slotNo);
     void on_writeButton_clicked ();

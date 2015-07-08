@@ -70,8 +70,7 @@ TOTPSlot::TOTPSlot ()
 
 *******************************************************************************/
 
-TOTPSlot::TOTPSlot (uint8_t slotNumber, uint8_t slotName[], uint8_t secret[],
-                    uint8_t config)
+TOTPSlot::TOTPSlot (uint8_t slotNumber, uint8_t slotName[], uint8_t secret[], uint8_t config)
 {
     this->slotNumber = slotNumber;
     memcpy (this->slotName, slotName, 15);

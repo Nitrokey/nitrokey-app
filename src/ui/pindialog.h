@@ -43,15 +43,14 @@ class PinDialog:public QDialog
     Device* cryptostick;
 
     explicit PinDialog (const QString & title, const QString & label,
-                        Device * cryptostick, Usage usage, PinType pinType,
-                        bool ShowMatrix = FALSE, QWidget * parent = NULL);
+                        Device * cryptostick, Usage usage, PinType pinType, bool ShowMatrix = FALSE, QWidget * parent = NULL);
      ~PinDialog ();
 
     // void init(char *text,int RetryCount);
     void getPassword (char* text);
     void getPassword (QString & pin);
 
-    private slots: void on_checkBox_toggled (bool checked);
+    private slots:void on_checkBox_toggled (bool checked);
 
     void on_checkBox_PasswordMatrix_toggled (bool checked);
 

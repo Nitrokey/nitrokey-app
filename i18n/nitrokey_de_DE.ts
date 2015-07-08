@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.1" language="de_DE">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -19,22 +19,14 @@
         <translation></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Dieses Programm dient zum konfigurieren und verwenden des Nitrokeys.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Anleitung und Hilfe&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>App version:</source>
-        <translation type="obsolete">App Version:</translation>
-    </message>
-    <message>
         <location filename="../ui/aboutdialog.ui" line="91"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Dieses Programm dient zum konfigurieren und verwenden des Nitrokeys.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Anleitung und Hilfe&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="131"/>
-        <source>App Version:</source>
-        <translation type="unfinished"></translation>
+        <source>App version:</source>
+        <translation>App Version:</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="138"/>
@@ -160,14 +152,9 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <location filename="../src/ui/aboutdialog.cpp" line="208"/>
         <location filename="../src/ui/aboutdialog.cpp" line="272"/>
-        <source>Password retry counter
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>PIN retry counter
 </source>
-        <translation type="obsolete">Passwort-Eingabeversuche
+        <translation>PIN-Eingabeversuche
 </translation>
     </message>
     <message>
@@ -216,21 +203,13 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../ui/stick20debugdialog.ui" line="120"/>
-        <source>Qutput Stick</source>
-        <translation type="unfinished"></translation>
+        <source>Device Output</source>
+        <translation>Geräteausgabe</translation>
     </message>
     <message>
         <location filename="../ui/stick20debugdialog.ui" line="133"/>
-        <source>Stick output logged via USB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Qutput Device</source>
-        <translation type="obsolete">Geräteausgabe</translation>
-    </message>
-    <message>
         <source>Device output logged via USB</source>
-        <translation type="obsolete">Geräteausgabe mittels USB protokolliert</translation>
+        <translation>Geräteausgabe mittels USB protokolliert</translation>
     </message>
 </context>
 <context>
@@ -300,40 +279,24 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Neue Benutzer-PIN:</translation>
     </message>
     <message>
-        <source>Change Update Password</source>
-        <translation type="obsolete">Aktualisierungs-Passwort ändern</translation>
-    </message>
-    <message>
-        <source>Update Password:</source>
-        <translation type="obsolete">Aktualisierungs-Passwort:</translation>
-    </message>
-    <message>
-        <source>New Update Password:</source>
-        <translation type="obsolete">Neues Aktualisierungs-Passwort:</translation>
-    </message>
-    <message>
-        <source>New Update Password (confirm):</source>
-        <translation type="obsolete">Neues Aktualisierungs-Passwort (Wiederholung):</translation>
-    </message>
-    <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="121"/>
-        <source>Change Update PIN</source>
-        <translation type="unfinished"></translation>
+        <source>Change Update Password</source>
+        <translation>Aktualisierungs-Passwort ändern</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="122"/>
-        <source>Update PIN:</source>
-        <translation type="unfinished"></translation>
+        <source>Update Password:</source>
+        <translation>Aktualisierungs-Passwort:</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="123"/>
-        <source>New Update PIN:</source>
-        <translation type="unfinished"></translation>
+        <source>New Update Password:</source>
+        <translation>Neues Aktualisierungs-Passwort:</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="124"/>
-        <source>New Update PIN (confirm):</source>
-        <translation type="unfinished"></translation>
+        <source>New Update Password (confirm):</source>
+        <translation>Neues Aktualisierungs-Passwort (Wiederholung):</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="268"/>
@@ -380,13 +343,6 @@ Bitte versuchen Sie es erneut</translation>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="472"/>
         <source>The minimum length of a password is </source>
         <translation>Minimale Passwortlänge beträgt </translation>
-    </message>
-</context>
-<context>
-    <name>Gui::ColorButton</name>
-    <message>
-        <source>Auto</source>
-        <translation type="obsolete">automatisch</translation>
     </message>
 </context>
 <context>
@@ -484,8 +440,9 @@ Bitte versuchen Sie es erneut</translation>
         <translation></translation>
     </message>
     <message>
+        <location filename="../ui/mainwindow.ui" line="124"/>
         <source>(Recommendation: Use TOTP for web applications and HOTP for local applications)</source>
-        <translation type="obsolete">(Tipp: Verwenden Sie TOTP für Webseiten und HOTP für lokale Programme)</translation>
+        <translation>(Tipp: Verwenden Sie TOTP für Webseiten und HOTP für lokale Programme)</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="148"/>
@@ -591,8 +548,9 @@ Bitte versuchen Sie es erneut</translation>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beispiel: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
+        <location filename="../ui/mainwindow.ui" line="354"/>
         <source>Base32</source>
-        <translation type="obsolete">Base32</translation>
+        <translation>Base32</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="367"/>
@@ -615,8 +573,9 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Parameter</translation>
     </message>
     <message>
+        <location filename="../ui/mainwindow.ui" line="441"/>
         <source>Send &apos;enter&apos; as the last keystroke</source>
-        <translation type="obsolete">&apos;Enter&apos; als letztes Zeichen senden</translation>
+        <translation>&apos;Enter&apos; als letztes Zeichen senden</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="460"/>
@@ -642,6 +601,13 @@ Bitte versuchen Sie es erneut</translation>
         <location filename="../ui/mainwindow.ui" line="513"/>
         <source>8 digits</source>
         <translation>8 Ziffern</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/mainwindow.cpp" line="529"/>
+        <location filename="../src/ui/mainwindow.cpp" line="939"/>
+        <location filename="../src/ui/mainwindow.cpp" line="951"/>
+        <source>Nitrokey disconnected</source>
+        <translation>Nitrokey wurde entfernt</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="565"/>
@@ -724,28 +690,9 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Speichern</translation>
     </message>
     <message>
-        <source>OTP General</source>
-        <translation type="obsolete">OTP Allgemein</translation>
-    </message>
-    <message>
-        <location filename="../ui/mainwindow.ui" line="124"/>
-        <source>(Recommendation: Use TOPT for web applications and HOTP for local applications)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/mainwindow.ui" line="354"/>
-        <source>Base 32</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/mainwindow.ui" line="441"/>
-        <source>Send &apos;enter&apos;as the last keystroke</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/mainwindow.ui" line="793"/>
-        <source>OTP General Configuration</source>
-        <translation type="unfinished"></translation>
+        <source>OTP General</source>
+        <translation>OTP Allgemein</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="817"/>
@@ -783,6 +730,11 @@ Bitte versuchen Sie es erneut</translation>
         <translation>ScrollLock doppelt drücken:</translation>
     </message>
     <message>
+        <location filename="../src/ui/mainwindow.cpp" line="897"/>
+        <source>Nitrokey Pro connected</source>
+        <translation>Nitrokey Pro wurde verbunden</translation>
+    </message>
+    <message>
         <location filename="../ui/mainwindow.ui" line="900"/>
         <location filename="../ui/mainwindow.ui" line="919"/>
         <location filename="../ui/mainwindow.ui" line="938"/>
@@ -802,6 +754,12 @@ Bitte versuchen Sie es erneut</translation>
         <location filename="../ui/mainwindow.ui" line="948"/>
         <source>Send HOTP2</source>
         <translation>Sende HOTP2</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/mainwindow.cpp" line="934"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1003"/>
+        <source>Nitrokey Storage connected</source>
+        <translation>Nitrokey Storage wurde verbunden</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="994"/>
@@ -846,9 +804,29 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Login-Name:</translation>
     </message>
     <message>
+        <location filename="../src/ui/mainwindow.cpp" line="1217"/>
+        <source>&amp;OTP</source>
+        <translation>&amp;Einmalpasswörter</translation>
+    </message>
+    <message>
         <location filename="../ui/mainwindow.ui" line="1219"/>
         <source>Slot name:</source>
         <translation>Namen des Eintrags:</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/mainwindow.cpp" line="1221"/>
+        <source>&amp;Factory reset</source>
+        <translation>&amp;Zurücksetzen in Auslieferungszustand</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/mainwindow.cpp" line="1225"/>
+        <source>&amp;Change User PIN</source>
+        <translation>&amp;Benutzer-PIN ändern</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/mainwindow.cpp" line="1230"/>
+        <source>&amp;Change Admin PIN</source>
+        <translation>&amp;Administrator-PIN ändern</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="1230"/>
@@ -866,49 +844,6 @@ Bitte versuchen Sie es erneut</translation>
         <location filename="../src/ui/mainwindow.cpp" line="4212"/>
         <source>Unlock password safe</source>
         <translation>Passwort-Safe entsperren</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="529"/>
-        <location filename="../src/ui/mainwindow.cpp" line="939"/>
-        <location filename="../src/ui/mainwindow.cpp" line="951"/>
-        <source>Nitrokey disconnected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="897"/>
-        <source>Nitrokey Pro connected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="934"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1003"/>
-        <source>Nitrokey Storage connected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="960"/>
-        <source>Nitrokey connected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1217"/>
-        <source>&amp;OTP</source>
-        <translation>&amp;Einmalpasswörter</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1221"/>
-        <source>&amp;Factory reset</source>
-        <translation>&amp;Zurücksetzen in Auslieferungszustand</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1225"/>
-        <source>&amp;Change User PIN</source>
-        <translation>&amp;Benutzer-PIN ändern</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1230"/>
-        <source>&amp;Change Admin PIN</source>
-        <translation>&amp;Administrator-PIN ändern</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1237"/>
@@ -974,7 +909,7 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1302"/>
         <source>&amp;Change Update PIN</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aktualisierungs-PIN ändern</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1307"/>
@@ -1074,13 +1009,6 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2526"/>
-        <location filename="../src/ui/mainwindow.cpp" line="4679"/>
-        <location filename="../src/ui/mainwindow.cpp" line="4905"/>
-        <source>Enter card admin PIN</source>
-        <translation>Administrator-PIN eingeben</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2526"/>
         <location filename="../src/ui/mainwindow.cpp" line="2980"/>
         <location filename="../src/ui/mainwindow.cpp" line="3111"/>
         <location filename="../src/ui/mainwindow.cpp" line="3512"/>
@@ -1097,18 +1025,13 @@ Bitte versuchen Sie es erneut</translation>
         <location filename="../src/ui/mainwindow.cpp" line="4704"/>
         <location filename="../src/ui/mainwindow.cpp" line="4923"/>
         <source>Wrong Pin. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falsche PIN. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2605"/>
         <location filename="../src/ui/mainwindow.cpp" line="2847"/>
         <location filename="../src/ui/mainwindow.cpp" line="2951"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2980"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3001"/>
         <location filename="../src/ui/mainwindow.cpp" line="3022"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3111"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3512"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3759"/>
         <source>Enter admin PIN</source>
         <translation>Administrator-PIN eingeben</translation>
     </message>
@@ -1119,16 +1042,8 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="4505"/>
-        <source>AES key doen not exist!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wrong password</source>
-        <translation type="obsolete">Falsches Passwort</translation>
-    </message>
-    <message>
-        <source>Unable to create AES key</source>
-        <translation type="obsolete">Konnte keinen AES-Schlüssel erzeugen</translation>
+        <source>AES key does not exist!</source>
+        <translation>AES-Schlüssel existiert nicht!</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2706"/>
@@ -1322,21 +1237,9 @@ Dieser Befehl benötigt für 32 GB mehr als eine Stunde.</translation>
         <translation>Konnte Eintrag nicht löschen. %1</translation>
     </message>
     <message>
-        <source>Wrong PIN. Please try again.</source>
-        <translation type="obsolete">Falsche PIN. Bitte versuchen Sie es erneut.</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="528"/>
         <source>Generate random password </source>
         <translation>zufälliges Passwort generieren </translation>
-    </message>
-    <message>
-        <source>Nitrokey disconnected</source>
-        <translation type="obsolete">Nitrokey wurde entfernt</translation>
-    </message>
-    <message>
-        <source>Nitrokey Pro connected</source>
-        <translation type="obsolete">Nitrokey Pro wurde verbunden</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="914"/>
@@ -1367,10 +1270,7 @@ Zeit des Nitrokey zurücksetzen?</translation>
         <translation>Zeit wurde zurückgesetzt!</translation>
     </message>
     <message>
-        <source>Nitrokey Storage connected</source>
-        <translation type="obsolete">Nitrokey Storage wurde verbunden</translation>
-    </message>
-    <message>
+        <location filename="../src/ui/mainwindow.cpp" line="960"/>
         <location filename="../src/ui/mainwindow.cpp" line="961"/>
         <location filename="../src/ui/mainwindow.cpp" line="1001"/>
         <source>Nitrokey connected</source>
@@ -1413,22 +1313,18 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2625"/>
-        <source>Wrong passowrd</source>
-        <translation type="unfinished"></translation>
+        <source>Wrong password</source>
+        <translation>Falsches Passwort</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2627"/>
-        <source>Unable to create new AES key</source>
-        <translation type="unfinished"></translation>
+        <source>Unable to create AES key</source>
+        <translation>Konnte keinen AES-Schlüssel erzeugen</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="4386"/>
         <source>Can&apos;t save slot.</source>
         <translation>Eintrag konnte nicht gespeichert werden.</translation>
-    </message>
-    <message>
-        <source>AES key does not exist!</source>
-        <translation type="obsolete">AES-Schlüssel existiert nicht!</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="4509"/>
@@ -1788,13 +1684,6 @@ Bitte ändern Sie die PIN.</translation>
     </message>
 </context>
 <context>
-    <name>SplashScreen</name>
-    <message>
-        <source>Author:</source>
-        <translation type="obsolete">Autor:</translation>
-    </message>
-</context>
-<context>
     <name>Stick20Dialog</name>
     <message>
         <location filename="../ui/stick20dialog.ui" line="14"/>
@@ -1808,30 +1697,18 @@ Bitte ändern Sie die PIN.</translation>
     </message>
     <message>
         <location filename="../ui/stick20dialog.ui" line="79"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-Password&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Administrator-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/stick20dialog.ui" line="92"/>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
+        <source>PIN</source>
+        <translation>PIN</translation>
     </message>
     <message>
         <location filename="../ui/stick20dialog.ui" line="116"/>
-        <source>Show password</source>
-        <translation type="unfinished">Passwort anzeigen</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Administrator-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>PIN</source>
-        <translation type="obsolete">PIN</translation>
-    </message>
-    <message>
         <source>Show PIN</source>
-        <translation type="obsolete">PIN anzeigen</translation>
+        <translation>PIN anzeigen</translation>
     </message>
     <message>
         <location filename="../ui/stick20dialog.ui" line="137"/>
@@ -1842,13 +1719,9 @@ Bitte ändern Sie die PIN.</translation>
 <context>
     <name>Stick20InfoDialog</name>
     <message>
-        <source>Device status</source>
-        <translation type="obsolete">Gerätestatus</translation>
-    </message>
-    <message>
         <location filename="../ui/stick20infodialog.ui" line="14"/>
-        <source>Stick status</source>
-        <translation type="unfinished"></translation>
+        <source>Device status</source>
+        <translation>Gerätestatus</translation>
     </message>
     <message>
         <location filename="../ui/stick20infodialog.ui" line="39"/>
@@ -1884,7 +1757,7 @@ Bitte ändern Sie die PIN.</translation>
     </message>
     <message>
         <location filename="../ui/stick20responsedialog.ui" line="61"/>
-        <source>LabelProgressWheell</source>
+        <source>LabelProgressWheel</source>
         <translation></translation>
     </message>
     <message>
@@ -1898,93 +1771,94 @@ Bitte ändern Sie die PIN.</translation>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="167"/>
         <source>Wrong password</source>
-        <translation type="unfinished">Falsches Passwort</translation>
+        <translation>Falsches Passwort</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="255"/>
         <source>Encrypted volume unlocked successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschlüsseltes Volumen wurde erfolgreich entsperrt</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="259"/>
         <source>Encrypted volume locked successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschlüsseltes Volumen wurde erfolgreich gesperrt</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="262"/>
         <source>Hidden volume unlocked successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstecktes Volumen wurde erfolgreich entsperrt</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="265"/>
         <source>Hidden volume locked successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstecktes Volumen wurde erfolgreich gesperrt</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="268"/>
         <source>Hidden volume setup successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstecktes Volumen wurde erfolgreich eingerichtet</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="271"/>
-        <source>Uncrypted volume is in readonly mode</source>
-        <translation type="unfinished"></translation>
+        <source>Cleartext volume is in readonly mode</source>
+        <translation>Klartext-Volumen ist im Nur-Lese-Modus</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="275"/>
-        <source>Uncrypted volume is in readwrite mode</source>
-        <translation type="unfinished"></translation>
+        <source>Cleartext volume is in readwrite mode</source>
+        <translation>Klartext-Volumen ist im Lese-Schreib-Modus</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="279"/>
         <source>Warning disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung deaktiviert</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="283"/>
         <source>Firmware is locked</source>
-        <translation type="unfinished"></translation>
+        <translation>Firmware ist gesperrt</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="287"/>
         <source>Firmware exported successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Firmware wurde erfolgreich exportiert</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="291"/>
         <source>New keys generated successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Schlüssel wurden erfolgreich generiert</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="302"/>
         <source>Storage successfully initialized with random data</source>
-        <translation type="unfinished"></translation>
+        <translation>Speicher wurde erfolgreich mit Zufallsdaten initialisiert</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="318"/>
         <source>Can&apos;t enable hidden volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstecktes Volumen konnte nicht aktiviert werden</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="338"/>
         <source>Please enable the encrypted volume first.</source>
-        <translation type="unfinished">Bitte aktivieren Sie zuerst das verschlüsselte Volumen.</translation>
+        <translation>Bitte aktivieren Sie zuerst das verschlüsselte Volumen.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="345"/>
         <source>Encrypted volume was not enabled, please enable the encrypted volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschlüsseltes Volumen war nicht aktiv. Bitte aktivieren Sie das verschlüsselte Volumen</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="362"/>
         <source>Smartcard error, please retry the command</source>
-        <translation type="unfinished"></translation>
+        <translation>Chipkarten-Fehler. Bitte versuchen Sie den Befehl erneut</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="379"/>
         <source>Security bit of the device is activated.
 Firmware update is not possible.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sicherheits-Bit des Geräts ist aktiviert.
+Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     </message>
 </context>
 <context>
@@ -2048,12 +1922,8 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <location filename="../ui/stick20updatedialog.ui" line="65"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.crypto-stick.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wenn Sie mit &amp;quot;OK&amp;quot; bestätigen wird der Nitrokey &lt;br/&gt;in den Firmware-Aktualisierungs-Modus versetzt. Dies lässt sich nicht rückgängig machen!&lt;br/&gt;Bitte lesen Sie die &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Dokumentation &lt;/span&gt;&lt;/a&gt;um die &lt;br/&gt;Firmware zu aktualisieren.&lt;/p&gt;&lt;p&gt;Mit Firmware-Aktualisierungs-Modus fortfahren?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wenn Sie mit &amp;quot;OK&amp;quot; bestätigen wird der Nitrokey &lt;br/&gt;in den Firmware-Aktualisierungs-Modus versetzt. Dies lässt sich nicht rückgängig machen!&lt;br/&gt;Bitte lesen Sie die &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Dokumentation &lt;/span&gt;&lt;/a&gt;um die &lt;br/&gt;Firmware zu aktualisieren.&lt;/p&gt;&lt;p&gt;Mit Firmware-Aktualisierungs-Modus fortfahren?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -2064,13 +1934,9 @@ Firmware update is not possible.</source>
         <translation>Dialog</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor. However it might be possible to extract OTP secrets by physically accessing the device (via JTAG interface). In order to prevent this attack, you can enable the device&apos;s security bit, but doing this disables the option to update the firmware.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sicherheitshinweis&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Bitte lesen Sie diesen Hinweis gründlich.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN-Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Der Nitrokey wird durch eine Benutzer-PIN und Administrator-PIN geschützt. Die Benutzer-PIN wird zum Freischalten des verschlüsselten Speichers, des Passwort-Safes, der Chipkarte und (falls aktiviert) der Einmalpasswörter (OTP) verwendet. Einmalpasswörter sind standardmäßig nicht PIN-geschützt, da es sich hierbei um eine Zweifaktorauthentisierung handelt. Die Chipkarte wird bei jeder Eingabe der Benutzer-PIN freigeschaltet, unabhängig von der jeweiligen Funktion bei der die PIN eingegeben wird. Die Administrator-PIN wird zum Konfigurieren und zum Verwalten von Einträgen verwendet. Bitte ändern Sie die PINs im Auslieferungszustand und halten Sie diese geheim. Falls die Benutzer-PIN oder Administrator-PIN jeweils dreimal falsch eingegeben werden, oder falls die Chipkarte zurückgesetzt wird, werden alle Ihre sensiblen Daten gelöscht.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physischer Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Alle sensiblen Daten sind verschlüsselt und gegen physische Angriffe geschützt. Dies trifft nicht auf Einmalpasswörter zu, da es sich hierbei um eine Zweifaktorauthentisierung handelt. Dies Einmalpasswörter-Geheimnisse lassen sich bei physischem Zugriff extrahieren (mittels JTAG-Schnittstelle). Um dies zu verhindern können Sie das Sicherheits-Bit des Geräts aktivieren. Dies verhindern jedoch auch die Firmwareaktualisierung.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Versteckte Volumen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Versteckte Volumen setzen voraus, dass der Massenspeicher mit Zufallswerten initialisiert wurde. Versteckte Volumen sind mittels Benutzer-PIN und einem zusätzlichem Passwort, welches für jedes versteckte Volumen unterschiedlich ist, geschützt. Ohne die Benutzer-PIN und das Passwort kann das versteckte Volumen nicht gefunden werden und dessen Existenz weder bewiesen noch widerlegt werden. Das Passwort für das versteckte Volumen muss stark und lang genug sein um sog. Brute Force Angriffe zu widerstehen. Die versteckten Volumen werden auf einem Flash-Speicher mit integrierter Nutzungsverteilung (wear levelling) gespeichert. Dadurch könnten Informationen entstehen, die einem hochentwickeltem Angreifer die Existenz versteckter Volumen verraten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="../ui/securitydialog.ui" line="26"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) the One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are used as a second factor only. The smart card is unlocked anytime the user PIN is entered, nomatter for which function. The admin PIN can be used to configure settings, to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered wrongly three times each, or if the smart card has been reset to factory settings, all your sensitive data is lost irrevocably.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secure against physical attacks. Ths doesn&apos;t apply to One-Time Passwords (OTP) because they are used as a second factor only. With physical access to the device (via JTAG interface), it might be possible to extract the OTP secrets. To prevent this attack, you could enable the device&apos;s security bit but it would disable the option to update the firmware.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require the mass storage initialized with random data. Hidden volumes are protected by the user PIN and a separate password which can be individual for each hidden volume. Without knowing these both credentials, the existance of the hidden volume can&apos;t be proven or disproven. The password for the hidden volume must be chosen strong and long enough to sustain a brute force attack. However, the hidden volume is stored on a flash storage with integrated wear leveling. This leaves the potential risk of leaking information to a sophisticated attacker which could reveal the existance of a hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor. However it might be possible to extract OTP secrets by physically accessing the device (via JTAG interface). In order to prevent this attack, you can enable the device&apos;s security bit, but doing this disables the option to update the firmware.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sicherheitshinweis&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Bitte lesen Sie diesen Hinweis gründlich.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN-Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Der Nitrokey wird durch eine Benutzer-PIN und Administrator-PIN geschützt. Die Benutzer-PIN wird zum Freischalten des verschlüsselten Speichers, des Passwort-Safes, der Chipkarte und (falls aktiviert) der Einmalpasswörter (OTP) verwendet. Einmalpasswörter sind standardmäßig nicht PIN-geschützt, da es sich hierbei um eine Zweifaktorauthentisierung handelt. Die Chipkarte wird bei jeder Eingabe der Benutzer-PIN freigeschaltet, unabhängig von der jeweiligen Funktion bei der die PIN eingegeben wird. Die Administrator-PIN wird zum Konfigurieren und zum Verwalten von Einträgen verwendet. Bitte ändern Sie die PINs im Auslieferungszustand und halten Sie diese geheim. Falls die Benutzer-PIN oder Administrator-PIN jeweils dreimal falsch eingegeben werden, oder falls die Chipkarte zurückgesetzt wird, werden alle Ihre sensiblen Daten gelöscht.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physischer Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Alle sensiblen Daten sind verschlüsselt und gegen physische Angriffe geschützt. Dies trifft nicht auf Einmalpasswörter zu, da es sich hierbei um eine Zweifaktorauthentisierung handelt. Dies Einmalpasswörter-Geheimnisse lassen sich bei physischem Zugriff extrahieren (mittels JTAG-Schnittstelle). Um dies zu verhindern können Sie das Sicherheits-Bit des Geräts aktivieren. Dies verhindern jedoch auch die Firmwareaktualisierung.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Versteckte Volumen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Versteckte Volumen setzen voraus, dass der Massenspeicher mit Zufallswerten initialisiert wurde. Versteckte Volumen sind mittels Benutzer-PIN und einem zusätzlichem Passwort, welches für jedes versteckte Volumen unterschiedlich ist, geschützt. Ohne die Benutzer-PIN und das Passwort kann das versteckte Volumen nicht gefunden werden und dessen Existenz weder bewiesen noch widerlegt werden. Das Passwort für das versteckte Volumen muss stark und lang genug sein um sog. Brute Force Angriffe zu widerstehen. Die versteckten Volumen werden auf einem Flash-Speicher mit integrierter Nutzungsverteilung (wear levelling) gespeichert. Dadurch könnten Informationen entstehen, die einem hochentwickeltem Angreifer die Existenz versteckter Volumen verraten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/securitydialog.ui" line="45"/>
@@ -2186,12 +2052,8 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <location filename="../ui/stick20lockfirmwaredialog.ui" line="65"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the stick lock the firmware and close the hardware debug port.This disable any external hardware access to the CPU.&lt;/p&gt;&lt;p&gt;There is no way back ! &lt;/p&gt;&lt;p&gt;After this you can&apos;t update the firmware.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the stick lock the firmware and close the hardware debug port.This disables any external hardware access to the data in the device (processor).&lt;/p&gt;&lt;p&gt;There is no way back! &lt;/p&gt;&lt;p&gt;After this you can&apos;t update the firmware.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wenn Sie mit &amp;quot;OK&amp;quot; bestätigen wird die Firmware und der Hardware-Anschluss zur Fehleranalyse gesperrt.Dies verhindern jeden externen Hardwarezugriff auf die Daten im Gerät (Prozessor).&lt;/p&gt;&lt;p&gt;Dieser Vorgang lässt sich nicht rückgängig machen! &lt;/p&gt;&lt;p&gt;Anschließend können Sie die Firmware nicht mehr aktualisieren.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wenn Sie mit &amp;quot;OK&amp;quot; bestätigen wird die Firmware und der Hardware-Anschluss zur Fehleranalyse gesperrt.Dies verhindern jeden externen Hardwarezugriff auf die Daten im Gerät (Prozessor).&lt;/p&gt;&lt;p&gt;Dieser Vorgang lässt sich nicht rückgängig machen! &lt;/p&gt;&lt;p&gt;Anschließend können Sie die Firmware nicht mehr aktualisieren.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 </TS>

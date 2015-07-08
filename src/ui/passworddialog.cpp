@@ -141,8 +141,7 @@ void PasswordDialog::getPassword (char* text)
 {
     if (FALSE == ui->checkBox_PasswordMatrix->isChecked ())
     {
-        STRCPY (&text[1], LOCAL_PASSWORD_SIZE - 1,
-                ui->lineEdit->text ().toLatin1 ());
+        STRCPY (&text[1], LOCAL_PASSWORD_SIZE - 1, ui->lineEdit->text ().toLatin1 ());
     }
     else
     {
@@ -226,27 +225,20 @@ QByteArray passwordString;
         n = passwordString.size ();
         if (30 <= n)
         {
-            csApplet->
-                warningBox (tr
-                            ("Your PIN is too long! Use not more than 30 characters."));
+            csApplet->warningBox (tr ("Your PIN is too long! Use not more than 30 characters."));
             done (FALSE);
             return;
         }
         if (6 > n)
         {
-            csApplet->
-                warningBox (tr
-                            ("Your PIN is too short. Use at least 6 characters."));
+            csApplet->warningBox (tr ("Your PIN is too short. Use at least 6 characters."));
             done (FALSE);
             return;
         }
 
-        if ((0 == strcmp (passwordString, "123456"))
-            || (0 == strcmp (passwordString, "12345678")))
+        if ((0 == strcmp (passwordString, "123456")) || (0 == strcmp (passwordString, "12345678")))
         {
-            csApplet->
-                warningBox (tr
-                            ("Warning: Default PIN is used.\nPlease change the PIN."));
+            csApplet->warningBox (tr ("Warning: Default PIN is used.\nPlease change the PIN."));
         }
         memset (&password[1], 0, 49);
         memcpy (&password[1], passwordString.data (), n);

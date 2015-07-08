@@ -33,28 +33,23 @@ EngineButton::EngineButton (QWidget * parent):QPushButton (parent)
     setup ();
 }
 
-EngineButton::EngineButton (const QString & text,
-                            QWidget * parent):QPushButton (text, parent)
+EngineButton::EngineButton (const QString & text, QWidget * parent):QPushButton (text, parent)
 {
     setup ();
 }
 
-EngineButton::EngineButton (const QIcon & icon, const QString & text,
-                            QWidget * parent):QPushButton (icon, text, parent)
+EngineButton::EngineButton (const QIcon & icon, const QString & text, QWidget * parent):QPushButton (icon, text, parent)
 {
     setup ();
 }
 
-QSize EngineButton::sizeHint () const const
-{
-    if (_pixmap.isNull ())
-        return QSize (QPushButton::sizeHint ().width (),
-                      (_height ==
-                       -1) ? QPushButton::sizeHint ().height () : _height);
-    else
-        return QSize (_pixmap.width () + 10,
-                      (_height == -1) ? _pixmap.height () + 10 : _height);
-}
+     QSize EngineButton::sizeHint () const const const const
+     {
+         if (_pixmap.isNull ())
+             return QSize (QPushButton::sizeHint ().width (), (_height == -1) ? QPushButton::sizeHint ().height () : _height);
+         else
+             return QSize (_pixmap.width () + 10, (_height == -1) ? _pixmap.height () + 10 : _height);
+     }
 
 void EngineButton::setPixmap (const QPixmap & pixmap)
 {
@@ -88,8 +83,7 @@ QStylePainter painter (this);
     painter.drawControl (QStyle::CE_PushButton, optionButton);
 
     if (!_pixmap.isNull ())
-        painter.drawPixmap ((width () - _pixmap.width ()) / 2,
-                            (height () - _pixmap.height ()) / 2, _pixmap);
+        painter.drawPixmap ((width () - _pixmap.width ()) / 2, (height () - _pixmap.height ()) / 2, _pixmap);
 }
 
 void EngineButton::enterEvent (QEvent * /* event */ )
@@ -142,15 +136,11 @@ QStyleOptionButton option;
     option.text = (_color.alpha ())? QString () : tr ("Auto");
     painter.setRenderHint (QPainter::Antialiasing, true);
 
-QRect rect =
-    QApplication::style ()->subElementRect (QStyle::SE_PushButtonContents,
-                                            &option, this);
+QRect rect = QApplication::style ()->subElementRect (QStyle::SE_PushButtonContents,
+                                                     &option, this);
 
     if (_color.alpha ())
-        painter.fillRect (rect.
-                          adjusted (rect.width () / 8, rect.height () / 3,
-                                    -rect.width () / 8, -rect.height () / 3),
-                          color ());
+        painter.fillRect (rect.adjusted (rect.width () / 8, rect.height () / 3, -rect.width () / 8, -rect.height () / 3), color ());
     else
         painter.drawText (rect, Qt::AlignCenter, tr ("Auto"));
 }
@@ -160,8 +150,7 @@ void ColorButton::nextCheckState ()
     QPushButton::nextCheckState ();
 
     if (color ().alpha ())
-        setColor (QColor
-                  (color ().red (), color ().green (), color ().blue (), 0));
+        setColor (QColor (color ().red (), color ().green (), color ().blue (), 0));
     else
     {
 QColor newColor = QColorDialog::getColor (color ().rgb ());
@@ -187,11 +176,8 @@ emit executed ();
         move ((QApplication::desktop ()->availableGeometry ().width () -
                width ()) / 2,
               (_position ==
-               CenterOfScreen) ? (QApplication::desktop ()->
-                                  availableGeometry ().height () -
-                                  height ()) /
-              2 : QApplication::desktop ()->availableGeometry ().height () /
-              10);
+               CenterOfScreen) ? (QApplication::desktop ()->availableGeometry ().height () -
+                                  height ()) / 2 : QApplication::desktop ()->availableGeometry ().height () / 10);
     }
 }
 
@@ -249,40 +235,27 @@ QVBoxLayout* layout = new QVBoxLayout;
     setFrameShape (QFrame::StyledPanel);
     setFrameShadow (QFrame::Plain);
 
-    connect (buttonUp, SIGNAL (clicked ()), this,
-             SLOT (on_buttonUp_clicked ()));
-    connect (buttonDown, SIGNAL (clicked ()), this,
-             SLOT (on_buttonDown_clicked ()));
-connect (scrollArea->verticalScrollBar (), SIGNAL (valueChanged (int)), this,
-         SLOT (on_scrollBar_valueChanged (int)));
+    connect (buttonUp, SIGNAL (clicked ()), this, SLOT (on_buttonUp_clicked ()));
+    connect (buttonDown, SIGNAL (clicked ()), this, SLOT (on_buttonDown_clicked ()));
+connect (scrollArea->verticalScrollBar (), SIGNAL (valueChanged (int)), this, SLOT (on_scrollBar_valueChanged (int)));
 
     buttonGroup = new QButtonGroup (this);
-    connect (buttonGroup, SIGNAL (buttonClicked (QAbstractButton *)),
-             this, SIGNAL (buttonClicked (QAbstractButton *)));
-connect (buttonGroup, SIGNAL (buttonClicked (int)),
-         this, SIGNAL (buttonClicked (int)));
-    connect (buttonGroup, SIGNAL (buttonPressed (QAbstractButton *)),
-             this, SIGNAL (buttonPressed (QAbstractButton *)));
-connect (buttonGroup, SIGNAL (buttonPressed (int)),
-         this, SIGNAL (buttonPressed (int)));
-    connect (buttonGroup, SIGNAL (buttonReleased (QAbstractButton *)),
-             this, SIGNAL (buttonReleased (QAbstractButton *)));
-connect (buttonGroup, SIGNAL (buttonReleased (int)),
-         this, SIGNAL (buttonReleased (int)));
+    connect (buttonGroup, SIGNAL (buttonClicked (QAbstractButton *)), this, SIGNAL (buttonClicked (QAbstractButton *)));
+connect (buttonGroup, SIGNAL (buttonClicked (int)), this, SIGNAL (buttonClicked (int)));
+    connect (buttonGroup, SIGNAL (buttonPressed (QAbstractButton *)), this, SIGNAL (buttonPressed (QAbstractButton *)));
+connect (buttonGroup, SIGNAL (buttonPressed (int)), this, SIGNAL (buttonPressed (int)));
+    connect (buttonGroup, SIGNAL (buttonReleased (QAbstractButton *)), this, SIGNAL (buttonReleased (QAbstractButton *)));
+connect (buttonGroup, SIGNAL (buttonReleased (int)), this, SIGNAL (buttonReleased (int)));
 }
 
 void ScrollableButtons::on_buttonUp_clicked ()
 {
-    scrollArea->verticalScrollBar ()->setValue (scrollArea->
-                                                verticalScrollBar ()->
-                                                value () - 10);
+    scrollArea->verticalScrollBar ()->setValue (scrollArea->verticalScrollBar ()->value () - 10);
 }
 
 void ScrollableButtons::on_buttonDown_clicked ()
 {
-    scrollArea->verticalScrollBar ()->setValue (scrollArea->
-                                                verticalScrollBar ()->
-                                                value () + 10);
+    scrollArea->verticalScrollBar ()->setValue (scrollArea->verticalScrollBar ()->value () + 10);
 }
 
 void ScrollableButtons::addButton (QAbstractButton * button)
@@ -297,35 +270,35 @@ void ScrollableButtons::addButton (QAbstractButton * button, int id)
     buttonGroup->addButton (button, id);
 }
 
-QAbstractButton* ScrollableButtons::button (int id) const const
-{
-    return buttonGroup->button (id);
-}
+     QAbstractButton* ScrollableButtons::button (int id) const const const const
+     {
+         return buttonGroup->button (id);
+     }
 
 QList < QAbstractButton * >ScrollableButtons::buttons () constconst
 {
     return buttonGroup->buttons ();
 }
 
-QAbstractButton* ScrollableButtons::checkedButton () const const
-{
-    return buttonGroup->checkedButton ();
-}
+     QAbstractButton* ScrollableButtons::checkedButton () const const const const
+     {
+         return buttonGroup->checkedButton ();
+     }
 
-int ScrollableButtons::checkedId () const const
-{
-    return buttonGroup->checkedId ();
-}
+     int ScrollableButtons::checkedId () const const const const
+     {
+         return buttonGroup->checkedId ();
+     }
 
-bool ScrollableButtons::exclusive () const const
-{
-    return buttonGroup->exclusive ();
-}
+     bool ScrollableButtons::exclusive () const const const const
+     {
+         return buttonGroup->exclusive ();
+     }
 
-int ScrollableButtons::id (QAbstractButton * button) const const
-{
-    return buttonGroup->id (button);
-}
+     int ScrollableButtons::id (QAbstractButton * button) const const const const
+     {
+         return buttonGroup->id (button);
+     }
 
 void ScrollableButtons::insertButton (int index, QAbstractButton * button)
 {
@@ -333,8 +306,7 @@ void ScrollableButtons::insertButton (int index, QAbstractButton * button)
     buttonGroup->addButton (button);
 }
 
-void ScrollableButtons::insertButton (int index, QAbstractButton * button,
-                                      int id)
+void ScrollableButtons::insertButton (int index, QAbstractButton * button, int id)
 {
     buttonLayout->insertWidget (index, button);
     buttonGroup->addButton (button, id);
@@ -358,10 +330,8 @@ void ScrollableButtons::setId (QAbstractButton * button, int id)
 
 void ScrollableButtons::on_scrollBar_valueChanged (int value)
 {
-    buttonUp->setEnabled (value >
-                          scrollArea->verticalScrollBar ()->minimum ());
-    buttonDown->setEnabled (value <
-                            scrollArea->verticalScrollBar ()->maximum ());
+    buttonUp->setEnabled (value > scrollArea->verticalScrollBar ()->minimum ());
+    buttonDown->setEnabled (value < scrollArea->verticalScrollBar ()->maximum ());
 }
 
 void ScrollableButtons::resizeEvent (QResizeEvent * event)
@@ -411,39 +381,34 @@ QPainter painter (this);
 
     painter.setPen (_shadowColor);
     painter.setBrush (_shadowColor);
-    painter.drawText (rect ().adjusted (0, 0, -delta, -delta).
-                      translated (delta, delta), alignment (), text ());
+    painter.drawText (rect ().adjusted (0, 0, -delta, -delta).translated (delta, delta), alignment (), text ());
 
     painter.setPen (_labelColor);
     painter.setBrush (_labelColor);
-    painter.drawText (rect ().adjusted (0, 0, -delta, -delta), alignment (),
-                      text ());
+    painter.drawText (rect ().adjusted (0, 0, -delta, -delta), alignment (), text ());
 }
 
-QSize ShadowedLabel::sizeHint () const const
-{
-    return QLabel::sizeHint () +
-        ((font ().pointSize () > 10) ? QSize (2, 2) : QSize (1, 1));
-}
+     QSize ShadowedLabel::sizeHint () const const const const
+     {
+         return QLabel::sizeHint () + ((font ().pointSize () > 10) ? QSize (2, 2) : QSize (1, 1));
+     }
 
-ShrinkableTableWidget::ShrinkableTableWidget (QWidget * parent):QTableWidget
-    (parent)
+ShrinkableTableWidget::ShrinkableTableWidget (QWidget * parent):QTableWidget (parent)
 {
     setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Preferred);
 }
 
-ShrinkableTableWidget::ShrinkableTableWidget (int rows, int columns, QWidget * parent):QTableWidget (rows, columns,
-              parent)
+ShrinkableTableWidget::ShrinkableTableWidget (int rows, int columns, QWidget * parent):QTableWidget (rows, columns, parent)
 {
     setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Preferred);
 }
 
-QSize ShrinkableTableWidget::sizeHint () const const
-{
-int row, height;
+     QSize ShrinkableTableWidget::sizeHint () const const const const
+     {
+    int row, height;
 
-    for (row = height = 0; row < rowCount (); ++row)
-        height += rowHeight (row);
+         for (row = height = 0; row < rowCount (); ++row)
+             height += rowHeight (row);
 
-    return QSize (QTableWidget::sizeHint ().width (), height + 10);
-}
+         return QSize (QTableWidget::sizeHint ().width (), height + 10);
+     }

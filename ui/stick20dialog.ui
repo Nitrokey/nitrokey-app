@@ -76,7 +76,7 @@
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-Password&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -89,7 +89,7 @@
        <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText</set>
       </property>
       <property name="text">
-       <string>Password</string>
+       <string>PIN</string>
       </property>
      </widget>
     </item>
@@ -113,7 +113,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Show password</string>
+    <string>Show PIN</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkBox_Matrix">

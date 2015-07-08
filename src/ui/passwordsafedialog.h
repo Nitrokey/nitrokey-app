@@ -31,7 +31,7 @@ namespace Ui
 class PasswordSafeDialog:public QDialog
 {
   Q_OBJECT public:
-    explicit PasswordSafeDialog (int Slot, QWidget * parent = 0);
+      explicit PasswordSafeDialog (int Slot, QWidget * parent = 0);
      ~PasswordSafeDialog ();
 
     Device* cryptostick;
@@ -39,7 +39,7 @@ class PasswordSafeDialog:public QDialog
     int delaySendTextInMs;
     int UsedSlot;
 
-    private slots: void on_ButtonSendpassword_clicked ();
+    private slots:void on_ButtonSendpassword_clicked ();
 
     void on_ButtonSendPW_LN_clicked ();
 

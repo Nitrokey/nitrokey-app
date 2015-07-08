@@ -117,23 +117,15 @@ int i;
         i++;
     }
     /*
-       ui->comboBox->addItem (QString("Enable Crypted Partition"));
-       ui->comboBox->addItem (QString("Disable Crypted Partition"));
-       ui->comboBox->addItem (QString("Enable Hidden Crypted Partition"));
-       ui->comboBox->addItem (QString("Disable Hidden Crypted Partition"));
-       ui->comboBox->addItem (QString("Enable Firmware Update"));
-       ui->comboBox->addItem (QString("Export Firmware To File"));
-       ui->comboBox->addItem (QString("Generate New Keys"));
-       ui->comboBox->addItem (QString("Initialize storage with random
-       data")); ui->comboBox->addItem (QString("Get Stick Status - Todo"));
-       ui->comboBox->addItem (QString("Set readonly Uncrypted Partition"));
-       ui->comboBox->addItem (QString("Set readwrite Uncrypted Partition")); */
+       ui->comboBox->addItem (QString("Enable Crypted Partition")); ui->comboBox->addItem (QString("Disable Crypted Partition"));
+       ui->comboBox->addItem (QString("Enable Hidden Crypted Partition")); ui->comboBox->addItem (QString("Disable Hidden Crypted Partition"));
+       ui->comboBox->addItem (QString("Enable Firmware Update")); ui->comboBox->addItem (QString("Export Firmware To File")); ui->comboBox->addItem
+       (QString("Generate New Keys")); ui->comboBox->addItem (QString("Initialize storage with random data")); ui->comboBox->addItem (QString("Get
+       Stick Status - Todo")); ui->comboBox->addItem (QString("Set readonly Uncrypted Partition")); ui->comboBox->addItem (QString("Set readwrite
+       Uncrypted Partition")); */
     /*
-       ui->comboBox->addItem (QString("Debug - Get Password Matrix"));
-       ui->comboBox->addItem (QString("Debug - Send Password Matrix Pin
-       Data")); ui->comboBox->addItem (QString("Debug - Send Password Matrix
-       Setup")); ui->comboBox->addItem (QString("Debug - Get stick 20
-       status")); */
+       ui->comboBox->addItem (QString("Debug - Get Password Matrix")); ui->comboBox->addItem (QString("Debug - Send Password Matrix Pin Data"));
+       ui->comboBox->addItem (QString("Debug - Send Password Matrix Setup")); ui->comboBox->addItem (QString("Debug - Get stick 20 status")); */
 }
 
 /*******************************************************************************
@@ -295,11 +287,8 @@ UpdateDialog dialog (this);
             break;
         case STICK20_CMD_GENERATE_NEW_KEYS:
             /*
-               { bool answer; answer =
-               csAppleARNING",ledYesOrNoBox("WARNING","Generating new AES
-               keys will destroy the encrypted volumes, hidden volumes, and
-               password safe! Continue?", 0, false); if (answer) { ret =
-               cryptostick->stick20CreateNewKeys (password); if (TRUE == ret)
+               { bool answer; answer = csAppleARNING",ledYesOrNoBox("WARNING","Generating new AES keys will destroy the encrypted volumes, hidden
+               volumes, and password safe! Continue?", 0, false); if (answer) { ret = cryptostick->stick20CreateNewKeys (password); if (TRUE == ret)
                { waitForAnswerFromStick20 = TRUE; } } } */
             ret = cryptostick->stick20CreateNewKeys (password);
             if (TRUE == ret)
@@ -318,9 +307,7 @@ bool answer;
                                               0, false);
             if (answer)
             {
-                ret =
-                    cryptostick->stick20FillSDCardWithRandomChars (password,
-                                                                   STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
+                ret = cryptostick->stick20FillSDCardWithRandomChars (password, STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
                 if (TRUE == ret)
                 {
                     waitForAnswerFromStick20 = TRUE;
@@ -332,18 +319,14 @@ bool answer;
             csApplet->warningBox ("Not implemented");
             break;
         case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
-            ret =
-                cryptostick->
-                stick20SendSetReadonlyToUncryptedVolume (password);
+            ret = cryptostick->stick20SendSetReadonlyToUncryptedVolume (password);
             if (TRUE == ret)
             {
                 waitForAnswerFromStick20 = TRUE;
             }
             break;
         case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
-            ret =
-                cryptostick->
-                stick20SendSetReadwriteToUncryptedVolume (password);
+            ret = cryptostick->stick20SendSetReadwriteToUncryptedVolume (password);
             if (TRUE == ret)
             {
                 waitForAnswerFromStick20 = TRUE;

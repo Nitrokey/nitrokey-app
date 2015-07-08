@@ -11,8 +11,8 @@ namespace Ui
 class securitydialog:public QDialog
 {
   Q_OBJECT public:
-    explicit securitydialog (QWidget * parent = 0);
-    ~securitydialog ();
+      explicit securitydialog (QWidget * parent = 0);
+     ~securitydialog ();
 
     private slots:void on_ST_CheckBox_toggled (bool checked);
 

@@ -47,9 +47,7 @@ class OwnSleep:public QThread
 };
 
 
-PasswordSafeDialog::PasswordSafeDialog (int Slot,
-                                        QWidget * parent):QDialog (parent),
-ui (new Ui::PasswordSafeDialog)
+PasswordSafeDialog::PasswordSafeDialog (int Slot, QWidget * parent):QDialog (parent), ui (new Ui::PasswordSafeDialog)
 {
     QString MsgText;
 
@@ -78,10 +76,8 @@ ui (new Ui::PasswordSafeDialog)
     /*
        { char Text[100]; MsgText.append(" -");
 
-       strcpy (Text,(char*)&cryptostick->passwordSafeSlotNames[UsedSlot][0]);
-       MsgText.append((char*)cryptostick->passwordSafeSlotNames[UsedSlot]); } */
-    MsgText.
-        append (tr (" clicked.\nPress <Button> to copy value to clipboard"));
+       strcpy (Text,(char*)&cryptostick->passwordSafeSlotNames[UsedSlot][0]); MsgText.append((char*)cryptostick->passwordSafeSlotNames[UsedSlot]); } */
+    MsgText.append (tr (" clicked.\nPress <Button> to copy value to clipboard"));
 
     ui->labelInfo->setText (MsgText);
 
@@ -115,9 +111,7 @@ int ret_s32;
     {
         OwnSleep::msleep (delaySendTextInMs);
 
-        ret_s32 =
-            cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,
-                                                         PWS_SEND_PASSWORD);
+        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_PASSWORD);
         if (ERR_NO_ERROR != ret_s32)
         {
             csApplet->warningBox (tr ("Can't send password chars via HID"));
@@ -161,27 +155,21 @@ int ret_s32;
     {
         OwnSleep::msleep (delaySendTextInMs);
 
-        ret_s32 =
-            cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,
-                                                         PWS_SEND_LOGINNAME);
+        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_LOGINNAME);
         if (ERR_NO_ERROR != ret_s32)
         {
             csApplet->warningBox (tr ("Can't send loginname via keyboard"));
             return;
         }
 
-        ret_s32 =
-            cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,
-                                                         PWS_SEND_TAB);
+        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_TAB);
         if (ERR_NO_ERROR != ret_s32)
         {
             csApplet->warningBox (tr ("Can't send CR via keyboard"));
             return;
         }
 
-        ret_s32 =
-            cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,
-                                                         PWS_SEND_PASSWORD);
+        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_PASSWORD);
         if (ERR_NO_ERROR != ret_s32)
         {
             csApplet->warningBox (tr ("Can't send password via keyboard"));
@@ -237,9 +225,7 @@ int ret_s32;
     {
         OwnSleep::msleep (delaySendTextInMs);
 
-        ret_s32 =
-            cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot,
-                                                         PWS_SEND_LOGINNAME);
+        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_LOGINNAME);
         if (ERR_NO_ERROR != ret_s32)
         {
             csApplet->warningBox (tr ("Can't send loginname chars via HID"));
@@ -301,12 +287,8 @@ QString MsgText;
     {
         MsgText.append (tr ("PW Safe Slot "));
         MsgText.append (QString::number (UsedSlot + 1, 10));
-        MsgText.
-            append (tr
-                    (" clicked.\nPress <Button> and set cursor to the input dialog.\nThe value is send in "));
-        MsgText.
-            append (QString::
-                    number ((float) delaySendTextInMs / 1000.0, 'f', 1));
+        MsgText.append (tr (" clicked.\nPress <Button> and set cursor to the input dialog.\nThe value is send in "));
+        MsgText.append (QString::number ((float) delaySendTextInMs / 1000.0, 'f', 1));
         MsgText.append (tr (" seconds"));
 
         ui->labelInfo->setText (MsgText);
@@ -337,8 +319,7 @@ QString MsgText;
 
     MsgText.append (tr ("PW Safe Slot "));
     MsgText.append (QString::number (UsedSlot + 1, 10));
-    MsgText.
-        append (tr (" clicked.\nPress <Button> to copy value to clipboard"));
+    MsgText.append (tr (" clicked.\nPress <Button> to copy value to clipboard"));
 
     ui->labelInfo->setText (MsgText);
 
@@ -369,11 +350,8 @@ QString MsgText;
 
     MsgText.append (tr ("PW Safe Slot "));
     MsgText.append (QString::number (UsedSlot + 1, 10));
-    MsgText.
-        append (tr
-                (" clicked.\nPress <Button> and set cursor to the input dialog.\nThe value is send in "));
-    MsgText.
-        append (QString::number ((float) delaySendTextInMs / 1000.0, 'f', 1));
+    MsgText.append (tr (" clicked.\nPress <Button> and set cursor to the input dialog.\nThe value is send in "));
+    MsgText.append (QString::number ((float) delaySendTextInMs / 1000.0, 'f', 1));
     MsgText.append (tr (" seconds"));
 
     ui->labelInfo->setText (MsgText);

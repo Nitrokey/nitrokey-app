@@ -26,11 +26,11 @@
 
 class SplashScreen:public QSplashScreen
 {
-    Q_OBJECT QPixmap * logo;
+    Q_OBJECT QPixmap* logo;
 
   public:
-    SplashScreen ();
-    virtual ~ SplashScreen ();
+      SplashScreen ();
+      virtual ~ SplashScreen ();
 };
 
 #endif

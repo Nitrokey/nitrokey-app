@@ -62,7 +62,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.crypto-stick.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>

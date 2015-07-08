@@ -50,8 +50,7 @@ class OwnSleep:public QThread
 
 
 Stick20ResponseDialog::Stick20ResponseDialog (QWidget * parent, Stick20ResponseTask * Stick20TaskPointer):
-QDialog (parent),
-ui (new Ui::Stick20ResponseDialog)
+QDialog (parent), ui (new Ui::Stick20ResponseDialog)
 {
     ui->setupUi (this);
 
@@ -64,17 +63,12 @@ QMovie* ProgressMovie = new QMovie (":/images/progressWheel2.gif");
     ui->LabelProgressWheel->setAttribute (Qt::WA_TranslucentBackground, true);
 
     // Center dialog to the screen
-    this->setGeometry (QStyle::alignedRect (Qt::LeftToRight,
-                                            Qt::AlignCenter,
-                                            this->size (),
-                                            QApplication::desktop ()->
-                                            availableGeometry ()));
+    this->setGeometry (QStyle::alignedRect (Qt::LeftToRight, Qt::AlignCenter, this->size (), QApplication::desktop ()->availableGeometry ()));
 
 
     Stick20Task = Stick20TaskPointer;
 
-    if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS !=
-        Stick20Task->ActiveCommand)
+    if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS != Stick20Task->ActiveCommand)
     {
         this->setWindowFlags (Qt::Dialog | Qt::FramelessWindowHint);
         ui->HeaderText->hide ();
@@ -85,13 +79,12 @@ QMovie* ProgressMovie = new QMovie (":/images/progressWheel2.gif");
     }
 
     if (FALSE == DebugingActive)    // Resize the dialog when debugging is
-                                    // inactive
+        // inactive
     {
         ui->OutputText->hide ();
         ui->OutputText->setText ("");
         // Start progress wheel
-        if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS !=
-            Stick20Task->ActiveCommand)
+        if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS != Stick20Task->ActiveCommand)
         {
             ui->LabelProgressWheel->show ();
 
@@ -119,8 +112,7 @@ QMovie* ProgressMovie = new QMovie (":/images/progressWheel2.gif");
     pollStick20Timer = new QTimer (this);
 
     // Start timer for polling stick response
-    connect (pollStick20Timer, SIGNAL (timeout ()), this,
-             SLOT (checkStick20StatusDialog ()));
+    connect (pollStick20Timer, SIGNAL (timeout ()), this, SLOT (checkStick20StatusDialog ()));
     pollStick20Timer->start (100);
 
     this->layout ()->setSizeConstraint (QLayout::SetFixedSize);
@@ -146,126 +138,72 @@ void Stick20ResponseDialog::showStick20Configuration (int Status)
     if (0 == Status)
     {
         OutputText.append (QString ("Firmware version      "));
-        OutputText.append (QString ("%1").
-                           arg (QString::
-                                number (HID_Stick20Configuration_st.
-                                        VersionInfo_au8[0])));
+        OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.VersionInfo_au8[0])));
         OutputText.append (QString ("."));
-        OutputText.append (QString ("%1").
-                           arg (QString::
-                                number (HID_Stick20Configuration_st.
-                                        VersionInfo_au8[1])));
+        OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.VersionInfo_au8[1])));
         OutputText.append (QString ("\n"));
 
         if (TRUE == HID_Stick20Configuration_st.FirmwareLocked_u8)
         {
-            OutputText.append (QString ("    *** Firmware is locked *** ")).
-                append ("\n");
+            OutputText.append (QString ("    *** Firmware is locked *** ")).append ("\n");
         }
 
-        if (READ_WRITE_ACTIVE ==
-            HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8)
+        if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8)
         {
-            OutputText.
-                append (QString ("Uncrypted volume     READ/WRITE mode ")).
-                append ("\n");
+            OutputText.append (QString ("Uncrypted volume     READ/WRITE mode ")).append ("\n");
         }
         else
         {
-            OutputText.
-                append (QString ("Uncrypted volume     READ ONLY mode ")).
-                append ("\n");
+            OutputText.append (QString ("Uncrypted volume     READ ONLY mode ")).append ("\n");
         }
 
-        if (0 !=
-            (HID_Stick20Configuration_st.
-             VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE)))
+        if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE)))
         {
-            OutputText.append (QString ("Crypted volume        active")).
-                append ("\n");
+            OutputText.append (QString ("Crypted volume        active")).append ("\n");
         }
         else
         {
-            OutputText.append (QString ("Crypted volume        not active")).
-                append ("\n");
+            OutputText.append (QString ("Crypted volume        not active")).append ("\n");
         }
 
-        if (0 !=
-            (HID_Stick20Configuration_st.
-             VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE)))
+        if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE)))
         {
-            OutputText.append (QString ("Hidden volume         active")).
-                append ("\n");
+            OutputText.append (QString ("Hidden volume         active")).append ("\n");
         }
 
         if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01))
         {
-            OutputText.
-                append (QString ("*** New SD card found - Change Counter "));
-            OutputText.append (QString ("%1").
-                               arg (QString::
-                                    number (HID_Stick20Configuration_st.
-                                            NewSDCardFound_u8 >> 1))).
-                append ("\n");
+            OutputText.append (QString ("*** New SD card found - Change Counter "));
+            OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.NewSDCardFound_u8 >> 1))).append ("\n");
         }
         else
         {
-            OutputText.
-                append (QString ("SD card              Change Counter "));
-            OutputText.append (QString ("%1").
-                               arg (QString::
-                                    number (HID_Stick20Configuration_st.
-                                            NewSDCardFound_u8 >> 1))).
-                append ("\n");
+            OutputText.append (QString ("SD card              Change Counter "));
+            OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.NewSDCardFound_u8 >> 1))).append ("\n");
         }
 
-        if (0 ==
-            (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01))
+        if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01))
         {
-            OutputText.
-                append (QString
-                        ("*** Not initialized with random data - Fill Counter "));
-            OutputText.append (QString ("%1").
-                               arg (QString::
-                                    number (HID_Stick20Configuration_st.
-                                            SDFillWithRandomChars_u8 >> 1))).
-                append ("\n");
+            OutputText.append (QString ("*** Not initialized with random data - Fill Counter "));
+            OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 >> 1))).append ("\n");
         }
         else
         {
-            OutputText.
-                append (QString ("Filled with random    Fill Counter "));
-            OutputText.append (QString ("%1").
-                               arg (QString::
-                                    number (HID_Stick20Configuration_st.
-                                            SDFillWithRandomChars_u8 >> 1))).
-                append ("\n");
+            OutputText.append (QString ("Filled with random    Fill Counter "));
+            OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 >> 1))).append ("\n");
         }
 
         OutputText.append (QString ("Smartcard ID "));
-        OutputText.append (QString ("%1").
-                           arg (QString::
-                                number (HID_Stick20Configuration_st.
-                                        ActiveSmartCardID_u32))).
-            append ("\n");
+        OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.ActiveSmartCardID_u32))).append ("\n");
 
         OutputText.append (QString ("SD ID "));
-        OutputText.append (QString ("%1").
-                           arg (QString::
-                                number (HID_Stick20Configuration_st.
-                                        ActiveSD_CardID_u32))).append ("\n");
+        OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.ActiveSD_CardID_u32))).append ("\n");
 
         OutputText.append (QString ("Admin PIN retry counter "));
-        OutputText.append (QString ("%1").
-                           arg (QString::
-                                number (HID_Stick20Configuration_st.
-                                        AdminPwRetryCount))).append ("\n");
+        OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.AdminPwRetryCount))).append ("\n");
 
         OutputText.append (QString ("User PIN retry counter  "));
-        OutputText.append (QString ("%1").
-                           arg (QString::
-                                number (HID_Stick20Configuration_st.
-                                        UserPwRetryCount))).append ("\n");
+        OutputText.append (QString ("%1").arg (QString::number (HID_Stick20Configuration_st.UserPwRetryCount))).append ("\n");
 
     }
     /* else { OutputText.append(QString("Can't read HID interface\n")); } */
@@ -276,33 +214,21 @@ void Stick20ResponseDialog::showStick20Configuration (int Status)
 }
 
 
-void Stick20ResponseDialog::checkStick20StatusDebug (Response *
-                                                     stick20Response,
-                                                     int Status)
+void Stick20ResponseDialog::checkStick20StatusDebug (Response * stick20Response, int Status)
 {
     QString OutputText;
 
-    OutputText.append (QByteArray::number (Stick20Task->Counter_u32, 10)).
-        append (" Calls\n");
+    OutputText.append (QByteArray::number (Stick20Task->Counter_u32, 10)).append (" Calls\n");
 
     if (0 == Status)
     {
         OutputText.append (QString ("CommandCounter   ")).
-            append (QByteArray::
-                    number (stick20Response->HID_Stick20Status_st.
-                            CommandCounter_u8)).append ("\n");
+            append (QByteArray::number (stick20Response->HID_Stick20Status_st.CommandCounter_u8)).append ("\n");
         OutputText.append (QString ("LastCommand      ")).
-            append (QByteArray::
-                    number (stick20Response->HID_Stick20Status_st.
-                            LastCommand_u8)).append ("\n");
-        OutputText.append (QString ("Status           ")).
-            append (QByteArray::
-                    number (stick20Response->HID_Stick20Status_st.Status_u8)).
-            append ("\n");
+            append (QByteArray::number (stick20Response->HID_Stick20Status_st.LastCommand_u8)).append ("\n");
+        OutputText.append (QString ("Status           ")).append (QByteArray::number (stick20Response->HID_Stick20Status_st.Status_u8)).append ("\n");
         OutputText.append (QString ("ProgressBarValue ")).
-            append (QByteArray::
-                    number (stick20Response->HID_Stick20Status_st.
-                            ProgressBarValue_u8)).append ("\n");
+            append (QByteArray::number (stick20Response->HID_Stick20Status_st.ProgressBarValue_u8)).append ("\n");
     }
     else
     {
@@ -318,8 +244,7 @@ void Stick20ResponseDialog::checkStick20StatusDialog (void)
 {
     QString OutputText;
 
-    if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS ==
-        Stick20Task->ActiveCommand)
+    if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS == Stick20Task->ActiveCommand)
     {
         ui->HeaderText->show ();
     }
@@ -328,14 +253,12 @@ void Stick20ResponseDialog::checkStick20StatusDialog (void)
 
     if (TRUE == DebugingActive)
     {
-        checkStick20StatusDebug (Stick20Task->stick20Response,
-                                 Stick20Task->retStick20Respone);
+        checkStick20StatusDebug (Stick20Task->stick20Response, Stick20Task->retStick20Respone);
     }
 
     if (0 == Stick20Task->retStick20Respone)
     {
-        switch (Stick20Task->stick20Response->HID_Stick20Status_st.
-                LastCommand_u8)
+        switch (Stick20Task->stick20Response->HID_Stick20Status_st.LastCommand_u8)
         {
             case STICK20_CMD_ENABLE_CRYPTED_PARI:
                 OutputText.append (QString ("Enabling encrypted volume"));
@@ -362,27 +285,19 @@ void Stick20ResponseDialog::checkStick20StatusDialog (void)
                 OutputText.append (QString ("Generating new keys"));
                 break;
             case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
-                OutputText.
-                    append (QString
-                            ("Initializing storage with random data"));
+                OutputText.append (QString ("Initializing storage with random data"));
                 break;
             case STICK20_CMD_GET_DEVICE_STATUS:
                 OutputText.append (QString ("Getting device configuration"));
                 break;
             case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
-                OutputText.
-                    append (QString
-                            ("Enabling read-only configuration for the unencrypted volume"));
+                OutputText.append (QString ("Enabling read-only configuration for the unencrypted volume"));
                 break;
             case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
-                OutputText.
-                    append (QString
-                            ("Enabling read-write configuration for the unencrypted volume"));
+                OutputText.append (QString ("Enabling read-write configuration for the unencrypted volume"));
                 break;
             case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND:
-                OutputText.
-                    append (QString
-                            ("Disabling 'initialize storage with random data' warning"));
+                OutputText.append (QString ("Disabling 'initialize storage with random data' warning"));
                 break;
             case STICK20_CMD_PRODUCTION_TEST:
                 OutputText.append (QString ("Production test"));
@@ -422,9 +337,7 @@ void Stick20ResponseDialog::checkStick20StatusDialog (void)
                 OutputText.append (QString ("BUSY"));
                 ui->progressBar->show ();
                 ui->LabelProgressWheel->hide ();
-                ui->progressBar->setValue (Stick20Task->stick20Response->
-                                           HID_Stick20Status_st.
-                                           ProgressBarValue_u8);
+                ui->progressBar->setValue (Stick20Task->stick20Response->HID_Stick20Status_st.ProgressBarValue_u8);
                 break;
             case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY:
                 OutputText.append (QString ("PASSWORD MATRIX READY"));

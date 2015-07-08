@@ -31,8 +31,8 @@ namespace Ui
 class stick20HiddenVolumeDialog:public QDialog
 {
   Q_OBJECT public:
-    explicit stick20HiddenVolumeDialog (QWidget * parent = 0);
-    ~stick20HiddenVolumeDialog ();
+      explicit stick20HiddenVolumeDialog (QWidget * parent = 0);
+     ~stick20HiddenVolumeDialog ();
 
     HiddenVolumeSetup_tst HV_Setup_st;
 

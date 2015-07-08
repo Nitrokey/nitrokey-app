@@ -111,37 +111,16 @@ extern "C"
     typedef void* PHIDP_PREPARSED_DATA;
 #define HIDP_STATUS_SUCCESS 0x110000
 
-    typedef BOOLEAN (__stdcall * HidD_GetAttributes_) (HANDLE device,
-                                                       PHIDD_ATTRIBUTES
-                                                       attrib);
-    typedef BOOLEAN (__stdcall * HidD_GetSerialNumberString_) (HANDLE device,
-                                                               PVOID buffer,
-                                                               ULONG
-                                                               buffer_len);
-    typedef BOOLEAN (__stdcall * HidD_GetManufacturerString_) (HANDLE handle,
-                                                               PVOID buffer,
-                                                               ULONG
-                                                               buffer_len);
-    typedef BOOLEAN (__stdcall * HidD_GetProductString_) (HANDLE handle,
-                                                          PVOID buffer,
-                                                          ULONG buffer_len);
-    typedef BOOLEAN (__stdcall * HidD_SetFeature_) (HANDLE handle, PVOID data,
-                                                    ULONG length);
-    typedef BOOLEAN (__stdcall * HidD_GetFeature_) (HANDLE handle, PVOID data,
-                                                    ULONG length);
-    typedef BOOLEAN (__stdcall * HidD_GetIndexedString_) (HANDLE handle,
-                                                          ULONG string_index,
-                                                          PVOID buffer,
-                                                          ULONG buffer_len);
-    typedef BOOLEAN (__stdcall * HidD_GetPreparsedData_) (HANDLE handle,
-                                                          PHIDP_PREPARSED_DATA
-                                                          * preparsed_data);
-    typedef BOOLEAN (__stdcall *
-                     HidD_FreePreparsedData_) (PHIDP_PREPARSED_DATA
-                                               preparsed_data);
-    typedef NTSTATUS (__stdcall *
-                      HidP_GetCaps_) (PHIDP_PREPARSED_DATA preparsed_data,
-                                      HIDP_CAPS * caps);
+    typedef BOOLEAN (__stdcall * HidD_GetAttributes_) (HANDLE device, PHIDD_ATTRIBUTES attrib);
+    typedef BOOLEAN (__stdcall * HidD_GetSerialNumberString_) (HANDLE device, PVOID buffer, ULONG buffer_len);
+    typedef BOOLEAN (__stdcall * HidD_GetManufacturerString_) (HANDLE handle, PVOID buffer, ULONG buffer_len);
+    typedef BOOLEAN (__stdcall * HidD_GetProductString_) (HANDLE handle, PVOID buffer, ULONG buffer_len);
+    typedef BOOLEAN (__stdcall * HidD_SetFeature_) (HANDLE handle, PVOID data, ULONG length);
+    typedef BOOLEAN (__stdcall * HidD_GetFeature_) (HANDLE handle, PVOID data, ULONG length);
+    typedef BOOLEAN (__stdcall * HidD_GetIndexedString_) (HANDLE handle, ULONG string_index, PVOID buffer, ULONG buffer_len);
+    typedef BOOLEAN (__stdcall * HidD_GetPreparsedData_) (HANDLE handle, PHIDP_PREPARSED_DATA * preparsed_data);
+    typedef BOOLEAN (__stdcall * HidD_FreePreparsedData_) (PHIDP_PREPARSED_DATA preparsed_data);
+    typedef NTSTATUS (__stdcall * HidP_GetCaps_) (PHIDP_PREPARSED_DATA preparsed_data, HIDP_CAPS * caps);
 
     static HidD_GetAttributes_ HidD_GetAttributes;
     static HidD_GetSerialNumberString_ HidD_GetSerialNumberString;
@@ -184,8 +163,7 @@ extern "C"
           dev->read_pending = FALSE;
           dev->read_buf = NULL;
           memset (&dev->ol, 0, sizeof (dev->ol));
-          dev->ol.hEvent = CreateEvent (NULL, FALSE, FALSE  /* inital state
-                                                               f=nonsignaled */ , NULL);
+          dev->ol.hEvent = CreateEvent (NULL, FALSE, FALSE /* inital state f=nonsignaled */ , NULL);
 
           return dev;
     }
@@ -197,13 +175,8 @@ extern "C"
 
         char msg_c[400];
 
-        FormatMessageW (FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                        FORMAT_MESSAGE_FROM_SYSTEM |
-                        FORMAT_MESSAGE_IGNORE_INSERTS,
-                        NULL,
-                        GetLastError (),
-                        MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),
-                        (LPWSTR) & msg, 0 /* sz */ ,
+        FormatMessageW (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, GetLastError (), MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR) & msg, 0   /* sz
+                                                                                                                                                                                                             */ ,
                         NULL);
 
         // Write error to debug log
@@ -265,8 +238,7 @@ extern "C"
         // GENERIC_READ);
         DWORD desired_access = 0;
 
-        DWORD share_mode = (enumerate) ?
-            FILE_SHARE_READ | FILE_SHARE_WRITE : FILE_SHARE_READ;
+        DWORD share_mode = (enumerate) ? FILE_SHARE_READ | FILE_SHARE_WRITE : FILE_SHARE_READ;
 
         handle = CreateFileA (path, desired_access, share_mode, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED,  // FILE_ATTRIBUTE_NORMAL,
                               0);
@@ -305,8 +277,7 @@ extern "C"
         return 0;
     }
 
-    struct hid_device_info HID_API_EXPORT* HID_API_CALL
-        hid_enumerate (unsigned short vendor_id, unsigned short product_id)
+    struct hid_device_info HID_API_EXPORT* HID_API_CALL hid_enumerate (unsigned short vendor_id, unsigned short product_id)
     {
         BOOL res;
 
@@ -315,15 +286,14 @@ extern "C"
         struct hid_device_info* cur_dev = NULL;
 
         // Windows objects for interacting with the driver.
-        GUID InterfaceClassGuid =
-            { 0x4d1e55b2, 0xf16f, 0x11cf, {0x88, 0xcb, 0x00, 0x11, 0x11, 0x00,
-                                           0x00, 0x30} };
+        GUID InterfaceClassGuid = { 0x4d1e55b2, 0xf16f, 0x11cf, {0x88, 0xcb, 0x00, 0x11, 0x11, 0x00,
+                                                                 0x00, 0x30}
+        };
         SP_DEVINFO_DATA devinfo_data;
 
         SP_DEVICE_INTERFACE_DATA device_interface_data;
 
-        SP_DEVICE_INTERFACE_DETAIL_DATA_A* device_interface_detail_data =
-            NULL;
+        SP_DEVICE_INTERFACE_DETAIL_DATA_A* device_interface_detail_data = NULL;
         HDEVINFO device_info_set = INVALID_HANDLE_VALUE;
 
         int device_index = 0;
@@ -334,8 +304,7 @@ extern "C"
         {   // For debugging
         char text[1000];
 
-            sprintf (text, "hid_enumerate: Start VID %04x PID %04x\n",
-                     vendor_id, product_id);
+            sprintf (text, "hid_enumerate: Start VID %04x PID %04x\n", vendor_id, product_id);
             DebugAppendTextGui (text);
         }
 #endif
@@ -350,9 +319,7 @@ extern "C"
         device_interface_data.cbSize = sizeof (SP_DEVICE_INTERFACE_DATA);
 
         // Get information for all the devices belonging to the HID class.
-        device_info_set =
-            SetupDiGetClassDevsA (&InterfaceClassGuid, NULL, NULL,
-                                  DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
+        device_info_set = SetupDiGetClassDevsA (&InterfaceClassGuid, NULL, NULL, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
         // device_info_set = SetupDiGetClassDevsA(NULL, NULL, NULL,
         // DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
 
@@ -369,11 +336,7 @@ extern "C"
 
         HIDD_ATTRIBUTES attrib;
 
-            res = SetupDiEnumDeviceInterfaces (device_info_set,
-                                               NULL,
-                                               &InterfaceClassGuid,
-                                               device_index,
-                                               &device_interface_data);
+            res = SetupDiEnumDeviceInterfaces (device_info_set, NULL, &InterfaceClassGuid, device_index, &device_interface_data);
 
             if (!res)
             {
@@ -385,27 +348,18 @@ extern "C"
             // Call with 0-sized detail size, and let the function
             // tell us how long the detail struct needs to be. The
             // size is put in &required_size.
-            res = SetupDiGetDeviceInterfaceDetailA (device_info_set,
-                                                    &device_interface_data,
-                                                    NULL,
-                                                    0, &required_size, NULL);
+            res = SetupDiGetDeviceInterfaceDetailA (device_info_set, &device_interface_data, NULL, 0, &required_size, NULL);
 
             // Allocate a long enough structure for
             // device_interface_detail_data.
-            device_interface_detail_data =
-                (SP_DEVICE_INTERFACE_DETAIL_DATA_A *) malloc (required_size);
-            device_interface_detail_data->cbSize =
-                sizeof (SP_DEVICE_INTERFACE_DETAIL_DATA_A);
+            device_interface_detail_data = (SP_DEVICE_INTERFACE_DETAIL_DATA_A *) malloc (required_size);
+            device_interface_detail_data->cbSize = sizeof (SP_DEVICE_INTERFACE_DETAIL_DATA_A);
 
             // Get the detailed data for this device. The detail data gives
             // us
             // the device path for this device, which is then passed into
             // CreateFile() to get a handle to the device.
-            res = SetupDiGetDeviceInterfaceDetailA (device_info_set,
-                                                    &device_interface_data,
-                                                    device_interface_detail_data,
-                                                    required_size,
-                                                    NULL, NULL);
+            res = SetupDiGetDeviceInterfaceDetailA (device_info_set, &device_interface_data, device_interface_detail_data, required_size, NULL, NULL);
 
             if (!res)
             {
@@ -424,18 +378,13 @@ extern "C"
                 // Populate devinfo_data. This function will return failure
                 // when there are no more interfaces left.
 
-                res =
-                    SetupDiEnumDeviceInfo (device_info_set, i, &devinfo_data);
+                res = SetupDiEnumDeviceInfo (device_info_set, i, &devinfo_data);
                 if (!res)
                     goto cont;
 
                 res =
                     SetupDiGetDeviceRegistryPropertyA (device_info_set,
-                                                       &devinfo_data,
-                                                       SPDRP_CLASS, NULL,
-                                                       (PBYTE) driver_name,
-                                                       sizeof (driver_name),
-                                                       NULL);
+                                                       &devinfo_data, SPDRP_CLASS, NULL, (PBYTE) driver_name, sizeof (driver_name), NULL);
                 if (!res)
                     goto cont;
 #ifdef STICK20_DEBUG_ALL
@@ -446,19 +395,12 @@ extern "C"
                     DebugAppendText (text);
                 }
 #endif
-                if ((strcmp (driver_name, "HIDClass") == 0)
-                    || (strcmp (driver_name, "Keyboard") == 0))
+                if ((strcmp (driver_name, "HIDClass") == 0) || (strcmp (driver_name, "Keyboard") == 0))
                 {
                     // See if there's a driver bound.
                     res =
                         SetupDiGetDeviceRegistryPropertyA (device_info_set,
-                                                           &devinfo_data,
-                                                           SPDRP_DRIVER, NULL,
-                                                           (PBYTE)
-                                                           driver_name,
-                                                           sizeof
-                                                           (driver_name),
-                                                           NULL);
+                                                           &devinfo_data, SPDRP_DRIVER, NULL, (PBYTE) driver_name, sizeof (driver_name), NULL);
                     if (res)
                     {
                         break;
@@ -469,14 +411,12 @@ extern "C"
             {
         char text[1000];
 
-                sprintf (text, "HandleName: %s\n",
-                         device_interface_detail_data->DevicePath);
+                sprintf (text, "HandleName: %s\n", device_interface_detail_data->DevicePath);
                 DebugAppendText (text);
             }
 #endif
             // Open a handle to the device
-            write_handle =
-                open_device (device_interface_detail_data->DevicePath, TRUE);
+            write_handle = open_device (device_interface_detail_data->DevicePath, TRUE);
 
             // Check validity of write_handle.
             if (write_handle == INVALID_HANDLE_VALUE)
@@ -499,9 +439,7 @@ extern "C"
                 // sprintf(text,"Check Product-Vendor: Start VID %04x PID
                 // %04x\n",attrib.ProductID, attrib.VendorID);
                 // DebugAppendText (text);
-                if ((attrib.VendorID == 0x20A0)
-                    && (attrib.ProductID == 0x4109)
-                    && (attrib.ProductID == product_id))
+                if ((attrib.VendorID == 0x20A0) && (attrib.ProductID == 0x4109) && (attrib.ProductID == product_id))
                 {
                     sprintf (text, "*** STICK FOUND\n");
                     DebugAppendTextGui (text);
@@ -512,9 +450,7 @@ extern "C"
 
             // Check the VID/PID to see if we should add this
             // device to the enumeration list.
-            if ((vendor_id == 0x0 && product_id == 0x0) ||
-                (attrib.VendorID == vendor_id
-                 && attrib.ProductID == product_id))
+            if ((vendor_id == 0x0 && product_id == 0x0) || (attrib.VendorID == vendor_id && attrib.ProductID == product_id))
             {
 
 #define WSTR_LEN 512
@@ -535,10 +471,7 @@ extern "C"
         size_t len;
 
                 /* VID/PID match. Create the record. */
-                tmp =
-                    (struct hid_device_info *) calloc (1,
-                                                       sizeof (struct
-                                                               hid_device_info));
+                tmp = (struct hid_device_info *) calloc (1, sizeof (struct hid_device_info));
                 if (cur_dev)
                 {
                     cur_dev->next = tmp;
@@ -577,9 +510,7 @@ extern "C"
                     cur_dev->path = NULL;
 
                 /* Serial Number */
-                res =
-                    HidD_GetSerialNumberString (write_handle, wstr,
-                                                sizeof (wstr));
+                res = HidD_GetSerialNumberString (write_handle, wstr, sizeof (wstr));
                 wstr[WSTR_LEN - 1] = 0x0000;
                 if (res)
                 {
@@ -587,9 +518,7 @@ extern "C"
                 }
 
                 /* Manufacturer String */
-                res =
-                    HidD_GetManufacturerString (write_handle, wstr,
-                                                sizeof (wstr));
+                res = HidD_GetManufacturerString (write_handle, wstr, sizeof (wstr));
                 wstr[WSTR_LEN - 1] = 0x0000;
                 if (res)
                 {
@@ -597,8 +526,7 @@ extern "C"
                 }
 
                 /* Product String */
-                res =
-                    HidD_GetProductString (write_handle, wstr, sizeof (wstr));
+                res = HidD_GetProductString (write_handle, wstr, sizeof (wstr));
                 wstr[WSTR_LEN - 1] = 0x0000;
                 if (res)
                 {
@@ -612,11 +540,9 @@ extern "C"
                 /* Release Number */
                 cur_dev->release_number = attrib.VersionNumber;
 
-                /* Interface Number. It can sometimes be parsed out of the
-                   path on Windows if a device has multiple interfaces. See
-                   http://msdn.microsoft.com/en-us/windows/hardware/gg487473
-                   or search for "Hardware IDs for HID Devices" at MSDN. If
-                   it's not in the path, it's set to -1. */
+                /* Interface Number. It can sometimes be parsed out of the path on Windows if a device has multiple interfaces. See
+                   http://msdn.microsoft.com/en-us/windows/hardware/gg487473 or search for "Hardware IDs for HID Devices" at MSDN. If it's not in the
+                   path, it's set to -1. */
                 cur_dev->interface_number = -1;
                 if (cur_dev->path)
                 {
@@ -628,12 +554,10 @@ extern "C"
 
         char* endptr = NULL;
 
-                        cur_dev->interface_number =
-                            strtol (hex_str, &endptr, 16);
+                        cur_dev->interface_number = strtol (hex_str, &endptr, 16);
                         if (endptr == hex_str)
                         {
-                            /* The parsing failed. Set interface_number to
-                               -1. */
+                            /* The parsing failed. Set interface_number to -1. */
                             cur_dev->interface_number = -1;
                         }
                     }
@@ -657,9 +581,7 @@ extern "C"
 
     }
 
-    void HID_API_EXPORT HID_API_CALL hid_free_enumeration (struct
-                                                           hid_device_info*
-                                                           devs)
+    void HID_API_EXPORT HID_API_CALL hid_free_enumeration (struct hid_device_info* devs)
     {
         // TODO: Merge this with the Linux version. This function is
         // platform-independent.
@@ -679,12 +601,7 @@ extern "C"
     }
 
 
-    HID_API_EXPORT hid_device* HID_API_CALL hid_open (unsigned short
-                                                      vendor_id,
-                                                      unsigned short
-                                                      product_id,
-                                                      const wchar_t *
-                                                      serial_number)
+    HID_API_EXPORT hid_device* HID_API_CALL hid_open (unsigned short vendor_id, unsigned short product_id, const wchar_t * serial_number)
     {
         // TODO: Merge this functions with the Linux version. This function
         // should be platform independent.
@@ -698,8 +615,7 @@ extern "C"
         {   // For debugging
         char text[1000];
 
-            sprintf (text, "hid_open: VID %04x PID %04x\n", vendor_id,
-                     product_id);
+            sprintf (text, "hid_open: VID %04x PID %04x\n", vendor_id, product_id);
             DebugAppendTextGui (text);
         }
 #endif
@@ -708,8 +624,7 @@ extern "C"
         cur_dev = devs;
         while (cur_dev)
         {
-            if (cur_dev->vendor_id == vendor_id &&
-                cur_dev->product_id == product_id)
+            if (cur_dev->vendor_id == vendor_id && cur_dev->product_id == product_id)
             {
                 if (serial_number)
                 {
@@ -798,9 +713,7 @@ extern "C"
         return NULL;
     }
 
-    int HID_API_EXPORT HID_API_CALL hid_write (hid_device * dev,
-                                               const unsigned char* data,
-                                               size_t length)
+    int HID_API_EXPORT HID_API_CALL hid_write (hid_device * dev, const unsigned char* data, size_t length)
     {
         DWORD bytes_written;
 
@@ -812,22 +725,17 @@ extern "C"
 
         memset (&ol, 0, sizeof (ol));
 
-        /* Make sure the right number of bytes are passed to WriteFile.
-           Windows expects the number of bytes which are in the _longest_
-           report (plus one for the report number) bytes even if the data is
-           a report which is shorter than that. Windows gives us this value
-           in caps.OutputReportByteLength. If a user passes in fewer bytes
-           than this, create a temporary buffer which is the proper size. */
+        /* Make sure the right number of bytes are passed to WriteFile. Windows expects the number of bytes which are in the _longest_ report (plus
+           one for the report number) bytes even if the data is a report which is shorter than that. Windows gives us this value in
+           caps.OutputReportByteLength. If a user passes in fewer bytes than this, create a temporary buffer which is the proper size. */
         if (length >= dev->output_report_length)
         {
-            /* The user passed the right number of bytes. Use the buffer
-               as-is. */
+            /* The user passed the right number of bytes. Use the buffer as-is. */
             buf = (unsigned char *) data;
         }
         else
         {
-            /* Create a temporary buffer and copy the user's data into it,
-               padding the rest with zeros. */
+            /* Create a temporary buffer and copy the user's data into it, padding the rest with zeros. */
             buf = (unsigned char *) malloc (dev->output_report_length);
             memcpy (buf, data, length);
             memset (buf + length, 0, dev->output_report_length - length);
@@ -849,9 +757,7 @@ extern "C"
 
         // Wait here until the write is done. This makes
         // hid_write() synchronous.
-        res =
-            GetOverlappedResult (dev->device_handle, &ol, &bytes_written,
-                                 TRUE /* wait */ );
+        res = GetOverlappedResult (dev->device_handle, &ol, &bytes_written, TRUE /* wait */ );
         if (!res)
         {
             // The Write operation failed.
@@ -868,10 +774,7 @@ extern "C"
     }
 
 
-    int HID_API_EXPORT HID_API_CALL hid_read_timeout (hid_device * dev,
-                                                      unsigned char* data,
-                                                      size_t length,
-                                                      int milliseconds)
+    int HID_API_EXPORT HID_API_CALL hid_read_timeout (hid_device * dev, unsigned char* data, size_t length, int milliseconds)
     {
         DWORD bytes_read = 0;
 
@@ -886,9 +789,7 @@ extern "C"
             dev->read_pending = TRUE;
             memset (dev->read_buf, 0, dev->input_report_length);
             ResetEvent (ev);
-            res =
-                ReadFile (dev->device_handle, dev->read_buf,
-                          dev->input_report_length, &bytes_read, &dev->ol);
+            res = ReadFile (dev->device_handle, dev->read_buf, dev->input_report_length, &bytes_read, &dev->ol);
 
             if (!res)
             {
@@ -921,9 +822,7 @@ extern "C"
         // actual
         // data has been copied to the data[] array which was passed to
         // ReadFile().
-        res =
-            GetOverlappedResult (dev->device_handle, &dev->ol, &bytes_read,
-                                 TRUE /* wait */ );
+        res = GetOverlappedResult (dev->device_handle, &dev->ol, &bytes_read, TRUE /* wait */ );
 
         // Set pending back to false, even if GetOverlappedResult() returned
         // error.
@@ -933,10 +832,8 @@ extern "C"
         {
             if (dev->read_buf[0] == 0x0)
             {
-                /* If report numbers aren't being used, but Windows sticks a
-                   report number (0x0) on the beginning of the report anyway.
-                   To make this work like the other platforms, and to make it
-                   work more like the HID spec, we'll skip over this byte. */
+                /* If report numbers aren't being used, but Windows sticks a report number (0x0) on the beginning of the report anyway. To make this
+                   work like the other platforms, and to make it work more like the HID spec, we'll skip over this byte. */
         size_t copy_len;
 
                 bytes_read--;
@@ -962,24 +859,18 @@ extern "C"
         return bytes_read;
     }
 
-    int HID_API_EXPORT HID_API_CALL hid_read (hid_device * dev,
-                                              unsigned char* data,
-                                              size_t length)
+    int HID_API_EXPORT HID_API_CALL hid_read (hid_device * dev, unsigned char* data, size_t length)
     {
         return hid_read_timeout (dev, data, length, (dev->blocking) ? -1 : 0);
     }
 
-    int HID_API_EXPORT HID_API_CALL hid_set_nonblocking (hid_device * dev,
-                                                         int nonblock)
+    int HID_API_EXPORT HID_API_CALL hid_set_nonblocking (hid_device * dev, int nonblock)
     {
         dev->blocking = !nonblock;
         return 0;   /* Success */
     }
 
-    int HID_API_EXPORT HID_API_CALL hid_send_feature_report (hid_device * dev,
-                                                             const unsigned
-                                                             char* data,
-                                                             size_t length)
+    int HID_API_EXPORT HID_API_CALL hid_send_feature_report (hid_device * dev, const unsigned char* data, size_t length)
     {
         BOOL res = HidD_SetFeature (dev->device_handle, (PVOID) data, length);
 
@@ -995,10 +886,7 @@ extern "C"
     extern int HID_GetStick20ReceiveData (unsigned char* data);
 
 
-    int HID_API_EXPORT HID_API_CALL hid_get_feature_report (hid_device * dev,
-                                                            unsigned char*
-                                                            data,
-                                                            size_t length)
+    int HID_API_EXPORT HID_API_CALL hid_get_feature_report (hid_device * dev, unsigned char* data, size_t length)
     {
         BOOL res;
 
@@ -1009,8 +897,7 @@ extern "C"
             register_error (dev, "HidD_GetFeature");
             return -1;
         }
-        return 0;   /* HidD_GetFeature() doesn't give us an actual length,
-                       unfortunately */
+        return 0;   /* HidD_GetFeature() doesn't give us an actual length, unfortunately */
 #else
         DWORD bytes_returned;
 
@@ -1018,10 +905,7 @@ extern "C"
 
         memset (&ol, 0, sizeof (ol));
 
-        res = DeviceIoControl (dev->device_handle,
-                               IOCTL_HID_GET_FEATURE,
-                               data, length,
-                               data, length, &bytes_returned, &ol);
+        res = DeviceIoControl (dev->device_handle, IOCTL_HID_GET_FEATURE, data, length, data, length, &bytes_returned, &ol);
 
         if (!res)
         {
@@ -1035,9 +919,7 @@ extern "C"
 
         // Wait here until the write is done. This makes
         // hid_get_feature_report() synchronous.
-        res =
-            GetOverlappedResult (dev->device_handle, &ol, &bytes_returned,
-                                 TRUE /* wait */ );
+        res = GetOverlappedResult (dev->device_handle, &ol, &bytes_returned, TRUE /* wait */ );
         if (!res)
         {
             // The operation failed.
@@ -1066,15 +948,11 @@ extern "C"
         free (dev);
     }
 
-    int HID_API_EXPORT_CALL HID_API_CALL
-        hid_get_manufacturer_string (hid_device * dev, wchar_t * string,
-                                     size_t maxlen)
+    int HID_API_EXPORT_CALL HID_API_CALL hid_get_manufacturer_string (hid_device * dev, wchar_t * string, size_t maxlen)
     {
     BOOL res;
 
-        res =
-            HidD_GetManufacturerString (dev->device_handle, string,
-                                        2 * maxlen);
+        res = HidD_GetManufacturerString (dev->device_handle, string, 2 * maxlen);
         if (!res)
         {
             register_error (dev, "HidD_GetManufacturerString");
@@ -1084,12 +962,7 @@ extern "C"
         return 0;
     }
 
-    int HID_API_EXPORT_CALL HID_API_CALL hid_get_product_string (hid_device *
-                                                                 dev,
-                                                                 wchar_t *
-                                                                 string,
-                                                                 size_t
-                                                                 maxlen)
+    int HID_API_EXPORT_CALL HID_API_CALL hid_get_product_string (hid_device * dev, wchar_t * string, size_t maxlen)
     {
     BOOL res;
 
@@ -1103,15 +976,11 @@ extern "C"
         return 0;
     }
 
-    int HID_API_EXPORT_CALL HID_API_CALL
-        hid_get_serial_number_string (hid_device * dev, wchar_t * string,
-                                      size_t maxlen)
+    int HID_API_EXPORT_CALL HID_API_CALL hid_get_serial_number_string (hid_device * dev, wchar_t * string, size_t maxlen)
     {
     BOOL res;
 
-        res =
-            HidD_GetSerialNumberString (dev->device_handle, string,
-                                        2 * maxlen);
+        res = HidD_GetSerialNumberString (dev->device_handle, string, 2 * maxlen);
         if (!res)
         {
             register_error (dev, "HidD_GetSerialNumberString");
@@ -1121,20 +990,11 @@ extern "C"
         return 0;
     }
 
-    int HID_API_EXPORT_CALL HID_API_CALL hid_get_indexed_string (hid_device *
-                                                                 dev,
-                                                                 int
-                                                                 string_index,
-                                                                 wchar_t *
-                                                                 string,
-                                                                 size_t
-                                                                 maxlen)
+    int HID_API_EXPORT_CALL HID_API_CALL hid_get_indexed_string (hid_device * dev, int string_index, wchar_t * string, size_t maxlen)
     {
         BOOL res;
 
-        res =
-            HidD_GetIndexedString (dev->device_handle, string_index, string,
-                                   2 * maxlen);
+        res = HidD_GetIndexedString (dev->device_handle, string_index, string, 2 * maxlen);
         if (!res)
         {
             register_error (dev, "HidD_GetIndexedString");

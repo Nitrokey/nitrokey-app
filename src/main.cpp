@@ -34,10 +34,8 @@ void HelpInfos (void)
           "-h, --help        display this help and exit\n"
           "-a, --admin       enable extra administrativefunctions\n"
           "-d, --debug       enable debug options\n"
-          "--debugAll       enable extensive debug options\n"
-          "--lock-hardware   enable hardware lock option\n"
-          /* Disable password matrix printf ("--PWM Enable PIN entry via
-             matrix\n"); */
+          "--debugAll       enable extensive debug options\n" "--lock-hardware   enable hardware lock option\n"
+          /* Disable password matrix printf ("--PWM Enable PIN entry via matrix\n"); */
           "--cmd ...         start a command line session\n" "\n");
 }
 
@@ -62,10 +60,8 @@ int main (int argc, char* argv[])
     /*
        QSharedMemory shared("6b50960df-f5f3-4562-bbdc-84c3bc004ef4");
 
-       if( !shared.create( 512, QSharedMemory::ReadWrite) ) { // An instance
-       is already running. Quit the current instance QMessageBox msgBox;
-       msgBox.setText( QObject::tr("Can't start more than one instance of the
-       application.") ); msgBox.setIcon( QMessageBox::Critical );
+       if( !shared.create( 512, QSharedMemory::ReadWrite) ) { // An instance is already running. Quit the current instance QMessageBox msgBox;
+       msgBox.setText( QObject::tr("Can't start more than one instance of the application.") ); msgBox.setIcon( QMessageBox::Critical );
        msgBox.exec(); exit(0); } else { */
     qDebug () << "Application started successfully.";
     // }
@@ -73,8 +69,7 @@ int main (int argc, char* argv[])
     /*
        SplashScreen *splash = 0; splash = new SplashScreen; splash->show();
 
-       QFile qss( ":/qss/default.qss" ); if( ! qss.open( QIODevice::ReadOnly
-       ) ) { qss.setFileName( ":/qss/default.qss" ); qss.open(
+       QFile qss( ":/qss/default.qss" ); if( ! qss.open( QIODevice::ReadOnly ) ) { qss.setFileName( ":/qss/default.qss" ); qss.open(
        QIODevice::ReadOnly ); }
 
        if( qss.isOpen() ) { a.setStyleSheet( qss.readAll() ); }
@@ -111,8 +106,7 @@ int main (int argc, char* argv[])
         {
             StartupInfo_st.ExtendedConfigActive = TRUE;
         }
-        /* Disable password matrix if (0 == strcmp (p,"--PWM")) {
-           StartupInfo_st.PasswordMatrix = TRUE; } */
+        /* Disable password matrix if (0 == strcmp (p,"--PWM")) { StartupInfo_st.PasswordMatrix = TRUE; } */
         if (0 == strcmp (p, "--lock-hardware"))
             StartupInfo_st.LockHardware = TRUE;
 
@@ -159,8 +153,7 @@ char* GetTimeStampForLog (void)
     if (ActualTimeStamp.toTime_t () != LastTimeStamp.toTime_t ())
     {
         LastTimeStamp = ActualTimeStamp;
-        STRCPY (DateString, sizeof (DateString) - 1,
-                LastTimeStamp.toString ("dd.MM.yyyy hh:mm:ss").toLatin1 ());
+        STRCPY (DateString, sizeof (DateString) - 1, LastTimeStamp.toString ("dd.MM.yyyy hh:mm:ss").toLatin1 ());
     }
     else
         DateString[0] = 0;

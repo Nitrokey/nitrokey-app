@@ -31,8 +31,8 @@ namespace Ui
 class DialogChangePassword:public QDialog
 {
   Q_OBJECT public:
-    explicit DialogChangePassword (QWidget * parent = 0);
-    ~DialogChangePassword ();
+      explicit DialogChangePassword (QWidget * parent = 0);
+     ~DialogChangePassword ();
 
     void InitData (void);
 
@@ -40,7 +40,7 @@ class DialogChangePassword:public QDialog
 
     Device* cryptostick;
 
-    private slots: void on_checkBox_clicked (bool checked);
+    private slots:void on_checkBox_clicked (bool checked);
 
   private:
       Ui::DialogChangePassword * ui;

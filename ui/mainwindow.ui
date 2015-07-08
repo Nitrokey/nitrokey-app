@@ -121,7 +121,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>(Recommendation: Use TOPT for web applications and HOTP for local applications)</string>
+                <string>(Recommendation: Use TOTP for web applications and HOTP for local applications)</string>
                </property>
               </widget>
              </item>
@@ -351,7 +351,7 @@
                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Example: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
-                  <string>Base 32</string>
+                  <string>Base32</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -438,7 +438,7 @@
            <item>
             <widget class="QCheckBox" name="enterCheckBox">
              <property name="text">
-              <string>Send 'enter'as the last keystroke</string>
+              <string>Send 'enter' as the last keystroke</string>
              </property>
             </widget>
            </item>
@@ -790,7 +790,7 @@
          <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
        </attribute>
        <attribute name="title">
-        <string>OTP General Configuration</string>
+        <string>OTP General</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_14">
         <item>

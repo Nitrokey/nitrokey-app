@@ -24,8 +24,7 @@
 #define VERSION_FONT_POINT_SIZE 5
 #define TEXT_MARGIN 10
 
-SplashScreen::SplashScreen ():QSplashScreen (QPixmap (),
-               Qt::WindowStaysOnTopHint)
+SplashScreen::SplashScreen ():QSplashScreen (QPixmap (), Qt::WindowStaysOnTopHint)
 {
 QFont titleFont = qApp->font ();
 
@@ -39,19 +38,16 @@ QWidget* textWidget = new QWidget (this);
 
 QVBoxLayout* textLayout = new QVBoxLayout;
 
-    Gui::ShadowedLabel * titleLabel =
-        new Gui::ShadowedLabel (qApp->applicationName (), this);
+    Gui::ShadowedLabel * titleLabel = new Gui::ShadowedLabel (qApp->applicationName (), this);
     titleLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
     titleFont.setBold (true);
     titleFont.setPointSize (40);
     titleLabel->setFont (titleFont);
-    Gui::ShadowedLabel * versionLabel =
-        new Gui::ShadowedLabel (qApp->applicationVersion (), this);
+    Gui::ShadowedLabel * versionLabel = new Gui::ShadowedLabel (qApp->applicationVersion (), this);
     versionFont.setPointSize (20);
     versionLabel->setFont (versionFont);
     versionLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
-    Gui::ShadowedLabel * authorLabel =
-        new Gui::ShadowedLabel (tr ("Author:") + "", this);
+    Gui::ShadowedLabel * authorLabel = new Gui::ShadowedLabel (tr ("Author:") + "", this);
     authorFont.setPointSize (10);
     authorLabel->setFont (authorFont);
     authorLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
@@ -68,19 +64,13 @@ QWidget* spacerWidget = new QWidget (this);
 
     textWidget->setLayout (textLayout);
 
-    textWidget->setFixedSize (logo->size ().width (),
-                              logo->height () -
-                              QFontMetrics (qApp->font ()).height () - 12);
+    textWidget->setFixedSize (logo->size ().width (), logo->height () - QFontMetrics (qApp->font ()).height () - 12);
 
 QPainter painter (logo);
 
     painter.setRenderHint (QPainter::Antialiasing, true);
     painter.setRenderHint (QPainter::TextAntialiasing, true);
-    painter.
-        fillRect (QRect
-                  (8,
-                   logo->height () - QFontMetrics (qApp->font ()).height () -
-                   12, logo->width (), logo->height ()), Qt::black);
+    painter.fillRect (QRect (8, logo->height () - QFontMetrics (qApp->font ()).height () - 12, logo->width (), logo->height ()), Qt::black);
     painter.end ();
     textWidget->render (logo, QPoint (), QRegion (), 0);
 

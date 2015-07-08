@@ -20,12 +20,12 @@
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="91"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="131"/>
-        <source>App Version:</source>
+        <source>App version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -143,7 +143,7 @@ Please retry</source>
     <message>
         <location filename="../src/ui/aboutdialog.cpp" line="208"/>
         <location filename="../src/ui/aboutdialog.cpp" line="272"/>
-        <source>Password retry counter
+        <source>PIN retry counter
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,12 +191,12 @@ Please retry</source>
     </message>
     <message>
         <location filename="../ui/stick20debugdialog.ui" line="120"/>
-        <source>Qutput Stick</source>
+        <source>Device Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/stick20debugdialog.ui" line="133"/>
-        <source>Stick output logged via USB</source>
+        <source>Device output logged via USB</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -268,22 +268,22 @@ Please retry</source>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="121"/>
-        <source>Change Update PIN</source>
+        <source>Change Update Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="122"/>
-        <source>Update PIN:</source>
+        <source>Update Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="123"/>
-        <source>New Update PIN:</source>
+        <source>New Update Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="124"/>
-        <source>New Update PIN (confirm):</source>
+        <source>New Update Password (confirm):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -657,22 +657,22 @@ Please retry</source>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="124"/>
-        <source>(Recommendation: Use TOPT for web applications and HOTP for local applications)</source>
+        <source>(Recommendation: Use TOTP for web applications and HOTP for local applications)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="354"/>
-        <source>Base 32</source>
+        <source>Base32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="441"/>
-        <source>Send &apos;enter&apos;as the last keystroke</source>
+        <source>Send &apos;enter&apos; as the last keystroke</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="793"/>
-        <source>OTP General Configuration</source>
+        <source>OTP General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -799,23 +799,18 @@ Please retry</source>
         <location filename="../src/ui/mainwindow.cpp" line="529"/>
         <location filename="../src/ui/mainwindow.cpp" line="939"/>
         <location filename="../src/ui/mainwindow.cpp" line="951"/>
-        <source>Nitrokey disconnected.</source>
+        <source>Nitrokey disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="897"/>
-        <source>Nitrokey Pro connected.</source>
+        <source>Nitrokey Pro connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="934"/>
         <location filename="../src/ui/mainwindow.cpp" line="1003"/>
-        <source>Nitrokey Storage connected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ui/mainwindow.cpp" line="960"/>
-        <source>Nitrokey connected.</source>
+        <source>Nitrokey Storage connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1024,19 +1019,14 @@ Please retry</source>
         <location filename="../src/ui/mainwindow.cpp" line="3823"/>
         <location filename="../src/ui/mainwindow.cpp" line="4704"/>
         <location filename="../src/ui/mainwindow.cpp" line="4923"/>
-        <source>Wrong Pin. Please try again.</source>
+        <source>Wrong PIN. Please try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2605"/>
         <location filename="../src/ui/mainwindow.cpp" line="2847"/>
         <location filename="../src/ui/mainwindow.cpp" line="2951"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2980"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3001"/>
         <location filename="../src/ui/mainwindow.cpp" line="3022"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3111"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3512"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3759"/>
         <source>Enter admin PIN</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1047,7 +1037,7 @@ Please retry</source>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="4505"/>
-        <source>AES key doen not exist!</source>
+        <source>AES key does not exist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1267,6 +1257,7 @@ Reset Nitrokey&apos;s time?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/ui/mainwindow.cpp" line="960"/>
         <location filename="../src/ui/mainwindow.cpp" line="961"/>
         <location filename="../src/ui/mainwindow.cpp" line="1001"/>
         <source>Nitrokey connected</source>
@@ -1307,12 +1298,12 @@ Select &quot;Initialize storage with random data&quot;</source>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2625"/>
-        <source>Wrong passowrd</source>
+        <source>Wrong password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2627"/>
-        <source>Unable to create new AES key</source>
+        <source>Unable to create AES key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1682,17 +1673,17 @@ Please change the PIN.</source>
     </message>
     <message>
         <location filename="../ui/stick20dialog.ui" line="79"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-Password&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/stick20dialog.ui" line="92"/>
-        <source>Password</source>
+        <source>PIN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/stick20dialog.ui" line="116"/>
-        <source>Show password</source>
+        <source>Show PIN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1705,7 +1696,7 @@ Please change the PIN.</source>
     <name>Stick20InfoDialog</name>
     <message>
         <location filename="../ui/stick20infodialog.ui" line="14"/>
-        <source>Stick status</source>
+        <source>Device status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1740,7 +1731,7 @@ Please change the PIN.</source>
     </message>
     <message>
         <location filename="../ui/stick20responsedialog.ui" line="61"/>
-        <source>LabelProgressWheell</source>
+        <source>LabelProgressWheel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1783,12 +1774,12 @@ Please change the PIN.</source>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="271"/>
-        <source>Uncrypted volume is in readonly mode</source>
+        <source>Cleartext volume is in readonly mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="275"/>
-        <source>Uncrypted volume is in readwrite mode</source>
+        <source>Cleartext volume is in readwrite mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1904,7 +1895,7 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <location filename="../ui/stick20updatedialog.ui" line="65"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.crypto-stick.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1917,7 +1908,7 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <location filename="../ui/securitydialog.ui" line="26"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) the One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are used as a second factor only. The smart card is unlocked anytime the user PIN is entered, nomatter for which function. The admin PIN can be used to configure settings, to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered wrongly three times each, or if the smart card has been reset to factory settings, all your sensitive data is lost irrevocably.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secure against physical attacks. Ths doesn&apos;t apply to One-Time Passwords (OTP) because they are used as a second factor only. With physical access to the device (via JTAG interface), it might be possible to extract the OTP secrets. To prevent this attack, you could enable the device&apos;s security bit but it would disable the option to update the firmware.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require the mass storage initialized with random data. Hidden volumes are protected by the user PIN and a separate password which can be individual for each hidden volume. Without knowing these both credentials, the existance of the hidden volume can&apos;t be proven or disproven. The password for the hidden volume must be chosen strong and long enough to sustain a brute force attack. However, the hidden volume is stored on a flash storage with integrated wear leveling. This leaves the potential risk of leaking information to a sophisticated attacker which could reveal the existance of a hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren't PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor. However it might be possible to extract OTP secrets by physically accessing the device (via JTAG interface). In order to prevent this attack, you can enable the device's security bit, but doing this disables the option to update the firmware.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2034,7 +2025,7 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <location filename="../ui/stick20lockfirmwaredialog.ui" line="65"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the stick lock the firmware and close the hardware debug port.This disable any external hardware access to the CPU.&lt;/p&gt;&lt;p&gt;There is no way back ! &lt;/p&gt;&lt;p&gt;After this you can&apos;t update the firmware.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the stick lock the firmware and close the hardware debug port.This disables any external hardware access to the data in the device (processor).&lt;/p&gt;&lt;p&gt;There is no way back! &lt;/p&gt;&lt;p&gt;After this you can&apos;t update the firmware.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

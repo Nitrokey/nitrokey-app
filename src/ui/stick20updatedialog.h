@@ -30,11 +30,11 @@ namespace Ui
 class UpdateDialog:public QDialog
 {
   Q_OBJECT public:
-    explicit UpdateDialog (QWidget * parent = 0);
-    ~UpdateDialog ();
+      explicit UpdateDialog (QWidget * parent = 0);
+     ~UpdateDialog ();
 
   private:
-    Ui::UpdateDialog * ui;
+      Ui::UpdateDialog * ui;
 };
 
 #endif // UPDATEDIALOG_H
