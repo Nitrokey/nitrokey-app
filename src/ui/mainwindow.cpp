@@ -58,6 +58,13 @@
 #include <QDateTime>
 #include <QThread>
 
+#ifdef Q_OS_LINUX
+#include<libintl.h>
+#include<locale.h>
+#define _(String) gettext (String)
+#endif // Q_OS_LINUX
+
+
 /*******************************************************************************
  External declarations
 *******************************************************************************/
@@ -435,9 +442,9 @@ void MainWindow::createIndicator ()
 
     // Initial message
     if (TRUE == DebugWindowActive)
-        showTrayMessage ("Nitrokey App", "Active (debug mode)", INFORMATION, TRAY_MSG_TIMEOUT);
+        showTrayMessage ("Nitrokey App", tr("Active (debug mode)"), INFORMATION, TRAY_MSG_TIMEOUT);
     else
-        showTrayMessage ("Nitrokey App", "Active", INFORMATION, TRAY_MSG_TIMEOUT);
+        showTrayMessage ("Nitrokey App", tr("Active"), INFORMATION, TRAY_MSG_TIMEOUT);
 }
 
 
@@ -468,6 +475,10 @@ void MainWindow::InitState ()
 MainWindow::MainWindow (StartUpParameter_tst * StartupInfo_st, QWidget * parent):
 QMainWindow (parent), ui (new Ui::MainWindow)
 {
+    setlocale(LC_ALL,"");
+    bindtextdomain("nitrokey-app","/usr/share/locale");
+    textdomain("nitrokey-app");
+
 int ret;
 
     QMetaObject::Connection ret_connection;
@@ -1048,11 +1059,11 @@ void MainWindow::generateMenu ()
     {
         indicatorMenu = gtk_menu_new ();
 
-GtkWidget* notConnItem = gtk_menu_item_new_with_label ("Nitrokey not connected");;
+GtkWidget* notConnItem = gtk_menu_item_new_with_label (_("Nitrokey not connected"));
 GtkWidget* debugItem;
 
-GtkWidget* aboutItem = gtk_menu_item_new_with_label ("About");;
-GtkWidget* quitItem = gtk_menu_item_new_with_label ("Quit");
+GtkWidget* aboutItem = gtk_menu_item_new_with_label (_("About"));
+GtkWidget* quitItem = gtk_menu_item_new_with_label (_("Quit"));
 
 GtkWidget* separItem = gtk_separator_menu_item_new ();
 
@@ -1252,7 +1263,7 @@ void MainWindow::generatePasswordMenu ()
 #ifdef Q_OS_LINUX
     if (isUnity ())
     {
-GtkWidget* passwordsItem = gtk_menu_item_new_with_label ("Passwords");
+GtkWidget* passwordsItem = gtk_menu_item_new_with_label (_("Passwords"));
 
 GtkWidget* separItem1 = gtk_separator_menu_item_new ();
 
@@ -1416,15 +1427,15 @@ void MainWindow::generateMenuForProDevice ()
 #ifdef Q_OS_LINUX
     if (isUnity ())
     {
-GtkWidget* configureItem = gtk_menu_item_new_with_label ("Configure");
+GtkWidget* configureItem = gtk_menu_item_new_with_label (_("Configure"));
 
 GtkWidget* configurePasswordsItem;
 
-GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label ("Change user PIN");
-GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label ("Change admin PIN");
-GtkWidget* resetUserPinItem = gtk_menu_item_new_with_label ("Reset User PIN");
+GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change user PIN"));
+GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change admin PIN"));
+GtkWidget* resetUserPinItem = gtk_menu_item_new_with_label (_("Reset User PIN"));
 
-GtkWidget* resetItem = gtk_menu_item_new_with_label ("Factory reset");
+GtkWidget* resetItem = gtk_menu_item_new_with_label (_("Factory reset"));
 
 GtkWidget* separItem2 = gtk_separator_menu_item_new ();
 
@@ -1439,9 +1450,9 @@ GtkWidget* configureSubMenu = gtk_menu_new ();
         generateMenuPasswordSafe ();
 
         if (TRUE == cryptostick->passwordSafeAvailable)
-            configurePasswordsItem = gtk_menu_item_new_with_label ("OTP and Password safe");
+            configurePasswordsItem = gtk_menu_item_new_with_label (_("OTP and Password safe"));
         else
-            configurePasswordsItem = gtk_menu_item_new_with_label ("OTP");
+            configurePasswordsItem = gtk_menu_item_new_with_label (_("OTP"));
 
         g_signal_connect (configurePasswordsItem, "activate", G_CALLBACK (onConfigure), this);
 
@@ -1515,38 +1526,38 @@ int AddSeperator = FALSE;
 #ifdef Q_OS_LINUX
     if (isUnity ())
     {
-GtkWidget* updateStorageStatusItem = gtk_menu_item_new_with_label ("Smartcard or SD card are not ready");
-GtkWidget* initEncryptedVolumeItem = gtk_menu_item_new_with_label ("Initialize keys");
-GtkWidget* fillSDCardWithRandomCharsItem = gtk_menu_item_new_with_label ("Initialize storage with random data");
-GtkWidget* enableEncryptedVolumeItem = gtk_menu_item_new_with_label ("Unlock encrypted volume");
-GtkWidget* disableEncryptedVolumeItem = gtk_menu_item_new_with_label ("Lock encrypted volume");
-GtkWidget* enableHiddenVolumeItem = gtk_menu_item_new_with_label ("Unlock hidden volume");
-GtkWidget* disableHiddenVolumeItem = gtk_menu_item_new_with_label ("Lock hidden volume");
-GtkWidget* setupHiddenVolumeItem = gtk_menu_item_new_with_label ("Setup hidden volume");
-GtkWidget* lockDeviceItem = gtk_menu_item_new_with_label ("Lock device");
+GtkWidget* updateStorageStatusItem = gtk_menu_item_new_with_label (_("Smartcard or SD card are not ready"));
+GtkWidget* initEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Initialize keys"));
+GtkWidget* fillSDCardWithRandomCharsItem = gtk_menu_item_new_with_label (_("Initialize storage with random data"));
+GtkWidget* enableEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Unlock encrypted volume"));
+GtkWidget* disableEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Lock encrypted volume"));
+GtkWidget* enableHiddenVolumeItem = gtk_menu_item_new_with_label (_("Unlock hidden volume"));
+GtkWidget* disableHiddenVolumeItem = gtk_menu_item_new_with_label (_("Lock hidden volume"));
+GtkWidget* setupHiddenVolumeItem = gtk_menu_item_new_with_label (_("Setup hidden volume"));
+GtkWidget* lockDeviceItem = gtk_menu_item_new_with_label (_("Lock device"));
 
-GtkWidget* setReadOnlyUnencryptedVolumeItem = gtk_menu_item_new_with_label ("Set unencrypted volume read-only");
-GtkWidget* setReadWriteUnencryptedVolumeItem = gtk_menu_item_new_with_label ("Set unencrypted volume read-write");
-GtkWidget* destroyEncryptedVolumeItem = gtk_menu_item_new_with_label ("Destroy encrypted data");
-GtkWidget* enableFirmwareUpdateItem = gtk_menu_item_new_with_label ("Enable firmware update");
-GtkWidget* exportFirmwareToFileItem = gtk_menu_item_new_with_label ("Export firmware to file");
-GtkWidget* lockHardwareItem = gtk_menu_item_new_with_label ("Lock hardware");
+GtkWidget* setReadOnlyUnencryptedVolumeItem = gtk_menu_item_new_with_label (_("Set unencrypted volume read-only"));
+GtkWidget* setReadWriteUnencryptedVolumeItem = gtk_menu_item_new_with_label (_("Set unencrypted volume read-write"));
+GtkWidget* destroyEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Destroy encrypted data"));
+GtkWidget* enableFirmwareUpdateItem = gtk_menu_item_new_with_label (_("Enable firmware update"));
+GtkWidget* exportFirmwareToFileItem = gtk_menu_item_new_with_label (_("Export firmware to file"));
+GtkWidget* lockHardwareItem = gtk_menu_item_new_with_label (_("Lock hardware"));
 
-GtkWidget* resetUserPasswordItem = gtk_menu_item_new_with_label ("Reset user PIN");
-GtkWidget* debugItem = gtk_menu_item_new_with_label ("Debug");
+GtkWidget* resetUserPasswordItem = gtk_menu_item_new_with_label (_("Reset user PIN"));
+GtkWidget* debugItem = gtk_menu_item_new_with_label (_("Debug"));
 
-GtkWidget* clearNewSDCardFoundItem = gtk_menu_item_new_with_label ("Disable 'Initialize storage with random data' warning");
-GtkWidget* configureItem = gtk_menu_item_new_with_label ("Configure");
+GtkWidget* clearNewSDCardFoundItem = gtk_menu_item_new_with_label (_("Disable 'Initialize storage with random data' warning"));
+GtkWidget* configureItem = gtk_menu_item_new_with_label (_("Configure"));
 
-GtkWidget* extendedConfigureItem = gtk_menu_item_new_with_label ("Advanced configure");
+GtkWidget* extendedConfigureItem = gtk_menu_item_new_with_label (_("Advanced configure"));
 
 GtkWidget* setupPasswordMatrixItem = gtk_menu_item_new_with_label ("");
 
 GtkWidget* configurePasswordsItem;
 
-GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label ("Change user PIN");
-GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label ("Change admin PIN");
-GtkWidget* changeUpdatePinItem = gtk_menu_item_new_with_label ("Change Update PIN");
+GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change user PIN"));
+GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change admin PIN"));
+GtkWidget* changeUpdatePinItem = gtk_menu_item_new_with_label (_("Change Update PIN"));
 
 
 GtkWidget* separItem1 = gtk_separator_menu_item_new ();
@@ -3950,7 +3961,7 @@ void MainWindow::generateMenuPasswordSafe ()
 #ifdef Q_OS_LINUX
         if (isUnity ())
         {
-GtkWidget* passwordSafeItem = gtk_menu_item_new_with_label ("Unlock password safe");
+GtkWidget* passwordSafeItem = gtk_menu_item_new_with_label (_("Unlock password safe"));
             g_signal_connect (passwordSafeItem, "activate", G_CALLBACK (onEnablePasswordSafe), this);
             gtk_menu_shell_append (GTK_MENU_SHELL (indicatorMenu), passwordSafeItem);
             gtk_widget_show (passwordSafeItem);
