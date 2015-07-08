@@ -42,7 +42,6 @@ void HelpInfos (void)
 
 int main (int argc, char* argv[])
 {
-
     // Q_INIT_RESOURCE(stylesheet);
 
     csApplet = new CryptostickApplet;
@@ -54,6 +53,39 @@ int main (int argc, char* argv[])
     StartUpParameter_tst StartupInfo_st;
 
     QApplication a (argc, argv);
+
+    // initialize i18n
+    QTranslator qtTranslator;
+#if defined(Q_WS_WIN)
+    qtTranslator.load("qt_" + QLocale::system().name());                                                                                                                                                                                                               
+#else
+    qtTranslator.load("qt_" + QLocale::system().name(),
+                      QLibraryInfo::location(QLibraryInfo::TranslationsPath));                                                                                                                                                                                         
+#endif
+    a.installTranslator(&qtTranslator);                                                                                                                                                                                                                              
+
+    QTranslator myappTranslator;
+#if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC) 
+    QLocale loc = QLocale::system();
+    QString lang = QLocale::languageToString(loc.language());                                                                                                                                                                                                          
+
+    if (lang != "en") {
+        bool success;
+        success = myappTranslator.load(QLocale::system(), // locale   
+                                       "",                // file name
+                                       "nitrokey_",        // prefix   
+                                       ":/i18n/",         // folder   
+                                       ".qm");            // suffix                                                                                                                                                                                                    
+
+        if (!success) {
+            myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));                                                                                                                                                                       
+        }
+    }
+#else
+    myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));                                                                                                                                                                               
+#endif
+
+    a.installTranslator(&myappTranslator);     
 
     // Check for multiple instances
     // GUID from http://www.guidgenerator.com/online-guid-generator.aspx

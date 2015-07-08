@@ -12,4 +12,8 @@
         <file alias="ProgressWheel.GIF">images/ProgressWheel.GIF</file>
         <file alias="progressWheel2.gif">images/progressWheel2.gif</file>
     </qresource>
+    <qresource prefix="/i18n">
+        <file alias="nitrokey_de_DE.qm">i18n/nitrokey_de_DE.qm</file>
+        <file alias="nitrokey_en.qm">i18n/nitrokey_en.qm</file>
+    </qresource>
 </RCC>
