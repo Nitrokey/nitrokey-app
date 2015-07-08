@@ -1,5 +1,6 @@
 *.pro.user*
 build
+release
 build-*-Debug
 *~
 *.o
