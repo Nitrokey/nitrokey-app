@@ -1205,7 +1205,7 @@ void MainWindow::initActionsForStick20 ()
     Stick20ActionChangeAdminPIN = new QAction (tr ("&Change admin PIN"), this);
     connect (Stick20ActionChangeAdminPIN, SIGNAL (triggered ()), this, SLOT (startStick20ActionChangeAdminPIN ()));
 
-    Stick20ActionChangeUpdatePIN = new QAction (tr ("&Change Update PIN"), this);
+    Stick20ActionChangeUpdatePIN = new QAction (tr ("&Change Firmware PIN"), this);
     connect (Stick20ActionChangeUpdatePIN, SIGNAL (triggered ()), this, SLOT (startStick20ActionChangeUpdatePIN ()));
 
     Stick20ActionEnableFirmwareUpdate = new QAction (tr ("&Enable firmware update"), this);
@@ -1557,7 +1557,7 @@ GtkWidget* configurePasswordsItem;
 
 GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change user PIN"));
 GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change admin PIN"));
-GtkWidget* changeUpdatePinItem = gtk_menu_item_new_with_label (_("Change Update PIN"));
+GtkWidget* changeUpdatePinItem = gtk_menu_item_new_with_label (_("Change Firmware PIN"));
 
 
 GtkWidget* separItem1 = gtk_separator_menu_item_new ();
