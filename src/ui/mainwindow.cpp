@@ -58,12 +58,13 @@
 #include <QDateTime>
 #include <QThread>
 
-#ifdef Q_OS_LINUX
+//#ifdef Q_OS_LINUX
 #include<libintl.h>
 #include<locale.h>
 #define _(String) gettext (String)
-#endif // Q_OS_LINUX
+//#endif // Q_OS_LINUX
 
+#include <QString>
 
 /*******************************************************************************
  External declarations
@@ -4107,14 +4108,14 @@ void MainWindow::PWS_ExceClickedSlot (int Slot)
 
     if (TRUE == trayIcon->supportsMessages ())
     {
-        MsgText.sprintf ("Password safe [%s]", (char *) cryptostick->passwordSafeSlotNames[Slot]);
-        MsgText_1.sprintf ("Password has been copied to clipboard");
+        MsgText = QString (tr("Password safe [%1]").arg( (char *) cryptostick->passwordSafeSlotNames[Slot]));
+        MsgText_1 = QString ("Password has been copied to clipboard");
 
         showTrayMessage (MsgText, MsgText_1, INFORMATION, TRAY_MSG_TIMEOUT);
     }
     else
     {
-        MsgText.sprintf ("Password safe [%s] has been copied to clipboard", (char *) cryptostick->passwordSafeSlotNames[Slot]);
+        MsgText = QString("Password safe [%1] has been copied to clipboard").arg((char *) cryptostick->passwordSafeSlotNames[Slot]);
         csApplet->messageBox (MsgText);
     }
 }
@@ -4398,14 +4399,14 @@ int Seed;
     {
         Seed = (1 << 20) - 1;
         Seed = (Seed / 16) * 16;
-        ui->counterEdit->setText (QString ("%1").sprintf ("%d", Seed));
+        ui->counterEdit->setText (QString ("%1").arg ( Seed));
         csApplet->warningBox (tr ("Seed must be lower than 1048560 (= 2^20)"));
     }
 
     if (0 != (Seed % 16))
     {
         Seed = (Seed / 16) * 16;
-        ui->counterEdit->setText (QString ("%1").sprintf ("%d", Seed));
+        ui->counterEdit->setText (QString ("%1").arg (Seed));
         csApplet->warningBox (tr ("Seed had to be a multiple of 16"));
     }
 }
