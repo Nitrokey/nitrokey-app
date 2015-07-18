@@ -216,6 +216,11 @@ IF(NOT WIN32)
         DESTINATION /etc/bash_completion.d
     )
 
+    install(FILES
+        ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
+        DESTINATION /usr/share/locale/de_DE/LC_MESSAGES
+    )
+
 ENDIF()
 
 
