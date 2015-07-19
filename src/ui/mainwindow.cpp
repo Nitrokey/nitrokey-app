@@ -1059,12 +1059,20 @@ void MainWindow::generateMenu ()
     if (isUnity ())
     {
         indicatorMenu = gtk_menu_new ();
-
 GtkWidget* notConnItem = gtk_menu_item_new_with_label (_("Nitrokey not connected"));
 GtkWidget* debugItem;
 
-GtkWidget* aboutItem = gtk_menu_item_new_with_label (_("About"));
-GtkWidget* quitItem = gtk_menu_item_new_with_label (_("Quit"));
+GtkWidget* aboutItem = gtk_image_menu_item_new_with_label (_("About"));
+gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(aboutItem),TRUE);
+GtkWidget* aboutItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/info.png");
+gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(aboutItem), GTK_WIDGET(aboutItemImg));
+
+GtkWidget* quitItem = gtk_image_menu_item_new_with_label (_("Quit"));
+gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(quitItem),TRUE);
+GtkWidget* quitItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/quit.png");
+gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quitItem), GTK_WIDGET(quitItemImg));
+
+//gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quitItem), quitItemImg);
 
 GtkWidget* separItem = gtk_separator_menu_item_new ();
 
@@ -1428,7 +1436,11 @@ void MainWindow::generateMenuForProDevice ()
 #ifdef Q_OS_LINUX
     if (isUnity ())
     {
-GtkWidget* configureItem = gtk_menu_item_new_with_label (_("Configure"));
+GtkWidget* configureItem = gtk_image_menu_item_new_with_label (_("Configure"));
+gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(configureItem),TRUE);
+GtkWidget* configureItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/settings.png");
+gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(configureItem), GTK_WIDGET(configureItemImg));
+
 
 GtkWidget* configurePasswordsItem;
 
@@ -1548,7 +1560,10 @@ GtkWidget* resetUserPasswordItem = gtk_menu_item_new_with_label (_("Reset user P
 GtkWidget* debugItem = gtk_menu_item_new_with_label (_("Debug"));
 
 GtkWidget* clearNewSDCardFoundItem = gtk_menu_item_new_with_label (_("Disable 'Initialize storage with random data' warning"));
-GtkWidget* configureItem = gtk_menu_item_new_with_label (_("Configure"));
+GtkWidget* configureItem = gtk_image_menu_item_new_with_label (_("Configure"));
+gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(configureItem),TRUE);
+GtkWidget* configureItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/settings.png");
+gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(configureItem), GTK_WIDGET(configureItemImg));
 
 GtkWidget* extendedConfigureItem = gtk_menu_item_new_with_label (_("Advanced configure"));
 
@@ -3962,7 +3977,11 @@ void MainWindow::generateMenuPasswordSafe ()
 #ifdef Q_OS_LINUX
         if (isUnity ())
         {
-GtkWidget* passwordSafeItem = gtk_menu_item_new_with_label (_("Unlock password safe"));
+            GtkWidget* passwordSafeItem = gtk_image_menu_item_new_with_label (_("Unlock password safe"));
+            gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(passwordSafeItem),TRUE);
+            GtkWidget* passwordSafeItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/safe_zahlenkreis.png");
+            gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(passwordSafeItem), GTK_WIDGET(passwordSafeItemImg));
+
             g_signal_connect (passwordSafeItem, "activate", G_CALLBACK (onEnablePasswordSafe), this);
             gtk_menu_shell_append (GTK_MENU_SHELL (indicatorMenu), passwordSafeItem);
             gtk_widget_show (passwordSafeItem);

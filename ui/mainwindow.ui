@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -61,10 +61,6 @@
        <bool>false</bool>
       </property>
       <widget class="QWidget" name="tab">
-       <attribute name="icon">
-        <iconset resource="../resources.qrc">
-         <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
-       </attribute>
        <attribute name="title">
         <string>OTP Slot Configuration</string>
        </attribute>
@@ -785,10 +781,6 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_2">
-       <attribute name="icon">
-        <iconset resource="../resources.qrc">
-         <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
-       </attribute>
        <attribute name="title">
         <string>OTP General</string>
        </attribute>
@@ -1155,10 +1147,6 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_3">
-       <attribute name="icon">
-        <iconset resource="../resources.qrc">
-         <normaloff>:/images/safe.png</normaloff>:/images/safe.png</iconset>
-       </attribute>
        <attribute name="title">
         <string>Password Safe</string>
        </attribute>
