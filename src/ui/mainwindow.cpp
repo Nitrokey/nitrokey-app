@@ -1208,13 +1208,13 @@ void MainWindow::initActionsForStick20 ()
     Stick20ActionDisableHiddenVolume = new QAction (tr ("&Lock hidden volume"), this);
     connect (Stick20ActionDisableHiddenVolume, SIGNAL (triggered ()), this, SLOT (startStick20DisableHiddenVolume ()));
 
-    Stick20ActionChangeUserPIN = new QAction (tr ("&Change user PIN"), this);
+    Stick20ActionChangeUserPIN = new QAction (tr ("&Change User PIN"), this);
     connect (Stick20ActionChangeUserPIN, SIGNAL (triggered ()), this, SLOT (startStick20ActionChangeUserPIN ()));
 
-    Stick20ActionChangeAdminPIN = new QAction (tr ("&Change admin PIN"), this);
+    Stick20ActionChangeAdminPIN = new QAction (tr ("&Change Admin PIN"), this);
     connect (Stick20ActionChangeAdminPIN, SIGNAL (triggered ()), this, SLOT (startStick20ActionChangeAdminPIN ()));
 
-    Stick20ActionChangeUpdatePIN = new QAction (tr ("&Change Firmware PIN"), this);
+    Stick20ActionChangeUpdatePIN = new QAction (tr ("&Change Firmware Password"), this);
     connect (Stick20ActionChangeUpdatePIN, SIGNAL (triggered ()), this, SLOT (startStick20ActionChangeUpdatePIN ()));
 
     Stick20ActionEnableFirmwareUpdate = new QAction (tr ("&Enable firmware update"), this);
@@ -1256,7 +1256,7 @@ void MainWindow::initActionsForStick20 ()
     Stick20ActionLockStickHardware = new QAction (tr ("&Lock stick hardware"), this);
     connect (Stick20ActionLockStickHardware, SIGNAL (triggered ()), this, SLOT (startStick20LockStickHardware ()));
 
-    Stick20ActionResetUserPassword = new QAction (tr ("&Reset user PIN"), this);
+    Stick20ActionResetUserPassword = new QAction (tr ("&Reset User PIN"), this);
     connect (Stick20ActionResetUserPassword, SIGNAL (triggered ()), this, SLOT (startResetUserPassword ()));
 
     LockDeviceAction = new QAction (tr ("&Lock Device"), this);
@@ -1556,7 +1556,7 @@ GtkWidget* enableFirmwareUpdateItem = gtk_menu_item_new_with_label (_("Enable fi
 GtkWidget* exportFirmwareToFileItem = gtk_menu_item_new_with_label (_("Export firmware to file"));
 GtkWidget* lockHardwareItem = gtk_menu_item_new_with_label (_("Lock hardware"));
 
-GtkWidget* resetUserPasswordItem = gtk_menu_item_new_with_label (_("Reset user PIN"));
+GtkWidget* resetUserPasswordItem = gtk_menu_item_new_with_label (_("Reset User PIN"));
 GtkWidget* debugItem = gtk_menu_item_new_with_label (_("Debug"));
 
 GtkWidget* clearNewSDCardFoundItem = gtk_menu_item_new_with_label (_("Disable 'Initialize storage with random data' warning"));
@@ -1571,9 +1571,9 @@ GtkWidget* setupPasswordMatrixItem = gtk_menu_item_new_with_label ("");
 
 GtkWidget* configurePasswordsItem;
 
-GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change user PIN"));
-GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change admin PIN"));
-GtkWidget* changeUpdatePinItem = gtk_menu_item_new_with_label (_("Change Firmware PIN"));
+GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change User PIN"));
+GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change Admin PIN"));
+GtkWidget* changeUpdatePinItem = gtk_menu_item_new_with_label (_("Change Firmware Password"));
 
 
 GtkWidget* separItem1 = gtk_separator_menu_item_new ();
