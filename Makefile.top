@@ -78,7 +78,8 @@ linux-release: build | $(LINUX_RELEASE_DIR)
 windows-release: windows | $(WIN_RELEASE_DIR)
 	cd ${ROOT_DIR}/nsis && \
 	cp ${BUILD_WIN}/release/nitrokey-app.exe . && \
-	makensis nitrokey-app.nsis
+	makensis nitrokey-app.nsis && \
+	cp Nitrokey-App-Installer.exe ${BUILD_WIN}/release/
 
 release-all: linux-release windows-release
 

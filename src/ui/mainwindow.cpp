@@ -58,11 +58,11 @@
 #include <QDateTime>
 #include <QThread>
 
-//#ifdef Q_OS_LINUX
+#ifdef Q_OS_LINUX
 #include<libintl.h>
 #include<locale.h>
 #define _(String) gettext (String)
-//#endif // Q_OS_LINUX
+#endif // Q_OS_LINUX
 
 #include <QString>
 
@@ -476,10 +476,11 @@ void MainWindow::InitState ()
 MainWindow::MainWindow (StartUpParameter_tst * StartupInfo_st, QWidget * parent):
 QMainWindow (parent), ui (new Ui::MainWindow)
 {
+#ifdef Q_OS_LINUX
     setlocale(LC_ALL,"");
     bindtextdomain("nitrokey-app","/usr/share/locale");
     textdomain("nitrokey-app");
-
+#endif
 int ret;
 
     QMetaObject::Connection ret_connection;
