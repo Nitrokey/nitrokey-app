@@ -74,6 +74,8 @@ QByteArray cardSerial = QByteArray ((char *) cryptostick->cardSerial).toHex ();
         // ui->ButtonStickStatus->hide();
     }
 
+    this->adjustSize();
+    this->updateGeometry();
 }
 
 AboutDialog::~AboutDialog ()
@@ -155,11 +157,15 @@ void AboutDialog::showStick20Configuration (void)
     if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01))
     {
         ui->newsd_label->show();
+    }else{
+        ui->newsd_label->hide();
     }
 
     if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01))
     {
         ui->not_erased_sd_label->show();
+    }else{
+        ui->not_erased_sd_label->hide();
     }
 
 
@@ -200,6 +206,7 @@ void AboutDialog::showStick20Configuration (void)
     ui->DeviceStatusLabel->setText (OutputText);
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
 }
 
 
@@ -228,6 +235,7 @@ void AboutDialog::showStick10Configuration (void)
     ui->user_retry_label->setText(QString::number (cryptostick->userPasswordRetryCount));
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
 }
 
 void AboutDialog::hideWarning(void)
@@ -237,6 +245,7 @@ void AboutDialog::hideWarning(void)
     ui->warning_sign->hide();
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
 }
 
 void AboutDialog::showWarning(void)
@@ -246,14 +255,17 @@ void AboutDialog::showWarning(void)
     ui->warning_sign->show();
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
 }
 
 void AboutDialog::hideStick20Menu (void)
 {
     hideWarning();
+    
     ui->hidden_volume_label->hide();
     ui->not_erased_sd_label->hide();
     ui->newsd_label->hide();
+    /*
     ui->label_8->hide();
     ui->label_9->hide();
     ui->label_10->hide();
@@ -261,22 +273,28 @@ void AboutDialog::hideStick20Menu (void)
     ui->sd_id_label->hide();
     ui->unencrypted_volume_label->hide();
     ui->encrypted_volume_label->hide();
+    */
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
 }
 
 void AboutDialog::showStick20Menu (void)
 {
+    
     ui->hidden_volume_label->show();
+    ui->unencrypted_volume_label->show();
+    ui->encrypted_volume_label->show();
+    /*
     ui->label_8->show();
     ui->label_9->show();
     ui->label_10->show();
     ui->label_11->show();
     ui->sd_id_label->show();
-    ui->unencrypted_volume_label->show();
-    ui->encrypted_volume_label->show();
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
+    */
 }
 
 void AboutDialog::hidePasswordCounters (void)
@@ -288,6 +306,7 @@ void AboutDialog::hidePasswordCounters (void)
     ui->label2->hide();
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
 }
 
 void AboutDialog::showPasswordCounters (void)
@@ -299,6 +318,7 @@ void AboutDialog::showPasswordCounters (void)
     ui->label2->show();
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
 }
 /*******************************************************************************
 
@@ -327,6 +347,7 @@ void AboutDialog::showNoStickFound (void)
     ui->serialEdit->setText ("-");
     this->resize(0,0);
     this->adjustSize ();
+    this->updateGeometry();
 }
 
 void AboutDialog::on_ButtonStickStatus_clicked ()
