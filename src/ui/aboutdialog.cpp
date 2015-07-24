@@ -32,7 +32,7 @@ QDialog (parent), ui (new Ui::AboutDialog)
 
 QPixmap image (":/images/splash.png");
 
-QPixmap small_img = image.scaled (346, 100, Qt::KeepAspectRatio, Qt::FastTransformation);
+QPixmap small_img = image.scaled (346, 80, Qt::KeepAspectRatio, Qt::FastTransformation);
 
 QPixmap warning (":/images/warning.png");
 QPixmap small_warning = warning.scaled(50,50, Qt::KeepAspectRatio, Qt::FastTransformation);
