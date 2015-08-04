@@ -4,6 +4,8 @@ PROJECT(NitrokeyApp)
 SET(PROJECT_VERSION "0.2") 
 #ADD_DEFINITIONS(-DSEAFILE_CLIENT_VERSION=${PROJECT_VERSION}) 
 
+OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" YES)
+
 INCLUDE(FindPkgConfig)
 
 IF (NOT (${CMAKE_BUILD_TYPE} MATCHES Release))
@@ -145,91 +147,100 @@ ELSEIF(APPLE)
     SET( platform_specific_sources hid_mac.c)
     SET( platform_specific_libs "-framework IOKit -framework CoreFoundation")
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
-    pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
-    SET(GTK2_INCLUDE_DIRS
-            ${GTK2_INCLUDE_DIRS}
-            /usr/include/libappindicator-0.1
-            /usr/include/gtk-2.0
-            /usr/lib/gtk-2.0/include
-            /usr/include/glib-2.0
-            /usr/lib/glib-2.0/include
-            /usr/include/cairo
-            /usr/include/atk-1.0
-            /usr/include/pango-1.0
+
+    pkg_check_modules(GTK2 gtk+-2.0)
+
+    IF (GTK2_FOUND AND HAVE_LIBAPPINDICATOR)
+
+      SET(GTK2_INCLUDE_DIRS
+          ${GTK2_INCLUDE_DIRS}
+          /usr/include/libappindicator-0.1
+          /usr/include/gtk-2.0
+          /usr/lib/gtk-2.0/include
+          /usr/include/glib-2.0
+          /usr/lib/glib-2.0/include
+          /usr/include/cairo
+          /usr/include/atk-1.0
+          /usr/include/pango-1.0
+      )
+
+      SET(EXTRA_LIBS ${GTK2_LIBRARIES} appindicator notify)
+
+      ADD_DEFINITIONS(${GTK2_CFLAGS_OTHER} -DHAVE_LIBAPPINDICATOR)
+
+    ENDIF () # GTK2_FOUND AND HAVE_LIBAPPINDICATOR
+
+    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread usb-1.0)
+
+    INCLUDE_DIRECTORIES(
+      ${CMAKE_CURRENT_SOURCE_DIR}
+      ${CMAKE_CURRENT_BINARY_DIR}
+      ${SRCDIR}
+      ${UTILSDIR}
+      ${SRCUIDIR}
+      ${PROJECT_SOURCE_DIR}
+      ${QT_INCLUDE_DIR}
+      ${LIBUSB_INCLUDE_DIRS}
+      ${GTK2_INCLUDE_DIRS}
     )
-    SET(EXTRA_LIBS ${GTK2_LIBRARIES} pthread usb-1.0 appindicator notify)
-ENDIF()
 
-INCLUDE_DIRECTORIES(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${SRCDIR}
-    ${UTILSDIR}
-    ${SRCUIDIR}
-    ${PROJECT_SOURCE_DIR}
-    ${QT_INCLUDE_DIR}
-    ${LIBUSB_INCLUDE_DIRS}
-    ${GTK2_INCLUDE_DIRS}
-)
+    LINK_DIRECTORIES(
+      ${QT_LIBRARY_DIR}
+      ${LIBUSB_LIBRARY_DIRS}
+      ${GTK2_LIBRARY_DIRS}
+    )
 
-LINK_DIRECTORIES(
-    ${QT_LIBRARY_DIR}
-    ${LIBUSB_LIBRARY_DIRS}
-    ${GTK2_LIBRARY_DIRS}
-)
-
-add_definitions(${GTK2_CFLAGS_OTHER})
-
+ENDIF () # WIN32
 
 # Freedesktop files
 IF(NOT WIN32)
-    install(DIRECTORY
-        #      ${CMAKE_SOURCE_DIR}/data/icons/16x16
-        #      ${CMAKE_SOURCE_DIR}/data/icons/22x22
-        #      ${CMAKE_SOURCE_DIR}/data/icons/24x24
-        #      ${CMAKE_SOURCE_DIR}/data/icons/32x32
-        #      ${CMAKE_SOURCE_DIR}/data/icons/48x48
-        #      ${CMAKE_SOURCE_DIR}/data/icons/128x128
-      ${CMAKE_SOURCE_DIR}/data/icons/
-      DESTINATION share/icons/
-    )
+  install(DIRECTORY
+      #      ${CMAKE_SOURCE_DIR}/data/icons/16x16
+      #      ${CMAKE_SOURCE_DIR}/data/icons/22x22
+      #      ${CMAKE_SOURCE_DIR}/data/icons/24x24
+      #      ${CMAKE_SOURCE_DIR}/data/icons/32x32
+      #      ${CMAKE_SOURCE_DIR}/data/icons/48x48
+      #      ${CMAKE_SOURCE_DIR}/data/icons/128x128
+    ${CMAKE_SOURCE_DIR}/data/icons/
+    DESTINATION share/icons/
+  )
 
-    install(FILES
-      ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
-      DESTINATION share/applications
-    )
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
+    DESTINATION share/applications
+  )
 
-    install(FILES
-      ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
-      DESTINATION share/pixmaps
-    )
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
+    DESTINATION share/pixmaps
+  )
 
-    # Install Nitrokey udev rules
-    install(FILES
-        ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
-        DESTINATION /etc/udev/rules.d
-        )
+  # Install Nitrokey udev rules
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
+    DESTINATION /etc/udev/rules.d
+  )
 
-    # Install autocompletion scripts
-    install(FILES
-        ${CMAKE_SOURCE_DIR}/data//bash-autocomplete/nitrokey-app
-        DESTINATION /etc/bash_completion.d
-    )
+  # Install autocompletion scripts
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data//bash-autocomplete/nitrokey-app
+    DESTINATION /etc/bash_completion.d
+  )
 
-    install(FILES
-        ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
-        DESTINATION /usr/share/locale/de_DE/LC_MESSAGES
-    )
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
+    DESTINATION /usr/share/locale/de_DE/LC_MESSAGES
+  )
 
-    install(FILES
-        ${CMAKE_SOURCE_DIR}/images/info.png
-        ${CMAKE_SOURCE_DIR}/images/quit.png
-        ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
-        ${CMAKE_SOURCE_DIR}/images/settings.png
-        DESTINATION /usr/share/nitrokey
-    )
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/images/info.png
+    ${CMAKE_SOURCE_DIR}/images/quit.png
+    ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
+    ${CMAKE_SOURCE_DIR}/images/settings.png
+    DESTINATION /usr/share/nitrokey
+  )
 
-ENDIF()
+ENDIF () # NOT WIN32
 
 
 ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}

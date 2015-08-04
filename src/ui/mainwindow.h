@@ -30,7 +30,7 @@
 
 #define TRAY_MSG_TIMEOUT    5000
 
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
 #undef signals
 extern "C"
 {
@@ -39,7 +39,7 @@ extern "C"
 #include <gtk/gtk.h>
 }
 #define signals public
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
 
 
 namespace Ui
@@ -94,10 +94,10 @@ class MainWindow:public QMainWindow
     void showTrayMessage (const QString & title, const QString & msg, enum trayMessageType type, int timeout);
 
       Ui::MainWindow * ui;
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
     AppIndicator* indicator;
     GtkWidget* indicatorMenu;
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
     QSystemTrayIcon* trayIcon;
     QMenu* trayMenu;
     QMenu* trayMenuSubConfigure;

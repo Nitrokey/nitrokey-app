@@ -21,14 +21,14 @@
 #include "stick20-response-task.h"
 #include "stick20responsedialog.h"
 
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
 #undef signals
 extern "C"
 {
 #include <libnotify/notify.h>
 }
 #define signals public
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
 
 // #include "ui_stick20-response-task.h"
 
@@ -86,7 +86,7 @@ void Stick20ResponseTask::ShowIconMessage (const QString msg)
 {
     QString title = QString ("Nitrokey App");
     int timeout = 3000;
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
     if (isUnity ())
     {
         if (!notify_init ("example"))
@@ -99,7 +99,7 @@ void Stick20ResponseTask::ShowIconMessage (const QString msg)
         notify_uninit ();
     }
     else
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
     {
         if (TRUE == trayIcon->supportsMessages ())
         {

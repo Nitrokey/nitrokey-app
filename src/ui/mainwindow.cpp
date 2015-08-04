@@ -98,7 +98,7 @@ class OwnSleep:public QThread
 #define LOCAL_PASSWORD_SIZE         40
 
 
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
 /*
  * Indicator call backs
  */
@@ -378,11 +378,11 @@ QString desktop = getenv ("XDG_CURRENT_DESKTOP");
     return (desktop.toLower () == "unity" || desktop.toLower () == "kde" || desktop.toLower () == "lxde" || desktop.toLower () == "xfce");
 }
 
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
 
 void MainWindow::showTrayMessage (const QString & title, const QString & msg, enum trayMessageType type, int timeout)
 {
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
     if (isUnity ())
     {
         if (!notify_init ("example"))
@@ -395,7 +395,7 @@ void MainWindow::showTrayMessage (const QString & title, const QString & msg, en
         notify_uninit ();
     }
     else
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
     {
         if (TRUE == trayIcon->supportsMessages ())
         {
@@ -425,14 +425,14 @@ void MainWindow::showTrayMessage (const QString & title, const QString & msg, en
  */
 void MainWindow::createIndicator ()
 {
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
     if (isUnity ())
     {
         indicator = app_indicator_new ("Nitrokey App", "nitrokey-app", APP_INDICATOR_CATEGORY_OTHER);
         app_indicator_set_status (indicator, APP_INDICATOR_STATUS_ACTIVE);
     }
     else    // other DE's and OS's
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
     {
         trayIcon = new QSystemTrayIcon (this);
         trayIcon->setIcon (QIcon (":/images/CS_icon.png"));
@@ -1056,7 +1056,7 @@ int i;
 
 void MainWindow::generateMenu ()
 {
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
     if (isUnity ())
     {
         indicatorMenu = gtk_menu_new ();
@@ -1109,7 +1109,7 @@ GtkWidget* separItem = gtk_separator_menu_item_new ();
         app_indicator_set_menu (indicator, GTK_MENU (indicatorMenu));
     }
     else
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
     {
         if (NULL == trayMenu)
             trayMenu = new QMenu ();
@@ -1270,7 +1270,7 @@ void MainWindow::initActionsForStick20 ()
 
 void MainWindow::generatePasswordMenu ()
 {
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
     if (isUnity ())
     {
 GtkWidget* passwordsItem = gtk_menu_item_new_with_label (_("Passwords"));
@@ -1346,7 +1346,7 @@ struct getOTPData* otp_data;
         gtk_widget_show (separItem1);
     }
     else
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
     {
         trayMenuPasswdSubMenu = trayMenu->addMenu (tr ("Passwords"));
 
@@ -1434,7 +1434,7 @@ struct getOTPData* otp_data;
 
 void MainWindow::generateMenuForProDevice ()
 {
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
     if (isUnity ())
     {
 GtkWidget* configureItem = gtk_image_menu_item_new_with_label (_("Configure"));
@@ -1497,7 +1497,7 @@ GtkWidget* configureSubMenu = gtk_menu_new ();
         gtk_widget_show (configureSubMenu);
     }
     else
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
     {
         generatePasswordMenu ();
         trayMenu->addSeparator ();
@@ -1537,7 +1537,7 @@ void MainWindow::generateMenuForStorageDevice ()
 {
 int AddSeperator = FALSE;
 
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
     if (isUnity ())
     {
 GtkWidget* updateStorageStatusItem = gtk_menu_item_new_with_label (_("Smartcard or SD card are not ready"));
@@ -1753,7 +1753,7 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
         gtk_widget_show (separItem2);
     }
     else
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
     {
 
         if (FALSE == Stick20ScSdCardOnline) // Is Stick 2.0 online (SD + SC
@@ -3975,7 +3975,7 @@ void MainWindow::generateMenuPasswordSafe ()
 {
     if (FALSE == cryptostick->passwordSafeUnlocked)
     {
-#ifdef Q_OS_LINUX
+#ifdef HAVE_LIBAPPINDICATOR
         if (isUnity ())
         {
             GtkWidget* passwordSafeItem = gtk_image_menu_item_new_with_label (_("Unlock password safe"));
@@ -3988,7 +3988,7 @@ void MainWindow::generateMenuPasswordSafe ()
             gtk_widget_show (passwordSafeItem);
         }
         else
-#endif // Q_OS_LINUX
+#endif // HAVE_LIBAPPINDICATOR
         {
             trayMenu->addAction (UnlockPasswordSafeAction);
 
