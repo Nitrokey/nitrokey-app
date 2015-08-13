@@ -1,7 +1,7 @@
 # Maintainer: Christoph J. Thompson <thompsonc@protonmail.ch>
 
 pkgname=nitrokey-app
-pkgver=r358.g886fed4
+pkgver=r477.g694e6a5
 pkgrel=1
 pkgdesc="Nitrokey management application"
 arch=('i686' 'x86_64')
@@ -9,13 +9,9 @@ url="https://www.nitrokey.com"
 license=('GPL3')
 depends=('qt5-base' 'libusb>=1.0.0')
 makedepends=('git')
-source=("${pkgname}::git+https://github.com/Nitrokey/nitrokey-app"
-        40-nitrokey.rules
-        nitrokey-app.desktop)
+source=("${pkgname}::git+https://github.com/Nitrokey/nitrokey-app")
 install=nitrokey-app.install
-sha256sums=('SKIP'
-            20dff1e02ee899ebfabcbb4b995d5b0f46301969a6ee11668cd37cbef77b95ad
-            6d847e94fb3e81d24765c0d0ad54f375f4943ace9b2144d5dc45e5b159184e94)
+sha256sums=('SKIP')
 
 pkgver() {
   cd "${pkgname}"
@@ -26,13 +22,14 @@ pkgver() {
 
 build() {
   cd "${pkgname}"
-  cmake . -DCMAKE_INSTALL_PREFIX=/usr
+  sed -i 's|/etc/udev/rules.d|/usr/lib/udev/rules.d|g' CMakeLists.txt
+  sed -i 's|/etc/bash_completion.d|/usr/share/bash-completion/completions|g' \
+         CMakeLists.txt
+  cmake . -DCMAKE_INSTALL_PREFIX=/usr -DHAVE_LIBAPPINDICATOR=NO
   make
 }
 
 package() {
   cd "${pkgname}"
   make DESTDIR="${pkgdir}" install
-  install -Dm644 "${srcdir}/40-nitrokey.rules" "${pkgdir}/usr/lib/udev/rules.d/40-nitrokey.rules"
-  install -Dm644 "${srcdir}/nitrokey-app.desktop" "${pkgdir}/etc/xdg/autostart/nitrokey-app.desktop"
 }
