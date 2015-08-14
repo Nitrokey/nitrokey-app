@@ -12,3 +12,5 @@ build-*-Debug
 moc_*.cpp
 ui_*.h
 *tags
+install
+CMakeCache.txt
