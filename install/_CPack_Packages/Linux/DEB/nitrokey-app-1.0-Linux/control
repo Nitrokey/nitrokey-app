@@ -1,9 +1,0 @@
-Package: nitrokey-app
-Version: 1.0
-Section: devel
-Priority: optional
-Architecture: amd64
-Installed-Size: 10453
-Maintainer: Georgios Gkitsas <george@nitrokey.com>
-Description: CryptoStickGUI built using CMake
-
