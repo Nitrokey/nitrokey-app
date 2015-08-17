@@ -72,8 +72,8 @@ linux-release: build | $(LINUX_RELEASE_DIR)
 	make package && \
 	mv *.deb *.rpm ${LINUX_RELEASE_DIR} && cd ${LINUX_RELEASE_DIR} && \
 	find . -name *.deb -type f -printf '%f' | xargs -0 -n1 -I{} sh -c '${SCRIPTS_DIR}/fix-deb.sh {}' && \
-	find . -name *.deb -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5' && \
-	find . -name *.rpm -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha512sum -b {} > {}.sha512; md5sum -b {} > {}.md5'
+	find . -name *.deb -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha256sum -b {} > {}.sha256; md5sum -b {} > {}.md5' && \
+	find . -name *.rpm -type f -printf "%f" | xargs -0 -n1 -I{} sh -c 'sha256sum -b {} > {}.sha256; md5sum -b {} > {}.md5'
 
 windows-release: windows | $(WIN_RELEASE_DIR)
 	cd ${ROOT_DIR}/nsis && \
