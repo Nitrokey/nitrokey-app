@@ -82,7 +82,7 @@ Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-
 3. cd mxe && make qt5
 4. export PATH=<mxe root>/usr/bin:$PATH
 5. Change to build directory parallel to PC CryptoStickGUI directory, e.g. build-CryptoStickGUI-Win32-release
-6. <mxe root>/usr/i686-pc-mingw32/qt5/bin/qmake -spec <mxe root>/usr/i686-pc-mingw32/qt5/mkspecs/win32-g++ -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
+6. <mxe root>/usr/i686-w64-mingw32.static/qt5/bin/qmake -spec <mxe root>/usr/i686-w64-mingw32.static/qt5/mkspecs/win32-g++ -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
 7. make
 8. optional: use upx to compress the executable
 
