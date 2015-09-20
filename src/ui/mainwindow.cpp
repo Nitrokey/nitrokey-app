@@ -54,7 +54,7 @@
 #include <QTimer>
 #include <QMenu>
 #include <QDialog>
-#include <QtWidgets>
+#include <QtGui>
 #include <QDateTime>
 #include <QThread>
 

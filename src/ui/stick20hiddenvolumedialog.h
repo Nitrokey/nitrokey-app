@@ -21,6 +21,8 @@
 #define STICK20HIDDENVOLUMEDIALOG_H
 
 #include <QDialog>
+#include <QAbstractButton>
+#include <QPushButton>
 #include "device.h"
 
 namespace Ui
