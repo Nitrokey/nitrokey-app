@@ -21,7 +21,6 @@
 #include <QMenu>
 #include <QDateTime>
 #include <QDesktopWidget>
-#include <QGraphicsScene>
 
 #include "device.h"
 #include "response.h"

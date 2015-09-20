@@ -21,7 +21,7 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
-#include <QtGui>
+#include <QtWidgets>
 
 #include "hidapi.h"
 #include "command.h"
