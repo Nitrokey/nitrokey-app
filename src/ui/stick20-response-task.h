@@ -2,6 +2,7 @@
 #define STICK20RESPONSETASK_H
 
 #include <QWidget>
+#include <QSystemTrayIcon>
 #include "device.h"
 #include "response.h"
 #include "nitrokey-applet.h"
