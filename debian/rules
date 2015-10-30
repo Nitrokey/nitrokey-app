@@ -21,15 +21,15 @@ CROSS= --build $(DEB_BUILD_GNU_TYPE)
 endif
 
 
-destdir = $(CURDIR)/debian/privacybox
+destdir = $(CURDIR)/debian/nitrokey-app
 install_prefix = $(destdir)/usr
 
 build:
 	dh_testdir
 	mkdir -p $(install_prefix)
 
-	export INSTALL_DIR=$(destdir) && make -f Makefile.top build
-	make -f Makefile.top install
+	INSTALL_DIR=$(destdir) make -f Makefile.top build
+	INSTALL_DIR=$(destdir) make -f Makefile.top install
 
 clean:
 	dh_clean
