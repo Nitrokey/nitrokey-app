@@ -1,0 +1,5 @@
+nitrokey-app (0.0.2) unstable; urgency=medium
+
+  * Initial release for Ubuntu 14.04.
+
+ -- Tim Stoop <tim@kumina.nl>  Fri, 30 Oct 2015 09:28:49 +0000
