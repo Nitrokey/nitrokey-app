@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Georgios Gkitsas <george@nitrokey.com>
 Build-Depends:
     debhelper (>= 9),
-    libqt5-dev,
+    qtbase5-dev,
     cmake
 Standards-Version: 3.9.4
 Homepage: http://nitrokey.com
