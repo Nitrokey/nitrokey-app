@@ -218,18 +218,18 @@ IF(NOT WIN32)
   # Install Nitrokey udev rules
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
-    DESTINATION /etc/udev/rules.d
+    DESTINATION ../etc/udev/rules.d
   )
 
   # Install autocompletion scripts
   install(FILES
     ${CMAKE_SOURCE_DIR}/data//bash-autocomplete/nitrokey-app
-    DESTINATION /etc/bash_completion.d
+    DESTINATION ../etc/bash_completion.d
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
-    DESTINATION /usr/share/locale/de_DE/LC_MESSAGES
+    DESTINATION share/locale/de_DE/LC_MESSAGES
   )
 
   install(FILES
@@ -237,7 +237,7 @@ IF(NOT WIN32)
     ${CMAKE_SOURCE_DIR}/images/quit.png
     ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
     ${CMAKE_SOURCE_DIR}/images/settings.png
-    DESTINATION /usr/share/nitrokey
+    DESTINATION share/nitrokey
   )
 
 ENDIF () # NOT WIN32
