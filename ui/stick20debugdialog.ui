@@ -14,7 +14,7 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <widget class="QPlainTextEdit" name="TextGUI">
@@ -117,7 +117,7 @@
     <bool>true</bool>
    </property>
    <property name="plainText">
-    <string>Qutput Stick</string>
+    <string>Device Output</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_OutputStick">
@@ -130,12 +130,12 @@
     </rect>
    </property>
    <property name="text">
-    <string>Stick output logged via USB</string>
+    <string>Device output logged via USB</string>
    </property>
   </widget>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>

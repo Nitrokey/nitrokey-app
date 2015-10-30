@@ -4,6 +4,8 @@ PROJECT(NitrokeyApp)
 SET(PROJECT_VERSION "0.2") 
 #ADD_DEFINITIONS(-DSEAFILE_CLIENT_VERSION=${PROJECT_VERSION}) 
 
+OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" YES)
+
 INCLUDE(FindPkgConfig)
 
 IF (NOT (${CMAKE_BUILD_TYPE} MATCHES Release))
@@ -34,8 +36,6 @@ SET(moc_headers
     ${UTILSDIR}/crc32.h
     ${SRCUIDIR}/nitrokey-applet.h
     ${SRCDIR}/device.h
-    ${UTILSDIR}/gui.h
-    ${UTILSDIR}/hidapi.h
     ${SRCUIDIR}/hotpdialog.h
     ${SRCDIR}/hotpslot.h
     ${SRCDIR}/inttypes.h
@@ -47,7 +47,6 @@ SET(moc_headers
     ${SRCDIR}/response.h
     ${SRCUIDIR}/securitydialog.h
     ${UTILSDIR}/sleep.h
-    ${SRCUIDIR}/splash.h
     ${SRCUIDIR}/stick20changepassworddialog.h
     ${SRCUIDIR}/stick20debugdialog.h
     ${SRCUIDIR}/stick20dialog.h
@@ -57,6 +56,7 @@ SET(moc_headers
     ${SRCUIDIR}/stick20lockfirmwaredialog.h
     ${SRCUIDIR}/stick20matrixpassworddialog.h
     ${SRCUIDIR}/stick20responsedialog.h
+    ${SRCUIDIR}/stick20-response-task.h
     ${SRCUIDIR}/stick20setup.h
     ${SRCUIDIR}/stick20updatedialog.h
     ${SRCUIDIR}/stick20window.h
@@ -114,7 +114,6 @@ SET(nitrokey_app_sources
     ${UTILSDIR}/crc32.cpp
     ${SRCUIDIR}/nitrokey-applet.cpp
     ${SRCDIR}/device.cpp
-    ${UTILSDIR}/gui.cpp
     ${SRCUIDIR}/hotpdialog.cpp
     ${SRCDIR}/hotpslot.cpp
     ${SRCDIR}/main.cpp
@@ -124,7 +123,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/pindialog.cpp
     ${SRCDIR}/response.cpp
     ${SRCUIDIR}/securitydialog.cpp
-    ${SRCUIDIR}/splash.cpp
     ${SRCUIDIR}/stick20changepassworddialog.cpp
     ${SRCUIDIR}/stick20debugdialog.cpp
     ${SRCUIDIR}/stick20dialog.cpp
@@ -133,6 +131,7 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
     ${SRCUIDIR}/stick20matrixpassworddialog.cpp
     ${SRCUIDIR}/stick20responsedialog.cpp
+    ${SRCUIDIR}/stick20-response-task.cpp
     ${SRCUIDIR}/stick20setup.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${SRCUIDIR}/stick20window.cpp
@@ -148,50 +147,100 @@ ELSEIF(APPLE)
     SET( platform_specific_sources hid_mac.c)
     SET( platform_specific_libs "-framework IOKit -framework CoreFoundation")
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
-    SET(EXTRA_LIBS pthread usb-1.0)
-ENDIF()
 
-INCLUDE_DIRECTORIES(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${SRCDIR}
-    ${UTILSDIR}
-    ${SRCUIDIR}
-    ${PROJECT_SOURCE_DIR}
-    ${QT_INCLUDE_DIR}
-    ${LIBUSB_INCLUDE_DIRS}
-)
+    pkg_check_modules(GTK2 gtk+-2.0)
 
-LINK_DIRECTORIES(
-    ${QT_LIBRARY_DIR}
-    ${LIBUSB_LIBRARY_DIRS}
-)
+    IF (GTK2_FOUND AND HAVE_LIBAPPINDICATOR)
 
+      SET(GTK2_INCLUDE_DIRS
+          ${GTK2_INCLUDE_DIRS}
+          /usr/include/libappindicator-0.1
+          /usr/include/gtk-2.0
+          /usr/lib/gtk-2.0/include
+          /usr/include/glib-2.0
+          /usr/lib/glib-2.0/include
+          /usr/include/cairo
+          /usr/include/atk-1.0
+          /usr/include/pango-1.0
+      )
+
+      SET(EXTRA_LIBS ${GTK2_LIBRARIES} appindicator notify)
+
+      ADD_DEFINITIONS(${GTK2_CFLAGS_OTHER} -DHAVE_LIBAPPINDICATOR)
+
+    ENDIF () # GTK2_FOUND AND HAVE_LIBAPPINDICATOR
+
+    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread usb-1.0)
+
+    INCLUDE_DIRECTORIES(
+      ${CMAKE_CURRENT_SOURCE_DIR}
+      ${CMAKE_CURRENT_BINARY_DIR}
+      ${SRCDIR}
+      ${UTILSDIR}
+      ${SRCUIDIR}
+      ${PROJECT_SOURCE_DIR}
+      ${QT_INCLUDE_DIR}
+      ${LIBUSB_INCLUDE_DIRS}
+      ${GTK2_INCLUDE_DIRS}
+    )
+
+    LINK_DIRECTORIES(
+      ${QT_LIBRARY_DIR}
+      ${LIBUSB_LIBRARY_DIRS}
+      ${GTK2_LIBRARY_DIRS}
+    )
+
+ENDIF () # WIN32
 
 # Freedesktop files
-if(NOT WIN32)
-install(DIRECTORY
-  ${CMAKE_SOURCE_DIR}/data/icons/16x16
-  ${CMAKE_SOURCE_DIR}/data/icons/22x22
-  ${CMAKE_SOURCE_DIR}/data/icons/24x24
-  ${CMAKE_SOURCE_DIR}/data/icons/32x32
-  ${CMAKE_SOURCE_DIR}/data/icons/48x48
-  ${CMAKE_SOURCE_DIR}/data/icons/128x128
-  ${CMAKE_SOURCE_DIR}/data/icons/scalable
-  DESTINATION share/icons/hicolor
-)
+IF(NOT WIN32)
+  install(DIRECTORY
+      #      ${CMAKE_SOURCE_DIR}/data/icons/16x16
+      #      ${CMAKE_SOURCE_DIR}/data/icons/22x22
+      #      ${CMAKE_SOURCE_DIR}/data/icons/24x24
+      #      ${CMAKE_SOURCE_DIR}/data/icons/32x32
+      #      ${CMAKE_SOURCE_DIR}/data/icons/48x48
+      #      ${CMAKE_SOURCE_DIR}/data/icons/128x128
+    ${CMAKE_SOURCE_DIR}/data/icons/
+    DESTINATION share/icons/
+  )
 
-install(FILES
-  ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
-  DESTINATION share/applications
-)
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
+    DESTINATION share/applications
+  )
 
-install(FILES
-  ${CMAKE_SOURCE_DIR}/data/icons/128x128/apps/nitrokey-app.png
-  DESTINATION share/pixmaps
-)
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
+    DESTINATION share/pixmaps
+  )
 
-endif()
+  # Install Nitrokey udev rules
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
+    DESTINATION /etc/udev/rules.d
+  )
+
+  # Install autocompletion scripts
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data//bash-autocomplete/nitrokey-app
+    DESTINATION /etc/bash_completion.d
+  )
+
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
+    DESTINATION /usr/share/locale/de_DE/LC_MESSAGES
+  )
+
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/images/info.png
+    ${CMAKE_SOURCE_DIR}/images/quit.png
+    ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
+    ${CMAKE_SOURCE_DIR}/images/settings.png
+    DESTINATION /usr/share/nitrokey
+  )
+
+ENDIF () # NOT WIN32
 
 
 ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
@@ -233,9 +282,14 @@ IF("${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
     set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
 ENDIF("${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
 
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Georgios Gkitsas <george@nitrokey.com>" )
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Mateusz Zalega <mateusz@nitrokey.com>" )
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+
+
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libappindicator1, libnotify4, libqt5widgets5, libqt5gui5, libqt5core5a")
+SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/debian/postinst")
+
 
 # Rpm
 #execute_process(COMMAND dpkg --print-architecture OUTPUT_VARIABLE CPACK_RPM_PACKAGE_ARCHITECTURE)
@@ -243,7 +297,7 @@ SET(CPACK_RPM_PACKAGE_DESCRIPTION  "Use and manage your Nitrokey")
 
 SET(CPACK_RPM_PACKAGE_SUMMARY "Use and manage your Nitrokey")
 SET(CPACK_RPM_PACKAGE_VENDOR "Nitrokey")
-SET(CPACK_RPM_PACKAGE_MAINTAINER "Georgios Gkitsas <george@nitrokey.com>" )
+SET(CPACK_RPM_PACKAGE_MAINTAINER "Mateusz Zalega <mateusz@nitrokey.com>" )
 SET(CPACK_RPM_PACKAGE_PRIORITY "optional")
 SET(CPACK_RPM_PACKAGE_SECTION "utils")
 

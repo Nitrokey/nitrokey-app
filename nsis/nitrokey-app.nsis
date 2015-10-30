@@ -1,0 +1,70 @@
+# set the name of the installer
+Outfile "Nitrokey-App-Installer.exe"
+
+# define installation directory
+InstallDir "$PROGRAMFILES\Nitrokey App"
+
+# For removing Start Menu shortcut in Windows 7
+RequestExecutionLevel admin
+
+# create a default section.
+Section
+    # set the installation directory as the destination for the following actions
+    SetOutPath $INSTDIR
+
+    # App files
+    File nitrokey-app.exe
+
+    # create the uninstaller
+    WriteUninstaller $INSTDIR\uninstall.exe
+
+    # Shortcuts
+    createShortCut "$SMPROGRAMS\Nitrokey App.lnk" "$INSTDIR\nitrokey-app.exe"
+    createShortCut "$DESKTOP\Nitrokey App.lnk" "$INSTDIR\nitrokey-app.exe"
+    CreateShortCut "$SMPROGRAMS\Uninstall Nitrokey App.lnk" "$INSTDIR\uninstall.exe"
+
+    # Add/Remove entry
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+                 "DisplayName" "Nitrokey App"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+                 "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+                 "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+                 "Publisher" "Nitrokey UG"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+                 "RegCompany" "Nitrokey UG"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+                 "HelpLink" "https://www.nitrokey.com"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+                 "Comments" "Manage your Nitrokey devices"
+    # TODO
+#    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+#                 "DisplayIcon" ""
+#    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+#                 "VersionMajor" ""
+#    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp" \
+#                 "VersionMinor" ""
+    
+SectionEnd
+
+
+Section "Uninstall"
+     
+    # Always delete uninstaller first
+    Delete $INSTDIR\uninstall.exe
+     
+    # now delete installed file
+    Delete $INSTDIR\nitrokey-app.exe
+    RMDir $INSTDIR
+
+    # Delete shortcuts
+    Delete "$SMPROGRAMS\Nitrokey App.lnk"
+    Delete "$DESKTOP\Nitrokey App.lnk"
+    Delete "$SMPROGRAMS\Uninstall Nitrokey App.lnk"
+
+    # Delete Registry keys
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\NitrokeyApp"
+
+
+SectionEnd

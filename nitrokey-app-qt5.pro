@@ -35,6 +35,7 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCUIDIR}/stick20updatedialog.cpp \
             $${SRCUIDIR}/stick20setup.cpp \
             $${SRCUIDIR}/stick20responsedialog.cpp \
+            $${SRCUIDIR}/stick20-response-task.cpp \
             $${SRCUIDIR}/stick20matrixpassworddialog.cpp \
             $${SRCUIDIR}/stick20lockfirmwaredialog.cpp \
             $${SRCUIDIR}/stick20infodialog.cpp \
@@ -54,8 +55,6 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${UTILSDIR}/stick20hid.c \
             $${SRCUIDIR}/passwordsafedialog.cpp \
             $${SRCUIDIR}/securitydialog.cpp \
-            $${UTILSDIR}/gui.cpp \
-            $${SRCUIDIR}/splash.cpp \
             $${SRCUIDIR}/nitrokey-applet.cpp
 
 win32 {
@@ -76,6 +75,7 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCUIDIR}/stick20updatedialog.h \
             $${SRCUIDIR}/stick20setup.h \
             $${SRCUIDIR}/stick20responsedialog.h \
+            $${SRCUIDIR}/stick20-response-task.h \
             $${SRCUIDIR}/stick20matrixpassworddialog.h \
             $${SRCUIDIR}/stick20lockfirmwaredialog.h \
             $${SRCUIDIR}/stick20infodialog.h \
@@ -100,8 +100,6 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCUIDIR}/passwordsafedialog.h \
             $${SRCUIDIR}/securitydialog.h \
             $${SRCDIR}/mcvs-wrapper.h \
-            $${UTILSDIR}/gui.h \
-            $${SRCUIDIR}/splash.h \
             $${SRCUIDIR}/nitrokey-applet.h
 
 FORMS +=    $${UIDIR}/mainwindow.ui \
@@ -141,6 +139,19 @@ macx{
 unix:!macx{
     LIBS  = `pkg-config libusb-1.0 --libs` -lrt -lpthread
     INCLUDEPATH += /usr/include/libusb-1.0
+
+    INCLUDEPATH += /usr/include/libappindicator-0.1 \
+        /usr/include/gtk-2.0 \
+        /usr/lib/gtk-2.0/include \
+        /usr/include/glib-2.0 \
+        /usr/lib/glib-2.0/include \
+        /usr/include/cairo \
+        /usr/include/atk-1.0 \
+        /usr/include/pango-1.0
+
+    LIBS += -L/usr/lib -lappindicator -lnotify
+    CONFIG += link_pkgconfig
+    PKGCONFIG = gtk+-2.0
 }
 
 OTHER_FILES +=
@@ -148,3 +159,5 @@ OTHER_FILES +=
 RESOURCES += \
     resources.qrc
 
+TRANSLATIONS += i18n/nitrokey_de_DE.ts \
+                i18n/nitrokey_en.ts

@@ -24,57 +24,61 @@
 #define VERSION_FONT_POINT_SIZE 5
 #define TEXT_MARGIN 10
 
-SplashScreen::SplashScreen() : QSplashScreen(QPixmap(),Qt::WindowStaysOnTopHint)
+SplashScreen::SplashScreen ():QSplashScreen (QPixmap (), Qt::WindowStaysOnTopHint)
 {
-  QFont titleFont = qApp->font();
-  QFont authorFont = qApp->font();
-  QFont versionFont = qApp->font();
+QFont titleFont = qApp->font ();
 
-  logo = new QPixmap(":/images/splash.png");
+QFont authorFont = qApp->font ();
 
-  QWidget *textWidget = new QWidget(this);
-  QVBoxLayout *textLayout = new QVBoxLayout;
-  Gui::ShadowedLabel *titleLabel = new Gui::ShadowedLabel(qApp->applicationName(),this);
-  titleLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  titleFont.setBold(true);
-  titleFont.setPointSize(40);
-  titleLabel->setFont(titleFont);
-  Gui::ShadowedLabel *versionLabel = new Gui::ShadowedLabel(qApp->applicationVersion(),this);
-  versionFont.setPointSize(20);
-  versionLabel->setFont(versionFont);
-  versionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  Gui::ShadowedLabel *authorLabel = new Gui::ShadowedLabel(tr("Author:") + "",this);
-  authorFont.setPointSize(10);
-  authorLabel->setFont(authorFont);
-  authorLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-  QWidget *spacerWidget = new QWidget(this);
-  spacerWidget->setFixedHeight(15);
+QFont versionFont = qApp->font ();
 
-  textLayout->setSpacing(1);
-  textLayout->addStretch();
-  textLayout->addWidget(titleLabel);
-  textLayout->addWidget(versionLabel);
-  textLayout->addWidget(spacerWidget);
-  textLayout->addWidget(authorLabel);
+    logo = new QPixmap (":/images/splash.png");
 
-  textWidget->setLayout(textLayout);
+QWidget* textWidget = new QWidget (this);
 
-  textWidget->setFixedSize(logo->size().width(),
-                           logo->height() - QFontMetrics(qApp->font()).height() - 12);
+QVBoxLayout* textLayout = new QVBoxLayout;
 
-  QPainter painter(logo);
-  painter.setRenderHint(QPainter::Antialiasing,true);
-  painter.setRenderHint(QPainter::TextAntialiasing,true);
-  painter.fillRect(QRect(8,logo->height() - QFontMetrics(qApp->font()).height() - 12,
-                         logo->width(),logo->height()),Qt::black);
-  painter.end();
-  textWidget->render(logo,QPoint(),QRegion(),0);
+    Gui::ShadowedLabel * titleLabel = new Gui::ShadowedLabel (qApp->applicationName (), this);
+    titleLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
+    titleFont.setBold (true);
+    titleFont.setPointSize (40);
+    titleLabel->setFont (titleFont);
+    Gui::ShadowedLabel * versionLabel = new Gui::ShadowedLabel (qApp->applicationVersion (), this);
+    versionFont.setPointSize (20);
+    versionLabel->setFont (versionFont);
+    versionLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
+    Gui::ShadowedLabel * authorLabel = new Gui::ShadowedLabel (tr ("Author:") + "", this);
+    authorFont.setPointSize (10);
+    authorLabel->setFont (authorFont);
+    authorLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
+QWidget* spacerWidget = new QWidget (this);
 
-  setMask(QRegion(logo->mask()));
-  setPixmap(*logo);
+    spacerWidget->setFixedHeight (15);
+
+    textLayout->setSpacing (1);
+    textLayout->addStretch ();
+    textLayout->addWidget (titleLabel);
+    textLayout->addWidget (versionLabel);
+    textLayout->addWidget (spacerWidget);
+    textLayout->addWidget (authorLabel);
+
+    textWidget->setLayout (textLayout);
+
+    textWidget->setFixedSize (logo->size ().width (), logo->height () - QFontMetrics (qApp->font ()).height () - 12);
+
+QPainter painter (logo);
+
+    painter.setRenderHint (QPainter::Antialiasing, true);
+    painter.setRenderHint (QPainter::TextAntialiasing, true);
+    painter.fillRect (QRect (8, logo->height () - QFontMetrics (qApp->font ()).height () - 12, logo->width (), logo->height ()), Qt::black);
+    painter.end ();
+    textWidget->render (logo, QPoint (), QRegion (), 0);
+
+    setMask (QRegion (logo->mask ()));
+    setPixmap (*logo);
 }
 
-SplashScreen::~SplashScreen()
+SplashScreen::~SplashScreen ()
 {
-  delete logo;
+delete logo;
 }

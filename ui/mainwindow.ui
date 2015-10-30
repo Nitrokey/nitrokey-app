@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>719</width>
-    <height>732</height>
+    <width>801</width>
+    <height>781</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,7 @@
    <string>Configuration</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <property name="autoFillBackground">
@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -60,132 +60,7 @@
       <property name="movable">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="tab_4">
-       <attribute name="title">
-        <string>Overview</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_17">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_12">
-          <item>
-           <spacer name="horizontalSpacer_12">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_15">
-            <item>
-             <widget class="QPushButton" name="pushButton_GotoTOTP">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use TOTP for login to websites&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Time-based One-Time Passwords (TOTP)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_GotoHOTP">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HOTP are usually used to login to local applications&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>HMAC-based One-Time Passwords (HOTP)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_GotoGenOTP">
-              <property name="text">
-               <string>General One-Time Password Settings</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_StaticPasswords">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Manage static passwords&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Password Safe</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_8">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::MinimumExpanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_11">
-          <item>
-           <spacer name="horizontalSpacer_7">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="cancelButton_2">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Close</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="tab">
-       <attribute name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
-       </attribute>
        <attribute name="title">
         <string>OTP Slot Configuration</string>
        </attribute>
@@ -214,6 +89,52 @@
               <string>Manage slots</string>
              </property>
             </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <widget class="QRadioButton" name="radioButton_2">
+               <property name="text">
+                <string>TOTP</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton">
+               <property name="text">
+                <string>HOTP</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_25">
+               <property name="font">
+                <font>
+                 <italic>true</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>(Recommendation: Use TOTP for web applications and HOTP for local applications)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_14">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -426,7 +347,7 @@
                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Example: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
-                  <string>Base 32</string>
+                  <string>Base32</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -466,6 +387,22 @@
              </item>
             </layout>
            </item>
+           <item>
+            <widget class="QLabel" name="label_26">
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+               <italic>true</italic>
+              </font>
+             </property>
+             <property name="text">
+              <string>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren't protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -495,30 +432,64 @@
             </widget>
            </item>
            <item>
+            <widget class="QCheckBox" name="enterCheckBox">
+             <property name="text">
+              <string>Send 'enter' as the last keystroke</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <layout class="QFormLayout" name="formLayout_5">
              <property name="fieldGrowthPolicy">
               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
              </property>
-             <item row="1" column="0">
-              <widget class="QCheckBox" name="enterCheckBox">
-               <property name="text">
-                <string>Send 'enter'as the last keystroke</string>
-               </property>
-              </widget>
+             <item row="4" column="1">
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QLineEdit" name="counterEdit">
+                   <property name="inputMask">
+                    <string/>
+                   </property>
+                   <property name="text">
+                    <string>00000000</string>
+                   </property>
+                   <property name="maxLength">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="setToZeroButton">
+                   <property name="text">
+                    <string>Set to zero</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="setToRandomButton">
+                   <property name="text">
+                    <string>Set to random</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </item>
-             <item row="2" column="0">
-              <widget class="QLabel" name="intervalLabel">
-               <property name="text">
-                <string>TOTP interval:</string>
+             <item row="5" column="1">
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
                </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>HOTP length:</string>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>0</height>
+                </size>
                </property>
-              </widget>
+              </spacer>
              </item>
              <item row="3" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -554,48 +525,6 @@
                </item>
               </layout>
              </item>
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_6">
-               <property name="text">
-                <string>Moving factor seed:</string>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <layout class="QVBoxLayout" name="verticalLayout_5">
-               <item>
-                <widget class="QLineEdit" name="counterEdit">
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="text">
-                  <string>00000000</string>
-                 </property>
-                 <property name="maxLength">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
-                 <item>
-                  <widget class="QPushButton" name="setToZeroButton">
-                   <property name="text">
-                    <string>Set to zero</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="setToRandomButton">
-                   <property name="text">
-                    <string>Set to random</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </item>
              <item row="2" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_15">
                <item>
@@ -619,12 +548,33 @@
                  <property name="sizeHint" stdset="0">
                   <size>
                    <width>40</width>
-                   <height>20</height>
+                   <height>0</height>
                   </size>
                  </property>
                 </spacer>
                </item>
               </layout>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Moving factor seed:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>HOTP length:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="intervalLabel">
+               <property name="text">
+                <string>TOTP interval:</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -831,12 +781,8 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_2">
-       <attribute name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
-       </attribute>
        <attribute name="title">
-        <string>OTP General Configuration</string>
+        <string>OTP General</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_14">
         <item>
@@ -1201,10 +1147,6 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tab_3">
-       <attribute name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/images/safe.png</normaloff>:/images/safe.png</iconset>
-       </attribute>
        <attribute name="title">
         <string>Password Safe</string>
        </attribute>
@@ -1392,11 +1334,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>pushButton_GotoTOTP</tabstop>
-  <tabstop>pushButton_GotoHOTP</tabstop>
-  <tabstop>pushButton_GotoGenOTP</tabstop>
-  <tabstop>pushButton_StaticPasswords</tabstop>
-  <tabstop>cancelButton_2</tabstop>
   <tabstop>slotComboBox</tabstop>
   <tabstop>eraseButton</tabstop>
   <tabstop>nameEdit</tabstop>
@@ -1405,11 +1342,9 @@
   <tabstop>randomSecretButton</tabstop>
   <tabstop>base32RadioButton</tabstop>
   <tabstop>hexRadioButton</tabstop>
-  <tabstop>enterCheckBox</tabstop>
   <tabstop>intervalSpinBox</tabstop>
   <tabstop>digits6radioButton</tabstop>
   <tabstop>digits8radioButton</tabstop>
-  <tabstop>counterEdit</tabstop>
   <tabstop>setToZeroButton</tabstop>
   <tabstop>setToRandomButton</tabstop>
   <tabstop>tokenIDCheckBox</tabstop>
@@ -1439,25 +1374,9 @@
   <tabstop>PWS_ButtonSaveSlot</tabstop>
  </tabstops>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>352</x>
-     <y>508</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>262</x>
-     <y>366</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>generalCancelButton</sender>
    <signal>clicked()</signal>
@@ -1475,18 +1394,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>cancelButton_2</sender>
+   <sender>cancelButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>311</x>
-     <y>485</y>
+     <x>352</x>
+     <y>508</y>
     </hint>
     <hint type="destinationlabel">
-     <x>318</x>
-     <y>274</y>
+     <x>262</x>
+     <y>366</y>
     </hint>
    </hints>
   </connection>

@@ -7,7 +7,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,7 @@
 // limitations under the License.
 //
 // Encode and decode from base32 encoding using the following alphabet:
-//   ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
+// ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
 // This alphabet is documented in RFC 4668/3548
 //
 // We allow white-space and hyphens, but all other characters are considered
@@ -30,13 +30,10 @@
 
 #include <stdint.h>
 /*
-int base32_decode(const uint8_t *encoded, uint8_t *result, int bufSize)
-    __attribute__((visibility("hidden")));
-int base32_encode(const uint8_t *data, int length, uint8_t *result,
-                  int bufSize)
-    __attribute__((visibility("hidden")));
-*/
-int base32_decode(const uint8_t *encoded, uint8_t *result, int bufSize);
-int base32_encode(const uint8_t *data, int length, uint8_t *result,int bufSize) ;
-int base32_clean(const uint8_t *data, int length, uint8_t *result);
+   int base32_decode(const uint8_t *encoded, uint8_t *result, int bufSize) __attribute__((visibility("hidden"))); int base32_encode(const uint8_t
+   *data, int length, uint8_t *result, int bufSize) __attribute__((visibility("hidden"))); */
+int base32_decode (const uint8_t * encoded, uint8_t * result, int bufSize);
+
+int base32_encode (const uint8_t * data, int length, uint8_t * result, int bufSize);
+int base32_clean (const uint8_t * data, int length, uint8_t * result);
 #endif /* _BASE32_H_ */

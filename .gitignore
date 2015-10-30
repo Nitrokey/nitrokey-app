@@ -1,11 +1,16 @@
 *.pro.user*
+build
+release
 build-*-Debug
 *~
 *.o
 *.lst
 .*
+*.exe
 !/.travis.yml
 !/.gitignore
 moc_*.cpp
 ui_*.h
 *tags
+install
+CMakeCache.txt

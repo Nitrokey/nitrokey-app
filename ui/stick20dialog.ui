@@ -14,7 +14,7 @@
    <string>Stick 2.0</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
@@ -76,7 +76,7 @@
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-Password&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -89,7 +89,7 @@
        <set>Qt::ImhHiddenText|Qt::ImhNoAutoUppercase|Qt::ImhNoPredictiveText</set>
       </property>
       <property name="text">
-       <string>Password</string>
+       <string>PIN</string>
       </property>
      </widget>
     </item>
@@ -113,7 +113,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Show password</string>
+    <string>Show PIN</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkBox_Matrix">
@@ -139,7 +139,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>

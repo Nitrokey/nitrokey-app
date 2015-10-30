@@ -1,22 +1,22 @@
 /*
-* Author: Copyright (C) Andrzej Surowiec 2012
-*						Parts Rudolf Boeddeker  Date: 2013-08-13
-*
-* This file is part of Nitrokey.
-*
-* Nitrokey is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* any later version.
-*
-* Nitrokey is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Author: Copyright (C) Andrzej Surowiec 2012
+ *                      Parts Rudolf Boeddeker  Date: 2013-08-13
+ *
+ * This file is part of Nitrokey.
+ *
+ * Nitrokey is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * Nitrokey is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DEVICE_H
 #define DEVICE_H
@@ -39,15 +39,15 @@
 #define PID_STICK_OTP 0x4108
 
 #define VID_STICK_20  0x20A0
-#define PID_STICK_20  0x4109 // MSD + CCID + HID production id
+#define PID_STICK_20  0x4109    // MSD + CCID + HID production id
 
 #define VID_STICK_20_UPDATE_MODE  0x03EB
 #define PID_STICK_20_UPDATE_MODE  0x2FF1
 
 
-//#define PID_STICK_20    0x220D // MSD + CCID + HID test id
-//#define PID_STICK_20    0x2309 // MSD + HID test id
-//#define PID_STICK_20    0x220B // HID test id
+// #define PID_STICK_20 0x220D // MSD + CCID + HID test id
+// #define PID_STICK_20 0x2309 // MSD + HID test id
+// #define PID_STICK_20 0x220B // HID test id
 
 
 class Response;
@@ -137,6 +137,9 @@ class Response;
 #define STICK20_CMD_PRODUCTION_TEST                     (STICK20_CMD_START_VALUE + 24)
 #define STICK20_CMD_SEND_DEBUG_DATA                     (STICK20_CMD_START_VALUE + 25)
 
+#define STICK20_CMD_CHANGE_UPDATE_PIN                   (STICK20_CMD_START_VALUE + 26)
+
+
 #define STATUS_READY           0x00
 #define STATUS_BUSY	           0x01
 #define STATUS_ERROR           0x02
@@ -154,23 +157,26 @@ class Response;
 #define CMD_STATUS_UNKNOWN_COMMAND     9
 #define CMD_STATUS_AES_DEC_FAILED      10
 
-enum comm_errors{
-    ERR_NO_ERROR           =  0,
-    ERR_NOT_CONNECTED      = -1,
+enum comm_errors
+{
+    ERR_NO_ERROR = 0,
+    ERR_NOT_CONNECTED = -1,
     ERR_WRONG_RESPONSE_CRC = -2,
-    ERR_SENDING            = -3,
-    ERR_STATUS_NOT_OK      = -4
+    ERR_SENDING = -3,
+    ERR_STATUS_NOT_OK = -4
 };
 
 // TODO STICK10
 #define STICK10_PASSWORD_LEN               20
 #define STICK20_PASSOWRD_LEN               20
+#define CS20_MAX_UPDATE_PASSWORD_LEN       15
 #define STICK20_PASSWORD_KIND_USER          0
 #define STICK20_PASSWORD_KIND_ADMIN         1
 #define STICK20_PASSWORD_KIND_RESET_USER    2
 #define STICK10_PASSWORD_KIND_USER          3
 #define STICK10_PASSWORD_KIND_ADMIN         4
-
+#define STICK10_PASSWORD_KIND_RESET_USER    5
+#define STICK20_PASSWORD_KIND_UPDATE        6
 
 #define STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ALL_VOL              0
 #define STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL        1
@@ -200,11 +206,12 @@ enum comm_errors{
 
 #define OUTPUT_CMD_STICK20_MATRIX_DATA_SIZE            25
 
-typedef struct {
-  unsigned char  Counter_u8;
-  unsigned char  BlockNo_u8;
-  unsigned char  SendSize_u8;
-  unsigned char  MatrixData_u8[OUTPUT_CMD_STICK20_MATRIX_DATA_SIZE];
+typedef struct
+{
+    unsigned char Counter_u8;
+    unsigned char BlockNo_u8;
+    unsigned char SendSize_u8;
+    unsigned char MatrixData_u8[OUTPUT_CMD_STICK20_MATRIX_DATA_SIZE];
 } HID_Stick20Matrix_est;
 
 
@@ -212,11 +219,12 @@ typedef struct {
 
 #pragma pack(push,1)
 
-typedef struct {
+typedef struct
+{
     unsigned char SlotNr_u8;
     unsigned char StartBlockPercent_u8;
     unsigned char EndBlockPercent_u8;
-    unsigned char HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE+1];
+    unsigned char HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE + 1];
 } HiddenVolumeSetup_tst;
 
 #pragma pack(pop)
@@ -224,13 +232,11 @@ typedef struct {
 
 #ifdef _MSC_VER
     // For MSVC
-    #define uint64_t unsigned long long
+#define uint64_t unsigned long long
 #endif
 
 /*
-#define HOTP_SLOT_COUNT      3
-#define TOTP_SLOT_COUNT     15
-*/
+   #define HOTP_SLOT_COUNT 3 #define TOTP_SLOT_COUNT 15 */
 #define HOTP_SLOT_COUNT_MAX      3
 #define TOTP_SLOT_COUNT_MAX     15
 
@@ -271,102 +277,102 @@ class Device
 
 
 
-public:
-    Device(int vid, int pid,int vidStick20, int pidStick20,int vidStick20UpdateMode, int pidStick20UpdateMode);
-    hid_device *dev_hid_handle;
-    int checkConnection();
+  public:
+    Device (int vid, int pid, int vidStick20, int pidStick20, int vidStick20UpdateMode, int pidStick20UpdateMode);
+    hid_device* dev_hid_handle;
+    int checkConnection ();
     bool isConnected;
-    int sendCommand(Command *cmd);
-    int sendCommandGetResponse(Command *cmd, Response *resp);
-    void connect();
-    int getSlotName(uint8_t slotNo);
-    int eraseSlot(uint8_t slotNo);
-    int setTime(int reset);
-    int writeToHOTPSlot(HOTPSlot *slot);
-    int writeToTOTPSlot(TOTPSlot *slot);
-    int getCode(uint8_t slotNo, uint64_t challenge,uint64_t lastTOTPTime,uint8_t  lastInterval,uint8_t result[18]);
-    int getHOTP(uint8_t slotNo);
-    int readSlot(uint8_t slotNo);
-    int getPasswordRetryCount();
-    int getUserPasswordRetryCount();
+    int sendCommand (Command * cmd);
+    int sendCommandGetResponse (Command * cmd, Response * resp);
+    void connect ();
+    int getSlotName (uint8_t slotNo);
+    int eraseSlot (uint8_t slotNo);
+    int setTime (int reset);
+    int writeToHOTPSlot (HOTPSlot * slot);
+    int writeToTOTPSlot (TOTPSlot * slot);
+    int getCode (uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval, uint8_t result[18]);
+    int getHOTP (uint8_t slotNo);
+    int readSlot (uint8_t slotNo);
+    int getPasswordRetryCount ();
+    int getUserPasswordRetryCount ();
     int lockDevice (void);
     int factoryReset (const char* password);
 
-    //START - OTP Test Routine --------------------------------
+    // START - OTP Test Routine --------------------------------
     /*
-    uint16_t testHOTP(uint16_t tests_number,uint8_t counter_number);
-    uint16_t testTOTP(uint16_t tests_number);
-    */
-    //END - OTP Test Routine ----------------------------------
+       uint16_t testHOTP(uint16_t tests_number,uint8_t counter_number); uint16_t testTOTP(uint16_t tests_number); */
+    // END - OTP Test Routine ----------------------------------
 
 
-// Password safe
+    // Password safe
     int getPasswordSafeSlotStatus ();
     int getPasswordSafeSlotName (int Slot);
     int getPasswordSafeSlotPassword (int Slot);
     int getPasswordSafeSlotLoginName (int Slot);
-    int setPasswordSafeSlotData_1 (int Slot,uint8_t *Name,uint8_t *Password);
-    int setPasswordSafeSlotData_2 (int Slot,uint8_t *LoginName);
+    int setPasswordSafeSlotData_1 (int Slot, uint8_t * Name, uint8_t * Password);
+    int setPasswordSafeSlotData_2 (int Slot, uint8_t * LoginName);
     int passwordSafeEraseSlot (int Slot);
-    int passwordSafeEnable (char *password);
+    int passwordSafeEnable (char* password);
     int passwordSafeInitKey (void);
-    int passwordSafeSendSlotDataViaHID (int Slot,int Kind);
-    int isAesSupported(uint8_t* password);
-    int buildAesKey(uint8_t* password);
+    int passwordSafeSendSlotDataViaHID (int Slot, int Kind);
+    int isAesSupported (uint8_t * password);
+    int buildAesKey (uint8_t * password);
 
     uint8_t passwordSafeUnlocked;
     uint8_t passwordSafeAvailable;
     uint8_t passwordSafeStatus[PWS_SLOT_COUNT];
     uint8_t passwordSafeStatusDisplayed[PWS_SLOT_COUNT];
-    uint8_t passwordSafeSlotNames[PWS_SLOT_COUNT][PWS_SLOTNAME_LENGTH+1];
+    uint8_t passwordSafeSlotNames[PWS_SLOT_COUNT][PWS_SLOTNAME_LENGTH + 1];
 
-    uint8_t passwordSafeSlotName[PWS_SLOTNAME_LENGTH+1];
-    uint8_t passwordSafeLoginName[PWS_LOGINNAME_LENGTH+1];
-    uint8_t passwordSafePassword[PWS_PASSWORD_LENGTH+1];
-// Password safe end
+    uint8_t passwordSafeSlotName[PWS_SLOTNAME_LENGTH + 1];
+    uint8_t passwordSafeLoginName[PWS_LOGINNAME_LENGTH + 1];
+    uint8_t passwordSafePassword[PWS_PASSWORD_LENGTH + 1];
+    // Password safe end
 
     bool newConnection;
-    int  LastStickError;
-    void initializeConfig();
-    HOTPSlot *HOTPSlots[HOTP_SLOT_COUNT_MAX];
-    TOTPSlot *TOTPSlots[TOTP_SLOT_COUNT_MAX];
-    void getSlotConfigs();
-    uint8_t *password[25];
+    int LastStickError;
+    void initializeConfig ();
+    HOTPSlot* HOTPSlots[HOTP_SLOT_COUNT_MAX];
+    TOTPSlot* TOTPSlots[TOTP_SLOT_COUNT_MAX];
+    void getSlotConfigs ();
+    uint8_t* password[25];
     bool validPassword;
-    uint8_t *userPassword[25];
+    uint8_t* userPassword[25];
     bool validUserPassword;
     bool passwordSet;
     uint8_t passwordRetryCount;
     uint8_t userPasswordRetryCount;
 
-    int getHighwaterMarkFromSdCard (unsigned char *WriteLevel_Min,unsigned char *WriteLevel_Max, unsigned char *ReadLevel_Min, unsigned char *ReadLevel_Max);
+    int getHighwaterMarkFromSdCard (unsigned char* WriteLevel_Min,
+                                    unsigned char* WriteLevel_Max, unsigned char* ReadLevel_Min, unsigned char* ReadLevel_Max);
 
-    bool stick20EnableCryptedPartition (uint8_t *password);
+    bool stick20EnableCryptedPartition (uint8_t * password);
     bool stick20DisableCryptedPartition (void);
 
-    bool stick20EnableHiddenCryptedPartition (uint8_t *password);
+    bool stick20EnableHiddenCryptedPartition (uint8_t * password);
     bool stick20DisableHiddenCryptedPartition (void);
 
-    bool stick20EnableFirmwareUpdate (uint8_t *password);
-    bool stick20ExportFirmware (uint8_t *password);
+    bool stick20EnableFirmwareUpdate (uint8_t * password);
+    bool stick20NewUpdatePassword (uint8_t * old_password, uint8_t * new_password);
+    bool stick20ExportFirmware (uint8_t * password);
 
-    bool stick20CreateNewKeys (uint8_t *password);
-    bool stick20FillSDCardWithRandomChars (uint8_t *password,uint8_t VolumeFlag);
+    bool stick20CreateNewKeys (uint8_t * password);
+    bool stick20FillSDCardWithRandomChars (uint8_t * password, uint8_t VolumeFlag);
 
     bool stick20SetupHiddenVolume (void);
     bool stick20GetPasswordMatrix (void);
-    bool stick20SendPasswordMatrixPinData (uint8_t *Pindata);
-    bool stick20SendPasswordMatrixSetup (uint8_t *Setupdata);
+    bool stick20SendPasswordMatrixPinData (uint8_t * Pindata);
+    bool stick20SendPasswordMatrixSetup (uint8_t * Setupdata);
     bool stick20GetStatusData ();
-    int stick20SendPassword (uint8_t *Pindata);
-    int stick20SendNewPassword (uint8_t *NewPindata);
-    int stick20SendClearNewSdCardFound (uint8_t *Pindata);
+    int stick20SendPassword (uint8_t * Pindata);
+    int stick20SendNewPassword (uint8_t * NewPindata);
+    int stick20SendClearNewSdCardFound (uint8_t * Pindata);
 
-    int stick20SendSetReadonlyToUncryptedVolume (uint8_t *Pindata);
-    int stick20SendSetReadwriteToUncryptedVolume (uint8_t *Pindata);
+    int stick20SendSetReadonlyToUncryptedVolume (uint8_t * Pindata);
+    int stick20SendSetReadwriteToUncryptedVolume (uint8_t * Pindata);
     int stick20SendStartup (uint64_t localTime);
-    int stick20SendHiddenVolumeSetup (HiddenVolumeSetup_tst *HV_Data_st);
-    int stick20LockFirmware (uint8_t *password);
+    int stick20SendHiddenVolumeSetup (HiddenVolumeSetup_tst * HV_Data_st);
+    int stick20LockFirmware (uint8_t * password);
     int stick20ProductionTest (void);
     int stick20GetDebugData (void);
 
@@ -380,30 +386,31 @@ public:
     uint8_t PasswordMatrix[100];
     uint8_t PasswordMatrixPinData[30];
 
-    int getStatus();
-    void getGeneralConfig();
-    int writeGeneralConfig(uint8_t data[3]);
+    int getStatus ();
+    void getGeneralConfig ();
+    int writeGeneralConfig (uint8_t data[3]);
 
-    int firstAuthenticate(uint8_t cardPassword[25],uint8_t tempPasswrod[25]);
-    int authorize(Command *authorizedCmd);
+    int firstAuthenticate (uint8_t cardPassword[25], uint8_t tempPasswrod[25]);
+    int authorize (Command * authorizedCmd);
 
-    int userAuthenticate(uint8_t cardPassword[25],uint8_t tempPasswrod[25]);
-    int userAuthorize(Command *authorizedCmd);
+    int userAuthenticate (uint8_t cardPassword[25], uint8_t tempPasswrod[25]);
+    int userAuthorize (Command * authorizedCmd);
 
-    int unlockUserPassword (uint8_t *adminPassword);
-    int changeUserPin (uint8_t *old_pin, uint8_t* new_pin);
-    int changeAdminPin (uint8_t *old_pin, uint8_t* new_pin);
+    int unlockUserPassword (uint8_t * adminPassword);
+    int unlockUserPasswordStick10 (uint8_t * data);
+    int changeUserPin (uint8_t * old_pin, uint8_t * new_pin);
+    int changeAdminPin (uint8_t * old_pin, uint8_t * new_pin);
 
-    int  activStick20;
+    int activStick20;
     bool waitForAckStick20;
-    int  lastBlockNrStick20;
+    int lastBlockNrStick20;
 
-    int  HOTP_SlotCount;
-    int  TOTP_SlotCount;
+    int HOTP_SlotCount;
+    int TOTP_SlotCount;
 
 
 
-private:
+  private:
     int vid;
     int pid;
 

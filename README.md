@@ -1,4 +1,4 @@
-Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app)
+Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app)  [![Code Health](https://landscape.io/github/Nitrokey/nitrokey-app/master/landscape.svg?style=flat)](https://landscape.io/github/Nitrokey/nitrokey-app/master)  [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
 ============
 Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator 2.4.1 with Qt 4.7.4 and MinGW 4.4.
 
@@ -12,6 +12,12 @@ QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
 Compiling on Ubuntu Linux
 -------------------------
+Prerequisites for building on Ubuntu:
+libusb-1.0.0-dev
+libgtk2.0-dev
+libappindicator-dev
+libnotify-dev
+
 #### QT5
 Prerequisite: [Install QT5](https://qt-project.org/wiki/Install_Qt_5_on_Ubuntu)
 
@@ -19,46 +25,54 @@ Use QT Creator for compilation or perform the following steps:
 
 1. Change to build directory parallel to PC CryptoStickGUI directory
 2. For 64 bit system: 
-   ~/bin/qt/5.3/gcc_64/bin/qmake -spec  ~/bin/qt/5.3/gcc_64/mkspecs/linux-g++-64 -o Makefile ../cryptostick.utility/CryptoStickGUI_QT5.pro
+   ~/bin/qt/5.3/gcc_64/bin/qmake -spec  ~/bin/qt/5.3/gcc_64/mkspecs/linux-g++-64 -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
 3. make
 
 #### QT 4
-Prerequisite: sudo apt-get install qt4-default libqt4-dev libusb-1.0.0-dev qtcreator
+Prerequisite: sudo apt-get install qt4-default libqt4-dev qtcreator
 Use QT Creator for compilation or perform the following steps:
 
 1. Change to build directory parallel to PC CryptoStickGUI directory
 2. Configure:
   * For 64 bit system: 
-  /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-64 -o Makefile ../CryptoStickGUI/CryptoStickGUI.pro
-  * For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 -o Makefile ../CryptoStickGUI/CryptoStickGUI.pro
+  /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-64 -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
+  * For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
 3. make
 
 
 #### Using cmake:
+```
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=\<prefix\> \<path to this project's root dir\>
 make
 make install
+```
 
 Note: You may need to set CMAKE_PREFIX_PATH to your corresponding Qt path.
 
 Out of the source build is highly recomended. Eg:
+```
 mkdir build
 mkdir install
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install ..
 make
 make install
+```
 
 #### Using qmake:
+```
 qmake
 make
 make install
+```
 
 You can use out-of-the-source build again:
+```
 mkdir build
 cd build
 qmake ..
 make && make install
+```
 
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux
 Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
@@ -68,7 +82,7 @@ Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-
 3. cd mxe && make qt5
 4. export PATH=<mxe root>/usr/bin:$PATH
 5. Change to build directory parallel to PC CryptoStickGUI directory, e.g. build-CryptoStickGUI-Win32-release
-6. <mxe root>/usr/i686-pc-mingw32/qt5/bin/qmake -spec <mxe root>/usr/i686-pc-mingw32/qt5/mkspecs/win32-g++ -o Makefile ../cryptostick.utility/CryptoStickGUI_QT5.pro
+6. <mxe root>/usr/i686-w64-mingw32.static/qt5/bin/qmake -spec <mxe root>/usr/i686-w64-mingw32.static/qt5/mkspecs/win32-g++ -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
 7. make
 8. optional: use upx to compress the executable
 
@@ -78,7 +92,9 @@ Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-
 2. Navigate to <build_dir>/CryptoStickGUI.app/Contents
 3. Create a .dmg file
    Go to the build directory and use
-     macdeployqt CryptoStickGUI.app/ -dmg
+
+     `macdeployqt CryptoStickGUI.app/ -dmg`
+     
    CryptoStickGUI.dmg file will be created at the same folder. This is the final file for distributing the App on Mac OS
 4. Compress the .dmg package:
    * Open Disk Utility
@@ -86,10 +102,10 @@ Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-
    * Select Convert, check "compressed" option and then "Save"
 
 
-KDE
+Tray
 ---
 
-Note that the Nitrokey App's graphical interface is based on a QT system tray widget. If you are using a non-KDE Linux desktop environment that does not support system tray widgets, then you may be unable to access the graphical interface.
+Note that the Nitrokey App's graphical interface is based on a QT system tray widget. If you are using a Linux desktop environment that does not support system tray widgets, then you may be unable to access the graphical interface.
 
 
 Internals
