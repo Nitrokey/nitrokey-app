@@ -302,5 +302,45 @@ SET(CPACK_RPM_PACKAGE_MAINTAINER "Mateusz Zalega <mateusz@nitrokey.com>" )
 SET(CPACK_RPM_PACKAGE_PRIORITY "optional")
 SET(CPACK_RPM_PACKAGE_SECTION "utils")
 
+# Prevent RPM directory collisions by excluding those already provided by
+# package dependencies. AFAIK this can't be automated.
+LIST(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION 
+    "/etc/bash_completion.d"
+    "/etc/udev"
+    "/etc/udev/rules.d"
+    "/usr/share/locale"
+    "/usr/share/locale/de_DE"
+    "/usr/share/locale/de_DE/LC_MESSAGES"
+    "/usr/share/icons"
+    "/usr/share/icons/hicolor"
+    "/usr/share/icons/hicolor/16x16"
+    "/usr/share/icons/hicolor/16x16/apps"
+    "/usr/share/icons/hicolor/22x22"
+    "/usr/share/icons/hicolor/22x22/apps"
+    "/usr/share/icons/hicolor/24x24"
+    "/usr/share/icons/hicolor/24x24/apps"
+    "/usr/share/icons/hicolor/48x48"
+    "/usr/share/icons/hicolor/48x48/apps"
+    "/usr/share/icons/hicolor/32x32"
+    "/usr/share/icons/hicolor/32x32/apps"
+    "/usr/share/icons/hicolor/128x128"
+    "/usr/share/icons/hicolor/128x128/apps"
+    "/usr/share/icons/hicolor/scalable"
+    "/usr/share/icons/hicolor/scalable/apps"
+    "/usr/share/icons/ubuntu-mono-dark"
+    "/usr/share/icons/ubuntu-mono-dark/apps"
+    "/usr/share/icons/ubuntu-mono-dark/apps/22"
+    "/usr/share/icons/ubuntu-mono-dark/apps/24"
+    "/usr/share/icons/ubuntu-mono-dark/apps/48"
+    "/usr/share/icons/ubuntu-mono-dark/apps/16"
+    "/usr/share/icons/ubuntu-mono-light"
+    "/usr/share/icons/ubuntu-mono-light/apps"
+    "/usr/share/icons/ubuntu-mono-light/apps/22"
+    "/usr/share/icons/ubuntu-mono-light/apps/24"
+    "/usr/share/icons/ubuntu-mono-light/apps/48"
+    "/usr/share/icons/ubuntu-mono-light/apps/16"
+    "/usr/share/applications"
+    "/usr/share/pixmaps"
+)
 
 INCLUDE(CPack)
