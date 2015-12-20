@@ -80,7 +80,7 @@ extern "C" void DebugInitDebugging (void);
 
 class OwnSleep:public QThread
 {
-  public:
+public:
     static void usleep (unsigned long usecs)
     {
         QThread::usleep (usecs);
@@ -104,59 +104,59 @@ class OwnSleep:public QThread
  */
 extern "C"
 {
-    void onQuit (GtkMenu *, gpointer);
-    void onAbout (GtkMenu *, gpointer);
-    void onChangeUserPin (GtkMenu *, gpointer);
-    void onChangeAdminPin (GtkMenu *, gpointer);
-    void onChangeUpdatePin (GtkMenu *, gpointer);
-    void onResetUserPin (GtkMenu *, gpointer);
-    void onConfigure (GtkMenu *, gpointer);
-    void onEnablePasswordSafe (GtkMenu *, gpointer);
-    void onReset (GtkMenu *, gpointer);
-    void onGetTOTP (GtkMenu *, gpointer);
-    void onGetHOTP (GtkMenu *, gpointer);
-    void onGetPasswordSafeSlot (GtkMenu *, gpointer);
-    void onInitEncryptedVolume (GtkMenu *, gpointer);
-    void onFillSDCardWithRandomChars (GtkMenu *, gpointer);
-    void onEnableEncryptedVolume (GtkMenu *, gpointer);
-    void onDisableEncryptedVolume (GtkMenu *, gpointer);
-    void onEnableHiddenVolume (GtkMenu *, gpointer);
-    void onDisableHiddenVolume (GtkMenu *, gpointer);
-    void onSetupHiddenVolumeItem (GtkMenu *, gpointer);
-    void onLockDevice (GtkMenu *, gpointer);
-    void onSetReadOnlyUnencryptedVolumeItem (GtkMenu *, gpointer);
-    void onSetReadWriteUnencryptedVolumeItem (GtkMenu *, gpointer);
-    void onChangeUserPinStorage (GtkMenu *, gpointer);
-    void onChangeAdminPinStorage (GtkMenu *, gpointer);
-    void onLockHardware (GtkMenu *, gpointer);
-    void onEnableFirmwareUpdate (GtkMenu *, gpointer);
-    void onExportFirmwareToFile (GtkMenu *, gpointer);
-    void onResetUserPassword (GtkMenu *, gpointer);
-    void onDebug (GtkMenu *, gpointer);
-    void onClearNewSDCardFound (GtkMenu *, gpointer);
-    void onSetupHiddenVolume (GtkMenu *, gpointer);
-    void onSetupPasswordMatrix (GtkMenu *, gpointer);
-    bool isUnity (void);
+void onQuit (GtkMenu *, gpointer);
+void onAbout (GtkMenu *, gpointer);
+void onChangeUserPin (GtkMenu *, gpointer);
+void onChangeAdminPin (GtkMenu *, gpointer);
+void onChangeUpdatePin (GtkMenu *, gpointer);
+void onResetUserPin (GtkMenu *, gpointer);
+void onConfigure (GtkMenu *, gpointer);
+void onEnablePasswordSafe (GtkMenu *, gpointer);
+void onReset (GtkMenu *, gpointer);
+void onGetTOTP (GtkMenu *, gpointer);
+void onGetHOTP (GtkMenu *, gpointer);
+void onGetPasswordSafeSlot (GtkMenu *, gpointer);
+void onInitEncryptedVolume (GtkMenu *, gpointer);
+void onFillSDCardWithRandomChars (GtkMenu *, gpointer);
+void onEnableEncryptedVolume (GtkMenu *, gpointer);
+void onDisableEncryptedVolume (GtkMenu *, gpointer);
+void onEnableHiddenVolume (GtkMenu *, gpointer);
+void onDisableHiddenVolume (GtkMenu *, gpointer);
+void onSetupHiddenVolumeItem (GtkMenu *, gpointer);
+void onLockDevice (GtkMenu *, gpointer);
+void onSetReadOnlyUnencryptedVolumeItem (GtkMenu *, gpointer);
+void onSetReadWriteUnencryptedVolumeItem (GtkMenu *, gpointer);
+void onChangeUserPinStorage (GtkMenu *, gpointer);
+void onChangeAdminPinStorage (GtkMenu *, gpointer);
+void onLockHardware (GtkMenu *, gpointer);
+void onEnableFirmwareUpdate (GtkMenu *, gpointer);
+void onExportFirmwareToFile (GtkMenu *, gpointer);
+void onResetUserPassword (GtkMenu *, gpointer);
+void onDebug (GtkMenu *, gpointer);
+void onClearNewSDCardFound (GtkMenu *, gpointer);
+void onSetupHiddenVolume (GtkMenu *, gpointer);
+void onSetupPasswordMatrix (GtkMenu *, gpointer);
+bool isUnity (void);
 }
 
 void onQuit (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-QApplication* self = static_cast < QApplication * >(data);
+    QApplication* self = static_cast < QApplication * >(data);
     self->quit ();
 }
 
 void onAbout (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startAboutDialog ();
 }
 
 void onChangeUserPin (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick10ActionChangeUserPIN ();
 }
 
@@ -164,42 +164,42 @@ void onChangeAdminPin (GtkMenu * menu, gpointer data)
 {
 
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick10ActionChangeAdminPIN ();
 }
 
 void onChangeUpdatePin (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20ActionChangeUpdatePIN ();
 }
 
 void onResetUserPin (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startResetUserPassword ();
 }
 
 void onConfigure (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startConfiguration ();
 }
 
 void onEnablePasswordSafe (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->PWS_Clicked_EnablePWSAccess ();
 }
 
 void onReset (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->factoryReset ();
 }
 
@@ -212,77 +212,77 @@ struct getOTPData
 void onGetTOTP (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-struct getOTPData* otp_data = static_cast < struct getOTPData* >(data);
+    struct getOTPData* otp_data = static_cast < struct getOTPData* >(data);
     otp_data->window->getTOTPDialog (otp_data->slot);
 }
 
 void onGetHOTP (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-struct getOTPData* otp_data = static_cast < struct getOTPData* >(data);
+    struct getOTPData* otp_data = static_cast < struct getOTPData* >(data);
     otp_data->window->getHOTPDialog (otp_data->slot);
 }
 
 void onGetPasswordSafeSlot (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-struct getOTPData* otp_data = static_cast < struct getOTPData* >(data);
+    struct getOTPData* otp_data = static_cast < struct getOTPData* >(data);
     otp_data->window->PWS_ExceClickedSlot (otp_data->slot);
 }
 
 void onInitEncryptedVolume (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20DestroyCryptedVolume ();
 }
 
 void onFillSDCardWithRandomChars (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20FillSDCardWithRandomChars ();
 }
 
 void onEnableEncryptedVolume (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20EnableCryptedVolume ();
 }
 
 void onDisableEncryptedVolume (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20DisableCryptedVolume ();
 }
 
 void onEnableHiddenVolume (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20EnableHiddenVolume ();
 }
 
 void onDisableHiddenVolume (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20DisableHiddenVolume ();
 }
 
 void onSetupHiddenVolumeItem (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20SetupHiddenVolume ();
 }
 
 void onLockDevice (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startLockDeviceAction ();
 }
 
@@ -290,90 +290,90 @@ MainWindow* window = static_cast < MainWindow * >(data);
 void onChangeUserPinStorage (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20ActionChangeUserPIN ();
 }
 
 void onChangeAdminPinStorage (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20ActionChangeAdminPIN ();
 }
 
 void onSetReadOnlyUnencryptedVolumeItem (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20SetReadOnlyUncryptedVolume ();
 }
 
 void onSetReadWriteUnencryptedVolumeItem (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20SetReadWriteUncryptedVolume ();
 }
 
 void onLockHardware (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20LockStickHardware ();
 }
 
 void onEnableFirmwareUpdate (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20EnableFirmwareUpdate ();
 }
 
 void onExportFirmwareToFile (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20ExportFirmwareToFile ();
 }
 
 void onResetUserPassword (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startResetUserPassword ();
 }
 
 void onDebug (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20DebugAction ();
 }
 
 void onClearNewSDCardFound (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20ClearNewSdCardFound ();
 }
 
 void onSetupHiddenVolume (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20SetupHiddenVolume ();
 }
 
 void onSetupPasswordMatrix (GtkMenu * menu, gpointer data)
 {
     Q_UNUSED (menu);
-MainWindow* window = static_cast < MainWindow * >(data);
+    MainWindow* window = static_cast < MainWindow * >(data);
     window->startStick20SetupPasswordMatrix ();
 }
 
 bool isUnity ()
 {
-QString desktop = getenv ("XDG_CURRENT_DESKTOP");
+    QString desktop = getenv ("XDG_CURRENT_DESKTOP");
 
     return (desktop.toLower () == "unity" || desktop.toLower () == "kde" || desktop.toLower () == "lxde" || desktop.toLower () == "xfce");
 }
@@ -388,7 +388,7 @@ void MainWindow::showTrayMessage (const QString & title, const QString & msg, en
         if (!notify_init ("example"))
             return;
 
-    NotifyNotification* notf;
+        NotifyNotification* notf;
 
         notf = notify_notification_new (title.toUtf8 ().data (), msg.toUtf8 ().data (), NULL);
         notify_notification_show (notf, NULL);
@@ -401,15 +401,15 @@ void MainWindow::showTrayMessage (const QString & title, const QString & msg, en
         {
             switch (type)
             {
-                case INFORMATION:
-                    trayIcon->showMessage (title, msg, QSystemTrayIcon::Information, timeout);
-                    break;
-                case WARNING:
-                    trayIcon->showMessage (title, msg, QSystemTrayIcon::Warning, timeout);
-                    break;
-                case CRITICAL:
-                    trayIcon->showMessage (title, msg, QSystemTrayIcon::Critical, timeout);
-                    break;
+            case INFORMATION:
+                trayIcon->showMessage (title, msg, QSystemTrayIcon::Information, timeout);
+                break;
+            case WARNING:
+                trayIcon->showMessage (title, msg, QSystemTrayIcon::Warning, timeout);
+                break;
+            case CRITICAL:
+                trayIcon->showMessage (title, msg, QSystemTrayIcon::Critical, timeout);
+                break;
             }
         }
         else
@@ -474,14 +474,14 @@ void MainWindow::InitState ()
 
 
 MainWindow::MainWindow (StartUpParameter_tst * StartupInfo_st, QWidget * parent):
-QMainWindow (parent), ui (new Ui::MainWindow)
+    QMainWindow (parent), ui (new Ui::MainWindow)
 {
 #ifdef Q_OS_LINUX
     setlocale(LC_ALL,"");
     bindtextdomain("nitrokey-app","/usr/share/locale");
     textdomain("nitrokey-app");
 #endif
-int ret;
+    int ret;
 
     QMetaObject::Connection ret_connection;
 
@@ -497,24 +497,24 @@ int ret;
 
     switch (StartupInfo_st->FlagDebug)
     {
-        case DEBUG_STATUS_LOCAL_DEBUG:
-            DebugWindowActive = TRUE;
-            DebugingActive = TRUE;
-            DebugingStick20PoolingActive = FALSE;
-            break;
+    case DEBUG_STATUS_LOCAL_DEBUG:
+        DebugWindowActive = TRUE;
+        DebugingActive = TRUE;
+        DebugingStick20PoolingActive = FALSE;
+        break;
 
-        case DEBUG_STATUS_DEBUG_ALL:
-            DebugWindowActive = TRUE;
-            DebugingActive = TRUE;
-            DebugingStick20PoolingActive = TRUE;
-            break;
+    case DEBUG_STATUS_DEBUG_ALL:
+        DebugWindowActive = TRUE;
+        DebugingActive = TRUE;
+        DebugingStick20PoolingActive = TRUE;
+        break;
 
-        case DEBUG_STATUS_NO_DEBUGGING:
-        default:
-            DebugWindowActive = FALSE;
-            DebugingActive = FALSE;
-            DebugingStick20PoolingActive = FALSE;
-            break;
+    case DEBUG_STATUS_NO_DEBUGGING:
+    default:
+        DebugWindowActive = FALSE;
+        DebugingActive = FALSE;
+        DebugingStick20PoolingActive = FALSE;
+        break;
     }
 
     ui->setupUi (this);
@@ -533,18 +533,18 @@ int ret;
     }
 
     set_initial_time = false;
-QTimer* timer = new QTimer (this);
+    QTimer* timer = new QTimer (this);
 
     ret_connection = connect (timer, SIGNAL (timeout ()), this, SLOT (checkConnection ()));
     timer->start (1000);
 
-QTimer* Clipboard_ValidTimer = new QTimer (this);
+    QTimer* Clipboard_ValidTimer = new QTimer (this);
 
     // Start timer for Clipboard delete check
     connect (Clipboard_ValidTimer, SIGNAL (timeout ()), this, SLOT (checkClipboard_Valid ()));
     Clipboard_ValidTimer->start (1000);
 
-QTimer* Password_ValidTimer = new QTimer (this);
+    QTimer* Password_ValidTimer = new QTimer (this);
 
     // Start timer for Password check
     connect (Password_ValidTimer, SIGNAL (timeout ()), this, SLOT (checkPasswordTime_Valid ()));
@@ -626,7 +626,7 @@ int MainWindow::ExecStickCmd (char* Cmdline)
 
     if (0 == strncmp (Cmdline, "unlockencrypted", strlen ("unlockencrypted")))
     {
-    uint8_t password[40];
+        uint8_t password[40];
 
         // Check password
         if (0 == strlen (p))
@@ -684,23 +684,23 @@ void MainWindow::iconActivated (QSystemTrayIcon::ActivationReason reason)
 
     switch (reason)
     {
-        case QSystemTrayIcon::Context:
-            // trayMenu->close();
+    case QSystemTrayIcon::Context:
+        // trayMenu->close();
 #ifdef Q_OS_MAC
-            trayMenu->popup (QCursor::pos ());
+        trayMenu->popup (QCursor::pos ());
 #endif
-            break;
-        case QSystemTrayIcon::Trigger:
+        break;
+    case QSystemTrayIcon::Trigger:
 #ifndef Q_OS_MAC
-            trayMenu->popup (QCursor::pos ());
+        trayMenu->popup (QCursor::pos ());
 #endif
-            break;
-        case QSystemTrayIcon::DoubleClick:
-            break;
-        case QSystemTrayIcon::MiddleClick:
-            break;
-        default:
-            ;
+        break;
+    case QSystemTrayIcon::DoubleClick:
+        break;
+    case QSystemTrayIcon::MiddleClick:
+        break;
+    default:
+        ;
     }
 }
 
@@ -709,7 +709,7 @@ bool MainWindow::eventFilter (QObject * obj, QEvent * event)
 {
     if (event->type () == QEvent::MouseButtonPress)
     {
-QMouseEvent* mEvent = static_cast < QMouseEvent * >(event);
+        QMouseEvent* mEvent = static_cast < QMouseEvent * >(event);
 
         if (mEvent->button () == Qt::LeftButton)
         {
@@ -725,9 +725,9 @@ QMouseEvent* mEvent = static_cast < QMouseEvent * >(event);
 
 void MainWindow::AnalyseProductionInfos ()
 {
-char text[100];
+    char text[100];
 
-bool ProductStateOK = TRUE;
+    bool ProductStateOK = TRUE;
 
     printf ("\nGet production infos\n");
 
@@ -753,12 +753,12 @@ bool ProductStateOK = TRUE;
 
     // Valid manufacturers
     if ((0x74 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8) // Transcend
-        && (0x03 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)  // SanDisk
-        && (0x73 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)  // ?
-        // Amazon
-        && (0x28 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)  // Lexar
-        && (0x1b != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)  // Samsung
-        )
+            && (0x03 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)  // SanDisk
+            && (0x73 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)  // ?
+            // Amazon
+            && (0x28 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)  // Lexar
+            && (0x1b != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)  // Samsung
+            )
     {
         ProductStateOK = FALSE;
         printf ((char *) "Manufacturers error\n");
@@ -766,9 +766,9 @@ bool ProductStateOK = TRUE;
 
     // Write to log
     {
-FILE* fp;
+        FILE* fp;
 
-char* LogFile = (char *) "prodlog.txt";
+        char* LogFile = (char *) "prodlog.txt";
 
         FOPEN (fp, LogFile, "a+");
         if (0 != fp)
@@ -837,13 +837,13 @@ char* LogFile = (char *) "prodlog.txt";
 
 void MainWindow::checkConnection ()
 {
-static int DeviceOffline = TRUE;
+    static int DeviceOffline = TRUE;
 
-int ret = 0;
+    int ret = 0;
 
     currentTime = QDateTime::currentDateTime ().toTime_t ();
 
-int result = cryptostick->checkConnection ();
+    int result = cryptostick->checkConnection ();
 
     // Set new slot counts
     HOTP_SlotCount = cryptostick->HOTP_SlotCount;
@@ -865,15 +865,15 @@ int result = cryptostick->checkConnection ();
                 ret = 0;
             }
 
-bool answer;
+            bool answer;
 
             if (ret == -2)
             {
                 answer =
-                    csApplet->detailedYesOrNoBox (tr ("Time is out-of-sync"),
-                                                  tr
-                                                  ("WARNING!\n\nThe time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-                                                  0, false);
+                        csApplet->detailedYesOrNoBox (tr ("Time is out-of-sync"),
+                                                      tr
+                                                      ("WARNING!\n\nThe time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+                                                      0, false);
                 if (answer)
                 {
                     resetTime ();
@@ -927,15 +927,15 @@ bool answer;
                 ret = 0;
             }
 
-bool answer;
+            bool answer;
 
             if (ret == -2)
             {
                 answer =
-                    csApplet->detailedYesOrNoBox (tr ("Time is out-of-sync"),
-                                                  tr
-                                                  ("WARNING!\n\nThe time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-                                                  0, false);
+                        csApplet->detailedYesOrNoBox (tr ("Time is out-of-sync"),
+                                                      tr
+                                                      ("WARNING!\n\nThe time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+                                                      0, false);
 
                 if (answer)
                 {
@@ -1005,9 +1005,9 @@ void MainWindow::startTimer ()
 
 MainWindow::~MainWindow ()
 {
-delete validator;
+    delete validator;
 
-delete ui;
+    delete ui;
 }
 
 
@@ -1025,7 +1025,7 @@ void MainWindow::getSlotNames ()
 
 void MainWindow::generateComboBoxEntrys ()
 {
-int i;
+    int i;
 
     ui->slotComboBox->clear ();
 
@@ -1060,22 +1060,22 @@ void MainWindow::generateMenu ()
     if (isUnity ())
     {
         indicatorMenu = gtk_menu_new ();
-GtkWidget* notConnItem = gtk_menu_item_new_with_label (_("Nitrokey not connected"));
-GtkWidget* debugItem;
+        GtkWidget* notConnItem = gtk_menu_item_new_with_label (_("Nitrokey not connected"));
+        GtkWidget* debugItem;
 
-GtkWidget* aboutItem = gtk_image_menu_item_new_with_label (_("About"));
-gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(aboutItem),TRUE);
-GtkWidget* aboutItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/info.png");
-gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(aboutItem), GTK_WIDGET(aboutItemImg));
+        GtkWidget* aboutItem = gtk_image_menu_item_new_with_label (_("About"));
+        gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(aboutItem),TRUE);
+        GtkWidget* aboutItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/info.png");
+        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(aboutItem), GTK_WIDGET(aboutItemImg));
 
-GtkWidget* quitItem = gtk_image_menu_item_new_with_label (_("Quit"));
-gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(quitItem),TRUE);
-GtkWidget* quitItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/quit.png");
-gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quitItem), GTK_WIDGET(quitItemImg));
+        GtkWidget* quitItem = gtk_image_menu_item_new_with_label (_("Quit"));
+        gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(quitItem),TRUE);
+        GtkWidget* quitItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/quit.png");
+        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quitItem), GTK_WIDGET(quitItemImg));
 
-//gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quitItem), quitItemImg);
+        //gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quitItem), quitItemImg);
 
-GtkWidget* separItem = gtk_separator_menu_item_new ();
+        GtkWidget* separItem = gtk_separator_menu_item_new ();
 
         g_signal_connect (aboutItem, "activate", G_CALLBACK (onAbout), this);
         g_signal_connect (quitItem, "activate", G_CALLBACK (onQuit), qApp);
@@ -1273,18 +1273,18 @@ void MainWindow::generatePasswordMenu ()
 #ifdef Q_OS_LINUX
     if (isUnity ())
     {
-GtkWidget* passwordsItem = gtk_menu_item_new_with_label (_("Passwords"));
+        GtkWidget* passwordsItem = gtk_menu_item_new_with_label (_("Passwords"));
 
-GtkWidget* separItem1 = gtk_separator_menu_item_new ();
+        GtkWidget* separItem1 = gtk_separator_menu_item_new ();
 
-GtkWidget* passwordsSubMenu = gtk_menu_new ();
+        GtkWidget* passwordsSubMenu = gtk_menu_new ();
 
         gtk_menu_shell_append (GTK_MENU_SHELL (indicatorMenu), passwordsItem);
         for (int i = 0; i < TOTP_SlotCount; i++)
         {
-GtkWidget* currPasswdItem;
+            GtkWidget* currPasswdItem;
 
-struct getOTPData* otp_data;
+            struct getOTPData* otp_data;
 
             if (cryptostick->TOTPSlots[i]->isProgrammed)
             {
@@ -1300,9 +1300,9 @@ struct getOTPData* otp_data;
         }
         for (int i = 0; i < HOTP_SlotCount; i++)
         {
-GtkWidget* currPasswdItem;
+            GtkWidget* currPasswdItem;
 
-struct getOTPData* otp_data;
+            struct getOTPData* otp_data;
 
             if (cryptostick->HOTPSlots[i]->isProgrammed)
             {
@@ -1320,9 +1320,9 @@ struct getOTPData* otp_data;
         {
             for (int i = 0; i < HOTP_SlotCount; i++)
             {
-GtkWidget* currPasswdItem;
+                GtkWidget* currPasswdItem;
 
-struct getOTPData* otp_data;
+                struct getOTPData* otp_data;
 
                 if (cryptostick->passwordSafeStatus[i] == (unsigned char) true)
                 {
@@ -1437,23 +1437,23 @@ void MainWindow::generateMenuForProDevice ()
 #ifdef Q_OS_LINUX
     if (isUnity ())
     {
-GtkWidget* configureItem = gtk_image_menu_item_new_with_label (_("Configure"));
-gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(configureItem),TRUE);
-GtkWidget* configureItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/settings.png");
-gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(configureItem), GTK_WIDGET(configureItemImg));
+        GtkWidget* configureItem = gtk_image_menu_item_new_with_label (_("Configure"));
+        gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(configureItem),TRUE);
+        GtkWidget* configureItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/settings.png");
+        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(configureItem), GTK_WIDGET(configureItemImg));
 
 
-GtkWidget* configurePasswordsItem;
+        GtkWidget* configurePasswordsItem;
 
-GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change user PIN"));
-GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change admin PIN"));
-GtkWidget* resetUserPinItem = gtk_menu_item_new_with_label (_("Reset User PIN"));
+        GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change user PIN"));
+        GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change admin PIN"));
+        GtkWidget* resetUserPinItem = gtk_menu_item_new_with_label (_("Reset User PIN"));
 
-GtkWidget* resetItem = gtk_menu_item_new_with_label (_("Factory reset"));
+        GtkWidget* resetItem = gtk_menu_item_new_with_label (_("Factory reset"));
 
-GtkWidget* separItem2 = gtk_separator_menu_item_new ();
+        GtkWidget* separItem2 = gtk_separator_menu_item_new ();
 
-GtkWidget* configureSubMenu = gtk_menu_new ();
+        GtkWidget* configureSubMenu = gtk_menu_new ();
 
         g_signal_connect (changeUserPinItem, "activate", G_CALLBACK (onChangeUserPin), this);
         g_signal_connect (changeAdminPinItem, "activate", G_CALLBACK (onChangeAdminPin), this);
@@ -1535,55 +1535,55 @@ GtkWidget* configureSubMenu = gtk_menu_new ();
 
 void MainWindow::generateMenuForStorageDevice ()
 {
-int AddSeperator = FALSE;
+    int AddSeperator = FALSE;
 
 #ifdef Q_OS_LINUX
     if (isUnity ())
     {
-GtkWidget* updateStorageStatusItem = gtk_menu_item_new_with_label (_("Smartcard or SD card are not ready"));
-GtkWidget* initEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Initialize keys"));
-GtkWidget* fillSDCardWithRandomCharsItem = gtk_menu_item_new_with_label (_("Initialize storage with random data"));
-GtkWidget* enableEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Unlock encrypted volume"));
-GtkWidget* disableEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Lock encrypted volume"));
-GtkWidget* enableHiddenVolumeItem = gtk_menu_item_new_with_label (_("Unlock hidden volume"));
-GtkWidget* disableHiddenVolumeItem = gtk_menu_item_new_with_label (_("Lock hidden volume"));
-GtkWidget* setupHiddenVolumeItem = gtk_menu_item_new_with_label (_("Setup hidden volume"));
-GtkWidget* lockDeviceItem = gtk_menu_item_new_with_label (_("Lock device"));
+        GtkWidget* updateStorageStatusItem = gtk_menu_item_new_with_label (_("Smartcard or SD card are not ready"));
+        GtkWidget* initEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Initialize keys"));
+        GtkWidget* fillSDCardWithRandomCharsItem = gtk_menu_item_new_with_label (_("Initialize storage with random data"));
+        GtkWidget* enableEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Unlock encrypted volume"));
+        GtkWidget* disableEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Lock encrypted volume"));
+        GtkWidget* enableHiddenVolumeItem = gtk_menu_item_new_with_label (_("Unlock hidden volume"));
+        GtkWidget* disableHiddenVolumeItem = gtk_menu_item_new_with_label (_("Lock hidden volume"));
+        GtkWidget* setupHiddenVolumeItem = gtk_menu_item_new_with_label (_("Setup hidden volume"));
+        GtkWidget* lockDeviceItem = gtk_menu_item_new_with_label (_("Lock device"));
 
-GtkWidget* setReadOnlyUnencryptedVolumeItem = gtk_menu_item_new_with_label (_("Set unencrypted volume read-only"));
-GtkWidget* setReadWriteUnencryptedVolumeItem = gtk_menu_item_new_with_label (_("Set unencrypted volume read-write"));
-GtkWidget* destroyEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Destroy encrypted data"));
-GtkWidget* enableFirmwareUpdateItem = gtk_menu_item_new_with_label (_("Enable firmware update"));
-GtkWidget* exportFirmwareToFileItem = gtk_menu_item_new_with_label (_("Export firmware to file"));
-GtkWidget* lockHardwareItem = gtk_menu_item_new_with_label (_("Lock hardware"));
+        GtkWidget* setReadOnlyUnencryptedVolumeItem = gtk_menu_item_new_with_label (_("Set unencrypted volume read-only"));
+        GtkWidget* setReadWriteUnencryptedVolumeItem = gtk_menu_item_new_with_label (_("Set unencrypted volume read-write"));
+        GtkWidget* destroyEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Destroy encrypted data"));
+        GtkWidget* enableFirmwareUpdateItem = gtk_menu_item_new_with_label (_("Enable firmware update"));
+        GtkWidget* exportFirmwareToFileItem = gtk_menu_item_new_with_label (_("Export firmware to file"));
+        GtkWidget* lockHardwareItem = gtk_menu_item_new_with_label (_("Lock hardware"));
 
-GtkWidget* resetUserPasswordItem = gtk_menu_item_new_with_label (_("Reset User PIN"));
-GtkWidget* debugItem = gtk_menu_item_new_with_label (_("Debug"));
+        GtkWidget* resetUserPasswordItem = gtk_menu_item_new_with_label (_("Reset User PIN"));
+        GtkWidget* debugItem = gtk_menu_item_new_with_label (_("Debug"));
 
-GtkWidget* clearNewSDCardFoundItem = gtk_menu_item_new_with_label (_("Disable 'Initialize storage with random data' warning"));
-GtkWidget* configureItem = gtk_image_menu_item_new_with_label (_("Configure"));
-gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(configureItem),TRUE);
-GtkWidget* configureItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/settings.png");
-gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(configureItem), GTK_WIDGET(configureItemImg));
+        GtkWidget* clearNewSDCardFoundItem = gtk_menu_item_new_with_label (_("Disable 'Initialize storage with random data' warning"));
+        GtkWidget* configureItem = gtk_image_menu_item_new_with_label (_("Configure"));
+        gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(configureItem),TRUE);
+        GtkWidget* configureItemImg = gtk_image_new_from_file ("/usr/share/nitrokey/settings.png");
+        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(configureItem), GTK_WIDGET(configureItemImg));
 
-GtkWidget* extendedConfigureItem = gtk_menu_item_new_with_label (_("Advanced configure"));
+        GtkWidget* extendedConfigureItem = gtk_menu_item_new_with_label (_("Advanced configure"));
 
-GtkWidget* setupPasswordMatrixItem = gtk_menu_item_new_with_label ("");
+        GtkWidget* setupPasswordMatrixItem = gtk_menu_item_new_with_label ("");
 
-GtkWidget* configurePasswordsItem;
+        GtkWidget* configurePasswordsItem;
 
-GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change User PIN"));
-GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change Admin PIN"));
-GtkWidget* changeUpdatePinItem = gtk_menu_item_new_with_label (_("Change Firmware Password"));
+        GtkWidget* changeUserPinItem = gtk_menu_item_new_with_label (_("Change User PIN"));
+        GtkWidget* changeAdminPinItem = gtk_menu_item_new_with_label (_("Change Admin PIN"));
+        GtkWidget* changeUpdatePinItem = gtk_menu_item_new_with_label (_("Change Firmware Password"));
 
 
-GtkWidget* separItem1 = gtk_separator_menu_item_new ();
+        GtkWidget* separItem1 = gtk_separator_menu_item_new ();
 
-GtkWidget* separItem2 = gtk_separator_menu_item_new ();
+        GtkWidget* separItem2 = gtk_separator_menu_item_new ();
 
-GtkWidget* configureSubMenu = gtk_menu_new ();
+        GtkWidget* configureSubMenu = gtk_menu_new ();
 
-GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
+        GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
 
         g_signal_connect (updateStorageStatusItem, "activate", G_CALLBACK (onAbout), this);
         g_signal_connect (initEncryptedVolumeItem, "activate", G_CALLBACK (onInitEncryptedVolume), this);
@@ -1882,7 +1882,7 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
 
 void MainWindow::generateHOTPConfig (HOTPSlot * slot)
 {
-uint8_t selectedSlot = ui->slotComboBox->currentIndex ();
+    uint8_t selectedSlot = ui->slotComboBox->currentIndex ();
 
     selectedSlot -= (TOTP_SlotCount + 1);
 
@@ -1892,13 +1892,13 @@ uint8_t selectedSlot = ui->slotComboBox->currentIndex ();
         slot->slotNumber = selectedSlot + 0x10;
 
 
-QByteArray secretFromGUI = ui->secretEdit->text ().toLatin1 ();
+        QByteArray secretFromGUI = ui->secretEdit->text ().toLatin1 ();
 
-uint8_t encoded[128];
+        uint8_t encoded[128];
 
-uint8_t decoded[20];
+        uint8_t decoded[20];
 
-uint8_t data[128];
+        uint8_t data[128];
 
         memset (encoded, 'A', 32);
         memset (data, 'A', 32);
@@ -1912,28 +1912,28 @@ uint8_t data[128];
         memset (slot->secret, 0, 20);
         memcpy (slot->secret, secretFromGUI.data (), secretFromGUI.size ());
 
-QByteArray slotNameFromGUI = QByteArray (ui->nameEdit->text ().toLatin1 ());
+        QByteArray slotNameFromGUI = QByteArray (ui->nameEdit->text ().toLatin1 ());
 
         memset (slot->slotName, 0, 15);
         memcpy (slot->slotName, slotNameFromGUI.data (), slotNameFromGUI.size ());
 
         memset (slot->tokenID, 32, 13);
 
-QByteArray ompFromGUI = (ui->ompEdit->text ().toLatin1 ());
+        QByteArray ompFromGUI = (ui->ompEdit->text ().toLatin1 ());
 
         memcpy (slot->tokenID, ompFromGUI, 2);
 
-QByteArray ttFromGUI = (ui->ttEdit->text ().toLatin1 ());
+        QByteArray ttFromGUI = (ui->ttEdit->text ().toLatin1 ());
 
         memcpy (slot->tokenID + 2, ttFromGUI, 2);
 
-QByteArray muiFromGUI = (ui->muiEdit->text ().toLatin1 ());
+        QByteArray muiFromGUI = (ui->muiEdit->text ().toLatin1 ());
 
         memcpy (slot->tokenID + 4, muiFromGUI, 8);
 
         slot->tokenID[12] = ui->keyboardComboBox->currentIndex () & 0xFF;
 
-QByteArray counterFromGUI = QByteArray (ui->counterEdit->text ().toLatin1 ());
+        QByteArray counterFromGUI = QByteArray (ui->counterEdit->text ().toLatin1 ());
 
         memset (slot->counter, 0, 8);
 
@@ -1956,20 +1956,20 @@ QByteArray counterFromGUI = QByteArray (ui->counterEdit->text ().toLatin1 ());
 
 void MainWindow::generateTOTPConfig (TOTPSlot * slot)
 {
-uint8_t selectedSlot = ui->slotComboBox->currentIndex ();
+    uint8_t selectedSlot = ui->slotComboBox->currentIndex ();
 
     // get the TOTP slot number
     if (selectedSlot < TOTP_SlotCount)
     {
         slot->slotNumber = selectedSlot + 0x20;
 
-QByteArray secretFromGUI = ui->secretEdit->text ().toLatin1 ();
+        QByteArray secretFromGUI = ui->secretEdit->text ().toLatin1 ();
 
-uint8_t encoded[128];
+        uint8_t encoded[128];
 
-uint8_t decoded[20];
+        uint8_t decoded[20];
 
-uint8_t data[128];
+        uint8_t data[128];
 
         memset (encoded, 'A', 32);
         memset (data, 'A', 32);
@@ -1983,22 +1983,22 @@ uint8_t data[128];
         memset (slot->secret, 0, 20);
         memcpy (slot->secret, secretFromGUI.data (), secretFromGUI.size ());
 
-QByteArray slotNameFromGUI = QByteArray (ui->nameEdit->text ().toLatin1 ());
+        QByteArray slotNameFromGUI = QByteArray (ui->nameEdit->text ().toLatin1 ());
 
         memset (slot->slotName, 0, 15);
         memcpy (slot->slotName, slotNameFromGUI.data (), slotNameFromGUI.size ());
 
         memset (slot->tokenID, 32, 13);
 
-QByteArray ompFromGUI = (ui->ompEdit->text ().toLatin1 ());
+        QByteArray ompFromGUI = (ui->ompEdit->text ().toLatin1 ());
 
         memcpy (slot->tokenID, ompFromGUI, 2);
 
-QByteArray ttFromGUI = (ui->ttEdit->text ().toLatin1 ());
+        QByteArray ttFromGUI = (ui->ttEdit->text ().toLatin1 ());
 
         memcpy (slot->tokenID + 2, ttFromGUI, 2);
 
-QByteArray muiFromGUI = (ui->muiEdit->text ().toLatin1 ());
+        QByteArray muiFromGUI = (ui->muiEdit->text ().toLatin1 ());
 
         memcpy (slot->tokenID + 4, muiFromGUI, 8);
 
@@ -2011,7 +2011,7 @@ QByteArray muiFromGUI = (ui->muiEdit->text ().toLatin1 ());
         if (ui->tokenIDCheckBox->isChecked ())
             slot->config += (1 << 2);
 
-uint16_t lastInterval = ui->intervalSpinBox->value ();
+        uint16_t lastInterval = ui->intervalSpinBox->value ();
 
         if (lastInterval < 1)
             lastInterval = 1;
@@ -2046,26 +2046,26 @@ void MainWindow::displayCurrentTotpSlotConfig (uint8_t slotNo)
     ui->secretEdit->setPlaceholderText ("********************************");
 
     ui->nameEdit->setText (QString ((char *) cryptostick->TOTPSlots[slotNo]->slotName));
-QByteArray secret ((char* ) cryptostick->TOTPSlots[slotNo]->secret, 20);
+    QByteArray secret ((char* ) cryptostick->TOTPSlots[slotNo]->secret, 20);
 
     ui->base32RadioButton->setChecked (true);
     ui->secretEdit->setText (secret);   // .toHex());
 
     ui->counterEdit->setText ("0");
 
-QByteArray omp ((char* ) cryptostick->TOTPSlots[slotNo]->tokenID, 2);
+    QByteArray omp ((char* ) cryptostick->TOTPSlots[slotNo]->tokenID, 2);
 
     ui->ompEdit->setText (QString (omp));
 
-QByteArray tt ((char* ) cryptostick->TOTPSlots[slotNo]->tokenID + 2, 2);
+    QByteArray tt ((char* ) cryptostick->TOTPSlots[slotNo]->tokenID + 2, 2);
 
     ui->ttEdit->setText (QString (tt));
 
-QByteArray mui ((char* ) cryptostick->TOTPSlots[slotNo]->tokenID + 4, 8);
+    QByteArray mui ((char* ) cryptostick->TOTPSlots[slotNo]->tokenID + 4, 8);
 
     ui->muiEdit->setText (QString (mui));
 
-int interval = cryptostick->TOTPSlots[slotNo]->interval;
+    int interval = cryptostick->TOTPSlots[slotNo]->interval;
 
     ui->intervalSpinBox->setValue (interval);
 
@@ -2088,7 +2088,7 @@ int interval = cryptostick->TOTPSlots[slotNo]->interval;
     {
         ui->ompEdit->setText ("NK");
         ui->ttEdit->setText ("01");
-QByteArray cardSerial = QByteArray ((char *) cryptostick->cardSerial).toHex ();
+        QByteArray cardSerial = QByteArray ((char *) cryptostick->cardSerial).toHex ();
         ui->muiEdit->setText (QString ("%1").arg (QString (cardSerial), 8, '0'));
     }
 }
@@ -2109,27 +2109,27 @@ void MainWindow::displayCurrentHotpSlotConfig (uint8_t slotNo)
 
     // slotNo=slotNo+0x10;
     ui->nameEdit->setText (QString ((char *) cryptostick->HOTPSlots[slotNo]->slotName));
-QByteArray secret ((char* ) cryptostick->HOTPSlots[slotNo]->secret, 20);
+    QByteArray secret ((char* ) cryptostick->HOTPSlots[slotNo]->secret, 20);
 
     ui->base32RadioButton->setChecked (true);
     ui->secretEdit->setText (secret);   // .toHex());
 
-QByteArray counter ((char* ) cryptostick->HOTPSlots[slotNo]->counter, 8);
+    QByteArray counter ((char* ) cryptostick->HOTPSlots[slotNo]->counter, 8);
 
-QString TextCount;
+    QString TextCount;
 
     TextCount = QString ("%1").arg (counter.toInt ());
     ui->counterEdit->setText (TextCount);   // .toHex());
 
-QByteArray omp ((char* ) cryptostick->HOTPSlots[slotNo]->tokenID, 2);
+    QByteArray omp ((char* ) cryptostick->HOTPSlots[slotNo]->tokenID, 2);
 
     ui->ompEdit->setText (QString (omp));
 
-QByteArray tt ((char* ) cryptostick->HOTPSlots[slotNo]->tokenID + 2, 2);
+    QByteArray tt ((char* ) cryptostick->HOTPSlots[slotNo]->tokenID + 2, 2);
 
     ui->ttEdit->setText (QString (tt));
 
-QByteArray mui ((char* ) cryptostick->HOTPSlots[slotNo]->tokenID + 4, 8);
+    QByteArray mui ((char* ) cryptostick->HOTPSlots[slotNo]->tokenID + 4, 8);
 
     ui->muiEdit->setText (QString (mui));
 
@@ -2152,7 +2152,7 @@ QByteArray mui ((char* ) cryptostick->HOTPSlots[slotNo]->tokenID + 4, 8);
     {
         ui->ompEdit->setText ("NK");
         ui->ttEdit->setText ("01");
-QByteArray cardSerial = QByteArray ((char *) cryptostick->cardSerial).toHex ();
+        QByteArray cardSerial = QByteArray ((char *) cryptostick->cardSerial).toHex ();
         ui->muiEdit->setText (QString ("%1").arg (QString (cardSerial), 8, '0'));
     }
 }
@@ -2160,7 +2160,7 @@ QByteArray cardSerial = QByteArray ((char *) cryptostick->cardSerial).toHex ();
 
 void MainWindow::displayCurrentSlotConfig ()
 {
-uint8_t slotNo = ui->slotComboBox->currentIndex ();
+    uint8_t slotNo = ui->slotComboBox->currentIndex ();
 
     if (slotNo == 255)
         return;
@@ -2214,21 +2214,21 @@ void MainWindow::displayCurrentGeneralConfig ()
 
 void MainWindow::startConfiguration ()
 {
-bool ok;
+    bool ok;
 
     if (!cryptostick->validPassword)
     {
         do
         {
-PinDialog dialog (tr ("Enter card admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+            PinDialog dialog (tr ("Enter card admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
             ok = dialog.exec ();
-QString password;
+            QString password;
 
             dialog.getPassword (password);
 
             if (QDialog::Accepted == ok)
             {
-uint8_t tempPassword[25];
+                uint8_t tempPassword[25];
 
                 for (int i = 0; i < 25; i++)
                     tempPassword[i] = qrand () & 0xFF;
@@ -2283,11 +2283,11 @@ void MainWindow::resizeMin ()
 
 void MainWindow::destroyPasswordSafeStick10 ()
 {
-uint8_t password[40];
-bool ret;
-int ret_s32;
-QMessageBox msgBox;
-PasswordDialog dialog (FALSE, this);
+    uint8_t password[40];
+    bool ret;
+    int ret_s32;
+    QMessageBox msgBox;
+    PasswordDialog dialog (FALSE, this);
 
     cryptostick->getUserPasswordRetryCount ();
     dialog.init ((char *) (tr ("Enter admin PIN").toUtf8 ().data ()), HID_Stick20Configuration_st.UserPwRetryCount);
@@ -2321,7 +2321,7 @@ PasswordDialog dialog (FALSE, this);
 
 void MainWindow::startStick20Configuration ()
 {
-Stick20Dialog dialog (this);
+    Stick20Dialog dialog (this);
 
     dialog.cryptostick = cryptostick;
     dialog.exec ();
@@ -2329,7 +2329,7 @@ Stick20Dialog dialog (this);
 
 void MainWindow::startStickDebug ()
 {
-DebugDialog dialog (this);
+    DebugDialog dialog (this);
 
     dialog.cryptostick = cryptostick;
     dialog.updateText ();   // Init data
@@ -2339,14 +2339,14 @@ DebugDialog dialog (this);
 
 void MainWindow::startAboutDialog ()
 {
-AboutDialog dialog (cryptostick, this);
+    AboutDialog dialog (cryptostick, this);
 
     if (TRUE == cryptostick->activStick20)
     {
         // Get actual data from stick 20
         cryptostick->stick20GetStatusData ();
 
-Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
+        Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
 
         ResponseTask.NoStopWhenStatusOK ();
         ResponseTask.GetResponse ();
@@ -2359,7 +2359,7 @@ Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
 
 void MainWindow::startStick20Setup ()
 {
-Stick20Setup dialog (this);
+    Stick20Setup dialog (this);
 
     dialog.cryptostick = cryptostick;
     dialog.exec ();
@@ -2367,7 +2367,7 @@ Stick20Setup dialog (this);
 
 void MainWindow::startMatrixPasswordDialog ()
 {
-MatrixPasswordDialog dialog (this);
+    MatrixPasswordDialog dialog (this);
 
     dialog.cryptostick = cryptostick;
     dialog.PasswordLen = 6;
@@ -2379,23 +2379,23 @@ MatrixPasswordDialog dialog (this);
 
 void MainWindow::startStick20EnableCryptedVolume ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool ret;
+    bool ret;
 
-bool answer;
+    bool answer;
 
     if (TRUE == HiddenVolumeActive)
     {
         answer =
-            csApplet->yesOrNoBox (tr
-                                  ("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
-                                  0, false);
+                csApplet->yesOrNoBox (tr
+                                      ("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
+                                      0, false);
         if (false == answer)
             return;
     }
 
-PinDialog dialog (tr ("User pin dialog"), tr ("Enter user PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
+    PinDialog dialog (tr ("User pin dialog"), tr ("Enter user PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -2408,16 +2408,16 @@ PinDialog dialog (tr ("User pin dialog"), tr ("Enter user PIN:"), cryptostick, P
 
 void MainWindow::startStick20DisableCryptedVolume ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool answer;
+    bool answer;
 
     if (TRUE == CryptedVolumeActive)
     {
         answer =
-            csApplet->yesOrNoBox (tr
-                                  ("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
-                                  0, false);
+                csApplet->yesOrNoBox (tr
+                                      ("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
+                                      0, false);
         if (false == answer)
             return;
 
@@ -2429,11 +2429,11 @@ bool answer;
 
 void MainWindow::startStick20EnableHiddenVolume ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool ret;
+    bool ret;
 
-bool answer;
+    bool answer;
 
     if (FALSE == CryptedVolumeActive)
     {
@@ -2442,14 +2442,14 @@ bool answer;
     }
 
     answer =
-        csApplet->yesOrNoBox (tr
-                              ("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
-                              0, true);
+            csApplet->yesOrNoBox (tr
+                                  ("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
+                                  0, true);
     if (false == answer)
         return;
 
-PinDialog dialog (tr ("Enter password for hidden volume"),
-                  tr ("Enter password for hidden volume:"), cryptostick, PinDialog::PREFIXED, PinDialog::OTHER);
+    PinDialog dialog (tr ("Enter password for hidden volume"),
+                      tr ("Enter password for hidden volume:"), cryptostick, PinDialog::PREFIXED, PinDialog::OTHER);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -2464,14 +2464,14 @@ PinDialog dialog (tr ("Enter password for hidden volume"),
 
 void MainWindow::startStick20DisableHiddenVolume ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool answer;
+    bool answer;
 
     answer =
-        csApplet->yesOrNoBox (tr
-                              ("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
-                              0, true);
+            csApplet->yesOrNoBox (tr
+                                  ("This activity locks your hidden volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
+                                  0, true);
     if (false == answer)
         return;
 
@@ -2483,14 +2483,14 @@ bool answer;
 
 void MainWindow::startLockDeviceAction ()
 {
-bool answer;
+    bool answer;
 
     if ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive))
     {
         answer =
-            csApplet->yesOrNoBox (tr
-                                  ("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
-                                  0, true);
+                csApplet->yesOrNoBox (tr
+                                      ("This activity locks your encrypted volume. Do you want to proceed?\nTo avoid data loss, please unmount the partitions before proceeding."),
+                                      0, true);
         if (false == answer)
         {
             return;
@@ -2510,11 +2510,11 @@ bool answer;
 
 void MainWindow::startStick20EnableFirmwareUpdate ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool ret;
+    bool ret;
 
-UpdateDialog dialogUpdate (this);
+    UpdateDialog dialogUpdate (this);
 
     ret = dialogUpdate.exec ();
     if (QDialog::Accepted != ret)
@@ -2522,7 +2522,7 @@ UpdateDialog dialogUpdate (this);
         return;
     }
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+    PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -2536,7 +2536,7 @@ PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, 
 
 void MainWindow::startStick10ActionChangeUserPIN ()
 {
-DialogChangePassword dialog (this);
+    DialogChangePassword dialog (this);
 
     dialog.setModal (TRUE);
 
@@ -2551,7 +2551,7 @@ DialogChangePassword dialog (this);
 
 void MainWindow::startStick10ActionChangeAdminPIN ()
 {
-DialogChangePassword dialog (this);
+    DialogChangePassword dialog (this);
 
     dialog.setModal (TRUE);
     dialog.cryptostick = cryptostick;
@@ -2562,7 +2562,7 @@ DialogChangePassword dialog (this);
 
 void MainWindow::startStick20ActionChangeUpdatePIN ()
 {
-DialogChangePassword dialog (this);
+    DialogChangePassword dialog (this);
 
     dialog.setModal (TRUE);
     dialog.cryptostick = cryptostick;
@@ -2573,7 +2573,7 @@ DialogChangePassword dialog (this);
 
 void MainWindow::startStick20ActionChangeUserPIN ()
 {
-DialogChangePassword dialog (this);
+    DialogChangePassword dialog (this);
 
     dialog.setModal (TRUE);
 
@@ -2588,7 +2588,7 @@ DialogChangePassword dialog (this);
 
 void MainWindow::startStick20ActionChangeAdminPIN ()
 {
-DialogChangePassword dialog (this);
+    DialogChangePassword dialog (this);
 
     dialog.setModal (TRUE);
 
@@ -2603,7 +2603,7 @@ DialogChangePassword dialog (this);
 
 void MainWindow::startResetUserPassword ()
 {
-DialogChangePassword dialog (this);
+    DialogChangePassword dialog (this);
 
     dialog.setModal (TRUE);
 
@@ -2621,11 +2621,11 @@ DialogChangePassword dialog (this);
 
 void MainWindow::startStick20ExportFirmwareToFile ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool ret;
+    bool ret;
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+    PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -2640,19 +2640,19 @@ PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, 
 
 void MainWindow::startStick20DestroyCryptedVolume ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-int ret;
+    int ret;
 
-bool answer;
+    bool answer;
 
     answer =
-        csApplet->yesOrNoBox (tr
-                              ("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?"),
-                              0, false);
+            csApplet->yesOrNoBox (tr
+                                  ("WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?"),
+                                  0, false);
     if (true == answer)
     {
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+        PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
         ret = dialog.exec ();
 
         if (QDialog::Accepted == ret)
@@ -2668,11 +2668,11 @@ PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDia
 
 void MainWindow::startStick20FillSDCardWithRandomChars ()
 {
-uint8_t password[40];
+    uint8_t password[40];
 
-bool ret;
+    bool ret;
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin Pin:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+    PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin Pin:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -2687,11 +2687,11 @@ PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin Pin:"), cryptostick, PinDia
 
 void MainWindow::startStick20ClearNewSdCardFound ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool ret;
+    bool ret;
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+    PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -2710,7 +2710,7 @@ void MainWindow::startStick20GetStickStatus ()
     cryptostick->stick20GetStatusData ();
 
     // Wait for response
-Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
+    Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
 
     ResponseTask.NoStopWhenStatusOK ();
     ResponseTask.GetResponse ();
@@ -2721,7 +2721,7 @@ Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
        ResponseDialog.NoStopWhenStatusOK ();
 
        ResponseDialog.cryptostick = cryptostick; ResponseDialog.exec(); ResponseDialog.ResultValue; */
-Stick20InfoDialog InfoDialog (this);
+    Stick20InfoDialog InfoDialog (this);
 
     InfoDialog.exec ();
 }
@@ -2729,11 +2729,11 @@ Stick20InfoDialog InfoDialog (this);
 
 void MainWindow::startStick20SetReadOnlyUncryptedVolume ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool ret;
+    bool ret;
 
-PinDialog dialog (tr ("Enter user PIN"), tr ("User PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
+    PinDialog dialog (tr ("Enter user PIN"), tr ("User PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -2747,11 +2747,11 @@ PinDialog dialog (tr ("Enter user PIN"), tr ("User PIN:"), cryptostick, PinDialo
 
 void MainWindow::startStick20SetReadWriteUncryptedVolume ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool ret;
+    bool ret;
 
-PinDialog dialog (tr ("Enter user PIN"), tr ("User PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
+    PinDialog dialog (tr ("Enter user PIN"), tr ("User PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::USER_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
@@ -2765,16 +2765,16 @@ PinDialog dialog (tr ("Enter user PIN"), tr ("User PIN:"), cryptostick, PinDialo
 
 void MainWindow::startStick20LockStickHardware ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
+    uint8_t password[LOCAL_PASSWORD_SIZE];
 
-bool ret;
+    bool ret;
 
-stick20LockFirmwareDialog dialog (this);
+    stick20LockFirmwareDialog dialog (this);
 
     ret = dialog.exec ();
     if (QDialog::Accepted == ret)
     {
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+        PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
         ret = dialog.exec ();
 
         if (QDialog::Accepted == ret)
@@ -2788,7 +2788,7 @@ PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDia
 
 void MainWindow::startStick20SetupPasswordMatrix ()
 {
-MatrixPasswordDialog dialog (this);
+    MatrixPasswordDialog dialog (this);
 
     csApplet->warningBox (tr ("The selected lines must be greater then greatest password length"));
 
@@ -2805,7 +2805,7 @@ MatrixPasswordDialog dialog (this);
 
 void MainWindow::startStick20DebugAction ()
 {
-int ret;
+    int ret;
 
     /*
        securitydialog dialog(this); ret = dialog.exec(); csApplet->warningBox("Encrypted volume is not secure.\nSelect \"Initialize keys\"");
@@ -2819,9 +2819,9 @@ int ret;
 
 void MainWindow::startStick20SetupHiddenVolume ()
 {
-bool ret;
+    bool ret;
 
-stick20HiddenVolumeDialog HVDialog (this);
+    stick20HiddenVolumeDialog HVDialog (this);
 
     if (FALSE == CryptedVolumeActive)
     {
@@ -2835,9 +2835,9 @@ stick20HiddenVolumeDialog HVDialog (this);
     HVDialog.SdCardHighWatermark_Write_Max = 100;
 
     ret =
-        cryptostick->getHighwaterMarkFromSdCard (&HVDialog.SdCardHighWatermark_Write_Min,
-                                                 &HVDialog.SdCardHighWatermark_Write_Max,
-                                                 &HVDialog.SdCardHighWatermark_Read_Min, &HVDialog.SdCardHighWatermark_Read_Max);
+            cryptostick->getHighwaterMarkFromSdCard (&HVDialog.SdCardHighWatermark_Write_Min,
+                                                     &HVDialog.SdCardHighWatermark_Write_Max,
+                                                     &HVDialog.SdCardHighWatermark_Read_Min, &HVDialog.SdCardHighWatermark_Read_Max);
     /*
        qDebug () << "High water mark : WriteMin WriteMax ReadMin ReadMax"; qDebug () << HVDialog.SdCardHighWatermark_Write_Min; qDebug () <<
        HVDialog.SdCardHighWatermark_Write_Max; qDebug () << HVDialog.SdCardHighWatermark_Read_Min; qDebug () <<
@@ -2910,142 +2910,142 @@ int MainWindow::UpdateDynamicMenuEntrys (void)
 
 int MainWindow::stick20SendCommand (uint8_t stick20Command, uint8_t * password)
 {
-int ret;
+    int ret;
 
-bool waitForAnswerFromStick20;
+    bool waitForAnswerFromStick20;
 
-bool stopWhenStatusOKFromStick20;
+    bool stopWhenStatusOKFromStick20;
 
-int Result;
+    int Result;
 
-QByteArray passwordString;
+    QByteArray passwordString;
 
     waitForAnswerFromStick20 = FALSE;
     stopWhenStatusOKFromStick20 = FALSE;
 
     switch (stick20Command)
     {
-        case STICK20_CMD_ENABLE_CRYPTED_PARI:
-            ret = cryptostick->stick20EnableCryptedPartition (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_DISABLE_CRYPTED_PARI:
-            ret = cryptostick->stick20DisableCryptedPartition ();
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
-            ret = cryptostick->stick20EnableHiddenCryptedPartition (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
-            ret = cryptostick->stick20DisableHiddenCryptedPartition ();
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_ENABLE_FIRMWARE_UPDATE:
-            ret = cryptostick->stick20EnableFirmwareUpdate (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = FALSE;
-            break;
-        case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE:
-            ret = cryptostick->stick20ExportFirmware (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_GENERATE_NEW_KEYS:
-            ret = cryptostick->stick20CreateNewKeys (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
-        {
-bool answer =
-    csApplet->yesOrNoBox (tr
-                          ("This command fills the encrypted volumes with random data.\nThis will destroy all encrypted volumes!\nThis commands requires more than 1 hour for 32GB."),
-                          0, false);
+    case STICK20_CMD_ENABLE_CRYPTED_PARI:
+        ret = cryptostick->stick20EnableCryptedPartition (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_DISABLE_CRYPTED_PARI:
+        ret = cryptostick->stick20DisableCryptedPartition ();
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
+        ret = cryptostick->stick20EnableHiddenCryptedPartition (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
+        ret = cryptostick->stick20DisableHiddenCryptedPartition ();
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_ENABLE_FIRMWARE_UPDATE:
+        ret = cryptostick->stick20EnableFirmwareUpdate (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = FALSE;
+        break;
+    case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE:
+        ret = cryptostick->stick20ExportFirmware (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_GENERATE_NEW_KEYS:
+        ret = cryptostick->stick20CreateNewKeys (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
+    {
+        bool answer =
+                csApplet->yesOrNoBox (tr
+                                      ("This command fills the encrypted volumes with random data.\nThis will destroy all encrypted volumes!\nThis commands requires more than 1 hour for 32GB."),
+                                      0, false);
 
-            if (answer)
+        if (answer)
+        {
+            ret = cryptostick->stick20FillSDCardWithRandomChars (password, STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
+            if (TRUE == ret)
             {
-                ret = cryptostick->stick20FillSDCardWithRandomChars (password, STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
-                if (TRUE == ret)
-                {
-                    waitForAnswerFromStick20 = TRUE;
-                    stopWhenStatusOKFromStick20 = FALSE;
-                }
+                waitForAnswerFromStick20 = TRUE;
+                stopWhenStatusOKFromStick20 = FALSE;
             }
         }
-            break;
-        case STICK20_CMD_WRITE_STATUS_DATA:
-            csApplet->messageBox (tr ("Not implemented"));
-            break;
-        case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
-            ret = cryptostick->stick20SendSetReadonlyToUncryptedVolume (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
-            ret = cryptostick->stick20SendSetReadwriteToUncryptedVolume (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_SEND_PASSWORD_MATRIX:
-            ret = cryptostick->stick20GetPasswordMatrix ();
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA:
-            ret = cryptostick->stick20SendPasswordMatrixPinData (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_GET_DEVICE_STATUS:
-            ret = cryptostick->stick20GetStatusData ();
-            if (TRUE == ret)
-            {
-                waitForAnswerFromStick20 = TRUE;
-                stopWhenStatusOKFromStick20 = FALSE;
-            }
-            break;
-        case STICK20_CMD_SEND_STARTUP:
-            break;
+    }
+        break;
+    case STICK20_CMD_WRITE_STATUS_DATA:
+        csApplet->messageBox (tr ("Not implemented"));
+        break;
+    case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
+        ret = cryptostick->stick20SendSetReadonlyToUncryptedVolume (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
+        ret = cryptostick->stick20SendSetReadwriteToUncryptedVolume (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_SEND_PASSWORD_MATRIX:
+        ret = cryptostick->stick20GetPasswordMatrix ();
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA:
+        ret = cryptostick->stick20SendPasswordMatrixPinData (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_GET_DEVICE_STATUS:
+        ret = cryptostick->stick20GetStatusData ();
+        if (TRUE == ret)
+        {
+            waitForAnswerFromStick20 = TRUE;
+            stopWhenStatusOKFromStick20 = FALSE;
+        }
+        break;
+    case STICK20_CMD_SEND_STARTUP:
+        break;
 
-        case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP:
-            ret = cryptostick->stick20SendHiddenVolumeSetup ((HiddenVolumeSetup_tst *) password);
-            if (TRUE == ret)
-            {
-                waitForAnswerFromStick20 = TRUE;
-                stopWhenStatusOKFromStick20 = FALSE;
-            }
-            break;
+    case STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP:
+        ret = cryptostick->stick20SendHiddenVolumeSetup ((HiddenVolumeSetup_tst *) password);
+        if (TRUE == ret)
+        {
+            waitForAnswerFromStick20 = TRUE;
+            stopWhenStatusOKFromStick20 = FALSE;
+        }
+        break;
 
-        case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND:
-            ret = cryptostick->stick20SendClearNewSdCardFound (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_SEND_LOCK_STICK_HARDWARE:
-            ret = cryptostick->stick20LockFirmware (password);
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
-        case STICK20_CMD_PRODUCTION_TEST:
-            ret = cryptostick->stick20ProductionTest ();
-            if (TRUE == ret)
-                waitForAnswerFromStick20 = TRUE;
-            break;
+    case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND:
+        ret = cryptostick->stick20SendClearNewSdCardFound (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_SEND_LOCK_STICK_HARDWARE:
+        ret = cryptostick->stick20LockFirmware (password);
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
+    case STICK20_CMD_PRODUCTION_TEST:
+        ret = cryptostick->stick20ProductionTest ();
+        if (TRUE == ret)
+            waitForAnswerFromStick20 = TRUE;
+        break;
 
-        default:
-            csApplet->messageBox (tr ("Stick20Dialog: Wrong combobox value! "));
-            break;
+    default:
+        csApplet->messageBox (tr ("Stick20Dialog: Wrong combobox value! "));
+        break;
     }
 
     Result = FALSE;
     if (TRUE == waitForAnswerFromStick20)
     {
-Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
+        Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
 
         if (FALSE == stopWhenStatusOKFromStick20)
             ResponseTask.NoStopWhenStatusOK ();
@@ -3057,53 +3057,59 @@ Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
     {
         switch (stick20Command)
         {
-            case STICK20_CMD_ENABLE_CRYPTED_PARI:
-                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_CRYPTED_VOLUME_BIT_PLACE);
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_DISABLE_CRYPTED_PARI:
-                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
-                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_HIDDEN_VOLUME_BIT_PLACE);
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
-                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_GET_DEVICE_STATUS:
-                UpdateDynamicMenuEntrys ();
-                break;
-                /* Dead code case STICK20_CMD_SEND_STARTUP: UpdateDynamicMenuEntrys (); break; */
-            case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
-                HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_WRITE_ACTIVE;
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
-                HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_ONLY_ACTIVE;
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND:
-                HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
-                HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_GENERATE_NEW_KEYS:    // = firmware reset
-                HID_Stick20Configuration_st.StickKeysNotInitiated = FALSE;
-                HID_Stick20Configuration_st.SDFillWithRandomChars_u8 = 0x00;
-                HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
-                UpdateDynamicMenuEntrys ();
-                break;
-            case STICK20_CMD_PRODUCTION_TEST:
-                break;
+        case STICK20_CMD_ENABLE_CRYPTED_PARI:
+            HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_CRYPTED_VOLUME_BIT_PLACE);
+            UpdateDynamicMenuEntrys ();
+#ifdef Q_OS_LINUX
+            sleep(2);
+            if(!QFileInfo("/dev/nitrospace").isSymLink()){
+                csApplet->warningBox (tr ("Warning: The encrypted Volume is not formatted.\n\"Use GParted or fdisk for this.\""));
+            }
+#endif // if Q_OS_LINUX
+            break;
+        case STICK20_CMD_DISABLE_CRYPTED_PARI:
+            HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
+            UpdateDynamicMenuEntrys ();
+            break;
+        case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
+            HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_HIDDEN_VOLUME_BIT_PLACE);
+            UpdateDynamicMenuEntrys ();
+            break;
+        case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
+            HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
+            UpdateDynamicMenuEntrys ();
+            break;
+        case STICK20_CMD_GET_DEVICE_STATUS:
+            UpdateDynamicMenuEntrys ();
+            break;
+            /* Dead code case STICK20_CMD_SEND_STARTUP: UpdateDynamicMenuEntrys (); break; */
+        case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
+            HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_WRITE_ACTIVE;
+            UpdateDynamicMenuEntrys ();
+            break;
+        case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
+            HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_ONLY_ACTIVE;
+            UpdateDynamicMenuEntrys ();
+            break;
+        case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND:
+            HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
+            UpdateDynamicMenuEntrys ();
+            break;
+        case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
+            HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
+            UpdateDynamicMenuEntrys ();
+            break;
+        case STICK20_CMD_GENERATE_NEW_KEYS:    // = firmware reset
+            HID_Stick20Configuration_st.StickKeysNotInitiated = FALSE;
+            HID_Stick20Configuration_st.SDFillWithRandomChars_u8 = 0x00;
+            HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
+            UpdateDynamicMenuEntrys ();
+            break;
+        case STICK20_CMD_PRODUCTION_TEST:
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
     return (true);
@@ -3112,10 +3118,10 @@ Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
 
 void MainWindow::getCode (uint8_t slotNo)
 {
-uint8_t result[18];
+    uint8_t result[18];
 
     memset (result, 0, 18);
-uint32_t code;
+    uint32_t code;
 
     cryptostick->getCode (slotNo, currentTime / 30, currentTime, 30, result);
     code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
@@ -3125,14 +3131,14 @@ uint32_t code;
 
 void MainWindow::on_writeButton_clicked ()
 {
-int res;
+    int res;
 
-uint8_t SlotName[16];
+    uint8_t SlotName[16];
 
-uint8_t slotNo = ui->slotComboBox->currentIndex ();
+    uint8_t slotNo = ui->slotComboBox->currentIndex ();
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
-bool ok;
+    PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+    bool ok;
 
     if (slotNo > TOTP_SlotCount)
         slotNo -= (TOTP_SlotCount + 1);
@@ -3156,72 +3162,72 @@ bool ok;
 
             if (slotNo < HOTP_SlotCount)
             {   // HOTP slot
-HOTPSlot* hotp = new HOTPSlot ();
+                HOTPSlot* hotp = new HOTPSlot ();
 
                 generateHOTPConfig (hotp);
                 res = cryptostick->writeToHOTPSlot (hotp);
-delete hotp;
+                delete hotp;
             }
             else
             {   // TOTP slot
-TOTPSlot* totp = new TOTPSlot ();
+                TOTPSlot* totp = new TOTPSlot ();
 
                 generateTOTPConfig (totp);
                 res = cryptostick->writeToTOTPSlot (totp);
-delete totp;
+                delete totp;
             }
 
             switch (res)
             {
-                case CMD_STATUS_OK:
-                    csApplet->messageBox (tr ("Configuration successfully written."));
-                    break;
-                case CMD_STATUS_NOT_AUTHORIZED:
-                    // Ask for password
-                    do
+            case CMD_STATUS_OK:
+                csApplet->messageBox (tr ("Configuration successfully written."));
+                break;
+            case CMD_STATUS_NOT_AUTHORIZED:
+                // Ask for password
+                do
+                {
+                    ok = dialog.exec ();
+                    QString password;
+
+                    dialog.getPassword (password);
+
+                    if (QDialog::Accepted == ok)
                     {
-                        ok = dialog.exec ();
-QString password;
+                        uint8_t tempPassword[25];
 
-                        dialog.getPassword (password);
+                        for (int i = 0; i < 25; i++)
+                            tempPassword[i] = qrand () & 0xFF;
 
-                        if (QDialog::Accepted == ok)
+                        cryptostick->firstAuthenticate ((uint8_t *) password.toLatin1 ().data (), tempPassword);
+                        if (cryptostick->validPassword)
                         {
-uint8_t tempPassword[25];
-
-                            for (int i = 0; i < 25; i++)
-                                tempPassword[i] = qrand () & 0xFF;
-
-                            cryptostick->firstAuthenticate ((uint8_t *) password.toLatin1 ().data (), tempPassword);
-                            if (cryptostick->validPassword)
-                            {
-                                lastAuthenticateTime = QDateTime::currentDateTime ().toTime_t ();
-                            }
-                            else
-                            {
-                                csApplet->warningBox (tr ("Wrong PIN. Please try again."));
-                            }
-                            password.clear ();
+                            lastAuthenticateTime = QDateTime::currentDateTime ().toTime_t ();
                         }
-                    } while (QDialog::Accepted == ok && !cryptostick->validPassword);   // While
-                    // the
-                    // user
-                    // keeps
-                    // enterning
-                    // a
-                    // pin
-                    // and
-                    // the
-                    // pin
-                    // is
-                    // not
-                    // correct..
-                    break;
-                case CMD_STATUS_NO_NAME_ERROR:
-                    csApplet->warningBox (tr ("The name of the slot must not be empty."));
-                    break;
-                default:
-                    csApplet->warningBox (tr ("Error writing configuration!"));
+                        else
+                        {
+                            csApplet->warningBox (tr ("Wrong PIN. Please try again."));
+                        }
+                        password.clear ();
+                    }
+                } while (QDialog::Accepted == ok && !cryptostick->validPassword);   // While
+                // the
+                // user
+                // keeps
+                // enterning
+                // a
+                // pin
+                // and
+                // the
+                // pin
+                // is
+                // not
+                // correct..
+                break;
+            case CMD_STATUS_NO_NAME_ERROR:
+                csApplet->warningBox (tr ("The name of the slot must not be empty."));
+                break;
+            default:
+                csApplet->warningBox (tr ("Error writing configuration!"));
             }
         } while (CMD_STATUS_NOT_AUTHORIZED == res);
 
@@ -3248,13 +3254,13 @@ void MainWindow::on_slotComboBox_currentIndexChanged (int index)
 
 void MainWindow::on_hexRadioButton_toggled (bool checked)
 {
-QByteArray secret;
+    QByteArray secret;
 
-uint8_t encoded[128];
+    uint8_t encoded[128];
 
-uint8_t data[128];
+    uint8_t data[128];
 
-uint8_t decoded[20];
+    uint8_t decoded[20];
 
     if (checked)
     {
@@ -3279,11 +3285,11 @@ uint8_t decoded[20];
 
 void MainWindow::on_base32RadioButton_toggled (bool checked)
 {
-QByteArray secret;
+    QByteArray secret;
 
-uint8_t encoded[128];
+    uint8_t encoded[128];
 
-uint8_t decoded[20];
+    uint8_t decoded[20];
 
     if (checked)
     {
@@ -3311,7 +3317,7 @@ void MainWindow::on_setToZeroButton_clicked ()
 
 void MainWindow::on_setToRandomButton_clicked ()
 {
-quint64 counter;
+    quint64 counter;
 
     counter = qrand () & 0xFFFF;
     counter *= 16;
@@ -3361,12 +3367,12 @@ void MainWindow::on_enableUserPasswordCheckBox_toggled (bool checked)
 
 void MainWindow::on_writeGeneralConfigButton_clicked ()
 {
-int res;
+    int res;
 
-uint8_t data[5];
+    uint8_t data[5];
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
-bool ok;
+    PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+    bool ok;
 
     if (cryptostick->isConnected)
     {
@@ -3395,52 +3401,52 @@ bool ok;
 
             switch (res)
             {
-                case CMD_STATUS_OK:
-                    csApplet->messageBox (tr ("Configuration successfully written."));
-                    break;
-                case CMD_STATUS_NOT_AUTHORIZED:
-                    // Ask for password
-                    do
+            case CMD_STATUS_OK:
+                csApplet->messageBox (tr ("Configuration successfully written."));
+                break;
+            case CMD_STATUS_NOT_AUTHORIZED:
+                // Ask for password
+                do
+                {
+                    ok = dialog.exec ();
+                    QString password;
+
+                    dialog.getPassword (password);
+
+                    if (QDialog::Accepted == ok)
                     {
-                        ok = dialog.exec ();
-QString password;
+                        uint8_t tempPassword[25];
 
-                        dialog.getPassword (password);
+                        for (int i = 0; i < 25; i++)
+                            tempPassword[i] = qrand () & 0xFF;
 
-                        if (QDialog::Accepted == ok)
+                        cryptostick->firstAuthenticate ((uint8_t *) password.toLatin1 ().data (), tempPassword);
+                        if (cryptostick->validPassword)
                         {
-uint8_t tempPassword[25];
-
-                            for (int i = 0; i < 25; i++)
-                                tempPassword[i] = qrand () & 0xFF;
-
-                            cryptostick->firstAuthenticate ((uint8_t *) password.toLatin1 ().data (), tempPassword);
-                            if (cryptostick->validPassword)
-                            {
-                                lastAuthenticateTime = QDateTime::currentDateTime ().toTime_t ();
-                            }
-                            else
-                            {
-                                csApplet->warningBox (tr ("Wrong PIN. Please try again."));
-                            }
-                            password.clear ();
+                            lastAuthenticateTime = QDateTime::currentDateTime ().toTime_t ();
                         }
-                    } while (QDialog::Accepted == ok && !cryptostick->validPassword);   // While
-                    // the
-                    // user
-                    // keeps
-                    // enterning
-                    // a
-                    // pin
-                    // and
-                    // the
-                    // pin
-                    // is
-                    // not
-                    // correct..
-                    break;
-                default:
-                    csApplet->warningBox (tr ("Error writing configuration!"));
+                        else
+                        {
+                            csApplet->warningBox (tr ("Wrong PIN. Please try again."));
+                        }
+                        password.clear ();
+                    }
+                } while (QDialog::Accepted == ok && !cryptostick->validPassword);   // While
+                // the
+                // user
+                // keeps
+                // enterning
+                // a
+                // pin
+                // and
+                // the
+                // pin
+                // is
+                // not
+                // correct..
+                break;
+            default:
+                csApplet->warningBox (tr ("Error writing configuration!"));
 
             }
         } while (CMD_STATUS_NOT_AUTHORIZED == res);
@@ -3587,12 +3593,12 @@ void MainWindow::getTOTP15 ()
 
 void MainWindow::on_eraseButton_clicked ()
 {
-bool answer = csApplet->yesOrNoBox (tr ("WARNING: Are you sure you want to erase the slot?"));
-char clean[8];
+    bool answer = csApplet->yesOrNoBox (tr ("WARNING: Are you sure you want to erase the slot?"));
+    char clean[8];
 
     memset (clean, ' ', 8);
 
-uint8_t slotNo = ui->slotComboBox->currentIndex ();
+    uint8_t slotNo = ui->slotComboBox->currentIndex ();
 
     if (slotNo > TOTP_SlotCount)
     {
@@ -3630,11 +3636,11 @@ uint8_t slotNo = ui->slotComboBox->currentIndex ();
 
 void MainWindow::on_randomSecretButton_clicked ()
 {
-int i = 0;
+    int i = 0;
 
-uint8_t secret[32];
+    uint8_t secret[32];
 
-char temp;
+    char temp;
 
     while (i < 32)
     {
@@ -3646,7 +3652,7 @@ char temp;
         }
     }
 
-QByteArray secretArray ((char* ) secret, 32);
+    QByteArray secretArray ((char* ) secret, 32);
 
     ui->base32RadioButton->setChecked (true);
     ui->secretEdit->setText (secretArray);
@@ -3677,7 +3683,7 @@ void MainWindow::copyToClipboard (QString text)
 
 void MainWindow::checkClipboard_Valid ()
 {
-uint64_t currentTime;
+    uint64_t currentTime;
 
     currentTime = QDateTime::currentDateTime ().toTime_t ();
     if ((currentTime >= (lastClipboardTime + (uint64_t) 60)) && (clipboard->text () == otpInClipboard))
@@ -3701,7 +3707,7 @@ uint64_t currentTime;
 
 void MainWindow::checkPasswordTime_Valid ()
 {
-uint64_t currentTime;
+    uint64_t currentTime;
 
 
     currentTime = QDateTime::currentDateTime ().toTime_t ();
@@ -3815,11 +3821,11 @@ void MainWindow::SetupPasswordSafeConfig (void)
 
 void MainWindow::on_PWS_ButtonClearSlot_clicked ()
 {
-int Slot;
+    int Slot;
 
-unsigned int ret;
+    unsigned int ret;
 
-QMessageBox msgBox;
+    QMessageBox msgBox;
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex ();
 
@@ -3889,17 +3895,17 @@ void MainWindow::on_PWS_CheckBoxHideSecret_toggled (bool checked)
 
 void MainWindow::on_PWS_ButtonSaveSlot_clicked ()
 {
-int Slot;
+    int Slot;
 
-int ret;
+    int ret;
 
-uint8_t SlotName[PWS_SLOTNAME_LENGTH + 1];
+    uint8_t SlotName[PWS_SLOTNAME_LENGTH + 1];
 
-uint8_t LoginName[PWS_LOGINNAME_LENGTH + 1];
+    uint8_t LoginName[PWS_LOGINNAME_LENGTH + 1];
 
-uint8_t Password[PWS_PASSWORD_LENGTH + 1];
+    uint8_t Password[PWS_PASSWORD_LENGTH + 1];
 
-QMessageBox msgBox;
+    QMessageBox msgBox;
 
     Slot = ui->PWS_ComboBoxSelectSlot->currentIndex ();
 
@@ -4007,12 +4013,12 @@ void MainWindow::generateMenuPasswordSafe ()
 
 void MainWindow::PWS_Clicked_EnablePWSAccess ()
 {
-uint8_t password[LOCAL_PASSWORD_SIZE];
-bool ret;
-int ret_s32;
+    uint8_t password[LOCAL_PASSWORD_SIZE];
+    bool ret;
+    int ret_s32;
 
-QMessageBox msgBox;
-PasswordDialog dialog (FALSE, this);
+    QMessageBox msgBox;
+    PasswordDialog dialog (FALSE, this);
 
     cryptostick->getUserPasswordRetryCount ();
     dialog.init ((char *) (tr ("Enter user PIN").toUtf8 ().data ()), HID_Stick20Configuration_st.UserPwRetryCount);
@@ -4038,39 +4044,39 @@ PasswordDialog dialog (FALSE, this);
             {
                 switch (ret_s32)
                 {
-                    case CMD_STATUS_AES_DEC_FAILED:
-                        uint8_t admin_password[40];
-                        cryptostick->getUserPasswordRetryCount ();
-                        dialog.init ((char *) (tr ("Enter admin PIN").toUtf8 ().data ()), HID_Stick20Configuration_st.UserPwRetryCount);
-                        dialog.cryptostick = cryptostick;
-                        ret = dialog.exec ();
+                case CMD_STATUS_AES_DEC_FAILED:
+                    uint8_t admin_password[40];
+                    cryptostick->getUserPasswordRetryCount ();
+                    dialog.init ((char *) (tr ("Enter admin PIN").toUtf8 ().data ()), HID_Stick20Configuration_st.UserPwRetryCount);
+                    dialog.cryptostick = cryptostick;
+                    ret = dialog.exec ();
 
-                        if (QDialog::Accepted == ret)
+                    if (QDialog::Accepted == ret)
+                    {
+                        dialog.getPassword ((char *) admin_password);
+
+                        ret_s32 = cryptostick->buildAesKey ((uint8_t *) & (admin_password[1]));
+
+                        if (CMD_STATUS_OK != ret_s32)
                         {
-                            dialog.getPassword ((char *) admin_password);
-
-                            ret_s32 = cryptostick->buildAesKey ((uint8_t *) & (admin_password[1]));
-
-                            if (CMD_STATUS_OK != ret_s32)
-                            {
-                                if (CMD_STATUS_WRONG_PASSWORD == ret_s32)
-                                    msgBox.setText (tr ("Wrong password"));
-                                else
-                                    msgBox.setText (tr ("Unable to create new AES key"));
-
-                                msgBox.exec ();
-                            }
+                            if (CMD_STATUS_WRONG_PASSWORD == ret_s32)
+                                msgBox.setText (tr ("Wrong password"));
                             else
-                            {
-                                Sleep::msleep (3000);
-                                ret_s32 = cryptostick->passwordSafeEnable ((char *) &password[1]);
-                            }
-                        }
+                                msgBox.setText (tr ("Unable to create new AES key"));
 
-                        break;
-                    default:
-                        csApplet->warningBox (tr ("Can't unlock password safe."));
-                        break;
+                            msgBox.exec ();
+                        }
+                        else
+                        {
+                            Sleep::msleep (3000);
+                            ret_s32 = cryptostick->passwordSafeEnable ((char *) &password[1]);
+                        }
+                    }
+
+                    break;
+                default:
+                    csApplet->warningBox (tr ("Can't unlock password safe."));
+                    break;
                 }
             }
             else
@@ -4223,22 +4229,22 @@ void MainWindow::PWS_Clicked_Slot15 ()
 
 void MainWindow::resetTime ()
 {
-bool ok;
+    bool ok;
 
     if (!cryptostick->validPassword)
     {
 
         do
         {
-PinDialog dialog (tr ("Enter card admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+            PinDialog dialog (tr ("Enter card admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
             ok = dialog.exec ();
-QString password;
+            QString password;
 
             dialog.getPassword (password);
 
             if (QDialog::Accepted == ok)
             {
-uint8_t tempPassword[25];
+                uint8_t tempPassword[25];
 
                 for (int i = 0; i < 25; i++)
                     tempPassword[i] = qrand () & 0xFF;
@@ -4267,18 +4273,18 @@ uint8_t tempPassword[25];
 
 int MainWindow::getNextCode (uint8_t slotNumber)
 {
-uint8_t result[18];
+    uint8_t result[18];
 
     memset (result, 0, 18);
-uint32_t code;
+    uint32_t code;
 
-uint8_t config;
+    uint8_t config;
 
-int ret;
+    int ret;
 
-bool ok;
+    bool ok;
 
-uint16_t lastInterval = 30;
+    uint16_t lastInterval = 30;
 
     if (cryptostick->otpPasswordConfig[0] == 1)
     {
@@ -4286,15 +4292,15 @@ uint16_t lastInterval = 30;
         {
             cryptostick->getUserPasswordRetryCount ();
 
-PinDialog dialog (tr ("Enter card user PIN"), tr ("User PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
+            PinDialog dialog (tr ("Enter card user PIN"), tr ("User PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::USER_PIN);
             ok = dialog.exec ();
-QString password;
+            QString password;
 
             dialog.getPassword (password);
 
             if (QDialog::Accepted == ok)
             {
-uint8_t tempPassword[25];
+                uint8_t tempPassword[25];
 
                 for (int i = 0; i < 25; i++)
                     tempPassword[i] = qrand () & 0xFF;
@@ -4316,12 +4322,12 @@ uint8_t tempPassword[25];
         if (slotNumber >= 0x20)
             cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
 
-QString output;
+        QString output;
 
         lastTOTPTime = QDateTime::currentDateTime ().toTime_t ();
         ret = cryptostick->setTime (TOTP_CHECK_TIME);
 
-bool answer;
+        bool answer;
 
         if (ret == -2)
         {
@@ -4375,17 +4381,17 @@ bool answer;
 
 void MainWindow::on_PWS_ButtonCreatePW_clicked ()
 {
-int i;
+    int i;
 
-int n;
+    int n;
 
-int PasswordCharSpaceLen;
+    int PasswordCharSpaceLen;
 
-char RandomPassword[30];
+    char RandomPassword[30];
 
-const char* PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
+    const char* PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
 
-QString Text;
+    QString Text;
 
     PasswordCharSpaceLen = strlen (PasswordCharSpace);
 
@@ -4411,7 +4417,7 @@ void MainWindow::on_PWS_ButtonEnable_clicked ()
 
 void MainWindow::on_counterEdit_editingFinished ()
 {
-int Seed;
+    int Seed;
 
     Seed = ui->counterEdit->text ().toInt ();
 
@@ -4433,15 +4439,15 @@ int Seed;
 
 int MainWindow::factoryReset ()
 {
-int ret;
+    int ret;
 
-bool ok;
+    bool ok;
 
     do
     {
-PinDialog dialog (tr ("Enter card admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+        PinDialog dialog (tr ("Enter card admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
         ok = dialog.exec ();
-char password[LOCAL_PASSWORD_SIZE];
+        char password[LOCAL_PASSWORD_SIZE];
 
         dialog.getPassword (password);
 
@@ -4450,15 +4456,15 @@ char password[LOCAL_PASSWORD_SIZE];
             ret = cryptostick->factoryReset (password);
             switch (ret)
             {
-                case CMD_STATUS_OK:
-                    csApplet->messageBox (tr ("Factory reset was successful."));
-                    break;
-                case CMD_STATUS_WRONG_PASSWORD:
-                    csApplet->warningBox (tr ("Wrong Pin. Please try again."));
-                    break;
-                default:
-                    csApplet->warningBox (tr ("Unknown error."));
-                    break;
+            case CMD_STATUS_OK:
+                csApplet->messageBox (tr ("Factory reset was successful."));
+                break;
+            case CMD_STATUS_WRONG_PASSWORD:
+                csApplet->warningBox (tr ("Wrong Pin. Please try again."));
+                break;
+            default:
+                csApplet->warningBox (tr ("Unknown error."));
+                break;
             }
             memset (password, 0, strlen (password));
         }
@@ -4477,7 +4483,7 @@ char password[LOCAL_PASSWORD_SIZE];
     // correct..
 
     // Disable pwd safe menu entries
-int i;
+    int i;
 
     for (i = 0; i <= 15; i++)
         cryptostick->passwordSafeStatus[i] = false;
