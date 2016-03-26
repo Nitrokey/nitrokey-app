@@ -4,7 +4,7 @@
 #include <QDialog>
 #include "device.h"
 
-#define GUI_VERSION      "0.2"  // 0.0 = development version,last prod
+#define GUI_VERSION      "0.3"  // 0.0 = development version,last prod
                                 // version was 0.6
 
 namespace Ui

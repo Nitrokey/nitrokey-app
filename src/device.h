@@ -378,6 +378,7 @@ class Device
 
     uint8_t cardSerial[4];
     uint8_t firmwareVersion[2];
+    uint8_t firmwareVersionInternal;
 
     uint8_t generalConfig[3];
 

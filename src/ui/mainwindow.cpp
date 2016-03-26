@@ -525,7 +525,7 @@ int ret;
     ui->statusBar->showMessage (tr ("Nitrokey disconnected"));
     cryptostick = new Device (VID_STICK_OTP, PID_STICK_OTP, VID_STICK_20, PID_STICK_20, VID_STICK_20_UPDATE_MODE, PID_STICK_20_UPDATE_MODE);
 
-    // Check for comamd line execution after init "cryptostick"
+    // Check for comamd line execution after init "nitrokey"
     if (0 != StartupInfo_st->Cmd)
     {
         ret = ExecStickCmd (StartupInfo_st->CmdLine);
@@ -606,11 +606,11 @@ int MainWindow::ExecStickCmd (char* Cmdline)
     }
     if (MAX_CONNECT_WAIT_TIME_IN_SEC <= i)
     {
-        printf ("ERROR: Can't get connection to crypto stick\n");
+        printf ("ERROR: Can't get connection to nitrokey\n");
         return (1);
     }
     // Check device
-    printf ("Get connection to crypto stick\n");
+    printf ("Get connection to nitrokey\n");
 
     // Get command
     p = strchr (Cmdline, '=');
@@ -654,24 +654,20 @@ int MainWindow::ExecStickCmd (char* Cmdline)
     {
         printf ("Send -get production infos-\n");
 
+        OwnSleep::sleep (2);
         stick20SendCommand (STICK20_CMD_PRODUCTION_TEST, NULL);
-
-        ret = cryptostick->stick20ProductionTest ();
-
-        /*
-           Stick20ResponseDialog ResponseDialog(this); ResponseDialog.NoStopWhenStatusOK (); ResponseDialog.cryptostick=cryptostick;
-           ResponseDialog.exec(); ret = ResponseDialog.ResultValue; */
-
-        if (false == ret)
-        {
-            printf ("FAIL sending command via HID\n");
-            return (1);
-        }
 
         if (TRUE == Stick20_ProductionInfosChanged)
         {
             Stick20_ProductionInfosChanged = FALSE;
-            AnalyseProductionInfos ();
+            if (FALSE == AnalyseProductionInfos ())
+            {
+                return (1);
+            }
+        }
+        else
+        {
+            return (1);
         }
 
     }
@@ -723,7 +719,7 @@ QMouseEvent* mEvent = static_cast < QMouseEvent * >(event);
 }
 
 
-void MainWindow::AnalyseProductionInfos ()
+int MainWindow::AnalyseProductionInfos ()
 {
 char text[100];
 
@@ -731,8 +727,10 @@ bool ProductStateOK = TRUE;
 
     printf ("\nGet production infos\n");
 
-    printf ("Firmware     %d.%d\n",
-            (unsigned int) Stick20ProductionInfos_st.FirmwareVersion_au8[0], (unsigned int) Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
+    printf ("Firmware     %d.%d - %d\n",
+            (unsigned int) Stick20ProductionInfos_st.FirmwareVersion_au8[0],
+            (unsigned int) Stick20ProductionInfos_st.FirmwareVersion_au8[1],
+            (unsigned int) Stick20ProductionInfos_st.FirmwareVersionInternal_u8);
     printf ("CPU ID       0x%08x\n", Stick20ProductionInfos_st.CPU_CardID_u32);
     printf ("Smartcard ID 0x%08x\n", Stick20ProductionInfos_st.SmartCardID_u32);
     printf ("SD card ID   0x%08x\n", Stick20ProductionInfos_st.SD_CardID_u32);
@@ -742,7 +740,8 @@ bool ProductStateOK = TRUE;
     printf ("OEM          0x%04x\n", Stick20ProductionInfos_st.SD_Card_OEM_u16);
     printf ("Manufa. date %d.%02d\n",
             Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000, Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-    printf ("Write speed  %d kB/sec\n", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
+    printf ("Write speed  %5d kB/sec\n", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
+    printf ("Size         %2d GB\n", Stick20ProductionInfos_st.SD_Card_Size_u8);
 
     // Check for SD card speed
     if (5000 > Stick20ProductionInfos_st.SD_WriteSpeed_u16)
@@ -780,7 +779,8 @@ char* LogFile = (char *) "prodlog.txt";
             fprintf (fp, "SCO:0x%04x,", Stick20ProductionInfos_st.SD_Card_OEM_u16);
             fprintf (fp, "DAT:%d.%02d,",
                      Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000, Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-            fprintf (fp, "Speed:%d", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
+            fprintf (fp, "Speed:%d,", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
+            fprintf (fp, "Size:%d", Stick20ProductionInfos_st.SD_Card_Size_u8);
             if (FALSE == ProductStateOK)
             {
                 fprintf (fp, ",*** FAIL");
@@ -832,6 +832,10 @@ char* LogFile = (char *) "prodlog.txt";
     DebugAppendTextGui (text);
     SNPRINTF (text, sizeof (text), "Write speed  %d kB/sec\n", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
     DebugAppendTextGui (text);
+    SNPRINTF (text, sizeof (text), "Size         %d GB\n", Stick20ProductionInfos_st.SD_Card_Size_u8);
+    DebugAppendTextGui (text);
+
+    return (ProductStateOK);
 }
 
 
@@ -988,11 +992,13 @@ bool answer;
         }
 
     }
+/*
     if (TRUE == Stick20_ProductionInfosChanged)
     {
         Stick20_ProductionInfosChanged = FALSE;
         AnalyseProductionInfos ();
     }
+*/
     if (ret)
     {
     }   // Fix warnings
@@ -2887,7 +2893,7 @@ int MainWindow::UpdateDynamicMenuEntrys (void)
         SdCardNotErased = TRUE;
     else
         SdCardNotErased = FALSE;
-
+/*
     if ((0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) || (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32))
     {
         Stick20ScSdCardOnline = FALSE;  // SD card or smartcard are not ready
@@ -2900,6 +2906,7 @@ int MainWindow::UpdateDynamicMenuEntrys (void)
             Stick20ActionUpdateStickStatus->setText (tr ("Smartcard and SD card are not ready"));
     }
     else
+*/
         Stick20ScSdCardOnline = TRUE;
 
     generateMenu ();

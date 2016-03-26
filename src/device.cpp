@@ -143,10 +143,11 @@ Device::Device (int vid, int pid, int vidStick20, int pidStick20, int vidStick20
 
 int Device::checkConnection ()
 {
-uint8_t buf[65];
+    uint8_t buf[65];
+    static int DisconnectCounter = 0;
 
     buf[0] = 0;
-int res;
+    int res;
 
     // handle = hid_open(vid,pid, NULL);
 
@@ -154,20 +155,38 @@ int res;
     {
         isConnected = false;
         newConnection = true;
+        DisconnectCounter = 0;
         return -1;
     }
     else
     {
+        static int Counter = 0;
+        Counter++;
+
         res = hid_get_feature_report (dev_hid_handle, buf, 65);
         if (res < 0)
-        {   // Check it twice to avoid connection problem
-            res = hid_get_feature_report (dev_hid_handle, buf, 65);
-            if (res < 0)
-            {
-                isConnected = false;
-                newConnection = true;
-                return -1;
-            }
+        {
+/*
+                static LARGE_INTEGER count;
+                static LARGE_INTEGER freq;
+                static int Time_Ms[10];
+                static int Time_Count[10];
+                QueryPerformanceFrequency (&freq);
+                QueryPerformanceCounter (&count);
+                Time_Ms[DisconnectCounter] = (int)(count.QuadPart * 1000 / freq.QuadPart);
+                Time_Count[DisconnectCounter] = Counter;
+*/
+                DisconnectCounter++;
+                if (1 < DisconnectCounter)
+                {
+                    isConnected = false;
+                    newConnection = true;
+                    return -1;
+                }
+        }
+        else
+        {
+            DisconnectCounter = 0;
         }
 
         if (newConnection)

@@ -186,8 +186,8 @@ class MainWindow:public QMainWindow
     void generateAllConfigs ();
 
     void generateMenuForStorageDevice ();
-    int UpdateDynamicMenuEntrys (void);
-    void AnalyseProductionInfos ();
+    int  UpdateDynamicMenuEntrys (void);
+    int  AnalyseProductionInfos ();
 
     public slots:void startAboutDialog ();
     void startStick10ActionChangeUserPIN ();
