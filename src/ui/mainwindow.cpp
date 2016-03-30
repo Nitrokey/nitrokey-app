@@ -1939,12 +1939,18 @@ QByteArray muiFromGUI = (ui->muiEdit->text ().toLatin1 ());
 
         slot->tokenID[12] = ui->keyboardComboBox->currentIndex () & 0xFF;
 
-QByteArray counterFromGUI = QByteArray (ui->counterEdit->text ().toLatin1 ());
+        bool conversionSuccess = false;
+        uint64_t counterFromGUI =
+            ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
 
         memset (slot->counter, 0, 8);
 
-        if (0 != counterFromGUI.length ())
-            memcpy (slot->counter, counterFromGUI.data (), counterFromGUI.length ());
+        if (0 !=ui->counterEdit->text().toLatin1().length () && conversionSuccess){
+            memcpy (slot->counter, &counterFromGUI, //FIXME check for little endian / big endian conversion (test on MAC)
+                    sizeof counterFromGUI);
+        }else{
+            csApplet->warningBox (tr ("Counter data not copied (setting to 0)")); //whole structure was zeroed in the beginning, so nop
+        }
 
         slot->config = 0;
 
