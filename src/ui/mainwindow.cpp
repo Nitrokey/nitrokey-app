@@ -1939,12 +1939,18 @@ QByteArray muiFromGUI = (ui->muiEdit->text ().toLatin1 ());
 
         slot->tokenID[12] = ui->keyboardComboBox->currentIndex () & 0xFF;
 
-QByteArray counterFromGUI = QByteArray (ui->counterEdit->text ().toLatin1 ());
+        bool conversionSuccess = false;
+        uint64_t counterFromGUI =
+            ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
 
         memset (slot->counter, 0, 8);
 
-        if (0 != counterFromGUI.length ())
-            memcpy (slot->counter, counterFromGUI.data (), counterFromGUI.length ());
+        if (0 !=ui->counterEdit->text().toLatin1().length () && conversionSuccess){
+            memcpy (slot->counter, &counterFromGUI, //FIXME check for little endian / big endian conversion (test on MAC)
+                    sizeof counterFromGUI);
+        }else{
+            csApplet->warningBox (tr ("Counter data not copied (setting to 0)")); //whole structure was zeroed in the beginning, so nop
+        }
 
         slot->config = 0;
 
@@ -3132,21 +3138,22 @@ uint32_t code;
 
 void MainWindow::on_writeButton_clicked ()
 {
-int res;
+    int res;
 
-uint8_t SlotName[16];
+    uint8_t SlotName[16];
 
-uint8_t slotNo = ui->slotComboBox->currentIndex ();
+    uint8_t slotNo = ui->slotComboBox->currentIndex ();
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
-bool ok;
+    PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+    bool ok;
 
     if (slotNo > TOTP_SlotCount)
         slotNo -= (TOTP_SlotCount + 1);
     else
         slotNo += HOTP_SlotCount;
 
-    STRNCPY ((char *) SlotName, sizeof (SlotName), ui->nameEdit->text ().toLatin1 (), 15);
+    STRNCPY ((char *) SlotName, sizeof (SlotName), ui->nameEdit->text
+            ().toLatin1 (), 15);
 
     SlotName[15] = 0;
     if (0 == strlen ((char *) SlotName))
@@ -3163,19 +3170,24 @@ bool ok;
 
             if (slotNo < HOTP_SlotCount)
             {   // HOTP slot
-HOTPSlot* hotp = new HOTPSlot ();
-
+                HOTPSlot* hotp = new HOTPSlot ();
                 generateHOTPConfig (hotp);
                 res = cryptostick->writeToHOTPSlot (hotp);
-delete hotp;
+                delete hotp;
             }
             else
             {   // TOTP slot
-TOTPSlot* totp = new TOTPSlot ();
-
+                TOTPSlot* totp = new TOTPSlot ();
                 generateTOTPConfig (totp);
                 res = cryptostick->writeToTOTPSlot (totp);
-delete totp;
+                delete totp;
+            }
+
+            if(DebugingActive == TRUE){
+                QString MsgText;
+                MsgText.append (tr ("(debug) Response: "));
+                MsgText.append (QString::number (res));
+                csApplet->warningBox(MsgText);
             }
 
             switch (res)
@@ -3188,13 +3200,13 @@ delete totp;
                     do
                     {
                         ok = dialog.exec ();
-QString password;
+                        QString password;
 
                         dialog.getPassword (password);
 
                         if (QDialog::Accepted == ok)
                         {
-uint8_t tempPassword[25];
+                            uint8_t tempPassword[25];
 
                             for (int i = 0; i < 25; i++)
                                 tempPassword[i] = qrand () & 0xFF;
@@ -3210,25 +3222,21 @@ uint8_t tempPassword[25];
                             }
                             password.clear ();
                         }
-                    } while (QDialog::Accepted == ok && !cryptostick->validPassword);   // While
-                    // the
-                    // user
-                    // keeps
-                    // enterning
-                    // a
-                    // pin
-                    // and
-                    // the
-                    // pin
-                    // is
-                    // not
-                    // correct..
+                    } while (QDialog::Accepted == ok &&
+                            !cryptostick->validPassword);   // While
+                    // the user keeps enterning a pin
+                    // and the pin is not correct..
                     break;
                 case CMD_STATUS_NO_NAME_ERROR:
                     csApplet->warningBox (tr ("The name of the slot must not be empty."));
                     break;
                 default:
-                    csApplet->warningBox (tr ("Error writing configuration!"));
+                    QString MsgText;
+                    MsgText.append (tr ("Error writing configuration!"));
+                    if(DebugingActive == TRUE){
+                        MsgText.append (QString::number (res));
+                    }
+                    csApplet->warningBox(MsgText);
             }
         } while (CMD_STATUS_NOT_AUTHORIZED == res);
 
@@ -4420,7 +4428,10 @@ void MainWindow::on_counterEdit_editingFinished ()
 {
 int Seed;
 
-    Seed = ui->counterEdit->text ().toInt ();
+//FIXME apparently edit control for counter is being used as GUI seed source -
+//TODO: decouple
+
+    Seed = ui->counterEdit->text ().toInt (); 
 
     if ((1 << 20) < Seed)
     {
