@@ -64,6 +64,11 @@
 #define _(String) gettext (String)
 #endif // Q_OS_LINUX
 
+#include <stdio.h> //for fflush to sync on all OSes including Windows
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#include <unistd.h> //for sync syscall
+#endif // Q_OS_LINUX || Q_OS_MAC
+
 #include <QString>
 
 /*******************************************************************************
@@ -94,6 +99,18 @@ class OwnSleep:public QThread
         QThread::sleep (secs);
     }
 };
+
+void local_sync(){
+    //TODO TEST unmount during/after big data transfer
+    fflush(NULL); //for windows
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+    sync(); 
+#endif // Q_OS_LINUX || Q_OS_MAC
+    //manual says sync waits until it's done, but they
+    //are not guarantee will this save data integrity anyway, 
+    //additional sleep should help
+    OwnSleep::sleep(2);
+}
 
 #define LOCAL_PASSWORD_SIZE         40
 
@@ -2412,6 +2429,7 @@ PinDialog dialog (tr ("User pin dialog"), tr ("Enter user PIN:"), cryptostick, P
 
     if (QDialog::Accepted == ret)
     {
+        local_sync();
         dialog.getPassword ((char *) password);
         stick20SendCommand (STICK20_CMD_ENABLE_CRYPTED_PARI, password);
     }
@@ -2433,6 +2451,7 @@ bool answer;
         if (false == answer)
             return;
 
+        local_sync();
         password[0] = 0;
         stick20SendCommand (STICK20_CMD_DISABLE_CRYPTED_PARI, password);
     }
@@ -2466,6 +2485,7 @@ PinDialog dialog (tr ("Enter password for hidden volume"),
 
     if (QDialog::Accepted == ret)
     {
+        local_sync();
         // password[0] = 'P';
         dialog.getPassword ((char *) password);
 
@@ -2487,6 +2507,7 @@ bool answer;
     if (false == answer)
         return;
 
+        local_sync();
     password[0] = 0;
     stick20SendCommand (STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, password);
 
@@ -2507,6 +2528,7 @@ bool answer;
         {
             return;
         }
+        local_sync();
     }
 
     if (cryptostick->lockDevice ())
