@@ -14,3 +14,10 @@ ui_*.h
 *tags
 install
 CMakeCache.txt
+Makefile
+nitrokey-app
+*.*_parameters
+*.depends
+*.cmake
+CMakeFiles/
+qrc_resources.cpp
