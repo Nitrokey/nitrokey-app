@@ -62,6 +62,9 @@
 #include<libintl.h>
 #include<locale.h>
 #define _(String) gettext (String)
+#include <sys/mount.h> // for unmounting on linux
+#include <errno.h> // for unmounting on linux
+#include "systemutils.h"
 #endif // Q_OS_LINUX
 
 #include <stdio.h> //for fflush to sync on all OSes including Windows
@@ -100,16 +103,36 @@ class OwnSleep:public QThread
     }
 };
 
+void unmountEncryptedVolumes(){
+    //TODO check will this work also on Mac
+#if defined(Q_OS_LINUX)
+    std::string endev = systemutils::getEncryptedDevice();
+    if (endev.size()<1) return;
+    std::string mntdir = systemutils::getMntPoint(endev);
+    if(DebugingActive == TRUE)
+        qDebug() << "Unmounting "<< mntdir.c_str();
+    //TODO polling with MNT_EXPIRE? test which will suit better
+    //int err = umount2("/dev/nitrospace", MNT_DETACH);
+    int err = umount(mntdir.c_str());
+    if (err!=0){
+        if(DebugingActive == TRUE)
+            qDebug() << "Unmount error: " << strerror(errno); 
+    }
+#endif // Q_OS_LINUX
+}
+
 void local_sync(){
     //TODO TEST unmount during/after big data transfer
-    fflush(NULL); //for windows
+    fflush(NULL); //for windows, not necessarly needed or working
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     sync(); 
 #endif // Q_OS_LINUX || Q_OS_MAC
     //manual says sync waits until it's done, but they
-    //are not guarantee will this save data integrity anyway, 
+    //are not guaranteeing will this save data integrity anyway, 
     //additional sleep should help
     OwnSleep::sleep(2);
+    //unmount does sync on its own additionally (if successful)
+    unmountEncryptedVolumes();
 }
 
 #define LOCAL_PASSWORD_SIZE         40
