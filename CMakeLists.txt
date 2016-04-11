@@ -106,41 +106,6 @@ QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
 FIND_PACKAGE(PkgConfig REQUIRED)
 SET(LIBUSB_INCLUDE_DIRS "/usr/include/libusb-1.0")
 
-# c/cpp sources
-SET(nitrokey_app_sources
-    ${SRCUIDIR}/aboutdialog.cpp
-    ${UTILSDIR}/base32.cpp
-    ${SRCDIR}/command.cpp
-    ${UTILSDIR}/crc32.cpp
-    ${SRCUIDIR}/nitrokey-applet.cpp
-    ${SRCDIR}/device.cpp
-    ${SRCUIDIR}/hotpdialog.cpp
-    ${SRCDIR}/hotpslot.cpp
-    ${SRCDIR}/main.cpp
-    ${SRCUIDIR}/mainwindow.cpp
-    ${SRCUIDIR}/passworddialog.cpp
-    ${SRCUIDIR}/passwordsafedialog.cpp
-    ${SRCUIDIR}/pindialog.cpp
-    ${SRCDIR}/response.cpp
-    ${SRCUIDIR}/securitydialog.cpp
-    ${SRCUIDIR}/stick20changepassworddialog.cpp
-    ${SRCUIDIR}/stick20debugdialog.cpp
-    ${SRCUIDIR}/stick20dialog.cpp
-    ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
-    ${SRCUIDIR}/stick20infodialog.cpp
-    ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
-    ${SRCUIDIR}/stick20matrixpassworddialog.cpp
-    ${SRCUIDIR}/stick20responsedialog.cpp
-    ${SRCUIDIR}/stick20-response-task.cpp
-    ${SRCUIDIR}/stick20setup.cpp
-    ${SRCUIDIR}/stick20updatedialog.cpp
-    ${SRCUIDIR}/stick20window.cpp
-    ${SRCDIR}/totpslot.cpp
-    ${UTILSDIR}/stick20hid.c
-    ${UTILSDIR}/hid_libusb.c
-    ${platform_specific_sources}
-)
-
 IF (WIN32)
     SET( platform_specific_sources hid_win.c)
 ELSEIF(APPLE)
@@ -148,6 +113,7 @@ ELSEIF(APPLE)
     SET( platform_specific_libs "-framework IOKit -framework CoreFoundation")
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
 
+    SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
     pkg_check_modules(GTK2 gtk+-2.0)
 
     IF (GTK2_FOUND AND HAVE_LIBAPPINDICATOR)
@@ -191,6 +157,41 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
     )
 
 ENDIF () # WIN32
+
+# c/cpp sources
+SET(nitrokey_app_sources
+    ${SRCUIDIR}/aboutdialog.cpp
+    ${UTILSDIR}/base32.cpp
+    ${SRCDIR}/command.cpp
+    ${UTILSDIR}/crc32.cpp
+    ${SRCUIDIR}/nitrokey-applet.cpp
+    ${SRCDIR}/device.cpp
+    ${SRCUIDIR}/hotpdialog.cpp
+    ${SRCDIR}/hotpslot.cpp
+    ${SRCDIR}/main.cpp
+    ${SRCUIDIR}/mainwindow.cpp
+    ${SRCUIDIR}/passworddialog.cpp
+    ${SRCUIDIR}/passwordsafedialog.cpp
+    ${SRCUIDIR}/pindialog.cpp
+    ${SRCDIR}/response.cpp
+    ${SRCUIDIR}/securitydialog.cpp
+    ${SRCUIDIR}/stick20changepassworddialog.cpp
+    ${SRCUIDIR}/stick20debugdialog.cpp
+    ${SRCUIDIR}/stick20dialog.cpp
+    ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
+    ${SRCUIDIR}/stick20infodialog.cpp
+    ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
+    ${SRCUIDIR}/stick20matrixpassworddialog.cpp
+    ${SRCUIDIR}/stick20responsedialog.cpp
+    ${SRCUIDIR}/stick20-response-task.cpp
+    ${SRCUIDIR}/stick20setup.cpp
+    ${SRCUIDIR}/stick20updatedialog.cpp
+    ${SRCUIDIR}/stick20window.cpp
+    ${SRCDIR}/totpslot.cpp
+    ${UTILSDIR}/stick20hid.c
+    ${UTILSDIR}/hid_libusb.c
+    ${platform_specific_sources}
+)
 
 # Freedesktop files
 IF(NOT WIN32)
