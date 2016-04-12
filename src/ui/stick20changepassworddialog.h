@@ -31,6 +31,7 @@ namespace Ui
 class DialogChangePassword:public QDialog
 {
   Q_OBJECT public:
+    const static int minimumPasswordLength = 6; //FIXME extract constant to global config
       explicit DialogChangePassword (QWidget * parent = 0);
      ~DialogChangePassword ();
 
