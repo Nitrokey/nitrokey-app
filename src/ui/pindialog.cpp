@@ -129,7 +129,7 @@ QByteArray passwordString;
         // Check the password length
         passwordString = ui->lineEdit->text ().toLatin1 ();
         n = passwordString.size ();
-        if (30 <= n)
+        if (30 <= n) //FIXME use constants/defines!
         {
             csApplet->warningBox (tr ("Your PIN is too long! Use not more than 30 characters."));
             ui->lineEdit->clear ();
@@ -194,7 +194,6 @@ MatrixPasswordDialog dialog (this);
     done (Accepted);
 }
 
-// TODO;
 void PinDialog::updateTryCounter ()
 {
 int triesLeft = 0;
@@ -207,6 +206,7 @@ int triesLeft = 0;
         case USER_PIN:
             triesLeft = HID_Stick20Configuration_st.UserPwRetryCount;
             break;
+        case FIRMWARE_PIN:
         case OTHER:
             // Hide tries left field
             ui->status->setVisible (false);

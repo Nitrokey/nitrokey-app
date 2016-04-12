@@ -37,7 +37,7 @@ class PinDialog:public QDialog
     enum Usage
     { PLAIN, PREFIXED };
     enum PinType
-    { USER_PIN, ADMIN_PIN, OTHER };
+    { USER_PIN, ADMIN_PIN, FIRMWARE_PIN, OTHER };
 
     unsigned char password[50];
     Device* cryptostick;

@@ -2583,11 +2583,12 @@ UpdateDialog dialogUpdate (this);
         return;
     }
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+PinDialog dialog (tr ("Enter Firmware Password"), tr ("Enter Firmware Password:"), cryptostick, PinDialog::PREFIXED, PinDialog::FIRMWARE_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
     {
+        //FIXME unmount all volumes and sync
         dialog.getPassword ((char *) password);
 
         stick20SendCommand (STICK20_CMD_ENABLE_FIRMWARE_UPDATE, password);
