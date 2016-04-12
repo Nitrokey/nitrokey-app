@@ -22,6 +22,7 @@
 #include "ui_stick20changepassworddialog.h"
 #include "stick20responsedialog.h"
 #include "nitrokey-applet.h"
+#include "device.h" //for STICK20_PASSOWRD_LEN
 
 
 /*******************************************************************************
@@ -55,11 +56,11 @@ QDialog (parent), ui (new Ui::DialogChangePassword)
     ui->setupUi (this);
 
     ui->lineEdit_OldPW->setEchoMode (QLineEdit::Password);
-    ui->lineEdit_OldPW->setMaxLength (20);
+    ui->lineEdit_OldPW->setMaxLength (STICK20_PASSOWRD_LEN); //TODO change define to constant
     ui->lineEdit_NewPW_1->setEchoMode (QLineEdit::Password);
-    ui->lineEdit_NewPW_1->setMaxLength (20);
+    ui->lineEdit_NewPW_1->setMaxLength (STICK20_PASSOWRD_LEN); //TODO change to UI_PASSWORD_LEN this and other occurences
     ui->lineEdit_NewPW_2->setEchoMode (QLineEdit::Password);
-    ui->lineEdit_NewPW_2->setMaxLength (20);
+    ui->lineEdit_NewPW_2->setMaxLength (STICK20_PASSOWRD_LEN);
 
 
     ui->lineEdit_OldPW->setFocus ();
