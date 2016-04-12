@@ -2322,7 +2322,11 @@ uint8_t tempPassword[25];
 
         SetupPasswordSafeConfig ();
 
+        raise();
+        activateWindow();
         showNormal ();
+        setWindowState(Qt::WindowActive);
+
         QTimer::singleShot (0, this, SLOT (resizeMin ()));
     }
 }
