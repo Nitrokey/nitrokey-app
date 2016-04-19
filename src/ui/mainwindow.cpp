@@ -3123,6 +3123,12 @@ Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
             case STICK20_CMD_ENABLE_CRYPTED_PARI:
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_CRYPTED_VOLUME_BIT_PLACE);
                 UpdateDynamicMenuEntrys ();
+#ifdef Q_OS_LINUX
+            sleep(4); //FIXME change hard sleep to thread
+            if(!QFileInfo("/dev/nitrospace").isSymLink()){
+                csApplet->warningBox (tr ("Warning: The encrypted Volume is not formatted.\n\"Use GParted or fdisk for this.\""));
+            }
+#endif // if Q_OS_LINUX
                 break;
             case STICK20_CMD_DISABLE_CRYPTED_PARI:
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;

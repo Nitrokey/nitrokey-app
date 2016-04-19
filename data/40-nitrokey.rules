@@ -17,3 +17,6 @@ LABEL="gnupg_rules_end"
 ACTION!="add|change", GOTO="u2f_end"
 KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="2581", ATTRS{idProduct}=="f1d0", GROUP+="plugdev", TAG+="uaccess"
 LABEL="u2f_end"
+
+# Nitrokey Storage dev Entry
+KERNEL=="sd?1", ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="4109", SYMLINK+="nitrospace"
