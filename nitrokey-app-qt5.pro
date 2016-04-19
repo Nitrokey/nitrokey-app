@@ -66,7 +66,8 @@ macx{
 }
 
 unix:!macx{
-    SOURCES +=   $${UTILSDIR}/hid_libusb.c
+    SOURCES +=   $${UTILSDIR}/hid_libusb.c \
+            $${SRCDIR}/systemutils.cpp
 }
 
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
@@ -93,6 +94,7 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCUIDIR}/hotpdialog.h \
             $${UTILSDIR}/hidapi.h \
             $${SRCDIR}/device.h \
+            $${SRCDIR}/systemutils.h \
             $${UTILSDIR}/crc32.h \
             $${SRCDIR}/command.h \
             $${UTILSDIR}/base32.h \
