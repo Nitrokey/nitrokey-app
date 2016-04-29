@@ -18,51 +18,70 @@ libgtk2.0-dev
 libappindicator-dev
 libnotify-dev
 
+```
+sudo apt-get install libusb-1.0.0-dev libgtk2.0-dev libappindicator-dev libnotify-dev
+```
+
+#### Getting the Nitrokey Sources
+
+Clone the Nitrokey repository into your $HOME git folder.
+
+```
+cd $HOME
+mkdir git
+cd git
+Git clone https://github.com/Nitrokey/nitrokey-app.git
+```
+
 #### QT5
-Prerequisite: [Install QT5](https://qt-project.org/wiki/Install_Qt_5_on_Ubuntu)
+Prerequisite: [Install QT5](http://www.qt.io/download-open-source/#section-2)
 
 Use QT Creator for compilation or perform the following steps:
 
-1. Change to build directory parallel to PC CryptoStickGUI directory
+1. cd to a build directory parallel to the nitrokey-app directory
 2. For 64 bit system: 
-   ~/bin/qt/5.3/gcc_64/bin/qmake -spec  ~/bin/qt/5.3/gcc_64/mkspecs/linux-g++-64 -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
-3. make
+   $HOME/Qt/5.5/gcc_64/bin/qmake -spec  $HOME/Qt/5.5/gcc_64/mkspecs/linux-g++-64 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro
+4. make -j4
 
 #### QT 4
 Prerequisite: sudo apt-get install qt4-default libqt4-dev qtcreator
 Use QT Creator for compilation or perform the following steps:
 
-1. Change to build directory parallel to PC CryptoStickGUI directory
+1. cd to a build directory parallel to the nitrokey-app directory
 2. Configure:
   * For 64 bit system: 
-  /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-64 -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
-  * For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
-3. make
+  /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-64 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro
+  * For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro
+3. make -j4
 
 
 #### Using cmake:
+General use:
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=\<prefix\> \<path to this project's root dir\>
-make
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=\<prefix\> $HOME/git/nitrokey-app/
+make -j4
 make install
 ```
 
-Note: You may need to set CMAKE_PREFIX_PATH to your corresponding Qt path.
-
-Out of the source build is highly recomended. Eg:
+Note: You have to set CMAKE_PREFIX_PATH to your corresponding Qt path.
+Example: (If QT5.5 (64bit) was installed in your $HOME DIR): 
+```
+export CMAKE_PREFIX_PATH=$HOME/Qt/5.5/gcc_64/
+```
+Out of the source build is highly recomended, because you are not touching your git'ed source directory. Eg:
 ```
 mkdir build
 mkdir install
 cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install ..
-make
-make install
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install $HOME/git/nitrokey-app/
+make -j4
+sudo make install
 ```
 
 #### Using qmake:
 ```
 qmake
-make
+make -j4
 make install
 ```
 
@@ -71,7 +90,7 @@ You can use out-of-the-source build again:
 mkdir build
 cd build
 qmake ..
-make && make install
+make -j4 && make install
 ```
 
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux

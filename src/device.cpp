@@ -600,12 +600,12 @@ int Device::setTime (int reset)
 
 int Device::writeToHOTPSlot (HOTPSlot * slot)
 {
-    if ((slot->slotNumber >= 0x10) && (slot->slotNumber < 0x10 + HOTP_SlotCount))
+    if ((slot->slotNumber >= 0x10) && (slot->slotNumber < 0x10 +
+                HOTP_SlotCount))
     {
-int res;
+        int res;
 
-uint8_t data[COMMAND_SIZE];
-
+        uint8_t data[COMMAND_SIZE];
         memset (data, 0, COMMAND_SIZE);
 
         data[0] = slot->slotNumber;
@@ -617,40 +617,38 @@ uint8_t data[COMMAND_SIZE];
 
         if (isConnected)
         {
-Command* cmd = new Command (CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
-
+            Command* cmd = new Command (CMD_WRITE_TO_SLOT, data,
+                    COMMAND_SIZE);
             authorize (cmd);
             res = sendCommand (cmd);
 
             if (res == -1)
             {
-delete cmd;
-
+                delete cmd;
                 return -1;
             }
             else
             {   // sending the command was successful
                 Sleep::msleep (100);
-Response* resp = new Response ();
+                Response* resp = new Response (); //FIXME memory leak
 
                 resp->getResponse (this);
 
-                if (cmd->crc == resp->lastCommandCRC && resp->lastCommandStatus == CMD_STATUS_OK)
+                if (cmd->crc == resp->lastCommandCRC &&
+                        resp->lastCommandStatus == CMD_STATUS_OK)
                 {
-delete cmd;
-
+                    delete cmd;
                     return 0;
                 }
-                else if (cmd->crc == resp->lastCommandCRC && resp->lastCommandStatus == CMD_STATUS_NO_NAME_ERROR)
+                else if (cmd->crc == resp->lastCommandCRC &&
+                        resp->lastCommandStatus == CMD_STATUS_NO_NAME_ERROR)
                 {
-delete cmd;
-
+                    delete cmd;
                     return -3;
                 }
+                delete cmd;
+                return -2;
             }
-delete cmd;
-
-            return -2;
         }
     }
     return -1;
@@ -670,10 +668,9 @@ int Device::writeToTOTPSlot (TOTPSlot * slot)
 {
     if ((slot->slotNumber >= 0x20) && (slot->slotNumber < 0x20 + TOTP_SlotCount))
     {
-int res;
+        int res;
 
-uint8_t data[COMMAND_SIZE];
-
+        uint8_t data[COMMAND_SIZE];
         memset (data, 0, COMMAND_SIZE);
 
         data[0] = slot->slotNumber;
@@ -683,37 +680,30 @@ uint8_t data[COMMAND_SIZE];
         memcpy (data + 37, slot->tokenID, 13);
         memcpy (data + 50, &(slot->interval), 2);
 
-
         if (isConnected)
         {
-Command* cmd = new Command (CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
-
+            Command* cmd = new Command (CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
             authorize (cmd);
             res = sendCommand (cmd);
 
             if (res == -1)
             {
-delete cmd;
-
+                delete cmd;
                 return -1;
             }
             else
             {   // sending the command was successful
                 Sleep::msleep (100);
-Response* resp = new Response ();
+                Response* resp = new Response ();
 
                 resp->getResponse (this);
 
                 if (cmd->crc == resp->lastCommandCRC)
                 {
-delete cmd;
-
+                    delete cmd;
                     return resp->lastCommandStatus;
-                    /* Dead code switch (resp->lastCommandStatus) { case CMD_STATUS_OK: return 0; case CMD_STATUS_NO_NAME_ERROR: return -3; case
-                       CMD_STATUS_NOT_AUTHORIZED: return -3; } */
                 }
-delete cmd;
-
+                delete cmd;
                 return -2;
             }
         }

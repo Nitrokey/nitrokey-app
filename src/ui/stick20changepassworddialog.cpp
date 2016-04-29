@@ -22,6 +22,7 @@
 #include "ui_stick20changepassworddialog.h"
 #include "stick20responsedialog.h"
 #include "nitrokey-applet.h"
+#include "device.h" //for STICK20_PASSOWRD_LEN
 
 
 /*******************************************************************************
@@ -55,11 +56,11 @@ QDialog (parent), ui (new Ui::DialogChangePassword)
     ui->setupUi (this);
 
     ui->lineEdit_OldPW->setEchoMode (QLineEdit::Password);
-    ui->lineEdit_OldPW->setMaxLength (20);
+    ui->lineEdit_OldPW->setMaxLength (STICK20_PASSOWRD_LEN); //TODO change define to constant
     ui->lineEdit_NewPW_1->setEchoMode (QLineEdit::Password);
-    ui->lineEdit_NewPW_1->setMaxLength (20);
+    ui->lineEdit_NewPW_1->setMaxLength (STICK20_PASSOWRD_LEN); //TODO change to UI_PASSWORD_LEN this and other occurences
     ui->lineEdit_NewPW_2->setEchoMode (QLineEdit::Password);
-    ui->lineEdit_NewPW_2->setMaxLength (20);
+    ui->lineEdit_NewPW_2->setMaxLength (STICK20_PASSOWRD_LEN);
 
 
     ui->lineEdit_OldPW->setFocus ();
@@ -96,6 +97,20 @@ delete ui;
 
 void DialogChangePassword::InitData (void)
 {
+    //center the password window
+    QDesktopWidget *desktop = QApplication::desktop();
+    setGeometry(
+            QStyle::alignedRect(
+                Qt::LeftToRight,
+                Qt::AlignCenter,
+                size(),
+                desktop->availableGeometry()
+                ));
+    //replace %1 and %2 from text with proper values
+    //(min and max of password length)
+    QString text = ui->label_additional_information->text();
+    text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN);
+    ui->label_additional_information->setText (text);
     switch (PasswordKind)
     {
         case STICK20_PASSWORD_KIND_USER:
@@ -412,12 +427,12 @@ void DialogChangePassword::Stick20ChangeUpdatePassword (void)
 void DialogChangePassword::accept ()
 {
     // Check the length of the old password
-    if (6 > strlen (ui->lineEdit_OldPW->text ().toLatin1 ()))
+    if (minimumPasswordLength > strlen (ui->lineEdit_OldPW->text ().toLatin1 ()))
     {
         clearFields ();
 QString OutputText;
 
-        OutputText = tr ("The minimum length of the old password is ") + QString ("%1").arg (6) + "chars";
+        OutputText = tr ("The minimum length of the old password is ") + QString ("%1").arg (minimumPasswordLength) + tr(" chars");
 
         csApplet->warningBox (OutputText);
         return;
@@ -431,25 +446,27 @@ QString OutputText;
         return;
     }
 
-    // Check the new length of password
+    // Check the new length of password - max
+    // obsolete since input field max length is set, but should be checked 
+    // nevertheless in case STICK20_PASSOWRD_LEN would be changed to lower value
     if (STICK20_PASSOWRD_LEN < strlen (ui->lineEdit_NewPW_1->text ().toLatin1 ()))
     {
         clearFields ();
 QString OutputText;
 
-        OutputText = tr ("The maximum length of a password is ") + QString ("%1").arg (STICK20_PASSOWRD_LEN) + "chars";
+        OutputText = tr ("The maximum length of a password is ") + QString ("%1").arg (STICK20_PASSOWRD_LEN) + tr(" chars");
 
         csApplet->warningBox (OutputText);
         return;
     }
 
-    // Check the new length of password
-    if (6 > strlen (ui->lineEdit_NewPW_1->text ().toLatin1 ()))
+    // Check the new length of password - min
+    if (minimumPasswordLength > strlen (ui->lineEdit_NewPW_1->text ().toLatin1 ()))
     {
         clearFields ();
 QString OutputText;
 
-        OutputText = tr ("The minimum length of a password is ") + QString ("%1").arg (6) + "chars";
+        OutputText = tr ("The minimum length of a password is ") + QString ("%1").arg (minimumPasswordLength) + tr(" chars");
 
         csApplet->warningBox (OutputText);
         return;

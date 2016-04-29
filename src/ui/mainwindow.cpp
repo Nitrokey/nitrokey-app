@@ -62,7 +62,15 @@
 #include<libintl.h>
 #include<locale.h>
 #define _(String) gettext (String)
+#include <sys/mount.h> // for unmounting on linux
+#include <errno.h> // for unmounting on linux
+#include "systemutils.h"
 #endif // Q_OS_LINUX
+
+#include <stdio.h> //for fflush to sync on all OSes including Windows
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+#include <unistd.h> //for sync syscall
+#endif // Q_OS_LINUX || Q_OS_MAC
 
 #include <QString>
 
@@ -94,6 +102,38 @@ class OwnSleep:public QThread
         QThread::sleep (secs);
     }
 };
+
+void unmountEncryptedVolumes(){
+    //TODO check will this work also on Mac
+#if defined(Q_OS_LINUX)
+    std::string endev = systemutils::getEncryptedDevice();
+    if (endev.size()<1) return;
+    std::string mntdir = systemutils::getMntPoint(endev);
+    if(DebugingActive == TRUE)
+        qDebug() << "Unmounting "<< mntdir.c_str();
+    //TODO polling with MNT_EXPIRE? test which will suit better
+    //int err = umount2("/dev/nitrospace", MNT_DETACH);
+    int err = umount(mntdir.c_str());
+    if (err!=0){
+        if(DebugingActive == TRUE)
+            qDebug() << "Unmount error: " << strerror(errno); 
+    }
+#endif // Q_OS_LINUX
+}
+
+void local_sync(){
+    //TODO TEST unmount during/after big data transfer
+    fflush(NULL); //for windows, not necessarly needed or working
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+    sync(); 
+#endif // Q_OS_LINUX || Q_OS_MAC
+    //manual says sync waits until it's done, but they
+    //are not guaranteeing will this save data integrity anyway, 
+    //additional sleep should help
+    OwnSleep::sleep(2);
+    //unmount does sync on its own additionally (if successful)
+    unmountEncryptedVolumes();
+}
 
 #define LOCAL_PASSWORD_SIZE         40
 
@@ -1939,12 +1979,18 @@ QByteArray muiFromGUI = (ui->muiEdit->text ().toLatin1 ());
 
         slot->tokenID[12] = ui->keyboardComboBox->currentIndex () & 0xFF;
 
-QByteArray counterFromGUI = QByteArray (ui->counterEdit->text ().toLatin1 ());
+        bool conversionSuccess = false;
+        uint64_t counterFromGUI =
+            ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
 
         memset (slot->counter, 0, 8);
 
-        if (0 != counterFromGUI.length ())
-            memcpy (slot->counter, counterFromGUI.data (), counterFromGUI.length ());
+        if (0 !=ui->counterEdit->text().toLatin1().length () && conversionSuccess){
+            memcpy (slot->counter, &counterFromGUI, //FIXME check for little endian / big endian conversion (test on MAC)
+                    sizeof counterFromGUI);
+        }else{
+            csApplet->warningBox (tr ("Counter data not copied (setting to 0)")); //whole structure was zeroed in the beginning, so nop
+        }
 
         slot->config = 0;
 
@@ -2276,7 +2322,11 @@ uint8_t tempPassword[25];
 
         SetupPasswordSafeConfig ();
 
+        raise();
+        activateWindow();
         showNormal ();
+        setWindowState(Qt::WindowActive);
+
         QTimer::singleShot (0, this, SLOT (resizeMin ()));
     }
 }
@@ -2406,6 +2456,7 @@ PinDialog dialog (tr ("User pin dialog"), tr ("Enter user PIN:"), cryptostick, P
 
     if (QDialog::Accepted == ret)
     {
+        local_sync();
         dialog.getPassword ((char *) password);
         stick20SendCommand (STICK20_CMD_ENABLE_CRYPTED_PARI, password);
     }
@@ -2427,6 +2478,7 @@ bool answer;
         if (false == answer)
             return;
 
+        local_sync();
         password[0] = 0;
         stick20SendCommand (STICK20_CMD_DISABLE_CRYPTED_PARI, password);
     }
@@ -2460,6 +2512,7 @@ PinDialog dialog (tr ("Enter password for hidden volume"),
 
     if (QDialog::Accepted == ret)
     {
+        local_sync();
         // password[0] = 'P';
         dialog.getPassword ((char *) password);
 
@@ -2481,6 +2534,7 @@ bool answer;
     if (false == answer)
         return;
 
+        local_sync();
     password[0] = 0;
     stick20SendCommand (STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, password);
 
@@ -2501,6 +2555,7 @@ bool answer;
         {
             return;
         }
+        local_sync();
     }
 
     if (cryptostick->lockDevice ())
@@ -2528,11 +2583,12 @@ UpdateDialog dialogUpdate (this);
         return;
     }
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, PinDialog::ADMIN_PIN);
+PinDialog dialog (tr ("Enter Firmware Password"), tr ("Enter Firmware Password:"), cryptostick, PinDialog::PREFIXED, PinDialog::FIRMWARE_PIN);
     ret = dialog.exec ();
 
     if (QDialog::Accepted == ret)
     {
+        //FIXME unmount all volumes and sync
         dialog.getPassword ((char *) password);
 
         stick20SendCommand (STICK20_CMD_ENABLE_FIRMWARE_UPDATE, password);
@@ -3067,6 +3123,12 @@ Stick20ResponseTask ResponseTask (this, cryptostick, trayIcon);
             case STICK20_CMD_ENABLE_CRYPTED_PARI:
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_CRYPTED_VOLUME_BIT_PLACE);
                 UpdateDynamicMenuEntrys ();
+#ifdef Q_OS_LINUX
+            sleep(4); //FIXME change hard sleep to thread
+            if(!QFileInfo("/dev/nitrospace").isSymLink()){
+                csApplet->warningBox (tr ("Warning: The encrypted Volume is not formatted.\n\"Use GParted or fdisk for this.\""));
+            }
+#endif // if Q_OS_LINUX
                 break;
             case STICK20_CMD_DISABLE_CRYPTED_PARI:
                 HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
@@ -3132,21 +3194,22 @@ uint32_t code;
 
 void MainWindow::on_writeButton_clicked ()
 {
-int res;
+    int res;
 
-uint8_t SlotName[16];
+    uint8_t SlotName[16];
 
-uint8_t slotNo = ui->slotComboBox->currentIndex ();
+    uint8_t slotNo = ui->slotComboBox->currentIndex ();
 
-PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
-bool ok;
+    PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDialog::PLAIN, PinDialog::ADMIN_PIN);
+    bool ok;
 
     if (slotNo > TOTP_SlotCount)
         slotNo -= (TOTP_SlotCount + 1);
     else
         slotNo += HOTP_SlotCount;
 
-    STRNCPY ((char *) SlotName, sizeof (SlotName), ui->nameEdit->text ().toLatin1 (), 15);
+    STRNCPY ((char *) SlotName, sizeof (SlotName), ui->nameEdit->text
+            ().toLatin1 (), 15);
 
     SlotName[15] = 0;
     if (0 == strlen ((char *) SlotName))
@@ -3163,19 +3226,24 @@ bool ok;
 
             if (slotNo < HOTP_SlotCount)
             {   // HOTP slot
-HOTPSlot* hotp = new HOTPSlot ();
-
+                HOTPSlot* hotp = new HOTPSlot ();
                 generateHOTPConfig (hotp);
                 res = cryptostick->writeToHOTPSlot (hotp);
-delete hotp;
+                delete hotp;
             }
             else
             {   // TOTP slot
-TOTPSlot* totp = new TOTPSlot ();
-
+                TOTPSlot* totp = new TOTPSlot ();
                 generateTOTPConfig (totp);
                 res = cryptostick->writeToTOTPSlot (totp);
-delete totp;
+                delete totp;
+            }
+
+            if(DebugingActive == TRUE){
+                QString MsgText;
+                MsgText.append (tr ("(debug) Response: "));
+                MsgText.append (QString::number (res));
+                csApplet->warningBox(MsgText);
             }
 
             switch (res)
@@ -3188,13 +3256,13 @@ delete totp;
                     do
                     {
                         ok = dialog.exec ();
-QString password;
+                        QString password;
 
                         dialog.getPassword (password);
 
                         if (QDialog::Accepted == ok)
                         {
-uint8_t tempPassword[25];
+                            uint8_t tempPassword[25];
 
                             for (int i = 0; i < 25; i++)
                                 tempPassword[i] = qrand () & 0xFF;
@@ -3210,25 +3278,21 @@ uint8_t tempPassword[25];
                             }
                             password.clear ();
                         }
-                    } while (QDialog::Accepted == ok && !cryptostick->validPassword);   // While
-                    // the
-                    // user
-                    // keeps
-                    // enterning
-                    // a
-                    // pin
-                    // and
-                    // the
-                    // pin
-                    // is
-                    // not
-                    // correct..
+                    } while (QDialog::Accepted == ok &&
+                            !cryptostick->validPassword);   // While
+                    // the user keeps enterning a pin
+                    // and the pin is not correct..
                     break;
                 case CMD_STATUS_NO_NAME_ERROR:
                     csApplet->warningBox (tr ("The name of the slot must not be empty."));
                     break;
                 default:
-                    csApplet->warningBox (tr ("Error writing configuration!"));
+                    QString MsgText;
+                    MsgText.append (tr ("Error writing configuration!"));
+                    if(DebugingActive == TRUE){
+                        MsgText.append (QString::number (res));
+                    }
+                    csApplet->warningBox(MsgText);
             }
         } while (CMD_STATUS_NOT_AUTHORIZED == res);
 
@@ -4420,7 +4484,10 @@ void MainWindow::on_counterEdit_editingFinished ()
 {
 int Seed;
 
-    Seed = ui->counterEdit->text ().toInt ();
+//FIXME apparently edit control for counter is being used as GUI seed source -
+//TODO: decouple
+
+    Seed = ui->counterEdit->text ().toInt (); 
 
     if ((1 << 20) < Seed)
     {

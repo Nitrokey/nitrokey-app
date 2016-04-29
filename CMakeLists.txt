@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(NitrokeyApp)
-SET(PROJECT_VERSION "0.2") 
+SET(PROJECT_VERSION "0.3.2")
 #ADD_DEFINITIONS(-DSEAFILE_CLIENT_VERSION=${PROJECT_VERSION}) 
 
 OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" YES)
@@ -106,41 +106,6 @@ QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
 FIND_PACKAGE(PkgConfig REQUIRED)
 SET(LIBUSB_INCLUDE_DIRS "/usr/include/libusb-1.0")
 
-# c/cpp sources
-SET(nitrokey_app_sources
-    ${SRCUIDIR}/aboutdialog.cpp
-    ${UTILSDIR}/base32.cpp
-    ${SRCDIR}/command.cpp
-    ${UTILSDIR}/crc32.cpp
-    ${SRCUIDIR}/nitrokey-applet.cpp
-    ${SRCDIR}/device.cpp
-    ${SRCUIDIR}/hotpdialog.cpp
-    ${SRCDIR}/hotpslot.cpp
-    ${SRCDIR}/main.cpp
-    ${SRCUIDIR}/mainwindow.cpp
-    ${SRCUIDIR}/passworddialog.cpp
-    ${SRCUIDIR}/passwordsafedialog.cpp
-    ${SRCUIDIR}/pindialog.cpp
-    ${SRCDIR}/response.cpp
-    ${SRCUIDIR}/securitydialog.cpp
-    ${SRCUIDIR}/stick20changepassworddialog.cpp
-    ${SRCUIDIR}/stick20debugdialog.cpp
-    ${SRCUIDIR}/stick20dialog.cpp
-    ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
-    ${SRCUIDIR}/stick20infodialog.cpp
-    ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
-    ${SRCUIDIR}/stick20matrixpassworddialog.cpp
-    ${SRCUIDIR}/stick20responsedialog.cpp
-    ${SRCUIDIR}/stick20-response-task.cpp
-    ${SRCUIDIR}/stick20setup.cpp
-    ${SRCUIDIR}/stick20updatedialog.cpp
-    ${SRCUIDIR}/stick20window.cpp
-    ${SRCDIR}/totpslot.cpp
-    ${UTILSDIR}/stick20hid.c
-    ${UTILSDIR}/hid_libusb.c
-    ${platform_specific_sources}
-)
-
 IF (WIN32)
     SET( platform_specific_sources hid_win.c)
 ELSEIF(APPLE)
@@ -148,6 +113,7 @@ ELSEIF(APPLE)
     SET( platform_specific_libs "-framework IOKit -framework CoreFoundation")
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
 
+    SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
     pkg_check_modules(GTK2 gtk+-2.0)
 
     IF (GTK2_FOUND AND HAVE_LIBAPPINDICATOR)
@@ -191,6 +157,41 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
     )
 
 ENDIF () # WIN32
+
+# c/cpp sources
+SET(nitrokey_app_sources
+    ${SRCUIDIR}/aboutdialog.cpp
+    ${UTILSDIR}/base32.cpp
+    ${SRCDIR}/command.cpp
+    ${UTILSDIR}/crc32.cpp
+    ${SRCUIDIR}/nitrokey-applet.cpp
+    ${SRCDIR}/device.cpp
+    ${SRCUIDIR}/hotpdialog.cpp
+    ${SRCDIR}/hotpslot.cpp
+    ${SRCDIR}/main.cpp
+    ${SRCUIDIR}/mainwindow.cpp
+    ${SRCUIDIR}/passworddialog.cpp
+    ${SRCUIDIR}/passwordsafedialog.cpp
+    ${SRCUIDIR}/pindialog.cpp
+    ${SRCDIR}/response.cpp
+    ${SRCUIDIR}/securitydialog.cpp
+    ${SRCUIDIR}/stick20changepassworddialog.cpp
+    ${SRCUIDIR}/stick20debugdialog.cpp
+    ${SRCUIDIR}/stick20dialog.cpp
+    ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
+    ${SRCUIDIR}/stick20infodialog.cpp
+    ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
+    ${SRCUIDIR}/stick20matrixpassworddialog.cpp
+    ${SRCUIDIR}/stick20responsedialog.cpp
+    ${SRCUIDIR}/stick20-response-task.cpp
+    ${SRCUIDIR}/stick20setup.cpp
+    ${SRCUIDIR}/stick20updatedialog.cpp
+    ${SRCUIDIR}/stick20window.cpp
+    ${SRCDIR}/totpslot.cpp
+    ${UTILSDIR}/stick20hid.c
+    ${UTILSDIR}/hid_libusb.c
+    ${platform_specific_sources}
+)
 
 # Freedesktop files
 IF(NOT WIN32)
@@ -301,5 +302,45 @@ SET(CPACK_RPM_PACKAGE_MAINTAINER "Mateusz Zalega <mateusz@nitrokey.com>" )
 SET(CPACK_RPM_PACKAGE_PRIORITY "optional")
 SET(CPACK_RPM_PACKAGE_SECTION "utils")
 
+# Prevent RPM directory collisions by excluding those already provided by
+# package dependencies. AFAIK this can't be automated.
+LIST(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION 
+    "/etc/bash_completion.d"
+    "/etc/udev"
+    "/etc/udev/rules.d"
+    "/usr/share/locale"
+    "/usr/share/locale/de_DE"
+    "/usr/share/locale/de_DE/LC_MESSAGES"
+    "/usr/share/icons"
+    "/usr/share/icons/hicolor"
+    "/usr/share/icons/hicolor/16x16"
+    "/usr/share/icons/hicolor/16x16/apps"
+    "/usr/share/icons/hicolor/22x22"
+    "/usr/share/icons/hicolor/22x22/apps"
+    "/usr/share/icons/hicolor/24x24"
+    "/usr/share/icons/hicolor/24x24/apps"
+    "/usr/share/icons/hicolor/48x48"
+    "/usr/share/icons/hicolor/48x48/apps"
+    "/usr/share/icons/hicolor/32x32"
+    "/usr/share/icons/hicolor/32x32/apps"
+    "/usr/share/icons/hicolor/128x128"
+    "/usr/share/icons/hicolor/128x128/apps"
+    "/usr/share/icons/hicolor/scalable"
+    "/usr/share/icons/hicolor/scalable/apps"
+    "/usr/share/icons/ubuntu-mono-dark"
+    "/usr/share/icons/ubuntu-mono-dark/apps"
+    "/usr/share/icons/ubuntu-mono-dark/apps/22"
+    "/usr/share/icons/ubuntu-mono-dark/apps/24"
+    "/usr/share/icons/ubuntu-mono-dark/apps/48"
+    "/usr/share/icons/ubuntu-mono-dark/apps/16"
+    "/usr/share/icons/ubuntu-mono-light"
+    "/usr/share/icons/ubuntu-mono-light/apps"
+    "/usr/share/icons/ubuntu-mono-light/apps/22"
+    "/usr/share/icons/ubuntu-mono-light/apps/24"
+    "/usr/share/icons/ubuntu-mono-light/apps/48"
+    "/usr/share/icons/ubuntu-mono-light/apps/16"
+    "/usr/share/applications"
+    "/usr/share/pixmaps"
+)
 
 INCLUDE(CPack)
