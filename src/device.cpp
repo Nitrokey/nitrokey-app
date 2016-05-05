@@ -294,6 +294,11 @@ uint32_t crc = 0xffffffff;
 
     cmd->crc = crc;
 
+    if (0 == dev_hid_handle)
+    {
+        return (-1);        // Return error
+    }
+
     err = hid_send_feature_report (dev_hid_handle, report, sizeof (report));
 
     {
