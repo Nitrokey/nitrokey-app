@@ -42,7 +42,12 @@ void HelpInfos (void)
 
 int main (int argc, char* argv[])
 {
-    // Q_INIT_RESOURCE(stylesheet);
+    //workaround for issue https://github.com/Nitrokey/nitrokey-app/issues/43
+#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
+    if (qgetenv("QT_QPA_PLATFORMTHEME") == "appmenu-qt5"){
+        qputenv("QT_QPA_PLATFORMTHEME","generic");
+    }
+#endif
 
     csApplet = new CryptostickApplet;
 
