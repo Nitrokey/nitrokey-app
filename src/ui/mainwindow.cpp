@@ -1853,7 +1853,8 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
                 trayMenu->addAction (Stick20ActionDisableHiddenVolume);
         }
 
-        trayMenu->addAction (LockDeviceAction);
+        if (TRUE == (HiddenVolumeActive || CryptedVolumeActive))
+            trayMenu->addAction (LockDeviceAction);
 
         trayMenuSubConfigure = trayMenu->addMenu (tr ("Configure"));
         trayMenuSubConfigure->setIcon (QIcon (":/images/settings.png"));
