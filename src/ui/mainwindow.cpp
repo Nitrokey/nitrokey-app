@@ -504,6 +504,7 @@ void MainWindow::InitState ()
     SdCardNotErased = FALSE;
     MatrixInputActive = FALSE;
     LockHardware = FALSE;
+    PasswordSafeEnabled = FALSE;
 
     SdCardNotErased_DontAsk = FALSE;
     StickNotInitated_DontAsk = FALSE;
@@ -1701,7 +1702,8 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
                 gtk_menu_shell_append (GTK_MENU_SHELL (indicatorMenu), disableHiddenVolumeItem);
         }
 
-        gtk_menu_shell_append (GTK_MENU_SHELL (indicatorMenu), lockDeviceItem);
+        if (FALSE != (HiddenVolumeActive || CryptedVolumeActive || PasswordSafeEnabled ))
+            gtk_menu_shell_append (GTK_MENU_SHELL (indicatorMenu), lockDeviceItem);
 
         if (TRUE == cryptostick->passwordSafeAvailable)
             configurePasswordsItem = gtk_menu_item_new_with_label ("OTP and Password safe");
@@ -1853,7 +1855,7 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
                 trayMenu->addAction (Stick20ActionDisableHiddenVolume);
         }
 
-        if (TRUE == (HiddenVolumeActive || CryptedVolumeActive))
+        if (FALSE != (HiddenVolumeActive || CryptedVolumeActive || PasswordSafeEnabled ))
             trayMenu->addAction (LockDeviceAction);
 
         trayMenuSubConfigure = trayMenu->addMenu (tr ("Configure"));
@@ -2565,8 +2567,10 @@ bool answer;
     }
 
     HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
+    PasswordSafeEnabled = FALSE;
 
     UpdateDynamicMenuEntrys ();
+    showTrayMessage ("Nitrokey App", tr ("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
 }
 
 
@@ -4147,6 +4151,7 @@ PasswordDialog dialog (FALSE, this);
             }
             else
             {
+                PasswordSafeEnabled = TRUE;
                 showTrayMessage ("Nitrokey App", tr ("Password Safe unlocked successfully."), INFORMATION, TRAY_MSG_TIMEOUT);
                 SetupPasswordSafeConfig ();
                 generateMenu ();

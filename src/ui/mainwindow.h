@@ -120,6 +120,7 @@ class MainWindow:public QMainWindow
     uint64_t currentTime;
     bool Stick20ScSdCardOnline;
     bool CryptedVolumeActive;
+    bool PasswordSafeEnabled;
     bool HiddenVolumeActive;
     bool NormalVolumeRWActive;
     bool HiddenVolumeAccessable;
