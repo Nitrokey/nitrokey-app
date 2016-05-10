@@ -116,7 +116,7 @@ void unmountEncryptedVolumes(){
     int err = umount(mntdir.c_str());
     if (err!=0){
         if(DebugingActive == TRUE)
-            qDebug() << "Unmount error: " << strerror(errno); 
+            qDebug() << "Unmount error: " << strerror(errno);
     }
 #endif // Q_OS_LINUX
 }
@@ -125,10 +125,10 @@ void local_sync(){
     //TODO TEST unmount during/after big data transfer
     fflush(NULL); //for windows, not necessarly needed or working
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-    sync(); 
+    sync();
 #endif // Q_OS_LINUX || Q_OS_MAC
     //manual says sync waits until it's done, but they
-    //are not guaranteeing will this save data integrity anyway, 
+    //are not guaranteeing will this save data integrity anyway,
     //additional sleep should help
     OwnSleep::sleep(2);
     //unmount does sync on its own additionally (if successful)
@@ -1021,17 +1021,11 @@ bool answer;
         UpdateDynamicMenuEntrys ();
 
 
-        if (TRUE == StickNotInitated)
+        if (TRUE == StickNotInitated || TRUE == SdCardNotErased)
         {
-            if (FALSE == StickNotInitated_DontAsk)
-                csApplet->warningBox (tr ("Warning: Encrypted volume is not secure.\nSelect \"Initialize keys\""));
+            if (FALSE == StickNotInitated_DontAsk && FALSE == SdCardNotErased_DontAsk )
+                csApplet->warningBox (tr ("Warning: Encrypted volume is not secure,\nSelect \"Initialize device\" option from context menu."));
         }
-        if (TRUE == SdCardNotErased)
-        {
-            if (FALSE == SdCardNotErased_DontAsk)
-                csApplet->warningBox (tr ("Warning: Encrypted volume is not secure,\nSelect \"Initialize storage with random data\""));
-        }
-
     }
 /*
     if (TRUE == Stick20_ProductionInfosChanged)
@@ -1274,7 +1268,7 @@ void MainWindow::initActionsForStick20 ()
     Stick20ActionDestroyCryptedVolume = new QAction (tr ("&Destroy encrypted data"), this);
     connect (Stick20ActionDestroyCryptedVolume, SIGNAL (triggered ()), this, SLOT (startStick20DestroyCryptedVolume ()));
 
-    Stick20ActionInitCryptedVolume = new QAction (tr ("&Initialize keys"), this);
+    Stick20ActionInitCryptedVolume = new QAction (tr ("&Initialize device"), this);
     connect (Stick20ActionInitCryptedVolume, SIGNAL (triggered ()), this, SLOT (startStick20DestroyCryptedVolume ()));
 
     Stick20ActionFillSDCardWithRandomChars = new QAction (tr ("&Initialize storage with random data"), this);
@@ -1588,7 +1582,7 @@ int AddSeperator = FALSE;
     if (isUnity ())
     {
 GtkWidget* updateStorageStatusItem = gtk_menu_item_new_with_label (_("Smartcard or SD card are not ready"));
-GtkWidget* initEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Initialize keys"));
+GtkWidget* initEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Initialize device"));
 GtkWidget* fillSDCardWithRandomCharsItem = gtk_menu_item_new_with_label (_("Initialize storage with random data"));
 GtkWidget* enableEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Unlock encrypted volume"));
 GtkWidget* disableEncryptedVolumeItem = gtk_menu_item_new_with_label (_("Lock encrypted volume"));
@@ -1662,15 +1656,9 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
             return;
         }
 
-        if (TRUE == StickNotInitated)
+        if (TRUE == StickNotInitated || TRUE == SdCardNotErased)
         {
             gtk_menu_shell_append (GTK_MENU_SHELL (indicatorMenu), initEncryptedVolumeItem);
-            AddSeperator = TRUE;
-        }
-
-        if (TRUE == SdCardNotErased)
-        {
-            gtk_menu_shell_append (GTK_MENU_SHELL (indicatorMenu), fillSDCardWithRandomCharsItem);
             AddSeperator = TRUE;
         }
 
@@ -1812,15 +1800,9 @@ GtkWidget* extendedConfigureSubMenu = gtk_menu_new ();
         }
 
         // Add special entrys
-        if (TRUE == StickNotInitated)
+        if (TRUE == StickNotInitated || TRUE == SdCardNotErased)
         {
             trayMenu->addAction (Stick20ActionInitCryptedVolume);
-            AddSeperator = TRUE;
-        }
-
-        if (TRUE == SdCardNotErased)
-        {
-            trayMenu->addAction (Stick20ActionFillSDCardWithRandomChars);
             AddSeperator = TRUE;
         }
 
@@ -2727,6 +2709,7 @@ PinDialog dialog (tr ("Enter admin PIN"), tr ("Admin PIN:"), cryptostick, PinDia
             dialog.getPassword ((char *) password);
 
             stick20SendCommand (STICK20_CMD_GENERATE_NEW_KEYS, password);
+            stick20SendCommand (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
         }
     }
 
@@ -3032,8 +3015,11 @@ QByteArray passwordString;
         {
 bool answer =
     csApplet->yesOrNoBox (tr
-                          ("This command fills the encrypted volumes with random data.\nThis will destroy all encrypted volumes!\nThis commands requires more than 1 hour for 32GB."),
-                          0, false);
+            (
+             "This command fills the encrypted volumes with random data "
+             "and will destroy all encrypted volumes!\n"
+             "It requires more than 1 hour for 32GB. Do you want to continue?"),
+            0, false);
 
             if (answer)
             {
@@ -4493,7 +4479,7 @@ int Seed;
 //FIXME apparently edit control for counter is being used as GUI seed source -
 //TODO: decouple
 
-    Seed = ui->counterEdit->text ().toInt (); 
+    Seed = ui->counterEdit->text ().toInt ();
 
     if ((1 << 20) < Seed)
     {
