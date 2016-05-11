@@ -20,38 +20,35 @@
 #ifndef STICK20DIALOG_H
 #define STICK20DIALOG_H
 
-#include <QDialog>
 #include "device.h"
+#include <QDialog>
 
-namespace Ui
-{
-    class Stick20Dialog;
+namespace Ui {
+class Stick20Dialog;
 }
 
-class Stick20Dialog:public QDialog
-{
-  Q_OBJECT public:
-      explicit Stick20Dialog (QWidget * parent = 0);
-     ~Stick20Dialog ();
+class Stick20Dialog : public QDialog {
+  Q_OBJECT public : explicit Stick20Dialog(QWidget *parent = 0);
+  ~Stick20Dialog();
 
-    Device* cryptostick;
+  Device *cryptostick;
 
-    private slots:void on_buttonBox_accepted ();
+private slots:
+  void on_buttonBox_accepted();
 
-    void on_comboBox_currentIndexChanged (int index);
+  void on_comboBox_currentIndexChanged(int index);
 
-    void on_checkBox_toggled (bool checked);
+  void on_checkBox_toggled(bool checked);
 
-    void on_checkBox_Matrix_toggled (bool checked);
+  void on_checkBox_Matrix_toggled(bool checked);
 
-    void on_PasswordEdit_textChanged (const QString & arg1);
+  void on_PasswordEdit_textChanged(const QString &arg1);
 
-  private:
-      Ui::Stick20Dialog * ui;
+private:
+  Ui::Stick20Dialog *ui;
 
-    void InitEnterPasswordGui (char* PasswordKind);
-    void InitNoPasswordGui (void);
-
+  void InitEnterPasswordGui(char *PasswordKind);
+  void InitNoPasswordGui(void);
 };
 
 #endif // STICK20DIALOG_H

@@ -20,43 +20,40 @@
 #ifndef STICK20HIDDENVOLUMEDIALOG_H
 #define STICK20HIDDENVOLUMEDIALOG_H
 
-#include <QDialog>
 #include "device.h"
+#include <QDialog>
 
-namespace Ui
-{
-    class stick20HiddenVolumeDialog;
+namespace Ui {
+class stick20HiddenVolumeDialog;
 }
 
-class stick20HiddenVolumeDialog:public QDialog
-{
-  Q_OBJECT public:
-      explicit stick20HiddenVolumeDialog (QWidget * parent = 0);
-     ~stick20HiddenVolumeDialog ();
+class stick20HiddenVolumeDialog : public QDialog {
+  Q_OBJECT public : explicit stick20HiddenVolumeDialog(QWidget *parent = 0);
+  ~stick20HiddenVolumeDialog();
 
-    HiddenVolumeSetup_tst HV_Setup_st;
+  HiddenVolumeSetup_tst HV_Setup_st;
 
-    int GetCharsetSpace (unsigned char* Password, size_t size);
-    double GetEntropy (unsigned char* Password, size_t size);
+  int GetCharsetSpace(unsigned char *Password, size_t size);
+  double GetEntropy(unsigned char *Password, size_t size);
 
-    uint8_t SdCardHighWatermark_Read_Min;
-    uint8_t SdCardHighWatermark_Read_Max;
-    uint8_t SdCardHighWatermark_Write_Min;
-    uint8_t SdCardHighWatermark_Write_Max;
+  uint8_t SdCardHighWatermark_Read_Min;
+  uint8_t SdCardHighWatermark_Read_Max;
+  uint8_t SdCardHighWatermark_Write_Min;
+  uint8_t SdCardHighWatermark_Write_Max;
 
-    void setHighWaterMarkText (void);
+  void setHighWaterMarkText(void);
 
-    private slots:void on_ShowPasswordCheckBox_toggled (bool checked);
+private slots:
+  void on_ShowPasswordCheckBox_toggled(bool checked);
 
+  // void on_buttonBox_accepted();
 
-    // void on_buttonBox_accepted();
+  void on_buttonBox_clicked(QAbstractButton *button);
 
-    void on_buttonBox_clicked (QAbstractButton * button);
+  void on_HVPasswordEdit_textChanged(const QString &arg1);
 
-    void on_HVPasswordEdit_textChanged (const QString & arg1);
-
-  private:
-      Ui::stick20HiddenVolumeDialog * ui;
+private:
+  Ui::stick20HiddenVolumeDialog *ui;
 };
 
 #endif // STICK20HIDDENVOLUMEDIALOG_H

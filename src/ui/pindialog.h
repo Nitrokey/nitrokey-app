@@ -26,44 +26,40 @@
 #include "device.h"
 #include "ui_pindialog.h"
 
-namespace Ui
-{
-    class PinDialog;
+namespace Ui {
+class PinDialog;
 }
 
-class PinDialog:public QDialog
-{
-  Q_OBJECT public:
-    enum Usage
-    { PLAIN, PREFIXED };
-    enum PinType
-    { USER_PIN, ADMIN_PIN, FIRMWARE_PIN, OTHER };
+class PinDialog : public QDialog {
+  Q_OBJECT public : enum Usage { PLAIN, PREFIXED };
+  enum PinType { USER_PIN, ADMIN_PIN, FIRMWARE_PIN, OTHER };
 
-    unsigned char password[50];
-    Device* cryptostick;
+  unsigned char password[50];
+  Device *cryptostick;
 
-    explicit PinDialog (const QString & title, const QString & label,
-                        Device * cryptostick, Usage usage, PinType pinType, bool ShowMatrix = FALSE, QWidget * parent = NULL);
-     ~PinDialog ();
+  explicit PinDialog(const QString &title, const QString &label, Device *cryptostick, Usage usage,
+                     PinType pinType, bool ShowMatrix = FALSE, QWidget *parent = NULL);
+  ~PinDialog();
 
-    // void init(char *text,int RetryCount);
-    void getPassword (char* text);
-    void getPassword (QString & pin);
+  // void init(char *text,int RetryCount);
+  void getPassword(char *text);
+  void getPassword(QString &pin);
 
-    private slots:void on_checkBox_toggled (bool checked);
+private slots:
+  void on_checkBox_toggled(bool checked);
 
-    void on_checkBox_PasswordMatrix_toggled (bool checked);
+  void on_checkBox_PasswordMatrix_toggled(bool checked);
 
-    void onOkButtonClicked ();
+  void onOkButtonClicked();
 
-  private:
-      Ui::PinDialog * ui;
+private:
+  Ui::PinDialog *ui;
 
-    Usage _usage;
-    PinType _pinType;
+  Usage _usage;
+  PinType _pinType;
 
-    void updateTryCounter ();
-    void clearBuffers ();
+  void updateTryCounter();
+  void clearBuffers();
 };
 
 #endif // PINDIALOG_H

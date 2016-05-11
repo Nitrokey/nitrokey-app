@@ -17,17 +17,16 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "stick20matrixpassworddialog.h"
-#include "ui_stick20matrixpassworddialog.h"
-#include "response.h"
-#include "stick20responsedialog.h"
-#include "stick20hid.h"
 #include "nitrokey-applet.h"
+#include "response.h"
+#include "stick20hid.h"
+#include "stick20responsedialog.h"
+#include "ui_stick20matrixpassworddialog.h"
 
-#include <QTimer>
-#include <QPainter>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QTimer>
 
 /*******************************************************************************
 
@@ -35,11 +34,11 @@
 
 *******************************************************************************/
 
-#define STICK20_PASSWORD_MATRIX_DATA_LEN                  100
+#define STICK20_PASSWORD_MATRIX_DATA_LEN 100
 
-#define STICK20_PASSWORD_MATRIX_STATUS_IDLE                 0
-#define STICK20_PASSWORD_MATRIX_STATUS_GET_NEW_BLOCK        1
-#define STICK20_PASSWORD_MATRIX_STATUS_NEW_BLOCK_RECEIVED   2
+#define STICK20_PASSWORD_MATRIX_STATUS_IDLE 0
+#define STICK20_PASSWORD_MATRIX_STATUS_GET_NEW_BLOCK 1
+#define STICK20_PASSWORD_MATRIX_STATUS_NEW_BLOCK_RECEIVED 2
 
 /*******************************************************************************
 
@@ -59,99 +58,93 @@
 
 *******************************************************************************/
 
-MatrixPasswordDialog::MatrixPasswordDialog (QWidget * parent):
-QDialog (parent), ui (new Ui::MatrixPasswordDialog)
-{
-    // Initializations
-    PasswordLen = 0;
-    SetupInterfaceFlag = FALSE;
-    SetupPasswordLen = 0;
-    HideMatrix = 0;
-    InputPasswordLength = 0;
-    InputPasswordLengthPointer = 0;
-    SetupMode = FALSE;
-    HighLightVerticalBar = 0;
-    SetupModeActiveRow = 0;
+MatrixPasswordDialog::MatrixPasswordDialog(QWidget *parent)
+    : QDialog(parent), ui(new Ui::MatrixPasswordDialog) {
+  // Initializations
+  PasswordLen = 0;
+  SetupInterfaceFlag = FALSE;
+  SetupPasswordLen = 0;
+  HideMatrix = 0;
+  InputPasswordLength = 0;
+  InputPasswordLengthPointer = 0;
+  SetupMode = FALSE;
+  HighLightVerticalBar = 0;
+  SetupModeActiveRow = 0;
 
-    ui->setupUi (this);
-QPainter painter (ui->frame);
+  ui->setupUi(this);
+  QPainter painter(ui->frame);
 
-QRect Rect;
+  QRect Rect;
 
-bool ret;
+  bool ret;
 
-int i;
+  int i;
 
-int height, width;
+  int height, width;
 
+  ui->frame->installEventFilter(this);
+  ui->frame->setMouseTracking(true);
 
-    ui->frame->installEventFilter (this);
-    ui->frame->setMouseTracking (true);
+  ui->pushButton_0->installEventFilter(this);
+  ui->pushButton_1->installEventFilter(this);
+  ui->pushButton_2->installEventFilter(this);
+  ui->pushButton_3->installEventFilter(this);
+  ui->pushButton_4->installEventFilter(this);
+  ui->pushButton_5->installEventFilter(this);
+  ui->pushButton_6->installEventFilter(this);
+  ui->pushButton_7->installEventFilter(this);
+  ui->pushButton_8->installEventFilter(this);
+  ui->pushButton_9->installEventFilter(this);
 
-    ui->pushButton_0->installEventFilter (this);
-    ui->pushButton_1->installEventFilter (this);
-    ui->pushButton_2->installEventFilter (this);
-    ui->pushButton_3->installEventFilter (this);
-    ui->pushButton_4->installEventFilter (this);
-    ui->pushButton_5->installEventFilter (this);
-    ui->pushButton_6->installEventFilter (this);
-    ui->pushButton_7->installEventFilter (this);
-    ui->pushButton_8->installEventFilter (this);
-    ui->pushButton_9->installEventFilter (this);
+  ui->pushButton_Send->installEventFilter(this);
+  ui->pushButton_Exit->installEventFilter(this);
 
-    ui->pushButton_Send->installEventFilter (this);
-    ui->pushButton_Exit->installEventFilter (this);
+  height = ui->frame->size().height();
+  width = ui->frame->size().width();
 
+  // ui->pushButton_0->set
 
-    height = ui->frame->size ().height ();
-    width = ui->frame->size ().width ();
+  Rect = ui->frame->geometry();
 
-    // ui->pushButton_0->set
+  i = 0;
+  ui->pushButton_0->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_1->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_2->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_3->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_4->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_5->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_6->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_7->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_8->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
+  ui->pushButton_9->setGeometry(QRect(Rect.x() + width * i / 10 + width / 20 - 10, 355, 20, 20));
+  i++;
 
-    Rect = ui->frame->geometry ();
+  // Hardware access var isn't filled
+  cryptostick = NULL;
 
+  // Init Timer
+  WaitForMatrixTimer = new QTimer(this);
 
-    i = 0;
-    ui->pushButton_0->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_1->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_2->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_3->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_4->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_5->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_6->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_7->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_8->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
-    ui->pushButton_9->setGeometry (QRect (Rect.x () + width * i / 10 + width / 20 - 10, 355, 20, 20));
-    i++;
+  ret = connect(WaitForMatrixTimer, SIGNAL(timeout()), this, SLOT(CheckGetPasswordMatrix()));
 
-    // Hardware access var isn't filled
-    cryptostick = NULL;
+  WaitForMatrixTimer->start(100);
 
-    // Init Timer
-    WaitForMatrixTimer = new QTimer (this);
-
-    ret = connect (WaitForMatrixTimer, SIGNAL (timeout ()), this, SLOT (CheckGetPasswordMatrix ()));
-
-    WaitForMatrixTimer->start (100);
-
-    Stick20MatrixDataReceived = 0;
-    HID_Stick20MatrixPasswordData_st.StatusFlag_u8 = STICK20_PASSWORD_MATRIX_STATUS_IDLE;
-    SelectedRowCounter = 0;
-    if (ret)
-    {
-    }   // Fix warnings
-    if (height)
-    {
-    }   // Fix warnings
+  Stick20MatrixDataReceived = 0;
+  HID_Stick20MatrixPasswordData_st.StatusFlag_u8 = STICK20_PASSWORD_MATRIX_STATUS_IDLE;
+  SelectedRowCounter = 0;
+  if (ret) {
+  } // Fix warnings
+  if (height) {
+  } // Fix warnings
 }
 
 /*******************************************************************************
@@ -166,13 +159,12 @@ int height, width;
 
 *******************************************************************************/
 
-MatrixPasswordDialog::~MatrixPasswordDialog ()
-{
-delete ui;
+MatrixPasswordDialog::~MatrixPasswordDialog() {
+  delete ui;
 
-    WaitForMatrixTimer->stop ();
+  WaitForMatrixTimer->stop();
 
-delete WaitForMatrixTimer;
+  delete WaitForMatrixTimer;
 }
 
 /*******************************************************************************
@@ -185,71 +177,62 @@ delete WaitForMatrixTimer;
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::InitSecurePasswordDialog ()
-{
-bool ret = FALSE;
+void MatrixPasswordDialog::InitSecurePasswordDialog() {
+  bool ret = FALSE;
 
-bool waitForAnswerFromStick20;
+  bool waitForAnswerFromStick20;
 
-int i;
+  int i;
 
-int i1;
+  int i1;
 
-QByteArray passwordString;
+  QByteArray passwordString;
 
-QString OutputText;
+  QString OutputText;
 
-    waitForAnswerFromStick20 = FALSE;
+  waitForAnswerFromStick20 = FALSE;
 
-    HighLightVerticalBar = -1;
-    HideMatrix = false;
+  HighLightVerticalBar = -1;
+  HideMatrix = false;
 
-    SetupMode = SetupInterfaceFlag; // false;
-    SetupPasswordLen = PasswordLen;
+  SetupMode = SetupInterfaceFlag; // false;
+  SetupPasswordLen = PasswordLen;
 
-    ui->frame->setMouseTracking (true);
+  ui->frame->setMouseTracking(true);
 
-    SetupModeActiveRow = -1;
-    SelectedRowCounter = 0;
-    InputPasswordLength = PasswordLen;
-    Stick20MatrixDataReceived = 0;
+  SetupModeActiveRow = -1;
+  SelectedRowCounter = 0;
+  InputPasswordLength = PasswordLen;
+  Stick20MatrixDataReceived = 0;
 
-    InputPasswordLengthPointer = 0;
+  InputPasswordLengthPointer = 0;
 
-    // No Stick - no work ?
-    if (false == cryptostick->isConnected)
-    {
-        csApplet->warningBox ("MatrixPasswordDialog: No cryptostick 2.0 connected!");
-        return;
+  // No Stick - no work ?
+  if (false == cryptostick->isConnected) {
+    csApplet->warningBox("MatrixPasswordDialog: No cryptostick 2.0 connected!");
+    return;
+  }
+
+  if (TRUE == SetupMode) {
+    OutputText = "Select row " + QString("%1").arg(1);
+    ui->label->setText(OutputText);
+
+    // Set setup matrix data
+    for (i = 0; i < 10; i++) {
+      for (i1 = 0; i1 < 10; i1++) {
+        HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[i1 * 10 + i] = i;
+      }
     }
+  } else {
+    // Send get password matrix request
+    ret = cryptostick->stick20GetPasswordMatrix();
 
-    if (TRUE == SetupMode)
-    {
-        OutputText = "Select row " + QString ("%1").arg (1);
-        ui->label->setText (OutputText);
-
-        // Set setup matrix data
-        for (i = 0; i < 10; i++)
-        {
-            for (i1 = 0; i1 < 10; i1++)
-            {
-                HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[i1 * 10 + i] = i;
-            }
-        }
-    }
-    else
-    {
-        // Send get password matrix request
-        ret = cryptostick->stick20GetPasswordMatrix ();
-
-        ui->label->setText ("Waiting for matrix data generated by cryptostick 2.0");
-    }
-    if (ret)
-    {
-    }   // Fix warnings
-    if (waitForAnswerFromStick20)
-    {
-    }   // Fix warnings
+    ui->label->setText("Waiting for matrix data generated by cryptostick 2.0");
+  }
+  if (ret) {
+  } // Fix warnings
+  if (waitForAnswerFromStick20) {
+  } // Fix warnings
 }
 
 /*******************************************************************************
@@ -262,29 +245,26 @@ QString OutputText;
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::CheckGetPasswordMatrix (void)
-{
-    if (NULL == cryptostick)
-    {
-        return;
-    }
+void MatrixPasswordDialog::CheckGetPasswordMatrix(void) {
+  if (NULL == cryptostick) {
+    return;
+  }
 
-    Response* stick20Response = new Response ();
+  Response *stick20Response = new Response();
 
+  // Get HID data from stick 2.0
+  stick20Response->getResponse(cryptostick);
 
-    // Get HID data from stick 2.0
-    stick20Response->getResponse (cryptostick);
+  // Get all data ?
+  if (STICK20_PASSWORD_MATRIX_STATUS_NEW_BLOCK_RECEIVED ==
+      HID_Stick20MatrixPasswordData_st.StatusFlag_u8) {
+    Stick20MatrixDataReceived = 1;
+    WaitForMatrixTimer->stop();
+    ui->label->setText("Select column 1");
+    ui->frame->repaint();
+  }
 
-    // Get all data ?
-    if (STICK20_PASSWORD_MATRIX_STATUS_NEW_BLOCK_RECEIVED == HID_Stick20MatrixPasswordData_st.StatusFlag_u8)
-    {
-        Stick20MatrixDataReceived = 1;
-        WaitForMatrixTimer->stop ();
-        ui->label->setText ("Select column 1");
-        ui->frame->repaint ();
-    }
-
-    // Todo check for timeout
+  // Todo check for timeout
 }
 
 /*******************************************************************************
@@ -297,14 +277,13 @@ void MatrixPasswordDialog::CheckGetPasswordMatrix (void)
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::addChar (uint8_t * Text, uint8_t AddChar)
-{
-int n;
+void MatrixPasswordDialog::addChar(uint8_t *Text, uint8_t AddChar) {
+  int n;
 
-    n = strlen ((char *) Text);
+  n = strlen((char *)Text);
 
-    Text[n] = AddChar;
-    Text[n + 1] = 0;
+  Text[n] = AddChar;
+  Text[n + 1] = 0;
 }
 
 /*******************************************************************************
@@ -317,35 +296,30 @@ int n;
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::sendPasswordKey (char* Password)
-{
-    QString OutputText;
+void MatrixPasswordDialog::sendPasswordKey(char *Password) {
+  QString OutputText;
 
-    bool ret;
+  bool ret;
 
-    // Store the entry
-    SelectedColumns[InputPasswordLengthPointer] = Password[0];
-    InputPasswordLengthPointer++;
+  // Store the entry
+  SelectedColumns[InputPasswordLengthPointer] = Password[0];
+  InputPasswordLengthPointer++;
 
-    // Enter the next char
-    if (InputPasswordLengthPointer < OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS)
-    {
-        OutputText = "Select column " + QString ("%1").arg (InputPasswordLengthPointer + 1);
-        ui->label->setText (OutputText);
+  // Enter the next char
+  if (InputPasswordLengthPointer < OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS) {
+    OutputText = "Select column " + QString("%1").arg(InputPasswordLengthPointer + 1);
+    ui->label->setText(OutputText);
+  } else {
+    // No, send the data to stick 2.0
+
+    SelectedColumns[InputPasswordLengthPointer] = 0;
+    ret = cryptostick->stick20SendPasswordMatrixPinData(SelectedColumns);
+    if (TRUE == ret) {
     }
-    else
-    {
-        // No, send the data to stick 2.0
 
-        SelectedColumns[InputPasswordLengthPointer] = 0;
-        ret = cryptostick->stick20SendPasswordMatrixPinData (SelectedColumns);
-        if (TRUE == ret)
-        {
-        }
-
-        // Exit Dialog
-        done (true);
-    }
+    // Exit Dialog
+    done(true);
+  }
 }
 
 /*******************************************************************************
@@ -358,10 +332,7 @@ void MatrixPasswordDialog::sendPasswordKey (char* Password)
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_0_clicked ()
-{
-    sendPasswordKey ((char *) "0");
-}
+void MatrixPasswordDialog::on_pushButton_0_clicked() { sendPasswordKey((char *)"0"); }
 
 /*******************************************************************************
 
@@ -373,10 +344,7 @@ void MatrixPasswordDialog::on_pushButton_0_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_1_clicked ()
-{
-    sendPasswordKey ((char *) "1");
-}
+void MatrixPasswordDialog::on_pushButton_1_clicked() { sendPasswordKey((char *)"1"); }
 
 /*******************************************************************************
 
@@ -388,10 +356,7 @@ void MatrixPasswordDialog::on_pushButton_1_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_2_clicked ()
-{
-    sendPasswordKey ((char *) "2");
-}
+void MatrixPasswordDialog::on_pushButton_2_clicked() { sendPasswordKey((char *)"2"); }
 
 /*******************************************************************************
 
@@ -403,10 +368,7 @@ void MatrixPasswordDialog::on_pushButton_2_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_3_clicked ()
-{
-    sendPasswordKey ((char *) "3");
-}
+void MatrixPasswordDialog::on_pushButton_3_clicked() { sendPasswordKey((char *)"3"); }
 
 /*******************************************************************************
 
@@ -418,10 +380,7 @@ void MatrixPasswordDialog::on_pushButton_3_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_4_clicked ()
-{
-    sendPasswordKey ((char *) "4");
-}
+void MatrixPasswordDialog::on_pushButton_4_clicked() { sendPasswordKey((char *)"4"); }
 
 /*******************************************************************************
 
@@ -433,10 +392,7 @@ void MatrixPasswordDialog::on_pushButton_4_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_5_clicked ()
-{
-    sendPasswordKey ((char *) "5");
-}
+void MatrixPasswordDialog::on_pushButton_5_clicked() { sendPasswordKey((char *)"5"); }
 
 /*******************************************************************************
 
@@ -448,10 +404,7 @@ void MatrixPasswordDialog::on_pushButton_5_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_6_clicked ()
-{
-    sendPasswordKey ((char *) "6");
-}
+void MatrixPasswordDialog::on_pushButton_6_clicked() { sendPasswordKey((char *)"6"); }
 
 /*******************************************************************************
 
@@ -463,10 +416,7 @@ void MatrixPasswordDialog::on_pushButton_6_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_7_clicked ()
-{
-    sendPasswordKey ((char *) "7");
-}
+void MatrixPasswordDialog::on_pushButton_7_clicked() { sendPasswordKey((char *)"7"); }
 
 /*******************************************************************************
 
@@ -478,10 +428,7 @@ void MatrixPasswordDialog::on_pushButton_7_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_8_clicked ()
-{
-    sendPasswordKey ((char *) "8");
-}
+void MatrixPasswordDialog::on_pushButton_8_clicked() { sendPasswordKey((char *)"8"); }
 
 /*******************************************************************************
 
@@ -493,10 +440,7 @@ void MatrixPasswordDialog::on_pushButton_8_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::on_pushButton_9_clicked ()
-{
-    sendPasswordKey ((char *) "9");
-}
+void MatrixPasswordDialog::on_pushButton_9_clicked() { sendPasswordKey((char *)"9"); }
 
 /*******************************************************************************
 
@@ -508,111 +452,100 @@ void MatrixPasswordDialog::on_pushButton_9_clicked ()
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::PaintMatrix (QFrame * frame)
-{
-int i, i1;
+void MatrixPasswordDialog::PaintMatrix(QFrame *frame) {
+  int i, i1;
 
-QPainter painter (frame);
+  QPainter painter(frame);
 
-QColor color;
+  QColor color;
 
-QFont font;
+  QFont font;
 
-int height, width;
+  int height, width;
 
-int text_height;
+  int text_height;
 
-    // Get size and text high
-    height = frame->size ().height ();
-    width = frame->size ().width ();
-    text_height = painter.fontMetrics ().height ();
+  // Get size and text high
+  height = frame->size().height();
+  width = frame->size().width();
+  text_height = painter.fontMetrics().height();
 
-    // Is matrix data ready ?
-    if (FALSE == SetupMode)
-    {
-        if (0 == Stick20MatrixDataReceived)
-        {
-            color.setRgb (200, 200, 200);
-            painter.fillRect (0, 0, width, height, color);
+  // Is matrix data ready ?
+  if (FALSE == SetupMode) {
+    if (0 == Stick20MatrixDataReceived) {
+      color.setRgb(200, 200, 200);
+      painter.fillRect(0, 0, width, height, color);
 
-            color.setRgb (255, 255, 255);
-            painter.setPen (color);
-            font = painter.font ();
-            font.bold ();
-            font.setPixelSize (22);
-            painter.setFont (font);
-            painter.drawText (20, height / 2, "Waiting for matrix data generated by cryptostick 2.0");
-            return;
-        }
+      color.setRgb(255, 255, 255);
+      painter.setPen(color);
+      font = painter.font();
+      font.bold();
+      font.setPixelSize(22);
+      painter.setFont(font);
+      painter.drawText(20, height / 2, "Waiting for matrix data generated by cryptostick 2.0");
+      return;
     }
+  }
 
+  // Hide the matrix, not in setup mode
+  if (((int)true == HideMatrix) && (false == SetupMode)) {
+    color.setRgb(200, 200, 200);
+    painter.fillRect(0, 0, width, height, color);
 
-    // Hide the matrix, not in setup mode
-    if (((int) true == HideMatrix) && (false == SetupMode))
-    {
-        color.setRgb (200, 200, 200);
-        painter.fillRect (0, 0, width, height, color);
+    color.setRgb(255, 255, 255);
+    painter.setPen(color);
+    font = painter.font();
+    font.bold();
+    font.setPixelSize(22);
+    painter.setFont(font);
+    painter.drawText(150, height / 2, "Move cursor out of frame");
+    return;
+  }
 
-        color.setRgb (255, 255, 255);
-        painter.setPen (color);
-        font = painter.font ();
-        font.bold ();
-        font.setPixelSize (22);
-        painter.setFont (font);
-        painter.drawText (150, height / 2, "Move cursor out of frame");
-        return;
+  // Paint horizontal bar
+  for (i = 0; i < 10; i++) {
+    color.setRgb(100 + 50 * (i % 2), 100 + 50 * (i % 2), 100 + 50 * (i % 2));
+    painter.fillRect(0, height * i / 10, width, height / 10, color);
+  }
+
+  if ((false == HideMatrix) && (false == SetupMode)) {
+    // Paint vertical bar
+    if (-1 != HighLightVerticalBar) {
+      for (i = 0; i < 10; i++) {
+        color.setRgb(50 + 50 * (i % 2), 50 + 50 * (i % 2), 50 + 50 * (i % 2));
+        painter.fillRect(width * HighLightVerticalBar / 10, height * i / 10, width / 10,
+                         height / 10, color);
+      }
     }
+  }
 
-    // Paint horizontal bar
-    for (i = 0; i < 10; i++)
-    {
-        color.setRgb (100 + 50 * (i % 2), 100 + 50 * (i % 2), 100 + 50 * (i % 2));
-        painter.fillRect (0, height * i / 10, width, height / 10, color);
+  if (true == SetupMode) {
+    // Mark a row in the setup mode
+    if (-1 != SetupModeActiveRow) {
+      color.setRgb(200, 200, 200);
+      painter.fillRect(0, height / 10 * SetupModeActiveRow, width, height / 10, color);
     }
+  }
 
-    if ((false == HideMatrix) && (false == SetupMode))
-    {
-        // Paint vertical bar
-        if (-1 != HighLightVerticalBar)
-        {
-            for (i = 0; i < 10; i++)
-            {
-                color.setRgb (50 + 50 * (i % 2), 50 + 50 * (i % 2), 50 + 50 * (i % 2));
-                painter.fillRect (width * HighLightVerticalBar / 10, height * i / 10, width / 10, height / 10, color);
-            }
-        }
+  // Print text
+  for (i = 0; i < 10; i++) {
+    for (i1 = 0; i1 < 10; i1++) {
+      QString text;
+
+      color.setRgb(255, 255, 255);
+      painter.setPen(color);
+
+      font = painter.font();
+      font.bold();
+      font.setPixelSize(20);
+      painter.setFont(font);
+
+      // painter.drawText(width*i/10+(width/20),(height*(i1+1)/10)-text_height,"1");
+      text = '0' + HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[i * 10 + i1];
+      painter.drawText(width * i / 10 + (width / 20) - 6,
+                       (height * (i1 + 1) / 10) - text_height + 2, text);
     }
-
-    if (true == SetupMode)
-    {
-        // Mark a row in the setup mode
-        if (-1 != SetupModeActiveRow)
-        {
-            color.setRgb (200, 200, 200);
-            painter.fillRect (0, height / 10 * SetupModeActiveRow, width, height / 10, color);
-        }
-    }
-
-    // Print text
-    for (i = 0; i < 10; i++)
-    {
-        for (i1 = 0; i1 < 10; i1++)
-        {
-QString text;
-
-            color.setRgb (255, 255, 255);
-            painter.setPen (color);
-
-            font = painter.font ();
-            font.bold ();
-            font.setPixelSize (20);
-            painter.setFont (font);
-
-            // painter.drawText(width*i/10+(width/20),(height*(i1+1)/10)-text_height,"1");
-            text = '0' + HID_Stick20MatrixPasswordData_st.PasswordMatrix_u8[i * 10 + i1];
-            painter.drawText (width * i / 10 + (width / 20) - 6, (height * (i1 + 1) / 10) - text_height + 2, text);
-        }
-    }
+  }
 }
 
 /*******************************************************************************
@@ -625,21 +558,18 @@ QString text;
 
 *******************************************************************************/
 
-bool MatrixPasswordDialog::eventButton (QEvent * event, int Number)
-{
-    if (event->type () == QEvent::Enter)
-    {
-        HighLightVerticalBar = Number;
-        ui->frame->repaint ();
-        return true;
-    }
-    if (event->type () == QEvent::Leave)
-    {
-        HighLightVerticalBar = -1;
-        ui->frame->repaint ();
-        return true;
-    }
-    return false;
+bool MatrixPasswordDialog::eventButton(QEvent *event, int Number) {
+  if (event->type() == QEvent::Enter) {
+    HighLightVerticalBar = Number;
+    ui->frame->repaint();
+    return true;
+  }
+  if (event->type() == QEvent::Leave) {
+    HighLightVerticalBar = -1;
+    ui->frame->repaint();
+    return true;
+  }
+  return false;
 }
 
 /*******************************************************************************
@@ -652,25 +582,21 @@ bool MatrixPasswordDialog::eventButton (QEvent * event, int Number)
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::RowSelected (int SelectedRow)
-{
-    QString OutputText;
+void MatrixPasswordDialog::RowSelected(int SelectedRow) {
+  QString OutputText;
 
-    SelectedRows[SelectedRowCounter] = '0' + SelectedRow;   // Store as Ascii
-    SelectedRowCounter++;
+  SelectedRows[SelectedRowCounter] = '0' + SelectedRow; // Store as Ascii
+  SelectedRowCounter++;
 
-    if (SelectedRowCounter < OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS)
-    {
-        OutputText = "Select row " + QString ("%1").arg (SelectedRowCounter + 1);
-        ui->label->setText (OutputText);
-    }
-    else
-    {
-        csApplet->warningBox ("Maximum length reached");
+  if (SelectedRowCounter < OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS) {
+    OutputText = "Select row " + QString("%1").arg(SelectedRowCounter + 1);
+    ui->label->setText(OutputText);
+  } else {
+    csApplet->warningBox("Maximum length reached");
 
-        SendMatrixRowDataToStick20 ();
-        done (true);
-    }
+    SendMatrixRowDataToStick20();
+    done(true);
+  }
 }
 
 /*******************************************************************************
@@ -683,166 +609,134 @@ void MatrixPasswordDialog::RowSelected (int SelectedRow)
 
 *******************************************************************************/
 
-bool MatrixPasswordDialog::eventFilter (QObject * target, QEvent * event)
-{
-bool ret;
+bool MatrixPasswordDialog::eventFilter(QObject *target, QEvent *event) {
+  bool ret;
 
-    if (false == SetupMode)
-    {
-        if (target == ui->pushButton_0)
-        {
-            return (eventButton (event, 0));
-        }
-        if (target == ui->pushButton_1)
-        {
-            return (eventButton (event, 1));
-        }
-        if (target == ui->pushButton_2)
-        {
-            return (eventButton (event, 2));
-        }
-        if (target == ui->pushButton_3)
-        {
-            return (eventButton (event, 3));
-        }
-        if (target == ui->pushButton_4)
-        {
-            return (eventButton (event, 4));
-        }
-        if (target == ui->pushButton_5)
-        {
-            return (eventButton (event, 5));
-        }
-        if (target == ui->pushButton_6)
-        {
-            return (eventButton (event, 6));
-        }
-        if (target == ui->pushButton_7)
-        {
-            return (eventButton (event, 7));
-        }
-        if (target == ui->pushButton_8)
-        {
-            return (eventButton (event, 8));
-        }
-        if (target == ui->pushButton_9)
-        {
-            return (eventButton (event, 9));
-        }
+  if (false == SetupMode) {
+    if (target == ui->pushButton_0) {
+      return (eventButton(event, 0));
     }
-    /*
-       if (target == ui->plainTextEdit) {
-
-       if (event->type() == QEvent::MouseMove) { QPoint Pos; QMouseEvent *e;
-
-       e = (QMouseEvent *)event;
-
-       } if (event->type() == QEvent::MouseButtonRelease) {
-
-       }
-
-       } */
-    if (target == ui->frame)
-    {
-        if (event->type () == QEvent::Paint)
-        {
-            PaintMatrix ((QFrame *) target);
-        }
-        // In the normal mode hide the data when the cursor get on the frame
-        if (false == SetupMode)
-        {
-            SetupModeActiveRow = -1;
-            if (event->type () == QEvent::Enter)
-            {
-                HideMatrix = true;
-                ui->frame->repaint ();
-                return true;
-            }
-            if (event->type () == QEvent::Leave)
-            {
-                HideMatrix = false;
-                ui->frame->repaint ();
-                return true;
-            }
-        }
-        else
-        {
-            // Setup matrix mode
-            // test = ui->frame->hasMouseTracking();
-            // Get the row the mouse pointer
-            if (event->type () == QEvent::MouseMove)
-            {
-QMouseEvent* e;
-
-                e = (QMouseEvent *) event;
-                SetupModeActiveRow = e->pos ().y () * 10 / ui->frame->size ().height ();
-                ui->frame->repaint ();
-                return true;
-            }
-            // Store the selected row
-            if (event->type () == QEvent::MouseButtonRelease)
-            {
-                if (OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS > SelectedRowCounter)
-                {
-                    RowSelected (SetupModeActiveRow);
-                }
-                return true;
-            }
-            if (event->type () == QEvent::Enter)
-            {
-QMouseEvent* e;
-
-                e = (QMouseEvent *) event;
-                SetupModeActiveRow = e->pos ().y () * 10 / ui->frame->size ().height ();
-                ui->frame->repaint ();
-                return true;
-            }
-            if (event->type () == QEvent::Leave)
-            {
-                SetupModeActiveRow = -1;
-                ui->frame->repaint ();
-                return true;
-            }
-        }
+    if (target == ui->pushButton_1) {
+      return (eventButton(event, 1));
     }
-
-    // Send button
-    if (target == ui->pushButton_Send)
-    {
-        if (event->type () == QEvent::MouseButtonRelease)
-        {
-            if (false == SetupMode)
-            {
-                // Yes, send the pin data to stick 2.0
-                SelectedColumns[InputPasswordLengthPointer] = 0;
-                ret = cryptostick->stick20SendPasswordMatrixPinData (SelectedColumns);
-                if (TRUE == ret)
-                {
-                }
-            }
-            else
-            {
-                // Send setupdata
-                SendMatrixRowDataToStick20 ();
-            }
-
-            // Exit Dialog
-            done (true);
-
-            return true;
-        }
+    if (target == ui->pushButton_2) {
+      return (eventButton(event, 2));
     }
-
-    // Exit button
-    if (target == ui->pushButton_Exit)
-    {
-        if (event->type () == QEvent::MouseButtonRelease)
-        {
-            done (FALSE);
-            return true;
-        }
+    if (target == ui->pushButton_3) {
+      return (eventButton(event, 3));
     }
-    return QDialog::eventFilter (target, event);
+    if (target == ui->pushButton_4) {
+      return (eventButton(event, 4));
+    }
+    if (target == ui->pushButton_5) {
+      return (eventButton(event, 5));
+    }
+    if (target == ui->pushButton_6) {
+      return (eventButton(event, 6));
+    }
+    if (target == ui->pushButton_7) {
+      return (eventButton(event, 7));
+    }
+    if (target == ui->pushButton_8) {
+      return (eventButton(event, 8));
+    }
+    if (target == ui->pushButton_9) {
+      return (eventButton(event, 9));
+    }
+  }
+  /*
+     if (target == ui->plainTextEdit) {
+
+     if (event->type() == QEvent::MouseMove) { QPoint Pos; QMouseEvent *e;
+
+     e = (QMouseEvent *)event;
+
+     } if (event->type() == QEvent::MouseButtonRelease) {
+
+     }
+
+     } */
+  if (target == ui->frame) {
+    if (event->type() == QEvent::Paint) {
+      PaintMatrix((QFrame *)target);
+    }
+    // In the normal mode hide the data when the cursor get on the frame
+    if (false == SetupMode) {
+      SetupModeActiveRow = -1;
+      if (event->type() == QEvent::Enter) {
+        HideMatrix = true;
+        ui->frame->repaint();
+        return true;
+      }
+      if (event->type() == QEvent::Leave) {
+        HideMatrix = false;
+        ui->frame->repaint();
+        return true;
+      }
+    } else {
+      // Setup matrix mode
+      // test = ui->frame->hasMouseTracking();
+      // Get the row the mouse pointer
+      if (event->type() == QEvent::MouseMove) {
+        QMouseEvent *e;
+
+        e = (QMouseEvent *)event;
+        SetupModeActiveRow = e->pos().y() * 10 / ui->frame->size().height();
+        ui->frame->repaint();
+        return true;
+      }
+      // Store the selected row
+      if (event->type() == QEvent::MouseButtonRelease) {
+        if (OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS > SelectedRowCounter) {
+          RowSelected(SetupModeActiveRow);
+        }
+        return true;
+      }
+      if (event->type() == QEvent::Enter) {
+        QMouseEvent *e;
+
+        e = (QMouseEvent *)event;
+        SetupModeActiveRow = e->pos().y() * 10 / ui->frame->size().height();
+        ui->frame->repaint();
+        return true;
+      }
+      if (event->type() == QEvent::Leave) {
+        SetupModeActiveRow = -1;
+        ui->frame->repaint();
+        return true;
+      }
+    }
+  }
+
+  // Send button
+  if (target == ui->pushButton_Send) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+      if (false == SetupMode) {
+        // Yes, send the pin data to stick 2.0
+        SelectedColumns[InputPasswordLengthPointer] = 0;
+        ret = cryptostick->stick20SendPasswordMatrixPinData(SelectedColumns);
+        if (TRUE == ret) {
+        }
+      } else {
+        // Send setupdata
+        SendMatrixRowDataToStick20();
+      }
+
+      // Exit Dialog
+      done(true);
+
+      return true;
+    }
+  }
+
+  // Exit button
+  if (target == ui->pushButton_Exit) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+      done(FALSE);
+      return true;
+    }
+  }
+  return QDialog::eventFilter(target, event);
 }
 
 /*******************************************************************************
@@ -855,10 +749,7 @@ QMouseEvent* e;
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::mousePressEvent (QMouseEvent * e)
-{
-    return QDialog::mousePressEvent (e);
-}
+void MatrixPasswordDialog::mousePressEvent(QMouseEvent *e) { return QDialog::mousePressEvent(e); }
 
 /*******************************************************************************
 
@@ -870,10 +761,7 @@ void MatrixPasswordDialog::mousePressEvent (QMouseEvent * e)
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::mouseMoveEvent (QMouseEvent * e)
-{
-    return QDialog::mouseMoveEvent (e);
-}
+void MatrixPasswordDialog::mouseMoveEvent(QMouseEvent *e) { return QDialog::mouseMoveEvent(e); }
 
 /*******************************************************************************
 
@@ -885,35 +773,33 @@ void MatrixPasswordDialog::mouseMoveEvent (QMouseEvent * e)
 
 *******************************************************************************/
 
-void MatrixPasswordDialog::SendMatrixRowDataToStick20 ()
-{
-bool ret;
+void MatrixPasswordDialog::SendMatrixRowDataToStick20() {
+  bool ret;
 
-unsigned char Data[OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS + 2];
+  unsigned char Data[OUTPUT_CMD_STICK20_MAX_MATRIX_ROWS + 2];
 
-    Data[0] = 'P';
+  Data[0] = 'P';
 
-    memcpy (&Data[1], SelectedRows, SelectedRowCounter);
-    Data[1 + SelectedRowCounter] = 0;
+  memcpy(&Data[1], SelectedRows, SelectedRowCounter);
+  Data[1 + SelectedRowCounter] = 0;
 
-    ret = cryptostick->stick20SendPasswordMatrixSetup (Data);
-    if (TRUE == ret)
-    {
-    }
+  ret = cryptostick->stick20SendPasswordMatrixSetup(Data);
+  if (TRUE == ret) {
+  }
 
-    // Wait vor response
-Stick20ResponseTask ResponseTask (this, cryptostick, NULL);
+  // Wait vor response
+  Stick20ResponseTask ResponseTask(this, cryptostick, NULL);
 
-    ResponseTask.GetResponse ();
+  ResponseTask.GetResponse();
 
-    /*
-       Stick20ResponseDialog ResponseDialog(this);
+  /*
+     Stick20ResponseDialog ResponseDialog(this);
 
-       ResponseDialog.setModal (TRUE);
+     ResponseDialog.setModal (TRUE);
 
-       ResponseDialog.cryptostick=cryptostick;
+     ResponseDialog.cryptostick=cryptostick;
 
-       ResponseDialog.exec(); */
+     ResponseDialog.exec(); */
 }
 
 /*******************************************************************************
@@ -926,15 +812,13 @@ Stick20ResponseTask ResponseTask (this, cryptostick, NULL);
 
 *******************************************************************************/
 
-bool MatrixPasswordDialog::CopyMatrixPassword (char* Password, int len)
-{
-    if (len - 1 <= InputPasswordLengthPointer)
-    {
-        return (FALSE);
-    }
+bool MatrixPasswordDialog::CopyMatrixPassword(char *Password, int len) {
+  if (len - 1 <= InputPasswordLengthPointer) {
+    return (FALSE);
+  }
 
-    memcpy (Password, SelectedColumns, InputPasswordLengthPointer);
-    Password[InputPasswordLengthPointer] = 0;
+  memcpy(Password, SelectedColumns, InputPasswordLengthPointer);
+  Password[InputPasswordLengthPointer] = 0;
 
-    return (TRUE);
+  return (TRUE);
 }

@@ -17,39 +17,35 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef DEBUGDIALOG_H
 #define DEBUGDIALOG_H
 
-#include <QDialog>
 #include "device.h"
+#include <QDialog>
 
-namespace Ui
-{
-    class DebugDialog;
+namespace Ui {
+class DebugDialog;
 }
 
-class DebugDialog:public QDialog
-{
-  Q_OBJECT public:
-      explicit DebugDialog (QWidget * parent = 0);
-     ~DebugDialog ();
+class DebugDialog : public QDialog {
+  Q_OBJECT public : explicit DebugDialog(QWidget *parent = 0);
+  ~DebugDialog();
 
-    QString DebugText;
+  QString DebugText;
 
-    void updateText (void);
+  void updateText(void);
 
-    Device* cryptostick;
+  Device *cryptostick;
 
-    private slots:void UpdateDebugText ();
+private slots:
+  void UpdateDebugText();
 
-    void on_pushButton_clicked ();
+  void on_pushButton_clicked();
 
-  private:
-      Ui::DebugDialog * ui;
+private:
+  Ui::DebugDialog *ui;
 
-    QTimer* RefreshTimer;
-
+  QTimer *RefreshTimer;
 };
 
 #endif // DEBUGDIALOG_H

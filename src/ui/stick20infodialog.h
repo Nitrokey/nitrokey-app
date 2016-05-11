@@ -22,24 +22,21 @@
 
 #include <QDialog>
 
-namespace Ui
-{
-    class Stick20InfoDialog;
+namespace Ui {
+class Stick20InfoDialog;
 }
 
-class Stick20InfoDialog:public QDialog
-{
-  Q_OBJECT public:
-      explicit Stick20InfoDialog (QWidget * parent = 0);
-     ~Stick20InfoDialog ();
+class Stick20InfoDialog : public QDialog {
+  Q_OBJECT public : explicit Stick20InfoDialog(QWidget *parent = 0);
+  ~Stick20InfoDialog();
 
-    private slots:void on_pushButton_clicked ();
+private slots:
+  void on_pushButton_clicked();
 
-  private:
-      Ui::Stick20InfoDialog * ui;
+private:
+  Ui::Stick20InfoDialog *ui;
 
-    void showStick20Configuration (void);
+  void showStick20Configuration(void);
 };
-
 
 #endif // STICK20INFODIALOG_H

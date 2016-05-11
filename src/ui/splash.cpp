@@ -14,71 +14,71 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  */
 
-#include "gui.h"
 #include "splash.h"
+#include "gui.h"
 
 #define TITLE_FONT_POINT_SIZE 40
 #define VERSION_FONT_POINT_SIZE 5
 #define TEXT_MARGIN 10
 
-SplashScreen::SplashScreen ():QSplashScreen (QPixmap (), Qt::WindowStaysOnTopHint)
-{
-QFont titleFont = qApp->font ();
+SplashScreen::SplashScreen() : QSplashScreen(QPixmap(), Qt::WindowStaysOnTopHint) {
+  QFont titleFont = qApp->font();
 
-QFont authorFont = qApp->font ();
+  QFont authorFont = qApp->font();
 
-QFont versionFont = qApp->font ();
+  QFont versionFont = qApp->font();
 
-    logo = new QPixmap (":/images/splash.png");
+  logo = new QPixmap(":/images/splash.png");
 
-QWidget* textWidget = new QWidget (this);
+  QWidget *textWidget = new QWidget(this);
 
-QVBoxLayout* textLayout = new QVBoxLayout;
+  QVBoxLayout *textLayout = new QVBoxLayout;
 
-    Gui::ShadowedLabel * titleLabel = new Gui::ShadowedLabel (qApp->applicationName (), this);
-    titleLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
-    titleFont.setBold (true);
-    titleFont.setPointSize (40);
-    titleLabel->setFont (titleFont);
-    Gui::ShadowedLabel * versionLabel = new Gui::ShadowedLabel (qApp->applicationVersion (), this);
-    versionFont.setPointSize (20);
-    versionLabel->setFont (versionFont);
-    versionLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
-    Gui::ShadowedLabel * authorLabel = new Gui::ShadowedLabel (tr ("Author:") + "", this);
-    authorFont.setPointSize (10);
-    authorLabel->setFont (authorFont);
-    authorLabel->setAlignment (Qt::AlignRight | Qt::AlignVCenter);
-QWidget* spacerWidget = new QWidget (this);
+  Gui::ShadowedLabel *titleLabel = new Gui::ShadowedLabel(qApp->applicationName(), this);
+  titleLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  titleFont.setBold(true);
+  titleFont.setPointSize(40);
+  titleLabel->setFont(titleFont);
+  Gui::ShadowedLabel *versionLabel = new Gui::ShadowedLabel(qApp->applicationVersion(), this);
+  versionFont.setPointSize(20);
+  versionLabel->setFont(versionFont);
+  versionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  Gui::ShadowedLabel *authorLabel = new Gui::ShadowedLabel(tr("Author:") + "", this);
+  authorFont.setPointSize(10);
+  authorLabel->setFont(authorFont);
+  authorLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+  QWidget *spacerWidget = new QWidget(this);
 
-    spacerWidget->setFixedHeight (15);
+  spacerWidget->setFixedHeight(15);
 
-    textLayout->setSpacing (1);
-    textLayout->addStretch ();
-    textLayout->addWidget (titleLabel);
-    textLayout->addWidget (versionLabel);
-    textLayout->addWidget (spacerWidget);
-    textLayout->addWidget (authorLabel);
+  textLayout->setSpacing(1);
+  textLayout->addStretch();
+  textLayout->addWidget(titleLabel);
+  textLayout->addWidget(versionLabel);
+  textLayout->addWidget(spacerWidget);
+  textLayout->addWidget(authorLabel);
 
-    textWidget->setLayout (textLayout);
+  textWidget->setLayout(textLayout);
 
-    textWidget->setFixedSize (logo->size ().width (), logo->height () - QFontMetrics (qApp->font ()).height () - 12);
+  textWidget->setFixedSize(logo->size().width(),
+                           logo->height() - QFontMetrics(qApp->font()).height() - 12);
 
-QPainter painter (logo);
+  QPainter painter(logo);
 
-    painter.setRenderHint (QPainter::Antialiasing, true);
-    painter.setRenderHint (QPainter::TextAntialiasing, true);
-    painter.fillRect (QRect (8, logo->height () - QFontMetrics (qApp->font ()).height () - 12, logo->width (), logo->height ()), Qt::black);
-    painter.end ();
-    textWidget->render (logo, QPoint (), QRegion (), 0);
+  painter.setRenderHint(QPainter::Antialiasing, true);
+  painter.setRenderHint(QPainter::TextAntialiasing, true);
+  painter.fillRect(QRect(8, logo->height() - QFontMetrics(qApp->font()).height() - 12,
+                         logo->width(), logo->height()),
+                   Qt::black);
+  painter.end();
+  textWidget->render(logo, QPoint(), QRegion(), 0);
 
-    setMask (QRegion (logo->mask ()));
-    setPixmap (*logo);
+  setMask(QRegion(logo->mask()));
+  setPixmap(*logo);
 }
 
-SplashScreen::~SplashScreen ()
-{
-delete logo;
-}
+SplashScreen::~SplashScreen() { delete logo; }

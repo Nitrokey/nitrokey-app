@@ -20,7 +20,6 @@
 #include "stick20lockfirmwaredialog.h"
 #include "ui_stick20lockfirmwaredialog.h"
 
-
 /*******************************************************************************
 
  Local defines
@@ -32,7 +31,6 @@
  External declarations
 
 *******************************************************************************/
-
 
 /*******************************************************************************
 
@@ -46,14 +44,9 @@
 
 *******************************************************************************/
 
-
-stick20LockFirmwareDialog::stick20LockFirmwareDialog (QWidget * parent):
-QDialog (parent), ui (new Ui::stick20LockFirmwareDialog)
-{
-    ui->setupUi (this);
+stick20LockFirmwareDialog::stick20LockFirmwareDialog(QWidget *parent)
+    : QDialog(parent), ui(new Ui::stick20LockFirmwareDialog) {
+  ui->setupUi(this);
 }
 
-stick20LockFirmwareDialog::~stick20LockFirmwareDialog ()
-{
-delete ui;
-}
+stick20LockFirmwareDialog::~stick20LockFirmwareDialog() { delete ui; }

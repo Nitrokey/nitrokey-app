@@ -20,7 +20,6 @@
 #include "stick20updatedialog.h"
 #include "ui_stick20updatedialog.h"
 
-
 /*******************************************************************************
 
  Local defines
@@ -32,7 +31,6 @@
  External declarations
 
 *******************************************************************************/
-
 
 /*******************************************************************************
 
@@ -46,10 +44,8 @@
 
 *******************************************************************************/
 
-UpdateDialog::UpdateDialog (QWidget * parent):
-QDialog (parent), ui (new Ui::UpdateDialog)
-{
-    ui->setupUi (this);
+UpdateDialog::UpdateDialog(QWidget *parent) : QDialog(parent), ui(new Ui::UpdateDialog) {
+  ui->setupUi(this);
 }
 
 /*******************************************************************************
@@ -64,7 +60,4 @@ QDialog (parent), ui (new Ui::UpdateDialog)
 
 *******************************************************************************/
 
-UpdateDialog::~UpdateDialog ()
-{
-delete ui;
-}
+UpdateDialog::~UpdateDialog() { delete ui; }

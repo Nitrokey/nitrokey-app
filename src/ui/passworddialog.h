@@ -25,32 +25,30 @@
 
 #include "device.h"
 
-namespace Ui
-{
-    class PasswordDialog;
+namespace Ui {
+class PasswordDialog;
 }
 
-class PasswordDialog:public QDialog
-{
-  Q_OBJECT public:
-    unsigned char password[50];
-    // QByteArray passwordString;
-    Device* cryptostick;
+class PasswordDialog : public QDialog {
+  Q_OBJECT public : unsigned char password[50];
+  // QByteArray passwordString;
+  Device *cryptostick;
 
-    explicit PasswordDialog (bool ShowMatrix, QWidget * parent = 0);
-     ~PasswordDialog ();
+  explicit PasswordDialog(bool ShowMatrix, QWidget *parent = 0);
+  ~PasswordDialog();
 
-    void init (char* text, int RetryCount);
-    void getPassword (char* text);
+  void init(char *text, int RetryCount);
+  void getPassword(char *text);
 
-    private slots:void on_checkBox_toggled (bool checked);
+private slots:
+  void on_checkBox_toggled(bool checked);
 
-    void on_checkBox_PasswordMatrix_toggled (bool checked);
+  void on_checkBox_PasswordMatrix_toggled(bool checked);
 
-    void on_buttonBox_accepted ();
+  void on_buttonBox_accepted();
 
-  private:
-      Ui::PasswordDialog * ui;
+private:
+  Ui::PasswordDialog *ui;
 };
 
 #endif // PASSWORDDIALOG_H

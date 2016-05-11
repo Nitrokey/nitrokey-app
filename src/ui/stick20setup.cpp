@@ -18,12 +18,12 @@
  */
 
 #include "stick20setup.h"
-#include "ui_stick20setup.h"
 #include "nitrokey-applet.h"
+#include "ui_stick20setup.h"
 
 #include "device.h"
-#include "stick20matrixpassworddialog.h"
 #include "stick20changepassworddialog.h"
+#include "stick20matrixpassworddialog.h"
 #include "stick20responsedialog.h"
 
 /*******************************************************************************
@@ -38,7 +38,6 @@
 
 *******************************************************************************/
 
-
 /*******************************************************************************
 
   Stick20Setup
@@ -51,11 +50,9 @@
 
 *******************************************************************************/
 
-Stick20Setup::Stick20Setup (QWidget * parent):
-QDialog (parent), ui (new Ui::Stick20Setup)
-{
-    ui->setupUi (this);
-    cryptostick = NULL;
+Stick20Setup::Stick20Setup(QWidget *parent) : QDialog(parent), ui(new Ui::Stick20Setup) {
+  ui->setupUi(this);
+  cryptostick = NULL;
 }
 
 /*******************************************************************************
@@ -70,10 +67,7 @@ QDialog (parent), ui (new Ui::Stick20Setup)
 
 *******************************************************************************/
 
-Stick20Setup::~Stick20Setup ()
-{
-delete ui;
-}
+Stick20Setup::~Stick20Setup() { delete ui; }
 
 /*******************************************************************************
 
@@ -85,18 +79,17 @@ delete ui;
 
 *******************************************************************************/
 
-void Stick20Setup::on_pushButton_Change_AdminPW_clicked ()
-{
-DialogChangePassword dialog (this);
+void Stick20Setup::on_pushButton_Change_AdminPW_clicked() {
+  DialogChangePassword dialog(this);
 
-    dialog.setModal (TRUE);
+  dialog.setModal(TRUE);
 
-    dialog.cryptostick = cryptostick;
+  dialog.cryptostick = cryptostick;
 
-    dialog.PasswordKind = STICK20_PASSWORD_KIND_ADMIN;
+  dialog.PasswordKind = STICK20_PASSWORD_KIND_ADMIN;
 
-    dialog.InitData ();
-    dialog.exec ();
+  dialog.InitData();
+  dialog.exec();
 }
 
 /*******************************************************************************
@@ -109,21 +102,19 @@ DialogChangePassword dialog (this);
 
 *******************************************************************************/
 
-void Stick20Setup::on_pushButton_Ch_Mat_APW_clicked ()
-{
-MatrixPasswordDialog dialog (this);
+void Stick20Setup::on_pushButton_Ch_Mat_APW_clicked() {
+  MatrixPasswordDialog dialog(this);
 
+  csApplet->warningBox(tr("The selected lines must be greater then greatest password length"));
 
-    csApplet->warningBox (tr ("The selected lines must be greater then greatest password length"));
+  dialog.setModal(TRUE);
 
-    dialog.setModal (TRUE);
+  dialog.cryptostick = cryptostick;
+  dialog.SetupInterfaceFlag = TRUE;
 
-    dialog.cryptostick = cryptostick;
-    dialog.SetupInterfaceFlag = TRUE;
+  dialog.InitSecurePasswordDialog();
 
-    dialog.InitSecurePasswordDialog ();
-
-    dialog.exec ();
+  dialog.exec();
 }
 
 /*******************************************************************************
@@ -136,18 +127,17 @@ MatrixPasswordDialog dialog (this);
 
 *******************************************************************************/
 
-void Stick20Setup::on_pushButton_Ch_PW_clicked ()
-{
-DialogChangePassword dialog (this);
+void Stick20Setup::on_pushButton_Ch_PW_clicked() {
+  DialogChangePassword dialog(this);
 
-    dialog.setModal (TRUE);
+  dialog.setModal(TRUE);
 
-    dialog.cryptostick = cryptostick;
+  dialog.cryptostick = cryptostick;
 
-    dialog.PasswordKind = STICK20_PASSWORD_KIND_USER;
+  dialog.PasswordKind = STICK20_PASSWORD_KIND_USER;
 
-    dialog.InitData ();
-    dialog.exec ();
+  dialog.InitData();
+  dialog.exec();
 }
 
 /*******************************************************************************
@@ -160,34 +150,30 @@ DialogChangePassword dialog (this);
 
 *******************************************************************************/
 
-void Stick20Setup::on_pushButton_Ch_HiddenVol_clicked ()
-{
-int ret;
+void Stick20Setup::on_pushButton_Ch_HiddenVol_clicked() {
+  int ret;
 
-bool answer;
+  bool answer;
 
-    answer = csApplet->yesOrNoBox (tr ("Build a new base key for the hidden volume? all data get lost"));
+  answer =
+      csApplet->yesOrNoBox(tr("Build a new base key for the hidden volume? all data get lost"));
 
-    if (answer)
-    {
-        ret = cryptostick->stick20SetupHiddenVolume ();
+  if (answer) {
+    ret = cryptostick->stick20SetupHiddenVolume();
 
-        if (TRUE == ret)
-        {
-            /*
-               Stick20ResponseDialog ResponseDialog(this);
+    if (TRUE == ret) {
+      /*
+         Stick20ResponseDialog ResponseDialog(this);
 
-               ResponseDialog.cryptostick=cryptostick;
+         ResponseDialog.cryptostick=cryptostick;
 
-               ResponseDialog.NoStopWhenStatusOK ();
+         ResponseDialog.NoStopWhenStatusOK ();
 
-               ResponseDialog.exec(); */
-Stick20ResponseTask ResponseTask (this, cryptostick, NULL);
+         ResponseDialog.exec(); */
+      Stick20ResponseTask ResponseTask(this, cryptostick, NULL);
 
-            ResponseTask.NoStopWhenStatusOK ();
-            ResponseTask.GetResponse ();
-
-
-        }
+      ResponseTask.NoStopWhenStatusOK();
+      ResponseTask.GetResponse();
     }
+  }
 }

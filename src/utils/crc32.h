@@ -27,6 +27,6 @@
 #include "inttypes.h"
 #endif
 
-uint32_t Crc32 (uint32_t Crc, uint32_t Data);
+uint32_t Crc32(uint32_t Crc, uint32_t Data);
 
 #endif // CRC32_H
