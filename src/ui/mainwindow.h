@@ -105,7 +105,6 @@ class MainWindow:public QMainWindow
     QMenu* trayMenuTOTPSubMenu;
     QMenu* trayMenuHOTPSubMenu;
     QMenu* trayMenuSubSpecialConfigure;
-    QClipboard* clipboard;
     QValidator* validator;
 
     unsigned char HOTP_SlotCount;
@@ -238,7 +237,6 @@ class MainWindow:public QMainWindow
     void on_writeGeneralConfigButton_clicked ();
 
     void copyToClipboard (QString text);
-    void checkClipboard_Valid ();
     void checkPasswordTime_Valid ();
     void checkTextEdited ();
 

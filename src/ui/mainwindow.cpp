@@ -50,6 +50,7 @@
 #include "securitydialog.h"
 #include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
+#include "Clipboard.h"
 
 #include <QTimer>
 #include <QMenu>
@@ -527,7 +528,6 @@ int ret;
     QMetaObject::Connection ret_connection;
 
     InitState ();
-    clipboard = QApplication::clipboard ();
     ExtendedConfigActive = StartupInfo_st->ExtendedConfigActive;
 
     if (0 != StartupInfo_st->PasswordMatrix)
@@ -578,12 +578,6 @@ QTimer* timer = new QTimer (this);
 
     ret_connection = connect (timer, SIGNAL (timeout ()), this, SLOT (checkConnection ()));
     timer->start (1000);
-
-QTimer* Clipboard_ValidTimer = new QTimer (this);
-
-    // Start timer for Clipboard delete check
-    connect (Clipboard_ValidTimer, SIGNAL (timeout ()), this, SLOT (checkClipboard_Valid ()));
-    Clipboard_ValidTimer->start (1000);
 
 QTimer* Password_ValidTimer = new QTimer (this);
 
@@ -3745,35 +3739,12 @@ void MainWindow::copyToClipboard (QString text)
 {
     if (text != 0)
     {
-        lastClipboardTime = QDateTime::currentDateTime ().toTime_t ();
-        clipboard->setText (text);
+        clipboard()->setText (text);
         ui->labelNotify->show ();
     }
 }
 
-void MainWindow::checkClipboard_Valid ()
-{
-uint64_t currentTime;
 
-    currentTime = QDateTime::currentDateTime ().toTime_t ();
-    if ((currentTime >= (lastClipboardTime + (uint64_t) 60)) && (clipboard->text () == otpInClipboard))
-    {
-        otpInClipboard = "";
-        clipboard->setText (QString (""));
-    }
-
-    if ((currentTime >= (lastClipboardTime + (uint64_t) 120)) && (clipboard->text () == secretInClipboard))
-    {
-        secretInClipboard = "";
-        clipboard->setText (QString (""));
-        ui->labelNotify->hide ();
-    }
-
-    if (QString::compare (clipboard->text (), secretInClipboard) != 0)
-    {
-        ui->labelNotify->hide ();
-    }
-}
 
 void MainWindow::checkPasswordTime_Valid ()
 {
@@ -4198,7 +4169,7 @@ void MainWindow::PWS_ExceClickedSlot (int Slot)
     }
     MsgText.append ((char *) cryptostick->passwordSafePassword);
 
-    clipboard->setText (MsgText);
+    clipboard()->setText (MsgText);
 
     memset (cryptostick->passwordSafePassword, 0, sizeof (cryptostick->passwordSafePassword));
 
