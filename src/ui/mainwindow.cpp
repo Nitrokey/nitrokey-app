@@ -1272,7 +1272,7 @@ void MainWindow::generatePasswordMenu() {
   } else
 #endif // HAVE_LIBAPPINDICATOR
   {
-    trayMenuPasswdSubMenu = trayMenu->addMenu(tr("Passwords"));
+    trayMenuPasswdSubMenu = new QMenu(tr("Passwords"));
 
     /* TOTP passwords */
     if (cryptostick->TOTPSlots[0]->isProgrammed == true)
@@ -1367,7 +1367,10 @@ void MainWindow::generatePasswordMenu() {
         trayMenuPasswdSubMenu->addAction(PWS_GetSlotName(15), this, SLOT(PWS_Clicked_Slot15()));
     }
 
-    trayMenu->addSeparator();
+    if (!trayMenuPasswdSubMenu->actions().empty()) {
+      trayMenu->addMenu(trayMenuPasswdSubMenu);
+      trayMenu->addSeparator();
+    }
   }
 }
 
