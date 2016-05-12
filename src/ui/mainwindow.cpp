@@ -458,7 +458,7 @@ void MainWindow::InitState() {
 }
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), trayMenuPasswdSubMenu(NULL) {
 #ifdef Q_OS_LINUX
   setlocale(LC_ALL, "");
   bindtextdomain("nitrokey-app", "/usr/share/locale");
@@ -1272,7 +1272,10 @@ void MainWindow::generatePasswordMenu() {
   } else
 #endif // HAVE_LIBAPPINDICATOR
   {
-    trayMenuPasswdSubMenu = trayMenu->addMenu(tr("Passwords"));
+      if (trayMenuPasswdSubMenu != NULL){
+          delete trayMenuPasswdSubMenu;
+      }
+    trayMenuPasswdSubMenu = new QMenu(tr("Passwords"));
 
     /* TOTP passwords */
     if (cryptostick->TOTPSlots[0]->isProgrammed == true)
@@ -1367,7 +1370,10 @@ void MainWindow::generatePasswordMenu() {
         trayMenuPasswdSubMenu->addAction(PWS_GetSlotName(15), this, SLOT(PWS_Clicked_Slot15()));
     }
 
-    trayMenu->addSeparator();
+    if (!trayMenuPasswdSubMenu->actions().empty()) {
+      trayMenu->addMenu(trayMenuPasswdSubMenu);
+      trayMenu->addSeparator();
+    }
   }
 }
 
