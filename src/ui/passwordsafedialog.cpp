@@ -29,64 +29,49 @@
 
 *******************************************************************************/
 
-class OwnSleep:public QThread
-{
-  public:
-    static void usleep (unsigned long usecs)
-    {
-        QThread::usleep (usecs);
-    }
-    static void msleep (unsigned long msecs)
-    {
-        QThread::msleep (msecs);
-    }
-    static void sleep (unsigned long secs)
-    {
-        QThread::sleep (secs);
-    }
+class OwnSleep : public QThread {
+public:
+  static void usleep(unsigned long usecs) { QThread::usleep(usecs); }
+  static void msleep(unsigned long msecs) { QThread::msleep(msecs); }
+  static void sleep(unsigned long secs) { QThread::sleep(secs); }
 };
 
+PasswordSafeDialog::PasswordSafeDialog(int Slot, QWidget *parent)
+    : QDialog(parent), ui(new Ui::PasswordSafeDialog) {
+  QString MsgText;
 
-PasswordSafeDialog::PasswordSafeDialog (int Slot, QWidget * parent):QDialog (parent), ui (new Ui::PasswordSafeDialog)
-{
-    QString MsgText;
+  cryptostick = NULL;
+  ui->setupUi(this);
 
-    cryptostick = NULL;
-    ui->setupUi (this);
+  clipboard = QApplication::clipboard();
 
+  delaySendTextInMs = 1000; // = 1.0 sec
+  UsedSlot = Slot;
 
-    clipboard = QApplication::clipboard ();
+  ui->spinBoxDelay->setMinimum(500);
+  ui->spinBoxDelay->setMaximum(10000);
+  ui->spinBoxDelay->setSingleStep(500);
 
-    delaySendTextInMs = 1000;   // = 1.0 sec
-    UsedSlot = Slot;
+  delaySendTextInMs = 1000; // = 1.0 sec
+  ui->spinBoxDelay->setValue(delaySendTextInMs);
 
-    ui->spinBoxDelay->setMinimum (500);
-    ui->spinBoxDelay->setMaximum (10000);
-    ui->spinBoxDelay->setSingleStep (500);
+  ui->radioCutUPaste->setChecked(true);
+  ui->radioKeyboard->setChecked(false);
+  ui->spinBoxDelay->setEnabled(false);
 
-    delaySendTextInMs = 1000;   // = 1.0 sec
-    ui->spinBoxDelay->setValue (delaySendTextInMs);
+  MsgText.append(tr("Password Safe Slot "));
+  MsgText.append(QString::number(UsedSlot + 1, 10));
+  /*
+     { char Text[100]; MsgText.append(" -");
 
-    ui->radioCutUPaste->setChecked (true);
-    ui->radioKeyboard->setChecked (false);
-    ui->spinBoxDelay->setEnabled (false);
+     strcpy (Text,(char*)&cryptostick->passwordSafeSlotNames[UsedSlot][0]);
+     MsgText.append((char*)cryptostick->passwordSafeSlotNames[UsedSlot]); } */
+  MsgText.append(tr(" clicked.\nPress <Button> to copy value to clipboard"));
 
-    MsgText.append (tr ("Password Safe Slot "));
-    MsgText.append (QString::number (UsedSlot + 1, 10));
-    /*
-       { char Text[100]; MsgText.append(" -");
-
-       strcpy (Text,(char*)&cryptostick->passwordSafeSlotNames[UsedSlot][0]); MsgText.append((char*)cryptostick->passwordSafeSlotNames[UsedSlot]); } */
-    MsgText.append (tr (" clicked.\nPress <Button> to copy value to clipboard"));
-
-    ui->labelInfo->setText (MsgText);
-
+  ui->labelInfo->setText(MsgText);
 }
 
-PasswordSafeDialog::~PasswordSafeDialog ()
-{
-delete ui;
-}
+PasswordSafeDialog::~PasswordSafeDialog() { delete ui; }
 
 /*******************************************************************************
 
@@ -101,35 +86,30 @@ delete ui;
 
 *******************************************************************************/
 
-void PasswordSafeDialog::on_ButtonSendpassword_clicked ()
-{
-QString MsgText;
+void PasswordSafeDialog::on_ButtonSendpassword_clicked() {
+  QString MsgText;
 
-int ret_s32;
+  int ret_s32;
 
-    if (true == ui->radioKeyboard->isChecked ())
-    {
-        OwnSleep::msleep (delaySendTextInMs);
+  if (true == ui->radioKeyboard->isChecked()) {
+    OwnSleep::msleep(delaySendTextInMs);
 
-        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_PASSWORD);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't send password chars via HID"));
-            return;
-        }
+    ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_PASSWORD);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't send password chars via HID"));
+      return;
+    }
+  }
+
+  if (true == ui->radioCutUPaste->isChecked()) {
+    ret_s32 = cryptostick->getPasswordSafeSlotPassword(UsedSlot);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't get password"));
+      return;
     }
 
-    if (true == ui->radioCutUPaste->isChecked ())
-    {
-        ret_s32 = cryptostick->getPasswordSafeSlotPassword (UsedSlot);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't get password"));
-            return;
-        }
-
-        clipboard->setText ((char *) cryptostick->passwordSafePassword);
-    }
+    clipboard->setText((char *)cryptostick->passwordSafePassword);
+  }
 }
 
 /*******************************************************************************
@@ -145,61 +125,52 @@ int ret_s32;
 
 *******************************************************************************/
 
-void PasswordSafeDialog::on_ButtonSendPW_LN_clicked ()
-{
-QString MsgText;
+void PasswordSafeDialog::on_ButtonSendPW_LN_clicked() {
+  QString MsgText;
 
-int ret_s32;
+  int ret_s32;
 
-    if (true == ui->radioKeyboard->isChecked ())
-    {
-        OwnSleep::msleep (delaySendTextInMs);
+  if (true == ui->radioKeyboard->isChecked()) {
+    OwnSleep::msleep(delaySendTextInMs);
 
-        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_LOGINNAME);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't send loginname via keyboard"));
-            return;
-        }
-
-        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_TAB);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't send CR via keyboard"));
-            return;
-        }
-
-        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_PASSWORD);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't send password via keyboard"));
-            return;
-        }
-
+    ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_LOGINNAME);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't send loginname via keyboard"));
+      return;
     }
 
-    if (true == ui->radioCutUPaste->isChecked ())
-    {
-        ret_s32 = cryptostick->getPasswordSafeSlotLoginName (UsedSlot);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't get password"));
-            return;
-        }
-
-        MsgText.append ((char *) cryptostick->passwordSafeLoginName);
-        MsgText.append ((char) 9);
-
-        ret_s32 = cryptostick->getPasswordSafeSlotPassword (UsedSlot);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't get password"));
-            return;
-        }
-        MsgText.append ((char *) cryptostick->passwordSafePassword);
-
-        clipboard->setText (MsgText);
+    ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_TAB);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't send CR via keyboard"));
+      return;
     }
+
+    ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_PASSWORD);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't send password via keyboard"));
+      return;
+    }
+  }
+
+  if (true == ui->radioCutUPaste->isChecked()) {
+    ret_s32 = cryptostick->getPasswordSafeSlotLoginName(UsedSlot);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't get password"));
+      return;
+    }
+
+    MsgText.append((char *)cryptostick->passwordSafeLoginName);
+    MsgText.append((char)9);
+
+    ret_s32 = cryptostick->getPasswordSafeSlotPassword(UsedSlot);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't get password"));
+      return;
+    }
+    MsgText.append((char *)cryptostick->passwordSafePassword);
+
+    clipboard->setText(MsgText);
+  }
 }
 
 /*******************************************************************************
@@ -215,35 +186,30 @@ int ret_s32;
 
 *******************************************************************************/
 
-void PasswordSafeDialog::on_ButtonSendLoginname_clicked ()
-{
-QString MsgText;
+void PasswordSafeDialog::on_ButtonSendLoginname_clicked() {
+  QString MsgText;
 
-int ret_s32;
+  int ret_s32;
 
-    if (true == ui->radioKeyboard->isChecked ())
-    {
-        OwnSleep::msleep (delaySendTextInMs);
+  if (true == ui->radioKeyboard->isChecked()) {
+    OwnSleep::msleep(delaySendTextInMs);
 
-        ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID (UsedSlot, PWS_SEND_LOGINNAME);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't send loginname chars via HID"));
-            return;
-        }
+    ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_LOGINNAME);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't send loginname chars via HID"));
+      return;
+    }
+  }
+
+  if (true == ui->radioCutUPaste->isChecked()) {
+    ret_s32 = cryptostick->getPasswordSafeSlotLoginName(UsedSlot);
+    if (ERR_NO_ERROR != ret_s32) {
+      csApplet->warningBox(tr("Can't get password"));
+      return;
     }
 
-    if (true == ui->radioCutUPaste->isChecked ())
-    {
-        ret_s32 = cryptostick->getPasswordSafeSlotLoginName (UsedSlot);
-        if (ERR_NO_ERROR != ret_s32)
-        {
-            csApplet->warningBox (tr ("Can't get password"));
-            return;
-        }
-
-        clipboard->setText ((char *) cryptostick->passwordSafeLoginName);
-    }
+    clipboard->setText((char *)cryptostick->passwordSafeLoginName);
+  }
 }
 
 /*******************************************************************************
@@ -259,10 +225,7 @@ int ret_s32;
 
 *******************************************************************************/
 
-void PasswordSafeDialog::on_ButtonOk_clicked ()
-{
-    done (TRUE);
-}
+void PasswordSafeDialog::on_ButtonOk_clicked() { done(TRUE); }
 
 /*******************************************************************************
 
@@ -277,22 +240,21 @@ void PasswordSafeDialog::on_ButtonOk_clicked ()
 
 *******************************************************************************/
 
-void PasswordSafeDialog::on_spinBoxDelay_valueChanged ()
-{
-QString MsgText;
+void PasswordSafeDialog::on_spinBoxDelay_valueChanged() {
+  QString MsgText;
 
-    delaySendTextInMs = ui->spinBoxDelay->value ();
+  delaySendTextInMs = ui->spinBoxDelay->value();
 
-    if (true == ui->radioKeyboard->isChecked ())
-    {
-        MsgText.append (tr ("PW Safe Slot "));
-        MsgText.append (QString::number (UsedSlot + 1, 10));
-        MsgText.append (tr (" clicked.\nPress <Button> and set cursor to the input dialog.\nThe value is send in "));
-        MsgText.append (QString::number ((float) delaySendTextInMs / 1000.0, 'f', 1));
-        MsgText.append (tr (" seconds"));
+  if (true == ui->radioKeyboard->isChecked()) {
+    MsgText.append(tr("PW Safe Slot "));
+    MsgText.append(QString::number(UsedSlot + 1, 10));
+    MsgText.append(tr(" clicked.\nPress <Button> and set cursor to the input "
+                      "dialog.\nThe value is send in "));
+    MsgText.append(QString::number((float)delaySendTextInMs / 1000.0, 'f', 1));
+    MsgText.append(tr(" seconds"));
 
-        ui->labelInfo->setText (MsgText);
-    }
+    ui->labelInfo->setText(MsgText);
+  }
 }
 
 /*******************************************************************************
@@ -308,21 +270,19 @@ QString MsgText;
 
 *******************************************************************************/
 
-void PasswordSafeDialog::on_radioCutUPaste_clicked ()
-{
-QString MsgText;
+void PasswordSafeDialog::on_radioCutUPaste_clicked() {
+  QString MsgText;
 
-    ui->radioCutUPaste->setChecked (true);
-    ui->radioKeyboard->setChecked (false);
+  ui->radioCutUPaste->setChecked(true);
+  ui->radioKeyboard->setChecked(false);
 
-    ui->spinBoxDelay->setEnabled (false);
+  ui->spinBoxDelay->setEnabled(false);
 
-    MsgText.append (tr ("PW Safe Slot "));
-    MsgText.append (QString::number (UsedSlot + 1, 10));
-    MsgText.append (tr (" clicked.\nPress <Button> to copy value to clipboard"));
+  MsgText.append(tr("PW Safe Slot "));
+  MsgText.append(QString::number(UsedSlot + 1, 10));
+  MsgText.append(tr(" clicked.\nPress <Button> to copy value to clipboard"));
 
-    ui->labelInfo->setText (MsgText);
-
+  ui->labelInfo->setText(MsgText);
 }
 
 /*******************************************************************************
@@ -338,22 +298,20 @@ QString MsgText;
 
 *******************************************************************************/
 
+void PasswordSafeDialog::on_radioKeyboard_clicked() {
+  QString MsgText;
 
-void PasswordSafeDialog::on_radioKeyboard_clicked ()
-{
-QString MsgText;
+  ui->radioCutUPaste->setChecked(false);
+  ui->radioKeyboard->setChecked(true);
 
-    ui->radioCutUPaste->setChecked (false);
-    ui->radioKeyboard->setChecked (true);
+  ui->spinBoxDelay->setEnabled(true);
 
-    ui->spinBoxDelay->setEnabled (true);
+  MsgText.append(tr("PW Safe Slot "));
+  MsgText.append(QString::number(UsedSlot + 1, 10));
+  MsgText.append(tr(" clicked.\nPress <Button> and set cursor to the input "
+                    "dialog.\nThe value is send in "));
+  MsgText.append(QString::number((float)delaySendTextInMs / 1000.0, 'f', 1));
+  MsgText.append(tr(" seconds"));
 
-    MsgText.append (tr ("PW Safe Slot "));
-    MsgText.append (QString::number (UsedSlot + 1, 10));
-    MsgText.append (tr (" clicked.\nPress <Button> and set cursor to the input dialog.\nThe value is send in "));
-    MsgText.append (QString::number ((float) delaySendTextInMs / 1000.0, 'f', 1));
-    MsgText.append (tr (" seconds"));
-
-    ui->labelInfo->setText (MsgText);
-
+  ui->labelInfo->setText(MsgText);
 }

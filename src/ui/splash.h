@@ -14,23 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
  */
 
 #ifndef SPLASH_H
 #define SPLASH_H
 
+#include <QSplashScreen>
 #include <QtCore>
 #include <QtGui>
-#include <QSplashScreen>
 
-class SplashScreen:public QSplashScreen
-{
-    Q_OBJECT QPixmap* logo;
+class SplashScreen : public QSplashScreen {
+  Q_OBJECT QPixmap *logo;
 
-  public:
-      SplashScreen ();
-      virtual ~ SplashScreen ();
+public:
+  SplashScreen();
+  virtual ~SplashScreen();
 };
 
 #endif

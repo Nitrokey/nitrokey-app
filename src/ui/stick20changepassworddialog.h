@@ -20,39 +20,38 @@
 #ifndef DIALOGCHANGEPASSWORD_H
 #define DIALOGCHANGEPASSWORD_H
 
-#include <QDialog>
 #include "device.h"
+#include <QDialog>
 
-namespace Ui
-{
-    class DialogChangePassword;
+namespace Ui {
+class DialogChangePassword;
 }
 
-class DialogChangePassword:public QDialog
-{
-  Q_OBJECT public:
-    const static int minimumPasswordLength = 6; //FIXME extract constant to global config
-      explicit DialogChangePassword (QWidget * parent = 0);
-     ~DialogChangePassword ();
+class DialogChangePassword : public QDialog {
+  Q_OBJECT public : const static int minimumPasswordLength =
+                        6; // FIXME extract constant to global config
+  explicit DialogChangePassword(QWidget *parent = 0);
+  ~DialogChangePassword();
 
-    void InitData (void);
+  void InitData(void);
 
-    int PasswordKind;
+  int PasswordKind;
 
-    Device* cryptostick;
+  Device *cryptostick;
 
-    private slots:void on_checkBox_clicked (bool checked);
+private slots:
+  void on_checkBox_clicked(bool checked);
 
-  private:
-      Ui::DialogChangePassword * ui;
-    void accept (void);
-    void SendNewPassword (void);
-    void Stick10ChangePassword (void);
-    void ResetUserPassword (void);
-    void ResetUserPasswordStick10 (void);
-    void Stick20ChangeUpdatePassword (void);
-    int CheckResponse (bool NoStopFlag);
-    void clearFields ();
+private:
+  Ui::DialogChangePassword *ui;
+  void accept(void);
+  void SendNewPassword(void);
+  void Stick10ChangePassword(void);
+  void ResetUserPassword(void);
+  void ResetUserPasswordStick10(void);
+  void Stick20ChangeUpdatePassword(void);
+  int CheckResponse(bool NoStopFlag);
+  void clearFields();
 };
 
 #endif // DIALOGCHANGEPASSWORD_H

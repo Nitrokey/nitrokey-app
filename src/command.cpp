@@ -19,9 +19,9 @@
  */
 
 #include "command.h"
-#include "string.h"
 #include "crc32.h"
 #include "device.h"
+#include "string.h"
 
 /*******************************************************************************
 
@@ -33,23 +33,20 @@
 
 *******************************************************************************/
 
-Command::Command (uint8_t commandType, uint8_t * data, uint8_t len)
-{
-uint8_t length = len;
+Command::Command(uint8_t commandType, uint8_t *data, uint8_t len) {
+  uint8_t length = len;
 
-    this->commandType = commandType;
-    this->crc = 0;
-    memset (this->data, 0, COMMAND_SIZE);
+  this->commandType = commandType;
+  this->crc = 0;
+  memset(this->data, 0, COMMAND_SIZE);
 
-    if (COMMAND_SIZE < length)
-    {
-        length = COMMAND_SIZE;
-    }
+  if (COMMAND_SIZE < length) {
+    length = COMMAND_SIZE;
+  }
 
-    if ((0 != length) && (NULL != data))
-    {
-        memcpy (this->data, data, length);
-    }
+  if ((0 != length) && (NULL != data)) {
+    memcpy(this->data, data, length);
+  }
 }
 
 /*******************************************************************************
@@ -64,26 +61,24 @@ uint8_t length = len;
 
 *******************************************************************************/
 
-void Command::generateCRC ()
-{
-int i;
+void Command::generateCRC() {
+  int i;
 
-uint8_t report[REPORT_SIZE + 1];
+  uint8_t report[REPORT_SIZE + 1];
 
-uint32_t crc = 0xffffffff;
+  uint32_t crc = 0xffffffff;
 
-    memset (report, 0, sizeof (report));
+  memset(report, 0, sizeof(report));
 
-    report[1] = this->commandType;
+  report[1] = this->commandType;
 
-    memcpy (report + 2, this->data, COMMAND_SIZE);  // (2+59 = 61 not 60 !!!)
+  memcpy(report + 2, this->data, COMMAND_SIZE); // (2+59 = 61 not 60 !!!)
 
-    for (i = 0; i < 15; i++)
-    {
-        crc = Crc32 (crc, ((uint32_t *) (report + 1))[i]);
-    }
+  for (i = 0; i < 15; i++) {
+    crc = Crc32(crc, ((uint32_t *)(report + 1))[i]);
+  }
 
-    ((uint32_t *) (report + 1))[15] = crc;
+  ((uint32_t *)(report + 1))[15] = crc;
 
-    this->crc = crc;
+  this->crc = crc;
 }

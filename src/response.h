@@ -22,27 +22,25 @@
 #ifndef RESPONSE_H
 #define RESPONSE_H
 
-#include "stick20hid.h"
 #include "device.h"
+#include "stick20hid.h"
 
-class Response
-{
-  public:
-    Response ();
-    void DebugResponse ();
+class Response {
+public:
+  Response();
+  void DebugResponse();
 
-    uint8_t deviceStatus;
-    uint8_t lastCommandType;
-    uint32_t lastCommandCRC;
-    uint8_t lastCommandStatus;
-    char data[PAYLOAD_SIZE];
-    uint32_t responseCRC;
-    int getResponse (Device * device);
-    uint8_t reportBuffer[REPORT_SIZE + 1];
+  uint8_t deviceStatus;
+  uint8_t lastCommandType;
+  uint32_t lastCommandCRC;
+  uint8_t lastCommandStatus;
+  char data[PAYLOAD_SIZE];
+  uint32_t responseCRC;
+  int getResponse(Device *device);
+  uint8_t reportBuffer[REPORT_SIZE + 1];
 
-
-    HID_Stick20Status_est HID_Stick20Status_st;
-    uint8_t DebugResponseFlag;
+  HID_Stick20Status_est HID_Stick20Status_st;
+  uint8_t DebugResponseFlag;
 };
 
 #endif // RESPONSE_H

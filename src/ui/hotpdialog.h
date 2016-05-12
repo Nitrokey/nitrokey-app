@@ -21,50 +21,45 @@
 #ifndef HOTPDIALOG_H
 #define HOTPDIALOG_H
 
+#include "device.h"
 #include <QDialog>
 #include <QTimer>
-#include "device.h"
 
-namespace Ui
-{
-    class HOTPDialog;
+namespace Ui {
+class HOTPDialog;
 }
 
-class HOTPDialog:public QDialog
-{
-  Q_OBJECT public:
-      explicit HOTPDialog (QWidget * parent);
-    Device* device;
-    uint8_t slotNumber;
-    QString title;
+class HOTPDialog : public QDialog {
+  Q_OBJECT public : explicit HOTPDialog(QWidget *parent);
+  Device *device;
+  uint8_t slotNumber;
+  QString title;
 
-    QTimer* TOTP_ValidTimer;
-    uint64_t lastTOTPTime;
-    uint8_t lastInterval;
+  QTimer *TOTP_ValidTimer;
+  uint64_t lastTOTPTime;
+  uint8_t lastInterval;
 
-    QTimer* Clipboard_ValidTimer;
-    uint64_t lastClipboardTime;
+  QTimer *Clipboard_ValidTimer;
+  uint64_t lastClipboardTime;
 
-     ~HOTPDialog ();
+  ~HOTPDialog();
 
-    void getNextCode ();
-    void setToHOTP ();
-    void setToTOTP ();
+  void getNextCode();
+  void setToHOTP();
+  void setToTOTP();
 
+private slots:
+  void on_nextButton_clicked();
 
+  void copyToClipboard(QString text);
 
-    private slots:void on_nextButton_clicked ();
+  void checkTOTP_Valid();
 
-    void copyToClipboard (QString text);
+  void checkClipboard_Valid();
 
-    void checkTOTP_Valid ();
-
-    void checkClipboard_Valid ();
-
-  private:
-      Ui::HOTPDialog * ui;
-    QClipboard* clipboard;
-
+private:
+  Ui::HOTPDialog *ui;
+  QClipboard *clipboard;
 };
 
 #endif // HOTPDIALOG_H

@@ -20,52 +20,47 @@
 #ifndef STICK20RESPONSEDIALOG_H
 #define STICK20RESPONSEDIALOG_H
 
-#include <QDialog>
-#include <QTimer>
 #include "device.h"
 #include "response.h"
 #include "stick20-response-task.h"
+#include <QDialog>
+#include <QTimer>
 
-
-#define STICK20_DEBUG_TEXT_LEN          600000
+#define STICK20_DEBUG_TEXT_LEN 600000
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
-    extern char DebugText_GUI[STICK20_DEBUG_TEXT_LEN];
-    extern int DebugTextlen_GUI;
-    extern int DebugingActive;
-    extern int DebugingStick20PoolingActive;
+extern char DebugText_GUI[STICK20_DEBUG_TEXT_LEN];
+extern int DebugTextlen_GUI;
+extern int DebugingActive;
+extern int DebugingStick20PoolingActive;
 
-    void DebugAppendTextGui (const char* Text);
+void DebugAppendTextGui(const char *Text);
 #ifdef __cplusplus
-}   // extern "C"
+} // extern "C"
 #endif
 
-
-namespace Ui
-{
-    class Stick20ResponseDialog;
+namespace Ui {
+class Stick20ResponseDialog;
 }
 
-class Stick20ResponseDialog:public QDialog
-{
-  Q_OBJECT public:
-      Stick20ResponseTask * Stick20Task;
+class Stick20ResponseDialog : public QDialog {
+  Q_OBJECT public : Stick20ResponseTask *Stick20Task;
 
-    explicit Stick20ResponseDialog (QWidget * parent = 0, Stick20ResponseTask * Stick20TaskPointer = 0);
-     ~Stick20ResponseDialog ();
+  explicit Stick20ResponseDialog(QWidget *parent = 0, Stick20ResponseTask *Stick20TaskPointer = 0);
+  ~Stick20ResponseDialog();
 
-    void checkStick20StatusDebug (Response * stick20Response, int Status);
-    void showStick20Configuration (int Status);
+  void checkStick20StatusDebug(Response *stick20Response, int Status);
+  void showStick20Configuration(int Status);
 
-    QTimer* pollStick20Timer;
+  QTimer *pollStick20Timer;
 
-  private:
-      Ui::Stick20ResponseDialog * ui;
+private:
+  Ui::Stick20ResponseDialog *ui;
 
-    private slots:void checkStick20StatusDialog ();
+private slots:
+  void checkStick20StatusDialog();
 };
 
 #endif // STICK20RESPONSEDIALOG_H

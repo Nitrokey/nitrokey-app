@@ -25,17 +25,14 @@
 
 #define COMMAND_SIZE 59
 
-class Command
-{
-  public:
-    Command (uint8_t commandType, uint8_t * data, uint8_t len);
-    uint8_t commandType;
-    uint8_t data[COMMAND_SIZE];
-    uint32_t crc;
+class Command {
+public:
+  Command(uint8_t commandType, uint8_t *data, uint8_t len);
+  uint8_t commandType;
+  uint8_t data[COMMAND_SIZE];
+  uint32_t crc;
 
-    void generateCRC ();
-
+  void generateCRC();
 };
-
 
 #endif // COMMAND_H

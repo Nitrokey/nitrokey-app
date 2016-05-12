@@ -20,18 +20,16 @@
 
 #include "crc32.h"
 
+uint32_t Crc32(uint32_t Crc, uint32_t Data) {
+  int i;
 
-uint32_t Crc32 (uint32_t Crc, uint32_t Data)
-{
-int i;
+  Crc = Crc ^ Data;
 
-    Crc = Crc ^ Data;
+  for (i = 0; i < 32; i++)
+    if (Crc & 0x80000000)
+      Crc = (Crc << 1) ^ 0x04C11DB7; // Polynomial used in STM32
+    else
+      Crc = (Crc << 1);
 
-    for (i = 0; i < 32; i++)
-        if (Crc & 0x80000000)
-            Crc = (Crc << 1) ^ 0x04C11DB7;  // Polynomial used in STM32
-        else
-            Crc = (Crc << 1);
-
-    return (Crc);
+  return (Crc);
 }
