@@ -92,13 +92,14 @@ public:
   static void sleep(unsigned long secs) { QThread::sleep(secs); }
 };
 
-void unmountEncryptedVolumes() {
-// TODO check will this work also on Mac
-#if defined(Q_OS_LINUX)
-  std::string endev = systemutils::getEncryptedDevice();
-  if (endev.size() < 1)
+void unmountVolume(std::string endev) {
+  qDebug() << "Trying to unmount: " << endev.c_str();
+#if defined(Q_OS_LINUX) // TODO check will this work also on Mac
+  if (endev.empty())
     return;
   std::string mntdir = systemutils::getMntPoint(endev);
+  if (mntdir.empty())
+    return;
   if (DebugingActive == TRUE)
     qDebug() << "Unmounting " << mntdir.c_str();
   // TODO polling with MNT_EXPIRE? test which will suit better
@@ -107,11 +108,17 @@ void unmountEncryptedVolumes() {
   if (err != 0) {
     if (DebugingActive == TRUE)
       qDebug() << "Unmount error: " << strerror(errno);
+    /*
+     *std::string cmd = std::string("gvfs-mount -u ")+std::string(mntdir);
+     *qDebug() << cmd.c_str() <<
+     *  system(cmd.c_str());
+     *OwnSleep::sleep(1);
+     */
   }
 #endif // Q_OS_LINUX
 }
 
-void local_sync() {
+void do_sync() {
   // TODO TEST unmount during/after big data transfer
   fflush(NULL); // for windows, not necessarly needed or working
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
@@ -121,8 +128,22 @@ void local_sync() {
   // are not guaranteeing will this save data integrity anyway,
   // additional sleep should help
   OwnSleep::sleep(2);
-  // unmount does sync on its own additionally (if successful)
-  unmountEncryptedVolumes();
+}
+
+void local_sync_uncrypted() {
+  do_sync();
+// unmount does sync on its own additionally (if successful)
+#if defined(Q_OS_LINUX)
+  unmountVolume(systemutils::getUnencryptedDevice());
+#endif // Q_OS_LINUX
+}
+
+void local_sync() {
+  do_sync();
+// unmount does sync on its own additionally (if successful)
+#if defined(Q_OS_LINUX)
+  unmountVolume(systemutils::getEncryptedDevice());
+#endif // Q_OS_LINUX
 }
 
 #define LOCAL_PASSWORD_SIZE 40
@@ -2591,8 +2612,8 @@ void MainWindow::startStick20SetReadOnlyUncryptedVolume() {
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
+    local_sync_uncrypted();
     dialog.getPassword((char *)password);
-
     stick20SendCommand(STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN, password);
   }
 }
@@ -2607,8 +2628,8 @@ void MainWindow::startStick20SetReadWriteUncryptedVolume() {
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
+    local_sync_uncrypted();
     dialog.getPassword((char *)password);
-
     stick20SendCommand(STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN, password);
   }
 }

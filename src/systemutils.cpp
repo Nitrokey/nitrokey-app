@@ -23,11 +23,7 @@ bool isNitroDevice(string dev) {
   return false;
 }
 
-string getEncryptedDevice() {
-  // return full encrypted device path
-  // return empty string if one or none devices are connected
-  // This approach would only work if encrypted device has letter after
-  // not encrypted
+vector<string> getNitroDevices() {
   std::vector<string> devices, nitrodevices;
 
   ifstream partitionsFile("/proc/partitions");
@@ -43,10 +39,28 @@ string getEncryptedDevice() {
     if (isNitroDevice(devices[i]))
       nitrodevices.push_back(devices[i]);
   }
+  sort(nitrodevices.begin(), nitrodevices.end());
+  return nitrodevices;
+}
+
+string getUnencryptedDevice() {
+  // return full unencrypted device path
+  // return empty string if one or none devices are connected
+  std::vector<string> nitrodevices = getNitroDevices();
+  if (nitrodevices.size() <= 1)
+    return "";
+  return string("/dev/") + nitrodevices.front();
+}
+
+string getEncryptedDevice() {
+  // return full encrypted device path
+  // return empty string if one or none devices are connected
+  // This approach would only work if encrypted device has letter after
+  // not encrypted
+  std::vector<string> nitrodevices = getNitroDevices();
 
   if (nitrodevices.size() <= 1)
     return "";
-  sort(nitrodevices.begin(), nitrodevices.end());
   return string("/dev/") + nitrodevices.back();
 }
 
