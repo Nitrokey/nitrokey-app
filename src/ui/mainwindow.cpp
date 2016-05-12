@@ -458,7 +458,7 @@ void MainWindow::InitState() {
 }
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), trayMenuPasswdSubMenu(NULL) {
 #ifdef Q_OS_LINUX
   setlocale(LC_ALL, "");
   bindtextdomain("nitrokey-app", "/usr/share/locale");
@@ -1272,6 +1272,9 @@ void MainWindow::generatePasswordMenu() {
   } else
 #endif // HAVE_LIBAPPINDICATOR
   {
+      if (trayMenuPasswdSubMenu != NULL){
+          delete trayMenuPasswdSubMenu;
+      }
     trayMenuPasswdSubMenu = new QMenu(tr("Passwords"));
 
     /* TOTP passwords */
