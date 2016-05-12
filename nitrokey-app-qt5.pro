@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-CONFIG   += qt console
+CONFIG   += qt
 QT       += core gui
 
 target.path = /usr/local/bin
