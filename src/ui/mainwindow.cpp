@@ -1270,9 +1270,9 @@ void MainWindow::generatePasswordMenu() {
   } else
 #endif // HAVE_LIBAPPINDICATOR
   {
-      if (trayMenuPasswdSubMenu != NULL){
-          delete trayMenuPasswdSubMenu;
-      }
+    if (trayMenuPasswdSubMenu != NULL) {
+      delete trayMenuPasswdSubMenu;
+    }
     trayMenuPasswdSubMenu = new QMenu(tr("Passwords"));
 
     /* TOTP passwords */
@@ -1844,7 +1844,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
 
     bool conversionSuccess = false;
     uint64_t counterFromGUI = 0;
-    if (0 != ui->counterEdit->text().toLatin1().length()){
+    if (0 != ui->counterEdit->text().toLatin1().length()) {
       counterFromGUI = ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
     }
 
@@ -1856,7 +1856,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
       csApplet->warningBox(tr("Counter data not copied (setting to 0)"));
     }
     if (DebugingActive)
-        qDebug() << "Counter: " << *slot->counter;
+      qDebug() << "Counter: " << *slot->counter;
 
     slot->config = 0;
 
@@ -3995,13 +3995,13 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked() {
 void MainWindow::on_PWS_ButtonEnable_clicked() { PWS_Clicked_EnablePWSAccess(); }
 
 void MainWindow::on_counterEdit_editingFinished() {
-    uint64_t counterMaxValue;
+  uint64_t counterMaxValue;
   double counterD = ui->counterEdit->text().toDouble();
   counterMaxValue = (1UL << 63) - 1UL;
-  if (counterMaxValue < counterD) { //FIXME implement proper check is it bigger than long long int
+  if (counterMaxValue < counterD) { // FIXME implement proper check is it bigger than long long int
     ui->counterEdit->setText(QString("%1").arg(counterMaxValue));
     csApplet->warningBox(
-      tr("Counter must be a value between 0 and 9,223,372,036,854,775,807 (= 2^63 -1)"));
+        tr("Counter must be a value between 0 and 9,223,372,036,854,775,807 (= 2^63 -1)"));
   }
 }
 
