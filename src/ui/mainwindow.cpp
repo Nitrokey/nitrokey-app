@@ -1804,7 +1804,6 @@ void MainWindow::generateMenuForStorageDevice() {
 
 void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
   uint8_t selectedSlot = ui->slotComboBox->currentIndex();
-
   selectedSlot -= (TOTP_SlotCount + 1);
 
   if (selectedSlot < HOTP_SlotCount) {
@@ -1813,9 +1812,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
     QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
 
     uint8_t encoded[128];
-
     uint8_t decoded[20];
-
     uint8_t data[128];
 
     memset(encoded, 'A', 32);
