@@ -501,8 +501,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
-  validator = new QIntValidator(0, 9999999, this);
-  ui->counterEdit->setValidator(validator);
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
   cryptostick = new Device(VID_STICK_OTP, PID_STICK_OTP, VID_STICK_20, PID_STICK_20,
@@ -1272,9 +1270,9 @@ void MainWindow::generatePasswordMenu() {
   } else
 #endif // HAVE_LIBAPPINDICATOR
   {
-      if (trayMenuPasswdSubMenu != NULL){
-          delete trayMenuPasswdSubMenu;
-      }
+    if (trayMenuPasswdSubMenu != NULL) {
+      delete trayMenuPasswdSubMenu;
+    }
     trayMenuPasswdSubMenu = new QMenu(tr("Passwords"));
 
     /* TOTP passwords */
@@ -1806,7 +1804,6 @@ void MainWindow::generateMenuForStorageDevice() {
 
 void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
   uint8_t selectedSlot = ui->slotComboBox->currentIndex();
-
   selectedSlot -= (TOTP_SlotCount + 1);
 
   if (selectedSlot < HOTP_SlotCount) {
@@ -1815,9 +1812,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
     QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
 
     uint8_t encoded[128];
-
     uint8_t decoded[20];
-
     uint8_t data[128];
 
     memset(encoded, 'A', 32);
@@ -1828,46 +1823,40 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
     base32_decode(data, decoded, 20);
 
     secretFromGUI = QByteArray((char *)decoded, 20); // .toHex();
-
     memset(slot->secret, 0, 20);
     memcpy(slot->secret, secretFromGUI.data(), secretFromGUI.size());
 
     QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
-
     memset(slot->slotName, 0, 15);
     memcpy(slot->slotName, slotNameFromGUI.data(), slotNameFromGUI.size());
 
     memset(slot->tokenID, 32, 13);
-
     QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-
     memcpy(slot->tokenID, ompFromGUI, 2);
 
     QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-
     memcpy(slot->tokenID + 2, ttFromGUI, 2);
 
     QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-
     memcpy(slot->tokenID + 4, muiFromGUI, 8);
 
     slot->tokenID[12] = ui->keyboardComboBox->currentIndex() & 0xFF;
 
     bool conversionSuccess = false;
-    uint64_t counterFromGUI = ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
+    uint64_t counterFromGUI = 0;
+    if (0 != ui->counterEdit->text().toLatin1().length()) {
+      counterFromGUI = ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
+    }
 
     memset(slot->counter, 0, 8);
-
-    if (0 != ui->counterEdit->text().toLatin1().length() && conversionSuccess) {
-      memcpy(slot->counter, &counterFromGUI, // FIXME check for little endian /
-                                             // big endian conversion (test on
-                                             // MAC)
-             sizeof counterFromGUI);
+    if (conversionSuccess) {
+      // FIXME check for little endian/big endian conversion (test on Macintosh)
+      memcpy(slot->counter, &counterFromGUI, sizeof counterFromGUI);
     } else {
-      csApplet->warningBox(tr("Counter data not copied (setting to 0)")); // whole structure was
-                                                                          // zeroed in the
-                                                                          // beginning, so nop
+      csApplet->warningBox(tr("Counter value not copied - there was an error in conversion. Setting to 0. Please retry."));
     }
+    if (DebugingActive)
+      qDebug() << "HOTP counter value: " << *slot->counter;
 
     slot->config = 0;
 
@@ -3962,6 +3951,8 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
 
     otpInClipboard = output;
     copyToClipboard(otpInClipboard);
+    if (DebugingActive)
+      qDebug() << otpInClipboard;
   } else if (ok) {
     csApplet->warningBox(tr("Invalid password!"));
     return 1;
@@ -4004,25 +3995,13 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked() {
 void MainWindow::on_PWS_ButtonEnable_clicked() { PWS_Clicked_EnablePWSAccess(); }
 
 void MainWindow::on_counterEdit_editingFinished() {
-  int Seed;
-
-  // FIXME apparently edit control for counter is being used as GUI seed source
-  // -
-  // TODO: decouple
-
-  Seed = ui->counterEdit->text().toInt();
-
-  if ((1 << 20) < Seed) {
-    Seed = (1 << 20) - 1;
-    Seed = (Seed / 16) * 16;
-    ui->counterEdit->setText(QString("%1").arg(Seed));
-    csApplet->warningBox(tr("Seed must be lower than 1048560 (= 2^20)"));
-  }
-
-  if (0 != (Seed % 16)) {
-    Seed = (Seed / 16) * 16;
-    ui->counterEdit->setText(QString("%1").arg(Seed));
-    csApplet->warningBox(tr("Seed had to be a multiple of 16"));
+  uint64_t counterMaxValue;
+  double counterD = ui->counterEdit->text().toDouble();
+  counterMaxValue = (1UL << 63) - 1UL;
+  if (counterMaxValue < counterD) { // FIXME implement proper check is it bigger than long long int
+    ui->counterEdit->setText(QString("%1").arg(counterMaxValue));
+    csApplet->warningBox(
+        tr("Counter must be a value between 0 and 9,223,372,036,854,775,807 (= 2^63 -1)"));
   }
 }
 
