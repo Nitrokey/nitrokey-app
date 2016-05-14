@@ -453,10 +453,10 @@
                     <string/>
                    </property>
                    <property name="text">
-                    <string>00000000</string>
+                    <string>00000000000000000000</string>
                    </property>
                    <property name="maxLength">
-                    <number>8</number>
+                    <number>20</number>
                    </property>
                   </widget>
                  </item>
