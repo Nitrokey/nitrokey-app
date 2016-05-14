@@ -188,7 +188,7 @@ public slots:
   void getTOTPDialog(int slot);
   void getHOTPDialog(int slot);
   void PWS_ExceClickedSlot(int Slot);
-  void startStick20DestroyCryptedVolume();
+  void startStick20DestroyCryptedVolume(int fillSDWithRandomChars);
   void startStick20FillSDCardWithRandomChars();
   void startStick20EnableCryptedVolume();
   void startStick20DisableCryptedVolume();
