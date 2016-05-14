@@ -1850,13 +1850,13 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
 
     memset(slot->counter, 0, 8);
     if (conversionSuccess) {
-      // FIXME check for little endian/big endian conversion (test on MAC)
+      // FIXME check for little endian/big endian conversion (test on Macintosh)
       memcpy(slot->counter, &counterFromGUI, sizeof counterFromGUI);
     } else {
-      csApplet->warningBox(tr("Counter data not copied (setting to 0)"));
+      csApplet->warningBox(tr("Counter value not copied - there was an error in conversion. Setting to 0. Please retry."));
     }
     if (DebugingActive)
-      qDebug() << "Counter: " << *slot->counter;
+      qDebug() << "HOTP counter value: " << *slot->counter;
 
     slot->config = 0;
 
