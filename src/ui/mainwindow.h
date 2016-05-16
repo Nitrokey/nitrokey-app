@@ -24,6 +24,7 @@
 #include "device.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <climits>
 
 #define uint64_t unsigned long long
 
@@ -94,7 +95,6 @@ private:
   QMenu *trayMenuHOTPSubMenu;
   QMenu *trayMenuSubSpecialConfigure;
   QClipboard *clipboard;
-  QValidator *validator;
 
   unsigned char HOTP_SlotCount;
   unsigned char TOTP_SlotCount;
