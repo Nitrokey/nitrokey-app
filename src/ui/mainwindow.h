@@ -24,6 +24,7 @@
 #include "device.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <climits>
 
 #define uint64_t unsigned long long
 

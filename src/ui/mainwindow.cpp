@@ -1848,7 +1848,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
       bool conversionSuccess = false;
       uint64_t counterFromGUI = 0;
       if (0 != ui->counterEdit->text().toLatin1().length()) {
-        counterFromGUI = ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
+        counterFromGUI = ui->counterEdit->text().toLatin1().toULongLong(&conversionSuccess);
       }
       if (conversionSuccess) {
         // FIXME check for little endian/big endian conversion (test on Macintosh)
@@ -1874,7 +1874,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
       if (cryptostick->activStick20)
         qDebug() << "HOTP counter value: " << *(char *)slot->counter;
       else
-        qDebug() << "HOTP counter value: " << *slot->counter;
+        qDebug() << "HOTP counter value: " << *(quint64 *)slot->counter;
     }
     slot->config = 0;
 
@@ -3142,8 +3142,10 @@ void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
 void MainWindow::on_setToRandomButton_clicked() {
   quint64 counter;
   counter = qrand();
-  if (cryptostick->activStick20)
-    counter = counter % 9999999;
+  if (cryptostick->activStick20) {
+    const int maxDigits = 7;
+    counter = counter % ((quint64)pow(10, maxDigits));
+  }
   ui->counterEdit->setText(QString(QByteArray::number(counter, 10)));
 }
 
@@ -4014,19 +4016,17 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked() {
 void MainWindow::on_PWS_ButtonEnable_clicked() { PWS_Clicked_EnablePWSAccess(); }
 
 void MainWindow::on_counterEdit_editingFinished() {
+  bool conversionSuccess = false;
+  ui->counterEdit->text().toLatin1().toULongLong(&conversionSuccess);
   if (cryptostick->activStick20 == false) {
-    uint64_t counterMaxValue;
-    double counterD = ui->counterEdit->text().toDouble();
-    counterMaxValue = (1UL << 63) - 1UL;
-    if (counterMaxValue <
-        counterD) { // FIXME implement proper check is it bigger than long long int
-      ui->counterEdit->setText(QString("%1").arg(counterMaxValue));
-      csApplet->warningBox(
-          tr("Counter must be a value between 0 and 9,223,372,036,854,775,807 (= 2^63 -1)"));
+    quint64 counterMaxValue = ULLONG_MAX;
+    if (!conversionSuccess) {
+      ui->counterEdit->setText(QString("%1").arg(0));
+      csApplet->warningBox(tr("Counter must be a value between 0 and %1").arg(counterMaxValue));
     }
   } else { // for nitrokey storage
-    if (ui->counterEdit->text().toLatin1().length() > 7) {
-      ui->counterEdit->setText(QString("%1").arg("9999999"));
+    if (conversionSuccess || ui->counterEdit->text().toLatin1().length() > 7) {
+      ui->counterEdit->setText(QString("%1").arg(0));
       csApplet->warningBox(
           tr("For Nitrokey Storage counter must be a value between 0 and 9999999"));
     }
