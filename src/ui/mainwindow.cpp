@@ -1843,7 +1843,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
     slot->tokenID[12] = ui->keyboardComboBox->currentIndex() & 0xFF;
 
     memset(slot->counter, 0, 8);
-    //Nitrokey Storage needs counter value in text but Pro in binary [#60]
+    // Nitrokey Storage needs counter value in text but Pro in binary [#60]
     if (cryptostick->activStick20 == false) {
       bool conversionSuccess = false;
       uint64_t counterFromGUI = 0;
@@ -1855,16 +1855,27 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
         memcpy(slot->counter, &counterFromGUI, sizeof counterFromGUI);
       } else {
         csApplet->warningBox(tr("Counter value not copied - there was an error in conversion. "
-                                "Setting to 0. Please retry."));
+                                "Setting counter value to 0. Please retry."));
       }
-    } else {
+    } else { // nitrokey storage version
       QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
-      if (0 != counterFromGUI.length())
-        memcpy(slot->counter, counterFromGUI.data(), counterFromGUI.length());
+      int digitsInCounter = counterFromGUI.length();
+      if (0 < digitsInCounter && digitsInCounter < 8) {
+        memcpy(slot->counter, counterFromGUI.data(), std::min(counterFromGUI.length(), 7));
+        // 8th char has to be '\0' since in firmware atoi is used directly on buffer
+        slot->counter[7] = 0;
+      } else {
+        csApplet->warningBox(
+            tr("Counter value not copied - Nitrokey Storage handles HOTP counter "
+               "values up to 7 digits. Setting counter value to 0. Please retry."));
+      }
     }
-    if (DebugingActive)
-      qDebug() << "HOTP counter value: " << *slot->counter;
-
+    if (DebugingActive) {
+      if (cryptostick->activStick20)
+        qDebug() << "HOTP counter value: " << *(char *)slot->counter;
+      else
+        qDebug() << "HOTP counter value: " << *slot->counter;
+    }
     slot->config = 0;
 
     if (TRUE == ui->digits8radioButton->isChecked())
@@ -2029,13 +2040,12 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secret); // .toHex());
 
-  QByteArray counter((char *)cryptostick->HOTPSlots[slotNo]->counter, 8);
-
-  QString TextCount;
-
-  TextCount = QString("%1").arg(counter.toInt());
-  ui->counterEdit->setText(TextCount); // .toHex());
-
+  if (cryptostick->activStick20) {
+    QByteArray counter((char *)cryptostick->HOTPSlots[slotNo]->counter, 8);
+    QString TextCount;
+    TextCount = QString("%1").arg(counter.toInt());
+    ui->counterEdit->setText(TextCount); // .toHex());
+  }
   QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID, 2);
 
   ui->ompEdit->setText(QString(omp));
@@ -3128,10 +3138,9 @@ void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
 
 void MainWindow::on_setToRandomButton_clicked() {
   quint64 counter;
-
-  counter = qrand() & 0xFFFF;
-  counter *= 16;
-
+  counter = qrand();
+  if (cryptostick->activStick20)
+    counter = counter % 9999999;
   ui->counterEdit->setText(QString(QByteArray::number(counter, 10)));
 }
 
@@ -4002,13 +4011,22 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked() {
 void MainWindow::on_PWS_ButtonEnable_clicked() { PWS_Clicked_EnablePWSAccess(); }
 
 void MainWindow::on_counterEdit_editingFinished() {
-  uint64_t counterMaxValue;
-  double counterD = ui->counterEdit->text().toDouble();
-  counterMaxValue = (1UL << 63) - 1UL;
-  if (counterMaxValue < counterD) { // FIXME implement proper check is it bigger than long long int
-    ui->counterEdit->setText(QString("%1").arg(counterMaxValue));
-    csApplet->warningBox(
-        tr("Counter must be a value between 0 and 9,223,372,036,854,775,807 (= 2^63 -1)"));
+  if (cryptostick->activStick20 == false) {
+    uint64_t counterMaxValue;
+    double counterD = ui->counterEdit->text().toDouble();
+    counterMaxValue = (1UL << 63) - 1UL;
+    if (counterMaxValue <
+        counterD) { // FIXME implement proper check is it bigger than long long int
+      ui->counterEdit->setText(QString("%1").arg(counterMaxValue));
+      csApplet->warningBox(
+          tr("Counter must be a value between 0 and 9,223,372,036,854,775,807 (= 2^63 -1)"));
+    }
+  } else { // for nitrokey storage
+    if (ui->counterEdit->text().toLatin1().length() > 7) {
+      ui->counterEdit->setText(QString("%1").arg("9999999"));
+      csApplet->warningBox(
+          tr("For Nitrokey Storage counter must be a value between 0 and 9999999"));
+    }
   }
 }
 
