@@ -1136,13 +1136,21 @@ void MainWindow::initActionsForStick20() {
   connect(Stick20ActionExportFirmwareToFile, SIGNAL(triggered()), this,
           SLOT(startStick20ExportFirmwareToFile()));
 
+  QSignalMapper *signalMapper_startStick20DestroyCryptedVolume =
+      new QSignalMapper(this); // FIXME memory leak
+
   Stick20ActionDestroyCryptedVolume = new QAction(tr("&Destroy encrypted data"), this);
-  connect(Stick20ActionDestroyCryptedVolume, SIGNAL(triggered()), this,
-          SLOT(startStick20DestroyCryptedVolume()));
+  signalMapper_startStick20DestroyCryptedVolume->setMapping(Stick20ActionDestroyCryptedVolume, 0);
+  connect(Stick20ActionDestroyCryptedVolume, SIGNAL(triggered()),
+          signalMapper_startStick20DestroyCryptedVolume, SLOT(map()));
 
   Stick20ActionInitCryptedVolume = new QAction(tr("&Initialize device"), this);
-  connect(Stick20ActionInitCryptedVolume, SIGNAL(triggered()), this,
-          SLOT(startStick20DestroyCryptedVolume()));
+  signalMapper_startStick20DestroyCryptedVolume->setMapping(Stick20ActionInitCryptedVolume, 1);
+  connect(Stick20ActionInitCryptedVolume, SIGNAL(triggered()),
+          signalMapper_startStick20DestroyCryptedVolume, SLOT(map()));
+
+  connect(signalMapper_startStick20DestroyCryptedVolume, SIGNAL(mapped(int)), this,
+          SLOT(startStick20DestroyCryptedVolume(int)));
 
   Stick20ActionFillSDCardWithRandomChars =
       new QAction(tr("&Initialize storage with random data"), this);
@@ -2502,7 +2510,7 @@ void MainWindow::startStick20ExportFirmwareToFile() {
   }
 }
 
-void MainWindow::startStick20DestroyCryptedVolume() {
+void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
   uint8_t password[LOCAL_PASSWORD_SIZE];
 
   int ret;
@@ -2522,7 +2530,8 @@ void MainWindow::startStick20DestroyCryptedVolume() {
       dialog.getPassword((char *)password);
 
       stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
-      stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
+      if (fillSDWithRandomChars != 0)
+        stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
     }
   }
 }
