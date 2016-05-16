@@ -2045,6 +2045,9 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
     QString TextCount;
     TextCount = QString("%1").arg(counter.toInt());
     ui->counterEdit->setText(TextCount); // .toHex());
+  } else {
+    QString TextCount = QString("%1").arg(*(qulonglong *)cryptostick->HOTPSlots[slotNo]->counter);
+    ui->counterEdit->setText(TextCount);
   }
   QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID, 2);
 
