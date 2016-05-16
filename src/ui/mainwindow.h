@@ -95,7 +95,6 @@ private:
   QMenu *trayMenuHOTPSubMenu;
   QMenu *trayMenuSubSpecialConfigure;
   QClipboard *clipboard;
-  QValidator *validator;
 
   unsigned char HOTP_SlotCount;
   unsigned char TOTP_SlotCount;

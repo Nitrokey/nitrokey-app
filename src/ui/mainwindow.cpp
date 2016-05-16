@@ -929,11 +929,7 @@ void MainWindow::checkConnection() {
 
 void MainWindow::startTimer() {}
 
-MainWindow::~MainWindow() {
-  delete validator;
-
-  delete ui;
-}
+MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
   this->hide();
@@ -2158,19 +2154,7 @@ void MainWindow::startConfiguration() {
         }
         password.clear();
       }
-    } while (QDialog::Accepted == ok && !cryptostick->validPassword); // While
-                                                                      // the
-                                                                      // user
-                                                                      // keeps
-    // enterning
-    // a
-    // pin
-    // and
-    // the
-    // pin
-    // is
-    // not
-    // correct..
+    } while (QDialog::Accepted == ok && !cryptostick->validPassword);
   }
 
   // Start the config dialog
@@ -2189,6 +2173,9 @@ void MainWindow::startConfiguration() {
     setWindowState(Qt::WindowActive);
 
     QTimer::singleShot(0, this, SLOT(resizeMin()));
+  }
+  if (cryptostick->activStick20) {
+    ui->counterEdit->setMaxLength(7);
   }
 }
 
@@ -4025,7 +4012,7 @@ void MainWindow::on_counterEdit_editingFinished() {
       csApplet->warningBox(tr("Counter must be a value between 0 and %1").arg(counterMaxValue));
     }
   } else { // for nitrokey storage
-    if (conversionSuccess || ui->counterEdit->text().toLatin1().length() > 7) {
+    if (!conversionSuccess || ui->counterEdit->text().toLatin1().length() > 7) {
       ui->counterEdit->setText(QString("%1").arg(0));
       csApplet->warningBox(
           tr("For Nitrokey Storage counter must be a value between 0 and 9999999"));
