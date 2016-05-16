@@ -1842,18 +1842,25 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
 
     slot->tokenID[12] = ui->keyboardComboBox->currentIndex() & 0xFF;
 
-    bool conversionSuccess = false;
-    uint64_t counterFromGUI = 0;
-    if (0 != ui->counterEdit->text().toLatin1().length()) {
-      counterFromGUI = ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
-    }
-
     memset(slot->counter, 0, 8);
-    if (conversionSuccess) {
-      // FIXME check for little endian/big endian conversion (test on Macintosh)
-      memcpy(slot->counter, &counterFromGUI, sizeof counterFromGUI);
+    //Nitrokey Storage needs counter value in text but Pro in binary [#60]
+    if (cryptostick->activStick20 == false) {
+      bool conversionSuccess = false;
+      uint64_t counterFromGUI = 0;
+      if (0 != ui->counterEdit->text().toLatin1().length()) {
+        counterFromGUI = ui->counterEdit->text().toLatin1().toLongLong(&conversionSuccess);
+      }
+      if (conversionSuccess) {
+        // FIXME check for little endian/big endian conversion (test on Macintosh)
+        memcpy(slot->counter, &counterFromGUI, sizeof counterFromGUI);
+      } else {
+        csApplet->warningBox(tr("Counter value not copied - there was an error in conversion. "
+                                "Setting to 0. Please retry."));
+      }
     } else {
-      csApplet->warningBox(tr("Counter value not copied - there was an error in conversion. Setting to 0. Please retry."));
+      QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
+      if (0 != counterFromGUI.length())
+        memcpy(slot->counter, counterFromGUI.data(), counterFromGUI.length());
     }
     if (DebugingActive)
       qDebug() << "HOTP counter value: " << *slot->counter;
