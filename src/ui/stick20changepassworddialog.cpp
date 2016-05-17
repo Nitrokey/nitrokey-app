@@ -69,35 +69,40 @@ DialogChangePassword::DialogChangePassword(QWidget *parent)
 
 DialogChangePassword::~DialogChangePassword() { delete ui; }
 
-void DialogChangePassword::UpdatePasswordRetry(){
+void DialogChangePassword::UpdatePasswordRetry() {
+  QString noTrialsLeft;
   int retryCount = 0;
   // update password retry values
   if (TRUE == cryptostick->activStick20) {
     cryptostick->stick20GetStatusData();
-    QSystemTrayIcon trayicon;
-    Stick20ResponseTask ResponseTask(this, cryptostick, &trayicon );
-    ResponseTask.NoStopWhenStatusOK();
-    ResponseTask.GetResponse();
+    CheckResponse(FALSE);
   }
   cryptostick->getPasswordRetryCount();
   cryptostick->getUserPasswordRetryCount();
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_USER:
-    retryCount =  HID_Stick20Configuration_st.UserPwRetryCount;
+    retryCount = HID_Stick20Configuration_st.UserPwRetryCount;
+    noTrialsLeft = tr("Unfortunately you have no more trials left. Please use 'Reset User PIN' "
+                      "option from menu to reset password");
     break;
   case STICK20_PASSWORD_KIND_ADMIN:
   case STICK10_PASSWORD_KIND_ADMIN:
   case STICK20_PASSWORD_KIND_RESET_USER:
   case STICK10_PASSWORD_KIND_RESET_USER:
     retryCount = HID_Stick20Configuration_st.AdminPwRetryCount;
+    noTrialsLeft = tr("Unfortunately you have no more trials left. Please check instruction how to "
+                      "reset Admin password.");
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
-    //FIXME add firmware counter
+    // FIXME add firmware counter
     retryCount = 0;
     ui->retryCount->hide();
     ui->retryCountLabel->hide();
     break;
+  }
+  if (retryCount == 0) {
+    csApplet->warningBox(noTrialsLeft);
   }
   ui->retryCount->setText(QString::number(retryCount));
   ui->retryCount->repaint();
@@ -150,13 +155,10 @@ void DialogChangePassword::InitData(void) {
 
 int DialogChangePassword::CheckResponse(bool NoStopFlag) {
   Stick20ResponseTask ResponseTask(this, cryptostick, NULL);
-
   if (FALSE == NoStopFlag) {
     ResponseTask.NoStopWhenStatusOK();
   }
-
   ResponseTask.GetResponse();
-
   return (ResponseTask.ResultValue);
 }
 
