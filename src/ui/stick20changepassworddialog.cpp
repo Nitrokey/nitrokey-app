@@ -123,7 +123,7 @@ int DialogChangePassword::CheckResponse(bool NoStopFlag) {
   return (ResponseTask.ResultValue);
 }
 
-void DialogChangePassword::SendNewPassword(void) {
+bool DialogChangePassword::SendNewPassword(void) {
   bool communicationSuccess;
   QByteArray PasswordString;
   int password_length = STICK20_PASSOWRD_LEN;
@@ -149,16 +149,15 @@ void DialogChangePassword::SendNewPassword(void) {
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
   communicationSuccess = cryptostick->stick20SendPassword(Data);
-
   if (!communicationSuccess) {
     csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
-    return;
+    return false;
   }
 
   bool isOldPasswordCorrect = CheckResponse(TRUE) == 1;
   if (!isOldPasswordCorrect) {
     csApplet->warningBox(tr("Current password is not correct. Please retry."));
-    return;
+    return false;
   }
 
   // Change password
@@ -170,15 +169,16 @@ void DialogChangePassword::SendNewPassword(void) {
   communicationSuccess = cryptostick->stick20SendNewPassword(Data);
   if (!communicationSuccess) {
     csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
-    return;
+    return false;
   }
 
   bool isNewPasswordCorrect = CheckResponse(FALSE) == 1;
   if (!isNewPasswordCorrect) {
     csApplet->warningBox(tr("New password is not correct. Please retry."));
-    return;
+    return false;
   }
   csApplet->messageBox(tr("New password is set"));
+  return true;
 }
 
 /*******************************************************************************
@@ -393,32 +393,37 @@ void DialogChangePassword::accept() {
     return;
   }
 
+  bool success = false;
   // Send password to Stick 2.0
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
   case STICK20_PASSWORD_KIND_ADMIN:
-    SendNewPassword();
+    success = SendNewPassword();
     break;
   case STICK10_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_ADMIN:
     Stick10ChangePassword();
+    success = true;
     break;
   case STICK20_PASSWORD_KIND_RESET_USER:
     ResetUserPassword();
+    success = true;
     break;
   case STICK10_PASSWORD_KIND_RESET_USER:
     ResetUserPasswordStick10();
+    success = true;
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
     Stick20ChangeUpdatePassword();
+    success = true;
     break;
   default:
     break;
   }
 
   cryptostick->getStatus();
-
-  done(true);
+  if (success)
+    done(true);
 }
 
 /*******************************************************************************
