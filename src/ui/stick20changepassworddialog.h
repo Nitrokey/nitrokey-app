@@ -50,7 +50,7 @@ private:
   void Stick10ChangePassword(void);
   bool ResetUserPassword(void);
   void ResetUserPasswordStick10(void);
-  void Stick20ChangeUpdatePassword(void);
+  bool Stick20ChangeUpdatePassword(void);
   int CheckResponse(bool NoStopFlag);
   void clearFields();
 };

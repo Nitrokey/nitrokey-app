@@ -2365,24 +2365,10 @@ bool Device::stick20EnableFirmwareUpdate(uint8_t *password) {
   return (true);
 }
 
-/*******************************************************************************
-
-  stick20EnableFirmwareUpdate
-
-  21.06.15  RB              First review
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
 bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_password) {
   uint8_t n;
-
   int res;
-
   uint8_t SendString[33];
-
   Command *cmd;
 
   // Check password length
@@ -2401,11 +2387,9 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
           CS20_MAX_UPDATE_PASSWORD_LEN);
   cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN, SendString, 33);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
   delete cmd;
 
-  return (true);
+  return res >0;
 }
 
 /*******************************************************************************

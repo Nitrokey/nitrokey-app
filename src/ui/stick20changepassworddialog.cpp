@@ -96,7 +96,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
     // FIXME add firmware counter
-    retryCount = 0;
+    retryCount = 99;
     ui->retryCount->hide();
     ui->retryCountLabel->hide();
     break;
@@ -338,16 +338,12 @@ void DialogChangePassword::ResetUserPasswordStick10(void) {
   }
 }
 
-void DialogChangePassword::Stick20ChangeUpdatePassword(void) {
-  int ret;
-
+bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
+  bool commandSuccess;
   int password_length;
-
   QByteArray PasswordString;
-
   password_length = CS20_MAX_UPDATE_PASSWORD_LEN;
   unsigned char old_pin[password_length + 1];
-
   unsigned char new_pin[password_length + 1];
 
   memset(old_pin, 0, password_length + 1);
@@ -360,10 +356,14 @@ void DialogChangePassword::Stick20ChangeUpdatePassword(void) {
   strncpy((char *)new_pin, PasswordString.data(), password_length);
 
   // Change password
-  ret = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
+  commandSuccess = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
 
-  if (!ret)
-    csApplet->warningBox(tr("Wrong password."));
+  if (!commandSuccess) {
+    csApplet->warningBox(
+        tr("Wrong password or there was a communication problem with the device."));
+    return false;
+  }
+  return true;
 }
 
 /*******************************************************************************
@@ -444,8 +444,7 @@ void DialogChangePassword::accept() {
     success = true;
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
-    Stick20ChangeUpdatePassword();
-    success = true;
+    success = Stick20ChangeUpdatePassword();
     break;
   default:
     break;
