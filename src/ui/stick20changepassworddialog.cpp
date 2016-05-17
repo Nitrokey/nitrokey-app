@@ -103,6 +103,9 @@ void DialogChangePassword::UpdatePasswordRetry() {
   }
   if (retryCount == 0) {
     csApplet->warningBox(noTrialsLeft);
+    QString cssRed = "QLabel {color: red; font-weight: bold}";
+    ui->retryCount->setStyleSheet(cssRed);
+    ui->retryCountLabel->setStyleSheet(cssRed);
   }
   ui->retryCount->setText(QString::number(retryCount));
   ui->retryCount->repaint();
