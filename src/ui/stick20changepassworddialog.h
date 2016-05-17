@@ -45,6 +45,7 @@ private slots:
 private:
   Ui::DialogChangePassword *ui;
   void accept(void);
+  void UpdatePasswordRetry(void);
   bool SendNewPassword(void);
   void Stick10ChangePassword(void);
   void ResetUserPassword(void);

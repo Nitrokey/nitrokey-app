@@ -69,6 +69,40 @@ DialogChangePassword::DialogChangePassword(QWidget *parent)
 
 DialogChangePassword::~DialogChangePassword() { delete ui; }
 
+void DialogChangePassword::UpdatePasswordRetry(){
+  int retryCount = 0;
+  // update password retry values
+  if (TRUE == cryptostick->activStick20) {
+    cryptostick->stick20GetStatusData();
+    QSystemTrayIcon trayicon;
+    Stick20ResponseTask ResponseTask(this, cryptostick, &trayicon );
+    ResponseTask.NoStopWhenStatusOK();
+    ResponseTask.GetResponse();
+  }
+  cryptostick->getPasswordRetryCount();
+  cryptostick->getUserPasswordRetryCount();
+  switch (PasswordKind) {
+  case STICK20_PASSWORD_KIND_USER:
+  case STICK10_PASSWORD_KIND_USER:
+    retryCount =  HID_Stick20Configuration_st.UserPwRetryCount;
+    break;
+  case STICK20_PASSWORD_KIND_ADMIN:
+  case STICK10_PASSWORD_KIND_ADMIN:
+  case STICK20_PASSWORD_KIND_RESET_USER:
+  case STICK10_PASSWORD_KIND_RESET_USER:
+    retryCount = HID_Stick20Configuration_st.AdminPwRetryCount;
+    break;
+  case STICK20_PASSWORD_KIND_UPDATE:
+    //FIXME add firmware counter
+    retryCount = 0;
+    ui->retryCount->hide();
+    ui->retryCountLabel->hide();
+    break;
+  }
+  ui->retryCount->setText(QString::number(retryCount));
+  ui->retryCount->repaint();
+}
+
 void DialogChangePassword::InitData(void) {
   // center the password window
   QDesktopWidget *desktop = QApplication::desktop();
@@ -80,6 +114,9 @@ void DialogChangePassword::InitData(void) {
   QString text = ui->label_additional_information->text();
   text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
   ui->label_additional_information->setText(text);
+
+  this->UpdatePasswordRetry();
+
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_USER:
@@ -422,8 +459,13 @@ void DialogChangePassword::accept() {
   }
 
   cryptostick->getStatus();
-  if (success)
+
+  if (success) {
     done(true);
+    return;
+  }
+  this->UpdatePasswordRetry();
+  this->clearFields();
 }
 
 /*******************************************************************************

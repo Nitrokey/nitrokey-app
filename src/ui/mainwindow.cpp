@@ -2237,19 +2237,15 @@ void MainWindow::startStickDebug() {
 }
 
 void MainWindow::startAboutDialog() {
-  AboutDialog dialog(cryptostick, this);
-
   if (TRUE == cryptostick->activStick20) {
     // Get actual data from stick 20
     cryptostick->stick20GetStatusData();
-
     Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
-
     ResponseTask.NoStopWhenStatusOK();
     ResponseTask.GetResponse();
-
     UpdateDynamicMenuEntrys(); // Use new data to update menu
   }
+  AboutDialog dialog(cryptostick, this);
   dialog.exec();
 }
 
