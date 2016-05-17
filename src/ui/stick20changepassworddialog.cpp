@@ -152,24 +152,10 @@ int DialogChangePassword::CheckResponse(bool NoStopFlag) {
   return (ResponseTask.ResultValue);
 }
 
-/*******************************************************************************
-
-  SendNewPassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
 void DialogChangePassword::SendNewPassword(void) {
-  int ret;
-
-  int password_length;
-
+  bool communicationSuccess;
   QByteArray PasswordString;
-
-  password_length = STICK20_PASSOWRD_LEN;
+  int password_length = STICK20_PASSOWRD_LEN;
   unsigned char Data[password_length + 2];
 
   // Set kind of password
@@ -191,12 +177,16 @@ void DialogChangePassword::SendNewPassword(void) {
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
-  ret = cryptostick->stick20SendPassword(Data);
+  communicationSuccess = cryptostick->stick20SendPassword(Data);
 
-  if ((int)true == ret) {
-    CheckResponse(TRUE);
-  } else {
-    // Todo
+  if (!communicationSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    return;
+  }
+
+  bool isOldPasswordCorrect = CheckResponse(TRUE) == 1;
+  if (!isOldPasswordCorrect) {
+    csApplet->warningBox(tr("Current password is not correct. Please retry."));
     return;
   }
 
@@ -206,14 +196,18 @@ void DialogChangePassword::SendNewPassword(void) {
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
-  ret = cryptostick->stick20SendNewPassword(Data);
-
-  if ((int)true == ret) {
-    CheckResponse(FALSE);
-  } else {
-    // Todo
+  communicationSuccess = cryptostick->stick20SendNewPassword(Data);
+  if (!communicationSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
     return;
   }
+
+  bool isNewPasswordCorrect = CheckResponse(FALSE) == 1;
+  if (!isNewPasswordCorrect) {
+    csApplet->warningBox(tr("New password is not correct. Please retry."));
+    return;
+  }
+  csApplet->messageBox(tr("New password is set"));
 }
 
 /*******************************************************************************

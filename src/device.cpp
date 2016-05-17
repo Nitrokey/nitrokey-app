@@ -2662,54 +2662,29 @@ bool Device::stick20GetStatusData() {
   return (true);
 }
 
-/*******************************************************************************
-
-  stick20SendPassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
-int Device::stick20SendPassword(uint8_t *Pindata) {
+bool Device::stick20SendPassword(uint8_t *Pindata) {
   uint8_t n;
-
-  int res;
-
+  bool success;
   Command *cmd;
 
   // Check pin data length
   n = strlen((const char *)Pindata);
   if (STICK20_PASSOWRD_LEN + 2 <= n) // Kind byte + End byte 0
   {
-    return (false);
+    return false;
   }
 
   cmd = new Command(STICK20_CMD_SEND_PASSWORD, Pindata, n);
-  res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  success = sendCommand(cmd) > 0;
   delete cmd;
 
-  return (true);
+  return success;
 }
 
-/*******************************************************************************
-
-  stick20SendNewPassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
-int Device::stick20SendNewPassword(uint8_t *NewPindata) {
+// FIXME stick20SendNewPassword is a duplicate of stick20SendPassword
+bool Device::stick20SendNewPassword(uint8_t *NewPindata) {
   uint8_t n;
-
-  int res;
-
+  int success;
   Command *cmd;
 
   // Check pin data length
@@ -2720,12 +2695,10 @@ int Device::stick20SendNewPassword(uint8_t *NewPindata) {
   }
 
   cmd = new Command(STICK20_CMD_SEND_NEW_PASSWORD, NewPindata, n);
-  res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  success = sendCommand(cmd) > 0;
   delete cmd;
 
-  return (true);
+  return success;
 }
 
 /*******************************************************************************
