@@ -67,29 +67,7 @@ DialogChangePassword::DialogChangePassword(QWidget *parent)
   PasswordKind = 0;
 }
 
-/*******************************************************************************
-
-  DialogChangePassword
-
-  Destructor DialogChangePassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
 DialogChangePassword::~DialogChangePassword() { delete ui; }
-
-/*******************************************************************************
-
-  InitData
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
 
 void DialogChangePassword::InitData(void) {
   // center the password window
@@ -98,8 +76,9 @@ void DialogChangePassword::InitData(void) {
       QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), desktop->availableGeometry()));
   // replace %1 and %2 from text with proper values
   //(min and max of password length)
+  int minimumPasswordLengthAdmin = 8;
   QString text = ui->label_additional_information->text();
-  text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN);
+  text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
   ui->label_additional_information->setText(text);
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
@@ -131,16 +110,6 @@ void DialogChangePassword::InitData(void) {
     break;
   }
 }
-
-/*******************************************************************************
-
-  CheckResponse
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
 
 int DialogChangePassword::CheckResponse(bool NoStopFlag) {
   Stick20ResponseTask ResponseTask(this, cryptostick, NULL);
