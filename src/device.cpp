@@ -2389,7 +2389,7 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
   res = sendCommand(cmd);
   delete cmd;
 
-  return res >0;
+  return res > 0;
 }
 
 /*******************************************************************************
