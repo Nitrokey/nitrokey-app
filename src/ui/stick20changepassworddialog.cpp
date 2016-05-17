@@ -270,7 +270,7 @@ void DialogChangePassword::Stick10ChangePassword(void) {
 
 // FIXME code doubles SendNewPassword
 bool DialogChangePassword::ResetUserPassword(void) {
-  bool communicationSuccess;
+  bool communicationAndCommandSuccess;
   QByteArray PasswordString;
   unsigned char Data[STICK20_PASSOWRD_LEN + 2];
 
@@ -281,8 +281,8 @@ bool DialogChangePassword::ResetUserPassword(void) {
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
-  communicationSuccess = cryptostick->stick20SendPassword(Data);
-  if (!communicationSuccess) {
+  communicationAndCommandSuccess = cryptostick->stick20SendPassword(Data);
+  if (!communicationAndCommandSuccess) {
     csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
     return false;
   }
@@ -297,17 +297,13 @@ bool DialogChangePassword::ResetUserPassword(void) {
   PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
-  communicationSuccess = cryptostick->unlockUserPassword(Data) == 0;
-  if (!communicationSuccess) {
-    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+  communicationAndCommandSuccess = cryptostick->unlockUserPassword(Data) == 0;
+  if (!communicationAndCommandSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device or new password "
+                            "is not correct. Please retry."));
     return false;
   }
 
-  bool isNewUserPasswordCorrect = CheckResponse(FALSE) == 1;
-  if (!isNewUserPasswordCorrect) {
-    csApplet->warningBox(tr("New password is not correct. Please retry."));
-    return false;
-  }
   csApplet->messageBox(tr("New User password is set"));
   return true;
 }
