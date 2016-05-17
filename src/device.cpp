@@ -1846,25 +1846,12 @@ int Device::userAuthorize(Command *authorizedCmd) {
   return -1;
 }
 
-/*******************************************************************************
-
-  unlockUserPassword
-
-  Changes
-  Date      Author        Info
-  02.09.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
+// returns 0 on success
 int Device::unlockUserPassword(uint8_t *adminPassword) {
   int res;
 
   if (isConnected) {
     Command *cmd = new Command(CMD_UNLOCK_USER_PASSWORD, adminPassword, STICK20_PASSOWRD_LEN + 2);
-
     res = sendCommand(cmd);
 
     if (res == -1) {

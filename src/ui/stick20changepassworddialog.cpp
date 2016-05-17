@@ -268,55 +268,48 @@ void DialogChangePassword::Stick10ChangePassword(void) {
   }
 }
 
-/*******************************************************************************
-
-  ResetUserPassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
-void DialogChangePassword::ResetUserPassword(void) {
-  int ret;
-
+// FIXME code doubles SendNewPassword
+bool DialogChangePassword::ResetUserPassword(void) {
+  bool communicationSuccess;
   QByteArray PasswordString;
-
   unsigned char Data[STICK20_PASSOWRD_LEN + 2];
 
   // Set kind of password
   Data[0] = 'A';
-
   // Send old password
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
-  ret = cryptostick->stick20SendPassword(Data);
+  communicationSuccess = cryptostick->stick20SendPassword(Data);
+  if (!communicationSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    return false;
+  }
 
-  if ((int)true == ret) {
-    CheckResponse(TRUE);
-  } else {
-    // Todo
-    return;
+  bool isAdminPasswordCorrect = CheckResponse(TRUE) == 1;
+  if (!isAdminPasswordCorrect) {
+    csApplet->warningBox(tr("Current Admin password is not correct. Please retry."));
+    return false;
   }
 
   // Reset new user PIN
   PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
-
-  ret = cryptostick->unlockUserPassword(Data);
-
-  if ((int)true == ret) {
-    CheckResponse(FALSE);
-  } else {
-    // Todo
-    return;
+  communicationSuccess = cryptostick->unlockUserPassword(Data) == 0;
+  if (!communicationSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    return false;
   }
+
+  bool isNewUserPasswordCorrect = CheckResponse(FALSE) == 1;
+  if (!isNewUserPasswordCorrect) {
+    csApplet->warningBox(tr("New password is not correct. Please retry."));
+    return false;
+  }
+  csApplet->messageBox(tr("New User password is set"));
+  return true;
 }
 
 void DialogChangePassword::ResetUserPasswordStick10(void) {
@@ -448,8 +441,7 @@ void DialogChangePassword::accept() {
     success = true;
     break;
   case STICK20_PASSWORD_KIND_RESET_USER:
-    ResetUserPassword();
-    success = true;
+    success = ResetUserPassword();
     break;
   case STICK10_PASSWORD_KIND_RESET_USER:
     ResetUserPasswordStick10();
