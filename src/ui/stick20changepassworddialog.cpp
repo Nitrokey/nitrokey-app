@@ -104,28 +104,30 @@ void DialogChangePassword::InitData(void) {
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_USER:
-    ui->label_2->setText(tr("Old user PIN"));
-    ui->label_3->setText(tr("New user PIN"));
-    ui->label_4->setText(tr("New user PIN"));
+    this->setWindowTitle(tr("Set User PIN"));
+    ui->label_2->setText(tr("Current User PIN:"));
+    ui->label_3->setText(tr("New User PIN:"));
+    ui->label_4->setText(tr("New User PIN:"));
     break;
   case STICK20_PASSWORD_KIND_ADMIN:
   case STICK10_PASSWORD_KIND_ADMIN:
-    ui->label_2->setText(tr("Admin PIN"));
-    ui->label_3->setText(tr("New admin PIN"));
-    ui->label_4->setText(tr("New admin PIN"));
+    this->setWindowTitle(tr("Set Admin PIN"));
+    ui->label_2->setText(tr("Current Admin PIN:"));
+    ui->label_3->setText(tr("New Admin PIN:"));
+    ui->label_4->setText(tr("New Admin PIN:"));
     break;
   case STICK20_PASSWORD_KIND_RESET_USER:
   case STICK10_PASSWORD_KIND_RESET_USER:
-    this->setWindowTitle(tr("Reset user PIN"));
+    this->setWindowTitle(tr("Reset User PIN"));
     ui->label_2->setText(tr("Admin PIN:"));
-    ui->label_3->setText(tr("New user PIN:"));
-    ui->label_4->setText(tr("New user PIN:"));
+    ui->label_3->setText(tr("New User PIN:"));
+    ui->label_4->setText(tr("New User PIN:"));
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
     this->setWindowTitle(tr("Change Firmware Password"));
-    ui->label_2->setText(tr("Firmware Password:"));
+    ui->label_2->setText(tr("Current Firmware Password:"));
     ui->label_3->setText(tr("New Firmware Password:"));
-    ui->label_4->setText(tr("New Firmware Password (confirm):"));
+    ui->label_4->setText(tr("New Firmware Password:"));
     break;
   }
 }
