@@ -348,8 +348,8 @@ public:
   bool stick20SendPasswordMatrixPinData(uint8_t *Pindata);
   bool stick20SendPasswordMatrixSetup(uint8_t *Setupdata);
   bool stick20GetStatusData();
-  int stick20SendPassword(uint8_t *Pindata);
-  int stick20SendNewPassword(uint8_t *NewPindata);
+  bool stick20SendPassword(uint8_t *Pindata);
+  bool stick20SendNewPassword(uint8_t *NewPindata);
   int stick20SendClearNewSdCardFound(uint8_t *Pindata);
 
   int stick20SendSetReadonlyToUncryptedVolume(uint8_t *Pindata);

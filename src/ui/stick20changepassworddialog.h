@@ -45,11 +45,12 @@ private slots:
 private:
   Ui::DialogChangePassword *ui;
   void accept(void);
-  void SendNewPassword(void);
+  void UpdatePasswordRetry(void);
+  bool SendNewPassword(void);
   void Stick10ChangePassword(void);
-  void ResetUserPassword(void);
+  bool ResetUserPassword(void);
   void ResetUserPasswordStick10(void);
-  void Stick20ChangeUpdatePassword(void);
+  bool Stick20ChangeUpdatePassword(void);
   int CheckResponse(bool NoStopFlag);
   void clearFields();
 };

@@ -2237,19 +2237,15 @@ void MainWindow::startStickDebug() {
 }
 
 void MainWindow::startAboutDialog() {
-  AboutDialog dialog(cryptostick, this);
-
   if (TRUE == cryptostick->activStick20) {
     // Get actual data from stick 20
     cryptostick->stick20GetStatusData();
-
     Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
-
     ResponseTask.NoStopWhenStatusOK();
     ResponseTask.GetResponse();
-
     UpdateDynamicMenuEntrys(); // Use new data to update menu
   }
+  AboutDialog dialog(cryptostick, this);
   dialog.exec();
 }
 
@@ -2783,8 +2779,12 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
   switch (stick20Command) {
   case STICK20_CMD_ENABLE_CRYPTED_PARI:
     ret = cryptostick->stick20EnableCryptedPartition(password);
-    if (TRUE == ret)
+    if (TRUE == ret) {
       waitForAnswerFromStick20 = TRUE;
+    } else {
+      csApplet->warningBox(
+          tr("There was an error during communicating with device. Please try again."));
+    }
     break;
   case STICK20_CMD_DISABLE_CRYPTED_PARI:
     ret = cryptostick->stick20DisableCryptedPartition();
@@ -2793,8 +2793,12 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     break;
   case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
     ret = cryptostick->stick20EnableHiddenCryptedPartition(password);
-    if (TRUE == ret)
+    if (TRUE == ret) {
       waitForAnswerFromStick20 = TRUE;
+    } else {
+      csApplet->warningBox(
+          tr("There was an error during communicating with device. Please try again."));
+    }
     break;
   case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
     ret = cryptostick->stick20DisableHiddenCryptedPartition();
@@ -2897,7 +2901,6 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
   Result = FALSE;
   if (TRUE == waitForAnswerFromStick20) {
     Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
-
     if (FALSE == stopWhenStatusOKFromStick20)
       ResponseTask.NoStopWhenStatusOK();
     ResponseTask.GetResponse();
@@ -2962,6 +2965,9 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     default:
       break;
     }
+  } else {
+    csApplet->warningBox(tr("Either the password is not correct or the command execution resulted "
+                            "in an error. Please try again."));
   }
   return (true);
 }

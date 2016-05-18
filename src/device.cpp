@@ -1846,25 +1846,12 @@ int Device::userAuthorize(Command *authorizedCmd) {
   return -1;
 }
 
-/*******************************************************************************
-
-  unlockUserPassword
-
-  Changes
-  Date      Author        Info
-  02.09.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
+// returns 0 on success
 int Device::unlockUserPassword(uint8_t *adminPassword) {
   int res;
 
   if (isConnected) {
     Command *cmd = new Command(CMD_UNLOCK_USER_PASSWORD, adminPassword, STICK20_PASSOWRD_LEN + 2);
-
     res = sendCommand(cmd);
 
     if (res == -1) {
@@ -2257,11 +2244,9 @@ bool Device::stick20EnableCryptedPartition(uint8_t *password) {
   cmd = new Command(STICK20_CMD_ENABLE_CRYPTED_PARI, password, n);
   res = sendCommand(cmd);
 
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
-
-  return (true);
+  return success;
 }
 
 /*******************************************************************************
@@ -2282,11 +2267,9 @@ bool Device::stick20DisableCryptedPartition(void) {
   cmd = new Command(STICK20_CMD_DISABLE_CRYPTED_PARI, NULL, 0);
   res = sendCommand(cmd);
 
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
-
-  return (true);
+  return success;
 }
 
 /*******************************************************************************
@@ -2315,11 +2298,9 @@ bool Device::stick20EnableHiddenCryptedPartition(uint8_t *password) {
 
   cmd = new Command(STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI, password, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
-
-  return (true);
+  return success;
 }
 
 /*******************************************************************************
@@ -2339,11 +2320,9 @@ bool Device::stick20DisableHiddenCryptedPartition(void) {
 
   cmd = new Command(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, NULL, 0);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
-
-  return (true);
+  return success;
 }
 
 /*******************************************************************************
@@ -2371,31 +2350,16 @@ bool Device::stick20EnableFirmwareUpdate(uint8_t *password) {
 
   cmd = new Command(STICK20_CMD_ENABLE_FIRMWARE_UPDATE, password, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
-
-/*******************************************************************************
-
-  stick20EnableFirmwareUpdate
-
-  21.06.15  RB              First review
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
 
 bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_password) {
   uint8_t n;
-
   int res;
-
   uint8_t SendString[33];
-
   Command *cmd;
 
   // Check password length
@@ -2414,11 +2378,9 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
           CS20_MAX_UPDATE_PASSWORD_LEN);
   cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN, SendString, 33);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
   delete cmd;
 
-  return (true);
+  return res > 0;
 }
 
 /*******************************************************************************
@@ -2446,11 +2408,10 @@ bool Device::stick20ExportFirmware(uint8_t *password) {
 
   cmd = new Command(STICK20_CMD_EXPORT_FIRMWARE_TO_FILE, password, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2478,11 +2439,10 @@ bool Device::stick20CreateNewKeys(uint8_t *password) {
 
   cmd = new Command(STICK20_CMD_GENERATE_NEW_KEYS, password, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2516,11 +2476,10 @@ bool Device::stick20FillSDCardWithRandomChars(uint8_t *password, uint8_t VolumeF
 
   cmd = new Command(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, data, n + 1);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2540,11 +2499,10 @@ bool Device::stick20SetupHiddenVolume(void) {
 
   cmd = new Command(STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP, NULL, 0);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2564,11 +2522,10 @@ bool Device::stick20GetPasswordMatrix(void) {
 
   cmd = new Command(STICK20_CMD_SEND_PASSWORD_MATRIX, NULL, 0);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2597,11 +2554,10 @@ bool Device::stick20SendPasswordMatrixPinData(uint8_t *Pindata) {
 
   cmd = new Command(STICK20_CMD_SEND_PASSWORD_MATRIX_PINDATA, Pindata, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2629,11 +2585,10 @@ bool Device::stick20SendPasswordMatrixSetup(uint8_t *Setupdata) {
 
   cmd = new Command(STICK20_CMD_SEND_PASSWORD_MATRIX_SETUP, Setupdata, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2655,61 +2610,35 @@ bool Device::stick20GetStatusData() {
 
   cmd = new Command(STICK20_CMD_GET_DEVICE_STATUS, NULL, 0);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
-/*******************************************************************************
-
-  stick20SendPassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
-int Device::stick20SendPassword(uint8_t *Pindata) {
+bool Device::stick20SendPassword(uint8_t *Pindata) {
   uint8_t n;
-
-  int res;
-
+  bool success;
   Command *cmd;
 
   // Check pin data length
   n = strlen((const char *)Pindata);
   if (STICK20_PASSOWRD_LEN + 2 <= n) // Kind byte + End byte 0
   {
-    return (false);
+    return false;
   }
 
   cmd = new Command(STICK20_CMD_SEND_PASSWORD, Pindata, n);
-  res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  success = sendCommand(cmd) > 0;
   delete cmd;
 
-  return (true);
+  return success;
 }
 
-/*******************************************************************************
-
-  stick20SendNewPassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
-int Device::stick20SendNewPassword(uint8_t *NewPindata) {
+// FIXME stick20SendNewPassword is a duplicate of stick20SendPassword
+bool Device::stick20SendNewPassword(uint8_t *NewPindata) {
   uint8_t n;
-
-  int res;
-
+  int success;
   Command *cmd;
 
   // Check pin data length
@@ -2720,12 +2649,10 @@ int Device::stick20SendNewPassword(uint8_t *NewPindata) {
   }
 
   cmd = new Command(STICK20_CMD_SEND_NEW_PASSWORD, NewPindata, n);
-  res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  success = sendCommand(cmd) > 0;
   delete cmd;
 
-  return (true);
+  return success;
 }
 
 /*******************************************************************************
@@ -2754,11 +2681,10 @@ int Device::stick20SendSetReadonlyToUncryptedVolume(uint8_t *Pindata) {
 
   cmd = new Command(STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN, Pindata, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2787,11 +2713,10 @@ int Device::stick20SendSetReadwriteToUncryptedVolume(uint8_t *Pindata) {
 
   cmd = new Command(STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN, Pindata, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2823,11 +2748,10 @@ int Device::stick20SendClearNewSdCardFound(uint8_t *Pindata) {
 
   cmd = new Command(STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND, Pindata, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2854,11 +2778,10 @@ int Device::stick20SendStartup(uint64_t localTime) {
 
   cmd = new Command(STICK20_CMD_SEND_STARTUP, data, 8);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (TRUE);
 }
 
 /*******************************************************************************
@@ -2887,11 +2810,10 @@ int Device::stick20SendHiddenVolumeSetup(HiddenVolumeSetup_tst *HV_Data_st) {
 
   cmd = new Command(STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP, data, sizeof(HiddenVolumeSetup_tst));
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (TRUE);
 }
 
 /*******************************************************************************
@@ -2922,11 +2844,10 @@ int Device::stick20LockFirmware(uint8_t *password) {
 
   cmd = new Command(STICK20_CMD_SEND_LOCK_STICK_HARDWARE, password, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2955,11 +2876,10 @@ int Device::stick20ProductionTest(void) {
 
   cmd = new Command(STICK20_CMD_PRODUCTION_TEST, TestData, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************
@@ -2988,11 +2908,10 @@ int Device::stick20GetDebugData(void) {
 
   cmd = new Command(STICK20_CMD_SEND_DEBUG_DATA, TestData, n);
   res = sendCommand(cmd);
-  if (res) {
-  } // Fix warnings
+  bool success = res > 0;
   delete cmd;
+  return success;
 
-  return (true);
 }
 
 /*******************************************************************************

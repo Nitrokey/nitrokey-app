@@ -67,29 +67,49 @@ DialogChangePassword::DialogChangePassword(QWidget *parent)
   PasswordKind = 0;
 }
 
-/*******************************************************************************
-
-  DialogChangePassword
-
-  Destructor DialogChangePassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
 DialogChangePassword::~DialogChangePassword() { delete ui; }
 
-/*******************************************************************************
-
-  InitData
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
+void DialogChangePassword::UpdatePasswordRetry() {
+  QString noTrialsLeft;
+  int retryCount = 0;
+  // update password retry values
+  if (TRUE == cryptostick->activStick20) {
+    cryptostick->stick20GetStatusData();
+    CheckResponse(FALSE);
+  }
+  cryptostick->getPasswordRetryCount();
+  cryptostick->getUserPasswordRetryCount();
+  switch (PasswordKind) {
+  case STICK20_PASSWORD_KIND_USER:
+  case STICK10_PASSWORD_KIND_USER:
+    retryCount = HID_Stick20Configuration_st.UserPwRetryCount;
+    noTrialsLeft = tr("Unfortunately you have no more trials left. Please use 'Reset User PIN' "
+                      "option from menu to reset password");
+    break;
+  case STICK20_PASSWORD_KIND_ADMIN:
+  case STICK10_PASSWORD_KIND_ADMIN:
+  case STICK20_PASSWORD_KIND_RESET_USER:
+  case STICK10_PASSWORD_KIND_RESET_USER:
+    retryCount = HID_Stick20Configuration_st.AdminPwRetryCount;
+    noTrialsLeft = tr("Unfortunately you have no more trials left. Please check instruction how to "
+                      "reset Admin password.");
+    break;
+  case STICK20_PASSWORD_KIND_UPDATE:
+    // FIXME add firmware counter
+    retryCount = 99;
+    ui->retryCount->hide();
+    ui->retryCountLabel->hide();
+    break;
+  }
+  if (retryCount == 0) {
+    csApplet->warningBox(noTrialsLeft);
+    QString cssRed = "QLabel {color: red; font-weight: bold}";
+    ui->retryCount->setStyleSheet(cssRed);
+    ui->retryCountLabel->setStyleSheet(cssRed);
+  }
+  ui->retryCount->setText(QString::number(retryCount));
+  ui->retryCount->repaint();
+}
 
 void DialogChangePassword::InitData(void) {
   // center the password window
@@ -98,78 +118,57 @@ void DialogChangePassword::InitData(void) {
       QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), desktop->availableGeometry()));
   // replace %1 and %2 from text with proper values
   //(min and max of password length)
+  int minimumPasswordLengthAdmin = 8;
   QString text = ui->label_additional_information->text();
-  text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN);
+  text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
   ui->label_additional_information->setText(text);
+
+  this->UpdatePasswordRetry();
+
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_USER:
-    ui->label_2->setText(tr("Old user PIN"));
-    ui->label_3->setText(tr("New user PIN"));
-    ui->label_4->setText(tr("New user PIN"));
+    this->setWindowTitle(tr("Set User PIN"));
+    ui->label_2->setText(tr("Current User PIN:"));
+    ui->label_3->setText(tr("New User PIN:"));
+    ui->label_4->setText(tr("New User PIN:"));
     break;
   case STICK20_PASSWORD_KIND_ADMIN:
   case STICK10_PASSWORD_KIND_ADMIN:
-    ui->label_2->setText(tr("Admin PIN"));
-    ui->label_3->setText(tr("New admin PIN"));
-    ui->label_4->setText(tr("New admin PIN"));
+    this->setWindowTitle(tr("Set Admin PIN"));
+    ui->label_2->setText(tr("Current Admin PIN:"));
+    ui->label_3->setText(tr("New Admin PIN:"));
+    ui->label_4->setText(tr("New Admin PIN:"));
     break;
   case STICK20_PASSWORD_KIND_RESET_USER:
   case STICK10_PASSWORD_KIND_RESET_USER:
-    this->setWindowTitle(tr("Reset user PIN"));
+    this->setWindowTitle(tr("Reset User PIN"));
     ui->label_2->setText(tr("Admin PIN:"));
-    ui->label_3->setText(tr("New user PIN:"));
-    ui->label_4->setText(tr("New user PIN:"));
+    ui->label_3->setText(tr("New User PIN:"));
+    ui->label_4->setText(tr("New User PIN:"));
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
     this->setWindowTitle(tr("Change Firmware Password"));
-    ui->label_2->setText(tr("Firmware Password:"));
+    ui->label_2->setText(tr("Current Firmware Password:"));
     ui->label_3->setText(tr("New Firmware Password:"));
-    ui->label_4->setText(tr("New Firmware Password (confirm):"));
+    ui->label_4->setText(tr("New Firmware Password:"));
     break;
   }
 }
 
-/*******************************************************************************
-
-  CheckResponse
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
 int DialogChangePassword::CheckResponse(bool NoStopFlag) {
   Stick20ResponseTask ResponseTask(this, cryptostick, NULL);
-
   if (FALSE == NoStopFlag) {
     ResponseTask.NoStopWhenStatusOK();
   }
-
   ResponseTask.GetResponse();
-
   return (ResponseTask.ResultValue);
 }
 
-/*******************************************************************************
-
-  SendNewPassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
-void DialogChangePassword::SendNewPassword(void) {
-  int ret;
-
-  int password_length;
-
+bool DialogChangePassword::SendNewPassword(void) {
+  bool communicationSuccess;
   QByteArray PasswordString;
-
-  password_length = STICK20_PASSOWRD_LEN;
+  int password_length = STICK20_PASSOWRD_LEN;
   unsigned char Data[password_length + 2];
 
   // Set kind of password
@@ -191,13 +190,16 @@ void DialogChangePassword::SendNewPassword(void) {
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
-  ret = cryptostick->stick20SendPassword(Data);
+  communicationSuccess = cryptostick->stick20SendPassword(Data);
+  if (!communicationSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    return false;
+  }
 
-  if ((int)true == ret) {
-    CheckResponse(TRUE);
-  } else {
-    // Todo
-    return;
+  bool isOldPasswordCorrect = CheckResponse(TRUE) == 1;
+  if (!isOldPasswordCorrect) {
+    csApplet->warningBox(tr("Current password is not correct. Please retry."));
+    return false;
   }
 
   // Change password
@@ -206,14 +208,19 @@ void DialogChangePassword::SendNewPassword(void) {
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
-  ret = cryptostick->stick20SendNewPassword(Data);
-
-  if ((int)true == ret) {
-    CheckResponse(FALSE);
-  } else {
-    // Todo
-    return;
+  communicationSuccess = cryptostick->stick20SendNewPassword(Data);
+  if (!communicationSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    return false;
   }
+
+  bool isNewPasswordCorrect = CheckResponse(FALSE) == 1;
+  if (!isNewPasswordCorrect) {
+    csApplet->warningBox(tr("New password is not correct. Please retry."));
+    return false;
+  }
+  csApplet->messageBox(tr("New password is set"));
+  return true;
 }
 
 /*******************************************************************************
@@ -261,55 +268,44 @@ void DialogChangePassword::Stick10ChangePassword(void) {
   }
 }
 
-/*******************************************************************************
-
-  ResetUserPassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
-
-void DialogChangePassword::ResetUserPassword(void) {
-  int ret;
-
+// FIXME code doubles SendNewPassword
+bool DialogChangePassword::ResetUserPassword(void) {
+  bool communicationAndCommandSuccess;
   QByteArray PasswordString;
-
   unsigned char Data[STICK20_PASSOWRD_LEN + 2];
 
   // Set kind of password
   Data[0] = 'A';
-
   // Send old password
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
 
-  ret = cryptostick->stick20SendPassword(Data);
+  communicationAndCommandSuccess = cryptostick->stick20SendPassword(Data);
+  if (!communicationAndCommandSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    return false;
+  }
 
-  if ((int)true == ret) {
-    CheckResponse(TRUE);
-  } else {
-    // Todo
-    return;
+  bool isAdminPasswordCorrect = CheckResponse(TRUE) == 1;
+  if (!isAdminPasswordCorrect) {
+    csApplet->warningBox(tr("Current Admin password is not correct. Please retry."));
+    return false;
   }
 
   // Reset new user PIN
   PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-
   STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
-
-  ret = cryptostick->unlockUserPassword(Data);
-
-  if ((int)true == ret) {
-    CheckResponse(FALSE);
-  } else {
-    // Todo
-    return;
+  communicationAndCommandSuccess = cryptostick->unlockUserPassword(Data) == 0;
+  if (!communicationAndCommandSuccess) {
+    csApplet->warningBox(tr("There was a problem during communicating with device or new password "
+                            "is not correct. Please retry."));
+    return false;
   }
+
+  csApplet->messageBox(tr("New User password is set"));
+  return true;
 }
 
 void DialogChangePassword::ResetUserPasswordStick10(void) {
@@ -342,16 +338,12 @@ void DialogChangePassword::ResetUserPasswordStick10(void) {
   }
 }
 
-void DialogChangePassword::Stick20ChangeUpdatePassword(void) {
-  int ret;
-
+bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
+  bool commandSuccess;
   int password_length;
-
   QByteArray PasswordString;
-
   password_length = CS20_MAX_UPDATE_PASSWORD_LEN;
   unsigned char old_pin[password_length + 1];
-
   unsigned char new_pin[password_length + 1];
 
   memset(old_pin, 0, password_length + 1);
@@ -364,10 +356,14 @@ void DialogChangePassword::Stick20ChangeUpdatePassword(void) {
   strncpy((char *)new_pin, PasswordString.data(), password_length);
 
   // Change password
-  ret = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
+  commandSuccess = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
 
-  if (!ret)
-    csApplet->warningBox(tr("Wrong password."));
+  if (!commandSuccess) {
+    csApplet->warningBox(
+        tr("Wrong password or there was a communication problem with the device."));
+    return false;
+  }
+  return true;
 }
 
 /*******************************************************************************
@@ -428,24 +424,27 @@ void DialogChangePassword::accept() {
     return;
   }
 
+  bool success = false;
   // Send password to Stick 2.0
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
   case STICK20_PASSWORD_KIND_ADMIN:
-    SendNewPassword();
+    success = SendNewPassword();
     break;
   case STICK10_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_ADMIN:
     Stick10ChangePassword();
+    success = true;
     break;
   case STICK20_PASSWORD_KIND_RESET_USER:
-    ResetUserPassword();
+    success = ResetUserPassword();
     break;
   case STICK10_PASSWORD_KIND_RESET_USER:
     ResetUserPasswordStick10();
+    success = true;
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
-    Stick20ChangeUpdatePassword();
+    success = Stick20ChangeUpdatePassword();
     break;
   default:
     break;
@@ -453,7 +452,12 @@ void DialogChangePassword::accept() {
 
   cryptostick->getStatus();
 
-  done(true);
+  if (success) {
+    done(true);
+    return;
+  }
+  this->UpdatePasswordRetry();
+  this->clearFields();
 }
 
 /*******************************************************************************
