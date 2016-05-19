@@ -96,7 +96,7 @@ private:
   QMenu *trayMenuSubSpecialConfigure;
   QClipboard *clipboard;
 
-  bool doNotCheckConnection;
+  bool doNotShowTrayMessages;
   unsigned char HOTP_SlotCount;
   unsigned char TOTP_SlotCount;
 
