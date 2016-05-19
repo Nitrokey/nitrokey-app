@@ -234,7 +234,9 @@ void Stick20ResponseTask::checkStick20Status() {
         break;
       case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
         HID_Stick20Configuration_st.AdminPwRetryCount = 3;
-        { csApplet->messageBox(tr("Storage successfully initialized with random data")); }
+        csApplet->messageBox(tr("Storage successfully initialized with random data") + ". " +
+                             tr("Please remove "
+                                "and insert the Nitrostick device to continue."));
         done(TRUE);
         break;
       default:
