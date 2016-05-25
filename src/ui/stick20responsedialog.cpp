@@ -293,6 +293,28 @@ void Stick20ResponseDialog::checkStick20StatusDialog(void) {
 
     OutputText.append(QString(" ("));
 
+    QString remainingStr;
+    int progressValue = 0;
+    if (Stick20Task->stick20Response->HID_Stick20Status_st.Status_u8 ==
+        OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR) {
+      static QTime *t = NULL;
+      if (t == NULL) {
+        t = new QTime(); // FIXME minor memory leak
+        t->start();
+      }
+      uint32_t remainingTimeSeconds = 60 * 60; // set default to 1 hour
+      progressValue = Stick20Task->stick20Response->HID_Stick20Status_st.ProgressBarValue_u8;
+      if (progressValue != 0) {
+        remainingTimeSeconds = (30 + t->elapsed()) / progressValue * (100 - progressValue) / 1000;
+        //      QTime remainingTime;
+        //      remainingTime.addSecs(remainingTimeSeconds);
+        remainingStr = QString("Time remaining approx.: %1 minutes (approx. total %2)")
+                           .arg(remainingTimeSeconds / 60)
+                           .arg(t->elapsed() / progressValue * 100 / 60);
+      }
+      ui->HeaderText->setText(remainingStr);
+    }
+
     switch (Stick20Task->stick20Response->HID_Stick20Status_st.Status_u8) {
     case OUTPUT_CMD_STICK20_STATUS_IDLE:
       OutputText.append(QString("IDLE"));
@@ -314,8 +336,7 @@ void Stick20ResponseDialog::checkStick20StatusDialog(void) {
       OutputText.append(QString("BUSY"));
       ui->progressBar->show();
       ui->LabelProgressWheel->hide();
-      ui->progressBar->setValue(
-          Stick20Task->stick20Response->HID_Stick20Status_st.ProgressBarValue_u8);
+      ui->progressBar->setValue(progressValue);
       break;
     case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY:
       OutputText.append(QString("PASSWORD MATRIX READY"));
@@ -341,7 +362,9 @@ void Stick20ResponseDialog::checkStick20StatusDialog(void) {
       break;
     }
     OutputText.append(QString(")"));
-    ui->HeaderText->setText(OutputText);
+    if (Stick20Task->stick20Response->HID_Stick20Status_st.Status_u8 !=
+        OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR)
+      ui->HeaderText->setText(OutputText);
     ui->label->setText(OutputText);
   }
 }
