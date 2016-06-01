@@ -572,12 +572,12 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
 
   printf("Connecting to nitrokey");
   // Wait for connect
-  for (i = 0; i < MAX_CONNECT_WAIT_TIME_IN_SEC; i++) {
+  for (i = 0; i < 2 * MAX_CONNECT_WAIT_TIME_IN_SEC; i++) {
     if (cryptostick->isConnected == true) {
       break;
     } else {
       cryptostick->connect();
-      OwnSleep::sleep(1);
+      OwnSleep::msleep(500);
       cryptostick->checkConnection();
       printf(".");
       fflush(stdout);
@@ -606,6 +606,7 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
     ret = cryptostick->stick20EnableFirmwareUpdate(firmwarePassword);
     if (false == ret) {
       printf("FAIL sending command via HID\n");
+      cryptostick->disconnect();
       return (1);
     }
   }
@@ -646,12 +647,15 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
     if (TRUE == Stick20_ProductionInfosChanged) {
       Stick20_ProductionInfosChanged = FALSE;
       if (FALSE == AnalyseProductionInfos()) {
+        cryptostick->disconnect();
         return (1);
       }
     } else {
+      cryptostick->disconnect();
       return (1);
     }
   }
+  cryptostick->disconnect();
   return (0);
 }
 
