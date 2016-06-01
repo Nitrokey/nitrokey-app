@@ -138,10 +138,9 @@ int Device::checkConnection() {
   uint8_t buf[65];
   static int DisconnectCounter = 0;
 
+  memset(buf, 0, sizeof(buf));
   buf[0] = 0;
   int res;
-
-  // handle = hid_open(vid,pid, NULL);
 
   if (!dev_hid_handle) {
     isConnected = false;
@@ -154,16 +153,6 @@ int Device::checkConnection() {
 
     res = hid_get_feature_report(dev_hid_handle, buf, 65);
     if (res < 0) {
-      /*
-                      static LARGE_INTEGER count;
-                      static LARGE_INTEGER freq;
-                      static int Time_Ms[10];
-                      static int Time_Count[10];
-                      QueryPerformanceFrequency (&freq);
-                      QueryPerformanceCounter (&count);
-                      Time_Ms[DisconnectCounter] = (int)(count.QuadPart * 1000 / freq.QuadPart);
-                      Time_Count[DisconnectCounter] = Counter;
-      */
       DisconnectCounter++;
       if (1 < DisconnectCounter) {
         isConnected = false;
@@ -209,6 +198,15 @@ int Device::checkConnection() {
   12.08.13  RB              First review
 
 *******************************************************************************/
+
+void Device::disconnect() {
+  activStick20 = false;
+  if (NULL == dev_hid_handle) {
+    hid_close(dev_hid_handle);
+    dev_hid_handle = NULL;
+    hid_exit();
+  }
+}
 
 void Device::connect() {
   // Disable stick 20

@@ -567,19 +567,20 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
 int MainWindow::ExecStickCmd(char *Cmdline) {
   int i;
-
   char *p;
-
   bool ret;
 
+  printf("Connecting to nitrokey");
   // Wait for connect
-  for (i = 0; i < MAX_CONNECT_WAIT_TIME_IN_SEC; i++) {
+  for (i = 0; i < 2 * MAX_CONNECT_WAIT_TIME_IN_SEC; i++) {
     if (cryptostick->isConnected == true) {
       break;
     } else {
       cryptostick->connect();
-      OwnSleep::sleep(1);
+      OwnSleep::msleep(500);
       cryptostick->checkConnection();
+      printf(".");
+      fflush(stdout);
     }
   }
   if (MAX_CONNECT_WAIT_TIME_IN_SEC <= i) {
@@ -587,54 +588,74 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
     return (1);
   }
   // Check device
-  printf("Get connection to nitrokey\n");
+  printf(" connected. \n");
 
   // Get command
   p = strchr(Cmdline, '=');
   if (NULL == p) {
     p = NULL;
   } else {
-    *p = 0;
-    p++; // Points now to 1. parameter
+    *p = 0; // set end of string in place of '=' sign
+    p++;    // Points now to 1. parameter of command
   }
 
-  if (0 == strncmp(Cmdline, "unlockencrypted", strlen("unlockencrypted"))) {
+  // --cmd setUpdateMode
+  if (0 == strcmp(Cmdline, "setUpdateMode")) {
+    uint8_t *firmwarePassword = (uint8_t *)"p12345678";
+    printf("Enabling update mode with default password %s\n", firmwarePassword);
+    ret = cryptostick->stick20EnableFirmwareUpdate(firmwarePassword);
+    if (false == ret) {
+      printf("FAIL sending command via HID\n");
+      cryptostick->disconnect();
+      return (1);
+    }
+  }
+  //  usage:
+  // --cmd unlockencrypted=<user_pin>
+  //  example:
+  // --cmd unlockencrypted=123456
+  else if (0 == strncmp(Cmdline, "unlockencrypted", strlen("unlockencrypted"))) {
     uint8_t password[40];
 
     // Check password
-    if (0 == strlen(p)) {
-      printf("No password found\n");
-      return (1);
+    if (p == NULL || 0 == strlen(p)) {
+      printf("No password found, setting default: 123456\n");
+      p = "123456";
     }
 
     // Get Password
     password[0] = 'p'; // Send a clear password
     STRCPY((char *)&password[1], sizeof(password) - 1, (char *)p);
-    printf("Unlock encrypted volume: ");
-
+    printf("Unlock encrypted volume: \n");
     ret = cryptostick->stick20EnableCryptedPartition(password);
 
     if (false == ret) {
       printf("FAIL sending command via HID\n");
       return (1);
     }
-  }
-
-  if (0 == strcmp(Cmdline, "prodinfo")) {
+    //  usage:
+    // --cmd prodinfo
+  } else if (0 == strcmp(Cmdline, "prodinfo")) {
     printf("Send -get production infos-\n");
 
     OwnSleep::sleep(2);
-    stick20SendCommand(STICK20_CMD_PRODUCTION_TEST, NULL);
+    bool commandSuccess = cryptostick->stick20ProductionTest();
+    if (!commandSuccess) {
+      printf("Command execution has failed or device stopped responding.\n");
+    }
 
     if (TRUE == Stick20_ProductionInfosChanged) {
       Stick20_ProductionInfosChanged = FALSE;
       if (FALSE == AnalyseProductionInfos()) {
+        cryptostick->disconnect();
         return (1);
       }
     } else {
+      cryptostick->disconnect();
       return (1);
     }
   }
+  cryptostick->disconnect();
   return (0);
 }
 
@@ -724,6 +745,10 @@ int MainWindow::AnalyseProductionInfos() {
 
     FOPEN(fp, LogFile, "a+");
     if (0 != fp) {
+      QDateTime ActualTimeStamp(QDateTime::currentDateTime());
+      std::string timestr = ActualTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toStdString();
+      const char *timestamp = timestr.c_str();
+      fprintf(fp, "timestamp:%s,", timestamp);
       fprintf(fp, "CPU:0x%08x,", Stick20ProductionInfos_st.CPU_CardID_u32);
       fprintf(fp, "SC:0x%08x,", Stick20ProductionInfos_st.SmartCardID_u32);
       fprintf(fp, "SD:0x%08x,", Stick20ProductionInfos_st.SD_CardID_u32);
@@ -732,7 +757,11 @@ int MainWindow::AnalyseProductionInfos() {
       fprintf(fp, "DAT:%d.%02d,", Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000,
               Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
       fprintf(fp, "Speed:%d,", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
-      fprintf(fp, "Size:%d", Stick20ProductionInfos_st.SD_Card_Size_u8);
+      fprintf(fp, "Size:%d,", Stick20ProductionInfos_st.SD_Card_Size_u8);
+      fprintf(fp, "Firmware:%d.%d - %d",
+              (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0],
+              (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1],
+              (unsigned int)Stick20ProductionInfos_st.FirmwareVersionInternal_u8);
       if (FALSE == ProductStateOK) {
         fprintf(fp, ",*** FAIL");
       }

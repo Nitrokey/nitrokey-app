@@ -268,6 +268,7 @@ public:
   int sendCommand(Command *cmd);
   int sendCommandGetResponse(Command *cmd, Response *resp);
   void connect();
+  void disconnect();
   int getSlotName(uint8_t slotNo);
   int eraseSlot(uint8_t slotNo);
   int setTime(int reset);
