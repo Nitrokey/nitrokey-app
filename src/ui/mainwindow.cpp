@@ -741,6 +741,10 @@ int MainWindow::AnalyseProductionInfos() {
 
     FOPEN(fp, LogFile, "a+");
     if (0 != fp) {
+      QDateTime ActualTimeStamp(QDateTime::currentDateTime());
+      std::string timestr = ActualTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toStdString();
+      const char *timestamp = timestr.c_str();
+      fprintf(fp, "timestamp:%s,", timestamp);
       fprintf(fp, "CPU:0x%08x,", Stick20ProductionInfos_st.CPU_CardID_u32);
       fprintf(fp, "SC:0x%08x,", Stick20ProductionInfos_st.SmartCardID_u32);
       fprintf(fp, "SD:0x%08x,", Stick20ProductionInfos_st.SD_CardID_u32);
@@ -749,7 +753,11 @@ int MainWindow::AnalyseProductionInfos() {
       fprintf(fp, "DAT:%d.%02d,", Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000,
               Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
       fprintf(fp, "Speed:%d,", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
-      fprintf(fp, "Size:%d", Stick20ProductionInfos_st.SD_Card_Size_u8);
+      fprintf(fp, "Size:%d,", Stick20ProductionInfos_st.SD_Card_Size_u8);
+      fprintf(fp, "Firmware:%d.%d - %d",
+              (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0],
+              (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1],
+              (unsigned int)Stick20ProductionInfos_st.FirmwareVersionInternal_u8);
       if (FALSE == ProductStateOK) {
         fprintf(fp, ",*** FAIL");
       }
