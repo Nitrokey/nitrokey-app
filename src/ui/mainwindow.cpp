@@ -4073,7 +4073,6 @@ void MainWindow::on_counterEdit_editingFinished() {
 
 int MainWindow::factoryReset() {
   int ret;
-
   bool ok;
 
   do {
