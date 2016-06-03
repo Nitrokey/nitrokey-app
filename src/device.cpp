@@ -2136,21 +2136,17 @@ int Device::factoryReset(const char *password) {
 
     if (-1 == res) {
       delete cmd;
-
       return ERR_SENDING;
     } else {
       Sleep::msleep(1000);
       Response *resp = new Response();
-
       resp->getResponse(this);
 
       if (cmd->crc == resp->lastCommandCRC) {
         delete cmd;
-
         return resp->lastCommandStatus;
       } else {
         delete cmd;
-
         return ERR_WRONG_RESPONSE_CRC;
       }
     }
@@ -2335,9 +2331,7 @@ bool Device::stick20DisableHiddenCryptedPartition(void) {
 
 bool Device::stick20EnableFirmwareUpdate(uint8_t *password) {
   uint8_t n;
-
   int res;
-
   Command *cmd;
 
   // Check password length
@@ -2351,7 +2345,6 @@ bool Device::stick20EnableFirmwareUpdate(uint8_t *password) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_password) {
@@ -2409,7 +2402,6 @@ bool Device::stick20ExportFirmware(uint8_t *password) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2440,7 +2432,6 @@ bool Device::stick20CreateNewKeys(uint8_t *password) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2477,7 +2468,6 @@ bool Device::stick20FillSDCardWithRandomChars(uint8_t *password, uint8_t VolumeF
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2500,7 +2490,6 @@ bool Device::stick20SetupHiddenVolume(void) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2523,7 +2512,6 @@ bool Device::stick20GetPasswordMatrix(void) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2555,7 +2543,6 @@ bool Device::stick20SendPasswordMatrixPinData(uint8_t *Pindata) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2586,7 +2573,6 @@ bool Device::stick20SendPasswordMatrixSetup(uint8_t *Setupdata) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2611,7 +2597,6 @@ bool Device::stick20GetStatusData() {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 bool Device::stick20SendPassword(uint8_t *Pindata) {
@@ -2682,7 +2667,6 @@ int Device::stick20SendSetReadonlyToUncryptedVolume(uint8_t *Pindata) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2714,7 +2698,6 @@ int Device::stick20SendSetReadwriteToUncryptedVolume(uint8_t *Pindata) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2749,7 +2732,6 @@ int Device::stick20SendClearNewSdCardFound(uint8_t *Pindata) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2779,7 +2761,6 @@ int Device::stick20SendStartup(uint64_t localTime) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2811,7 +2792,6 @@ int Device::stick20SendHiddenVolumeSetup(HiddenVolumeSetup_tst *HV_Data_st) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2845,7 +2825,6 @@ int Device::stick20LockFirmware(uint8_t *password) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2877,7 +2856,6 @@ int Device::stick20ProductionTest(void) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
@@ -2909,7 +2887,6 @@ int Device::stick20GetDebugData(void) {
   bool success = res > 0;
   delete cmd;
   return success;
-
 }
 
 /*******************************************************************************
