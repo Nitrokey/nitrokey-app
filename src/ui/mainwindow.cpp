@@ -599,13 +599,28 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
     p++;    // Points now to 1. parameter of command
   }
 
-  // --cmd setUpdateMode
-  if (0 == strcmp(Cmdline, "setUpdateMode")) {
-    uint8_t *firmwarePassword = (uint8_t *)"p12345678";
-    printf("Enabling update mode with default password %s\n", firmwarePassword);
-    ret = cryptostick->stick20EnableFirmwareUpdate(firmwarePassword);
+  // Check password and set default for empty
+  if (p == NULL || 0 == strlen(p)) {
+    p = (char *)"12345678";
+    //   FIXME should issue warning instead of silent password assigning?
+  }
+  uint8_t password[40];
+  password[0] = 'p'; // Send a clear password
+  STRCPY((char *)&password[1], sizeof(password) - 1, p);
+
+  // --cmd factoryReset=<ADMIN PIN>
+  if (0 == strcmp(Cmdline, "factoryReset")) {
+    // this command requires clear password without prefix
+    ret = cryptostick->factoryReset(p);
+    printf("%s\n", getFactoryResetMessage(ret));
+    cryptostick->disconnect();
+    return ret;
+  }
+  // --cmd setUpdateMode=<FIRMWARE PASSWORD>
+  else if (0 == strcmp(Cmdline, "setUpdateMode")) {
+    ret = cryptostick->stick20EnableFirmwareUpdate(password);
     if (false == ret) {
-      printf("FAIL sending command via HID\n");
+      printf("Command execution has failed or device stopped responding.\n");
       cryptostick->disconnect();
       return (1);
     }
@@ -615,24 +630,16 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
   //  example:
   // --cmd unlockencrypted=123456
   else if (0 == strncmp(Cmdline, "unlockencrypted", strlen("unlockencrypted"))) {
-    uint8_t password[40];
-
-    // Check password
-    if (p == NULL || 0 == strlen(p)) {
-      printf("No password found, setting default: 123456\n");
-      p = "123456";
-    }
-
-    // Get Password
-    password[0] = 'p'; // Send a clear password
-    STRCPY((char *)&password[1], sizeof(password) - 1, (char *)p);
-    printf("Unlock encrypted volume: \n");
+    printf("Unlock encrypted volume ");
     ret = cryptostick->stick20EnableCryptedPartition(password);
 
     if (false == ret) {
       printf("FAIL sending command via HID\n");
-      return (1);
+    } else {
+      printf("success\n");
     }
+    cryptostick->disconnect();
+    return (ret);
     //  usage:
     // --cmd prodinfo
   } else if (0 == strcmp(Cmdline, "prodinfo")) {
@@ -654,6 +661,8 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
       cryptostick->disconnect();
       return (1);
     }
+  } else {
+    printf("Unknown command\n");
   }
   cryptostick->disconnect();
   return (0);
@@ -4096,7 +4105,7 @@ int MainWindow::factoryReset() {
     char password[LOCAL_PASSWORD_SIZE];
     dialog.getPassword(password);
     if (QDialog::Accepted == ok) {
-      ret = cryptostick->factoryReset((uint8_t *)password); // FIXME check this
+      ret = cryptostick->factoryReset(password);
       csApplet->messageBox(tr(getFactoryResetMessage(ret)));
       memset(password, 0, strlen(password));
     }

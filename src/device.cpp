@@ -2136,21 +2136,17 @@ int Device::factoryReset(const char *password) {
 
     if (-1 == res) {
       delete cmd;
-
       return ERR_SENDING;
     } else {
       Sleep::msleep(1000);
       Response *resp = new Response();
-
       resp->getResponse(this);
 
       if (cmd->crc == resp->lastCommandCRC) {
         delete cmd;
-
         return resp->lastCommandStatus;
       } else {
         delete cmd;
-
         return ERR_WRONG_RESPONSE_CRC;
       }
     }
