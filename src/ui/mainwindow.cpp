@@ -4071,6 +4071,20 @@ void MainWindow::on_counterEdit_editingFinished() {
   }
 }
 
+char *MainWindow::getFactoryResetMessage(int retCode) {
+  switch (retCode) {
+  case CMD_STATUS_OK:
+    return strdup("Factory reset was successful.");
+    break;
+  case CMD_STATUS_WRONG_PASSWORD:
+    return strdup("Wrong Pin. Please try again.");
+    break;
+  default:
+    return strdup("Unknown error.");
+    break;
+  }
+}
+
 int MainWindow::factoryReset() {
   int ret;
   bool ok;
@@ -4080,38 +4094,13 @@ int MainWindow::factoryReset() {
                      PinDialog::ADMIN_PIN);
     ok = dialog.exec();
     char password[LOCAL_PASSWORD_SIZE];
-
     dialog.getPassword(password);
-
     if (QDialog::Accepted == ok) {
-      ret = cryptostick->factoryReset(password);
-      switch (ret) {
-      case CMD_STATUS_OK:
-        csApplet->messageBox(tr("Factory reset was successful."));
-        break;
-      case CMD_STATUS_WRONG_PASSWORD:
-        csApplet->warningBox(tr("Wrong Pin. Please try again."));
-        break;
-      default:
-        csApplet->warningBox(tr("Unknown error."));
-        break;
-      }
+      ret = cryptostick->factoryReset((uint8_t *)password); // FIXME check this
+      csApplet->messageBox(tr(getFactoryResetMessage(ret)));
       memset(password, 0, strlen(password));
     }
-  } while (QDialog::Accepted == ok && CMD_STATUS_WRONG_PASSWORD == ret); // While
-                                                                         // the
-                                                                         // user
-                                                                         // keeps
-                                                                         // enterning
-                                                                         // a
-                                                                         // pin
-                                                                         // and
-                                                                         // the
-                                                                         // pin
-                                                                         // is
-                                                                         // not
-                                                                         // correct..
-
+  } while (QDialog::Accepted == ok && CMD_STATUS_WRONG_PASSWORD == ret);
   // Disable pwd safe menu entries
   int i;
 
