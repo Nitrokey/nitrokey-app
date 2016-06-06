@@ -2813,7 +2813,7 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
   case STICK20_CMD_ENABLE_FIRMWARE_UPDATE:
     ret = cryptostick->stick20EnableFirmwareUpdate(password);
     if (TRUE == ret)
-      waitForAnswerFromStick20 = FALSE;
+      waitForAnswerFromStick20 = TRUE;
     break;
   case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE:
     ret = cryptostick->stick20ExportFirmware(password);
