@@ -376,10 +376,6 @@ bool isUnity() {
 
 void MainWindow::showTrayMessage(const QString &title, const QString &msg,
                                  enum trayMessageType type, int timeout) {
-  if (DebugingActive)
-    qDebug() << "[" << title << "]" << msg;
-  if (doNotShowTrayMessages)
-    return;
 #ifdef HAVE_LIBAPPINDICATOR
   if (isUnity()) {
     if (!notify_init("example"))
@@ -462,8 +458,7 @@ void MainWindow::InitState() {
 }
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), trayMenuPasswdSubMenu(NULL),
-      doNotShowTrayMessages(false) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), trayMenuPasswdSubMenu(NULL) {
 #ifdef Q_OS_LINUX
   setlocale(LC_ALL, "");
   bindtextdomain("nitrokey-app", "/usr/share/locale");
@@ -2871,7 +2866,6 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
                              0, false);
 
     if (answer) {
-      doNotShowTrayMessages = true;
       ret = cryptostick->stick20FillSDCardWithRandomChars(
           password, STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
       if (TRUE == ret) {
@@ -2996,7 +2990,6 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
       HID_Stick20Configuration_st.SDFillWithRandomChars_u8 |= 0x01;
       UpdateDynamicMenuEntrys();
-      doNotShowTrayMessages = false;
       break;
     case STICK20_CMD_GENERATE_NEW_KEYS: // = firmware reset
       HID_Stick20Configuration_st.StickKeysNotInitiated = FALSE;
