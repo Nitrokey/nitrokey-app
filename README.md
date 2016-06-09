@@ -1,6 +1,6 @@
 Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app)  [![Code Health](https://landscape.io/github/Nitrokey/nitrokey-app/master/landscape.svg?style=flat)](https://landscape.io/github/Nitrokey/nitrokey-app/master)  [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
 ============
-Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator 2.4.1 with Qt 4.7.4 and MinGW 4.4.
+Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator and Qt 5 and MinGW 4.4.
 
 The implementation is compatible to the Google Authenticator application which can be used for testing purposes. See [google-authenticator](http://google-authenticator.googlecode.com/git/libpam/totp.html)
 
@@ -34,7 +34,7 @@ Git clone https://github.com/Nitrokey/nitrokey-app.git
 ```
 
 #### QT5
-Prerequisite: [Install QT5](http://www.qt.io/download-open-source/#section-2)
+Prerequisite: [Install QT5](http://www.qt.io/download-open-source/#section-2) or `sudo apt-get install qt5-default qtcreator`
 
 Use QT Creator for compilation or perform the following steps:
 
@@ -42,18 +42,6 @@ Use QT Creator for compilation or perform the following steps:
 2. For 64 bit system: 
    $HOME/Qt/5.5/gcc_64/bin/qmake -spec  $HOME/Qt/5.5/gcc_64/mkspecs/linux-g++-64 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro
 4. make -j4
-
-#### QT 4
-Prerequisite: sudo apt-get install qt4-default libqt4-dev qtcreator
-Use QT Creator for compilation or perform the following steps:
-
-1. cd to a build directory parallel to the nitrokey-app directory
-2. Configure:
-  * For 64 bit system: 
-  /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-64 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro
-  * For 32 bit system: /usr/bin/qmake-qt4 -spec /usr/share/qt4/mkspecs/linux-g++-32 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro
-3. make -j4
-
 
 #### Using cmake:
 General use:
