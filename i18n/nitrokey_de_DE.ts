@@ -51,12 +51,12 @@
     <message>
         <location filename="../ui/aboutdialog.ui" line="64"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mit diesem Programm können Sie den Nitrokey konfigurieren und nutzen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="86"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Anleitungen und Hilfe&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="254"/>
@@ -66,7 +66,7 @@
     <message>
         <location filename="../ui/aboutdialog.ui" line="347"/>
         <source>Hidden Volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>Versteckte Volumen:</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="486"/>
@@ -83,7 +83,7 @@ Initialisieren Sie die Schlüssel.</translation>
     <message>
         <location filename="../ui/aboutdialog.ui" line="569"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2014 by Nitrokey team. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Urheberrecht 2014 bei Nitrokey. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="442"/>
@@ -103,12 +103,12 @@ Initialisieren Sie die Schlüssel.</translation>
     <message>
         <location filename="../ui/aboutdialog.ui" line="307"/>
         <source>Unencrypted volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unverschlüsseltes Volumen:</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="327"/>
         <source>Encrypted volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschlüsseltes Volumen:</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="425"/>
@@ -1130,12 +1130,12 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1218"/>
         <source>&amp;Change Firmware Password</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Firmware Passwort ändern</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1260"/>
         <source>&amp;Reset User PIN</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Benutzer-PIN zurücksetzen</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2305"/>
@@ -1263,8 +1263,8 @@ Dieser Befehl benötigt für 32 GB mehr als eine Stunde.</translation>
         <location filename="../src/ui/mainwindow.cpp" line="3066"/>
         <source>Warning: The encrypted Volume is not formatted.
 &quot;Use GParted or fdisk for this.&quot;</source>
-        <translation type="unfinished">Warnung: Das verschlüsselte Volumen ist noch nicht formatiert.
-&quot;Du kannst GParted oder fdisk dazu nutzen.&quot;</translation>
+        <translation>Warnung: Das verschlüsselte Volumen ist noch nicht formatiert.
+&quot;Dafür können Sie GParted oder fdisk verwenden.&quot;</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="3153"/>
@@ -1492,7 +1492,7 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="4137"/>
         <source>Password safe [%1]</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort-Safe [%1]</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="4295"/>
