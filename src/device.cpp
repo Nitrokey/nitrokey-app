@@ -75,8 +75,8 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
 
   validUserPassword = false;
 
-  memset(password, 0, 50);
-  memset(userPassword, 0, 50);
+  memset(password, 0, 25);
+  memset(userPassword, 0, 25);
 
   // Vars for password safe
   passwordSafeUnlocked = FALSE;
