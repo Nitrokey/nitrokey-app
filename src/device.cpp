@@ -659,6 +659,14 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
     Command *cmd = new Command(CMD_GET_CODE, data, 18);
 
     userAuthorize(cmd);
+
+    /*
+     * Workaround for next HOTP/TOTP coming out as zeros force asking
+     * the user PIN again and clear the temp pwd.
+     */
+    validUserPassword = false;
+    memset(userPassword, 0, 25);
+
     res = sendCommand(cmd);
 
     if (res == -1) {
