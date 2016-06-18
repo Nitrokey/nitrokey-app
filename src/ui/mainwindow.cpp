@@ -508,6 +508,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   // Check for comamd line execution after init "nitrokey"
   if (0 != StartupInfo_st->Cmd) {
+    initDebugging();
     ret = ExecStickCmd(StartupInfo_st->CmdLine);
     exit(ret);
   }
