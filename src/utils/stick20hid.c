@@ -237,6 +237,8 @@ void DebugAppendTextGui (const char* Text)
 
     static int LastCharWasCr = FALSE;
 
+    DebugAppendFileGuiText (Text);
+
     if (FALSE == DebugingActive)    // Don't save text when debugging is
         // disabled
     {

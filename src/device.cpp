@@ -134,7 +134,7 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
 
 *******************************************************************************/
 
-int Device::checkConnection() {
+int Device::checkConnection(int InitConfigFlag) {
   uint8_t buf[65];
   static int DisconnectCounter = 0;
 
@@ -181,7 +181,10 @@ int Device::checkConnection() {
         TOTP_SlotCount = TOTP_SLOT_COUNT_MAX;
         passwordSafeUnlocked = FALSE;
       }
-      initializeConfig(); // init data for OTP
+      if (TRUE == InitConfigFlag)
+      {
+        initializeConfig(); // init data for OTP
+      }
       return 1;
     }
 
@@ -709,6 +712,8 @@ int Device::getHOTP(uint8_t slotNo) {
   12.08.13  RB              First review
 
 *******************************************************************************/
+//#include <QElapsedTimer>
+//QElapsedTimer timer1;
 
 int Device::readSlot(uint8_t slotNo) {
   int res;
@@ -718,9 +723,13 @@ int Device::readSlot(uint8_t slotNo) {
   data[0] = slotNo;
 
   if (isConnected) {
+//      timer1.start ();
     Command *cmd = new Command(CMD_READ_SLOT, data, 1);
 
+
     res = sendCommand(cmd);
+//    qDebug() << " " << timer1.elapsed() << "milliseconds";
+
 
     if (res == -1) {
       delete cmd;
@@ -729,9 +738,11 @@ int Device::readSlot(uint8_t slotNo) {
     } else { // sending the command was successful
       // return cmd->crc;
       Sleep::msleep(100);
+//      qDebug() << " " << timer1.elapsed() << "milliseconds";
       Response *resp = new Response();
 
       resp->getResponse(this);
+//      qDebug() << "The slow operation took" << timer1.elapsed() << "milliseconds";
 
       if (cmd->crc == resp->lastCommandCRC) { // the response was for the last command
         if (resp->lastCommandStatus == CMD_STATUS_OK) {
@@ -763,6 +774,7 @@ int Device::readSlot(uint8_t slotNo) {
 
       return 0;
     }
+//    qDebug() << "The slow operation took" << timer1.elapsed() << "milliseconds";
   }
   return -1;
 }
@@ -2855,6 +2867,13 @@ int Device::stick20ProductionTest(void) {
   res = sendCommand(cmd);
   bool success = res > 0;
   delete cmd;
+
+
+  Sleep::msleep(3000);
+  Response *resp = new Response();
+  resp->getResponse(this);
+  delete resp;
+
   return success;
 }
 

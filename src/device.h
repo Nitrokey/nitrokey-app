@@ -263,7 +263,7 @@ public:
   Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20UpdateMode,
          int pidStick20UpdateMode);
   hid_device *dev_hid_handle;
-  int checkConnection();
+  int checkConnection(int InitConfigFlag);
   bool isConnected;
   int sendCommand(Command *cmd);
   int sendCommandGetResponse(Command *cmd, Response *resp);

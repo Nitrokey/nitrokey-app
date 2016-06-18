@@ -574,7 +574,7 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
     } else {
       cryptostick->connect();
       OwnSleep::msleep(500);
-      cryptostick->checkConnection();
+      cryptostick->checkConnection(FALSE);
       printf(".");
       fflush(stdout);
     }
@@ -641,7 +641,6 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
   } else if (0 == strcmp(Cmdline, "prodinfo")) {
     printf("Send -get production infos-\n");
 
-    OwnSleep::sleep(2);
     bool commandSuccess = cryptostick->stick20ProductionTest();
     if (!commandSuccess) {
       printf("Command execution has failed or device stopped responding.\n");
@@ -828,7 +827,7 @@ void MainWindow::checkConnection() {
 
   currentTime = QDateTime::currentDateTime().toTime_t();
 
-  int result = cryptostick->checkConnection();
+  int result = cryptostick->checkConnection(TRUE);
 
   // Set new slot counts
   HOTP_SlotCount = cryptostick->HOTP_SlotCount;

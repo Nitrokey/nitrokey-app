@@ -1274,8 +1274,11 @@ extern "C"
         if (skipped_report_id)
             res++;
 
-        // Get HID Stick messages
-        HID_GetStick20ReceiveData (data);
+        if (res >= 0)
+        {
+            // Get HID Stick messages
+            HID_GetStick20ReceiveData (data);
+        }
 
         return res;
     }
