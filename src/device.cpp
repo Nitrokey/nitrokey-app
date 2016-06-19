@@ -2379,9 +2379,15 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
           CS20_MAX_UPDATE_PASSWORD_LEN);
   STRNCPY((char *)&SendString[16], sizeof(SendString) - 16, (char *)new_password,
           CS20_MAX_UPDATE_PASSWORD_LEN);
+
   cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN, SendString, 33);
   res = sendCommand(cmd);
   delete cmd;
+
+  Sleep::msleep(2000);
+  Response *resp = new Response();
+  resp->getResponse(this);
+  delete resp;
 
   return res > 0;
 }
