@@ -77,8 +77,8 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
 
   validUserPassword = false;
 
-  memset(password, 0, 50);
-  memset(userPassword, 0, 50);
+  memset(password, 0, 25);
+  memset(userPassword, 0, 25);
 
   // Vars for password safe
   passwordSafeUnlocked = FALSE;
@@ -661,6 +661,14 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
     Command *cmd = new Command(CMD_GET_CODE, data, 18);
 
     userAuthorize(cmd);
+
+    /*
+     * Workaround for next HOTP/TOTP coming out as zeros force asking
+     * the user PIN again and clear the temp pwd.
+     */
+    validUserPassword = false;
+    memset(userPassword, 0, 25);
+
     res = sendCommand(cmd);
 
     if (res == -1) {
