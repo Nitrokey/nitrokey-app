@@ -20,6 +20,7 @@
 
 #include <QDateTime>
 #include <QDebug>
+#include <QElapsedTimer>
 
 #include "crc32.h"
 #include "device.h"
@@ -27,6 +28,7 @@
 #include "response.h"
 #include "sleep.h"
 #include "string.h"
+#include "stick20-response-task.h"
 
 /*******************************************************************************
 
@@ -2384,10 +2386,16 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
   res = sendCommand(cmd);
   delete cmd;
 
+  Stick20ResponseTask ResponseTask(NULL, this, NULL);
+  ResponseTask.NoStopWhenStatusOK();
+  ResponseTask.GetResponse();
+
+/*
   Sleep::msleep(2000);
   Response *resp = new Response();
   resp->getResponse(this);
   delete resp;
+*/
 
   return res > 0;
 }
@@ -2859,6 +2867,7 @@ int Device::stick20LockFirmware(uint8_t *password) {
 *******************************************************************************/
 
 int Device::stick20ProductionTest(void) {
+//  QElapsedTimer timer1;
   uint8_t n;
 
   int res;
@@ -2874,12 +2883,13 @@ int Device::stick20ProductionTest(void) {
   bool success = res > 0;
   delete cmd;
 
+//  timer1.start ();
 
-  Sleep::msleep(3000);
-  Response *resp = new Response();
-  resp->getResponse(this);
-  delete resp;
+  Stick20ResponseTask ResponseTask(NULL, this, NULL);
+  ResponseTask.NoStopWhenStatusOK();
+  ResponseTask.GetResponse();
 
+//  qDebug() << " " << timer1.elapsed() << "milliseconds";
   return success;
 }
 
