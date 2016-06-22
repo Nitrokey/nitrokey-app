@@ -948,10 +948,15 @@ void MainWindow::checkConnection() {
 
     UpdateDynamicMenuEntrys();
 
-    if (TRUE == StickNotInitated || TRUE == SdCardNotErased) {
-      if (FALSE == StickNotInitated_DontAsk && FALSE == SdCardNotErased_DontAsk)
+    if (TRUE == StickNotInitated) {
+      if (FALSE == StickNotInitated_DontAsk)
         csApplet->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
                                 "device\" option from context menu."));
+    }
+    if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
+      if (FALSE == SdCardNotErased_DontAsk)
+        csApplet->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
+                                "storage with random data\""));
     }
   }
   /*
@@ -1606,8 +1611,13 @@ void MainWindow::generateMenuForStorageDevice() {
       return;
     }
 
-    if (TRUE == StickNotInitated || TRUE == SdCardNotErased) {
+    if (TRUE == StickNotInitated) {
       gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), initEncryptedVolumeItem);
+      AddSeperator = TRUE;
+    }
+
+    if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
+      gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), fillSDCardWithRandomCharsItem);
       AddSeperator = TRUE;
     }
 
@@ -1742,8 +1752,13 @@ void MainWindow::generateMenuForStorageDevice() {
     }
 
     // Add special entrys
-    if (TRUE == StickNotInitated || TRUE == SdCardNotErased) {
+    if (TRUE == StickNotInitated) {
       trayMenu->addAction(Stick20ActionInitCryptedVolume);
+      AddSeperator = TRUE;
+    }
+
+    if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
+      trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars);
       AddSeperator = TRUE;
     }
 
@@ -1798,8 +1813,8 @@ void MainWindow::generateMenuForStorageDevice() {
     // active
     else
       trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume); // Set
-    // readonly
-    // active
+                                                                                 // readonly
+                                                                                 // active
 
     if (FALSE == SdCardNotErased)
       trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
@@ -2274,15 +2289,19 @@ void MainWindow::startStickDebug() {
   dialog.exec();
 }
 
+void MainWindow::refreshStick20StatusData(){
+    if (TRUE == cryptostick->activStick20) {
+      // Get actual data from stick 20
+      cryptostick->stick20GetStatusData();
+      Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
+      ResponseTask.NoStopWhenStatusOK();
+      ResponseTask.GetResponse();
+      UpdateDynamicMenuEntrys(); // Use new data to update menu
+    }
+}
+
 void MainWindow::startAboutDialog() {
-  if (TRUE == cryptostick->activStick20) {
-    // Get actual data from stick 20
-    cryptostick->stick20GetStatusData();
-    Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
-    ResponseTask.NoStopWhenStatusOK();
-    ResponseTask.GetResponse();
-    UpdateDynamicMenuEntrys(); // Use new data to update menu
-  }
+  refreshStick20StatusData();
   AboutDialog dialog(cryptostick, this);
   dialog.exec();
 }
@@ -2566,6 +2585,7 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
       stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
       if (fillSDWithRandomChars != 0)
         stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
+    refreshStick20StatusData();
     }
   }
 }
