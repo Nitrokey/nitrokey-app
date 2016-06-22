@@ -177,6 +177,7 @@ private:
   void generateMenuForStorageDevice();
   int UpdateDynamicMenuEntrys(void);
   int AnalyseProductionInfos();
+  void refreshStick20StatusData();
 
 public slots:
   void startAboutDialog();
