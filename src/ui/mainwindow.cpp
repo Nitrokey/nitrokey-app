@@ -248,7 +248,7 @@ void onGetPasswordSafeSlot(GtkMenu *menu, gpointer data) {
 void onInitEncryptedVolume(GtkMenu *menu, gpointer data) {
   Q_UNUSED(menu);
   MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20DestroyCryptedVolume();
+  window->startStick20DestroyCryptedVolume(1);
 }
 
 void onFillSDCardWithRandomChars(GtkMenu *menu, gpointer data) {
