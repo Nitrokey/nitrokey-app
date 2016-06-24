@@ -82,7 +82,7 @@ Initialisieren Sie die Schlüssel.</translation>
     <message>
         <location filename="../ui/aboutdialog.ui" line="569"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 durch NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt; lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2014 by Nitrokey team. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -106,7 +106,7 @@ Initialisieren Sie die Schlüssel.</translation>
     <message>
         <location filename="../ui/aboutdialog.ui" line="64"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey Pro and Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dieses Programm dient zum Konfigurieren und Verwenden des Nitrokey Pro und Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/aboutdialog.ui" line="307"/>
@@ -326,12 +326,12 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <location filename="../ui/stick20changepassworddialog.ui" line="132"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs können nur dreimal ausprobiert werden und sind daher sicher gegen Brute Force Angriffe. Eine PIN mit 6 oder 8 Zahlen ist ausreichend lang so dass längere und kompliziere PINs in der Regel unnötig sind. Die minimale Länge beträgt %1 (%3 für Admin) und die maximale Länge beträgt %2 Zeichen. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/stick20changepassworddialog.ui" line="147"/>
         <source>Retry count left:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anzahl möglicher Versuche:</translation>
     </message>
     <message>
         <source>Old user PIN</source>
@@ -400,22 +400,22 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="86"/>
         <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Leider sind keine Eingaben mehr möglich. Bitte nutzen Sie die Option &quot;Reset Benutzer-PIN&quot; im Menü um Ihre PIN zurückzusetzen</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="94"/>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Leider sind keine Eingaben mehr möglich. Bitte lesen Sie die Dokumentation wie die Admin-PIN zurückgesetzt werden kann.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="131"/>
         <source>Set User PIN</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Setze Benutzer-PIN</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="132"/>
         <source>Current User PIN:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aktuelle Benutzer-PIN:</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="133"/>
@@ -423,55 +423,55 @@ Bitte versuchen Sie es erneut</translation>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="147"/>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="148"/>
         <source>New User PIN:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neue Benutzer-PIN:</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="138"/>
         <source>Set Admin PIN</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Setze Admin-PIN</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="139"/>
         <source>Current Admin PIN:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aktuelle Admin-PIN:</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="140"/>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="141"/>
         <source>New Admin PIN:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neue Admin-PIN:</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="145"/>
         <source>Reset User PIN</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Benutzer-PIN zurücksetzen</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="152"/>
         <source>Current Firmware Password:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aktuelles Firmware-Passwort:</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="195"/>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="213"/>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="286"/>
         <source>There was a problem during communicating with device. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="201"/>
         <source>Current password is not correct. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aktuelles Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="219"/>
         <source>New password is not correct. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neues Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="222"/>
         <source>New password is set</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neues Passwort wurde gesetzt</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="264"/>
@@ -486,17 +486,17 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="292"/>
         <source>Current Admin password is not correct. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aktuelles Admin-Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="302"/>
         <source>There was a problem during communicating with device or new password is not correct. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bei der Gerätekommunikation ist ein Fehler aufgetreten oder das neue Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="307"/>
         <source>New User password is set</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Neue Benutzer-PIN wurde gesetzt</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="332"/>
@@ -516,7 +516,7 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="363"/>
         <source>Wrong password or there was a communication problem with the device.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Falsches Passwort oder Kommunikationsproblem mit dem Gerät.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="386"/>
@@ -528,7 +528,7 @@ Bitte versuchen Sie es erneut</translation>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="409"/>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="421"/>
         <source> chars</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> Zeichen</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20changepassworddialog.cpp" line="397"/>
@@ -1243,7 +1243,8 @@ Bitte versuchen Sie es erneut</translation>
         <location filename="../src/ui/mainwindow.cpp" line="953"/>
         <source>Warning: Encrypted volume is not secure,
 Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Warnung: Verschlüsseltes Volumen ist nicht sicher,
+Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1170"/>
@@ -1544,17 +1545,17 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1190"/>
         <source>&amp;Initialize device</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Gerät initialisieren</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1914"/>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zähler nicht kopiert - Ein Kommunikationsfehler ist aufgetreten. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1926"/>
         <source>Counter value not copied - Nitrokey Storage handles HOTP counter values up to 7 digits. Setting counter value to 0. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zähler nicht kopiert - Nitrokey Storage kann mit bis zu 7-stelligen HOTP-Zählern umgehen. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2197"/>
@@ -1584,39 +1585,40 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2447"/>
         <source>Device has been locked</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gerät wurde gesperrt</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2462"/>
         <source>Enter Firmware Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geben Sie das Firmware-Passwort ein</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2462"/>
         <source>Enter Firmware Password:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geben Sie das Firmware-Passwort ein:</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2844"/>
         <location filename="../src/ui/mainwindow.cpp" line="2858"/>
         <source>There was an error during communicating with device. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="2883"/>
         <source>This command fills the encrypted volumes with random data and will destroy all encrypted volumes!
 It requires more than 1 hour for 32GB. Do you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dieser Befehl füllt das verschlüsselte Volumen mit Zufallswerten und zerstört alle verschlüsselten Volumen!
+Für 32 GB dauert es mehr als 1 Stunde. Wollen Sie fortsetzen?</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="3027"/>
         <source>Either the password is not correct or the command execution resulted in an error. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Entweder ist das Passwort falsch oder bei der Ausführung trat ein Fehler auf. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="3086"/>
         <source>(debug) Response: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(Fehlersuche) Antwort: </translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="3698"/>
@@ -1687,12 +1689,12 @@ Zeit des Nitrokey zurücksetzen?</translation>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="4085"/>
         <source>Counter must be a value between 0 and %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zähler muss ein Wert zwischen 0 und %1 sein</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="4091"/>
         <source>For Nitrokey Storage counter must be a value between 0 and 9999999</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beim Nitrokey Storage muss der Zähler ein Wert zwischen 9999999 sein</translation>
     </message>
     <message>
         <source>Seed must be lower than 1048560 (= 2^20)</source>
