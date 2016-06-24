@@ -1290,7 +1290,7 @@ void MainWindow::generatePasswordMenu() {
       }
     }
     if (TRUE == cryptostick->passwordSafeUnlocked) {
-      for (int i = 0; i < HOTP_SlotCount; i++) {
+      for (int i = 0; i < PWS_SLOT_COUNT; i++) {
         GtkWidget *currPasswdItem;
 
         struct getOTPData *otp_data;
