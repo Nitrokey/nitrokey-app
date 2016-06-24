@@ -248,7 +248,7 @@ void onGetPasswordSafeSlot(GtkMenu *menu, gpointer data) {
 void onInitEncryptedVolume(GtkMenu *menu, gpointer data) {
   Q_UNUSED(menu);
   MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20DestroyCryptedVolume();
+  window->startStick20DestroyCryptedVolume(1);
 }
 
 void onFillSDCardWithRandomChars(GtkMenu *menu, gpointer data) {
@@ -1290,7 +1290,7 @@ void MainWindow::generatePasswordMenu() {
       }
     }
     if (TRUE == cryptostick->passwordSafeUnlocked) {
-      for (int i = 0; i < HOTP_SlotCount; i++) {
+      for (int i = 0; i < PWS_SLOT_COUNT; i++) {
         GtkWidget *currPasswdItem;
 
         struct getOTPData *otp_data;
