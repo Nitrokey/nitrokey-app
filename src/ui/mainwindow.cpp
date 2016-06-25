@@ -2574,8 +2574,8 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
     if (QDialog::Accepted == ret) {
       dialog.getPassword((char *)password);
 
-      stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
-      if (fillSDWithRandomChars != 0)
+     bool success = stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
+      if (success && fillSDWithRandomChars != 0)
         stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
     refreshStick20StatusData();
     }
@@ -3011,13 +3011,13 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
       break;
     case STICK20_CMD_PRODUCTION_TEST:
       break;
-
     default:
       break;
     }
   } else {
     csApplet->warningBox(tr("Either the password is not correct or the command execution resulted "
                             "in an error. Please try again."));
+    return false;
   }
   return (true);
 }
