@@ -720,14 +720,7 @@ int MainWindow::AnalyseProductionInfos() {
   printf("OEM          0x%04x\n", Stick20ProductionInfos_st.SD_Card_OEM_u16);
   printf("Manufa. date %d.%02d\n", Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000,
          Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-  printf("Write speed  %5d kB/sec\n", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
   printf("Size         %2d GB\n", Stick20ProductionInfos_st.SD_Card_Size_u8);
-
-  // Check for SD card speed
-  if (5000 > Stick20ProductionInfos_st.SD_WriteSpeed_u16) {
-    ProductStateOK = FALSE;
-    printf((char *)"Speed error\n");
-  }
 
   // Valid manufacturers
   if ((0x74 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)    // Transcend
@@ -760,7 +753,6 @@ int MainWindow::AnalyseProductionInfos() {
       fprintf(fp, "SCO:0x%04x,", Stick20ProductionInfos_st.SD_Card_OEM_u16);
       fprintf(fp, "DAT:%d.%02d,", Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000,
               Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-      fprintf(fp, "Speed:%d,", Stick20ProductionInfos_st.SD_WriteSpeed_u16);
       fprintf(fp, "Size:%d,", Stick20ProductionInfos_st.SD_Card_Size_u8);
       fprintf(fp, "Firmware:%d.%d - %d",
               (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0],
