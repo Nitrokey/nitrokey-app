@@ -2574,8 +2574,8 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
     if (QDialog::Accepted == ret) {
       dialog.getPassword((char *)password);
 
-      stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
-      if (fillSDWithRandomChars != 0)
+     bool success = stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
+      if (success && fillSDWithRandomChars != 0)
         stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
     refreshStick20StatusData();
     }
@@ -2985,8 +2985,6 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     case STICK20_CMD_GET_DEVICE_STATUS:
       UpdateDynamicMenuEntrys();
       break;
-    /* Dead code case STICK20_CMD_SEND_STARTUP: UpdateDynamicMenuEntrys ();
-     * break; */
     case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
       HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8 = READ_WRITE_ACTIVE;
       UpdateDynamicMenuEntrys();
@@ -3004,20 +3002,16 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
       UpdateDynamicMenuEntrys();
       break;
     case STICK20_CMD_GENERATE_NEW_KEYS: // = firmware reset
-      HID_Stick20Configuration_st.StickKeysNotInitiated = FALSE;
-      HID_Stick20Configuration_st.SDFillWithRandomChars_u8 = 0x00;
-      HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
-      UpdateDynamicMenuEntrys();
       break;
     case STICK20_CMD_PRODUCTION_TEST:
       break;
-
     default:
       break;
     }
   } else {
     csApplet->warningBox(tr("Either the password is not correct or the command execution resulted "
                             "in an error. Please try again."));
+    return false;
   }
   return (true);
 }
