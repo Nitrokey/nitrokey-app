@@ -2392,11 +2392,13 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
 
   cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN, SendString, 33);
   res = sendCommand(cmd);
+  bool sentWithSuccess = res > 0;
   delete cmd;
 
   Stick20ResponseTask ResponseTask(NULL, this, NULL);
   ResponseTask.NoStopWhenStatusOK();
   ResponseTask.GetResponse();
+  bool commandSuccess = ResponseTask.ResultValue == TRUE;
 
 /*
   Sleep::msleep(2000);
@@ -2405,7 +2407,7 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
   delete resp;
 */
 
-  return res > 0;
+  return sentWithSuccess && commandSuccess;
 }
 
 /*******************************************************************************

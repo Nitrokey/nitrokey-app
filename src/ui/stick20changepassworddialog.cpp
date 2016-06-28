@@ -363,6 +363,8 @@ bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
         tr("Wrong password or there was a communication problem with the device."));
     return false;
   }
+  csApplet->warningBox(
+      tr("Password has been changed with success!"));
   return true;
 }
 
