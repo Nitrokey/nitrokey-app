@@ -2377,11 +2377,12 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
 
   // Check password length
   n = strlen((const char *)old_password);
-  if (CS20_MAX_UPDATE_PASSWORD_LEN <= n) {
+  if (CS20_MAX_UPDATE_PASSWORD_LEN < n) {
     return (false);
   }
+
   n = strlen((const char *)new_password);
-  if (CS20_MAX_UPDATE_PASSWORD_LEN <= n) {
+  if (CS20_MAX_UPDATE_PASSWORD_LEN < n) {
     return (false);
   }
 
