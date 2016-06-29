@@ -10,6 +10,8 @@ To compile the Nitrokey App under Linux install the package libusb-1.0.0-dev and
 QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
 QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
+Note: In case `libusb-1.0.0-dev` is not available to install please check other name: `libusb-1.0-0-dev` (the difference is the `-` char between zeroes).
+
 Compiling on Ubuntu Linux
 -------------------------
 Prerequisites for building on Ubuntu:
