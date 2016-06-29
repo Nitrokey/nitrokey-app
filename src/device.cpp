@@ -2358,7 +2358,7 @@ bool Device::stick20EnableFirmwareUpdate(uint8_t *password) {
 
   // Check password length
   n = strlen((const char *)password);
-  if (CS20_MAX_UPDATE_PASSWORD_LEN <= n) {
+  if (CS20_MAX_UPDATE_PASSWORD_LEN +1 < n) { //+1 for [0]='p'
     return (false);
   }
 
