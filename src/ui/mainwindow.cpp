@@ -600,7 +600,7 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
     p = (char *)"12345678";
     //   FIXME should issue warning instead of silent password assigning?
   }
-  uint8_t password[40];
+  uint8_t password[40] = {0};
   password[0] = 'p'; // Send a clear password
   STRCPY((char *)&password[1], sizeof(password) - 1, p);
 

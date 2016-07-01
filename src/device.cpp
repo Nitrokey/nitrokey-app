@@ -2372,7 +2372,8 @@ bool Device::stick20EnableFirmwareUpdate(uint8_t *password) {
 bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_password) {
   uint8_t n;
   int res;
-  uint8_t SendString[33];
+  const int HID_STRING_LEN = 50;
+  uint8_t SendString[HID_STRING_LEN] = {0};
   Command *cmd;
 
   // Check password length
@@ -2386,12 +2387,11 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
     return (false);
   }
 
-  STRNCPY((char *)&SendString[1], sizeof(SendString) - 1, (char *)old_password,
-          CS20_MAX_UPDATE_PASSWORD_LEN);
-  STRNCPY((char *)&SendString[16], sizeof(SendString) - 16, (char *)new_password,
-          CS20_MAX_UPDATE_PASSWORD_LEN);
+  int m = CS20_MAX_UPDATE_PASSWORD_LEN;
+  STRNCPY((char *)&SendString[1], sizeof(SendString) - 1, (char *)old_password, m);
+  STRNCPY((char *)&SendString[22], sizeof(SendString) - 22, (char *)new_password, m);
 
-  cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN, SendString, 33);
+  cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN, SendString, sizeof(SendString));
   res = sendCommand(cmd);
   bool sentWithSuccess = res > 0;
   delete cmd;
