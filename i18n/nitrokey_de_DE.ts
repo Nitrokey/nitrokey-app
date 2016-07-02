@@ -452,69 +452,74 @@ Bitte versuchen Sie es erneut</translation>
         <translation type="unfinished">Aktuelles Firmware-Passwort:</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="195"/>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="213"/>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="286"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="155"/>
+        <source>Show password</source>
+        <translation>Passwort anzeigen</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="196"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="214"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="287"/>
         <source>There was a problem during communicating with device. Please retry.</source>
         <translation type="unfinished">Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="201"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="202"/>
         <source>Current password is not correct. Please retry.</source>
         <translation type="unfinished">Aktuelles Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="219"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="220"/>
         <source>New password is not correct. Please retry.</source>
         <translation type="unfinished">Neues Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="222"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="223"/>
         <source>New password is set</source>
         <translation type="unfinished">Neues Passwort wurde gesetzt</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="264"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="265"/>
         <source>Wrong password.</source>
         <translation>Falsches Passwort.</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="266"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="267"/>
         <source>Couldn&apos;t change %1 password</source>
         <translation>Konnte %1 Passwort nicht ändern</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="292"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="293"/>
         <source>Current Admin password is not correct. Please retry.</source>
         <translation type="unfinished">Aktuelles Admin-Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="302"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="303"/>
         <source>There was a problem during communicating with device or new password is not correct. Please retry.</source>
         <translation type="unfinished">Bei der Gerätekommunikation ist ein Fehler aufgetreten oder das neue Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="307"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="308"/>
         <source>New User password is set</source>
         <translation type="unfinished">Neue Benutzer-PIN wurde gesetzt</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="332"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="333"/>
         <source>Wrong Admin PIN.</source>
         <translation>Falsche Administrator-PIN.</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="334"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="335"/>
         <source>Couldn&apos;t unblock the user PIN. Error: %1</source>
         <translation>Benutzer-PIN konnte nicht freigeschaltet werden. Fehler: %1</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="337"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="338"/>
         <source>User PIN successfully unblocked</source>
         <translation>Benutzer-PIN erfolgreich freigeschaltet</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="363"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="364"/>
         <source>Wrong password or there was a communication problem with the device.</source>
         <translation type="unfinished">Falsches Passwort oder Kommunikationsproblem mit dem Gerät.</translation>
     </message>

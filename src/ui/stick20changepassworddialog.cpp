@@ -152,6 +152,7 @@ void DialogChangePassword::InitData(void) {
     ui->label_2->setText(tr("Current Firmware Password:"));
     ui->label_3->setText(tr("New Firmware Password:"));
     ui->label_4->setText(tr("New Firmware Password:"));
+    ui->checkBox->setText(tr("Show password"));
     break;
   }
 }
@@ -363,8 +364,7 @@ bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
         tr("Wrong password or there was a communication problem with the device."));
     return false;
   }
-  csApplet->warningBox(
-      tr("Password has been changed with success!"));
+  csApplet->warningBox(tr("Password has been changed with success!"));
   return true;
 }
 
