@@ -519,29 +519,34 @@ Bitte versuchen Sie es erneut</translation>
         <translation type="unfinished">Falsches Passwort oder Kommunikationsproblem mit dem Gerät.</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="386"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="367"/>
+        <source>Password has been changed with success!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="388"/>
         <source>The minimum length of the old password is </source>
         <translation>Minimale Länge des alten Passworts ist </translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="387"/>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="409"/>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="421"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="389"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="411"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="423"/>
         <source> chars</source>
         <translation type="unfinished"> Zeichen</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="397"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="399"/>
         <source>The new password entrys are not the same</source>
         <translation>Die neuen Passwörter sind nicht identisch</translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="408"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="410"/>
         <source>The maximum length of a password is </source>
         <translation>Maximale Passwortlänge beträgt </translation>
     </message>
     <message>
-        <location filename="../src/ui/stick20changepassworddialog.cpp" line="420"/>
+        <location filename="../src/ui/stick20changepassworddialog.cpp" line="422"/>
         <source>The minimum length of a password is </source>
         <translation>Minimale Passwortlänge beträgt </translation>
     </message>
@@ -810,8 +815,8 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="505"/>
-        <location filename="../src/ui/mainwindow.cpp" line="876"/>
-        <location filename="../src/ui/mainwindow.cpp" line="888"/>
+        <location filename="../src/ui/mainwindow.cpp" line="868"/>
+        <location filename="../src/ui/mainwindow.cpp" line="880"/>
         <source>Nitrokey disconnected</source>
         <translation>Nitrokey wurde entfernt</translation>
     </message>
@@ -822,7 +827,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="571"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2081"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2073"/>
         <source>HOTP length:</source>
         <translation>HOTP-Länge:</translation>
     </message>
@@ -936,7 +941,7 @@ Bitte versuchen Sie es erneut</translation>
         <translation>ScrollLock doppelt drücken:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="838"/>
+        <location filename="../src/ui/mainwindow.cpp" line="830"/>
         <source>Nitrokey Pro connected</source>
         <translation>Nitrokey Pro wurde verbunden</translation>
     </message>
@@ -962,8 +967,8 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Sende HOTP2</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="873"/>
-        <location filename="../src/ui/mainwindow.cpp" line="931"/>
+        <location filename="../src/ui/mainwindow.cpp" line="865"/>
+        <location filename="../src/ui/mainwindow.cpp" line="923"/>
         <source>Nitrokey Storage connected</source>
         <translation>Nitrokey Storage wurde verbunden</translation>
     </message>
@@ -994,8 +999,8 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="1154"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1631"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1774"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1623"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1766"/>
         <source>Password Safe</source>
         <translation>Passwort-Safe</translation>
     </message>
@@ -1010,7 +1015,7 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Login-Name:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1105"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1097"/>
         <source>&amp;OTP</source>
         <translation>&amp;Einmalpasswörter</translation>
     </message>
@@ -1020,19 +1025,19 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Namen des Eintrags:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1108"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1100"/>
         <source>&amp;Factory reset</source>
         <translation>&amp;Zurücksetzen in Auslieferungszustand</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1111"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1162"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1103"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1154"/>
         <source>&amp;Change User PIN</source>
         <translation>&amp;Benutzer-PIN ändern</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1115"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1166"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1107"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1158"/>
         <source>&amp;Change Admin PIN</source>
         <translation>&amp;Administrator-PIN ändern</translation>
     </message>
@@ -1048,59 +1053,59 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="1286"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1101"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3557"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1093"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3543"/>
         <source>Unlock password safe</source>
         <translation>Passwort-Safe entsperren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1121"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1217"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1113"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1209"/>
         <source>&amp;Debug</source>
         <translation>&amp;Fehlersuche</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1124"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1116"/>
         <source>&amp;Quit</source>
         <translation>&amp;Beenden</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1128"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1120"/>
         <source>&amp;About Nitrokey</source>
         <translation>&amp;Über Nitrokey</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1134"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1126"/>
         <source>&amp;OTP and Password safe</source>
         <translation>&amp;Einmalpasswörter und Passwort-Safe</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1137"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1129"/>
         <source>&amp;SecPassword</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1140"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1132"/>
         <source>&amp;Stick 20 Setup</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1143"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1135"/>
         <source>&amp;Unlock encrypted volume</source>
         <translation>&amp;Verschlüsseltes Volumen entsperren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1148"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1140"/>
         <source>&amp;Lock encrypted volume</source>
         <translation>&amp;Verschlüsseltes Volumen sperren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1153"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1145"/>
         <source>&amp;Unlock hidden volume</source>
         <translation>&amp;Verstecktes Volumen freischalten</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1158"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1150"/>
         <source>&amp;Lock hidden volume</source>
         <translation>&amp;Verstecktes Volumen sperren</translation>
     </message>
@@ -1117,17 +1122,17 @@ Bitte versuchen Sie es erneut</translation>
         <translation type="obsolete">&amp;Aktualisierungs-PIN ändern</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1174"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1166"/>
         <source>&amp;Enable firmware update</source>
         <translation>&amp;Firmware-Aktualisierung aktivieren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1178"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1170"/>
         <source>&amp;Export firmware to file</source>
         <translation>&amp;Firmware als Datei exportieren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1185"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1177"/>
         <source>&amp;Destroy encrypted data</source>
         <translation>&amp;Verschlüsselte Daten zerstören</translation>
     </message>
@@ -1136,42 +1141,42 @@ Bitte versuchen Sie es erneut</translation>
         <translation type="vanished">&amp;Schlüssel initialisieren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1199"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1191"/>
         <source>&amp;Initialize storage with random data</source>
         <translation>&amp;Speicher mit Zufallsdaten initialisieren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1203"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1195"/>
         <source>&amp;Get stick status</source>
         <translation>&amp;Gerätestatus</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1208"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1200"/>
         <source>&amp;Set unencrypted volume read-only</source>
         <translation>&amp;Unverschlüsseltes Volumen auf nur-Lesen setzen</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1213"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1205"/>
         <source>&amp;Set unencrypted volume read-write</source>
         <translation>&amp;Unverschlüsseltes Volumen auf Lesen/Schreiben setzen</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1220"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1212"/>
         <source>&amp;Setup hidden volume</source>
         <translation>&amp;Verstecktes Volumen einrichten</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1225"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1217"/>
         <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
         <translation>&amp;Warnung &apos;Speicher mit Zufallsdaten initialisieren&quot; deaktivieren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1229"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1221"/>
         <source>&amp;Setup password matrix</source>
         <translation>&amp;Passwortmatrix einrichten</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1233"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1225"/>
         <source>&amp;Lock stick hardware</source>
         <translation>&amp;Hardware sperren</translation>
     </message>
@@ -1180,84 +1185,84 @@ Bitte versuchen Sie es erneut</translation>
         <translation type="vanished">&amp;Benutzer-PIN zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1241"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1233"/>
         <source>&amp;Lock Device</source>
         <translation>&amp;Gerät sperren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1244"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1236"/>
         <source>Smartcard or SD card are not ready</source>
         <translation>Chipkarte oder Speicher sind nicht bereit</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1323"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1315"/>
         <source>Passwords</source>
         <translation>Passwörter</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1491"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1796"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1483"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1788"/>
         <source>Configure</source>
         <translation>Konfigurieren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1838"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1830"/>
         <source>Special Configure</source>
         <translation>Spezial konfigurieren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2021"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2013"/>
         <source>TOTP length:</source>
         <translation>TOTP-Länge:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2197"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2578"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2690"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3051"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3245"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3914"/>
-        <location filename="../src/ui/mainwindow.cpp" line="4115"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2189"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2570"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2682"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3037"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3231"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3900"/>
+        <location filename="../src/ui/mainwindow.cpp" line="4101"/>
         <source>Admin PIN:</source>
         <translation>Administrator-PIN:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3931"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3917"/>
         <source>Wrong Pin. Please try again.</source>
         <translation>Falsche PIN. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2253"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2554"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2578"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2598"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2615"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2690"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3051"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3245"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3789"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2245"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2546"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2570"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2590"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2607"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2682"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3037"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3231"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3775"/>
         <source>Enter admin PIN</source>
         <translation>Administrator-PIN eingeben</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="953"/>
+        <location filename="../src/ui/mainwindow.cpp" line="945"/>
         <source>Warning: Encrypted volume is not secure,
 Select &quot;Initialize device&quot; option from context menu.</source>
         <translation type="unfinished">Warnung: Verschlüsseltes Volumen ist nicht sicher,
 Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1170"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1162"/>
         <source>&amp;Change Firmware Password</source>
         <translation>&amp;Firmware Passwort ändern</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1237"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1229"/>
         <source>&amp;Reset User PIN</source>
         <translation>&amp;Benutzer-PIN zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2264"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2256"/>
         <source>AES key generated</source>
         <translation>AES-Schlüssel wurde generiert</translation>
     </message>
@@ -1266,80 +1271,80 @@ Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
         <translation type="obsolete">AES-Schlüssel existiert nicht!</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2335"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2413"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2327"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2405"/>
         <source>This activity locks your hidden volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
         <translation>Diese Aktivität verriegelt Ihr verstecktes Volumen. Wollen Sie fortsetzen?
 Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aushängen.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2343"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2335"/>
         <source>User pin dialog</source>
         <translation>Benutzer-PIN Dialog</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2343"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2335"/>
         <source>Enter user PIN:</source>
         <translation>Benutzer-PIN eingeben:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2361"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2387"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2429"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2353"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2379"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2421"/>
         <source>This activity locks your encrypted volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
         <translation>Diese Aktivität verriegelt Ihr verschlüsseltes Volumen. Wollen Sie fortsetzen?
 Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aushängen.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2382"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2736"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2374"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2728"/>
         <source>Please enable the encrypted volume first.</source>
         <translation>Bitte aktivieren Sie zuerst das verschlüsselte Volumen.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2394"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2386"/>
         <source>Enter password for hidden volume</source>
         <translation>Passwort für verstecktes Volumen eingeben</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2394"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2386"/>
         <source>Enter password for hidden volume:</source>
         <translation>Passwort für verstecktes Volumen:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2554"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2615"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2546"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2607"/>
         <source>Enter admin PIN:</source>
         <translation>Administrator-PIN eingeben:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2574"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2566"/>
         <source>WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?</source>
         <translation>WARNUNG: Die Generierung eines neuen AES-Schlüssels wird die verschlüsselten Volumen, versteckten Volumen und den Passwort-Safe zerstören! Fortfahren?</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2598"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2590"/>
         <source>Admin Pin:</source>
         <translation>Administrator-PIN:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2654"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2670"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3765"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2646"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2662"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3751"/>
         <source>Enter user PIN</source>
         <translation>Benutzer-PIN eingeben:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2654"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2670"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3962"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2646"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2662"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3948"/>
         <source>User PIN:</source>
         <translation>Benutzer-PIN:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2704"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2696"/>
         <source>The selected lines must be greater then greatest password length</source>
         <translation>Die ausgewählten Zeilen müssen größer sein als die maximale Passwortlänge</translation>
     </message>
@@ -1364,97 +1369,97 @@ Dies wird alle verschlüsselten Volumen zerstören!
 Dieser Befehl benötigt für 32 GB mehr als eine Stunde.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2898"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2890"/>
         <source>Not implemented</source>
         <translation>Nicht implementiert</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2955"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2947"/>
         <source>Stick20Dialog: Wrong combobox value! </source>
         <translation>Nitrokey Storage Dialog: Falscher Combobox-Wert! </translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2976"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2968"/>
         <source>Warning: The encrypted Volume is not formatted.
 &quot;Use GParted or fdisk for this.&quot;</source>
         <translation>Warnung: Das verschlüsselte Volumen ist noch nicht formatiert.
 &quot;Dafür können Sie GParted oder fdisk verwenden.&quot;</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3064"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3673"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3050"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3659"/>
         <source>Please enter a slotname.</source>
         <translation>Bitte Namen des Eintrags eingeben.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3093"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3271"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3079"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3257"/>
         <source>Configuration successfully written.</source>
         <translation>Konfiguration erfolgreich gespeichert.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3122"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3108"/>
         <source>The name of the slot must not be empty.</source>
         <translation>Der Name des Eintrags darf nicht leer sein.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3126"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3310"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3112"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3296"/>
         <source>Error writing configuration!</source>
         <translation>Fehler beim Schreiben der Konfiguration!</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3140"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3126"/>
         <source>Nitrokey is not connected!</source>
         <translation>Nitrokey ist nicht verbunden!</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3320"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3306"/>
         <source>Nitrokey not connected!</source>
         <translation>Nitrokey ist nicht verbunden!</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3332"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3340"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3358"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3366"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3318"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3326"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3344"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3352"/>
         <source>One-time password has been copied to clipboard.</source>
         <translation>Einmalpasswort wurde in Zwischenablage kopiert.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3402"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3388"/>
         <source>WARNING: Are you sure you want to erase the slot?</source>
         <translation>WARNUNG: Wollen Sie wirklich den Eintrag löschen?</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3429"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3415"/>
         <source>Slot has been erased successfully.</source>
         <translation>Eintrag wurde erfolgreich gelöscht.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3545"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3553"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3706"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3531"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3539"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3692"/>
         <source>Slot </source>
         <translation>Eintrag </translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3615"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3601"/>
         <source>Can&apos;t clear slot.</source>
         <translation>Konnte Eintrag nicht löschen.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3617"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3603"/>
         <source>Slot is erased already.</source>
         <translation>Eintrag ist bereits gelöscht.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3685"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3671"/>
         <source>Please enter a password.</source>
         <translation>Bitte geben Sie ein Passwort ein.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3691"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3677"/>
         <source>Can&apos;t save slot. %1</source>
         <translation>Konnte Eintrag nicht löschen. %1</translation>
     </message>
@@ -1474,15 +1479,15 @@ Dieser Befehl benötigt für 32 GB mehr als eine Stunde.</translation>
         <translation>aktiv</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="851"/>
-        <location filename="../src/ui/mainwindow.cpp" line="907"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3999"/>
+        <location filename="../src/ui/mainwindow.cpp" line="843"/>
+        <location filename="../src/ui/mainwindow.cpp" line="899"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3985"/>
         <source>Time is out-of-sync</source>
         <translation>Zeit ist nicht synchron</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="852"/>
-        <location filename="../src/ui/mainwindow.cpp" line="908"/>
+        <location filename="../src/ui/mainwindow.cpp" line="844"/>
+        <location filename="../src/ui/mainwindow.cpp" line="900"/>
         <source>WARNING!
 
 The time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
@@ -1495,16 +1500,16 @@ Die Zeit Ihres Computers und des Nitrokey sind nicht synchron. Ihr Computer kön
 Zeit des Nitrokey zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="867"/>
-        <location filename="../src/ui/mainwindow.cpp" line="924"/>
-        <location filename="../src/ui/mainwindow.cpp" line="4015"/>
+        <location filename="../src/ui/mainwindow.cpp" line="859"/>
+        <location filename="../src/ui/mainwindow.cpp" line="916"/>
+        <location filename="../src/ui/mainwindow.cpp" line="4001"/>
         <source>Time reset!</source>
         <translation>Zeit wurde zurückgesetzt!</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="893"/>
-        <location filename="../src/ui/mainwindow.cpp" line="894"/>
-        <location filename="../src/ui/mainwindow.cpp" line="930"/>
+        <location filename="../src/ui/mainwindow.cpp" line="885"/>
+        <location filename="../src/ui/mainwindow.cpp" line="886"/>
+        <location filename="../src/ui/mainwindow.cpp" line="922"/>
         <source>Nitrokey connected</source>
         <translation>Nitrokey wurde verbunden</translation>
     </message>
@@ -1515,158 +1520,158 @@ Select &quot;Initialize keys&quot;</source>
 Wählen Sie &quot;Schlüssel initialisieren&quot; aus.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="958"/>
+        <location filename="../src/ui/mainwindow.cpp" line="950"/>
         <source>Warning: Encrypted volume is not secure,
 Select &quot;Initialize storage with random data&quot;</source>
         <translation>Warnung: Verschlüsseltes Volumen ist nicht sicher.
 Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="991"/>
-        <location filename="../src/ui/mainwindow.cpp" line="993"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3357"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3361"/>
+        <location filename="../src/ui/mainwindow.cpp" line="983"/>
+        <location filename="../src/ui/mainwindow.cpp" line="985"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3343"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3347"/>
         <source>TOTP slot </source>
         <translation>TOTP-Eintrag</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1004"/>
-        <location filename="../src/ui/mainwindow.cpp" line="1006"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3331"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3335"/>
+        <location filename="../src/ui/mainwindow.cpp" line="996"/>
+        <location filename="../src/ui/mainwindow.cpp" line="998"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3317"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3321"/>
         <source>HOTP slot </source>
         <translation>HOTP-Eintrag </translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1073"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1065"/>
         <source>Nitrokey not connected</source>
         <translation>Nitrokey ist nicht verbunden</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1190"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1182"/>
         <source>&amp;Initialize device</source>
         <translation type="unfinished">&amp;Gerät initialisieren</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1914"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1906"/>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
         <translation type="unfinished">Zähler nicht kopiert - Ein Kommunikationsfehler ist aufgetreten. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="1926"/>
+        <location filename="../src/ui/mainwindow.cpp" line="1918"/>
         <source>Counter value not copied - Nitrokey Storage handles HOTP counter values up to 7 digits. Setting counter value to 0. Please retry.</source>
         <translation type="unfinished">Zähler nicht kopiert - Nitrokey Storage kann mit bis zu 7-stelligen HOTP-Zählern umgehen. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2197"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3914"/>
-        <location filename="../src/ui/mainwindow.cpp" line="4115"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2189"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3900"/>
+        <location filename="../src/ui/mainwindow.cpp" line="4101"/>
         <source>Enter card admin PIN</source>
         <translation>Administrator-PIN eingeben</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2214"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3113"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3291"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2206"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3099"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3277"/>
         <source>Wrong PIN. Please try again.</source>
         <translation>Falsche PIN. Bitte wiederholen.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2268"/>
-        <location filename="../src/ui/mainwindow.cpp" line="3801"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2260"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3787"/>
         <source>Wrong password</source>
         <translation>Falsches Passwort</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2270"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2262"/>
         <source>Unable to create AES key</source>
         <translation>Konnte keinen AES-Schlüssel erzeugen</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2447"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2439"/>
         <source>Device has been locked</source>
         <translation type="unfinished">Gerät wurde gesperrt</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2462"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2454"/>
         <source>Enter Firmware Password</source>
         <translation type="unfinished">Geben Sie das Firmware-Passwort ein</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2462"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2454"/>
         <source>Enter Firmware Password:</source>
         <translation type="unfinished">Geben Sie das Firmware-Passwort ein:</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2844"/>
-        <location filename="../src/ui/mainwindow.cpp" line="2858"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2836"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2850"/>
         <source>There was an error during communicating with device. Please try again.</source>
         <translation type="unfinished">Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="2883"/>
+        <location filename="../src/ui/mainwindow.cpp" line="2875"/>
         <source>This command fills the encrypted volumes with random data and will destroy all encrypted volumes!
 It requires more than 1 hour for 32GB. Do you want to continue?</source>
         <translation type="unfinished">Dieser Befehl füllt das verschlüsselte Volumen mit Zufallswerten und zerstört alle verschlüsselten Volumen!
 Für 32 GB dauert es mehr als 1 Stunde. Wollen Sie fortsetzen?</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3027"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3012"/>
         <source>Either the password is not correct or the command execution resulted in an error. Please try again.</source>
         <translation type="unfinished">Entweder ist das Passwort falsch oder bei der Ausführung trat ein Fehler auf. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3086"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3072"/>
         <source>(debug) Response: </source>
         <translation type="unfinished">(Fehlersuche) Antwort: </translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3698"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3684"/>
         <source>Can&apos;t save slot.</source>
         <translation>Eintrag konnte nicht gespeichert werden.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3803"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3789"/>
         <source>Unable to create new AES key</source>
         <translation>Neuer AES-Schlüssel konnte nicht erzeugt werden</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3814"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3800"/>
         <source>Can&apos;t unlock password safe.</source>
         <translation>Passwort-Safe konnte nicht freigeschaltet werden.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3819"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3805"/>
         <source>Password Safe unlocked successfully.</source>
         <translation>Passwort-Safe wurde erfolgreich freigeschaltet.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3831"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3817"/>
         <source>Password safe is not supported by this device.</source>
         <translation>Passwort-Safe wird durch dieses Gerät nicht unterstützt.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3837"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3823"/>
         <source>Wrong user password.</source>
         <translation>Falsches Benutzer-Passwort.</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3854"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3840"/>
         <source>Pasword safe: Can&apos;t get password</source>
         <translation>Passwort-Safe: Konnte Passwort nicht lesen</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3865"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3851"/>
         <source>Password safe [%1]</source>
         <translation>Passwort-Safe [%1]</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="3962"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3948"/>
         <source>Enter card user PIN</source>
         <translation>Benutzer-PIN eingeben</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="4000"/>
+        <location filename="../src/ui/mainwindow.cpp" line="3986"/>
         <source>WARNING!
 
 The time of your computer and Nitrokey are out of sync.
@@ -1682,17 +1687,17 @@ Die Zeit Ihres Computers und des Nitrokey sind nicht synchron. Ihr Computer kön
 Zeit des Nitrokey zurücksetzen?</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="4038"/>
+        <location filename="../src/ui/mainwindow.cpp" line="4024"/>
         <source>Invalid password!</source>
         <translation>Ungültiges Passwort!</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="4085"/>
+        <location filename="../src/ui/mainwindow.cpp" line="4071"/>
         <source>Counter must be a value between 0 and %1</source>
         <translation type="unfinished">Zähler muss ein Wert zwischen 0 und %1 sein</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.cpp" line="4091"/>
+        <location filename="../src/ui/mainwindow.cpp" line="4077"/>
         <source>For Nitrokey Storage counter must be a value between 0 and 9999999</source>
         <translation type="unfinished">Beim Nitrokey Storage muss der Zähler ein Wert zwischen 9999999 sein</translation>
     </message>
