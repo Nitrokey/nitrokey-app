@@ -68,26 +68,27 @@ int main(int argc, char *argv[]) {
   a.installTranslator(&qtTranslator);
 
   QTranslator myappTranslator;
+  bool success;
 #if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC)
   QLocale loc = QLocale::system();
   QString lang = QLocale::languageToString(loc.language());
 
-  if (lang != "en") {
-    bool success;
-    success = myappTranslator.load(QLocale::system(), // locale
-                                   "",                // file name
-                                   "nitrokey_",       // prefix
-                                   ":/i18n/",         // folder
-                                   ".qm");            // suffix
+  success = myappTranslator.load(QLocale::system(), // locale
+                                 "",                // file name
+                                 "nitrokey_",       // prefix
+                                 ":/i18n/",         // folder
+                                 ".qm");            // suffix
 
-    if (!success) {
-      myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
-    }
+  if (!success) {
+    success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
   }
 #else
-  myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
+  success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
 #endif
 
+  if (!success) {
+    success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg("en"));
+  }
   a.installTranslator(&myappTranslator);
 
   // Check for multiple instances
