@@ -93,6 +93,9 @@ int Stick20_ProductionInfosChanged = FALSE;
 typeStick20ProductionInfos_st Stick20ProductionInfos_st;
 
 
+/* forward declaration */
+void DebugAppendFileGuiText (char* Text);
+
 void initDebugging (void)
 {
     DebugText_GUI[0] = 0;
