@@ -224,16 +224,6 @@ bool DialogChangePassword::SendNewPassword(void) {
   return true;
 }
 
-/*******************************************************************************
-
-  Stick10ChangePassword
-
-  Reviews
-  Date      Reviewer        Info
-  21.10.13  GG              Created function
-
-*******************************************************************************/
-
 bool DialogChangePassword::Stick10ChangePassword(void) {
   int ret;
   int password_length;
@@ -368,17 +358,6 @@ bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
   csApplet->warningBox(tr("Password has been changed with success!"));
   return true;
 }
-
-/*******************************************************************************
-
-  accept
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*
-*******************************************************************************/
 
 void DialogChangePassword::accept() {
   // Check the length of the old password
