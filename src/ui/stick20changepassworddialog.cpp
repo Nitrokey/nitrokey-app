@@ -236,14 +236,10 @@ bool DialogChangePassword::SendNewPassword(void) {
 
 bool DialogChangePassword::Stick10ChangePassword(void) {
   int ret;
-
   int password_length;
-
   QByteArray PasswordString;
-
   password_length = STICK10_PASSWORD_LEN;
   unsigned char old_pin[password_length + 1];
-
   unsigned char new_pin[password_length + 1];
 
   memset(old_pin, 0, password_length + 1);
@@ -267,7 +263,11 @@ bool DialogChangePassword::Stick10ChangePassword(void) {
     csApplet->warningBox(tr("Couldn't change %1 password")
                              .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
   }
-  return ret == CMD_STATUS_OK;
+  bool success = ret == CMD_STATUS_OK;
+  if (success){
+      csApplet->messageBox(tr("New password is set"));
+  }
+  return success;
 }
 
 // FIXME code doubles SendNewPassword
