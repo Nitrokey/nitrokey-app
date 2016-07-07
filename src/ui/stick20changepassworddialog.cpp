@@ -232,8 +232,8 @@ bool DialogChangePassword::Stick10ChangePassword(void) {
   unsigned char old_pin[password_length + 1];
   unsigned char new_pin[password_length + 1];
 
-  memset(old_pin, 0, password_length + 1);
-  memset(new_pin, 0, password_length + 1);
+  memset(old_pin, 0, sizeof(old_pin) );
+  memset(new_pin, 0, sizeof(new_pin) );
 
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
   strncpy((char *)old_pin, PasswordString.data(), password_length);
