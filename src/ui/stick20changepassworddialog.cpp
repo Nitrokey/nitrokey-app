@@ -300,14 +300,12 @@ bool DialogChangePassword::ResetUserPassword(void) {
   return true;
 }
 
-void DialogChangePassword::ResetUserPasswordStick10(void) {
+bool DialogChangePassword::ResetUserPasswordStick10(void) {
   int ret;
-
   QByteArray PasswordString;
-
   unsigned char data[50 + 1];
 
-  memset(data, 0, 51);
+  memset(data, 0, sizeof(data));
 
   // New User PIN
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
@@ -319,7 +317,8 @@ void DialogChangePassword::ResetUserPasswordStick10(void) {
 
   ret = cryptostick->unlockUserPasswordStick10(data);
 
-  if (CMD_STATUS_OK != ret) {
+  bool success = ret == CMD_STATUS_OK;
+  if (!success) {
     if (CMD_STATUS_WRONG_PASSWORD == ret) {
       csApplet->warningBox(tr("Wrong Admin PIN."));
     } else {
@@ -328,6 +327,7 @@ void DialogChangePassword::ResetUserPasswordStick10(void) {
   } else {
     csApplet->messageBox(tr("User PIN successfully unblocked"));
   }
+  return success;
 }
 
 bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
@@ -421,8 +421,7 @@ void DialogChangePassword::accept() {
     success = ResetUserPassword();
     break;
   case STICK10_PASSWORD_KIND_RESET_USER:
-    ResetUserPasswordStick10();
-    success = true;
+    success = ResetUserPasswordStick10();
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
     success = Stick20ChangeUpdatePassword();

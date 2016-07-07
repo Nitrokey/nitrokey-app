@@ -49,7 +49,7 @@ private:
   bool SendNewPassword(void);
   bool Stick10ChangePassword(void);
   bool ResetUserPassword(void);
-  void ResetUserPasswordStick10(void);
+  bool ResetUserPasswordStick10(void);
   bool Stick20ChangeUpdatePassword(void);
   int CheckResponse(bool NoStopFlag);
   void clearFields();
