@@ -234,7 +234,7 @@ bool DialogChangePassword::SendNewPassword(void) {
 
 *******************************************************************************/
 
-void DialogChangePassword::Stick10ChangePassword(void) {
+bool DialogChangePassword::Stick10ChangePassword(void) {
   int ret;
 
   int password_length;
@@ -267,6 +267,7 @@ void DialogChangePassword::Stick10ChangePassword(void) {
     csApplet->warningBox(tr("Couldn't change %1 password")
                              .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
   }
+  return ret == CMD_STATUS_OK;
 }
 
 // FIXME code doubles SendNewPassword
@@ -435,8 +436,7 @@ void DialogChangePassword::accept() {
     break;
   case STICK10_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_ADMIN:
-    Stick10ChangePassword();
-    success = true;
+    success = Stick10ChangePassword();
     break;
   case STICK20_PASSWORD_KIND_RESET_USER:
     success = ResetUserPassword();
