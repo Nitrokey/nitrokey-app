@@ -106,6 +106,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
     QString cssRed = "QLabel {color: red; font-weight: bold}";
     ui->retryCount->setStyleSheet(cssRed);
     ui->retryCountLabel->setStyleSheet(cssRed);
+    done(true);
   }
   ui->retryCount->setText(QString::number(retryCount));
   ui->retryCount->repaint();
@@ -224,30 +225,16 @@ bool DialogChangePassword::SendNewPassword(void) {
   return true;
 }
 
-/*******************************************************************************
-
-  Stick10ChangePassword
-
-  Reviews
-  Date      Reviewer        Info
-  21.10.13  GG              Created function
-
-*******************************************************************************/
-
-void DialogChangePassword::Stick10ChangePassword(void) {
+bool DialogChangePassword::Stick10ChangePassword(void) {
   int ret;
-
   int password_length;
-
   QByteArray PasswordString;
-
   password_length = STICK10_PASSWORD_LEN;
   unsigned char old_pin[password_length + 1];
-
   unsigned char new_pin[password_length + 1];
 
-  memset(old_pin, 0, password_length + 1);
-  memset(new_pin, 0, password_length + 1);
+  memset(old_pin, 0, sizeof(old_pin) );
+  memset(new_pin, 0, sizeof(new_pin) );
 
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
   strncpy((char *)old_pin, PasswordString.data(), password_length);
@@ -267,6 +254,11 @@ void DialogChangePassword::Stick10ChangePassword(void) {
     csApplet->warningBox(tr("Couldn't change %1 password")
                              .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
   }
+  bool success = ret == CMD_STATUS_OK;
+  if (success){
+      csApplet->messageBox(tr("New password is set"));
+  }
+  return success;
 }
 
 // FIXME code doubles SendNewPassword
@@ -309,14 +301,12 @@ bool DialogChangePassword::ResetUserPassword(void) {
   return true;
 }
 
-void DialogChangePassword::ResetUserPasswordStick10(void) {
+bool DialogChangePassword::ResetUserPasswordStick10(void) {
   int ret;
-
   QByteArray PasswordString;
-
   unsigned char data[50 + 1];
 
-  memset(data, 0, 51);
+  memset(data, 0, sizeof(data));
 
   // New User PIN
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
@@ -328,7 +318,8 @@ void DialogChangePassword::ResetUserPasswordStick10(void) {
 
   ret = cryptostick->unlockUserPasswordStick10(data);
 
-  if (CMD_STATUS_OK != ret) {
+  bool success = ret == CMD_STATUS_OK;
+  if (!success) {
     if (CMD_STATUS_WRONG_PASSWORD == ret) {
       csApplet->warningBox(tr("Wrong Admin PIN."));
     } else {
@@ -337,6 +328,7 @@ void DialogChangePassword::ResetUserPasswordStick10(void) {
   } else {
     csApplet->messageBox(tr("User PIN successfully unblocked"));
   }
+  return success;
 }
 
 bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
@@ -367,17 +359,6 @@ bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
   csApplet->warningBox(tr("Password has been changed with success!"));
   return true;
 }
-
-/*******************************************************************************
-
-  accept
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*
-*******************************************************************************/
 
 void DialogChangePassword::accept() {
   // Check the length of the old password
@@ -435,15 +416,13 @@ void DialogChangePassword::accept() {
     break;
   case STICK10_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_ADMIN:
-    Stick10ChangePassword();
-    success = true;
+    success = Stick10ChangePassword();
     break;
   case STICK20_PASSWORD_KIND_RESET_USER:
     success = ResetUserPassword();
     break;
   case STICK10_PASSWORD_KIND_RESET_USER:
-    ResetUserPasswordStick10();
-    success = true;
+    success = ResetUserPasswordStick10();
     break;
   case STICK20_PASSWORD_KIND_UPDATE:
     success = Stick20ChangeUpdatePassword();

@@ -47,9 +47,9 @@ private:
   void accept(void);
   void UpdatePasswordRetry(void);
   bool SendNewPassword(void);
-  void Stick10ChangePassword(void);
+  bool Stick10ChangePassword(void);
   bool ResetUserPassword(void);
-  void ResetUserPasswordStick10(void);
+  bool ResetUserPasswordStick10(void);
   bool Stick20ChangeUpdatePassword(void);
   int CheckResponse(bool NoStopFlag);
   void clearFields();

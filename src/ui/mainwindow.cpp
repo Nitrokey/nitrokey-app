@@ -935,7 +935,7 @@ void MainWindow::checkConnection() {
     cryptostick->passwordRetryCount = HID_Stick20Configuration_st.AdminPwRetryCount;
   }
 
-  if (TRUE == Stick20_ConfigurationChanged) {
+  if (TRUE == Stick20_ConfigurationChanged && cryptostick->activStick20) {
     Stick20_ConfigurationChanged = FALSE;
 
     UpdateDynamicMenuEntrys();
