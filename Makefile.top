@@ -40,6 +40,8 @@ $(WIN_RELEASE_DIR):
 deps:
 	sudo apt-get install ${DEPS}
 
+clean:
+	cd ${BUILD_DIR} && make clean
 
 
 ### Linux

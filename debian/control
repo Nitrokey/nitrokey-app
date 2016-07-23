@@ -1,0 +1,18 @@
+Source: nitrokey-app
+Section: utils
+Priority: optional
+Maintainer: Georgios Gkitsas <george@nitrokey.com>
+Build-Depends:
+    debhelper (>= 9),
+    qtbase5-dev,
+    cmake,
+    pkg-config,
+    libusb-1.0-0-dev
+Standards-Version: 3.9.4
+Homepage: http://nitrokey.com
+
+Package: nitrokey-app
+Architecture: any
+Depends:
+Description: Desktop application to use and manage your Nitrokey device
+
