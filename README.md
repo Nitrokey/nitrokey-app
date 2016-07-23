@@ -83,6 +83,22 @@ qmake ..
 make -j4 && make install
 ```
 
+#### Building Debian Packages
+
+Execute the following in directory "nitrokey-app":
+
+```
+ fakeroot make -f debian/rules binary
+```
+
+Cleanup with:
+ ```
+ fakeroot make -f debian/rules clean
+ ```
+
+Requirements: fakeroot, debhelper, hardening-wrapper.
+
+
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux
 Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
 
