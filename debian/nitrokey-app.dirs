@@ -1,0 +1,14 @@
+/usr/bin
+/usr/share/applications
+/usr/share/pixmaps
+/usr/share/icons/ubuntu-mono-dark
+/usr/share/icons/ubuntu-mono-light
+/usr/share/icons/hicolor
+/usr/share/icons/breeze
+/usr/share/icons/breeze-dark
+/usr/share/icons/Humanity
+/usr/share/icons/Humanity-Dark
+/usr/share/icons/Adwaita
+
+/lib/udev/rules.d
+/usr/share/bash-completion/completions
