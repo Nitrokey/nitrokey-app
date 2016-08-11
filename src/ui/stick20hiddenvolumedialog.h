@@ -58,7 +58,6 @@ private slots:
   void on_rd_MB_clicked();
   void on_rd_GB_clicked();
 
-
 private:
   Ui::stick20HiddenVolumeDialog *ui;
 };

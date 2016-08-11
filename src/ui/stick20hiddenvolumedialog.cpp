@@ -40,12 +40,12 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
 
   ui->comboBox->setCurrentIndex(HV_Setup_st.SlotNr_u8);
 
-//  ui->StartBlockSpin->setMaximum(89);
-//  ui->StartBlockSpin->setMinimum(10);
+  //  ui->StartBlockSpin->setMaximum(89);
+  //  ui->StartBlockSpin->setMinimum(10);
   ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
 
-//  ui->EndBlockSpin->setMaximum(90);
-//  ui->EndBlockSpin->setMinimum(11);
+  //  ui->EndBlockSpin->setMaximum(90);
+  //  ui->EndBlockSpin->setMinimum(11);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
 
   ui->HVPasswordEdit->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
@@ -60,7 +60,6 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
 
   on_rd_percent_clicked();
   ui->rd_percent->setChecked(true);
-
 }
 
 stick20HiddenVolumeDialog::~stick20HiddenVolumeDialog() { delete ui; }
@@ -77,8 +76,8 @@ void stick20HiddenVolumeDialog::on_ShowPasswordCheckBox_toggled(bool checked) {
 
 void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
   if (button == ui->buttonBox->button(QDialogButtonBox::Ok)) {
-      on_rd_percent_clicked();
-      ui->rd_percent->setChecked(true);
+    on_rd_percent_clicked();
+    ui->rd_percent->setChecked(true);
 
     if (8 > strlen(ui->HVPasswordEdit->text().toLatin1().data())) {
         csApplet()->warningBox(tr("Your password is too short. Use at least 8 characters."));
@@ -99,9 +98,13 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
       return;
     }
 
-    if (HV_Setup_st.StartBlockPercent_u8 <  HighWatermarkMin || HV_Setup_st.EndBlockPercent_u8 > HighWatermarkMax){
-        csApplet()->warningBox(tr("Hidden volume not positioned in unwritten space. Please set your volume between %1% and %2% of total SD card size.").arg(HighWatermarkMin).arg(HighWatermarkMax));
-        return;
+    if (HV_Setup_st.StartBlockPercent_u8 < HighWatermarkMin ||
+        HV_Setup_st.EndBlockPercent_u8 > HighWatermarkMax) {
+      csApplet()->warningBox(tr("Hidden volume not positioned in unwritten space. Please set your "
+                              "volume between %1% and %2% of total SD card size.")
+                               .arg(HighWatermarkMin)
+                               .arg(HighWatermarkMax));
+      return;
     }
 
     STRNCPY((char *)HV_Setup_st.HiddenVolumePassword_au8,
@@ -120,18 +123,16 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
 // http://www.emoticode.net/c/optimized-f-the-shannf-the-shannon-entropy-algorithm.html
 // (site not working as of 2016.08)
 
-struct charset_space{
-    int HasLowerAlpha;
-    int HasUpperAlpha;
-    int HasGermanChars;
-    int HasNumber;
-    int HasSpecialChars1;
-    int HasSpecialChars2;
-    int HasSpecialChars3;
-    int CharSpace;
-    void clear(){
-        memset(this, 0, sizeof(*this));
-    }
+struct charset_space {
+  int HasLowerAlpha;
+  int HasUpperAlpha;
+  int HasGermanChars;
+  int HasNumber;
+  int HasSpecialChars1;
+  int HasSpecialChars2;
+  int HasSpecialChars3;
+  int CharSpace;
+  void clear() { memset(this, 0, sizeof(*this)); }
 } c;
 
 int stick20HiddenVolumeDialog::GetCharsetSpace(unsigned char *Password, size_t size) {
@@ -176,43 +177,49 @@ double stick20HiddenVolumeDialog::GetEntropy(unsigned char *Password, size_t siz
   int CharsetSpace;
 
   CharsetSpace = GetCharsetSpace(Password, size);
-  if (CharsetSpace == 0 ) return 0;
+  if (CharsetSpace == 0)
+    return 0;
   // Entropy by CharsetSpace * size
   Entropy = (double)size * (log((double)CharsetSpace) / log(2.0));
   return (Entropy);
 }
 
-int password_human_strength(double entropy){
-    if (entropy<28) return 0;
-    if (entropy<36) return 1;
-    if (entropy<60) return 2;
-    if (entropy<128) return 3;
-    return 4;
+int password_human_strength(double entropy) {
+  if (entropy < 28)
+    return 0;
+  if (entropy < 36)
+    return 1;
+  if (entropy < 60)
+    return 2;
+  if (entropy < 128)
+    return 3;
+  return 4;
 }
 
 void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg1) {
   int Len;
   double Entropy;
-  QString labels[] = { "Very Weak", "Weak", "Medium", "Strong", "Very Strong" };
+  QString labels[] = {"Very Weak", "Weak", "Medium", "Strong", "Very Strong"};
 
   Len = arg1.length();
   Entropy = GetEntropy((unsigned char *)arg1.toLatin1().data(), Len);
 
   if (Entropy < 0) {
-      Entropy = 0;
+    Entropy = 0;
   }
-                // == using human readable symbols, 127 bits
-    ui->HVEntropieRealWords->setText(
-        QString("%1").sprintf("using human readable symbols: %3.1lf", Entropy / 2.0));
-    int strength = password_human_strength(Entropy);
-    ui->password_strength_progressBar->setFormat(labels[strength]);
-    ui->password_strength_progressBar->setValue(100.0*Entropy/64.0/2.0);
-//    ui->password_strength_progressBar->setValue(100*strength/4);
-   ui->cb_lower_case->setChecked(c.HasLowerAlpha);
-   ui->cb_upper_case->setChecked(c.HasUpperAlpha);
-   ui->cb_numbers->setChecked(c.HasNumber);
-   ui->cb_symbols->setChecked(c.HasSpecialChars1 || c.HasSpecialChars2 || c.HasSpecialChars3 || c.HasGermanChars);
-    ui->cb_length->setChecked(Len>12);
+  // == using human readable symbols, 127 bits
+  ui->HVEntropieRealWords->setText(
+      QString("%1").sprintf("using human readable symbols: %3.1lf", Entropy / 2.0));
+  int strength = password_human_strength(Entropy);
+  ui->password_strength_progressBar->setFormat(labels[strength]);
+  ui->password_strength_progressBar->setValue(100.0 * Entropy / 64.0 / 2.0);
+  //    ui->password_strength_progressBar->setValue(100*strength/4);
+  ui->cb_lower_case->setChecked(c.HasLowerAlpha);
+  ui->cb_upper_case->setChecked(c.HasUpperAlpha);
+  ui->cb_numbers->setChecked(c.HasNumber);
+  ui->cb_symbols->setChecked(c.HasSpecialChars1 || c.HasSpecialChars2 || c.HasSpecialChars3 ||
+                             c.HasGermanChars);
+  ui->cb_length->setChecked(Len > 12);
 }
 
 void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
@@ -234,93 +241,79 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
                             HighWatermarkMin, HighWatermarkMax));
 
   // Set valid input range
-//  ui->StartBlockSpin->setMaximum(HighWatermarkMax - 1);
-//  ui->StartBlockSpin->setMinimum(HighWatermarkMin);
+  //  ui->StartBlockSpin->setMaximum(HighWatermarkMax - 1);
+  //  ui->StartBlockSpin->setMinimum(HighWatermarkMin);
   ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
 
-//  ui->EndBlockSpin->setMaximum(HighWatermarkMax);
-//  ui->EndBlockSpin->setMinimum(HighWatermarkMin + 1);
+  //  ui->EndBlockSpin->setMaximum(HighWatermarkMax);
+  //  ui->EndBlockSpin->setMinimum(HighWatermarkMin + 1);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
   int sd_size_GB = Stick20ProductionInfos_st.SD_Card_Size_u8;
-  ui->l_sd_size->setText(QString("SD size: %1GB").arg(sd_size_GB)) ;
-  ui->l_rounding_info->setText( ui->l_rounding_info->text().arg((sd_size_GB*1024/100)) );
+  ui->l_sd_size->setText(QString("SD size: %1GB").arg(sd_size_GB));
+  ui->l_rounding_info->setText(ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100)));
 }
 
 static char last = '%';
 static double i_start_MB = 0;
 static double i_end_MB = 0;
 
+void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
+  size_t sd_size_MB = Stick20ProductionInfos_st.SD_Card_Size_u8 * 1024;
 
-void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text)
-{
- size_t sd_size_MB = Stick20ProductionInfos_st.SD_Card_Size_u8*1024;
+  double current_block_start = ui->StartBlockSpin->value();
+  double current_block_end = ui->EndBlockSpin->value();
 
- double current_block_start = ui->StartBlockSpin->value();
- double current_block_end = ui->EndBlockSpin->value();
+  if (i_start_MB == 0) {
+    i_start_MB = sd_size_MB * current_block_start / 100.0;
+    i_end_MB = sd_size_MB * current_block_end / 100.0;
+  }
 
+  QString start = "Start at %1 of SD size:";
+  QString end = "End at %1 of SD size:";
+  ui->l_sd_start->setText(start.arg(text));
+  ui->l_sd_end->setText(end.arg(text));
 
- if (i_start_MB == 0 ){
-     i_start_MB = sd_size_MB * current_block_start /100.0;
-     i_end_MB = sd_size_MB *  current_block_end /100.0;
- }
+  switch (last) {
+  case 'M':
+    i_start_MB = current_block_start;
+    i_end_MB = current_block_end;
+    break;
+  case 'G':
+    i_start_MB = current_block_start * 1024;
+    i_end_MB = current_block_end * 1024;
+    break;
+  case '%':
+    i_start_MB = current_block_start * sd_size_MB / 100.0;
+    i_end_MB = current_block_end * sd_size_MB / 100.0;
+    break;
+  default:
+    break;
+  }
 
- QString start = "Start at %1 of SD size:";
- QString end = "End at %1 of SD size:";
- ui->l_sd_start->setText( start.arg( text )  );
- ui->l_sd_end->setText( end.arg( text )  );
+  char current = (int)text.data()[0].toLatin1();
 
+  switch (current) {
+  case 'M':
+    ui->StartBlockSpin->setValue(i_start_MB);
+    ui->EndBlockSpin->setValue(i_end_MB);
+    break;
+  case 'G':
+    ui->StartBlockSpin->setValue(i_start_MB / 1024.0);
+    ui->EndBlockSpin->setValue(i_end_MB / 1024.0);
+    break;
+  case '%':
+    ui->StartBlockSpin->setValue(100.0 * i_start_MB / sd_size_MB);
+    ui->EndBlockSpin->setValue(100.0 * i_end_MB / sd_size_MB);
+    break;
+  default:
+    break;
+  }
 
- switch (last){
- case 'M':
-     i_start_MB = current_block_start;
-     i_end_MB = current_block_end;
-     break;
- case 'G':
-     i_start_MB = current_block_start*1024;
-     i_end_MB = current_block_end*1024;
-     break;
- case '%':
-     i_start_MB = current_block_start*sd_size_MB/100.0;
-     i_end_MB = current_block_end*sd_size_MB/100.0;
-     break;
- default:
-     break;
-
- }
-
- char current = (int)text.data()[0].toLatin1();
-
- switch( current ){
- case 'M':
-     ui->StartBlockSpin->setValue( i_start_MB );
-     ui->EndBlockSpin->setValue( i_end_MB );
-     break;
- case 'G':
-     ui->StartBlockSpin->setValue( i_start_MB/1024.0 );
-     ui->EndBlockSpin->setValue( i_end_MB/1024.0 );
-     break;
- case '%':
-     ui->StartBlockSpin->setValue( 100.0*i_start_MB/sd_size_MB );
-     ui->EndBlockSpin->setValue( 100.0*i_end_MB/sd_size_MB );
-     break;
- default:
-     break;
- }
-
- last = current;
+  last = current;
 }
 
-void stick20HiddenVolumeDialog::on_rd_MB_clicked()
-{
-    on_rd_unit_clicked("MB");
-}
+void stick20HiddenVolumeDialog::on_rd_MB_clicked() { on_rd_unit_clicked("MB"); }
 
-void stick20HiddenVolumeDialog::on_rd_GB_clicked()
-{
-    on_rd_unit_clicked("GB");
-}
+void stick20HiddenVolumeDialog::on_rd_GB_clicked() { on_rd_unit_clicked("GB"); }
 
-void stick20HiddenVolumeDialog::on_rd_percent_clicked()
-{
-    on_rd_unit_clicked("%");
-}
+void stick20HiddenVolumeDialog::on_rd_percent_clicked() { on_rd_unit_clicked("%"); }
