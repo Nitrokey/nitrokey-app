@@ -77,6 +77,9 @@ void stick20HiddenVolumeDialog::on_ShowPasswordCheckBox_toggled(bool checked) {
 
 void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
   if (button == ui->buttonBox->button(QDialogButtonBox::Ok)) {
+      on_rd_percent_clicked();
+      ui->rd_percent->setChecked(true);
+
     if (8 > strlen(ui->HVPasswordEdit->text().toLatin1().data())) {
         csApplet()->warningBox(tr("Your password is too short. Use at least 8 characters."));
       return;
