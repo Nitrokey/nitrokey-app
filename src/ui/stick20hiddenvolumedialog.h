@@ -41,6 +41,9 @@ class stick20HiddenVolumeDialog : public QDialog {
   uint8_t SdCardHighWatermark_Write_Min;
   uint8_t SdCardHighWatermark_Write_Max;
 
+  uint8_t HighWatermarkMin;
+  uint8_t HighWatermarkMax;
+
   void setHighWaterMarkText(void);
   void on_rd_unit_clicked(QString text);
 

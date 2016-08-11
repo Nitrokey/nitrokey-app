@@ -99,6 +99,11 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
       return;
     }
 
+    if (HV_Setup_st.StartBlockPercent_u8 <  HighWatermarkMin || HV_Setup_st.EndBlockPercent_u8 > HighWatermarkMax){
+        csApplet()->warningBox(tr("Hidden volume not positioned in unwritten space"));
+        return;
+    }
+
     STRNCPY((char *)HV_Setup_st.HiddenVolumePassword_au8,
             sizeof(HV_Setup_st.HiddenVolumePassword_au8), ui->HVPasswordEdit->text().toLatin1(),
             MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
@@ -211,10 +216,6 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
 }
 
 void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
-  uint8_t HighWatermarkMin;
-
-  uint8_t HighWatermarkMax;
-
   HighWatermarkMin = SdCardHighWatermark_Write_Min;
   HighWatermarkMax = SdCardHighWatermark_Write_Max;
 
@@ -228,7 +229,7 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
   }
 
   ui->HVSdCardHighWaterMark->setText(
-      QString("%1").sprintf("The the unwritten area after plugin is\nbetween "
+      QString("%1").sprintf("The unwritten area after plugin is\nbetween "
                             "%d %% and %d %% of the sd card size",
                             HighWatermarkMin, HighWatermarkMax));
 
