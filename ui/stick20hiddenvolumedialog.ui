@@ -103,14 +103,14 @@
            <item>
             <widget class="QLabel" name="HVEntropieLabel">
              <property name="text">
-              <string>Entropy guess:</string>
+              <string>Entropy guess (assuming no dictionary words were used)</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLabel" name="HVEntropieRealWords">
              <property name="text">
-              <string> for real words</string>
+              <string>using human readable symbols: </string>
              </property>
             </widget>
            </item>
@@ -415,7 +415,7 @@
           <item>
            <widget class="QLabel" name="l_rounding_info">
             <property name="text">
-             <string>Size will be rounded to integral percent of total card size (%1MB)</string>
+             <string>Size will be rounded down to integral percent of total card size (%1MB)</string>
             </property>
            </widget>
           </item>

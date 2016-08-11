@@ -111,9 +111,9 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
   }
 }
 
-// Based from
+// Based on
 // http://www.emoticode.net/c/optimized-f-the-shannf-the-shannon-entropy-algorithm.html
-// */
+// (site not working as of 2016.08)
 
 struct charset_space{
     int HasLowerAlpha;
@@ -196,9 +196,9 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
   if (Entropy < 0) {
       Entropy = 0;
   }
-                // == alphanumeric chars, 127 bits
+                // == using human readable symbols, 127 bits
     ui->HVEntropieRealWords->setText(
-        QString("%1").sprintf(" %3.1lf for real words", Entropy / 2.0));
+        QString("%1").sprintf("using human readable symbols: %3.1lf", Entropy / 2.0));
     int strength = password_human_strength(Entropy);
     ui->password_strength_progressBar->setFormat(labels[strength]);
     ui->password_strength_progressBar->setValue(100.0*Entropy/64.0/2.0);
