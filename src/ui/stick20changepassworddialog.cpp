@@ -122,6 +122,11 @@ void DialogChangePassword::InitData(void) {
   int minimumPasswordLengthAdmin = 8;
   QString text = ui->label_additional_information->text();
   text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
+  if (PasswordKind == STICK20_PASSWORD_KIND_UPDATE) {
+    text += QString("<i>") + tr("Once the firmware password is forgotten the Nitrokey can't be "
+                                "updated or reset. Don't lose your firmware password, please.") +
+            QString("</i>");
+  }
   ui->label_additional_information->setText(text);
 
   this->UpdatePasswordRetry();
@@ -233,8 +238,8 @@ bool DialogChangePassword::Stick10ChangePassword(void) {
   unsigned char old_pin[password_length + 1];
   unsigned char new_pin[password_length + 1];
 
-  memset(old_pin, 0, sizeof(old_pin) );
-  memset(new_pin, 0, sizeof(new_pin) );
+  memset(old_pin, 0, sizeof(old_pin));
+  memset(new_pin, 0, sizeof(new_pin));
 
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
   strncpy((char *)old_pin, PasswordString.data(), password_length);
@@ -255,8 +260,8 @@ bool DialogChangePassword::Stick10ChangePassword(void) {
                              .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
   }
   bool success = ret == CMD_STATUS_OK;
-  if (success){
-      csApplet->messageBox(tr("New password is set"));
+  if (success) {
+    csApplet->messageBox(tr("New password is set"));
   }
   return success;
 }
