@@ -2696,6 +2696,9 @@ void MainWindow::startStick20SetupHiddenVolume() {
     ret = 0; // Do something ?
   }
 
+
+  //get SD card size
+  ret = cryptostick->stick20ProductionTest();
   HVDialog.setHighWaterMarkText();
 
   ret = HVDialog.exec();
