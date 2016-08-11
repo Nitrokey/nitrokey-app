@@ -78,7 +78,7 @@
          <item row="1" column="1">
           <widget class="QLineEdit" name="HVPasswordEdit_2">
            <property name="focusPolicy">
-            <enum>Qt::ClickFocus</enum>
+            <enum>Qt::StrongFocus</enum>
            </property>
            <property name="text">
             <string notr="true">12345678901234567890</string>
@@ -135,6 +135,9 @@
                <property name="enabled">
                 <bool>false</bool>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="text">
                 <string>length</string>
                </property>
@@ -145,6 +148,9 @@
                <property name="enabled">
                 <bool>false</bool>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="text">
                 <string>lower case</string>
                </property>
@@ -154,6 +160,9 @@
               <widget class="QCheckBox" name="cb_upper_case">
                <property name="enabled">
                 <bool>false</bool>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
                 <string>upper case</string>
@@ -168,6 +177,9 @@
                <property name="enabled">
                 <bool>false</bool>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="text">
                 <string>numbers</string>
                </property>
@@ -177,6 +189,9 @@
               <widget class="QCheckBox" name="cb_symbols">
                <property name="enabled">
                 <bool>false</bool>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
                 <string>symbols</string>
@@ -449,7 +464,14 @@
  </widget>
  <tabstops>
   <tabstop>HVPasswordEdit</tabstop>
+  <tabstop>HVPasswordEdit_2</tabstop>
   <tabstop>ShowPasswordCheckBox</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>rd_percent</tabstop>
+  <tabstop>rd_MB</tabstop>
+  <tabstop>rd_GB</tabstop>
+  <tabstop>StartBlockSpin</tabstop>
+  <tabstop>EndBlockSpin</tabstop>
  </tabstops>
  <resources>
   <include location="../resources.qrc"/>
