@@ -124,14 +124,14 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
 // (site not working as of 2016.08)
 
 struct charset_space {
-  int HasLowerAlpha;
-  int HasUpperAlpha;
-  int HasGermanChars;
-  int HasNumber;
-  int HasSpecialChars1;
-  int HasSpecialChars2;
-  int HasSpecialChars3;
   int CharSpace;
+  int HasLowerAlpha :1;
+  int HasUpperAlpha :1;
+  int HasGermanChars :1;
+  int HasNumber :1;
+  int HasSpecialChars1 :1;
+  int HasSpecialChars2 :1;
+  int HasSpecialChars3 :1;
   void clear() { memset(this, 0, sizeof(*this)); }
 } c;
 
