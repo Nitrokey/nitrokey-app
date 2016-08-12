@@ -458,7 +458,11 @@ void MainWindow::InitState() {
 }
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), trayMenuPasswdSubMenu(NULL) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), trayMenuPasswdSubMenu(NULL),
+      otpInClipboard("not empty"),
+      secretInClipboard("not empty"),
+      PWSInClipboard("not empty")
+{
 #ifdef Q_OS_LINUX
   setlocale(LC_ALL, "");
   bindtextdomain("nitrokey-app", "/usr/share/locale");
@@ -3458,25 +3462,29 @@ void MainWindow::copyToClipboard(QString text) {
   }
 }
 
+#include <algorithm>
+void overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
+
 void MainWindow::checkClipboard_Valid() {
   uint64_t currentTime;
 
   currentTime = QDateTime::currentDateTime().toTime_t();
   if ((currentTime >= (lastClipboardTime + (uint64_t)60)) &&
       (clipboard->text() == otpInClipboard)) {
-    otpInClipboard = "";
+    overwrite_string(otpInClipboard);
     clipboard->setText(QString(""));
   }
 
   if ((currentTime >= (lastClipboardTime + (uint64_t)60)) &&
       (clipboard->text() == PWSInClipboard)) {
-    PWSInClipboard = "";
+    overwrite_string(PWSInClipboard);
     clipboard->setText(QString(""));
   }
 
   if ((currentTime >= (lastClipboardTime + (uint64_t)120)) &&
       (clipboard->text() == secretInClipboard)) {
-    secretInClipboard = "";
+    overwrite_string(secretInClipboard );
+
     clipboard->setText(QString(""));
     ui->labelNotify->hide();
   }
