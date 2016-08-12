@@ -157,6 +157,7 @@ private:
   QString DebugText;
   QString otpInClipboard;
   QString secretInClipboard;
+  QString PWSInClipboard;
 
   int ExecStickCmd(char *Cmdline);
   int getNextCode(uint8_t slotNumber);

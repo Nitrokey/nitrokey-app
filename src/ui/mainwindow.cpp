@@ -3451,7 +3451,7 @@ void MainWindow::on_checkBox_toggled(bool checked) {
 }
 
 void MainWindow::copyToClipboard(QString text) {
-  if (text != 0) {
+  if (text.length() != 0) {
     lastClipboardTime = QDateTime::currentDateTime().toTime_t();
     clipboard->setText(text);
     ui->labelNotify->show();
@@ -3465,6 +3465,12 @@ void MainWindow::checkClipboard_Valid() {
   if ((currentTime >= (lastClipboardTime + (uint64_t)60)) &&
       (clipboard->text() == otpInClipboard)) {
     otpInClipboard = "";
+    clipboard->setText(QString(""));
+  }
+
+  if ((currentTime >= (lastClipboardTime + (uint64_t)60)) &&
+      (clipboard->text() == PWSInClipboard)) {
+    PWSInClipboard = "";
     clipboard->setText(QString(""));
   }
 
@@ -3829,7 +3835,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
 }
 
 void MainWindow::PWS_ExceClickedSlot(int Slot) {
-  QString MsgText;
+  QString password_safe_password;
 
   QString MsgText_1;
 
@@ -3840,22 +3846,23 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
     csApplet->warningBox(tr("Pasword safe: Can't get password"));
     return;
   }
-  MsgText.append((char *)cryptostick->passwordSafePassword);
+  password_safe_password.append((char *)cryptostick->passwordSafePassword);
 
-  clipboard->setText(MsgText);
+  PWSInClipboard = password_safe_password;
+  copyToClipboard(password_safe_password);
 
   memset(cryptostick->passwordSafePassword, 0, sizeof(cryptostick->passwordSafePassword));
 
   if (TRUE == trayIcon->supportsMessages()) {
-    MsgText =
+    password_safe_password =
         QString(tr("Password safe [%1]").arg((char *)cryptostick->passwordSafeSlotNames[Slot]));
     MsgText_1 = QString("Password has been copied to clipboard");
 
-    showTrayMessage(MsgText, MsgText_1, INFORMATION, TRAY_MSG_TIMEOUT);
+    showTrayMessage(password_safe_password, MsgText_1, INFORMATION, TRAY_MSG_TIMEOUT);
   } else {
-    MsgText = QString("Password safe [%1] has been copied to clipboard")
+    password_safe_password = QString("Password safe [%1] has been copied to clipboard")
                   .arg((char *)cryptostick->passwordSafeSlotNames[Slot]);
-    csApplet->messageBox(MsgText);
+    csApplet->messageBox(password_safe_password);
   }
 }
 
