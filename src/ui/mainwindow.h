@@ -231,7 +231,7 @@ private slots:
   void on_writeGeneralConfigButton_clicked();
 
   void copyToClipboard(QString text);
-  void checkClipboard_Valid();
+  void checkClipboard_Valid(bool ignore_time=false);
   void checkPasswordTime_Valid();
   void checkTextEdited();
 

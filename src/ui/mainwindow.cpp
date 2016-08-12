@@ -968,7 +968,10 @@ void MainWindow::checkConnection() {
 
 void MainWindow::startTimer() {}
 
-MainWindow::~MainWindow() { delete ui; }
+MainWindow::~MainWindow() {
+  checkClipboard_Valid(true);
+  delete ui;
+}
 
 void MainWindow::closeEvent(QCloseEvent *event) {
   this->hide();
@@ -3465,10 +3468,12 @@ void MainWindow::copyToClipboard(QString text) {
 #include <algorithm>
 void overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
 
-void MainWindow::checkClipboard_Valid() {
-  uint64_t currentTime;
+void MainWindow::checkClipboard_Valid(bool ignore_time) {
+  uint64_t currentTime, far_future_delta = 60000;
 
   currentTime = QDateTime::currentDateTime().toTime_t();
+  if (ignore_time)
+    currentTime += far_future_delta;
   if ((currentTime >= (lastClipboardTime + (uint64_t)60)) &&
       (clipboard->text() == otpInClipboard)) {
     overwrite_string(otpInClipboard);
