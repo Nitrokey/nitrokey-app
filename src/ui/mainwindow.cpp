@@ -459,10 +459,7 @@ void MainWindow::InitState() {
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), trayMenuPasswdSubMenu(NULL),
-      otpInClipboard("not empty"),
-      secretInClipboard("not empty"),
-      PWSInClipboard("not empty")
-{
+      otpInClipboard("not empty"), secretInClipboard("not empty"), PWSInClipboard("not empty") {
 #ifdef Q_OS_LINUX
   setlocale(LC_ALL, "");
   bindtextdomain("nitrokey-app", "/usr/share/locale");
@@ -2288,15 +2285,15 @@ void MainWindow::startStickDebug() {
   dialog.exec();
 }
 
-void MainWindow::refreshStick20StatusData(){
-    if (TRUE == cryptostick->activStick20) {
-      // Get actual data from stick 20
-      cryptostick->stick20GetStatusData();
-      Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
-      ResponseTask.NoStopWhenStatusOK();
-      ResponseTask.GetResponse();
-      UpdateDynamicMenuEntrys(); // Use new data to update menu
-    }
+void MainWindow::refreshStick20StatusData() {
+  if (TRUE == cryptostick->activStick20) {
+    // Get actual data from stick 20
+    cryptostick->stick20GetStatusData();
+    Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
+    ResponseTask.NoStopWhenStatusOK();
+    ResponseTask.GetResponse();
+    UpdateDynamicMenuEntrys(); // Use new data to update menu
+  }
 }
 
 void MainWindow::startAboutDialog() {
@@ -2581,10 +2578,10 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
     if (QDialog::Accepted == ret) {
       dialog.getPassword((char *)password);
 
-     bool success = stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
+      bool success = stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
       if (success && fillSDWithRandomChars != 0)
         stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
-    refreshStick20StatusData();
+      refreshStick20StatusData();
     }
   }
 }
@@ -3488,8 +3485,7 @@ void MainWindow::checkClipboard_Valid(bool ignore_time) {
 
   if ((currentTime >= (lastClipboardTime + (uint64_t)120)) &&
       (clipboard->text() == secretInClipboard)) {
-    overwrite_string(secretInClipboard );
-
+    overwrite_string(secretInClipboard);
     clipboard->setText(QString(""));
     ui->labelNotify->hide();
   }
@@ -3874,7 +3870,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
     showTrayMessage(password_safe_password, MsgText_1, INFORMATION, TRAY_MSG_TIMEOUT);
   } else {
     password_safe_password = QString("Password safe [%1] has been copied to clipboard")
-                  .arg((char *)cryptostick->passwordSafeSlotNames[Slot]);
+                                 .arg((char *)cryptostick->passwordSafeSlotNames[Slot]);
     csApplet->messageBox(password_safe_password);
   }
 }
