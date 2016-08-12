@@ -199,7 +199,7 @@ int password_human_strength(double entropy) {
 void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg1) {
   int Len;
   double Entropy;
-  QString labels[] = {"Very Weak", "Weak", "Medium", "Strong", "Very Strong"};
+  QString labels[] = {tr("Very Weak"), tr("Weak"), tr("Medium"), tr("Strong"), tr("Very Strong")};
 
   Len = arg1.length();
   Entropy = GetEntropy((unsigned char *)arg1.toLatin1().data(), Len);
@@ -208,8 +208,8 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
     Entropy = 0;
   }
   // == using human readable symbols, 127 bits
-  ui->HVEntropieRealWords->setText(
-      QString("%1").sprintf("using human readable symbols: %3.1lf", Entropy / 2.0));
+//  ui->HVEntropieRealWords->setText(
+//      QString("%1").sprintf("using human readable symbols: %3.1lf", Entropy / 2.0));
   int strength = password_human_strength(Entropy);
   ui->password_strength_progressBar->setFormat(labels[strength]);
   ui->password_strength_progressBar->setValue(100.0 * Entropy / 64.0 / 2.0);
@@ -249,7 +249,7 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
   //  ui->EndBlockSpin->setMinimum(HighWatermarkMin + 1);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
   int sd_size_GB = Stick20ProductionInfos_st.SD_Card_Size_u8;
-  ui->l_sd_size->setText(QString("SD size: %1GB").arg(sd_size_GB));
+  ui->l_sd_size->setText(tr("Storage capacity: %1GB").arg(sd_size_GB));
   ui->l_rounding_info->setText(ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100)));
 }
 
@@ -268,8 +268,8 @@ void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
     i_end_MB = sd_size_MB * current_block_end / 100.0;
   }
 
-  QString start = "Start at %1 of SD size:";
-  QString end = "End at %1 of SD size:";
+  QString start = tr("Start hidden volume at %1 of the encrypted storage:");
+  QString end = tr("End hidden volume at %1 of the encrypted storage:");
   ui->l_sd_start->setText(start.arg(text));
   ui->l_sd_end->setText(end.arg(text));
 

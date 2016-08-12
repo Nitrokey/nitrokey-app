@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>430</width>
-    <height>503</height>
+    <height>574</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -43,7 +43,49 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLabel" name="label_2">
+       <layout class="QHBoxLayout" name="top_layout">
+        <item>
+         <widget class="QLabel" name="l_warning">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../resources.qrc">:/images/warning.png</pixmap>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="l_top_instructions">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="l_instructions">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -51,15 +93,9 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;You should understand the properties of hidden volumes before proceeding. &lt;br/&gt;Please read &lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="scaledContents">
-         <bool>false</bool>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. You may want to copy some innocuous files to the encrypted data.&lt;br/&gt;2. Configure hidden volumes in this dialogue. &lt;br/&gt;3. Once you configured a hidden volume you must not use/write to the encryption volume anymore. Otherwise it may destroy the data in your hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-        <property name="openExternalLinks">
          <bool>true</bool>
         </property>
        </widget>
@@ -122,20 +158,6 @@
          </item>
          <item row="3" column="0" colspan="2">
           <layout class="QVBoxLayout" name="entropy_verticalLayout">
-           <item>
-            <widget class="QLabel" name="HVEntropieLabel">
-             <property name="text">
-              <string>Entropy guess (assuming no dictionary words were used)</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="HVEntropieRealWords">
-             <property name="text">
-              <string>using human readable symbols: </string>
-             </property>
-            </widget>
-           </item>
            <item>
             <widget class="QLabel" name="label_6">
              <property name="text">
@@ -284,7 +306,7 @@
             <item>
              <widget class="QLabel" name="HVSdCardHighWaterMark">
               <property name="text">
-               <string>SD card information</string>
+               <string notr="true">SD card information</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -300,7 +322,7 @@
                <item>
                 <widget class="QLabel" name="l_sd_size">
                  <property name="text">
-                  <string>SD size: %1GB</string>
+                  <string notr="true">Storage capacity: %1GB</string>
                  </property>
                 </widget>
                </item>
@@ -353,7 +375,7 @@
               <item>
                <widget class="QLabel" name="l_sd_start">
                 <property name="text">
-                 <string>Start at %1 of SD size:</string>
+                 <string notr="true">Start at %1 of SD size:</string>
                 </property>
                </widget>
               </item>
@@ -393,7 +415,7 @@
               <item>
                <widget class="QLabel" name="l_sd_end">
                 <property name="text">
-                 <string>End at %1 of SD size:</string>
+                 <string notr="true">End at %1 of SD size:</string>
                 </property>
                </widget>
               </item>
@@ -443,7 +465,7 @@
                </size>
               </property>
               <property name="text">
-               <string>Size will be rounded down to integral percent of total card size (%1MB)</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
