@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
-    <height>452</height>
+    <width>526</width>
+    <height>486</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -225,202 +225,210 @@
         <property name="checkable">
          <bool>false</bool>
         </property>
-        <widget class="QFrame" name="verticalFrame">
-         <property name="geometry">
-          <rect>
-           <x>9</x>
-           <y>20</y>
-           <width>381</width>
-           <height>151</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <widget class="QComboBox" name="comboBox">
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QFrame" name="verticalFrame">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <property name="text">
-              <string>Hidden volume slot 1</string>
-             </property>
+             <widget class="QComboBox" name="comboBox">
+              <item>
+               <property name="text">
+                <string>Hidden volume slot 1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hidden volume slot 2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hidden volume slot 3</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Hidden volume slot 4</string>
+               </property>
+              </item>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>Hidden volume slot 2</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Hidden volume slot 3</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Hidden volume slot 4</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="HVSdCardHighWaterMark">
-            <property name="text">
-             <string>SD card information</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="rd_frame">
-            <property name="frameShape">
-             <enum>QFrame::Box</enum>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
-              <widget class="QLabel" name="l_sd_size">
-               <property name="text">
-                <string>SD size: %1GB</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_5">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>Unit:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rd_percent">
-               <property name="text">
-                <string>%</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rd_MB">
-               <property name="text">
-                <string>MB</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rd_GB">
-               <property name="text">
-                <string>GB</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="StartControls">
-            <item>
-             <widget class="QLabel" name="l_sd_start">
+             <widget class="QLabel" name="HVSdCardHighWaterMark">
               <property name="text">
-               <string>Start at %1 of SD size:</string>
+               <string>SD card information</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+             <widget class="QFrame" name="rd_frame">
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <item>
+                <widget class="QLabel" name="l_sd_size">
+                 <property name="text">
+                  <string>SD size: %1GB</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>Unit:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rd_percent">
+                 <property name="text">
+                  <string>%</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rd_MB">
+                 <property name="text">
+                  <string>MB</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rd_GB">
+                 <property name="text">
+                  <string>GB</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="StartBlockSpin">
+             <layout class="QHBoxLayout" name="StartControls">
+              <item>
+               <widget class="QLabel" name="l_sd_start">
+                <property name="text">
+                 <string>Start at %1 of SD size:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="StartBlockSpin">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="maximum">
+                 <double>999999999999999983222784.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="StopControls">
+              <item>
+               <widget class="QLabel" name="l_sd_end">
+                <property name="text">
+                 <string>End at %1 of SD size:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="EndBlockSpin">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="maximum">
+                 <double>99999999999999997748809823456034029568.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="l_rounding_info">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="maximum">
-               <double>999999999999999983222784.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="StopControls">
-            <item>
-             <widget class="QLabel" name="l_sd_end">
-              <property name="text">
-               <string>End at %1 of SD size:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
+              <property name="minimumSize">
                <size>
-                <width>40</width>
-                <height>20</height>
+                <width>100</width>
+                <height>100</height>
                </size>
               </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="EndBlockSpin">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="maximum">
-               <double>99999999999999997748809823456034029568.000000000000000</double>
+              <property name="text">
+               <string>Size will be rounded down to integral percent of total card size (%1MB)</string>
               </property>
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QLabel" name="l_rounding_info">
-            <property name="text">
-             <string>Size will be rounded down to integral percent of total card size (%1MB)</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
