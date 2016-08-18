@@ -17,3 +17,7 @@ ATTR{idVendor}=="20a0", ATTR{idProduct}=="4211", ENV{ID_SMARTCARD_READER}="1", E
 ATTR{idVendor}=="20a0", ATTR{idProduct}=="4230", ENV{ID_SMARTCARD_READER}="1", ENV{ID_SMARTCARD_READER_DRIVER}="gnupg", GROUP+="plugdev", TAG+="uaccess"
 
 LABEL="gnupg_rules_end"
+
+
+# Nitrokey Storage dev Entry
+KERNEL=="sd?1", ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="4109", SYMLINK+="nitrospace"
