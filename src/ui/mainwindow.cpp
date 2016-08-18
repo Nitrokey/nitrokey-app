@@ -3505,14 +3505,21 @@ void MainWindow::checkClipboard_Valid(bool ignore_time) {
 
 void MainWindow::checkPasswordTime_Valid() {
   uint64_t currentTime;
-
   currentTime = QDateTime::currentDateTime().toTime_t();
+
+  bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
+  bool is_forget_PIN_after_10_minutes_enabled = cryptostick->otpPasswordConfig[1] == 1;
+
+  // invalidate admin authentication after 10 minutes
   if (currentTime >= lastAuthenticateTime + (uint64_t)600) {
     cryptostick->validPassword = false;
     memset(cryptostick->password, 0, 25);
   }
-  if (currentTime >= lastUserAuthenticateTime + (uint64_t)600 &&
-      cryptostick->otpPasswordConfig[0] == 1 && cryptostick->otpPasswordConfig[1] == 1) {
+
+  // invalidate user authentication after 10 minutes
+  //(only when OTP is PIN protected and forget PIN is enabled)
+  if (currentTime >= lastUserAuthenticateTime + (uint64_t)600 && is_OTP_PIN_protected &&
+      is_forget_PIN_after_10_minutes_enabled) {
     cryptostick->validUserPassword = false;
     memset(cryptostick->userPassword, 0, 25);
   }
@@ -3952,20 +3959,16 @@ void MainWindow::resetTime() {
 }
 
 int MainWindow::getNextCode(uint8_t slotNumber) {
-  uint8_t result[18];
-
-  memset(result, 0, 18);
+  uint8_t result[18] = {0};
+  //  memset(result, 0, 18);
   uint32_t code;
-
   uint8_t config;
-
   int ret;
-
   bool ok;
-
   uint16_t lastInterval = 30;
+  bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
 
-  if (cryptostick->otpPasswordConfig[0] == 1) {
+  if (is_OTP_PIN_protected) {
     if (!cryptostick->validUserPassword) {
       cryptostick->getUserPasswordRetryCount();
 
@@ -3973,38 +3976,36 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
                        PinDialog::USER_PIN);
       ok = dialog.exec();
       QString password;
-
       dialog.getPassword(password);
 
       if (QDialog::Accepted == ok) {
         uint8_t tempPassword[25];
-
         for (int i = 0; i < 25; i++)
           tempPassword[i] = qrand() & 0xFF;
 
         cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
-
         if (cryptostick->validUserPassword)
           lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-        password.clear();
+
+        password.clear(); // FIXME password leak?
       } else
         return 1;
     }
   }
-  // Start the config dialog
-  if ((TRUE == cryptostick->validUserPassword) || (cryptostick->otpPasswordConfig[0] != 1)) {
 
+  // Start the config dialog
+  if ((TRUE == cryptostick->validUserPassword) || (!is_OTP_PIN_protected)) {
+
+      //is it TOTP?
     if (slotNumber >= 0x20)
       cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
-
-    QString output;
 
     lastTOTPTime = QDateTime::currentDateTime().toTime_t();
     ret = cryptostick->setTime(TOTP_CHECK_TIME);
 
-    bool answer;
-
+    //if time is out of sync on the device
     if (ret == -2) {
+      bool answer;
       answer = csApplet->detailedYesOrNoBox(
           tr("Time is out-of-sync"),
           tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
@@ -4032,6 +4033,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
     config = result[4];
 
+    QString output;
     if (config & (1 << 0)) {
       code = code % 100000000;
       output.append(QString("%1").arg(QString::number(code), 8, '0'));

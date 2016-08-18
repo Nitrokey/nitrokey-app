@@ -658,22 +658,20 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
 
   if (isConnected) {
 
-    Command *cmd = new Command(CMD_GET_CODE, data, 18);
+    Command cmd(CMD_GET_CODE, data, 18);
 
-    userAuthorize(cmd);
+     bool is_OTP_PIN_protected = otpPasswordConfig[0] == 1;
+      if (is_OTP_PIN_protected){
+          userAuthorize(&cmd);
+      }
+//      userAuthenticate((uint8_t *) "123456", (uint8_t *) "123123123");
 
-    /*
-     * Workaround for next HOTP/TOTP coming out as zeros force asking
-     * the user PIN again and clear the temp pwd.
-     */
-    validUserPassword = false;
-    memset(userPassword, 0, 25);
+//    validUserPassword = false;
+//    memset(userPassword, 0, 25);
 
-    res = sendCommand(cmd);
+    res = sendCommand(&cmd);
 
     if (res == -1) {
-      delete cmd;
-
       return -1;
     } else { // sending the command was successful
       Sleep::msleep(100);
@@ -681,13 +679,11 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
 
       resp->getResponse(this);
 
-      if (cmd->crc == resp->lastCommandCRC) { // the response was for the last command
+      if (cmd.crc == resp->lastCommandCRC) { // the response was for the last command
         if (resp->lastCommandStatus == CMD_STATUS_OK) {
           memcpy(result, resp->data, 18);
         }
       }
-      delete cmd;
-
       return 0;
     }
   }
