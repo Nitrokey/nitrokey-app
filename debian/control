@@ -1,5 +1,5 @@
 Source: nitrokey-app
-Section: utils
+Section: universe/utils
 Priority: optional
 Maintainer: Jan Suhr <jan@nitrokey.com>
 Build-Depends: debhelper (>= 9), libqt5core5a, libqt5dbus5, libqt5gui5, libqt5widgets5, libqt5xml5, qt5-qmake, qtbase5-dev-tools, libusb-1.0-0-dev, libgtk2.0-dev, libappindicator-dev, libnotify-dev
