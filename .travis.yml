@@ -10,7 +10,7 @@ dist: trusty
 before_install:
     - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
     - sudo apt-get -qq update
-    - sudo apt-get -qq install qt55declarative qt55base
+    - sudo apt-get -qq install qt55base
     - sudo apt-get install -y build-essential cmake libusb-1.0-0 libusb-1.0-0-dev libgtk2.0-dev libappindicator-dev libnotify-dev 
 compiler: g++
 script:
