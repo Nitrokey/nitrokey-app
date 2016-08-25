@@ -5,6 +5,7 @@ export DEB_BUILD_HARDENING=1
 clean:
 	dh_testdir
 	dh_testroot
+	qmake
 	make clean
 	dh_clean -A
 
@@ -46,3 +47,12 @@ binary:
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
+
+
+binary-arch: binary
+binary-indep: binary
+
+build-arch: build
+build-indep: build
+
+build: binary
