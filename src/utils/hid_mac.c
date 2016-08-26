@@ -1063,7 +1063,17 @@ int HID_API_EXPORT hid_get_feature_report (hid_device * dev, unsigned char* data
         return len;
     }
     else
+   {
+#ifdef STICK20_DEBUG
+            {
+        char text[1000];
+
+                sprintf (text, "hid_get_feature_report: ERROR %d : ret= %d - %s\n", CallCounter, res, libusb_error_name (res));
+                DebugAppendTextGui (text);
+            }
+#endif
         return -1;
+     }
 }
 
 
