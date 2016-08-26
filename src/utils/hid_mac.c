@@ -1046,7 +1046,10 @@ extern int HID_GetStick20ReceiveData (unsigned char* data);
 int HID_API_EXPORT hid_get_feature_report (hid_device * dev, unsigned char* data, size_t length)
 {
     CFIndex len = length;
-
+#ifdef STICK20_DEBUG
+    static int CallCounter = 0;
+    CallCounter++;
+#endif
     IOReturn res;
 
     /* Return if the device has been unplugged. */
@@ -1068,7 +1071,7 @@ int HID_API_EXPORT hid_get_feature_report (hid_device * dev, unsigned char* data
             {
         char text[1000];
 
-                sprintf (text, "hid_get_feature_report: ERROR %d : ret= %d - %s\n", CallCounter, res, libusb_error_name (res));
+                sprintf (text, "hid_get_feature_report: ERROR %d : ret= %d - %s\n", CallCounter, res);
                 DebugAppendTextGui (text);
             }
 #endif
