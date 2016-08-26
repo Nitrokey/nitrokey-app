@@ -157,6 +157,7 @@ private:
   QString DebugText;
   QString otpInClipboard;
   QString secretInClipboard;
+  QString PWSInClipboard;
 
   int ExecStickCmd(char *Cmdline);
   int getNextCode(uint8_t slotNumber);
@@ -230,7 +231,7 @@ private slots:
   void on_writeGeneralConfigButton_clicked();
 
   void copyToClipboard(QString text);
-  void checkClipboard_Valid();
+  void checkClipboard_Valid(bool ignore_time=false);
   void checkPasswordTime_Valid();
   void checkTextEdited();
 

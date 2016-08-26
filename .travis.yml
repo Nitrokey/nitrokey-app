@@ -1,13 +1,19 @@
 notifications:
-email: false
+    email: false
 language: c++
 os:
 - linux
-before_install:
-    - sudo apt-add-repository ppa:ubuntu-sdk-team/ppa -y
-    - sudo apt-get update -qq
-    - sudo apt-get install -y qtdeclarative5-dev
-    - sudo apt-get install -y  build-essential cmake libusb-1.0-0 libusb-1.0-0-dev libgtk2.0-dev libappindicator-dev libnotify-dev
 
+sudo: required
+dist: trusty
+
+before_install:
+    - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
+    - sudo apt-get -qq update
+    - sudo apt-get -qq install qt55base
+    - sudo apt-get install -y build-essential cmake libusb-1.0-0 libusb-1.0-0-dev libgtk2.0-dev libappindicator-dev libnotify-dev 
 compiler: g++
-script: make -f Makefile.top build
+script:
+    - source /opt/qt55/bin/qt55-env.sh
+    - /opt/qt55/bin/qmake
+    - make
