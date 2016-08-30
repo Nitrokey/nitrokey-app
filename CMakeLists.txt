@@ -119,6 +119,15 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
 
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
     if(HAVE_LIBAPPINDICATOR)
+
+        find_package(Libnotify 0.7 REQUIRED)
+        find_path(NOTIFY_INCLUDE_DIR NAMES libnotify/notify.h
+            HINTS ${LIB_NOTIFY_INCLUDEDIR} ${LIB_NOTIFY_INCLUDE_DIRS}
+            PATH_SUFFIXES libnotify)
+        IF (NOT NOTIFY_INCLUDE_DIR )
+            message(FATAL_ERROR "libappindicator support could only be compiled when libnotify development files are installed (package libnotify-dev under Ubuntu)")
+        ENDIF()
+
         find_package(GTK2 2.6 QUIET)
         IF (NOT GTK2_FOUND)
             message(FATAL_ERROR "libappindicator support could only be compiled when GTK2 libraries are available (package libgtk2.0-dev under Ubuntu)")
