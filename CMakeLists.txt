@@ -115,9 +115,33 @@ ELSEIF(APPLE)
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
 
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
-    pkg_check_modules(GTK2 gtk+-2.0)
+    if(HAVE_LIBAPPINDICATOR)
+        find_package(GTK2 2.6 QUIET)
+        IF (NOT GTK2_FOUND)
+            message(FATAL_ERROR "libappindicator support could only be compiled when GTK2 libraries are available (package libgtk2.0-dev under Ubuntu)")
+        ENDIF()
+        #Needs package libappindicator-dev under ubuntu
+        pkg_check_modules(LIB_APPINDICATOR QUIET appindicator-0.1)
 
+        find_path(APPINDICATOR_INCLUDE_DIR NAMES libappindicator/app-indicator.h
+            HINTS ${LIB_APPINDICATOR_INCLUDEDIR} ${LIB_APPINDICATOR_INCLUDE_DIRS}
+            PATH_SUFFIXES libappindicator-0.1)
+
+        find_library(APPINDICATOR_LIBRARY NAMES appindicator)
+        include(FindPackageHandleStandardArgs)
+        find_package_handle_standard_args(APPINDICATOR DEFAULT_MSG APPINDICATOR_LIBRARY APPINDICATOR_INCLUDE_DIR)
+        if(APPINDICATOR_FOUND)
+            set(APPINDICATOR_LIBRARIES ${APPINDICATOR_LIBRARY})
+            set(APPINDICATOR_INCLUDE_DIRS ${APPINDICATOR_INCLUDE_DIR})
+        endif()
+
+        mark_as_advanced(APPINDICATOR_INCLUDE_DIR APPINDICATOR_LIBRARY)
+        IF (NOT APPINDICATOR_FOUND)
+            message(FATAL_ERROR "You have selected HAVE_LIBAPPINDICATOR but libappindicator support could only be compiled when development package is available (package libappindicator-dev under Ubuntu)")
+        ENDIF()
+    endif()
     IF (GTK2_FOUND AND HAVE_LIBAPPINDICATOR)
+
 
       SET(GTK2_INCLUDE_DIRS
           ${GTK2_INCLUDE_DIRS}
