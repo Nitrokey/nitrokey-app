@@ -128,6 +128,7 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
             message(FATAL_ERROR "libappindicator support could only be compiled when libnotify development files are installed (package libnotify-dev under Ubuntu)")
         ENDIF()
 
+        pkg_check_modules(GTK2 gtk+-2.0) 
         find_package(GTK2 2.6 QUIET)
         IF (NOT GTK2_FOUND)
             message(FATAL_ERROR "libappindicator support could only be compiled when GTK2 libraries are available (package libgtk2.0-dev under Ubuntu)")
