@@ -108,7 +108,7 @@ QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
 
 
 FIND_PACKAGE(PkgConfig REQUIRED)
-SET(LIBUSB_INCLUDE_DIRS "/usr/include/libusb-1.0")
+SET(LIBUSB_INCLUDE_DIRS_HINT "/usr/include/libusb-1.0")
 
 IF (WIN32)
     SET( platform_specific_sources hid_win.c)
@@ -118,6 +118,16 @@ ELSEIF(APPLE)
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
 
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
+
+    pkg_check_modules(LIBUSB libusb-1.0)
+    find_path(LIBUSB_INCLUDE_DIRS NAMES libusb.h
+        HINTS ${LIBUSB_INCLUDE_DIRS} ${LIB_USB_INCLUDEDIR} ${LIBUSB_INCLUDE_DIRS_HINT}
+        PATH_SUFFIXES libusb-1.0 )
+        IF (NOT LIBUSB_INCLUDE_DIRS )
+            message(FATAL_ERROR "libusb development library is required (package libusb-1.0-0-dev under Ubuntu 16.04)")
+        ENDIF()
+
+
     if(HAVE_LIBAPPINDICATOR)
 
         find_package(Libnotify 0.7 REQUIRED)
@@ -174,7 +184,7 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
 
     ENDIF () # GTK2_FOUND AND HAVE_LIBAPPINDICATOR
 
-    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread usb-1.0)
+    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread ${LIBUSB_LIBRARIES} )
 
     INCLUDE_DIRECTORIES(
       ${CMAKE_CURRENT_SOURCE_DIR}
