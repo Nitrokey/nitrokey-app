@@ -4,7 +4,8 @@ PROJECT(NitrokeyApp)
 SET(PROJECT_VERSION "0.3.2")
 #ADD_DEFINITIONS(-DSEAFILE_CLIENT_VERSION=${PROJECT_VERSION}) 
 
-OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" NO)
+#Please use either 'cmake -DHAVE_LIBAPPINDICATOR=NO' or 'ccmake' to change this value
+OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" YES)
 
 INCLUDE(FindPkgConfig)
 
