@@ -3668,7 +3668,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
 
   Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
-  STRNCPY((char *)SlotName, sizeof(SlotName), ui->PWS_EditSlotName->text().toLatin1(),
+  STRNCPY((char *)SlotName, sizeof(SlotName), ui->PWS_EditSlotName->text().toUtf8(),
           PWS_SLOTNAME_LENGTH);
   SlotName[PWS_SLOTNAME_LENGTH] = 0;
   if (0 == strlen((char *)SlotName)) {
@@ -3676,11 +3676,11 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
     return;
   }
 
-  STRNCPY((char *)LoginName, sizeof(LoginName), ui->PWS_EditLoginName->text().toLatin1(),
+  STRNCPY((char *)LoginName, sizeof(LoginName), ui->PWS_EditLoginName->text().toUtf8(),
           PWS_LOGINNAME_LENGTH);
   LoginName[PWS_LOGINNAME_LENGTH] = 0;
 
-  STRNCPY((char *)Password, sizeof(Password), ui->PWS_EditPassword->text().toLatin1(),
+  STRNCPY((char *)Password, sizeof(Password), ui->PWS_EditPassword->text().toUtf8(),
           PWS_PASSWORD_LENGTH);
   Password[PWS_PASSWORD_LENGTH] = 0;
   if (0 == strlen((char *)Password)) {
