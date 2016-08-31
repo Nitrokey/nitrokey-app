@@ -324,8 +324,6 @@ public:
   explicit utf8FieldLengthValidator(int _field_max_length, QObject *parent = 0)
       : QValidator(parent), field_max_length(_field_max_length) {}
   virtual State validate(QString &input, int &) const {
-    if (input.isEmpty())
-      return Invalid;
 
     int chars_left = field_max_length - strlen(input.toUtf8());
 
