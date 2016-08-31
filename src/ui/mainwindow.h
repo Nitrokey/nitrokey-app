@@ -24,6 +24,8 @@
 #include "device.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <QValidator>
+
 #include <climits>
 
 #define uint64_t unsigned long long
@@ -310,6 +312,28 @@ private slots:
   void on_PWS_EditSlotName_textEdited(const QString &arg1);
   void on_PWS_EditLoginName_textEdited(const QString &arg1);
   void on_PWS_EditPassword_textEdited(const QString &arg1);
+};
+
+class utf8FieldLengthValidator : public QValidator {
+  Q_OBJECT
+private:
+  int field_max_length;
+
+public:
+  explicit utf8FieldLengthValidator(QObject *parent = 0);
+  explicit utf8FieldLengthValidator(int _field_max_length, QObject *parent = 0)
+      : QValidator(parent), field_max_length(_field_max_length) {}
+  virtual State validate(QString &input, int &) const {
+    if (input.isEmpty())
+      return Invalid;
+
+    int chars_left = field_max_length - strlen(input.toUtf8());
+
+    if (chars_left >= 0) {
+      return Acceptable;
+    }
+    return Invalid;
+  }
 };
 
 #endif // MAINWINDOW_H
