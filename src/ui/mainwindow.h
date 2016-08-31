@@ -309,9 +309,9 @@ private slots:
   void on_counterEdit_editingFinished();
   void on_radioButton_2_toggled(bool checked);
   void on_radioButton_toggled(bool checked);
-  void on_PWS_EditSlotName_textEdited(const QString &arg1);
-  void on_PWS_EditLoginName_textEdited(const QString &arg1);
-  void on_PWS_EditPassword_textEdited(const QString &arg1);
+  void on_PWS_EditSlotName_textChanged(const QString &arg1);
+  void on_PWS_EditLoginName_textChanged(const QString &arg1);
+  void on_PWS_EditPassword_textChanged(const QString &arg1);
 };
 
 class utf8FieldLengthValidator : public QValidator {
