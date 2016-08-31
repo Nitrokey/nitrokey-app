@@ -160,7 +160,7 @@ void PasswordSafeDialog::on_ButtonSendPW_LN_clicked() {
     }
 
     MsgText.append((char *)cryptostick->passwordSafeLoginName);
-    MsgText.append((char)9);
+    MsgText.append((char)9); // ascii code for tab character
 
     ret_s32 = cryptostick->getPasswordSafeSlotPassword(UsedSlot);
     if (ERR_NO_ERROR != ret_s32) {
