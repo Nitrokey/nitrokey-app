@@ -2162,7 +2162,7 @@ Bitte ändern Sie die PIN.</translation>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="237"/>
         <source>Storage successfully initialized with random data</source>
-        <translation>Speicher wurde erfolgreich mit Zufallsdaten initialisiert</translation>
+        <translation>Der Speicher wurde erfolgreich mit Zufallsdaten initialisiert. Um die Initialisierung abzuschließen, entfernen Sie das Gerät und verbinden Sie es bitte erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="249"/>

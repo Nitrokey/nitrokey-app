@@ -1939,7 +1939,7 @@ Please change the PIN.</source>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="237"/>
         <source>Storage successfully initialized with random data</source>
-        <translation type="unfinished"></translation>
+        <translation>Storage successfully initialized with random data. Please remove the device and insert again to complete initialization process.</translation>
     </message>
     <message>
         <location filename="../src/ui/stick20-response-task.cpp" line="249"/>
