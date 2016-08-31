@@ -231,7 +231,7 @@ private slots:
   void on_writeGeneralConfigButton_clicked();
 
   void copyToClipboard(QString text);
-  void checkClipboard_Valid(bool ignore_time=false);
+  void checkClipboard_Valid(bool ignore_time = false);
   void checkPasswordTime_Valid();
   void checkTextEdited();
 
@@ -307,6 +307,9 @@ private slots:
   void on_counterEdit_editingFinished();
   void on_radioButton_2_toggled(bool checked);
   void on_radioButton_toggled(bool checked);
+  void on_PWS_EditSlotName_textEdited(const QString &arg1);
+  void on_PWS_EditLoginName_textEdited(const QString &arg1);
+  void on_PWS_EditPassword_textEdited(const QString &arg1);
 };
 
 #endif // MAINWINDOW_H

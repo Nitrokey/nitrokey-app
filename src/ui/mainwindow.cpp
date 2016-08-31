@@ -4146,3 +4146,22 @@ void MainWindow::on_radioButton_toggled(bool checked) {
   if (checked)
     ui->slotComboBox->setCurrentIndex(TOTP_SlotCount + 1);
 }
+
+void MainWindow::on_PWS_EditSlotName_textEdited(const QString &arg1) {
+  static QString valid_slotname;
+  int chars_left = PWS_SLOTNAME_LENGTH - strlen(arg1.toUtf8());
+  QString t = QString("%1").arg(chars_left);
+  ui->l_c_name->setText(t);
+}
+
+void MainWindow::on_PWS_EditLoginName_textEdited(const QString &arg1) {
+  int chars_left = PWS_LOGINNAME_LENGTH - strlen(arg1.toUtf8());
+  QString t = QString("%1").arg(chars_left);
+  ui->l_c_login->setText(t);
+}
+
+void MainWindow::on_PWS_EditPassword_textEdited(const QString &arg1) {
+  int chars_left = PWS_PASSWORD_LENGTH - strlen(arg1.toUtf8());
+  QString t = QString("%1").arg(chars_left);
+  ui->l_c_password->setText(t);
+}

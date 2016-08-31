@@ -1197,7 +1197,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
+             <item row="0" column="3">
               <widget class="QPushButton" name="PWS_ButtonClearSlot">
                <property name="text">
                 <string>Erase Slot</string>
@@ -1223,7 +1223,7 @@
                </item>
               </widget>
              </item>
-             <item row="3" column="2">
+             <item row="3" column="3">
               <widget class="QPushButton" name="PWS_ButtonCreatePW">
                <property name="text">
                 <string>Generate random password</string>
@@ -1247,6 +1247,43 @@
                </property>
                <property name="checked">
                 <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="l_chars_left_info">
+               <property name="text">
+                <string>Characters left:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="l_c_name">
+               <property name="text">
+                <string notr="true">...</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="l_c_login">
+               <property name="text">
+                <string notr="true">...</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QLabel" name="l_c_password">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
                </property>
               </widget>
              </item>
