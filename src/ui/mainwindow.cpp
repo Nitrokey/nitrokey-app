@@ -2579,8 +2579,9 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
       dialog.getPassword((char *)password);
 
       bool success = stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
-      if (success && fillSDWithRandomChars != 0)
+      if (success && fillSDWithRandomChars != 0) {
         stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
+      }
       refreshStick20StatusData();
     }
   }
