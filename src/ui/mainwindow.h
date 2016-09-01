@@ -24,6 +24,8 @@
 #include "device.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <QValidator>
+
 #include <climits>
 
 #define uint64_t unsigned long long
@@ -231,7 +233,7 @@ private slots:
   void on_writeGeneralConfigButton_clicked();
 
   void copyToClipboard(QString text);
-  void checkClipboard_Valid(bool ignore_time=false);
+  void checkClipboard_Valid(bool ignore_time = false);
   void checkPasswordTime_Valid();
   void checkTextEdited();
 
@@ -307,6 +309,29 @@ private slots:
   void on_counterEdit_editingFinished();
   void on_radioButton_2_toggled(bool checked);
   void on_radioButton_toggled(bool checked);
+  void on_PWS_EditSlotName_textChanged(const QString &arg1);
+  void on_PWS_EditLoginName_textChanged(const QString &arg1);
+  void on_PWS_EditPassword_textChanged(const QString &arg1);
+};
+
+class utf8FieldLengthValidator : public QValidator {
+  Q_OBJECT
+private:
+  int field_max_length;
+
+public:
+  explicit utf8FieldLengthValidator(QObject *parent = 0);
+  explicit utf8FieldLengthValidator(int _field_max_length, QObject *parent = 0)
+      : QValidator(parent), field_max_length(_field_max_length) {}
+  virtual State validate(QString &input, int &) const {
+
+    int chars_left = field_max_length - input.toUtf8().size();
+
+    if (chars_left >= 0) {
+      return Acceptable;
+    }
+    return Invalid;
+  }
 };
 
 #endif // MAINWINDOW_H

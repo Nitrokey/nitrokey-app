@@ -558,6 +558,13 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   cryptostick->getStatus();
   generateMenu();
+
+  ui->PWS_EditPassword->setValidator(
+      new utf8FieldLengthValidator(PWS_PASSWORD_LENGTH, ui->PWS_EditPassword));
+  ui->PWS_EditLoginName->setValidator(
+      new utf8FieldLengthValidator(PWS_LOGINNAME_LENGTH, ui->PWS_EditLoginName));
+  ui->PWS_EditSlotName->setValidator(
+      new utf8FieldLengthValidator(PWS_SLOTNAME_LENGTH, ui->PWS_EditSlotName));
 }
 
 #define MAX_CONNECT_WAIT_TIME_IN_SEC 10
@@ -3668,7 +3675,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
 
   Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
 
-  STRNCPY((char *)SlotName, sizeof(SlotName), ui->PWS_EditSlotName->text().toLatin1(),
+  STRNCPY((char *)SlotName, sizeof(SlotName), ui->PWS_EditSlotName->text().toUtf8(),
           PWS_SLOTNAME_LENGTH);
   SlotName[PWS_SLOTNAME_LENGTH] = 0;
   if (0 == strlen((char *)SlotName)) {
@@ -3676,11 +3683,11 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
     return;
   }
 
-  STRNCPY((char *)LoginName, sizeof(LoginName), ui->PWS_EditLoginName->text().toLatin1(),
+  STRNCPY((char *)LoginName, sizeof(LoginName), ui->PWS_EditLoginName->text().toUtf8(),
           PWS_LOGINNAME_LENGTH);
   LoginName[PWS_LOGINNAME_LENGTH] = 0;
 
-  STRNCPY((char *)Password, sizeof(Password), ui->PWS_EditPassword->text().toLatin1(),
+  STRNCPY((char *)Password, sizeof(Password), ui->PWS_EditPassword->text().toUtf8(),
           PWS_PASSWORD_LENGTH);
   Password[PWS_PASSWORD_LENGTH] = 0;
   if (0 == strlen((char *)Password)) {
@@ -4145,4 +4152,22 @@ void MainWindow::on_radioButton_2_toggled(bool checked) {
 void MainWindow::on_radioButton_toggled(bool checked) {
   if (checked)
     ui->slotComboBox->setCurrentIndex(TOTP_SlotCount + 1);
+}
+
+void setCounter(int size, const QString &arg1, QLabel *counter) {
+  int chars_left = size - arg1.toUtf8().size();
+  QString t = QString::number(chars_left);
+  counter->setText(t);
+}
+
+void MainWindow::on_PWS_EditSlotName_textChanged(const QString &arg1) {
+  setCounter(PWS_SLOTNAME_LENGTH, arg1, ui->l_c_name);
+}
+
+void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1) {
+  setCounter(PWS_LOGINNAME_LENGTH, arg1, ui->l_c_login);
+}
+
+void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
+  setCounter(PWS_PASSWORD_LENGTH, arg1, ui->l_c_password);
 }
