@@ -558,6 +558,13 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   cryptostick->getStatus();
   generateMenu();
+
+  ui->PWS_EditPassword->setValidator(
+      new utf8FieldLengthValidator(PWS_PASSWORD_LENGTH, ui->PWS_EditPassword));
+  ui->PWS_EditLoginName->setValidator(
+      new utf8FieldLengthValidator(PWS_LOGINNAME_LENGTH, ui->PWS_EditLoginName));
+  ui->PWS_EditSlotName->setValidator(
+      new utf8FieldLengthValidator(PWS_SLOTNAME_LENGTH, ui->PWS_EditSlotName));
 }
 
 #define MAX_CONNECT_WAIT_TIME_IN_SEC 10
@@ -4147,32 +4154,20 @@ void MainWindow::on_radioButton_toggled(bool checked) {
     ui->slotComboBox->setCurrentIndex(TOTP_SlotCount + 1);
 }
 
-void MainWindow::on_PWS_EditSlotName_textChanged(const QString &arg1)
-{
-    int chars_left = PWS_SLOTNAME_LENGTH - arg1.toUtf8().size();
-    QString t = QString::number(chars_left);
-    ui->l_c_name->setText(t);
-    ui->PWS_EditSlotName->setValidator(
-        new utf8FieldLengthValidator(PWS_SLOTNAME_LENGTH, ui->PWS_EditSlotName));
-
+void setCounter(int size, const QString &arg1, QLabel *counter) {
+  int chars_left = size - arg1.toUtf8().size();
+  QString t = QString::number(chars_left);
+  counter->setText(t);
 }
 
-void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1)
-{
-    int chars_left = PWS_LOGINNAME_LENGTH - arg1.toUtf8().size();
-    QString t = QString::number(chars_left);
-    ui->l_c_login->setText(t);
-    ui->PWS_EditLoginName->setValidator(
-        new utf8FieldLengthValidator(PWS_LOGINNAME_LENGTH, ui->PWS_EditLoginName));
-
+void MainWindow::on_PWS_EditSlotName_textChanged(const QString &arg1) {
+  setCounter(PWS_SLOTNAME_LENGTH, arg1, ui->l_c_name);
 }
 
-void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1)
-{
-    int chars_left = PWS_PASSWORD_LENGTH - arg1.toUtf8().size();
-    QString t = QString::number(chars_left);
-    ui->l_c_password->setText(t);
-    ui->PWS_EditPassword->setValidator(
-        new utf8FieldLengthValidator(PWS_PASSWORD_LENGTH, ui->PWS_EditPassword));
+void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1) {
+  setCounter(PWS_LOGINNAME_LENGTH, arg1, ui->l_c_login);
+}
 
+void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
+  setCounter(PWS_PASSWORD_LENGTH, arg1, ui->l_c_password);
 }
