@@ -4149,7 +4149,7 @@ void MainWindow::on_radioButton_toggled(bool checked) {
 
 void MainWindow::on_PWS_EditSlotName_textChanged(const QString &arg1)
 {
-    int chars_left = PWS_SLOTNAME_LENGTH - strlen(arg1.toUtf8());
+    int chars_left = PWS_SLOTNAME_LENGTH - arg1.toUtf8().size();
     QString t = QString::number(chars_left);
     ui->l_c_name->setText(t);
     ui->PWS_EditSlotName->setValidator(
@@ -4159,7 +4159,7 @@ void MainWindow::on_PWS_EditSlotName_textChanged(const QString &arg1)
 
 void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1)
 {
-    int chars_left = PWS_LOGINNAME_LENGTH - strlen(arg1.toUtf8());
+    int chars_left = PWS_LOGINNAME_LENGTH - arg1.toUtf8().size();
     QString t = QString::number(chars_left);
     ui->l_c_login->setText(t);
     ui->PWS_EditLoginName->setValidator(
@@ -4169,7 +4169,7 @@ void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1)
 
 void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1)
 {
-    int chars_left = PWS_PASSWORD_LENGTH - strlen(arg1.toUtf8());
+    int chars_left = PWS_PASSWORD_LENGTH - arg1.toUtf8().size();
     QString t = QString::number(chars_left);
     ui->l_c_password->setText(t);
     ui->PWS_EditPassword->setValidator(

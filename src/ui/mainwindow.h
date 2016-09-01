@@ -325,7 +325,7 @@ public:
       : QValidator(parent), field_max_length(_field_max_length) {}
   virtual State validate(QString &input, int &) const {
 
-    int chars_left = field_max_length - strlen(input.toUtf8());
+    int chars_left = field_max_length - input.toUtf8().size();
 
     if (chars_left >= 0) {
       return Acceptable;
