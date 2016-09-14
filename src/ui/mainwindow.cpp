@@ -3945,6 +3945,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   uint16_t lastInterval = 30;
   static QString password_copy;
 
+    cryptostick->getStatus();
   bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
   if (is_OTP_PIN_protected) {
     if (!cryptostick->validUserPassword) {
