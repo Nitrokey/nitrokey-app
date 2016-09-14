@@ -658,7 +658,7 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
     if (is_OTP_PIN_protected) {
       userAuthorize(&cmd);
     }
-    //      userAuthenticate((uint8_t *) "123456", (uint8_t *) "123123123");
+    //          userAuthenticate((uint8_t *) "123456", (uint8_t *) "123123123");
 
     //    validUserPassword = false;
     //    memset(userPassword, 0, 25);

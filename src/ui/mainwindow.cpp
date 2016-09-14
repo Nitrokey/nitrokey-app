@@ -2184,10 +2184,7 @@ void MainWindow::displayCurrentGeneralConfig() {
   else
     ui->enableUserPasswordCheckBox->setChecked(false);
 
-  if (cryptostick->otpPasswordConfig[1] == 1)
-    ui->deleteUserPasswordCheckBox->setChecked(true);
-  else
-    ui->deleteUserPasswordCheckBox->setChecked(false);
+  ui->deleteUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[1] == 1);
 
   lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 }
@@ -3222,17 +3219,10 @@ void MainWindow::on_tokenIDCheckBox_toggled(bool checked) {
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
-  if (checked) {
-    ui->deleteUserPasswordCheckBox->setEnabled(true);
-    ui->deleteUserPasswordCheckBox->setChecked(false);
-    cryptostick->otpPasswordConfig[0] = 1;
-    cryptostick->otpPasswordConfig[1] = 0;
-  } else {
-    ui->deleteUserPasswordCheckBox->setEnabled(false);
-    ui->deleteUserPasswordCheckBox->setChecked(false);
-    cryptostick->otpPasswordConfig[0] = 0;
-    cryptostick->otpPasswordConfig[1] = 0;
-  }
+  ui->deleteUserPasswordCheckBox->setEnabled(checked);
+  cryptostick->otpPasswordConfig[0] = (uint8_t)checked;
+  ui->deleteUserPasswordCheckBox->setChecked(false);
+  cryptostick->otpPasswordConfig[1] = 0;
 }
 
 void MainWindow::on_writeGeneralConfigButton_clicked() {
@@ -3252,10 +3242,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 
     if (ui->enableUserPasswordCheckBox->isChecked()) {
       data[3] = 1;
-      if (ui->deleteUserPasswordCheckBox->isChecked())
-        data[4] = 1;
-      else
-        data[4] = 0;
+      data[4] = ui->deleteUserPasswordCheckBox->isChecked() ? 1 : 0;
     } else {
       data[3] = 0;
       data[4] = 0;
@@ -3964,7 +3951,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   uint32_t code;
   uint8_t config;
   int ret;
-  bool ok;
+  int ok;
   uint16_t lastInterval = 30;
   bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
 
