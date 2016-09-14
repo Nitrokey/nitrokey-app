@@ -3943,8 +3943,9 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   int ret;
   int ok;
   uint16_t lastInterval = 30;
-  bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
+  static QString password_copy;
 
+  bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
   if (is_OTP_PIN_protected) {
     if (!cryptostick->validUserPassword) {
       cryptostick->getUserPasswordRetryCount();
@@ -3955,18 +3956,19 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       QString password;
       dialog.getPassword(password);
 
+      if (cryptostick->is_nkpro_rtm1()){
+        password_copy = password;
+      }
+
       if (QDialog::Accepted == ok) {
-        uint8_t tempPassword[25];
-        for (int i = 0; i < 25; i++)
-          tempPassword[i] = qrand() & 0xFF;
-
-        cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
-        if (cryptostick->validUserPassword)
-          lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-
+        userAuthenticate(password);
         password.clear(); // FIXME password leak?
       } else
-        return 1;
+        return 1; //user does not click OK button
+    } else {
+        if (cryptostick->is_nkpro_rtm1()){
+          userAuthenticate(password_copy);
+        }
     }
   }
 
@@ -4029,6 +4031,19 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   }
 
   return 0;
+}
+
+void MainWindow::userAuthenticate(const QString &password) {
+  uint8_t tempPassword[25];
+  generateTemporaryPassword(tempPassword);
+  cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
+  if (cryptostick->validUserPassword)
+          lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+}
+
+void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {
+    for (int i = 0; i < 25; i++)
+          tempPassword[i] = qrand() & 0xFF;
 }
 
 #define PWS_RANDOM_PASSWORD_CHAR_SPACE                                                             \

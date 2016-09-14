@@ -2917,6 +2917,10 @@ int Device::stick20GetDebugData(void) {
   return success;
 }
 
+bool Device::is_nkpro_rtm1() {
+    return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0);
+}
+
 /*******************************************************************************
 
   getCode
