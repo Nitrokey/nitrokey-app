@@ -2179,11 +2179,7 @@ void MainWindow::displayCurrentGeneralConfig() {
   if (cryptostick->generalConfig[2] == 0 || cryptostick->generalConfig[2] == 1)
     ui->scrollLockComboBox->setCurrentIndex(cryptostick->generalConfig[2] + 1);
 
-  if (cryptostick->otpPasswordConfig[0] == 1)
-    ui->enableUserPasswordCheckBox->setChecked(true);
-  else
-    ui->enableUserPasswordCheckBox->setChecked(false);
-
+  ui->enableUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[0] == 1);
   ui->deleteUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[1] == 1);
 
   lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
@@ -3221,8 +3217,7 @@ void MainWindow::on_tokenIDCheckBox_toggled(bool checked) {
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
   ui->deleteUserPasswordCheckBox->setEnabled(checked);
   cryptostick->otpPasswordConfig[0] = (uint8_t)checked;
-  ui->deleteUserPasswordCheckBox->setChecked(false);
-  cryptostick->otpPasswordConfig[1] = 0;
+  ui->deleteUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[1]);
 }
 
 void MainWindow::on_writeGeneralConfigButton_clicked() {
@@ -3240,13 +3235,8 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
     data[1] = ui->capsLockComboBox->currentIndex() - 1;
     data[2] = ui->scrollLockComboBox->currentIndex() - 1;
 
-    if (ui->enableUserPasswordCheckBox->isChecked()) {
-      data[3] = 1;
-      data[4] = ui->deleteUserPasswordCheckBox->isChecked() ? 1 : 0;
-    } else {
-      data[3] = 0;
-      data[4] = 0;
-    }
+    data[3] = (uint8_t) (ui->enableUserPasswordCheckBox->isChecked() ? 1 : 0);
+    data[4] = (uint8_t) (ui->deleteUserPasswordCheckBox->isChecked() && ui->enableUserPasswordCheckBox->isChecked() ? 1 : 0);
 
     do {
       res = cryptostick->writeGeneralConfig(data);
@@ -4160,3 +4150,4 @@ void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1) {
 void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
   setCounter(PWS_PASSWORD_LENGTH, arg1, ui->l_c_password);
 }
+
