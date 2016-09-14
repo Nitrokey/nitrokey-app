@@ -78,7 +78,10 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
-  void InitState();
+    QString nkpro_user_PIN;
+    void overwrite_string(QString &str);
+
+    void InitState();
   void createIndicator();
   void startDebug();
   void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type,
@@ -89,6 +92,7 @@ private:
   AppIndicator *indicator;
   GtkWidget *indicatorMenu;
 #endif // HAVE_LIBAPPINDICATOR
+
   QSystemTrayIcon *trayIcon;
   QMenu *trayMenu;
   QMenu *trayMenuSubConfigure;
@@ -181,6 +185,7 @@ private:
   int UpdateDynamicMenuEntrys(void);
   int AnalyseProductionInfos();
   void refreshStick20StatusData();
+
 
 public slots:
   void startAboutDialog();
@@ -316,6 +321,7 @@ private slots:
   void generateTemporaryPassword(uint8_t *tempPassword) const;
 
   void userAuthenticate(const QString &password);
+
 };
 
 class utf8FieldLengthValidator : public QValidator {

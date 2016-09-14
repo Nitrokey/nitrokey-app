@@ -85,6 +85,9 @@ extern "C" void DebugInitDebugging(void);
  Local defines
 *******************************************************************************/
 
+
+#include <algorithm>
+
 class OwnSleep : public QThread {
 public:
   static void usleep(unsigned long usecs) { QThread::usleep(usecs); }
@@ -372,7 +375,10 @@ bool isUnity() {
           desktop.toLower() == "lxde" || desktop.toLower() == "xfce");
 }
 
+
 #endif // HAVE_LIBAPPINDICATOR
+
+void MainWindow::overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
 
 void MainWindow::showTrayMessage(const QString &title, const QString &msg,
                                  enum trayMessageType type, int timeout) {
@@ -3450,9 +3456,6 @@ void MainWindow::copyToClipboard(QString text) {
   }
 }
 
-#include <algorithm>
-void overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
-
 void MainWindow::checkClipboard_Valid(bool ignore_time) {
   uint64_t currentTime, far_future_delta = 60000;
 
@@ -3502,6 +3505,7 @@ void MainWindow::checkPasswordTime_Valid() {
       is_forget_PIN_after_10_minutes_enabled) {
     cryptostick->validUserPassword = false;
     memset(cryptostick->userTemporaryPassword, 0, 25);
+      overwrite_string(nkpro_user_PIN); // for NK Pro 0.7 only
   }
 }
 
@@ -3946,7 +3950,6 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   int ret;
   int ok;
   uint16_t lastInterval = 30;
-  static QString password_copy;
 
   cryptostick->getStatus();
   bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
@@ -3961,7 +3964,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       dialog.getPassword(password);
 
       if (cryptostick->is_nkpro_rtm1()) {
-        password_copy = password;
+        nkpro_user_PIN = password;
       }
 
       if (QDialog::Accepted == ok) {
@@ -3973,7 +3976,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       }
     } else {
       if (cryptostick->is_nkpro_rtm1()) {
-        userAuthenticate(password_copy);
+        userAuthenticate(nkpro_user_PIN);
       }
     }
   }
