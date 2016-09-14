@@ -1761,9 +1761,9 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[]) {
 *******************************************************************************/
 
 int Device::authorize(Command *authorizedCmd) {
-/**
- * NK Pro 0.7 RTM.1 loses temporary password on cmd_*_authorize
- */
+  /**
+   * NK Pro 0.7 RTM.1 loses temporary password on cmd_*_authorize
+   */
   authorizedCmd->generateCRC();
   uint32_t crc = authorizedCmd->crc;
 
@@ -1815,9 +1815,9 @@ int Device::authorize(Command *authorizedCmd) {
 *******************************************************************************/
 
 int Device::userAuthorize(Command *authorizedCmd) {
-/**
- * NK Pro 0.7 RTM.1 loses temporary password on cmd_*_authorize
- */
+  /**
+   * NK Pro 0.7 RTM.1 loses temporary password on cmd_*_authorize
+   */
   authorizedCmd->generateCRC();
   uint32_t crc = authorizedCmd->crc;
   uint8_t data[29];
@@ -2917,9 +2917,7 @@ int Device::stick20GetDebugData(void) {
   return success;
 }
 
-bool Device::is_nkpro_rtm1() {
-    return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0);
-}
+bool Device::is_nkpro_rtm1() { return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0); }
 
 /*******************************************************************************
 

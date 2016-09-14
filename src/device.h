@@ -394,7 +394,7 @@ public:
   int HOTP_SlotCount;
   int TOTP_SlotCount;
 
-    bool is_nkpro_rtm1();
+  bool is_nkpro_rtm1();
 
 private:
   int vid;

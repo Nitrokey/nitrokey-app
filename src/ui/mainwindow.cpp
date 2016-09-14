@@ -3235,8 +3235,11 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
     data[1] = ui->capsLockComboBox->currentIndex() - 1;
     data[2] = ui->scrollLockComboBox->currentIndex() - 1;
 
-    data[3] = (uint8_t) (ui->enableUserPasswordCheckBox->isChecked() ? 1 : 0);
-    data[4] = (uint8_t) (ui->deleteUserPasswordCheckBox->isChecked() && ui->enableUserPasswordCheckBox->isChecked() ? 1 : 0);
+    data[3] = (uint8_t)(ui->enableUserPasswordCheckBox->isChecked() ? 1 : 0);
+    data[4] = (uint8_t)(ui->deleteUserPasswordCheckBox->isChecked() &&
+                                ui->enableUserPasswordCheckBox->isChecked()
+                            ? 1
+                            : 0);
 
     do {
       res = cryptostick->writeGeneralConfig(data);
@@ -3945,7 +3948,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   uint16_t lastInterval = 30;
   static QString password_copy;
 
-    cryptostick->getStatus();
+  cryptostick->getStatus();
   bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
   if (is_OTP_PIN_protected) {
     if (!cryptostick->validUserPassword) {
@@ -3957,7 +3960,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       QString password;
       dialog.getPassword(password);
 
-      if (cryptostick->is_nkpro_rtm1()){
+      if (cryptostick->is_nkpro_rtm1()) {
         password_copy = password;
       }
 
@@ -3965,11 +3968,11 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
         userAuthenticate(password);
         password.clear(); // FIXME password leak?
       } else
-        return 1; //user does not click OK button
+        return 1; // user does not click OK button
     } else {
-        if (cryptostick->is_nkpro_rtm1()){
-          userAuthenticate(password_copy);
-        }
+      if (cryptostick->is_nkpro_rtm1()) {
+        userAuthenticate(password_copy);
+      }
     }
   }
 
@@ -4039,12 +4042,12 @@ void MainWindow::userAuthenticate(const QString &password) {
   generateTemporaryPassword(tempPassword);
   cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
   if (cryptostick->validUserPassword)
-          lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+    lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 }
 
 void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {
-    for (int i = 0; i < 25; i++)
-          tempPassword[i] = qrand() & 0xFF;
+  for (int i = 0; i < 25; i++)
+    tempPassword[i] = qrand() & 0xFF;
 }
 
 #define PWS_RANDOM_PASSWORD_CHAR_SPACE                                                             \
@@ -4166,4 +4169,3 @@ void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1) {
 void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
   setCounter(PWS_PASSWORD_LENGTH, arg1, ui->l_c_password);
 }
-

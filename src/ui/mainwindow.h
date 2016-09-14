@@ -313,9 +313,9 @@ private slots:
   void on_PWS_EditLoginName_textChanged(const QString &arg1);
   void on_PWS_EditPassword_textChanged(const QString &arg1);
 
-    void generateTemporaryPassword(uint8_t *tempPassword) const;
+  void generateTemporaryPassword(uint8_t *tempPassword) const;
 
-    void userAuthenticate(const QString &password);
+  void userAuthenticate(const QString &password);
 };
 
 class utf8FieldLengthValidator : public QValidator {
