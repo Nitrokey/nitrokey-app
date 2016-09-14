@@ -3966,9 +3966,11 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
 
       if (QDialog::Accepted == ok) {
         userAuthenticate(password);
-        password.clear(); // FIXME password leak?
-      } else
+      }
+      overwrite_string(password);
+      if (QDialog::Accepted != ok) {
         return 1; // user does not click OK button
+      }
     } else {
       if (cryptostick->is_nkpro_rtm1()) {
         userAuthenticate(password_copy);
@@ -4169,3 +4171,4 @@ void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1) {
 void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
   setCounter(PWS_PASSWORD_LENGTH, arg1, ui->l_c_password);
 }
+
