@@ -322,6 +322,7 @@ private slots:
 
   void userAuthenticate(const QString &password);
 
+  void on_enableUserPasswordCheckBox_clicked(bool checked);
 };
 
 class utf8FieldLengthValidator : public QValidator {

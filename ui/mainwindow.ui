@@ -818,14 +818,14 @@
              <item>
               <widget class="QCheckBox" name="enableUserPasswordCheckBox">
                <property name="text">
-                <string>Protect OTP by user PIN</string>
+                <string>Protect OTP by user PIN (will be requested on first use each session)</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="deleteUserPasswordCheckBox">
                <property name="text">
-                <string>Forget PIN after 10 minutes</string>
+                <string>Forget user PIN after 10 minutes (if unchecked user PIN will remain in memory until application exits)</string>
                </property>
               </widget>
              </item>
