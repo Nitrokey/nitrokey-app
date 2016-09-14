@@ -540,16 +540,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   createIndicator();
 
-  if (FALSE == DebugWindowActive) {
-    ui->frame_6->setVisible(false);
-    ui->testHOTPButton->setVisible(false);
-    ui->testTOTPButton->setVisible(false);
-    ui->testsSpinBox->setVisible(false);
-    ui->testsSpinBox_2->setVisible(false);
-    ui->testsLabel->setVisible(false);
-    ui->testsLabel_2->setVisible(false);
-  }
-
   initActionsForStick10();
   initActionsForStick20();
   initCommonActions();
@@ -3025,17 +3015,6 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     return false;
   }
   return (true);
-}
-
-void MainWindow::getCode(uint8_t slotNo) {
-  uint8_t result[18];
-
-  memset(result, 0, 18);
-  uint32_t code;
-
-  cryptostick->getCode(slotNo, currentTime / 30, currentTime, 30, result);
-  code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
-  code = code % 100000000;
 }
 
 void MainWindow::on_writeButton_clicked() {
