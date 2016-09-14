@@ -77,8 +77,8 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
 
   validUserPassword = false;
 
-  memset(password, 0, 25);
-  memset(userPassword, 0, 25);
+  memset(adminTemporaryPassword, 0, 25);
+  memset(userTemporaryPassword, 0, 25);
 
   // Vars for password safe
   passwordSafeUnlocked = FALSE;
@@ -661,7 +661,7 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
     //          userAuthenticate((uint8_t *) "123456", (uint8_t *) "123123123");
 
     //    validUserPassword = false;
-    //    memset(userPassword, 0, 25);
+    //    memset(userTemporaryPassword, 0, 25);
 
     int res = sendCommand(&cmd);
     if (res == -1) {
@@ -1681,7 +1681,7 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[]) {
 
       if (crc == resp->lastCommandCRC) { // the response was for the last command
         if (resp->lastCommandStatus == CMD_STATUS_OK) {
-          memcpy(password, tempPasswrod, 25);
+          memcpy(adminTemporaryPassword, tempPasswrod, 25);
           validPassword = true;
           HID_Stick20Configuration_st.AdminPwRetryCount = 3;
           return 0;
@@ -1738,7 +1738,7 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[]) {
 
       if (crc == resp->lastCommandCRC) { // the response was for the last command
         if (resp->lastCommandStatus == CMD_STATUS_OK) {
-          memcpy(userPassword, tempPassword, 25);
+          memcpy(userTemporaryPassword, tempPassword, 25);
           validUserPassword = true;
           return 0;
         } else if (resp->lastCommandStatus == CMD_STATUS_WRONG_PASSWORD) {
@@ -1772,7 +1772,7 @@ int Device::authorize(Command *authorizedCmd) {
   int res;
 
   memcpy(data, &crc, 4);
-  memcpy(data + 4, password, 25);
+  memcpy(data + 4, adminTemporaryPassword, 25);
 
   if (isConnected) {
     Command *cmd = new Command(CMD_AUTHORIZE, data, 29);
@@ -1823,7 +1823,7 @@ int Device::userAuthorize(Command *authorizedCmd) {
   uint8_t data[29];
 
   memcpy(data, &crc, 4);
-  memcpy(data + 4, userPassword, 25);
+  memcpy(data + 4, userTemporaryPassword, 25);
 
   if (!isConnected) {
     return -1; // connection problem

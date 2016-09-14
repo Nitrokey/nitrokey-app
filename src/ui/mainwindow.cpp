@@ -3493,7 +3493,7 @@ void MainWindow::checkPasswordTime_Valid() {
   // invalidate admin authentication after 10 minutes
   if (currentTime >= lastAuthenticateTime + (uint64_t)600) {
     cryptostick->validPassword = false;
-    memset(cryptostick->password, 0, 25);
+    memset(cryptostick->adminTemporaryPassword, 0, 25);
   }
 
   // invalidate user authentication after 10 minutes
@@ -3501,7 +3501,7 @@ void MainWindow::checkPasswordTime_Valid() {
   if (currentTime >= lastUserAuthenticateTime + (uint64_t)600 && is_OTP_PIN_protected &&
       is_forget_PIN_after_10_minutes_enabled) {
     cryptostick->validUserPassword = false;
-    memset(cryptostick->userPassword, 0, 25);
+    memset(cryptostick->userTemporaryPassword, 0, 25);
   }
 }
 

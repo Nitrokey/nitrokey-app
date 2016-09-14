@@ -320,9 +320,9 @@ public:
   HOTPSlot *HOTPSlots[HOTP_SLOT_COUNT_MAX];
   TOTPSlot *TOTPSlots[TOTP_SLOT_COUNT_MAX];
   void getSlotConfigs();
-  uint8_t password[25];
+  uint8_t adminTemporaryPassword[25];
   bool validPassword;
-  uint8_t userPassword[25];
+  uint8_t userTemporaryPassword[25];
   bool validUserPassword;
   bool passwordSet;
   uint8_t passwordRetryCount;
