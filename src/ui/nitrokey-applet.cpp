@@ -8,22 +8,22 @@
 
 CryptostickApplet::CryptostickApplet() {}
 
-void CryptostickApplet::warningBox(const QString &msg, QWidget *parent) {
+void CryptostickApplet::warningBox(const QString msg, QWidget *parent) {
   QMessageBox::warning(parent != 0 ? parent : NULL, getBrand(), msg, QMessageBox::Ok);
 }
 
-void CryptostickApplet::messageBox(const QString &msg, QWidget *parent) {
+void CryptostickApplet::messageBox(const QString msg, QWidget *parent) {
   QMessageBox::information(parent != 0 ? parent : NULL, getBrand(), msg, QMessageBox::Ok);
 }
 
-bool CryptostickApplet::yesOrNoBox(const QString &msg, QWidget *parent, bool default_val) {
+bool CryptostickApplet::yesOrNoBox(const QString msg, QWidget *parent, bool default_val) {
   QMessageBox::StandardButton default_btn = default_val ? QMessageBox::Yes : QMessageBox::No;
 
   return QMessageBox::question(parent != 0 ? parent : NULL, getBrand(), msg,
                                QMessageBox::Yes | QMessageBox::No, default_btn) == QMessageBox::Yes;
 }
 
-bool CryptostickApplet::detailedYesOrNoBox(const QString &msg, const QString &detailed_text,
+bool CryptostickApplet::detailedYesOrNoBox(const QString msg, const QString detailed_text,
                                            QWidget *parent, bool default_val) {
   QMessageBox *msgBox =
       new QMessageBox(QMessageBox::Question, getBrand(), msg, QMessageBox::Yes | QMessageBox::No,
