@@ -27,8 +27,8 @@
 #include "mcvs-wrapper.h"
 #include "response.h"
 #include "sleep.h"
-#include "string.h"
 #include "stick20-response-task.h"
+#include "string.h"
 
 /*******************************************************************************
 
@@ -183,8 +183,7 @@ int Device::checkConnection(int InitConfigFlag) {
         TOTP_SlotCount = TOTP_SLOT_COUNT_MAX;
         passwordSafeUnlocked = FALSE;
       }
-      if (TRUE == InitConfigFlag)
-      {
+      if (TRUE == InitConfigFlag) {
         initializeConfig(); // init data for OTP
       }
       return 1;
@@ -660,14 +659,14 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
 
     Command cmd(CMD_GET_CODE, data, 18);
 
-     bool is_OTP_PIN_protected = otpPasswordConfig[0] == 1;
-      if (is_OTP_PIN_protected){
-          userAuthorize(&cmd);
-      }
-//      userAuthenticate((uint8_t *) "123456", (uint8_t *) "123123123");
+    bool is_OTP_PIN_protected = otpPasswordConfig[0] == 1;
+    if (is_OTP_PIN_protected) {
+      userAuthorize(&cmd);
+    }
+    //      userAuthenticate((uint8_t *) "123456", (uint8_t *) "123123123");
 
-//    validUserPassword = false;
-//    memset(userPassword, 0, 25);
+    //    validUserPassword = false;
+    //    memset(userPassword, 0, 25);
 
     res = sendCommand(&cmd);
 
@@ -719,7 +718,7 @@ int Device::getHOTP(uint8_t slotNo) {
 
 *******************************************************************************/
 //#include <QElapsedTimer>
-//QElapsedTimer timer1;
+// QElapsedTimer timer1;
 
 int Device::readSlot(uint8_t slotNo) {
   int res;
@@ -729,13 +728,11 @@ int Device::readSlot(uint8_t slotNo) {
   data[0] = slotNo;
 
   if (isConnected) {
-//      timer1.start ();
+    //      timer1.start ();
     Command *cmd = new Command(CMD_READ_SLOT, data, 1);
 
-
     res = sendCommand(cmd);
-//    qDebug() << " " << timer1.elapsed() << "milliseconds";
-
+    //    qDebug() << " " << timer1.elapsed() << "milliseconds";
 
     if (res == -1) {
       delete cmd;
@@ -744,11 +741,11 @@ int Device::readSlot(uint8_t slotNo) {
     } else { // sending the command was successful
       // return cmd->crc;
       Sleep::msleep(100);
-//      qDebug() << " " << timer1.elapsed() << "milliseconds";
+      //      qDebug() << " " << timer1.elapsed() << "milliseconds";
       Response *resp = new Response();
 
       resp->getResponse(this);
-//      qDebug() << "The slow operation took" << timer1.elapsed() << "milliseconds";
+      //      qDebug() << "The slow operation took" << timer1.elapsed() << "milliseconds";
 
       if (cmd->crc == resp->lastCommandCRC) { // the response was for the last command
         if (resp->lastCommandStatus == CMD_STATUS_OK) {
@@ -780,7 +777,7 @@ int Device::readSlot(uint8_t slotNo) {
 
       return 0;
     }
-//    qDebug() << "The slow operation took" << timer1.elapsed() << "milliseconds";
+    //    qDebug() << "The slow operation took" << timer1.elapsed() << "milliseconds";
   }
   return -1;
 }
@@ -1824,42 +1821,32 @@ int Device::authorize(Command *authorizedCmd) {
 int Device::userAuthorize(Command *authorizedCmd) {
   authorizedCmd->generateCRC();
   uint32_t crc = authorizedCmd->crc;
-
   uint8_t data[29];
-
-  int res;
 
   memcpy(data, &crc, 4);
   memcpy(data + 4, userPassword, 25);
 
-  if (isConnected) {
-    Command *cmd = new Command(CMD_USER_AUTHORIZE, data, 29);
+  if (!isConnected) {
+    return -1; // connection problem
+  }
 
-    res = sendCommand(cmd);
+  int res;
+  Command cmd(CMD_USER_AUTHORIZE, data, 29);
+  res = sendCommand(&cmd);
+  if (res == -1) {
+    return -1; // connection problem
+  }
 
-    if (res == -1) {
-      delete cmd;
+  Sleep::msleep(200);
 
-      return -1;
-    } else {
-      Sleep::msleep(200);
-      Response *resp = new Response();
-
-      resp->getResponse(this);
-
-      if (cmd->crc == resp->lastCommandCRC) { // the response was for the last command
-        if (resp->lastCommandStatus == CMD_STATUS_OK) {
-          delete cmd;
-
-          return 0;
-        }
-      }
-      delete cmd;
-
-      return -2;
+  Response resp;
+  resp.getResponse(this);
+  if (cmd.crc == resp.lastCommandCRC) { // the response was for the last command
+    if (resp.lastCommandStatus == CMD_STATUS_OK) {
+      return 0; //OK!
     }
   }
-  return -1;
+  return -2; // wrong CRC or not OK status
 }
 
 // returns 0 on success
@@ -2354,7 +2341,7 @@ bool Device::stick20EnableFirmwareUpdate(uint8_t *password) {
 
   // Check password length
   n = strlen((const char *)password);
-  if (CS20_MAX_UPDATE_PASSWORD_LEN +1 < n) { //+1 for [0]='p'
+  if (CS20_MAX_UPDATE_PASSWORD_LEN + 1 < n) { //+1 for [0]='p'
     return (false);
   }
 
@@ -2397,12 +2384,12 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
   ResponseTask.GetResponse();
   bool commandSuccess = ResponseTask.ResultValue == TRUE;
 
-/*
-  Sleep::msleep(2000);
-  Response *resp = new Response();
-  resp->getResponse(this);
-  delete resp;
-*/
+  /*
+    Sleep::msleep(2000);
+    Response *resp = new Response();
+    resp->getResponse(this);
+    delete resp;
+  */
 
   return sentWithSuccess && commandSuccess;
 }
@@ -2874,7 +2861,7 @@ int Device::stick20LockFirmware(uint8_t *password) {
 *******************************************************************************/
 
 int Device::stick20ProductionTest(void) {
-//  QElapsedTimer timer1;
+  //  QElapsedTimer timer1;
   uint8_t n;
 
   int res;
@@ -2890,13 +2877,13 @@ int Device::stick20ProductionTest(void) {
   bool success = res > 0;
   delete cmd;
 
-//  timer1.start ();
+  //  timer1.start ();
 
   Stick20ResponseTask ResponseTask(NULL, this, NULL);
   ResponseTask.NoStopWhenStatusOK();
   ResponseTask.GetResponse();
 
-//  qDebug() << " " << timer1.elapsed() << "milliseconds";
+  //  qDebug() << " " << timer1.elapsed() << "milliseconds";
   return success;
 }
 

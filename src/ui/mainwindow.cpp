@@ -3996,14 +3996,14 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   // Start the config dialog
   if ((TRUE == cryptostick->validUserPassword) || (!is_OTP_PIN_protected)) {
 
-      //is it TOTP?
+    // is it TOTP?
     if (slotNumber >= 0x20)
       cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
 
     lastTOTPTime = QDateTime::currentDateTime().toTime_t();
     ret = cryptostick->setTime(TOTP_CHECK_TIME);
 
-    //if time is out of sync on the device
+    // if time is out of sync on the device
     if (ret == -2) {
       bool answer;
       answer = csApplet->detailedYesOrNoBox(
