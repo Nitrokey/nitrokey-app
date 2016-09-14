@@ -640,26 +640,21 @@ int Device::writeToTOTPSlot(TOTPSlot *slot) {
 
 int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval,
                     uint8_t result[18]) {
-
-  int res;
+  bool is_OTP_PIN_protected = otpPasswordConfig[0] == 1;
 
   uint8_t data[30];
-
   data[0] = slotNo;
-
   memcpy(data + 1, &challenge, 8);
-
-  memcpy(data + 9, &lastTOTPTime, 8); // Time of challenge: Warning:
+  // Time of challenge: Warning:
   // it's better to tranfer time
   // and interval, to avoid attacks
   // with wrong timestamps
+  memcpy(data + 9, &lastTOTPTime, 8);
   memcpy(data + 17, &lastInterval, 1);
 
   if (isConnected) {
-
     Command cmd(CMD_GET_CODE, data, 18);
 
-    bool is_OTP_PIN_protected = otpPasswordConfig[0] == 1;
     if (is_OTP_PIN_protected) {
       userAuthorize(&cmd);
     }
@@ -668,25 +663,23 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
     //    validUserPassword = false;
     //    memset(userPassword, 0, 25);
 
-    res = sendCommand(&cmd);
-
+    int res = sendCommand(&cmd);
     if (res == -1) {
-      return -1;
-    } else { // sending the command was successful
-      Sleep::msleep(100);
-      Response *resp = new Response();
-
-      resp->getResponse(this);
-
-      if (cmd.crc == resp->lastCommandCRC) { // the response was for the last command
-        if (resp->lastCommandStatus == CMD_STATUS_OK) {
-          memcpy(result, resp->data, 18);
-        }
-      }
-      return 0;
+      return -1; // connection problem
     }
+    Sleep::msleep(100);
+
+    Response resp;
+    resp.getResponse(this);
+    if (cmd.crc == resp.lastCommandCRC) { // the response was for the last command
+      if (resp.lastCommandStatus == CMD_STATUS_OK) {
+        memcpy(result, resp.data, 18);
+        return 0; // OK!
+      }
+    }
+    return -2; // wrong CRC or not OK status
   }
-  return -1;
+  return -1; // connection problem
 }
 
 int Device::getHOTP(uint8_t slotNo) {
@@ -1843,7 +1836,7 @@ int Device::userAuthorize(Command *authorizedCmd) {
   resp.getResponse(this);
   if (cmd.crc == resp.lastCommandCRC) { // the response was for the last command
     if (resp.lastCommandStatus == CMD_STATUS_OK) {
-      return 0; //OK!
+      return 0; // OK!
     }
   }
   return -2; // wrong CRC or not OK status
