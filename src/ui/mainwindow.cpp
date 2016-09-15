@@ -3949,68 +3949,67 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       if (QDialog::Accepted != ok) {
         return 1; // user does not click OK button
       }
-    } else { //valid user password
+    } else { // valid user password
       if (cryptostick->is_nkpro_rtm1()) {
         userAuthenticate(nkpro_user_PIN);
       }
     }
   }
-    if (ok == QDialog::Accepted && !cryptostick->validUserPassword) {
-        csApplet->warningBox(tr("Invalid password!"));
-        return 1;
-    }
+  if (ok == QDialog::Accepted && !cryptostick->validUserPassword) {
+    csApplet->warningBox(tr("Invalid password!"));
+    return 1;
+  }
 
   // Start the config dialog
-    // is it TOTP?
-    if (slotNumber >= 0x20)
-      cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
+  // is it TOTP?
+  if (slotNumber >= 0x20)
+    cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
 
-    lastTOTPTime = QDateTime::currentDateTime().toTime_t();
-    ret = cryptostick->setTime(TOTP_CHECK_TIME);
+  lastTOTPTime = QDateTime::currentDateTime().toTime_t();
+  ret = cryptostick->setTime(TOTP_CHECK_TIME);
 
-    // if time is out of sync on the device
-    if (ret == -2) {
-      bool answer;
-      answer = csApplet->detailedYesOrNoBox(
-          tr("Time is out-of-sync"),
-          tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-             "sync.\nYour computer may be configured with a wrong time "
-             "or\nyour Nitrokey may have been attacked. If an attacker "
-             "or\nmalware could have used your Nitrokey you should reset the "
-             "secrets of your configured One Time Passwords. If your "
-             "computer's time is wrong, please configure it correctly and "
-             "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-          0, false);
+  // if time is out of sync on the device
+  if (ret == -2) {
+    bool answer;
+    answer = csApplet->detailedYesOrNoBox(
+        tr("Time is out-of-sync"),
+        tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+           "sync.\nYour computer may be configured with a wrong time "
+           "or\nyour Nitrokey may have been attacked. If an attacker "
+           "or\nmalware could have used your Nitrokey you should reset the "
+           "secrets of your configured One Time Passwords. If your "
+           "computer's time is wrong, please configure it correctly and "
+           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+        0, false);
 
-      if (answer) {
-        resetTime();
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        Sleep::msleep(1000);
-        QApplication::restoreOverrideCursor();
-        generateAllConfigs();
-        csApplet->messageBox(tr("Time reset!"));
-      } else
-        return 1;
-    }
+    if (answer) {
+      resetTime();
+      QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+      Sleep::msleep(1000);
+      QApplication::restoreOverrideCursor();
+      generateAllConfigs();
+      csApplet->messageBox(tr("Time reset!"));
+    } else
+      return 1;
+  }
 
-    cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval,
-                         result);
-    code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
-    config = result[4];
+  cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval, result);
+  code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
+  config = result[4];
 
-    QString output;
-    if (config & (1 << 0)) {
-      code = code % 100000000;
-      output.append(QString("%1").arg(QString::number(code), 8, '0'));
-    } else {
-      code = code % 1000000;
-      output.append(QString("%1").arg(QString::number(code), 6, '0'));
-    }
+  QString output;
+  if (config & (1 << 0)) {
+    code = code % 100000000;
+    output.append(QString("%1").arg(QString::number(code), 8, '0'));
+  } else {
+    code = code % 1000000;
+    output.append(QString("%1").arg(QString::number(code), 6, '0'));
+  }
 
-    otpInClipboard = output;
-    copyToClipboard(otpInClipboard);
-    if (DebugingActive)
-      qDebug() << otpInClipboard;
+  otpInClipboard = output;
+  copyToClipboard(otpInClipboard);
+  if (DebugingActive)
+    qDebug() << otpInClipboard;
 
   return 0;
 }
@@ -4018,10 +4017,10 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
 int MainWindow::userAuthenticate(const QString &password) {
   uint8_t tempPassword[25];
   generateTemporaryPassword(tempPassword);
-    int result = cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
+  int result = cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
   if (cryptostick->validUserPassword)
     lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-    return result;
+  return result;
 }
 
 void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {

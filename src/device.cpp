@@ -1634,7 +1634,7 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[]) {
 
   uint32_t crc;
 
-  strncpy((char *) data, (const char *) cardPassword, 25);
+  strncpy((char *)data, (const char *)cardPassword, 25);
   memcpy(data + 25, tempPasswrod, 25);
 
   if (isConnected) {
@@ -1689,7 +1689,7 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[]) {
   uint8_t data[50] = {0};
   uint32_t crc;
 
-  strncpy((char *) data, (const char *) cardPassword, 25);
+  strncpy((char *)data, (const char *)cardPassword, 25);
   memcpy(data + 25, tempPassword, 25);
 
   if (isConnected) {
@@ -1702,8 +1702,8 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[]) {
     memset(data, 0, sizeof(data));
 
     if (res == -1) {
-      return -1; //communication error
-    } else { // sending the command was successful
+      return -1; // communication error
+    } else {     // sending the command was successful
       Sleep::msleep(1000);
 
       Response resp;
@@ -1713,7 +1713,7 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[]) {
         if (resp.lastCommandStatus == CMD_STATUS_OK) {
           memcpy(userTemporaryPassword, tempPassword, 25);
           validUserPassword = true;
-          return 0; //OK
+          return 0; // OK
         } else if (resp.lastCommandStatus == CMD_STATUS_WRONG_PASSWORD) {
           validUserPassword = false;
           return -3; // WRONG_PASSWORD
