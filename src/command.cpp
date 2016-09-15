@@ -64,18 +64,16 @@ void Command::generateCRC() {
   int i;
 
   uint32_t crc = 0xffffffff;
-  uint8_t report[REPORT_SIZE + 1 + 20] = {0};
+  uint8_t report[REPORT_SIZE + 1] = {0};
   memset(report, 0, sizeof(report));
 
   report[1] = this->commandType;
-  size_t len = std::min(sizeof(report) - 2, (size_t)COMMAND_SIZE);
-  memcpy(report + 2, this->data, len); // (2+59 = 61 not 60 !!!)
+  size_t len = std::min(sizeof(report) - 2, sizeof(data));
+  memcpy(report + 2, this->data, len);
 
   for (i = 0; i < 15; i++) {
     crc = Crc32(crc, ((uint32_t *)(report + 1))[i]);
   }
-
-  ((uint32_t *)(report + 1))[15] = crc;
 
   this->crc = crc;
 }
