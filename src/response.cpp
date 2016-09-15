@@ -399,9 +399,6 @@ void Response::DebugResponse() {
   12.08.13  RB              First review
 
 *******************************************************************************/
-//#include <QElapsedTimer>
-// QElapsedTimer timer2;
-
 int Response::getResponse(Device *device) {
   int res;
 
@@ -412,27 +409,23 @@ int Response::getResponse(Device *device) {
   }
 
   res = hid_get_feature_report(device->dev_hid_handle, reportBuffer, sizeof(reportBuffer));
-  if (res != -1) {
-    deviceStatus = reportBuffer[1];
-    lastCommandType = reportBuffer[2];
-    lastCommandCRC = ((uint32_t *)(reportBuffer + 3))[0];
-    lastCommandStatus = reportBuffer[7];
-    responseCRC = ((uint32_t *)(reportBuffer + 61))[0];
-
-    size_t len = std::min(sizeof(data), (size_t)PAYLOAD_SIZE);
-    memcpy(data, reportBuffer + 8, len);
-
-    // Copy Stick 2.0 status vom HID response data
-    memcpy((void *)&HID_Stick20Status_st, reportBuffer + 1 + OUTPUT_CMD_RESULT_STICK20_STATUS_START,
-           sizeof(HID_Stick20Status_st));
-
-//    qDebug() << "getResponse 1  took" << timer2.elapsed() << "milliseconds";
-    DebugResponse();
-
-//    qDebug() << "getResponse took" << timer2.elapsed() << "milliseconds";
-    return 0;
-  } else {
-    //      qDebug() << "getResponse took" << timer2.elapsed() << "milliseconds";
+  if (res == -1) {
     return -1;
   }
+  deviceStatus = reportBuffer[1];
+  lastCommandType = reportBuffer[2];
+  lastCommandCRC = ((uint32_t *)(reportBuffer + 3))[0];
+  lastCommandStatus = reportBuffer[7];
+  responseCRC = ((uint32_t *)(reportBuffer + 61))[0];
+
+  size_t len = std::min(sizeof(data), sizeof(reportBuffer) - 8);
+  memcpy(data, reportBuffer + 8, len);
+
+  // Copy Stick 2.0 status vom HID response data
+  memcpy((void *)&HID_Stick20Status_st, reportBuffer + 1 + OUTPUT_CMD_RESULT_STICK20_STATUS_START,
+         sizeof(HID_Stick20Status_st));
+
+  DebugResponse();
+
+  return 0;
 }
