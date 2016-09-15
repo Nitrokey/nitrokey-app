@@ -6,21 +6,35 @@
 
 #include "nitrokey-applet.h"
 
-CryptostickApplet::CryptostickApplet() {}
+
+QMutex CryptostickApplet::mutex;
+
+CryptostickApplet *csApplet(){
+    return CryptostickApplet::instance();
+}
 
 void CryptostickApplet::warningBox(const QString msg, QWidget *parent) {
+    waitForThread();
+    if (msg == QString::null){
+        qDebug() << __FUNCTION__ << ": null string!";
+        return;
+    }
   QMessageBox::warning(parent != 0 ? parent : NULL, getBrand(), msg, QMessageBox::Ok);
 }
 
 void CryptostickApplet::messageBox(const QString msg, QWidget *parent) {
-  QMessageBox::information(parent != 0 ? parent : NULL, getBrand(), msg, QMessageBox::Ok);
+    waitForThread();
+    const QString brand = getBrand();
+  QMessageBox::information(parent != 0 ? parent : NULL,  brand, msg, QMessageBox::Ok);
 }
 
 bool CryptostickApplet::yesOrNoBox(const QString msg, QWidget *parent, bool default_val) {
   QMessageBox::StandardButton default_btn = default_val ? QMessageBox::Yes : QMessageBox::No;
 
-  return QMessageBox::question(parent != 0 ? parent : NULL, getBrand(), msg,
-                               QMessageBox::Yes | QMessageBox::No, default_btn) == QMessageBox::Yes;
+  bool b =
+      QMessageBox::question(parent != 0 ? parent : NULL, getBrand(), msg,
+                            QMessageBox::Yes | QMessageBox::No, default_btn) == QMessageBox::Yes;
+  return b;
 }
 
 bool CryptostickApplet::detailedYesOrNoBox(const QString msg, const QString detailed_text,
@@ -38,9 +52,12 @@ bool CryptostickApplet::detailedYesOrNoBox(const QString msg, const QString deta
 
   layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
   msgBox->setDefaultButton(default_val ? QMessageBox::Yes : QMessageBox::No);
-  return msgBox->exec() == QMessageBox::Yes;
+  bool b = msgBox->exec() == QMessageBox::Yes;
+  return b;
 }
 
-QString getBrand() { return QString::fromUtf8(CRYPTOSTICK_APP_BRAND); }
+QString getBrand() {
+  const QString string = QString::fromUtf8(CRYPTOSTICK_APP_BRAND);
+  return string;
+}
 
-CryptostickApplet *csApplet;

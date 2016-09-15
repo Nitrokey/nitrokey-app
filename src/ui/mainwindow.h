@@ -222,7 +222,7 @@ private slots:
   void resizeMin();
   void checkConnection();
 
-    void on_writeButton_clicked();
+  void on_writeButton_clicked();
   void displayCurrentTotpSlotConfig(uint8_t slotNo);
   void displayCurrentHotpSlotConfig(uint8_t slotNo);
   void displayCurrentSlotConfig();

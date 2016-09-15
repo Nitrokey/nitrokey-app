@@ -96,7 +96,7 @@ void PasswordSafeDialog::on_ButtonSendpassword_clicked() {
 
     ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_PASSWORD);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't send password chars via HID"));
+      csApplet()->warningBox(tr("Can't send password chars via HID"));
       return;
     }
   }
@@ -104,7 +104,7 @@ void PasswordSafeDialog::on_ButtonSendpassword_clicked() {
   if (true == ui->radioCutUPaste->isChecked()) {
     ret_s32 = cryptostick->getPasswordSafeSlotPassword(UsedSlot);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't get password"));
+      csApplet()->warningBox(tr("Can't get password"));
       return;
     }
 
@@ -135,19 +135,19 @@ void PasswordSafeDialog::on_ButtonSendPW_LN_clicked() {
 
     ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_LOGINNAME);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't send loginname via keyboard"));
+      csApplet()->warningBox(tr("Can't send loginname via keyboard"));
       return;
     }
 
     ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_TAB);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't send CR via keyboard"));
+      csApplet()->warningBox(tr("Can't send CR via keyboard"));
       return;
     }
 
     ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_PASSWORD);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't send password via keyboard"));
+      csApplet()->warningBox(tr("Can't send password via keyboard"));
       return;
     }
   }
@@ -155,7 +155,7 @@ void PasswordSafeDialog::on_ButtonSendPW_LN_clicked() {
   if (true == ui->radioCutUPaste->isChecked()) {
     ret_s32 = cryptostick->getPasswordSafeSlotLoginName(UsedSlot);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't get password"));
+      csApplet()->warningBox(tr("Can't get password"));
       return;
     }
 
@@ -164,7 +164,7 @@ void PasswordSafeDialog::on_ButtonSendPW_LN_clicked() {
 
     ret_s32 = cryptostick->getPasswordSafeSlotPassword(UsedSlot);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't get password"));
+      csApplet()->warningBox(tr("Can't get password"));
       return;
     }
     MsgText.append((char *)cryptostick->passwordSafePassword);
@@ -196,7 +196,7 @@ void PasswordSafeDialog::on_ButtonSendLoginname_clicked() {
 
     ret_s32 = cryptostick->passwordSafeSendSlotDataViaHID(UsedSlot, PWS_SEND_LOGINNAME);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't send loginname chars via HID"));
+      csApplet()->warningBox(tr("Can't send loginname chars via HID"));
       return;
     }
   }
@@ -204,7 +204,7 @@ void PasswordSafeDialog::on_ButtonSendLoginname_clicked() {
   if (true == ui->radioCutUPaste->isChecked()) {
     ret_s32 = cryptostick->getPasswordSafeSlotLoginName(UsedSlot);
     if (ERR_NO_ERROR != ret_s32) {
-      csApplet->warningBox(tr("Can't get password"));
+      csApplet()->warningBox(tr("Can't get password"));
       return;
     }
 

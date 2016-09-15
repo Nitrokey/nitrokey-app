@@ -113,19 +113,19 @@ void PinDialog::onOkButtonClicked() {
     n = passwordString.size();
     if (30 <= n) // FIXME use constants/defines!
     {
-      csApplet->warningBox(tr("Your PIN is too long! Use not more than 30 characters."));
+      csApplet()->warningBox(tr("Your PIN is too long! Use not more than 30 characters."));
       ui->lineEdit->clear();
       return;
     }
     if (6 > n) {
-      csApplet->warningBox(tr("Your PIN is too short. Use at least 6 characters."));
+      csApplet()->warningBox(tr("Your PIN is too short. Use at least 6 characters."));
       ui->lineEdit->clear();
       return;
     }
 
     // Check for default pin
     if ((0 == strcmp(passwordString, "123456")) || (0 == strcmp(passwordString, "12345678"))) {
-      csApplet->warningBox(tr("Warning: Default PIN is used.\nPlease change the PIN."));
+      csApplet()->warningBox(tr("Warning: Default PIN is used.\nPlease change the PIN."));
     }
 
     if (PREFIXED == _usage) {

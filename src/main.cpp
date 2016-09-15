@@ -47,8 +47,6 @@ int main(int argc, char *argv[]) {
   }
 #endif
 
-  csApplet = new CryptostickApplet();
-
   int i;
 
   char *p;

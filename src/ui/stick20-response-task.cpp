@@ -82,7 +82,7 @@ void Stick20ResponseTask::ShowIconMessage(const QString msg) {
     if (TRUE == trayIcon->supportsMessages()) {
       trayIcon->showMessage(title, msg, QSystemTrayIcon::Information, timeout);
     } else
-      csApplet->messageBox(msg);
+      csApplet()->messageBox(msg);
   }
 }
 
@@ -116,7 +116,7 @@ void Stick20ResponseTask::checkStick20Status() {
     case OUTPUT_CMD_STICK20_STATUS_BUSY:
       break;
     case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD:
-      switch (ActiveCommand) { csApplet->warningBox(tr("Wrong password")); }
+      switch (ActiveCommand) { csApplet()->warningBox(tr("Wrong password")); }
       EndFlag = TRUE;
       break;
     case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR:
@@ -234,7 +234,7 @@ void Stick20ResponseTask::checkStick20Status() {
         break;
       case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
         HID_Stick20Configuration_st.AdminPwRetryCount = 3;
-        { csApplet->messageBox(tr("Storage successfully initialized with random data")); }
+        { csApplet()->messageBox(tr("Storage successfully initialized with random data")); }
         done(TRUE);
         break;
       default:
@@ -246,7 +246,7 @@ void Stick20ResponseTask::checkStick20Status() {
         stick20Response->HID_Stick20Status_st.Status_u8) {
       switch (ActiveCommand) {
       case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI: {
-        csApplet->warningBox(tr("Can't enable hidden volume"));
+        csApplet()->warningBox(tr("Can't enable hidden volume"));
       } break;
       default:
         break;
@@ -260,10 +260,10 @@ void Stick20ResponseTask::checkStick20Status() {
         // msgBox.setText("To setup the hidden volume, please
         // enable the encrypted volume to enable smartcard
         // access");
-        csApplet->warningBox(tr("Please enable the encrypted volume first."));
+        csApplet()->warningBox(tr("Please enable the encrypted volume first."));
       } break;
       case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI: {
-        csApplet->messageBox(tr("Encrypted volume was not enabled, please "
+        csApplet()->messageBox(tr("Encrypted volume was not enabled, please "
                                 "enable the encrypted volume"));
       } break;
       default:
@@ -275,7 +275,7 @@ void Stick20ResponseTask::checkStick20Status() {
         stick20Response->HID_Stick20Status_st.Status_u8) {
       switch (ActiveCommand) {
       case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI: {
-        csApplet->warningBox(tr("Smartcard error, please retry the command"));
+        csApplet()->warningBox(tr("Smartcard error, please retry the command"));
       } break;
       default:
         break;
@@ -286,7 +286,7 @@ void Stick20ResponseTask::checkStick20Status() {
         stick20Response->HID_Stick20Status_st.Status_u8) {
       switch (ActiveCommand) {
       case STICK20_CMD_ENABLE_FIRMWARE_UPDATE: {
-        csApplet->messageBox(tr("Security bit of the device is activated.\nFirmware update is "
+        csApplet()->messageBox(tr("Security bit of the device is activated.\nFirmware update is "
                                 "not possible."));
       } break;
       default:
