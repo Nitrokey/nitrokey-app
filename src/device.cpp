@@ -733,13 +733,13 @@ int Device::readSlot(uint8_t slotNo) {
         if (resp.lastCommandStatus == CMD_STATUS_OK) {
           if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount)) {
             memcpy(HOTPSlots[slotNo & 0x0F]->slotName, resp.data, 15);
-            HOTPSlots[slotNo & 0x0F]->config = (uint8_t) resp.data[15];
+            HOTPSlots[slotNo & 0x0F]->config = (uint8_t)resp.data[15];
             memcpy(HOTPSlots[slotNo & 0x0F]->tokenID, resp.data + 16, 13);
             memcpy(HOTPSlots[slotNo & 0x0F]->counter, resp.data + 29, 8);
             HOTPSlots[slotNo & 0x0F]->isProgrammed = true;
           } else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount)) {
             memcpy(TOTPSlots[slotNo & 0x0F]->slotName, resp.data, 15);
-            TOTPSlots[slotNo & 0x0F]->config = (uint8_t) resp.data[15];
+            TOTPSlots[slotNo & 0x0F]->config = (uint8_t)resp.data[15];
             memcpy(TOTPSlots[slotNo & 0x0F]->tokenID, resp.data + 16, 13);
             memcpy(&(TOTPSlots[slotNo & 0x0F]->interval), resp.data + 29, 2);
             TOTPSlots[slotNo & 0x0F]->isProgrammed = true;
@@ -825,7 +825,7 @@ int Device::getStatus() {
   uint8_t data[1];
 
   if (isConnected) {
-    Command cmd (CMD_GET_STATUS, data, 0);
+    Command cmd(CMD_GET_STATUS, data, 0);
 
     res = sendCommand(&cmd);
 
@@ -1630,12 +1630,12 @@ int Device::writeGeneralConfig(uint8_t data[]) {
 int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[]) {
   int res;
 
-  uint8_t data[50];
+  uint8_t data[50] = {0};
 
   uint32_t crc;
 
-  memcpy(data, cardPassword, 25);      // FIXME!!!
-  memcpy(data + 25, tempPasswrod, 25); // FIXME!!!
+  strncpy((char *) data, (const char *) cardPassword, 25);
+  memcpy(data + 25, tempPasswrod, 25);
 
   if (isConnected) {
     Command *cmd = new Command(CMD_FIRST_AUTHENTICATE, data, 50);
@@ -1686,45 +1686,41 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[]) {
 
 int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[]) {
   int res;
-
-  uint8_t data[50];
-
+  uint8_t data[50] = {0};
   uint32_t crc;
 
-  memcpy(data, cardPassword, 25);
+  strncpy((char *) data, (const char *) cardPassword, 25);
   memcpy(data + 25, tempPassword, 25);
 
   if (isConnected) {
-    Command *cmd = new Command(CMD_USER_AUTHENTICATE, data, 50);
+    Command cmd(CMD_USER_AUTHENTICATE, data, sizeof(data));
 
-    res = sendCommand(cmd);
-    crc = cmd->crc;
+    res = sendCommand(&cmd);
+    crc = cmd.crc;
 
     // remove the card password from memory
-    delete cmd;
-
     memset(data, 0, sizeof(data));
 
     if (res == -1) {
-      return -1;
+      return -1; //communication error
     } else { // sending the command was successful
       Sleep::msleep(1000);
-      Response *resp = new Response();
 
-      resp->getResponse(this);
+      Response resp;
+      resp.getResponse(this);
 
-      if (crc == resp->lastCommandCRC) { // the response was for the last command
-        if (resp->lastCommandStatus == CMD_STATUS_OK) {
+      if (crc == resp.lastCommandCRC) { // the response was for the last command
+        if (resp.lastCommandStatus == CMD_STATUS_OK) {
           memcpy(userTemporaryPassword, tempPassword, 25);
           validUserPassword = true;
-          return 0;
-        } else if (resp->lastCommandStatus == CMD_STATUS_WRONG_PASSWORD) {
-          return -3;
+          return 0; //OK
+        } else if (resp.lastCommandStatus == CMD_STATUS_WRONG_PASSWORD) {
+          return -3; // WRONG_PASSWORD
         }
       }
     }
   }
-  return -2;
+  return -2; // NOT CONNECTED
 }
 
 /*******************************************************************************

@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
   }
 #endif
 
-  csApplet = new CryptostickApplet;
+  csApplet = new CryptostickApplet();
 
   int i;
 

@@ -469,6 +469,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   bindtextdomain("nitrokey-app", "/usr/share/locale");
   textdomain("nitrokey-app");
 #endif
+  lastUserAuthenticateTime = lastClipboardTime = QDateTime::currentDateTime().toTime_t();
   int ret;
 
   QMetaObject::Connection ret_connection;
