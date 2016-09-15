@@ -1954,11 +1954,9 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot) {
 
     QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
 
-    uint8_t encoded[128];
-
-    uint8_t decoded[20];
-
-    uint8_t data[128];
+    uint8_t encoded[128] = {'A'};
+    uint8_t decoded[20] = {'0'};
+    uint8_t data[128] = {'A'};
 
     memset(encoded, 'A', 32);
     memset(data, 'A', 32);

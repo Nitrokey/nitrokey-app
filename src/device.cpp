@@ -251,16 +251,15 @@ void Device::connect() {
 *******************************************************************************/
 
 int Device::sendCommand(Command *cmd) {
-  uint8_t report[REPORT_SIZE + 1];
-
+  uint8_t report[REPORT_SIZE + 1] = {0};
   int i;
-
   int err;
 
   memset(report, 0, sizeof(report));
   report[1] = cmd->commandType;
 
-  memcpy(report + 2, cmd->data, COMMAND_SIZE);
+    size_t len = std::min( sizeof(report) -2 , (size_t)COMMAND_SIZE);
+  memcpy(report + 2, cmd->data, len);
 
   uint32_t crc = 0xffffffff;
 
@@ -1603,36 +1602,30 @@ int Device::writeGeneralConfig(uint8_t data[]) {
   int res;
 
   if (isConnected) {
-    Command *cmd = new Command(CMD_WRITE_CONFIG, data, 5);
-
-    authorize(cmd);
-    res = sendCommand(cmd);
+    Command cmd (CMD_WRITE_CONFIG, data, 5);
+    authorize(&cmd);
+    res = sendCommand(&cmd);
 
     if (res == -1) {
-      delete cmd;
-
       return ERR_SENDING;
     } else { // sending the command was successful
       Sleep::msleep(100);
-      Response *resp = new Response();
+      Response resp;
 
-      resp->getResponse(this);
+      resp.getResponse(this);
 
-      if (cmd->crc == resp->lastCommandCRC) {
-        delete cmd;
-
-        switch (resp->lastCommandStatus) {
+      if (cmd.crc == resp.lastCommandCRC) {
+        switch (resp.lastCommandStatus) {
         case CMD_STATUS_OK:
           return CMD_STATUS_OK;
         case CMD_STATUS_NOT_AUTHORIZED:
           return CMD_STATUS_NOT_AUTHORIZED;
+            default:break;
         }
-        if (resp->lastCommandStatus == CMD_STATUS_OK) {
+        if (resp.lastCommandStatus == CMD_STATUS_OK) {
           return 0;
         }
       } else {
-        delete cmd;
-
         return ERR_WRONG_RESPONSE_CRC;
       }
     }
@@ -1657,8 +1650,8 @@ int Device::firstAuthenticate(uint8_t cardPassword[], uint8_t tempPasswrod[]) {
 
   uint32_t crc;
 
-  memcpy(data, cardPassword, 25);
-  memcpy(data + 25, tempPasswrod, 25);
+  memcpy(data, cardPassword, 25); //FIXME!!!
+  memcpy(data + 25, tempPasswrod, 25); //FIXME!!!
 
   if (isConnected) {
     Command *cmd = new Command(CMD_FIRST_AUTHENTICATE, data, 50);
@@ -1775,28 +1768,24 @@ int Device::authorize(Command *authorizedCmd) {
   memcpy(data + 4, adminTemporaryPassword, 25);
 
   if (isConnected) {
-    Command *cmd = new Command(CMD_AUTHORIZE, data, 29);
+    Command cmd (CMD_AUTHORIZE, data, 29);
 
-    res = sendCommand(cmd);
+    res = sendCommand(&cmd);
 
     if (res == -1) {
-      delete cmd;
 
       return -1;
     } else {
       Sleep::msleep(200);
-      Response *resp = new Response();
+      Response resp;
+      resp.getResponse(this);
 
-      resp->getResponse(this);
-
-      if (cmd->crc == resp->lastCommandCRC) { // the response was for the last command
-        if (resp->lastCommandStatus == CMD_STATUS_OK) {
-          delete cmd;
+      if (cmd.crc == resp.lastCommandCRC) { // the response was for the last command
+        if (resp.lastCommandStatus == CMD_STATUS_OK) {
 
           return 0;
         }
       }
-      delete cmd;
 
       return -2;
     }

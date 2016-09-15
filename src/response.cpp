@@ -411,11 +411,7 @@ int Response::getResponse(Device *device) {
     return -1;
   }
 
-  //  timer2.start ();
-
   res = hid_get_feature_report(device->dev_hid_handle, reportBuffer, sizeof(reportBuffer));
-  /*
-     static int nr = 0; qDebug() << "get report size:" << res << "- " << nr++; */
   if (res != -1) {
     deviceStatus = reportBuffer[1];
     lastCommandType = reportBuffer[2];
@@ -423,7 +419,8 @@ int Response::getResponse(Device *device) {
     lastCommandStatus = reportBuffer[7];
     responseCRC = ((uint32_t *)(reportBuffer + 61))[0];
 
-    memcpy(data, reportBuffer + 8, PAYLOAD_SIZE);
+    size_t len = std::min(sizeof(data), (size_t) PAYLOAD_SIZE);
+    memcpy(data, reportBuffer + 8, len);
 
     // Copy Stick 2.0 status vom HID response data
     memcpy((void *)&HID_Stick20Status_st, reportBuffer + 1 + OUTPUT_CMD_RESULT_STICK20_STATUS_START,
