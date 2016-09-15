@@ -85,7 +85,6 @@ extern "C" void DebugInitDebugging(void);
  Local defines
 *******************************************************************************/
 
-
 #include <algorithm>
 
 class OwnSleep : public QThread {
@@ -374,7 +373,6 @@ bool isUnity() {
   return (desktop.toLower() == "unity" || desktop.toLower() == "kde" ||
           desktop.toLower() == "lxde" || desktop.toLower() == "xfce");
 }
-
 
 #endif // HAVE_LIBAPPINDICATOR
 
@@ -3482,7 +3480,7 @@ void MainWindow::checkPasswordTime_Valid() {
       is_forget_PIN_after_10_minutes_enabled) {
     cryptostick->validUserPassword = false;
     memset(cryptostick->userTemporaryPassword, 0, 25);
-      overwrite_string(nkpro_user_PIN); // for NK Pro 0.7 only
+    overwrite_string(nkpro_user_PIN); // for NK Pro 0.7 only
   }
 }
 
@@ -4152,18 +4150,14 @@ void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
   setCounter(PWS_PASSWORD_LENGTH, arg1, ui->l_c_password);
 }
 
-
-void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked)
-{
-    if (checked && cryptostick->is_nkpro_rtm1()){
-        bool answer = csApplet->detailedYesOrNoBox(
-                tr("To handle this functionality "
-                           "application will keep your user PIN in memory. "
-                           "Do you want to continue?"),
-        tr("It will be cleared on exit or after 10 minutes "
-                           "(depending on your choice in the form)."
-        ),
-                0, false);
-        ui->enableUserPasswordCheckBox->setChecked(answer);
-    }
+void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
+  if (checked && cryptostick->is_nkpro_rtm1()) {
+    bool answer = csApplet->detailedYesOrNoBox(tr("To handle this functionality "
+                                                  "application will keep your user PIN in memory. "
+                                                  "Do you want to continue?"),
+                                               tr("It will be cleared on exit or after 10 minutes "
+                                                  "(depending on your choice in the form)."),
+                                               0, false);
+    ui->enableUserPasswordCheckBox->setChecked(answer);
+  }
 }

@@ -419,7 +419,7 @@ int Response::getResponse(Device *device) {
     lastCommandStatus = reportBuffer[7];
     responseCRC = ((uint32_t *)(reportBuffer + 61))[0];
 
-    size_t len = std::min(sizeof(data), (size_t) PAYLOAD_SIZE);
+    size_t len = std::min(sizeof(data), (size_t)PAYLOAD_SIZE);
     memcpy(data, reportBuffer + 8, len);
 
     // Copy Stick 2.0 status vom HID response data
