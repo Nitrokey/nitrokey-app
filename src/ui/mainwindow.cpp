@@ -3607,8 +3607,8 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   if (TRUE == cryptostick->passwordSafeStatus[index]) {
     ui->PWS_EditSlotName->setText((char *)cryptostick->passwordSafeSlotNames[index]);
 
-    ret = cryptostick->getPasswordSafeSlotPassword(index);
-    ret = cryptostick->getPasswordSafeSlotLoginName(index);
+    cryptostick->getPasswordSafeSlotPassword(index);
+    cryptostick->getPasswordSafeSlotLoginName(index);
 
     ui->PWS_EditPassword->setText((QString)(char *)cryptostick->passwordSafePassword);
     ui->PWS_EditLoginName->setText((QString)(char *)cryptostick->passwordSafeLoginName);
@@ -3780,7 +3780,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
               msgBox.exec();
             } else {
               Sleep::msleep(3000);
-              ret_s32 = cryptostick->passwordSafeEnable((char *)&password[1]);
+              cryptostick->passwordSafeEnable((char *)&password[1]);
             }
           }
 

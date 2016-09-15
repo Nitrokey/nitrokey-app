@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   if (!success) {
-    success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg("en"));
+    myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg("en"));
   }
   a.installTranslator(&myappTranslator);
 

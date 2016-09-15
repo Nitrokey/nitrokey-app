@@ -1932,7 +1932,6 @@ int Device::changeUserPin(uint8_t *old_pin, uint8_t *new_pin) {
     Command *cmd = new Command(CMD_CHANGE_USER_PIN, data, 50);
 
     res = sendCommand(cmd);
-    crc = cmd->crc;
 
     // remove the user password from memory
     delete cmd;
@@ -2036,7 +2035,6 @@ int Device::changeAdminPin(uint8_t *old_pin, uint8_t *new_pin) {
     Command *cmd = new Command(CMD_CHANGE_ADMIN_PIN, data, 50);
 
     res = sendCommand(cmd);
-    crc = cmd->crc;
 
     // remove the user password from memory
     delete cmd;
