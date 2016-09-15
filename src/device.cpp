@@ -452,7 +452,7 @@ int Device::eraseSlot(uint8_t slotNo) {
   if (res == -1) {
     return -1; // communication error
   }
-  Sleep::msleep(100);
+  Sleep::msleep(200);
 
   Response resp;
   resp.getResponse(this);

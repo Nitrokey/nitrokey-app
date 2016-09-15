@@ -3378,13 +3378,39 @@ void MainWindow::on_eraseButton_clicked() {
   }
 
   if (answer) {
-    cryptostick->eraseSlot(slotNo);
+    int res = cryptostick->eraseSlot(slotNo);
+    if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
+      PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                       PinDialog::ADMIN_PIN);
+      uint8_t tempPassword[25] = {0};
+      QString password;
+
+      do {
+        int ok = dialog.exec();
+        if (ok != QDialog::Accepted) {
+          return;
+        }
+        dialog.getPassword(password);
+
+        generateTemporaryPassword(tempPassword);
+        cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
+        if (cryptostick->validPassword) {
+          lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+        } else {
+          csApplet->warningBox(tr("Wrong PIN. Please try again."));
+        }
+        res = cryptostick->eraseSlot(slotNo);
+      } while (res != CMD_STATUS_OK);
+    }
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Sleep::msleep(1000);
     QApplication::restoreOverrideCursor();
     generateAllConfigs();
 
-    csApplet->messageBox(tr("Slot has been erased successfully."));
+    if (res == CMD_STATUS_OK)
+      csApplet->messageBox(tr("Slot has been erased successfully."));
+  } else {
+      csApplet->messageBox(tr("Command execution failed. Please try again."));
   }
 
   displayCurrentSlotConfig();
