@@ -319,7 +319,7 @@ private slots:
 
   void generateTemporaryPassword(uint8_t *tempPassword) const;
 
-  void userAuthenticate(const QString &password);
+  int userAuthenticate(const QString &password);
 
   void on_enableUserPasswordCheckBox_clicked(bool checked);
 };

@@ -3920,7 +3920,6 @@ void MainWindow::resetTime() {
 
 int MainWindow::getNextCode(uint8_t slotNumber) {
   uint8_t result[18] = {0};
-  //  memset(result, 0, 18);
   uint32_t code;
   uint8_t config;
   int ret;
@@ -3950,16 +3949,18 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       if (QDialog::Accepted != ok) {
         return 1; // user does not click OK button
       }
-    } else {
+    } else { //valid user password
       if (cryptostick->is_nkpro_rtm1()) {
         userAuthenticate(nkpro_user_PIN);
       }
     }
   }
+    if (ok == QDialog::Accepted && !cryptostick->validUserPassword) {
+        csApplet->warningBox(tr("Invalid password!"));
+        return 1;
+    }
 
   // Start the config dialog
-  if ((TRUE == cryptostick->validUserPassword) || (!is_OTP_PIN_protected)) {
-
     // is it TOTP?
     if (slotNumber >= 0x20)
       cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
@@ -4010,20 +4011,17 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     copyToClipboard(otpInClipboard);
     if (DebugingActive)
       qDebug() << otpInClipboard;
-  } else if (ok) {
-    csApplet->warningBox(tr("Invalid password!"));
-    return 1;
-  }
 
   return 0;
 }
 
-void MainWindow::userAuthenticate(const QString &password) {
+int MainWindow::userAuthenticate(const QString &password) {
   uint8_t tempPassword[25];
   generateTemporaryPassword(tempPassword);
-  cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
+    int result = cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
   if (cryptostick->validUserPassword)
     lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+    return result;
 }
 
 void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {

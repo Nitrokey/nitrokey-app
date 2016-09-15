@@ -1693,8 +1693,8 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[]) {
   memcpy(data + 25, tempPassword, 25);
 
   if (isConnected) {
-    Command cmd(CMD_USER_AUTHENTICATE, data, sizeof(data));
 
+    Command cmd(CMD_USER_AUTHENTICATE, data, sizeof(data));
     res = sendCommand(&cmd);
     crc = cmd.crc;
 
