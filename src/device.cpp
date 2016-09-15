@@ -1715,6 +1715,7 @@ int Device::userAuthenticate(uint8_t cardPassword[], uint8_t tempPassword[]) {
           validUserPassword = true;
           return 0; //OK
         } else if (resp.lastCommandStatus == CMD_STATUS_WRONG_PASSWORD) {
+          validUserPassword = false;
           return -3; // WRONG_PASSWORD
         }
       }
