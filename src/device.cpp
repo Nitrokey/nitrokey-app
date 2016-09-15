@@ -439,33 +439,27 @@ int Device::getSlotName(uint8_t slotNo) {
 
 int Device::eraseSlot(uint8_t slotNo) {
   int res;
-
   uint8_t data[1];
-
   data[0] = slotNo;
 
-  if (isConnected) {
-    Command *cmd = new Command(CMD_ERASE_SLOT, data, 1);
-
-    authorize(cmd);
-    res = sendCommand(cmd);
-
-    if (res == -1) {
-      delete cmd;
-
-      return -1;
-    } else { // sending the command was successful
-      // return cmd->crc;
-      Sleep::msleep(100);
-      Response *resp = new Response();
-
-      resp->getResponse(this);
-    }
-    delete cmd;
-
-    return 0;
+  if (!isConnected) {
+    return -1; // communication error
   }
-  return -1;
+  Command cmd(CMD_ERASE_SLOT, data, 1);
+  authorize(&cmd);
+  res = sendCommand(&cmd);
+
+  if (res == -1) {
+    return -1; // communication error
+  }
+  Sleep::msleep(100);
+
+  Response resp;
+  resp.getResponse(this);
+  if (cmd.crc == resp.lastCommandCRC) {
+    return resp.lastCommandStatus;
+  }
+  return -2; // wrong crc
 }
 
 /*******************************************************************************
