@@ -3360,9 +3360,7 @@ void MainWindow::getTOTP15() { getTOTPDialog(14); }
 
 void MainWindow::on_eraseButton_clicked() {
   bool answer = csApplet->yesOrNoBox(tr("WARNING: Are you sure you want to erase the slot?"));
-  char clean[8];
-
-  memset(clean, ' ', 8);
+  char clean[8] = {' '};
 
   uint8_t slotNo = ui->slotComboBox->currentIndex();
 
