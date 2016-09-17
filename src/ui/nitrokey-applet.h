@@ -10,8 +10,8 @@
 #define CRYPTOSTICK_APP_BRAND "Nitrokey App"
 QString getBrand();
 
-class CryptostickApplet : QObject {
-  Q_OBJECT public :
+class CryptostickApplet {
+  public :
     void messageBox(const QString msg, QWidget *parent = 0);
   void warningBox(const QString msg, QWidget *parent = 0);
   bool yesOrNoBox(const QString msg, QWidget *parent = 0, bool default_val = true);
