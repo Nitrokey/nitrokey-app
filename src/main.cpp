@@ -159,6 +159,7 @@ int main(int argc, char *argv[]) {
   }
 
   MainWindow w(&StartupInfo_st);
+//    csApplet()->setParent(&w);
 
   QDateTime local(QDateTime::currentDateTime());
 

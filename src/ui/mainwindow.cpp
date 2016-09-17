@@ -4174,11 +4174,11 @@ void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
 
 void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
   if (checked && cryptostick->is_nkpro_rtm1()) {
-    bool answer = csApplet()->detailedYesOrNoBox(tr("To handle this functionality "
+    bool answer = csApplet()->yesOrNoBox(tr("To handle this functionality "
                                                   "application will keep your user PIN in memory. "
                                                   "Do you want to continue?"),
-                                               tr("It will be cleared on exit or after 10 minutes "
-                                                  "(depending on your choice in the form)."),
+//                                               tr("It will be cleared on exit or after 10 minutes "
+//                                                  "(depending on your choice in the form)."),
                                                0, false);
     ui->enableUserPasswordCheckBox->setChecked(answer);
   }

@@ -23,8 +23,15 @@ class CryptostickApplet {
         return &applet;
     }
 private:
-    CryptostickApplet() {}
+    CryptostickApplet() :_parent(Q_NULLPTR) {}
     static QMutex mutex;
+public:
+    void setParent(QWidget *parent) {
+        CryptostickApplet::_parent = parent;
+    }
+
+private:
+    QWidget *_parent;
 };
 
 CryptostickApplet *csApplet();
