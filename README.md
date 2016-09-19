@@ -12,6 +12,10 @@ QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
 Note: In case `libusb-1.0.0-dev` is not available to install please check other name: `libusb-1.0-0-dev` (the difference is the `-` char between zeroes).
 
+Known issue: tray icon under Debian Jessy
+----------------
+Under Debian Jessy application's tray icon might be unavailable. There were reports it can be fixed with updating Qt libraries to 5.4.2 version and up. The packages are available in experimental branch. For more details please refer to: https://github.com/Nitrokey/nitrokey-app/issues/86
+
 Compiling on Ubuntu Linux
 -------------------------
 Prerequisites for building on Ubuntu:
