@@ -255,10 +255,9 @@ int Device::sendCommand(Command *cmd) {
   int i;
   int err;
 
-  memset(report, 0, sizeof(report));
   report[1] = cmd->commandType;
 
-  size_t len = std::min(sizeof(report) - 2, (size_t)COMMAND_SIZE);
+  size_t len = std::min(sizeof(report) - 2, sizeof(cmd->data));
   memcpy(report + 2, cmd->data, len);
 
   uint32_t crc = 0xffffffff;
