@@ -229,30 +229,18 @@ void Device::connect() {
 }
 
 /*******************************************************************************
-
   sendCommand
-
   Send a command to the stick via the send feature report HID message
-
   Report size is 64 byte
-
-  Command data size COMMAND_SIZE = 59 byte (should 58 ???)
 
   Byte  0       = 0
   Byte  1       = cmd type
-  Byte  2-59    = payload       (To do check length)
-  Byte 60-63    = CRC 32 from byte 0-59 = 15 long words
-
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
+  Byte  2-60    = payload
+  Byte 61-64    = CRC 32 from cmd type and payload = 15 long words - 60 bytes
 *******************************************************************************/
 
 int Device::sendCommand(Command *cmd) {
   uint8_t report[REPORT_SIZE + 1] = {0};
-  int i;
   int err;
 
   report[1] = cmd->commandType;
