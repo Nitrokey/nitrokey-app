@@ -566,8 +566,7 @@ int Device::writeToTOTPSlot(TOTPSlot *slot) {
   if ((slot->slotNumber >= 0x20) && (slot->slotNumber < 0x20 + TOTP_SlotCount)) {
     int res;
 
-    uint8_t data[COMMAND_SIZE];
-    memset(data, 0, COMMAND_SIZE);
+    uint8_t data[COMMAND_SIZE] = {0};
 
     data[0] = slot->slotNumber;
     memcpy(data + 1, slot->slotName, 15);
@@ -577,24 +576,21 @@ int Device::writeToTOTPSlot(TOTPSlot *slot) {
     memcpy(data + 50, &(slot->interval), 2);
 
     if (isConnected) {
-      Command *cmd = new Command(CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
-      authorize(cmd);
-      res = sendCommand(cmd);
+      Command cmd(CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
+      authorize(&cmd);
+      res = sendCommand(&cmd);
 
       if (res == -1) {
-        delete cmd;
         return -1;
       } else { // sending the command was successful
         Sleep::msleep(100);
-        Response *resp = new Response();
+        Response resp;
 
-        resp->getResponse(this);
+        resp.getResponse(this);
 
-        if (cmd->crc == resp->lastCommandCRC) {
-          delete cmd;
-          return resp->lastCommandStatus;
+        if (cmd.crc == resp.lastCommandCRC) {
+          return resp.lastCommandStatus;
         }
-        delete cmd;
         return -2;
       }
     }
@@ -880,33 +876,26 @@ int Device::getPasswordRetryCount() {
 int Device::getUserPasswordRetryCount() {
   int res;
 
-  uint8_t data[1];
-
   if (isConnected) {
-    Command *cmd = new Command(CMD_GET_USER_PASSWORD_RETRY_COUNT, data, 0);
+    Command cmd (CMD_GET_USER_PASSWORD_RETRY_COUNT, Q_NULLPTR, 0);
 
-    res = sendCommand(cmd);
+    res = sendCommand(&cmd);
 
     if (res == -1) {
-      delete cmd;
-
       return ERR_SENDING;
     } else { // sending the command was successful
       Sleep::msleep(1000);
-      Response *resp = new Response();
+      Response resp;
 
-      resp->getResponse(this);
+      resp.getResponse(this);
 
-      if (cmd->crc == resp->lastCommandCRC) {
-        userPasswordRetryCount = resp->data[0];
+      if (cmd.crc == resp.lastCommandCRC) {
+        userPasswordRetryCount = resp.data[0];
         HID_Stick20Configuration_st.UserPwRetryCount = userPasswordRetryCount;
       } else {
-        delete cmd;
-
         return ERR_WRONG_RESPONSE_CRC;
       }
     }
-    delete cmd;
   }
   return ERR_NOT_CONNECTED;
 }
