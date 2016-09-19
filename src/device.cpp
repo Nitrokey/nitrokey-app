@@ -260,14 +260,9 @@ int Device::sendCommand(Command *cmd) {
   size_t len = std::min(sizeof(report) - 2, sizeof(cmd->data));
   memcpy(report + 2, cmd->data, len);
 
-  uint32_t crc = 0xffffffff;
+    cmd->generateCRC();
+  ((uint32_t *)(report + 1))[15] = cmd->crc;
 
-  for (i = 0; i < 15; i++) {
-    crc = Crc32(crc, ((uint32_t *)(report + 1))[i]);
-  }
-  ((uint32_t *)(report + 1))[15] = crc;
-
-  cmd->crc = crc;
 
   if (0 == dev_hid_handle) {
     return (-1); // Return error
@@ -314,7 +309,8 @@ int Device::sendCommandGetResponse(Command *cmd, Response *resp) {
   memset(report, 0, sizeof(report));
   report[1] = cmd->commandType;
 
-  memcpy(report + 2, cmd->data, COMMAND_SIZE);
+  size_t len = std::min(sizeof(report) - 2, sizeof(cmd->data));
+  memcpy(report + 2, cmd->data, len);
 
   uint32_t crc = 0xffffffff;
 
@@ -568,6 +564,7 @@ int Device::writeToHOTPSlot(HOTPSlot *slot) {
       return -2; // wrong crc
     }
   }
+    return -3; // other issue
 }
 
 /*******************************************************************************
