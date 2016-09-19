@@ -247,15 +247,12 @@ int Device::sendCommand(Command *cmd) {
 
   size_t len = std::min(sizeof(report) - 2, sizeof(cmd->data));
   memcpy(report + 2, cmd->data, len);
-
     cmd->generateCRC();
   ((uint32_t *)(report + 1))[15] = cmd->crc;
-
 
   if (0 == dev_hid_handle) {
     return (-1); // Return error
   }
-
   err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
 
   {
