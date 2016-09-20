@@ -78,6 +78,7 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
+    QMutex check_connection_mutex;
   QString nkpro_user_PIN;
   void overwrite_string(QString &str);
 

@@ -816,6 +816,9 @@ int MainWindow::AnalyseProductionInfos() {
 }
 
 void MainWindow::checkConnection() {
+    if (!check_connection_mutex.tryLock(500))
+        return;
+
   static int DeviceOffline = TRUE;
 
   int ret = 0;
@@ -959,8 +962,7 @@ void MainWindow::checkConnection() {
           AnalyseProductionInfos ();
       }
   */
-  if (ret) {
-  } // Fix warnings
+    check_connection_mutex.unlock();
 }
 
 void MainWindow::startTimer() {}
