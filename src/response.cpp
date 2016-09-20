@@ -21,8 +21,8 @@
 
 #include "mcvs-wrapper.h"
 #include "response.h"
-#include "string.h"
 #include "sleep.h"
+#include "string.h"
 
 #include "stick20responsedialog.h"
 
@@ -400,7 +400,7 @@ void Response::DebugResponse() {
 
 *******************************************************************************/
 //#include <QElapsedTimer>
-//QElapsedTimer timer2;
+// QElapsedTimer timer2;
 
 int Response::getResponse(Device *device) {
   int res;
@@ -411,13 +411,12 @@ int Response::getResponse(Device *device) {
     return -1;
   }
 
-//  timer2.start ();
+  //  timer2.start ();
 
   res = hid_get_feature_report(device->dev_hid_handle, reportBuffer, sizeof(reportBuffer));
   /*
      static int nr = 0; qDebug() << "get report size:" << res << "- " << nr++; */
-  if (res != -1)
-  {
+  if (res != -1) {
     deviceStatus = reportBuffer[1];
     lastCommandType = reportBuffer[2];
     lastCommandCRC = ((uint32_t *)(reportBuffer + 3))[0];
@@ -436,7 +435,7 @@ int Response::getResponse(Device *device) {
 //    qDebug() << "getResponse took" << timer2.elapsed() << "milliseconds";
     return 0;
   } else {
-//      qDebug() << "getResponse took" << timer2.elapsed() << "milliseconds";
+    //      qDebug() << "getResponse took" << timer2.elapsed() << "milliseconds";
     return -1;
   }
 }

@@ -85,6 +85,9 @@ extern "C" void DebugInitDebugging(void);
  Local defines
 *******************************************************************************/
 
+
+#include <algorithm>
+
 class OwnSleep : public QThread {
 public:
   static void usleep(unsigned long usecs) { QThread::usleep(usecs); }
@@ -372,7 +375,10 @@ bool isUnity() {
           desktop.toLower() == "lxde" || desktop.toLower() == "xfce");
 }
 
+
 #endif // HAVE_LIBAPPINDICATOR
+
+void MainWindow::overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
 
 void MainWindow::showTrayMessage(const QString &title, const QString &msg,
                                  enum trayMessageType type, int timeout) {
@@ -2179,15 +2185,8 @@ void MainWindow::displayCurrentGeneralConfig() {
   if (cryptostick->generalConfig[2] == 0 || cryptostick->generalConfig[2] == 1)
     ui->scrollLockComboBox->setCurrentIndex(cryptostick->generalConfig[2] + 1);
 
-  if (cryptostick->otpPasswordConfig[0] == 1)
-    ui->enableUserPasswordCheckBox->setChecked(true);
-  else
-    ui->enableUserPasswordCheckBox->setChecked(false);
-
-  if (cryptostick->otpPasswordConfig[1] == 1)
-    ui->deleteUserPasswordCheckBox->setChecked(true);
-  else
-    ui->deleteUserPasswordCheckBox->setChecked(false);
+  ui->enableUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[0] == 1);
+  ui->deleteUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[1] == 1);
 
   lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 }
@@ -3222,17 +3221,9 @@ void MainWindow::on_tokenIDCheckBox_toggled(bool checked) {
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
-  if (checked) {
-    ui->deleteUserPasswordCheckBox->setEnabled(true);
-    ui->deleteUserPasswordCheckBox->setChecked(false);
-    cryptostick->otpPasswordConfig[0] = 1;
-    cryptostick->otpPasswordConfig[1] = 0;
-  } else {
-    ui->deleteUserPasswordCheckBox->setEnabled(false);
-    ui->deleteUserPasswordCheckBox->setChecked(false);
-    cryptostick->otpPasswordConfig[0] = 0;
-    cryptostick->otpPasswordConfig[1] = 0;
-  }
+  ui->deleteUserPasswordCheckBox->setEnabled(checked);
+  cryptostick->otpPasswordConfig[0] = (uint8_t)checked;
+  ui->deleteUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[1]);
 }
 
 void MainWindow::on_writeGeneralConfigButton_clicked() {
@@ -3250,16 +3241,11 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
     data[1] = ui->capsLockComboBox->currentIndex() - 1;
     data[2] = ui->scrollLockComboBox->currentIndex() - 1;
 
-    if (ui->enableUserPasswordCheckBox->isChecked()) {
-      data[3] = 1;
-      if (ui->deleteUserPasswordCheckBox->isChecked())
-        data[4] = 1;
-      else
-        data[4] = 0;
-    } else {
-      data[3] = 0;
-      data[4] = 0;
-    }
+    data[3] = (uint8_t)(ui->enableUserPasswordCheckBox->isChecked() ? 1 : 0);
+    data[4] = (uint8_t)(ui->deleteUserPasswordCheckBox->isChecked() &&
+                                ui->enableUserPasswordCheckBox->isChecked()
+                            ? 1
+                            : 0);
 
     do {
       res = cryptostick->writeGeneralConfig(data);
@@ -3470,9 +3456,6 @@ void MainWindow::copyToClipboard(QString text) {
   }
 }
 
-#include <algorithm>
-void overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
-
 void MainWindow::checkClipboard_Valid(bool ignore_time) {
   uint64_t currentTime, far_future_delta = 60000;
 
@@ -3505,16 +3488,24 @@ void MainWindow::checkClipboard_Valid(bool ignore_time) {
 
 void MainWindow::checkPasswordTime_Valid() {
   uint64_t currentTime;
-
   currentTime = QDateTime::currentDateTime().toTime_t();
+
+  bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
+  bool is_forget_PIN_after_10_minutes_enabled = cryptostick->otpPasswordConfig[1] == 1;
+
+  // invalidate admin authentication after 10 minutes
   if (currentTime >= lastAuthenticateTime + (uint64_t)600) {
     cryptostick->validPassword = false;
-    memset(cryptostick->password, 0, 25);
+    memset(cryptostick->adminTemporaryPassword, 0, 25);
   }
-  if (currentTime >= lastUserAuthenticateTime + (uint64_t)600 &&
-      cryptostick->otpPasswordConfig[0] == 1 && cryptostick->otpPasswordConfig[1] == 1) {
+
+  // invalidate user authentication after 10 minutes
+  //(only when OTP is PIN protected and forget PIN is enabled)
+  if (currentTime >= lastUserAuthenticateTime + (uint64_t)600 && is_OTP_PIN_protected &&
+      is_forget_PIN_after_10_minutes_enabled) {
     cryptostick->validUserPassword = false;
-    memset(cryptostick->userPassword, 0, 25);
+    memset(cryptostick->userTemporaryPassword, 0, 25);
+      overwrite_string(nkpro_user_PIN); // for NK Pro 0.7 only
   }
 }
 
@@ -3952,20 +3943,17 @@ void MainWindow::resetTime() {
 }
 
 int MainWindow::getNextCode(uint8_t slotNumber) {
-  uint8_t result[18];
-
-  memset(result, 0, 18);
+  uint8_t result[18] = {0};
+  //  memset(result, 0, 18);
   uint32_t code;
-
   uint8_t config;
-
   int ret;
-
-  bool ok;
-
+  int ok;
   uint16_t lastInterval = 30;
 
-  if (cryptostick->otpPasswordConfig[0] == 1) {
+  cryptostick->getStatus();
+  bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
+  if (is_OTP_PIN_protected) {
     if (!cryptostick->validUserPassword) {
       cryptostick->getUserPasswordRetryCount();
 
@@ -3973,38 +3961,39 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
                        PinDialog::USER_PIN);
       ok = dialog.exec();
       QString password;
-
       dialog.getPassword(password);
 
+      if (cryptostick->is_nkpro_rtm1()) {
+        nkpro_user_PIN = password;
+      }
+
       if (QDialog::Accepted == ok) {
-        uint8_t tempPassword[25];
-
-        for (int i = 0; i < 25; i++)
-          tempPassword[i] = qrand() & 0xFF;
-
-        cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
-
-        if (cryptostick->validUserPassword)
-          lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-        password.clear();
-      } else
-        return 1;
+        userAuthenticate(password);
+      }
+      overwrite_string(password);
+      if (QDialog::Accepted != ok) {
+        return 1; // user does not click OK button
+      }
+    } else {
+      if (cryptostick->is_nkpro_rtm1()) {
+        userAuthenticate(nkpro_user_PIN);
+      }
     }
   }
-  // Start the config dialog
-  if ((TRUE == cryptostick->validUserPassword) || (cryptostick->otpPasswordConfig[0] != 1)) {
 
+  // Start the config dialog
+  if ((TRUE == cryptostick->validUserPassword) || (!is_OTP_PIN_protected)) {
+
+    // is it TOTP?
     if (slotNumber >= 0x20)
       cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
-
-    QString output;
 
     lastTOTPTime = QDateTime::currentDateTime().toTime_t();
     ret = cryptostick->setTime(TOTP_CHECK_TIME);
 
-    bool answer;
-
+    // if time is out of sync on the device
     if (ret == -2) {
+      bool answer;
       answer = csApplet->detailedYesOrNoBox(
           tr("Time is out-of-sync"),
           tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
@@ -4032,6 +4021,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
     config = result[4];
 
+    QString output;
     if (config & (1 << 0)) {
       code = code % 100000000;
       output.append(QString("%1").arg(QString::number(code), 8, '0'));
@@ -4050,6 +4040,19 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   }
 
   return 0;
+}
+
+void MainWindow::userAuthenticate(const QString &password) {
+  uint8_t tempPassword[25];
+  generateTemporaryPassword(tempPassword);
+  cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
+  if (cryptostick->validUserPassword)
+    lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+}
+
+void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {
+  for (int i = 0; i < 25; i++)
+    tempPassword[i] = qrand() & 0xFF;
 }
 
 #define PWS_RANDOM_PASSWORD_CHAR_SPACE                                                             \
@@ -4170,4 +4173,20 @@ void MainWindow::on_PWS_EditLoginName_textChanged(const QString &arg1) {
 
 void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
   setCounter(PWS_PASSWORD_LENGTH, arg1, ui->l_c_password);
+}
+
+
+void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked)
+{
+    if (checked && cryptostick->is_nkpro_rtm1()){
+        bool answer = csApplet->detailedYesOrNoBox(
+                tr("To handle this functionality "
+                           "application will keep your user PIN in memory. "
+                           "Do you want to continue?"),
+        tr("It will be cleared on exit or after 10 minutes "
+                           "(depending on your choice in the form)."
+        ),
+                0, false);
+        ui->enableUserPasswordCheckBox->setChecked(answer);
+    }
 }
