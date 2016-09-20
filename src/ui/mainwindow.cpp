@@ -523,19 +523,19 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   QTimer *timer = new QTimer(this);
 
   ret_connection = connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
-  timer->start(1000);
+  timer->start(2000);
 
   QTimer *Clipboard_ValidTimer = new QTimer(this);
 
   // Start timer for Clipboard delete check
   connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
-  Clipboard_ValidTimer->start(1000);
+  Clipboard_ValidTimer->start(2000);
 
   QTimer *Password_ValidTimer = new QTimer(this);
 
   // Start timer for Password check
   connect(Password_ValidTimer, SIGNAL(timeout()), this, SLOT(checkPasswordTime_Valid()));
-  Password_ValidTimer->start(1000);
+  Password_ValidTimer->start(2000);
 
   createIndicator();
 
