@@ -11,12 +11,11 @@
 QString getBrand();
 
 class CryptostickApplet {
-  public :
-    void messageBox(const QString msg, QWidget *parent = 0);
-  void warningBox(const QString msg, QWidget *parent = 0);
-  bool yesOrNoBox(const QString msg, QWidget *parent = 0, bool default_val = true);
-  bool detailedYesOrNoBox(const QString msg, const QString detailed_text, QWidget *parent = 0,
-                          bool default_val = true);
+  public:
+  void messageBox(const QString msg);
+  void warningBox(const QString msg);
+  bool yesOrNoBox(const QString msg, bool default_val);
+  bool detailedYesOrNoBox(const QString msg, const QString detailed_text, bool default_val);
     static CryptostickApplet* instance(){
         QMutexLocker locker(&mutex);
         static CryptostickApplet applet;

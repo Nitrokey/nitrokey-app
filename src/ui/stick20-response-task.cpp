@@ -246,7 +246,7 @@ void Stick20ResponseTask::checkStick20Status() {
         stick20Response->HID_Stick20Status_st.Status_u8) {
       switch (ActiveCommand) {
       case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI: {
-        csApplet()->warningBox(tr("Can't enable hidden volume"));
+          csApplet()->warningBox(tr("Can't enable hidden volume"));
       } break;
       default:
         break;
@@ -260,11 +260,11 @@ void Stick20ResponseTask::checkStick20Status() {
         // msgBox.setText("To setup the hidden volume, please
         // enable the encrypted volume to enable smartcard
         // access");
-        csApplet()->warningBox(tr("Please enable the encrypted volume first."));
+          csApplet()->warningBox(tr("Please enable the encrypted volume first."));
       } break;
       case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI: {
         csApplet()->messageBox(tr("Encrypted volume was not enabled, please "
-                                "enable the encrypted volume"));
+                                          "enable the encrypted volume"));
       } break;
       default:
         break;
@@ -275,7 +275,7 @@ void Stick20ResponseTask::checkStick20Status() {
         stick20Response->HID_Stick20Status_st.Status_u8) {
       switch (ActiveCommand) {
       case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI: {
-        csApplet()->warningBox(tr("Smartcard error, please retry the command"));
+          csApplet()->warningBox(tr("Smartcard error, please retry the command"));
       } break;
       default:
         break;
@@ -287,7 +287,7 @@ void Stick20ResponseTask::checkStick20Status() {
       switch (ActiveCommand) {
       case STICK20_CMD_ENABLE_FIRMWARE_UPDATE: {
         csApplet()->messageBox(tr("Security bit of the device is activated.\nFirmware update is "
-                                "not possible."));
+                                          "not possible."));
       } break;
       default:
         break;

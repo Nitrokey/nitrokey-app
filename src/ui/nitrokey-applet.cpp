@@ -13,16 +13,16 @@ CryptostickApplet *csApplet(){
     return CryptostickApplet::instance();
 }
 
-void CryptostickApplet::warningBox(const QString msg, QWidget *parent) {
+void CryptostickApplet::warningBox(const QString msg) {
   QMessageBox::warning(_parent, getBrand(), msg, QMessageBox::Ok);
 }
 
-void CryptostickApplet::messageBox(const QString msg, QWidget *parent) {
+void CryptostickApplet::messageBox(const QString msg) {
     const QString brand = getBrand();
   QMessageBox::information(_parent,  brand, msg, QMessageBox::Ok);
 }
 
-bool CryptostickApplet::yesOrNoBox(const QString msg, QWidget *parent, bool default_val) {
+bool CryptostickApplet::yesOrNoBox(const QString msg, bool default_val) {
   QMessageBox::StandardButton default_btn = default_val ? QMessageBox::Yes : QMessageBox::No;
 
   bool b =
@@ -31,8 +31,7 @@ bool CryptostickApplet::yesOrNoBox(const QString msg, QWidget *parent, bool defa
   return b;
 }
 
-bool CryptostickApplet::detailedYesOrNoBox(const QString msg, const QString detailed_text,
-                                           QWidget *parent, bool default_val) {
+bool CryptostickApplet::detailedYesOrNoBox(const QString msg, const QString detailed_text, bool default_val) {
   QMessageBox msgBox (QMessageBox::Question, getBrand(), msg, QMessageBox::Yes | QMessageBox::No,
                       _parent);
 

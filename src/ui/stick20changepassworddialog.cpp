@@ -257,7 +257,7 @@ bool DialogChangePassword::Stick10ChangePassword(void) {
     csApplet()->warningBox(tr("Wrong password."));
   } else if (ret != CMD_STATUS_OK) {
     csApplet()->warningBox(tr("Couldn't change %1 password")
-                             .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
+                                   .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
   }
   bool success = ret == CMD_STATUS_OK;
   if (success) {
@@ -298,7 +298,7 @@ bool DialogChangePassword::ResetUserPassword(void) {
   communicationAndCommandSuccess = cryptostick->unlockUserPassword(Data) == 0;
   if (!communicationAndCommandSuccess) {
     csApplet()->warningBox(tr("There was a problem during communicating with device or new password "
-                            "is not correct. Please retry."));
+                                      "is not correct. Please retry."));
     return false;
   }
 
@@ -357,8 +357,7 @@ bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
   commandSuccess = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
 
   if (!commandSuccess) {
-    csApplet()->warningBox(
-        tr("Wrong password or there was a communication problem with the device."));
+    csApplet()->warningBox(tr("Wrong password or there was a communication problem with the device."));
     return false;
   }
   csApplet()->warningBox(tr("Password has been changed with success!"));

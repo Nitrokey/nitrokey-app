@@ -209,7 +209,7 @@ void MatrixPasswordDialog::InitSecurePasswordDialog() {
 
   // No Stick - no work ?
   if (false == cryptostick->isConnected) {
-    csApplet()->warningBox("MatrixPasswordDialog: No cryptostick 2.0 connected!");
+      csApplet()->warningBox("MatrixPasswordDialog: No cryptostick 2.0 connected!");
     return;
   }
 
@@ -592,7 +592,7 @@ void MatrixPasswordDialog::RowSelected(int SelectedRow) {
     OutputText = "Select row " + QString("%1").arg(SelectedRowCounter + 1);
     ui->label->setText(OutputText);
   } else {
-    csApplet()->warningBox("Maximum length reached");
+      csApplet()->warningBox("Maximum length reached");
 
     SendMatrixRowDataToStick20();
     done(true);

@@ -74,12 +74,12 @@ void stick20HiddenVolumeDialog::on_ShowPasswordCheckBox_toggled(bool checked) {
 void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
   if (button == ui->buttonBox->button(QDialogButtonBox::Ok)) {
     if (8 > strlen(ui->HVPasswordEdit->text().toLatin1().data())) {
-      csApplet()->warningBox(tr("Your password is too short. Use at least 8 characters."));
+        csApplet()->warningBox(tr("Your password is too short. Use at least 8 characters."));
       return;
     }
 
     if (ui->HVPasswordEdit->text().toLatin1() != ui->HVPasswordEdit_2->text().toLatin1()) {
-      csApplet()->warningBox(tr("The passwords are not identical"));
+        csApplet()->warningBox(tr("The passwords are not identical"));
       return;
     }
 
@@ -88,7 +88,7 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
     HV_Setup_st.EndBlockPercent_u8 = ui->EndBlockSpin->value();
 
     if (HV_Setup_st.StartBlockPercent_u8 >= HV_Setup_st.EndBlockPercent_u8) {
-      csApplet()->warningBox(tr("Wrong size of hidden volume"));
+        csApplet()->warningBox(tr("Wrong size of hidden volume"));
       return;
     }
 
