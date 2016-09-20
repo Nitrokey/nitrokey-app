@@ -78,6 +78,7 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
+    void initialTimeReset(int ret);
     QMutex check_connection_mutex;
   QString nkpro_user_PIN;
   void overwrite_string(QString &str);
@@ -323,6 +324,7 @@ private slots:
   int userAuthenticate(const QString &password);
 
   void on_enableUserPasswordCheckBox_clicked(bool checked);
+
 };
 
 class utf8FieldLengthValidator : public QValidator {

@@ -129,6 +129,7 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
   checkConnection
 
   Check the presents of stick 1.0 or 2.0
+  -1 disconnected, 0 connected, 1 just connected - needs initialization
 
   Reviews
   Date      Reviewer        Info
@@ -137,11 +138,8 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
 *******************************************************************************/
 
 int Device::checkConnection(int InitConfigFlag) {
-  uint8_t buf[65];
+  uint8_t buf[65] = {0};
   static int DisconnectCounter = 0;
-
-  memset(buf, 0, sizeof(buf));
-  buf[0] = 0;
   int res;
 
   if (!dev_hid_handle) {
@@ -205,7 +203,7 @@ int Device::checkConnection(int InitConfigFlag) {
 
 void Device::disconnect() {
   activStick20 = false;
-  if (NULL == dev_hid_handle) {
+  if (NULL != dev_hid_handle) {
     hid_close(dev_hid_handle);
     dev_hid_handle = NULL;
     hid_exit();

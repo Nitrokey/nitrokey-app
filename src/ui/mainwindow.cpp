@@ -820,9 +820,7 @@ void MainWindow::checkConnection() {
         return;
 
   static int DeviceOffline = TRUE;
-
   int ret = 0;
-
   currentTime = QDateTime::currentDateTime().toTime_t();
 
   int result = cryptostick->checkConnection(TRUE);
@@ -831,45 +829,17 @@ void MainWindow::checkConnection() {
   HOTP_SlotCount = cryptostick->HOTP_SlotCount;
   TOTP_SlotCount = cryptostick->TOTP_SlotCount;
 
-  if (result == 0) {
+  if (result == 0) { //connected
     if (false == cryptostick->activStick20) {
       ui->statusBar->showMessage(tr("Nitrokey Pro connected"));
-
-      if (set_initial_time == FALSE) {
-        ret = cryptostick->setTime(TOTP_CHECK_TIME);
-        set_initial_time = TRUE;
-      } else {
-        ret = 0;
-      }
-
-      bool answer;
-
-      if (ret == -2) {
-        answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
-                                                tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-                                                           "sync. Your computer may be configured with a wrong time or "
-                                                           "your Nitrokey may have been attacked. If an attacker or "
-                                                           "malware could have used your Nitrokey you should reset the "
-                                                           "secrets of your configured One Time Passwords. If your "
-                                                           "computer's time is wrong, please configure it correctly and "
-                                                           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-                                                false);
-        if (answer) {
-          resetTime();
-          QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-          Sleep::msleep(1000);
-          QApplication::restoreOverrideCursor();
-          generateAllConfigs();
-
-            csApplet()->messageBox(tr("Time reset!"));
-        }
-      }
-
+//      initialTimeReset(ret);
       cryptostick->getStatus();
     } else
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
+
     DeviceOffline = FALSE;
-  } else if (result == -1) {
+
+  } else if (result == -1) { //disconnected
     ui->statusBar->showMessage(tr("Nitrokey disconnected"));
     HID_Stick20Init(); // Clear stick 20 data
     Stick20ScSdCardOnline = FALSE;
@@ -885,55 +855,22 @@ void MainWindow::checkConnection() {
       showTrayMessage(tr("Nitrokey disconnected"), "", INFORMATION, TRAY_MSG_TIMEOUT);
     }
     cryptostick->connect();
+
   } else if (result == 1) { // recreate the settings and menus
     if (false == cryptostick->activStick20) {
       ui->statusBar->showMessage(tr("Nitrokey connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
-
-      if (set_initial_time == FALSE) {
-        ret = cryptostick->setTime(TOTP_CHECK_TIME);
-        set_initial_time = TRUE;
-      } else {
-        ret = 0;
-      }
-
-      bool answer;
-
-      if (ret == -2) {
-        answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
-                                                tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-                                                           "sync. Your computer may be configured with a wrong time or "
-                                                           "your Nitrokey may have been attacked. If an attacker or "
-                                                           "malware could have used your Nitrokey you should reset the "
-                                                           "secrets of your configured One Time Passwords. If your "
-                                                           "computer's time is wrong, please configure it correctly and "
-                                                           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-                                                false);
-
-        if (answer) {
-          resetTime();
-          QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-          Sleep::msleep(1000);
-          QApplication::restoreOverrideCursor();
-          generateAllConfigs();
-
-            csApplet()->messageBox(tr("Time reset!"));
-        }
-      }
-
+//      initialTimeReset(ret);
       cryptostick->getStatus();
     } else {
-      showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
+      showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
     }
     generateMenu();
   }
 
   // Be sure that the retry counter are always up to date
-  if ((cryptostick->userPasswordRetryCount != HID_Stick20Configuration_st.UserPwRetryCount)) // (99
-                                                                                             // !=
-  // HID_Stick20Configuration_st.UserPwRetryCount)
-  // &&
+  if ((cryptostick->userPasswordRetryCount != HID_Stick20Configuration_st.UserPwRetryCount))
   {
     cryptostick->userPasswordRetryCount = HID_Stick20Configuration_st.UserPwRetryCount;
     cryptostick->passwordRetryCount = HID_Stick20Configuration_st.AdminPwRetryCount;
@@ -955,14 +892,39 @@ void MainWindow::checkConnection() {
                                             "storage with random data\""));
     }
   }
-  /*
-      if (TRUE == Stick20_ProductionInfosChanged)
-      {
-          Stick20_ProductionInfosChanged = FALSE;
-          AnalyseProductionInfos ();
-      }
-  */
     check_connection_mutex.unlock();
+}
+
+void MainWindow::initialTimeReset(int ret) {
+  if (set_initial_time == FALSE) {
+        ret = cryptostick->setTime(TOTP_CHECK_TIME);
+        set_initial_time = TRUE;
+      } else {
+        ret = 0;
+      }
+
+  bool answer;
+
+  if (ret == -2) {
+        answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
+                                                tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+                                                           "sync. Your computer may be configured with a wrong time or "
+                                                           "your Nitrokey may have been attacked. If an attacker or "
+                                                           "malware could have used your Nitrokey you should reset the "
+                                                           "secrets of your configured One Time Passwords. If your "
+                                                           "computer's time is wrong, please configure it correctly and "
+                                                           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+                                                false);
+        if (answer) {
+          resetTime();
+          QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+          Sleep::msleep(1000);
+          QGuiApplication::restoreOverrideCursor();
+          generateAllConfigs();
+
+            csApplet()->messageBox(tr("Time reset!"));
+        }
+      }
 }
 
 void MainWindow::startTimer() {}
