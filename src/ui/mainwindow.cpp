@@ -3364,13 +3364,13 @@ void MainWindow::on_eraseButton_clicked() {
   if (answer) {
     int res = cryptostick->eraseSlot(slotNo);
     if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
-      PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-                       PinDialog::ADMIN_PIN);
       uint8_t tempPassword[25] = {0};
       QString password;
 
       do {
-        int ok = dialog.exec();
+          PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                           PinDialog::ADMIN_PIN);
+          int ok = dialog.exec();
         if (ok != QDialog::Accepted) {
           return;
         }

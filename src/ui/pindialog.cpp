@@ -167,11 +167,14 @@ void PinDialog::onOkButtonClicked() {
 void PinDialog::updateTryCounter() {
   int triesLeft = 0;
 
+
   switch (_pinType) {
   case ADMIN_PIN:
+    cryptostick->getPasswordRetryCount();
     triesLeft = HID_Stick20Configuration_st.AdminPwRetryCount;
     break;
   case USER_PIN:
+    cryptostick->getUserPasswordRetryCount();
     triesLeft = HID_Stick20Configuration_st.UserPwRetryCount;
     break;
   case FIRMWARE_PIN:
