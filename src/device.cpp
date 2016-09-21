@@ -676,7 +676,6 @@ int Device::readSlot(uint8_t slotNo) {
   int res;
 
   uint8_t data[1];
-
   data[0] = slotNo;
 
   if (isConnected) {
@@ -693,28 +692,29 @@ int Device::readSlot(uint8_t slotNo) {
       resp.getResponse(this);
 
       if (cmd.crc == resp.lastCommandCRC) { // the response was for the last command
-        if (resp.lastCommandStatus == CMD_STATUS_OK) {
+          const int s = slotNo & 0x0F;
+          if (resp.lastCommandStatus == CMD_STATUS_OK) {
           if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount)) {
-            memcpy(HOTPSlots[slotNo & 0x0F]->slotName, resp.data, 15);
-            HOTPSlots[slotNo & 0x0F]->config = (uint8_t)resp.data[15];
-            memcpy(HOTPSlots[slotNo & 0x0F]->tokenID, resp.data + 16, 13);
-            memcpy(HOTPSlots[slotNo & 0x0F]->counter, resp.data + 29, 8);
-            HOTPSlots[slotNo & 0x0F]->isProgrammed = true;
+            memcpy(HOTPSlots[s]->slotName, resp.data, 15);
+            HOTPSlots[s]->config = (uint8_t)resp.data[15];
+            memcpy(HOTPSlots[s]->tokenID, resp.data + 16, 13);
+            memcpy(HOTPSlots[s]->counter, resp.data + 29, 8);
+            HOTPSlots[s]->isProgrammed = true;
           } else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount)) {
-            memcpy(TOTPSlots[slotNo & 0x0F]->slotName, resp.data, 15);
-            TOTPSlots[slotNo & 0x0F]->config = (uint8_t)resp.data[15];
-            memcpy(TOTPSlots[slotNo & 0x0F]->tokenID, resp.data + 16, 13);
-            memcpy(&(TOTPSlots[slotNo & 0x0F]->interval), resp.data + 29, 2);
-            TOTPSlots[slotNo & 0x0F]->isProgrammed = true;
+            memcpy(TOTPSlots[s]->slotName, resp.data, 15);
+            TOTPSlots[s]->config = (uint8_t)resp.data[15];
+            memcpy(TOTPSlots[s]->tokenID, resp.data + 16, 13);
+            memcpy(&(TOTPSlots[s]->interval), resp.data + 29, 2);
+            TOTPSlots[s]->isProgrammed = true;
           }
 
         } else if (resp.lastCommandStatus == CMD_STATUS_SLOT_NOT_PROGRAMMED) {
           if ((slotNo >= 0x10) && (slotNo < 0x10 + HOTP_SlotCount)) {
-            HOTPSlots[slotNo & 0x0F]->isProgrammed = false;
-            HOTPSlots[slotNo & 0x0F]->slotName[0] = 0;
+            HOTPSlots[s]->isProgrammed = false;
+            HOTPSlots[s]->slotName[0] = 0;
           } else if ((slotNo >= 0x20) && (slotNo < 0x20 + TOTP_SlotCount)) {
-            TOTPSlots[slotNo & 0x0F]->isProgrammed = false;
-            TOTPSlots[slotNo & 0x0F]->slotName[0] = 0;
+            TOTPSlots[s]->isProgrammed = false;
+            TOTPSlots[s]->slotName[0] = 0;
           }
         }
       }
