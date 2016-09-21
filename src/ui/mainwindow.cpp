@@ -832,7 +832,7 @@ void MainWindow::checkConnection() {
   if (result == 0) { //connected
     if (false == cryptostick->activStick20) {
       ui->statusBar->showMessage(tr("Nitrokey Pro connected"));
-//      initialTimeReset(ret);
+      initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
       cryptostick->getStatus();
     } else
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
@@ -860,7 +860,7 @@ void MainWindow::checkConnection() {
     if (false == cryptostick->activStick20) {
       ui->statusBar->showMessage(tr("Nitrokey connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
-//      initialTimeReset(ret);
+      initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
       cryptostick->getStatus();
     } else {
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
