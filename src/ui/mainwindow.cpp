@@ -2964,9 +2964,7 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
 
 void MainWindow::on_writeButton_clicked() {
   int res;
-
-  uint8_t SlotName[16];
-
+  uint8_t SlotName[16] = {0};
   uint8_t slotNo = ui->slotComboBox->currentIndex();
 
   PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
@@ -2991,15 +2989,13 @@ void MainWindow::on_writeButton_clicked() {
       ui->base32RadioButton->toggle();
 
       if (slotNo < HOTP_SlotCount) { // HOTP slot
-        HOTPSlot *hotp = new HOTPSlot();
-        generateHOTPConfig(hotp);
-        res = cryptostick->writeToHOTPSlot(hotp);
-        delete hotp;
+        HOTPSlot hotp;
+        generateHOTPConfig(&hotp);
+        res = cryptostick->writeToHOTPSlot(&hotp);
       } else { // TOTP slot
-        TOTPSlot *totp = new TOTPSlot();
-        generateTOTPConfig(totp);
-        res = cryptostick->writeToTOTPSlot(totp);
-        delete totp;
+        TOTPSlot totp;
+        generateTOTPConfig(&totp);
+        res = cryptostick->writeToTOTPSlot(&totp);
       }
 
       if (DebugingActive == TRUE) {
@@ -3023,10 +3019,7 @@ void MainWindow::on_writeButton_clicked() {
 
           if (QDialog::Accepted == ok) {
             uint8_t tempPassword[25];
-
-            for (int i = 0; i < 25; i++)
-              tempPassword[i] = qrand() & 0xFF;
-
+            generateTemporaryPassword(tempPassword);
             cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
             if (cryptostick->validPassword) {
               lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
