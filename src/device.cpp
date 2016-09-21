@@ -534,12 +534,6 @@ int Device::writeToHOTPSlot(HOTPSlot *slot) {
 
       resp.getResponse(this);
 
-      //      if (cmd.crc == resp.lastCommandCRC && resp.lastCommandStatus == CMD_STATUS_OK) {
-      //        return 0; // OK!
-      //      } else if (cmd.crc == resp.lastCommandCRC &&
-      //                 resp.lastCommandStatus == CMD_STATUS_NO_NAME_ERROR) {
-      //        return -3; // CMD_STATUS_NO_NAME_ERROR
-      //      }
       if (cmd.crc == resp.lastCommandCRC) {
         return resp.lastCommandStatus;
       }
@@ -1711,7 +1705,7 @@ int Device::authorize(Command *authorizedCmd) {
   memcpy(data + 4, adminTemporaryPassword, 25);
 
   if (isConnected) {
-    Command cmd(CMD_AUTHORIZE, data, 29);
+    Command cmd(CMD_AUTHORIZE, data, sizeof(data));
 
     res = sendCommand(&cmd);
 
