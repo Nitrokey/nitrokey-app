@@ -201,18 +201,18 @@ void PasswordDialog::on_buttonBox_accepted() {
     passwordString = ui->lineEdit->text().toLatin1();
     n = passwordString.size();
     if (30 <= n) {
-      csApplet->warningBox(tr("Your PIN is too long! Use not more than 30 characters."));
+        csApplet()->warningBox(tr("Your PIN is too long! Use not more than 30 characters."));
       done(FALSE);
       return;
     }
     if (6 > n) {
-      csApplet->warningBox(tr("Your PIN is too short. Use at least 6 characters."));
+        csApplet()->warningBox(tr("Your PIN is too short. Use at least 6 characters."));
       done(FALSE);
       return;
     }
 
     if ((0 == strcmp(passwordString, "123456")) || (0 == strcmp(passwordString, "12345678"))) {
-      csApplet->warningBox(tr("Warning: Default PIN is used.\nPlease change the PIN."));
+        csApplet()->warningBox(tr("Warning: Default PIN is used.\nPlease change the PIN."));
     }
     memset(&password[1], 0, 49);
     memcpy(&password[1], passwordString.data(), n);

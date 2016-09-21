@@ -85,7 +85,6 @@ extern "C" void DebugInitDebugging(void);
  Local defines
 *******************************************************************************/
 
-
 #include <algorithm>
 
 class OwnSleep : public QThread {
@@ -375,7 +374,6 @@ bool isUnity() {
           desktop.toLower() == "lxde" || desktop.toLower() == "xfce");
 }
 
-
 #endif // HAVE_LIBAPPINDICATOR
 
 void MainWindow::overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
@@ -408,7 +406,7 @@ void MainWindow::showTrayMessage(const QString &title, const QString &msg,
         break;
       }
     } else
-      csApplet->messageBox(msg);
+        csApplet()->messageBox(msg);
   }
 }
 
@@ -471,6 +469,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   bindtextdomain("nitrokey-app", "/usr/share/locale");
   textdomain("nitrokey-app");
 #endif
+  lastUserAuthenticateTime = lastClipboardTime = QDateTime::currentDateTime().toTime_t();
   int ret;
 
   QMetaObject::Connection ret_connection;
@@ -524,19 +523,19 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   QTimer *timer = new QTimer(this);
 
   ret_connection = connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
-  timer->start(1000);
+  timer->start(2000);
 
   QTimer *Clipboard_ValidTimer = new QTimer(this);
 
   // Start timer for Clipboard delete check
   connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
-  Clipboard_ValidTimer->start(1000);
+  Clipboard_ValidTimer->start(2000);
 
   QTimer *Password_ValidTimer = new QTimer(this);
 
   // Start timer for Password check
   connect(Password_ValidTimer, SIGNAL(timeout()), this, SLOT(checkPasswordTime_Valid()));
-  Password_ValidTimer->start(1000);
+  Password_ValidTimer->start(2000);
 
   createIndicator();
 
@@ -817,10 +816,11 @@ int MainWindow::AnalyseProductionInfos() {
 }
 
 void MainWindow::checkConnection() {
+    if (!check_connection_mutex.tryLock(500))
+        return;
+
   static int DeviceOffline = TRUE;
-
   int ret = 0;
-
   currentTime = QDateTime::currentDateTime().toTime_t();
 
   int result = cryptostick->checkConnection(TRUE);
@@ -829,46 +829,17 @@ void MainWindow::checkConnection() {
   HOTP_SlotCount = cryptostick->HOTP_SlotCount;
   TOTP_SlotCount = cryptostick->TOTP_SlotCount;
 
-  if (result == 0) {
+  if (result == 0) { //connected
     if (false == cryptostick->activStick20) {
       ui->statusBar->showMessage(tr("Nitrokey Pro connected"));
-
-      if (set_initial_time == FALSE) {
-        ret = cryptostick->setTime(TOTP_CHECK_TIME);
-        set_initial_time = TRUE;
-      } else {
-        ret = 0;
-      }
-
-      bool answer;
-
-      if (ret == -2) {
-        answer = csApplet->detailedYesOrNoBox(
-            tr("Time is out-of-sync"),
-            tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-               "sync. Your computer may be configured with a wrong time or "
-               "your Nitrokey may have been attacked. If an attacker or "
-               "malware could have used your Nitrokey you should reset the "
-               "secrets of your configured One Time Passwords. If your "
-               "computer's time is wrong, please configure it correctly and "
-               "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-            0, false);
-        if (answer) {
-          resetTime();
-          QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-          Sleep::msleep(1000);
-          QApplication::restoreOverrideCursor();
-          generateAllConfigs();
-
-          csApplet->messageBox(tr("Time reset!"));
-        }
-      }
-
+      initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
       cryptostick->getStatus();
     } else
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
+
     DeviceOffline = FALSE;
-  } else if (result == -1) {
+
+  } else if (result == -1) { //disconnected
     ui->statusBar->showMessage(tr("Nitrokey disconnected"));
     HID_Stick20Init(); // Clear stick 20 data
     Stick20ScSdCardOnline = FALSE;
@@ -884,56 +855,22 @@ void MainWindow::checkConnection() {
       showTrayMessage(tr("Nitrokey disconnected"), "", INFORMATION, TRAY_MSG_TIMEOUT);
     }
     cryptostick->connect();
+
   } else if (result == 1) { // recreate the settings and menus
     if (false == cryptostick->activStick20) {
       ui->statusBar->showMessage(tr("Nitrokey connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
-
-      if (set_initial_time == FALSE) {
-        ret = cryptostick->setTime(TOTP_CHECK_TIME);
-        set_initial_time = TRUE;
-      } else {
-        ret = 0;
-      }
-
-      bool answer;
-
-      if (ret == -2) {
-        answer = csApplet->detailedYesOrNoBox(
-            tr("Time is out-of-sync"),
-            tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-               "sync. Your computer may be configured with a wrong time or "
-               "your Nitrokey may have been attacked. If an attacker or "
-               "malware could have used your Nitrokey you should reset the "
-               "secrets of your configured One Time Passwords. If your "
-               "computer's time is wrong, please configure it correctly and "
-               "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-            0, false);
-
-        if (answer) {
-          resetTime();
-          QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-          Sleep::msleep(1000);
-          QApplication::restoreOverrideCursor();
-          generateAllConfigs();
-
-          csApplet->messageBox(tr("Time reset!"));
-        }
-      }
-
+      initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
       cryptostick->getStatus();
     } else {
-      showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
+      showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
     }
     generateMenu();
   }
 
   // Be sure that the retry counter are always up to date
-  if ((cryptostick->userPasswordRetryCount != HID_Stick20Configuration_st.UserPwRetryCount)) // (99
-                                                                                             // !=
-  // HID_Stick20Configuration_st.UserPwRetryCount)
-  // &&
+  if ((cryptostick->userPasswordRetryCount != HID_Stick20Configuration_st.UserPwRetryCount))
   {
     cryptostick->userPasswordRetryCount = HID_Stick20Configuration_st.UserPwRetryCount;
     cryptostick->passwordRetryCount = HID_Stick20Configuration_st.AdminPwRetryCount;
@@ -946,24 +883,48 @@ void MainWindow::checkConnection() {
 
     if (TRUE == StickNotInitated) {
       if (FALSE == StickNotInitated_DontAsk)
-        csApplet->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-                                "device\" option from context menu."));
+          csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
+                                            "device\" option from context menu."));
     }
     if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
       if (FALSE == SdCardNotErased_DontAsk)
-        csApplet->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-                                "storage with random data\""));
+          csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
+                                            "storage with random data\""));
     }
   }
-  /*
-      if (TRUE == Stick20_ProductionInfosChanged)
-      {
-          Stick20_ProductionInfosChanged = FALSE;
-          AnalyseProductionInfos ();
+    check_connection_mutex.unlock();
+}
+
+void MainWindow::initialTimeReset(int ret) {
+  if (set_initial_time == FALSE) {
+        ret = cryptostick->setTime(TOTP_CHECK_TIME);
+        set_initial_time = TRUE;
+      } else {
+        ret = 0;
       }
-  */
-  if (ret) {
-  } // Fix warnings
+
+  bool answer;
+
+  if (ret == -2) {
+        answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
+                                                tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+                                                           "sync. Your computer may be configured with a wrong time or "
+                                                           "your Nitrokey may have been attacked. If an attacker or "
+                                                           "malware could have used your Nitrokey you should reset the "
+                                                           "secrets of your configured One Time Passwords. If your "
+                                                           "computer's time is wrong, please configure it correctly and "
+                                                           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+                                                false);
+        if (answer) {
+          resetTime();
+          QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+          Sleep::msleep(1000);
+          QGuiApplication::restoreOverrideCursor();
+          generateAllConfigs();
+
+            csApplet()->messageBox(tr("Time reset!"));
+        }
+      }
 }
 
 void MainWindow::startTimer() {}
@@ -1910,8 +1871,8 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
         // FIXME check for little endian/big endian conversion (test on Macintosh)
         memcpy(slot->counter, &counterFromGUI, sizeof counterFromGUI);
       } else {
-        csApplet->warningBox(tr("Counter value not copied - there was an error in conversion. "
-                                "Setting counter value to 0. Please retry."));
+          csApplet()->warningBox(tr("Counter value not copied - there was an error in conversion. "
+                                            "Setting counter value to 0. Please retry."));
       }
     } else { // nitrokey storage version
       QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
@@ -1921,9 +1882,8 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
         // 8th char has to be '\0' since in firmware atoi is used directly on buffer
         slot->counter[7] = 0;
       } else {
-        csApplet->warningBox(
-            tr("Counter value not copied - Nitrokey Storage handles HOTP counter "
-               "values up to 7 digits. Setting counter value to 0. Please retry."));
+          csApplet()->warningBox(tr("Counter value not copied - Nitrokey Storage handles HOTP counter "
+                                            "values up to 7 digits. Setting counter value to 0. Please retry."));
       }
     }
     if (DebugingActive) {
@@ -1954,11 +1914,9 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot) {
 
     QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
 
-    uint8_t encoded[128];
-
-    uint8_t decoded[20];
-
-    uint8_t data[128];
+    uint8_t encoded[128] = {'A'};
+    uint8_t decoded[20] = {'0'};
+    uint8_t data[128] = {'A'};
 
     memset(encoded, 'A', 32);
     memset(data, 'A', 32);
@@ -2203,7 +2161,7 @@ void MainWindow::startConfiguration() {
         if (cryptostick->validPassword) {
           lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
         } else {
-          csApplet->warningBox(tr("Wrong PIN. Please try again."));
+            csApplet()->warningBox(tr("Wrong PIN. Please try again."));
         }
         password.clear();
       }
@@ -2323,11 +2281,9 @@ void MainWindow::startStick20EnableCryptedVolume() {
   bool answer;
 
   if (TRUE == HiddenVolumeActive) {
-    answer = csApplet->yesOrNoBox(
-        tr("This activity locks your hidden volume. Do you want to "
-           "proceed?\nTo avoid data loss, please unmount the partitions before "
-           "proceeding."),
-        0, false);
+    answer = csApplet()->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to "
+                                               "proceed?\nTo avoid data loss, please unmount the partitions before "
+                                               "proceeding."), false);
     if (false == answer)
       return;
   }
@@ -2349,11 +2305,9 @@ void MainWindow::startStick20DisableCryptedVolume() {
   bool answer;
 
   if (TRUE == CryptedVolumeActive) {
-    answer = csApplet->yesOrNoBox(
-        tr("This activity locks your encrypted volume. Do you want to "
-           "proceed?\nTo avoid data loss, please unmount the partitions before "
-           "proceeding."),
-        0, false);
+    answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
+                                               "proceed?\nTo avoid data loss, please unmount the partitions before "
+                                               "proceeding."), false);
     if (false == answer)
       return;
 
@@ -2371,15 +2325,14 @@ void MainWindow::startStick20EnableHiddenVolume() {
   bool answer;
 
   if (FALSE == CryptedVolumeActive) {
-    csApplet->warningBox(tr("Please enable the encrypted volume first."));
+      csApplet()->warningBox(tr("Please enable the encrypted volume first."));
     return;
   }
 
   answer =
-      csApplet->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
-                              "proceed?\nTo avoid data loss, please unmount the partitions before "
-                              "proceeding."),
-                           0, true);
+          csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
+                                            "proceed?\nTo avoid data loss, please unmount the partitions before "
+                                            "proceeding."), true);
   if (false == answer)
     return;
 
@@ -2402,9 +2355,8 @@ void MainWindow::startStick20DisableHiddenVolume() {
   bool answer;
 
   answer =
-      csApplet->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to proceed?\nTo "
-                              "avoid data loss, please unmount the partitions before proceeding."),
-                           0, true);
+          csApplet()->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to proceed?\nTo "
+                                            "avoid data loss, please unmount the partitions before proceeding."), true);
   if (false == answer)
     return;
 
@@ -2417,11 +2369,9 @@ void MainWindow::startLockDeviceAction() {
   bool answer;
 
   if ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive)) {
-    answer = csApplet->yesOrNoBox(
-        tr("This activity locks your encrypted volume. Do you want to "
-           "proceed?\nTo avoid data loss, please unmount the partitions before "
-           "proceeding."),
-        0, true);
+    answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
+                                               "proceed?\nTo avoid data loss, please unmount the partitions before "
+                                               "proceeding."), true);
     if (false == answer) {
       return;
     }
@@ -2562,10 +2512,8 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
 
   bool answer;
 
-  answer = csApplet->yesOrNoBox(
-      tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
-         "hidden volumes, and password safe! Continue?"),
-      0, false);
+  answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
+                                             "hidden volumes, and password safe! Continue?"), false);
   if (true == answer) {
     PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PREFIXED,
                      PinDialog::ADMIN_PIN);
@@ -2694,7 +2642,7 @@ void MainWindow::startStick20LockStickHardware() {
 void MainWindow::startStick20SetupPasswordMatrix() {
   MatrixPasswordDialog dialog(this);
 
-  csApplet->warningBox(tr("The selected lines must be greater then greatest password length"));
+    csApplet()->warningBox(tr("The selected lines must be greater then greatest password length"));
 
   dialog.setModal(TRUE);
 
@@ -2711,7 +2659,7 @@ void MainWindow::startStick20DebugAction() {
 
   /*
      securitydialog dialog(this); ret = dialog.exec();
-     csApplet->warningBox("Encrypted volume is not secure.\nSelect \"Initialize
+     csApplet()->warningBox("Encrypted volume is not secure.\nSelect \"Initialize
      keys\"");
 
      StickNotInitated = TRUE; generateMenu(); */
@@ -2726,7 +2674,7 @@ void MainWindow::startStick20SetupHiddenVolume() {
   stick20HiddenVolumeDialog HVDialog(this);
 
   if (FALSE == CryptedVolumeActive) {
-    csApplet->warningBox(tr("Please enable the encrypted volume first."));
+      csApplet()->warningBox(tr("Please enable the encrypted volume first."));
     return;
   }
 
@@ -2833,8 +2781,7 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     if (TRUE == ret) {
       waitForAnswerFromStick20 = TRUE;
     } else {
-      csApplet->warningBox(
-          tr("There was an error during communicating with device. Please try again."));
+        csApplet()->warningBox(tr("There was an error during communicating with device. Please try again."));
     }
     break;
   case STICK20_CMD_DISABLE_CRYPTED_PARI:
@@ -2847,8 +2794,7 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     if (TRUE == ret) {
       waitForAnswerFromStick20 = TRUE;
     } else {
-      csApplet->warningBox(
-          tr("There was an error during communicating with device. Please try again."));
+        csApplet()->warningBox(tr("There was an error during communicating with device. Please try again."));
     }
     break;
   case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
@@ -2873,10 +2819,9 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     break;
   case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS: {
     bool answer =
-        csApplet->yesOrNoBox(tr("This command fills the encrypted volumes with random data "
-                                "and will destroy all encrypted volumes!\n"
-                                "It requires more than 1 hour for 32GB. Do you want to continue?"),
-                             0, false);
+            csApplet()->yesOrNoBox(tr("This command fills the encrypted volumes with random data "
+                                              "and will destroy all encrypted volumes!\n"
+                                              "It requires more than 1 hour for 32GB. Do you want to continue?"), false);
 
     if (answer) {
       ret = cryptostick->stick20FillSDCardWithRandomChars(
@@ -2888,7 +2833,7 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     }
   } break;
   case STICK20_CMD_WRITE_STATUS_DATA:
-    csApplet->messageBox(tr("Not implemented"));
+      csApplet()->messageBox(tr("Not implemented"));
     break;
   case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
     ret = cryptostick->stick20SendSetReadonlyToUncryptedVolume(password);
@@ -2945,7 +2890,7 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
     break;
 
   default:
-    csApplet->messageBox(tr("Stick20Dialog: Wrong combobox value! "));
+      csApplet()->messageBox(tr("Stick20Dialog: Wrong combobox value! "));
     break;
   }
 
@@ -2966,8 +2911,8 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
 #ifdef Q_OS_LINUX
       sleep(4); // FIXME change hard sleep to thread
       if (!QFileInfo("/dev/nitrospace").isSymLink()) {
-        csApplet->warningBox(tr("Warning: The encrypted Volume is not formatted.\n\"Use GParted "
-                                "or fdisk for this.\""));
+          csApplet()->warningBox(tr("Warning: The encrypted Volume is not formatted.\n\"Use GParted "
+                                            "or fdisk for this.\""));
       }
 #endif // if Q_OS_LINUX
       break;
@@ -3010,8 +2955,8 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
       break;
     }
   } else {
-    csApplet->warningBox(tr("Either the password is not correct or the command execution resulted "
-                            "in an error. Please try again."));
+      csApplet()->warningBox(tr("Either the password is not correct or the command execution resulted "
+                                        "in an error. Please try again."));
     return false;
   }
   return (true);
@@ -3037,7 +2982,7 @@ void MainWindow::on_writeButton_clicked() {
 
   SlotName[15] = 0;
   if (0 == strlen((char *)SlotName)) {
-    csApplet->warningBox(tr("Please enter a slotname."));
+      csApplet()->warningBox(tr("Please enter a slotname."));
     return;
   }
 
@@ -3061,12 +3006,12 @@ void MainWindow::on_writeButton_clicked() {
         QString MsgText;
         MsgText.append(tr("(debug) Response: "));
         MsgText.append(QString::number(res));
-        csApplet->warningBox(MsgText);
+          csApplet()->warningBox(MsgText);
       }
 
       switch (res) {
       case CMD_STATUS_OK:
-        csApplet->messageBox(tr("Configuration successfully written."));
+          csApplet()->messageBox(tr("Configuration successfully written."));
         break;
       case CMD_STATUS_NOT_AUTHORIZED:
         // Ask for password
@@ -3086,7 +3031,7 @@ void MainWindow::on_writeButton_clicked() {
             if (cryptostick->validPassword) {
               lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
             } else {
-              csApplet->warningBox(tr("Wrong PIN. Please try again."));
+                csApplet()->warningBox(tr("Wrong PIN. Please try again."));
             }
             password.clear();
           }
@@ -3095,7 +3040,7 @@ void MainWindow::on_writeButton_clicked() {
         // and the pin is not correct..
         break;
       case CMD_STATUS_NO_NAME_ERROR:
-        csApplet->warningBox(tr("The name of the slot must not be empty."));
+          csApplet()->warningBox(tr("The name of the slot must not be empty."));
         break;
       default:
         QString MsgText;
@@ -3103,7 +3048,7 @@ void MainWindow::on_writeButton_clicked() {
         if (DebugingActive == TRUE) {
           MsgText.append(QString::number(res));
         }
-        csApplet->warningBox(MsgText);
+              csApplet()->warningBox(MsgText);
       }
     } while (CMD_STATUS_NOT_AUTHORIZED == res);
 
@@ -3113,7 +3058,7 @@ void MainWindow::on_writeButton_clicked() {
 
     generateAllConfigs();
   } else
-    csApplet->warningBox(tr("Nitrokey is not connected!"));
+      csApplet()->warningBox(tr("Nitrokey is not connected!"));
 
   displayCurrentSlotConfig();
 }
@@ -3231,7 +3176,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 
       switch (res) {
       case CMD_STATUS_OK:
-        csApplet->messageBox(tr("Configuration successfully written."));
+          csApplet()->messageBox(tr("Configuration successfully written."));
         break;
       case CMD_STATUS_NOT_AUTHORIZED:
         // Ask for password
@@ -3251,7 +3196,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
             if (cryptostick->validPassword) {
               lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
             } else {
-              csApplet->warningBox(tr("Wrong PIN. Please try again."));
+                csApplet()->warningBox(tr("Wrong PIN. Please try again."));
             }
             password.clear();
           }
@@ -3270,7 +3215,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
         // correct..
         break;
       default:
-        csApplet->warningBox(tr("Error writing configuration!"));
+          csApplet()->warningBox(tr("Error writing configuration!"));
       }
     } while (CMD_STATUS_NOT_AUTHORIZED == res);
 
@@ -3280,7 +3225,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
     cryptostick->getStatus();
     generateAllConfigs();
   } else {
-    csApplet->warningBox(tr("Nitrokey not connected!"));
+      csApplet()->warningBox(tr("Nitrokey not connected!"));
   }
   displayCurrentGeneralConfig();
 }
@@ -3362,10 +3307,8 @@ void MainWindow::getTOTP14() { getTOTPDialog(13); }
 void MainWindow::getTOTP15() { getTOTPDialog(14); }
 
 void MainWindow::on_eraseButton_clicked() {
-  bool answer = csApplet->yesOrNoBox(tr("WARNING: Are you sure you want to erase the slot?"));
-  char clean[8];
-
-  memset(clean, ' ', 8);
+  bool answer = csApplet()->yesOrNoBox(tr("WARNING: Are you sure you want to erase the slot?"), false);
+  char clean[8] = {' '};
 
   uint8_t slotNo = ui->slotComboBox->currentIndex();
 
@@ -3383,13 +3326,39 @@ void MainWindow::on_eraseButton_clicked() {
   }
 
   if (answer) {
-    cryptostick->eraseSlot(slotNo);
+    int res = cryptostick->eraseSlot(slotNo);
+    if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
+      uint8_t tempPassword[25] = {0};
+      QString password;
+
+      do {
+          PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                           PinDialog::ADMIN_PIN);
+          int ok = dialog.exec();
+        if (ok != QDialog::Accepted) {
+          return;
+        }
+        dialog.getPassword(password);
+
+        generateTemporaryPassword(tempPassword);
+        cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
+        if (cryptostick->validPassword) {
+          lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+        } else {
+            csApplet()->warningBox(tr("Wrong PIN. Please try again."));
+        }
+        res = cryptostick->eraseSlot(slotNo);
+      } while (res != CMD_STATUS_OK);
+    }
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Sleep::msleep(1000);
     QApplication::restoreOverrideCursor();
     generateAllConfigs();
 
-    csApplet->messageBox(tr("Slot has been erased successfully."));
+    if (res == CMD_STATUS_OK)
+        csApplet()->messageBox(tr("Slot has been erased successfully."));
+  } else {
+      csApplet()->messageBox(tr("Command execution failed. Please try again."));
   }
 
   displayCurrentSlotConfig();
@@ -3484,7 +3453,7 @@ void MainWindow::checkPasswordTime_Valid() {
       is_forget_PIN_after_10_minutes_enabled) {
     cryptostick->validUserPassword = false;
     memset(cryptostick->userTemporaryPassword, 0, 25);
-      overwrite_string(nkpro_user_PIN); // for NK Pro 0.7 only
+    overwrite_string(nkpro_user_PIN); // for NK Pro 0.7 only
   }
 }
 
@@ -3591,9 +3560,9 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
       ui->PWS_ComboBoxSelectSlot->setItemText(
           Slot, QString("Slot ").append(QString::number(Slot + 1, 10)));
     } else
-      csApplet->warningBox(tr("Can't clear slot."));
+        csApplet()->warningBox(tr("Can't clear slot."));
   } else
-    csApplet->messageBox(tr("Slot is erased already."));
+      csApplet()->messageBox(tr("Slot is erased already."));
 
   generateMenu();
 }
@@ -3611,8 +3580,8 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   if (TRUE == cryptostick->passwordSafeStatus[index]) {
     ui->PWS_EditSlotName->setText((char *)cryptostick->passwordSafeSlotNames[index]);
 
-    ret = cryptostick->getPasswordSafeSlotPassword(index);
-    ret = cryptostick->getPasswordSafeSlotLoginName(index);
+    cryptostick->getPasswordSafeSlotPassword(index);
+    cryptostick->getPasswordSafeSlotLoginName(index);
 
     ui->PWS_EditPassword->setText((QString)(char *)cryptostick->passwordSafePassword);
     ui->PWS_EditLoginName->setText((QString)(char *)cryptostick->passwordSafeLoginName);
@@ -3649,7 +3618,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
           PWS_SLOTNAME_LENGTH);
   SlotName[PWS_SLOTNAME_LENGTH] = 0;
   if (0 == strlen((char *)SlotName)) {
-    csApplet->warningBox(tr("Please enter a slotname."));
+      csApplet()->warningBox(tr("Please enter a slotname."));
     return;
   }
 
@@ -3661,7 +3630,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
           PWS_PASSWORD_LENGTH);
   Password[PWS_PASSWORD_LENGTH] = 0;
   if (0 == strlen((char *)Password)) {
-    csApplet->warningBox(tr("Please enter a password."));
+      csApplet()->warningBox(tr("Please enter a password."));
     return;
   }
 
@@ -3674,7 +3643,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
 
   ret = cryptostick->setPasswordSafeSlotData_2(Slot, (uint8_t *)LoginName);
   if (ERR_NO_ERROR != ret) {
-    csApplet->warningBox(tr("Can't save slot."));
+      csApplet()->warningBox(tr("Can't save slot."));
     return;
   }
 
@@ -3784,13 +3753,13 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
               msgBox.exec();
             } else {
               Sleep::msleep(3000);
-              ret_s32 = cryptostick->passwordSafeEnable((char *)&password[1]);
+              cryptostick->passwordSafeEnable((char *)&password[1]);
             }
           }
 
           break;
         default:
-          csApplet->warningBox(tr("Can't unlock password safe."));
+            csApplet()->warningBox(tr("Can't unlock password safe."));
           break;
         }
       } else {
@@ -3807,13 +3776,13 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
         // Mark password safe as disabled feature
         cryptostick->passwordSafeAvailable = FALSE;
         UnlockPasswordSafeAction->setEnabled(false);
-        csApplet->warningBox(tr("Password safe is not supported by this device."));
+          csApplet()->warningBox(tr("Password safe is not supported by this device."));
         generateMenu();
         ui->tabWidget->setTabEnabled(3, 0);
       } else {
         if (CMD_STATUS_WRONG_PASSWORD == ret_s32) // Wrong password
         {
-          csApplet->warningBox(tr("Wrong user password."));
+            csApplet()->warningBox(tr("Wrong user password."));
         }
       }
       return;
@@ -3830,7 +3799,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
 
   ret_s32 = cryptostick->getPasswordSafeSlotPassword(Slot);
   if (ERR_NO_ERROR != ret_s32) {
-    csApplet->warningBox(tr("Pasword safe: Can't get password"));
+      csApplet()->warningBox(tr("Pasword safe: Can't get password"));
     return;
   }
   password_safe_password.append((char *)cryptostick->passwordSafePassword);
@@ -3849,7 +3818,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
   } else {
     password_safe_password = QString("Password safe [%1] has been copied to clipboard")
                                  .arg((char *)cryptostick->passwordSafeSlotNames[Slot]);
-    csApplet->messageBox(password_safe_password);
+      csApplet()->messageBox(password_safe_password);
   }
 }
 
@@ -3908,7 +3877,7 @@ void MainWindow::resetTime() {
         if (cryptostick->validPassword) {
           lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
         } else {
-          csApplet->warningBox(tr("Wrong Pin. Please try again."));
+            csApplet()->warningBox(tr("Wrong Pin. Please try again."));
         }
         password.clear();
       }
@@ -3923,7 +3892,6 @@ void MainWindow::resetTime() {
 
 int MainWindow::getNextCode(uint8_t slotNumber) {
   uint8_t result[18] = {0};
-  //  memset(result, 0, 18);
   uint32_t code;
   uint8_t config;
   int ret;
@@ -3953,80 +3921,77 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       if (QDialog::Accepted != ok) {
         return 1; // user does not click OK button
       }
-    } else {
+    } else { // valid user password
       if (cryptostick->is_nkpro_rtm1()) {
         userAuthenticate(nkpro_user_PIN);
       }
     }
   }
-
-  // Start the config dialog
-  if ((TRUE == cryptostick->validUserPassword) || (!is_OTP_PIN_protected)) {
-
-    // is it TOTP?
-    if (slotNumber >= 0x20)
-      cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
-
-    lastTOTPTime = QDateTime::currentDateTime().toTime_t();
-    ret = cryptostick->setTime(TOTP_CHECK_TIME);
-
-    // if time is out of sync on the device
-    if (ret == -2) {
-      bool answer;
-      answer = csApplet->detailedYesOrNoBox(
-          tr("Time is out-of-sync"),
-          tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-             "sync.\nYour computer may be configured with a wrong time "
-             "or\nyour Nitrokey may have been attacked. If an attacker "
-             "or\nmalware could have used your Nitrokey you should reset the "
-             "secrets of your configured One Time Passwords. If your "
-             "computer's time is wrong, please configure it correctly and "
-             "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-          0, false);
-
-      if (answer) {
-        resetTime();
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        Sleep::msleep(1000);
-        QApplication::restoreOverrideCursor();
-        generateAllConfigs();
-        csApplet->messageBox(tr("Time reset!"));
-      } else
-        return 1;
-    }
-
-    cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval,
-                         result);
-    code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
-    config = result[4];
-
-    QString output;
-    if (config & (1 << 0)) {
-      code = code % 100000000;
-      output.append(QString("%1").arg(QString::number(code), 8, '0'));
-    } else {
-      code = code % 1000000;
-      output.append(QString("%1").arg(QString::number(code), 6, '0'));
-    }
-
-    otpInClipboard = output;
-    copyToClipboard(otpInClipboard);
-    if (DebugingActive)
-      qDebug() << otpInClipboard;
-  } else if (ok) {
-    csApplet->warningBox(tr("Invalid password!"));
+  if (is_OTP_PIN_protected && ok == QDialog::Accepted && !cryptostick->validUserPassword) {
+      csApplet()->warningBox(tr("Invalid password!"));
     return 1;
   }
+
+  // Start the config dialog
+  // is it TOTP?
+  if (slotNumber >= 0x20)
+    cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
+
+  lastTOTPTime = QDateTime::currentDateTime().toTime_t();
+  ret = cryptostick->setTime(TOTP_CHECK_TIME);
+
+  // if time is out of sync on the device
+  if (ret == -2) {
+    bool answer;
+    answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
+                                            tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+                                                       "sync.\nYour computer may be configured with a wrong time "
+                                                       "or\nyour Nitrokey may have been attacked. If an attacker "
+                                                       "or\nmalware could have used your Nitrokey you should reset the "
+                                                       "secrets of your configured One Time Passwords. If your "
+                                                       "computer's time is wrong, please configure it correctly and "
+                                                       "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+                                            false);
+
+    if (answer) {
+      resetTime();
+      QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+      Sleep::msleep(1000);
+      QApplication::restoreOverrideCursor();
+      generateAllConfigs();
+        csApplet()->messageBox(tr("Time reset!"));
+    } else
+      return 1;
+  }
+
+  cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval, result);
+  code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
+  config = result[4];
+
+  QString output;
+  if (config & (1 << 0)) {
+    code = code % 100000000;
+    output.append(QString("%1").arg(QString::number(code), 8, '0'));
+  } else {
+    code = code % 1000000;
+    output.append(QString("%1").arg(QString::number(code), 6, '0'));
+  }
+
+  otpInClipboard = output;
+  copyToClipboard(otpInClipboard);
+  if (DebugingActive)
+    qDebug() << otpInClipboard;
 
   return 0;
 }
 
-void MainWindow::userAuthenticate(const QString &password) {
+int MainWindow::userAuthenticate(const QString &password) {
   uint8_t tempPassword[25];
   generateTemporaryPassword(tempPassword);
-  cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
+  int result = cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
   if (cryptostick->validUserPassword)
     lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+  return result;
 }
 
 void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {
@@ -4074,13 +4039,12 @@ void MainWindow::on_counterEdit_editingFinished() {
     quint64 counterMaxValue = ULLONG_MAX;
     if (!conversionSuccess) {
       ui->counterEdit->setText(QString("%1").arg(0));
-      csApplet->warningBox(tr("Counter must be a value between 0 and %1").arg(counterMaxValue));
+        csApplet()->warningBox(tr("Counter must be a value between 0 and %1").arg(counterMaxValue));
     }
   } else { // for nitrokey storage
     if (!conversionSuccess || ui->counterEdit->text().toLatin1().length() > 7) {
       ui->counterEdit->setText(QString("%1").arg(0));
-      csApplet->warningBox(
-          tr("For Nitrokey Storage counter must be a value between 0 and 9999999"));
+        csApplet()->warningBox(tr("For Nitrokey Storage counter must be a value between 0 and 9999999"));
     }
   }
 }
@@ -4111,7 +4075,7 @@ int MainWindow::factoryReset() {
     dialog.getPassword(password);
     if (QDialog::Accepted == ok) {
       ret = cryptostick->factoryReset(password);
-      csApplet->messageBox(tr(getFactoryResetMessage(ret)));
+        csApplet()->messageBox(tr(getFactoryResetMessage(ret)));
       memset(password, 0, strlen(password));
     }
   } while (QDialog::Accepted == ok && CMD_STATUS_WRONG_PASSWORD == ret);
@@ -4154,18 +4118,11 @@ void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
   setCounter(PWS_PASSWORD_LENGTH, arg1, ui->l_c_password);
 }
 
-
-void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked)
-{
-    if (checked && cryptostick->is_nkpro_rtm1()){
-        bool answer = csApplet->detailedYesOrNoBox(
-                tr("To handle this functionality "
-                           "application will keep your user PIN in memory. "
-                           "Do you want to continue?"),
-        tr("It will be cleared on exit or after 10 minutes "
-                           "(depending on your choice in the form)."
-        ),
-                0, false);
-        ui->enableUserPasswordCheckBox->setChecked(answer);
-    }
+void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
+  if (checked && cryptostick->is_nkpro_rtm1()) {
+    bool answer = csApplet()->yesOrNoBox(tr("To handle this functionality "
+                                                    "application will keep your user PIN in memory. "
+                                                    "Do you want to continue?"), false);
+    ui->enableUserPasswordCheckBox->setChecked(answer);
+  }
 }

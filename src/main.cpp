@@ -47,8 +47,6 @@ int main(int argc, char *argv[]) {
   }
 #endif
 
-  csApplet = new CryptostickApplet;
-
   int i;
 
   char *p;
@@ -87,7 +85,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   if (!success) {
-    success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg("en"));
+    myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg("en"));
   }
   a.installTranslator(&myappTranslator);
 
@@ -161,6 +159,7 @@ int main(int argc, char *argv[]) {
   }
 
   MainWindow w(&StartupInfo_st);
+//    csApplet()->setParent(&w);
 
   QDateTime local(QDateTime::currentDateTime());
 

@@ -78,10 +78,12 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
-    QString nkpro_user_PIN;
-    void overwrite_string(QString &str);
+    void initialTimeReset(int ret);
+    QMutex check_connection_mutex;
+  QString nkpro_user_PIN;
+  void overwrite_string(QString &str);
 
-    void InitState();
+  void InitState();
   void createIndicator();
   void startDebug();
   void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type,
@@ -186,7 +188,6 @@ private:
   int AnalyseProductionInfos();
   void refreshStick20StatusData();
 
-
 public slots:
   void startAboutDialog();
   void startStick10ActionChangeUserPIN();
@@ -223,7 +224,7 @@ private slots:
   void resizeMin();
   void checkConnection();
 
-    void on_writeButton_clicked();
+  void on_writeButton_clicked();
   void displayCurrentTotpSlotConfig(uint8_t slotNo);
   void displayCurrentHotpSlotConfig(uint8_t slotNo);
   void displayCurrentSlotConfig();
@@ -320,9 +321,10 @@ private slots:
 
   void generateTemporaryPassword(uint8_t *tempPassword) const;
 
-  void userAuthenticate(const QString &password);
+  int userAuthenticate(const QString &password);
 
   void on_enableUserPasswordCheckBox_clicked(bool checked);
+
 };
 
 class utf8FieldLengthValidator : public QValidator {
