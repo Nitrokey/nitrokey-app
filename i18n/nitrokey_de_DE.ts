@@ -790,24 +790,12 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Nitrokey Storage wurde verbunden</translation>
     </message>
     <message>
-        <source>Tests</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Number of tests:</source>
         <translation type="vanished">Anzahl der Tests:</translation>
     </message>
     <message>
         <source>HOTP counter:</source>
         <translation type="vanished">HOTP-Zähler:</translation>
-    </message>
-    <message>
-        <source>Test HOTP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Test TOTP</source>
-        <translation></translation>
     </message>
     <message>
         <source>Password Safe</source>
@@ -1964,66 +1952,6 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     <message>
         <source>Wrong size of hidden volume</source>
         <translation>Falsche Größe des Versteckten Volumens</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. You may want to copy some innocuous files to the encrypted data.&lt;br/&gt;2. Configure hidden volumes in this dialogue. &lt;br/&gt;3. Once you configured a hidden volume you must not use/write to the encryption volume anymore. Otherwise it may destroy the data in your hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password strength:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>lower case</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>upper case</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>numbers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>symbols</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hidden Volume settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unit:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>GB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hidden volume not positioned in unwritten space. Please set your volume between %1% and %2% of total SD card size.</source>
