@@ -125,13 +125,13 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
 
 struct charset_space {
   int CharSpace;
-  int HasLowerAlpha :1;
-  int HasUpperAlpha :1;
-  int HasGermanChars :1;
-  int HasNumber :1;
-  int HasSpecialChars1 :1;
-  int HasSpecialChars2 :1;
-  int HasSpecialChars3 :1;
+  int HasLowerAlpha : 1;
+  int HasUpperAlpha : 1;
+  int HasGermanChars : 1;
+  int HasNumber : 1;
+  int HasSpecialChars1 : 1;
+  int HasSpecialChars2 : 1;
+  int HasSpecialChars3 : 1;
   void clear() { memset(this, 0, sizeof(*this)); }
 } c;
 
@@ -208,8 +208,8 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
     Entropy = 0;
   }
   // == using human readable symbols, 127 bits
-//  ui->HVEntropieRealWords->setText(
-//      QString("%1").sprintf("using human readable symbols: %3.1lf", Entropy / 2.0));
+  //  ui->HVEntropieRealWords->setText(
+  //      QString("%1").sprintf("using human readable symbols: %3.1lf", Entropy / 2.0));
   int strength = password_human_strength(Entropy);
   ui->password_strength_progressBar->setFormat(labels[strength]);
   ui->password_strength_progressBar->setValue(100.0 * Entropy / 64.0 / 2.0);
@@ -236,9 +236,10 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
   }
 
   ui->HVSdCardHighWaterMark->setText(
-      QString("%1").sprintf("The unwritten area available for hidden volume\nis between "
-                            "%d %% and %d %% of the sd card size",
-                            HighWatermarkMin, HighWatermarkMax));
+      tr("The unwritten area available for hidden volume\nis between "
+         "%1 % and %2 % of the storage size")
+          .arg(HighWatermarkMin)
+          .arg(HighWatermarkMax));
 
   // Set valid input range
   //  ui->StartBlockSpin->setMaximum(HighWatermarkMax - 1);

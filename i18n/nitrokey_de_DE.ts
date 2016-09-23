@@ -790,12 +790,24 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Nitrokey Storage wurde verbunden</translation>
     </message>
     <message>
+        <source>Tests</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Number of tests:</source>
         <translation type="vanished">Anzahl der Tests:</translation>
     </message>
     <message>
         <source>HOTP counter:</source>
         <translation type="vanished">HOTP-Zähler:</translation>
+    </message>
+    <message>
+        <source>Test HOTP</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Test TOTP</source>
+        <translation></translation>
     </message>
     <message>
         <source>Password Safe</source>
@@ -1830,6 +1842,46 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
         <translation>Versteckte Volumen Einrichten</translation>
     </message>
     <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. You may want to copy some innocuous files to the encrypted data.&lt;br/&gt;2. Configure hidden volumes in this dialogue. &lt;br/&gt;3. Once you configured a hidden volume you must not use/write to the encryption volume anymore. Otherwise it may destroy the data in your hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password strength:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lower case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>upper case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>symbols</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden Volume settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Hidden volume slot 1</source>
         <translation>Verstecktes Volumen 1</translation>
     </message>
@@ -1846,16 +1898,36 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
         <translation>Verstecktes Volumen 4</translation>
     </message>
     <message>
+        <source>Unit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>High water mark</source>
-        <translation>Höchster Stand</translation>
+        <translation type="vanished">Höchster Stand</translation>
     </message>
     <message>
         <source>Start at % of SD size:</source>
-        <translation>Start bei % des Speichers:</translation>
+        <translation type="vanished">Start bei % des Speichers:</translation>
     </message>
     <message>
         <source>End at % of SD size:</source>
-        <translation>Ende bei % des Speichers:</translation>
+        <translation type="vanished">Ende bei % des Speichers:</translation>
     </message>
     <message>
         <source>Password:</source>
@@ -1863,7 +1935,7 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     </message>
     <message>
         <source>12345678901234567890</source>
-        <translation>12345678901234567890</translation>
+        <translation type="vanished">12345678901234567890</translation>
     </message>
     <message>
         <source>Show password</source>
@@ -1871,15 +1943,15 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     </message>
     <message>
         <source>Entropy guess:</source>
-        <translation>Zufälligkeit:</translation>
+        <translation type="vanished">Zufälligkeit:</translation>
     </message>
     <message>
         <source> bits for random chars</source>
-        <translation>Bits bei zufälligen Zeichen</translation>
+        <translation type="vanished">Bits bei zufälligen Zeichen</translation>
     </message>
     <message>
         <source> for real words</source>
-        <translation>bei Verwendung von Wörtern</translation>
+        <translation type="vanished">bei Verwendung von Wörtern</translation>
     </message>
     <message>
         <source>Your password is too short. Use at least 8 characters.</source>
@@ -1892,6 +1964,107 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     <message>
         <source>Wrong size of hidden volume</source>
         <translation>Falsche Größe des Versteckten Volumens</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. You may want to copy some innocuous files to the encrypted data.&lt;br/&gt;2. Configure hidden volumes in this dialogue. &lt;br/&gt;3. Once you configured a hidden volume you must not use/write to the encryption volume anymore. Otherwise it may destroy the data in your hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password strength:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>lower case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>upper case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>symbols</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden Volume settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume not positioned in unwritten space. Please set your volume between %1% and %2% of total SD card size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Very Weak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Strong</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Very Strong</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The unwritten area available for hidden volume
+is between %1 % and %2 % of the storage size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Storage capacity: %1GB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start hidden volume at %1 of the encrypted storage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End hidden volume at %1 of the encrypted storage:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
