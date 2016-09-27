@@ -785,19 +785,15 @@ void Device::getSlotConfigs() {
 int Device::getStatus() {
   int res;
 
-  uint8_t data[1];
-
   if (isConnected) {
-    Command cmd(CMD_GET_STATUS, data, 0);
-
+    Command cmd(CMD_GET_STATUS, Q_NULLPTR, 0);
     res = sendCommand(&cmd);
 
     if (res == -1) {
-      return -1;
+      return -1; //sending error
     } else { // sending the command was successful
       Sleep::msleep(100);
       Response resp;
-
       resp.getResponse(this);
 
       if (cmd.crc == resp.lastCommandCRC) {
@@ -805,11 +801,28 @@ int Device::getStatus() {
         memcpy(cardSerial, resp.data + 2, 4);
         memcpy(generalConfig, resp.data + 6, 3);
         memcpy(otpPasswordConfig, resp.data + 9, 2);
+      } else {
+          const int maxTries = 5;
+          const int maxTriesToReconnection = 2*maxTries;
+          static int invalidCRCCounter = 0;
+          QString text;
+          text = QString(__FUNCTION__) + QString(": CRC other than expected %1/%2\n").arg(invalidCRCCounter).arg(maxTries);
+          DebugAppendTextGui(text.toLatin1().data());
+          if (++invalidCRCCounter%maxTries == 0){
+              if(invalidCRCCounter>maxTriesToReconnection){
+                  invalidCRCCounter = 0;
+                  return -11; // fatal error, cannot resume communication, ask user for reinsertion
+              }
+              text = QString(__FUNCTION__)+ ": Reconnecting device\n";
+              DebugAppendTextGui(text.toLatin1().data());
+              this->disconnect();
+              return -10; // problems with communication, received CRC other than expected, try to reinitialize
+          }
       }
     }
-    return 0;
+    return 0; //OK
   }
-  return -2;
+  return -2; // device not connected
 }
 
 /*******************************************************************************
