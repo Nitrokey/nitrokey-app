@@ -1374,6 +1374,18 @@ Zeit des Nitrokey zurücksetzen?</translation>
         <source>To handle this functionality application will keep your user PIN in memory. Do you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Detected some communication problems with the device. Reinitializing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device lock detected, please remove and insert the device again.
+If problem will occur again please: 
+1. Close the application
+2. Reinsert the device
+3. Wait 30 seconds and start application</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
