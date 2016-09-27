@@ -8,16 +8,8 @@
         <translation>Über</translation>
     </message>
     <message>
-        <source>Nitrokey App</source>
-        <translation type="obsolete">Nitrokey App</translation>
-    </message>
-    <message>
         <source>ICON</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Dieses Programm dient zum konfigurieren und verwenden des Nitrokeys.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Anleitung und Hilfe&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>i</source>
@@ -38,10 +30,6 @@
     <message>
         <source>TextLabel</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Mit diesem Programm können Sie den Nitrokey konfigurieren und nutzen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -68,10 +56,6 @@ Initialisieren Sie die Schlüssel.</translation>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 durch NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt; lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2014 by Nitrokey team. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Urheberrecht 2014 bei Nitrokey. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>New SD card found</source>
@@ -108,10 +92,6 @@ Initialisieren Sie die Schlüssel.</translation>
     <message>
         <source>User:</source>
         <translation>Benutzer:</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2014 by Nitrokey team. This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Urheberrechtlich geschützt 2015 durch Nitrokey. Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt; lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Detailed Status</source>
@@ -162,60 +142,6 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>Not active</source>
         <translation>inaktiv</translation>
-    </message>
-    <message>
-        <source> ***  Warning stick is not securce  ***</source>
-        <translation type="obsolete"> ***  Warnung: Gerät ist noch nicht sicher initialisiert  ***</translation>
-    </message>
-    <message>
-        <source> ***        Select -Init keys-      ***</source>
-        <translation type="obsolete"> ***        Wählen Sie -Schlüssel initialisieren-      ***</translation>
-    </message>
-    <message>
-        <source>      *** Firmware is locked *** </source>
-        <translation type="obsolete">      *** Firmware ist gesperrt *** </translation>
-    </message>
-    <message>
-        <source>      *** New SD card found  ***
-</source>
-        <translation type="obsolete">      *** Neue SD-Karte gefunden  ***
-</translation>
-    </message>
-    <message>
-        <source> *** Not erased with random chars ***
-</source>
-        <translation type="obsolete"> *** Noch nicht mit Zufallszahlen gelöscht ***
-</translation>
-    </message>
-    <message>
-        <source>Unencrypted volume   READ/WRITE mode </source>
-        <translation type="obsolete">Unverschlüsseltes Volumen   LESE/SCHREIB Modus </translation>
-    </message>
-    <message>
-        <source>Unencrypted volume   READ ONLY mode </source>
-        <translation type="obsolete">Unverschlüsseltes Volumen   NUR-LESE Modus </translation>
-    </message>
-    <message>
-        <source>Hidden volume        active</source>
-        <translation type="obsolete">Verstecktes Volumen        aktiv</translation>
-    </message>
-    <message>
-        <source>Encrypted volume     active</source>
-        <translation type="obsolete">Verschlüsseltes Volumen     aktiv</translation>
-    </message>
-    <message>
-        <source>Encrypted volume     not active</source>
-        <translation type="obsolete">Verschlüsseltes Volumen     nicht aktiv</translation>
-    </message>
-    <message>
-        <source>PIN retry counter
-</source>
-        <translation type="obsolete">PIN-Eingabeversuche
-</translation>
-    </message>
-    <message>
-        <source>User  : </source>
-        <translation type="obsolete">Benutzer  : </translation>
     </message>
     <message>
         <source>No active Nitrokey
@@ -284,64 +210,16 @@ Bitte versuchen Sie es erneut</translation>
         <translation type="unfinished">Anzahl möglicher Versuche:</translation>
     </message>
     <message>
-        <source>Old user PIN</source>
-        <translation type="vanished">Alte Benutzer-PIN</translation>
-    </message>
-    <message>
-        <source>New user PIN</source>
-        <translation type="vanished">Neue Benutzer-PIN</translation>
-    </message>
-    <message>
-        <source>Admin PIN</source>
-        <translation type="vanished">Administrator-PIN</translation>
-    </message>
-    <message>
-        <source>New admin PIN</source>
-        <translation type="vanished">Neue Administrator-PIN</translation>
-    </message>
-    <message>
-        <source>Reset user PIN</source>
-        <translation type="vanished">Benutzer-PIN zurücksetzen</translation>
-    </message>
-    <message>
         <source>Admin PIN:</source>
         <translation>Administrator-PIN:</translation>
-    </message>
-    <message>
-        <source>New user PIN:</source>
-        <translation type="vanished">Neue Benutzer-PIN:</translation>
-    </message>
-    <message>
-        <source>Change Update Password</source>
-        <translation type="obsolete">Aktualisierungs-Passwort ändern</translation>
-    </message>
-    <message>
-        <source>Update Password:</source>
-        <translation type="obsolete">Aktualisierungs-Passwort:</translation>
-    </message>
-    <message>
-        <source>New Update Password:</source>
-        <translation type="obsolete">Neues Aktualisierungs-Passwort:</translation>
-    </message>
-    <message>
-        <source>New Update Password (confirm):</source>
-        <translation type="obsolete">Neues Aktualisierungs-Passwort (Wiederholung):</translation>
     </message>
     <message>
         <source>Change Firmware Password</source>
         <translation>Firmware-Passwort ändern</translation>
     </message>
     <message>
-        <source>Firmware Password:</source>
-        <translation type="vanished">Firmware-Passwort:</translation>
-    </message>
-    <message>
         <source>New Firmware Password:</source>
         <translation>Neues Firmware-Passwort:</translation>
-    </message>
-    <message>
-        <source>New Firmware Password (confirm):</source>
-        <translation type="vanished">Neues Firmware-Passwort (Wiederholung):</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
@@ -654,10 +532,6 @@ Bitte versuchen Sie es erneut</translation>
         <translation>&apos;Enter&apos; als letztes Zeichen senden</translation>
     </message>
     <message>
-        <source>00000000</source>
-        <translation type="vanished">00000000</translation>
-    </message>
-    <message>
         <source>Set to zero</source>
         <translation>Auf Null setzen</translation>
     </message>
@@ -746,14 +620,6 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Einmalpasswort-Einstellungen</translation>
     </message>
     <message>
-        <source>Protect OTP by user PIN</source>
-        <translation type="vanished">Einmalpasswörter mit Benutzer-PIN schützen</translation>
-    </message>
-    <message>
-        <source>Forget PIN after 10 minutes</source>
-        <translation type="vanished">PIN nach 10 Minuten vergessen</translation>
-    </message>
-    <message>
         <source>USB-Keyboard only</source>
         <translation>Nur für USB-Tastaturen</translation>
     </message>
@@ -788,14 +654,6 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>Nitrokey Storage connected</source>
         <translation>Nitrokey Storage wurde verbunden</translation>
-    </message>
-    <message>
-        <source>Number of tests:</source>
-        <translation type="vanished">Anzahl der Tests:</translation>
-    </message>
-    <message>
-        <source>HOTP counter:</source>
-        <translation type="vanished">HOTP-Zähler:</translation>
     </message>
     <message>
         <source>Password Safe</source>
@@ -894,18 +752,6 @@ Bitte versuchen Sie es erneut</translation>
         <translation>&amp;Verstecktes Volumen sperren</translation>
     </message>
     <message>
-        <source>&amp;Change user PIN</source>
-        <translation type="vanished">&amp;Benutzer-PIN ändern</translation>
-    </message>
-    <message>
-        <source>&amp;Change admin PIN</source>
-        <translation type="vanished">&amp;Administrator-PIN ändern</translation>
-    </message>
-    <message>
-        <source>&amp;Change Update PIN</source>
-        <translation type="obsolete">&amp;Aktualisierungs-PIN ändern</translation>
-    </message>
-    <message>
         <source>&amp;Enable firmware update</source>
         <translation>&amp;Firmware-Aktualisierung aktivieren</translation>
     </message>
@@ -916,10 +762,6 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>&amp;Destroy encrypted data</source>
         <translation>&amp;Verschlüsselte Daten zerstören</translation>
-    </message>
-    <message>
-        <source>&amp;Initialize keys</source>
-        <translation type="vanished">&amp;Schlüssel initialisieren</translation>
     </message>
     <message>
         <source>&amp;Initialize storage with random data</source>
@@ -952,10 +794,6 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>&amp;Lock stick hardware</source>
         <translation>&amp;Hardware sperren</translation>
-    </message>
-    <message>
-        <source>&amp;Reset user PIN</source>
-        <translation type="vanished">&amp;Benutzer-PIN zurücksetzen</translation>
     </message>
     <message>
         <source>&amp;Lock Device</source>
@@ -1012,10 +850,6 @@ Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
         <translation>AES-Schlüssel wurde generiert</translation>
     </message>
     <message>
-        <source>AES key does not exist!</source>
-        <translation type="obsolete">AES-Schlüssel existiert nicht!</translation>
-    </message>
-    <message>
         <source>This activity locks your hidden volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
         <translation>Diese Aktivität verriegelt Ihr verstecktes Volumen. Wollen Sie fortsetzen?
@@ -1070,26 +904,6 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     <message>
         <source>The selected lines must be greater then greatest password length</source>
         <translation>Die ausgewählten Zeilen müssen größer sein als die maximale Passwortlänge</translation>
-    </message>
-    <message>
-        <source>SD card is not ready</source>
-        <translation type="vanished">Speicher ist nicht bereit</translation>
-    </message>
-    <message>
-        <source>Smartcard is not ready</source>
-        <translation type="vanished">Chipkarte ist nicht bereit</translation>
-    </message>
-    <message>
-        <source>Smartcard and SD card are not ready</source>
-        <translation type="vanished">Chipkarte und Speicher sind nicht bereit</translation>
-    </message>
-    <message>
-        <source>This command fills the encrypted volumes with random data.
-This will destroy all encrypted volumes!
-This commands requires more than 1 hour for 32GB.</source>
-        <translation type="vanished">Dieser Befehl füllt die verschlüsselten Volumen mit Zufallsdaten.
-Dies wird alle verschlüsselten Volumen zerstören!
-Dieser Befehl benötigt für 32 GB mehr als eine Stunde.</translation>
     </message>
     <message>
         <source>Not implemented</source>
@@ -1196,12 +1010,6 @@ Zeit des Nitrokey zurücksetzen?</translation>
     <message>
         <source>Nitrokey connected</source>
         <translation>Nitrokey wurde verbunden</translation>
-    </message>
-    <message>
-        <source>Warning: Encrypted volume is not secure.
-Select &quot;Initialize keys&quot;</source>
-        <translation type="vanished">Warnung: Verschlüsseltes Volumen ist nicht sicher.
-Wählen Sie &quot;Schlüssel initialisieren&quot; aus.</translation>
     </message>
     <message>
         <source>Warning: Encrypted volume is not secure,
@@ -1341,22 +1149,6 @@ Zeit des Nitrokey zurücksetzen?</translation>
     <message>
         <source>For Nitrokey Storage counter must be a value between 0 and 9999999</source>
         <translation type="unfinished">Beim Nitrokey Storage muss der Zähler ein Wert zwischen 9999999 sein</translation>
-    </message>
-    <message>
-        <source>Seed must be lower than 1048560 (= 2^20)</source>
-        <translation type="vanished">Seed muss kleiner als 1048560 (= 2^20) sein</translation>
-    </message>
-    <message>
-        <source>Seed had to be a multiple of 16</source>
-        <translation type="vanished">Seed muss ein Mehrfaches von 16 sein</translation>
-    </message>
-    <message>
-        <source>Factory reset was successful.</source>
-        <translation type="vanished">Das Zurücksetzen in den Auslieferungszustand war erfolgreich.</translation>
-    </message>
-    <message>
-        <source>Unknown error.</source>
-        <translation type="vanished">Unbekannter Fehler.</translation>
     </message>
     <message>
         <source>Protect OTP by user PIN (will be requested on first use each session)</source>
@@ -1827,10 +1619,6 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
         <translation>Dialog</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor. However it might be possible to extract OTP secrets by physically accessing the device (via JTAG interface). In order to prevent this attack, you can enable the device&apos;s security bit, but doing this disables the option to update the firmware.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sicherheitshinweis&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Bitte lesen Sie diesen Hinweis gründlich.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN-Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Der Nitrokey wird durch eine Benutzer-PIN und Administrator-PIN geschützt. Die Benutzer-PIN wird zum Freischalten des verschlüsselten Speichers, des Passwort-Safes, der Chipkarte und (falls aktiviert) der Einmalpasswörter (OTP) verwendet. Einmalpasswörter sind standardmäßig nicht PIN-geschützt, da es sich hierbei um eine Zweifaktorauthentisierung handelt. Die Chipkarte wird bei jeder Eingabe der Benutzer-PIN freigeschaltet, unabhängig von der jeweiligen Funktion bei der die PIN eingegeben wird. Die Administrator-PIN wird zum Konfigurieren und zum Verwalten von Einträgen verwendet. Bitte ändern Sie die PINs im Auslieferungszustand und halten Sie diese geheim. Falls die Benutzer-PIN oder Administrator-PIN jeweils dreimal falsch eingegeben werden, oder falls die Chipkarte zurückgesetzt wird, werden alle Ihre sensiblen Daten gelöscht.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physischer Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Alle sensiblen Daten sind verschlüsselt und gegen physische Angriffe geschützt. Dies trifft nicht auf Einmalpasswörter zu, da es sich hierbei um eine Zweifaktorauthentisierung handelt. Dies Einmalpasswörter-Geheimnisse lassen sich bei physischem Zugriff extrahieren (mittels JTAG-Schnittstelle). Um dies zu verhindern können Sie das Sicherheits-Bit des Geräts aktivieren. Dies verhindern jedoch auch die Firmwareaktualisierung.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Versteckte Volumen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Versteckte Volumen setzen voraus, dass der Massenspeicher mit Zufallswerten initialisiert wurde. Versteckte Volumen sind mittels Benutzer-PIN und einem zusätzlichem Passwort, welches für jedes versteckte Volumen unterschiedlich ist, geschützt. Ohne die Benutzer-PIN und das Passwort kann das versteckte Volumen nicht gefunden werden und dessen Existenz weder bewiesen noch widerlegt werden. Das Passwort für das versteckte Volumen muss stark und lang genug sein um sog. Brute Force Angriffe zu widerstehen. Die versteckten Volumen werden auf einem Flash-Speicher mit integrierter Nutzungsverteilung (wear levelling) gespeichert. Dadurch könnten Informationen entstehen, die einem hochentwickeltem Angreifer die Existenz versteckter Volumen verraten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sicherheits-Informationen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Bitte lesen Sie diesen Text aufmerksam.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN-Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Ihr Nitrokey wird durch eine Benutzer-PIN und eine Administrator-PIN geschützt. Ihre Benutzer-PIN kann den verschlüsselten Speicher, den Passwort-Safe, die Chipkarte und (falls aktiviert) die Einmalpasswörter freischalten. Einmalpasswörter sind standardmäßig nicht PIN-geschützt da sie lediglich als zweiter Faktor dienen. Die Chipkarte wird immer bei Eingabe der Benutzer-PIN freigeschaltet, unabhängig von der Funktion für die die Benutzer-PIN eingegeben wurde. Die Administrator-PIN dient zum konfigurieren von Einstellungen und zum Hinzufügen oder Ändern von Einträgen. Sie sollten unbedingt die voreingestellten PINs ändern und geheim halten. Falls die Benutzer-PIN and die Administrator-PIN jeweils dreimal falsch eingegeben werden, oder falls die Chipkarte auf den Auslieferungszustand zurückgesetzt wird, gehen alle Ihre sensiblen Daten unwiderruflich verloren.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physischer Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Alle sensiblen Daten sind verschlüsselt und gegen physische Angriffe geschützt. Dies gilt nicht für Einmalpasswörter, da diese lediglich als zweiter Faktor verwendet werden.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Versteckte Volumen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Versteckte Volumen erfordern, dass der Massenspeicher mit Zufallsdaten initialisiert wird. Versteckte Volumen sind durch die Benutzer-PIN und ein separates Passwort, welches für jedes versteckte Volumen unterschiedlich sein kann, geschützt. Ohne Kenntnis der Benutzer-PIN und des Passworts kann das versteckte Volumen nicht gefunden werden und dessen Existenz kann somit weder bewiesen noch widerlegt werden. Das Passwort für das versteckte Volumen muss stark und lang genug sein um Bruteforce-Angriffen zu widerstehen. Die versteckten Volumen werden jedoch auf einem Flash-Speicher mit integriertem Wear-Levelling gespeichert, so dass möglicherweise Informationen anfallen können, die für einen hochentwickelten Angreifer die Existenz von versteckten Volumen belegen könnten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -1926,40 +1714,12 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>High water mark</source>
-        <translation type="vanished">Höchster Stand</translation>
-    </message>
-    <message>
-        <source>Start at % of SD size:</source>
-        <translation type="vanished">Start bei % des Speichers:</translation>
-    </message>
-    <message>
-        <source>End at % of SD size:</source>
-        <translation type="vanished">Ende bei % des Speichers:</translation>
-    </message>
-    <message>
         <source>Password:</source>
         <translation>Passwort:</translation>
     </message>
     <message>
-        <source>12345678901234567890</source>
-        <translation type="vanished">12345678901234567890</translation>
-    </message>
-    <message>
         <source>Show password</source>
         <translation>Passwort anzeigen</translation>
-    </message>
-    <message>
-        <source>Entropy guess:</source>
-        <translation type="vanished">Zufälligkeit:</translation>
-    </message>
-    <message>
-        <source> bits for random chars</source>
-        <translation type="vanished">Bits bei zufälligen Zeichen</translation>
-    </message>
-    <message>
-        <source> for real words</source>
-        <translation type="vanished">bei Verwendung von Wörtern</translation>
     </message>
     <message>
         <source>Your password is too short. Use at least 8 characters.</source>
