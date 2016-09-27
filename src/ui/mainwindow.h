@@ -187,6 +187,8 @@ private:
   int UpdateDynamicMenuEntrys(void);
   int AnalyseProductionInfos();
   void refreshStick20StatusData();
+  void translateDeviceStatusToUserMessage(const int getStatus);
+  void showTrayMessage(QString message);
 
 public slots:
   void startAboutDialog();
