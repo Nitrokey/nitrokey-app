@@ -3017,10 +3017,16 @@ void MainWindow::on_writeButton_clicked() {
       if (slotNo < HOTP_SlotCount) { // HOTP slot
         HOTPSlot hotp;
         generateHOTPConfig(&hotp);
+        if(!validate_secret(hotp.secret)) {
+          return;
+        }
         res = cryptostick->writeToHOTPSlot(&hotp);
       } else { // TOTP slot
         TOTPSlot totp;
         generateTOTPConfig(&totp);
+        if(!validate_secret(totp.secret)) {
+          return;
+        }
         res = cryptostick->writeToTOTPSlot(&totp);
       }
 
@@ -3080,6 +3086,23 @@ void MainWindow::on_writeButton_clicked() {
       csApplet()->warningBox(tr("Nitrokey is not connected!"));
 
   displayCurrentSlotConfig();
+}
+
+bool MainWindow::validate_secret(const uint8_t *secret) const {
+  if(cryptostick->is_nkpro_rtm1() && secret[0] == 0){
+      csApplet()->warningBox(tr("Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret."));
+    return false;
+  }
+  //check if the secret consist only from null bytes
+  //(this value is reserved - it would be ignored by device)
+  //assuming secret points to 20 byte array
+  for (int i=0; i<20; i++){
+    if (secret[i] != 0){
+      return true;
+    }
+  }
+  csApplet()->warningBox(tr("Your secret is invalid. Please change the secret."));
+  return false;
 }
 
 void MainWindow::on_slotComboBox_currentIndexChanged(int index) {
