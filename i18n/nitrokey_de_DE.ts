@@ -55,7 +55,7 @@ Initialisieren Sie die Schlüssel.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 durch NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt; lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 durch Nitrokey UG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt; lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>New SD card found</source>
@@ -71,7 +71,7 @@ Initialisieren Sie die Schlüssel.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey Pro and Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dieses Programm dient zum Konfigurieren und Verwenden des Nitrokey Pro und Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dieses Programm dient zum Konfigurieren und Verwenden des Nitrokey Pro und Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Unencrypted volume:</source>
@@ -203,11 +203,11 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs können nur dreimal ausprobiert werden und sind daher sicher gegen Brute Force Angriffe. Eine PIN mit 6 oder 8 Zahlen ist ausreichend lang so dass längere und kompliziere PINs in der Regel unnötig sind. Die minimale Länge beträgt %1 (%3 für Admin) und die maximale Länge beträgt %2 Zeichen. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs können nur dreimal ausprobiert werden und sind daher sicher gegen Brute Force Angriffe. Eine PIN mit 6 oder 8 Zahlen ist ausreichend lang, so dass längere und kompliziere PINs in der Regel unnötig sind. Die minimale Länge beträgt %1 (%3 für Admin) und die maximale Länge beträgt %2 Zeichen. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Retry count left:</source>
-        <translation type="unfinished">Anzahl möglicher Versuche:</translation>
+        <translation>Anzahl möglicher Versuche:</translation>
     </message>
     <message>
         <source>Admin PIN:</source>
@@ -223,11 +223,11 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
-        <translation type="unfinished">Leider sind keine Eingaben mehr möglich. Bitte nutzen Sie die Option &quot;Reset Benutzer-PIN&quot; im Menü um Ihre PIN zurückzusetzen</translation>
+        <translation>Leider sind keine Eingaben mehr möglich. Bitte nutzen Sie die Option &quot;Reset Benutzer-PIN&quot; im Menü um Ihre PIN zurückzusetzen</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
-        <translation type="unfinished">Leider sind keine Eingaben mehr möglich. Bitte lesen Sie die Dokumentation wie die Admin-PIN zurückgesetzt werden kann.</translation>
+        <translation>Leider sind keine Eingaben mehr möglich. Bitte lesen Sie die Dokumentation wie die Admin-PIN zurückgesetzt werden kann.</translation>
     </message>
     <message>
         <source>Once the firmware password is forgotten the Nitrokey can&apos;t be updated or reset. Don&apos;t lose your firmware password, please.</source>
@@ -235,35 +235,35 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Set User PIN</source>
-        <translation type="unfinished">Setze Benutzer-PIN</translation>
+        <translation>Setze Benutzer-PIN</translation>
     </message>
     <message>
         <source>Current User PIN:</source>
-        <translation type="unfinished">Aktuelle Benutzer-PIN:</translation>
+        <translation>Aktuelle Benutzer-PIN:</translation>
     </message>
     <message>
         <source>New User PIN:</source>
-        <translation type="unfinished">Neue Benutzer-PIN:</translation>
+        <translation>Neue Benutzer-PIN:</translation>
     </message>
     <message>
         <source>Set Admin PIN</source>
-        <translation type="unfinished">Setze Admin-PIN</translation>
+        <translation>Setze Admin-PIN</translation>
     </message>
     <message>
         <source>Current Admin PIN:</source>
-        <translation type="unfinished">Aktuelle Admin-PIN:</translation>
+        <translation>Aktuelle Admin-PIN:</translation>
     </message>
     <message>
         <source>New Admin PIN:</source>
-        <translation type="unfinished">Neue Admin-PIN:</translation>
+        <translation>Neue Admin-PIN:</translation>
     </message>
     <message>
         <source>Reset User PIN</source>
-        <translation type="unfinished">Benutzer-PIN zurücksetzen</translation>
+        <translation>Benutzer-PIN zurücksetzen</translation>
     </message>
     <message>
         <source>Current Firmware Password:</source>
-        <translation type="unfinished">Aktuelles Firmware-Passwort:</translation>
+        <translation>Aktuelles Firmware-Passwort:</translation>
     </message>
     <message>
         <source>Show password</source>
@@ -275,15 +275,15 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Current password is not correct. Please retry.</source>
-        <translation type="unfinished">Aktuelles Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
+        <translation>Aktuelles Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>New password is not correct. Please retry.</source>
-        <translation type="unfinished">Neues Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
+        <translation>Neues Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>New password is set</source>
-        <translation type="unfinished">Neues Passwort wurde gesetzt</translation>
+        <translation>Neues Passwort wurde gesetzt</translation>
     </message>
     <message>
         <source>Wrong password.</source>
@@ -295,15 +295,15 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Current Admin password is not correct. Please retry.</source>
-        <translation type="unfinished">Aktuelles Admin-Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
+        <translation>Aktuelles Admin-Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>There was a problem during communicating with device or new password is not correct. Please retry.</source>
-        <translation type="unfinished">Bei der Gerätekommunikation ist ein Fehler aufgetreten oder das neue Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
+        <translation>Bei der Gerätekommunikation ist ein Fehler aufgetreten oder das neue Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>New User password is set</source>
-        <translation type="unfinished">Neue Benutzer-PIN wurde gesetzt</translation>
+        <translation>Neue Benutzer-PIN wurde gesetzt</translation>
     </message>
     <message>
         <source>Wrong Admin PIN.</source>
@@ -319,11 +319,11 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Wrong password or there was a communication problem with the device.</source>
-        <translation type="unfinished">Falsches Passwort oder Kommunikationsproblem mit dem Gerät.</translation>
+        <translation>Falsches Passwort oder Kommunikationsproblem mit dem Gerät.</translation>
     </message>
     <message>
         <source>Password has been changed with success!</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort wurde erfolgreich gesetzt!</translation>
     </message>
     <message>
         <source>The minimum length of the old password is </source>
@@ -834,7 +834,7 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>Warning: Encrypted volume is not secure,
 Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation type="unfinished">Warnung: Verschlüsseltes Volumen ist nicht sicher,
+        <translation>Warnung: Verschlüsseltes Volumen ist nicht sicher,
 Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
     </message>
     <message>
@@ -1031,15 +1031,15 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>&amp;Initialize device</source>
-        <translation type="unfinished">&amp;Gerät initialisieren</translation>
+        <translation>&amp;Gerät initialisieren</translation>
     </message>
     <message>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
-        <translation type="unfinished">Zähler nicht kopiert - Ein Kommunikationsfehler ist aufgetreten. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
+        <translation>Zähler nicht kopiert - Ein Kommunikationsfehler ist aufgetreten. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>Counter value not copied - Nitrokey Storage handles HOTP counter values up to 7 digits. Setting counter value to 0. Please retry.</source>
-        <translation type="unfinished">Zähler nicht kopiert - Nitrokey Storage kann mit bis zu 7-stelligen HOTP-Zählern umgehen. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
+        <translation>Zähler nicht kopiert - Nitrokey Storage kann mit bis zu 7-stelligen HOTP-Zählern umgehen. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>Enter card admin PIN</source>
@@ -1059,33 +1059,33 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Device has been locked</source>
-        <translation type="unfinished">Gerät wurde gesperrt</translation>
+        <translation>Gerät wurde gesperrt</translation>
     </message>
     <message>
         <source>Enter Firmware Password</source>
-        <translation type="unfinished">Geben Sie das Firmware-Passwort ein</translation>
+        <translation>Geben Sie das Firmware-Passwort ein</translation>
     </message>
     <message>
         <source>Enter Firmware Password:</source>
-        <translation type="unfinished">Geben Sie das Firmware-Passwort ein:</translation>
+        <translation>Geben Sie das Firmware-Passwort ein:</translation>
     </message>
     <message>
         <source>There was an error during communicating with device. Please try again.</source>
-        <translation type="unfinished">Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
+        <translation>Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>This command fills the encrypted volumes with random data and will destroy all encrypted volumes!
 It requires more than 1 hour for 32GB. Do you want to continue?</source>
-        <translation type="unfinished">Dieser Befehl füllt das verschlüsselte Volumen mit Zufallswerten und zerstört alle verschlüsselten Volumen!
+        <translation>Dieser Befehl füllt das verschlüsselte Volumen mit Zufallswerten und zerstört alle verschlüsselten Volumen!
 Für 32 GB dauert es mehr als 1 Stunde. Wollen Sie fortsetzen?</translation>
     </message>
     <message>
         <source>Either the password is not correct or the command execution resulted in an error. Please try again.</source>
-        <translation type="unfinished">Entweder ist das Passwort falsch oder bei der Ausführung trat ein Fehler auf. Bitte versuchen Sie es erneut.</translation>
+        <translation>Entweder ist das Passwort falsch oder bei der Ausführung trat ein Fehler auf. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>(debug) Response: </source>
-        <translation type="unfinished">(Fehlersuche) Antwort: </translation>
+        <translation>(Fehlersuche) Antwort: </translation>
     </message>
     <message>
         <source>Can&apos;t save slot.</source>
@@ -1144,31 +1144,31 @@ Zeit des Nitrokey zurücksetzen?</translation>
     </message>
     <message>
         <source>Counter must be a value between 0 and %1</source>
-        <translation type="unfinished">Zähler muss ein Wert zwischen 0 und %1 sein</translation>
+        <translation>Zähler muss ein Wert zwischen 0 und %1 sein</translation>
     </message>
     <message>
         <source>For Nitrokey Storage counter must be a value between 0 and 9999999</source>
-        <translation type="unfinished">Beim Nitrokey Storage muss der Zähler ein Wert zwischen 9999999 sein</translation>
+        <translation>Beim Nitrokey Storage muss der Zähler ein Wert zwischen 9999999 sein</translation>
     </message>
     <message>
         <source>Protect OTP by user PIN (will be requested on first use each session)</source>
-        <translation type="unfinished"></translation>
+        <translation>OTP mit Benutzer-PIN schützen (wird bei der ersten Verwendung jeder Sitzung benötigt)</translation>
     </message>
     <message>
         <source>Forget user PIN after 10 minutes (if unchecked user PIN will remain in memory until application exits)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vergesse die Benutzer-PIN nach 10 Minuten (wenn nicht ausgewählt wird die Benutzer-PIN im Speicher abgelegt bis die Anwendung geschlossen wird)</translation>
     </message>
     <message>
         <source>Command execution failed. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausführung des Befehls fehlgeschlagen. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>To handle this functionality application will keep your user PIN in memory. Do you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Für diese Funktionalität speichert die Anwendung Ihre Benutzer-PIN im Arbeitsspeicher. Wollen Sie fortfahren?</translation>
     </message>
     <message>
         <source>Detected some communication problems with the device. Reinitializing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde ein Problem mit der Gerätekommunikation festgestellt. Reinitialisierung.</translation>
     </message>
     <message>
         <source>Device lock detected, please remove and insert the device again.
@@ -1176,7 +1176,11 @@ If problem will occur again please:
 1. Close the application
 2. Reinsert the device
 3. Wait 30 seconds and start application</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein gesperrtes Gerät wurde erkannt. Bitte entfernen und verbinden Sie das Gerät erneut.
+Falls das Problem erneut auftritt:
+1. Schließen Sie die Anwendung
+2. Verbinden Sie das Gerät erneut
+3. Warten Sie 30 Sekunden und starten anschließend die Anwendung</translation>
     </message>
     <message>
         <source>Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret.</source>
@@ -1639,43 +1643,43 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Bevor Sie fortfahren sollten Sie sich mit den Eigenschaften versteckter Volumen vertraut machen. Ihre verschlüsselten Daten könnten zerstört werden!&lt;br/&gt;Bitte lesen Sie zuerst &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;diese Anleitung&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. You may want to copy some innocuous files to the encrypted data.&lt;br/&gt;2. Configure hidden volumes in this dialogue. &lt;br/&gt;3. Once you configured a hidden volume you must not use/write to the encryption volume anymore. Otherwise it may destroy the data in your hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. Sie sollten einige unverfängliche Dateien auf das verschlüsselte Volumen kopieren.&lt;br/&gt;2. Konfigurieren Sie versteckte Volumen in diesem Fenster. &lt;br/&gt;3. Sobald Sie ein verstecktes Volumen konfiguriert haben dürfen Sie das verschlüsselte Volumen nicht mehr verwenden bzw. darauf schreiben. Andernfalls könnten Ihre Daten im versteckten Volumen zerstört werden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Password settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort Einstellungen</translation>
     </message>
     <message>
         <source>Password strength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort-Stärke:</translation>
     </message>
     <message>
         <source>length</source>
-        <translation type="unfinished"></translation>
+        <translation>Länge</translation>
     </message>
     <message>
         <source>lower case</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleinbuchstaben</translation>
     </message>
     <message>
         <source>upper case</source>
-        <translation type="unfinished"></translation>
+        <translation>Großbuchstaben</translation>
     </message>
     <message>
         <source>numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Zahlen</translation>
     </message>
     <message>
         <source>symbols</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonderzeichen</translation>
     </message>
     <message>
         <source>Hidden Volume settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Versteckte Volumen Einstellungen</translation>
     </message>
     <message>
         <source>Hidden volume slot 1</source>
@@ -1695,23 +1699,23 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     </message>
     <message>
         <source>Unit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Einheit:</translation>
     </message>
     <message>
         <source>%</source>
-        <translation type="unfinished"></translation>
+        <translation>%</translation>
     </message>
     <message>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation>MB</translation>
     </message>
     <message>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation>GB</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Größe wird auf ganzen Prozentsatz der gesamten Speichergröße abgerundet (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Password:</source>
@@ -1735,44 +1739,45 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     </message>
     <message>
         <source>Hidden volume not positioned in unwritten space. Please set your volume between %1% and %2% of total SD card size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstecktes Volumen ist nicht im unbeschriebenen Bereich platziert. Bitte setzen Sie ihr Volumen zwischen %1% and %2% der gesamten Speichergröße.</translation>
     </message>
     <message>
         <source>Very Weak</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehr schwach</translation>
     </message>
     <message>
         <source>Weak</source>
-        <translation type="unfinished"></translation>
+        <translation>Schwach</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittel</translation>
     </message>
     <message>
         <source>Strong</source>
-        <translation type="unfinished"></translation>
+        <translation>Stark</translation>
     </message>
     <message>
         <source>Very Strong</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehr stark</translation>
     </message>
     <message>
         <source>The unwritten area available for hidden volume
 is between %1 % and %2 % of the storage size</source>
-        <translation type="unfinished"></translation>
+        <translation>Der unbeschriebene Bereich zwischen %1% und %2%
+steht für verschlüsselten Volumen zur Verfügung.</translation>
     </message>
     <message>
         <source>Storage capacity: %1GB</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichergröße: %1GB</translation>
     </message>
     <message>
         <source>Start hidden volume at %1 of the encrypted storage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Start des versteckten Volumens bei %1 des verschlüsselten Speichers:</translation>
     </message>
     <message>
         <source>End hidden volume at %1 of the encrypted storage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende des versteckten Volumens bei %1 des verschlüsselten Speichers:</translation>
     </message>
 </context>
 <context>
