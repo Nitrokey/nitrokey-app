@@ -378,6 +378,10 @@ bool isUnity() {
 
 void MainWindow::overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
 
+void MainWindow::showTrayMessage(QString message) {
+    showTrayMessage("Nitrokey App", message, INFORMATION, 2000);
+}
+
 void MainWindow::showTrayMessage(const QString &title, const QString &msg,
                                  enum trayMessageType type, int timeout) {
 #ifdef HAVE_LIBAPPINDICATOR
@@ -551,7 +555,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   ui->deleteUserPasswordCheckBox->setEnabled(false);
   ui->deleteUserPasswordCheckBox->setChecked(false);
 
-  cryptostick->getStatus();
+    translateDeviceStatusToUserMessage(cryptostick->getStatus());
   generateMenu();
 
   ui->PWS_EditPassword->setValidator(
@@ -686,6 +690,25 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason) {
     break;
   default:;
   }
+}
+
+void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
+    switch (getStatus) {
+        case -10:
+            // problems with communication, received CRC other than expected, try to reinitialize
+            showTrayMessage(
+                    tr("Detected some communication problems with the device. Reinitializing.")
+            );
+            break;
+        case -11:
+            // fatal error, cannot resume communication, ask user for reinsertion
+            csApplet()->warningBox(
+                tr("Device lock detected, please remove and insert the device again.\nIf problem will occur again please: \n1. Close the application\n2. Reinsert the device\n3. Wait 30 seconds and start application")
+            );
+            break;
+        default:
+            break;
+    }
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
@@ -833,7 +856,7 @@ void MainWindow::checkConnection() {
     if (false == cryptostick->activStick20) {
       ui->statusBar->showMessage(tr("Nitrokey Pro connected"));
       initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
-      cryptostick->getStatus();
+        translateDeviceStatusToUserMessage(cryptostick->getStatus());
     } else
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
 
@@ -861,7 +884,7 @@ void MainWindow::checkConnection() {
       ui->statusBar->showMessage(tr("Nitrokey connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
       initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
-      cryptostick->getStatus();
+        translateDeviceStatusToUserMessage(cryptostick->getStatus());
     } else {
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
@@ -2173,7 +2196,7 @@ void MainWindow::startConfiguration() {
     cryptostick->getSlotConfigs();
     displayCurrentSlotConfig();
 
-    cryptostick->getStatus();
+      translateDeviceStatusToUserMessage(cryptostick->getStatus());
     displayCurrentGeneralConfig();
 
     SetupPasswordSafeConfig();
@@ -3218,7 +3241,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Sleep::msleep(500);
     QApplication::restoreOverrideCursor();
-    cryptostick->getStatus();
+      translateDeviceStatusToUserMessage(cryptostick->getStatus());
     generateAllConfigs();
   } else {
       csApplet()->warningBox(tr("Nitrokey not connected!"));
@@ -3894,7 +3917,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   int ok;
   uint16_t lastInterval = 30;
 
-  cryptostick->getStatus();
+    translateDeviceStatusToUserMessage(cryptostick->getStatus());
   bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
   if (is_OTP_PIN_protected) {
     if (!cryptostick->validUserPassword) {
