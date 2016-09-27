@@ -3101,7 +3101,7 @@ bool MainWindow::validate_secret(const uint8_t *secret) const {
       return true;
     }
   }
-  csApplet()->warningBox(tr("Nitrokey device does not support secret equal to null bytes. Please change the secret."));
+  csApplet()->warningBox(tr("Your secret is invalid. Please change the secret."));
   return false;
 }
 

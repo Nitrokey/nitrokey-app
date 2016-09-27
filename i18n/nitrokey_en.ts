@@ -1154,6 +1154,14 @@ If problem will occur again please:
 3. Wait 30 seconds and start application</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your secret is invalid. Please change the secret.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
