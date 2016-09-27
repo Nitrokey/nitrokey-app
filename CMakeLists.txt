@@ -1,9 +1,13 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6.2)
+cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
 
 PROJECT(NitrokeyApp)
 SET(PROJECT_VERSION "0.3.2")
 #ADD_DEFINITIONS(-DSEAFILE_CLIENT_VERSION=${PROJECT_VERSION}) 
 
+#Please use either 'cmake -DHAVE_LIBAPPINDICATOR=NO' or 'ccmake' to change this value
 OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" YES)
 
 INCLUDE(FindPkgConfig)
@@ -104,7 +108,7 @@ QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
 
 
 FIND_PACKAGE(PkgConfig REQUIRED)
-SET(LIBUSB_INCLUDE_DIRS "/usr/include/libusb-1.0")
+SET(LIBUSB_INCLUDE_DIRS_HINT "/usr/include/libusb-1.0")
 
 IF (WIN32)
     SET( platform_specific_sources hid_win.c)
@@ -114,9 +118,53 @@ ELSEIF(APPLE)
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
 
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
-    pkg_check_modules(GTK2 gtk+-2.0)
 
+    pkg_check_modules(LIBUSB libusb-1.0)
+    find_path(LIBUSB_INCLUDE_DIRS NAMES libusb.h
+        HINTS ${LIBUSB_INCLUDE_DIRS} ${LIB_USB_INCLUDEDIR} ${LIBUSB_INCLUDE_DIRS_HINT}
+        PATH_SUFFIXES libusb-1.0 )
+        IF (NOT LIBUSB_INCLUDE_DIRS )
+            message(FATAL_ERROR "libusb development library is required (package libusb-1.0-0-dev under Ubuntu 16.04)")
+        ENDIF()
+
+
+    if(HAVE_LIBAPPINDICATOR)
+
+        find_package(Libnotify 0.7 REQUIRED)
+        find_path(NOTIFY_INCLUDE_DIR NAMES libnotify/notify.h
+            HINTS ${LIB_NOTIFY_INCLUDEDIR} ${LIB_NOTIFY_INCLUDE_DIRS}
+            PATH_SUFFIXES libnotify)
+        IF (NOT NOTIFY_INCLUDE_DIR )
+            message(FATAL_ERROR "libappindicator support could only be compiled when libnotify development files are installed (package libnotify-dev under Ubuntu)")
+        ENDIF()
+
+        pkg_check_modules(GTK2 gtk+-2.0) 
+        find_package(GTK2 2.6 QUIET)
+        IF (NOT GTK2_FOUND)
+            message(FATAL_ERROR "libappindicator support could only be compiled when GTK2 libraries are available (package libgtk2.0-dev under Ubuntu)")
+        ENDIF()
+        #Needs package libappindicator-dev under ubuntu
+        pkg_check_modules(LIB_APPINDICATOR QUIET appindicator-0.1)
+
+        find_path(APPINDICATOR_INCLUDE_DIR NAMES libappindicator/app-indicator.h
+            HINTS ${LIB_APPINDICATOR_INCLUDEDIR} ${LIB_APPINDICATOR_INCLUDE_DIRS}
+            PATH_SUFFIXES libappindicator-0.1)
+
+        find_library(APPINDICATOR_LIBRARY NAMES appindicator)
+        include(FindPackageHandleStandardArgs)
+        find_package_handle_standard_args(APPINDICATOR DEFAULT_MSG APPINDICATOR_LIBRARY APPINDICATOR_INCLUDE_DIR)
+        if(APPINDICATOR_FOUND)
+            set(APPINDICATOR_LIBRARIES ${APPINDICATOR_LIBRARY})
+            set(APPINDICATOR_INCLUDE_DIRS ${APPINDICATOR_INCLUDE_DIR})
+        endif()
+
+        mark_as_advanced(APPINDICATOR_INCLUDE_DIR APPINDICATOR_LIBRARY)
+        IF (NOT APPINDICATOR_FOUND)
+            message(FATAL_ERROR "You have selected HAVE_LIBAPPINDICATOR but libappindicator support could only be compiled when development package is available (package libappindicator-dev under Ubuntu)")
+        ENDIF()
+    endif()
     IF (GTK2_FOUND AND HAVE_LIBAPPINDICATOR)
+
 
       SET(GTK2_INCLUDE_DIRS
           ${GTK2_INCLUDE_DIRS}
@@ -136,7 +184,7 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
 
     ENDIF () # GTK2_FOUND AND HAVE_LIBAPPINDICATOR
 
-    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread usb-1.0)
+    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread ${LIBUSB_LIBRARIES} )
 
     INCLUDE_DIRECTORIES(
       ${CMAKE_CURRENT_SOURCE_DIR}
@@ -203,34 +251,34 @@ IF(NOT WIN32)
       #      ${CMAKE_SOURCE_DIR}/data/icons/48x48
       #      ${CMAKE_SOURCE_DIR}/data/icons/128x128
     ${CMAKE_SOURCE_DIR}/data/icons/
-    DESTINATION share/icons/
+    DESTINATION usr/share/icons/
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
-    DESTINATION share/applications
+    DESTINATION usr/share/applications
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
-    DESTINATION share/pixmaps
+    DESTINATION usr/share/pixmaps
   )
 
   # Install Nitrokey udev rules
   install(FILES
-    ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
-    DESTINATION /usr/lib/udev/rules.d
+   ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
+   DESTINATION usr/lib/udev/rules.d
   )
 
   # Install autocompletion scripts
   install(FILES
-    ${CMAKE_SOURCE_DIR}/data//bash-autocomplete/nitrokey-app
-    DESTINATION /etc/bash_completion.d
+   ${CMAKE_SOURCE_DIR}/data//bash-autocomplete/nitrokey-app
+    DESTINATION etc/bash_completion.d
   )
 
   install(FILES
-    ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
-    DESTINATION /usr/share/locale/de_DE/LC_MESSAGES
+   ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
+   DESTINATION usr/share/locale/de_DE/LC_MESSAGES
   )
 
   install(FILES
@@ -238,7 +286,7 @@ IF(NOT WIN32)
     ${CMAKE_SOURCE_DIR}/images/quit.png
     ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
     ${CMAKE_SOURCE_DIR}/images/settings.png
-    DESTINATION /usr/share/nitrokey
+    DESTINATION usr/share/nitrokey
   )
 
 ENDIF () # NOT WIN32
@@ -251,7 +299,7 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${resources_ouput}
 )
 
-INSTALL(TARGETS nitrokey-app DESTINATION bin)
+INSTALL(TARGETS nitrokey-app DESTINATION usr/bin)
 
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${QT_LIBRARIES}
