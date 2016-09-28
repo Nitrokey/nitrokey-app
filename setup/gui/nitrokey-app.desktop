@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Nitrokey App
+GenericName=Nitrokey Management Application
+Comment=Manage your Nitrokey devices
+TryExec=nitrokey-app
+Exec=nitrokey-app
+Icon=${SNAP}/meta/gui/nitrokey-app.svg
+Type=Application
+Categories=Utility;Security;Qt;
+Keywords=Nitrokey;OpenPGP;smart card;
