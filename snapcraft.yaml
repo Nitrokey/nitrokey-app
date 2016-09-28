@@ -34,12 +34,10 @@ parts:
     plugin: qmake
     qt-version: qt5
     source: lp:~szszszsz/nitrokey/release_tmp
-    #source: git://github.com/Nitrokey/nitrokey-app.git
     snap:
         - -usr/lib/x86_64-linux-gnu/libLLVM-3.8.so.1
           #- -usr/lib/x86_64-linux-gnu/dri/ #5MB less, but with DRI errors, not needed probably but lets leave it for now
         - -usr/lib/x86_64-linux-gnu/libQt5Network.so.5.5.1
-    source-branch: master
     stage-packages:
       # Here for the plugins-- they're not linked in automatically.
       - libqt5gui5
