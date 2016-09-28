@@ -1,0 +1,45 @@
+name: nitrokey-app
+version: 0.4snap1
+summary: Nitrokey Application
+description: A QT GUI for managing your Nitrokey device
+confinement: strict
+#confinement: devmode
+
+apps:
+  nitrokey-app:
+    command: qt5-launch usr/local/bin/nitrokey-app -style fusion 2>/dev/null >/dev/null
+    plugs:
+      - unity7
+      - home
+      - x11
+      - gsettings
+      - network
+      - network-bind
+      - mount-observe
+  dev:
+    command: qt5-launch usr/local/bin/nitrokey-app -style fusion
+    plugs:
+      - unity7
+      - home
+      - x11
+      - gsettings
+      - network
+      - network-bind
+      - mount-observe
+  no-plugs:
+    command: qt5-launch usr/local/bin/nitrokey-app -style fusion
+
+parts:
+  application:
+    plugin: qmake
+    qt-version: qt5
+    source: git://github.com/Nitrokey/nitrokey-app.git
+    snap:
+        - -usr/lib/x86_64-linux-gnu/libLLVM-3.8.so.1
+          #- -usr/lib/x86_64-linux-gnu/dri/ #5MB less, but with DRI errors, not needed probably but lets leave it for now
+        - -usr/lib/x86_64-linux-gnu/libQt5Network.so.5.5.1
+    source-branch: master
+    stage-packages:
+      # Here for the plugins-- they're not linked in automatically.
+      - libqt5gui5
+    after: [qt5conf] # A wiki part
