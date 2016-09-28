@@ -12,6 +12,10 @@ QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
 Note: In case `libusb-1.0.0-dev` is not available to install please check other name: `libusb-1.0-0-dev` (the difference is the `-` char between zeroes).
 
+Known issue: tray icon under Debian Jessy
+----------------
+Under Debian Jessy application's tray icon might be unavailable. There were reports it can be fixed with updating Qt libraries to 5.4.2 version and up. The packages are available in experimental branch. For more details please refer to: https://github.com/Nitrokey/nitrokey-app/issues/86
+
 Compiling on Ubuntu Linux
 -------------------------
 Prerequisites for building on Ubuntu:
@@ -141,12 +145,12 @@ By default the OTP serial number is OpenPGP Card's serial number. It can be chan
 
 Keyboard Layout: The user will input the token ID values as he wants them displayed, then the gui will translate them to keycodes of the selected layout. The keycodes will be stored on the device, along with a number saying which layout was used, this number is important when the GUI application reads the conifg back from the device (to translate the keycodes back into characters).
 
-The report protocol is described [here](https://github.com/Nitrokey/nitrokey-pro-firmware/blob/master/src/INC/report_protocol.h) for Pro and [here](https://github.com/Nitrokey/nitrokey-storage-firmware/blob/master/src/OTP/report_protocol.h) for Storage.
+The report protocol is described [here](https://github.com/Nitrokey/nitrokey-pro-firmware/blob/master/src/inc/report_protocol.h) for Pro and [here](https://github.com/Nitrokey/nitrokey-storage-firmware/blob/master/src/OTP/report_protocol.h) for Storage.
 The HID reports are set to 64 bytes. The "output report" is what you get from the device. When you send a report (command), the first byte sets the command type, then you have 59 bytes for your data, and the last 4 bytes are the CRC32 of the whole report.
 
-On the GUI side, you can find examples of sending commands and receiving responses [here](https://github.com/Nitrokey/nitrokey-app/blob/master/device.cpp)
+On the GUI side, you can find examples of sending commands and receiving responses [here](https://github.com/Nitrokey/nitrokey-app/blob/master/src/device.cpp)
 
 First you create an object of class Command, for that you need a number for the command type, a buffer of data you want to send and the length of that buffer. Then you just use Device::sendCommand(Command *cmd), the CRC32 will be calculated automatically.
-To get a response, you just create a new object of class Response and do Response::getResponse(Device *device) and then you can analyze contents of the response object, already divided into fields ([see here](https://github.com/Nitrokey/nitrokey-app/blob/master/response.h)).
+To get a response, you just create a new object of class Response and do Response::getResponse(Device *device) and then you can analyze contents of the response object, already divided into fields ([see here](https://github.com/Nitrokey/nitrokey-app/blob/master/src/response.h)).
 
 

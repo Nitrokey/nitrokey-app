@@ -24,6 +24,8 @@
 #include "device.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <QValidator>
+
 #include <climits>
 
 #define uint64_t unsigned long long
@@ -76,6 +78,12 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
+    bool validate_secret(const uint8_t *secret) const;
+    void initialTimeReset(int ret);
+    QMutex check_connection_mutex;
+  QString nkpro_user_PIN;
+  void overwrite_string(QString &str);
+
   void InitState();
   void createIndicator();
   void startDebug();
@@ -87,6 +95,7 @@ private:
   AppIndicator *indicator;
   GtkWidget *indicatorMenu;
 #endif // HAVE_LIBAPPINDICATOR
+
   QSystemTrayIcon *trayIcon;
   QMenu *trayMenu;
   QMenu *trayMenuSubConfigure;
@@ -157,6 +166,7 @@ private:
   QString DebugText;
   QString otpInClipboard;
   QString secretInClipboard;
+  QString PWSInClipboard;
 
   int ExecStickCmd(char *Cmdline);
   int getNextCode(uint8_t slotNumber);
@@ -178,6 +188,8 @@ private:
   int UpdateDynamicMenuEntrys(void);
   int AnalyseProductionInfos();
   void refreshStick20StatusData();
+  void translateDeviceStatusToUserMessage(const int getStatus);
+  void showTrayMessage(QString message);
 
 public slots:
   void startAboutDialog();
@@ -214,7 +226,7 @@ public slots:
 private slots:
   void resizeMin();
   void checkConnection();
-  void getCode(uint8_t slotNo);
+
   void on_writeButton_clicked();
   void displayCurrentTotpSlotConfig(uint8_t slotNo);
   void displayCurrentHotpSlotConfig(uint8_t slotNo);
@@ -230,7 +242,7 @@ private slots:
   void on_writeGeneralConfigButton_clicked();
 
   void copyToClipboard(QString text);
-  void checkClipboard_Valid();
+  void checkClipboard_Valid(bool ignore_time = false);
   void checkPasswordTime_Valid();
   void checkTextEdited();
 
@@ -306,6 +318,36 @@ private slots:
   void on_counterEdit_editingFinished();
   void on_radioButton_2_toggled(bool checked);
   void on_radioButton_toggled(bool checked);
+  void on_PWS_EditSlotName_textChanged(const QString &arg1);
+  void on_PWS_EditLoginName_textChanged(const QString &arg1);
+  void on_PWS_EditPassword_textChanged(const QString &arg1);
+
+  void generateTemporaryPassword(uint8_t *tempPassword) const;
+
+  int userAuthenticate(const QString &password);
+
+  void on_enableUserPasswordCheckBox_clicked(bool checked);
+
+};
+
+class utf8FieldLengthValidator : public QValidator {
+  Q_OBJECT
+private:
+  int field_max_length;
+
+public:
+  explicit utf8FieldLengthValidator(QObject *parent = 0);
+  explicit utf8FieldLengthValidator(int _field_max_length, QObject *parent = 0)
+      : QValidator(parent), field_max_length(_field_max_length) {}
+  virtual State validate(QString &input, int &) const {
+
+    int chars_left = field_max_length - input.toUtf8().size();
+
+    if (chars_left >= 0) {
+      return Acceptable;
+    }
+    return Invalid;
+  }
 };
 
 #endif // MAINWINDOW_H

@@ -22,6 +22,7 @@
 #include "crc32.h"
 #include "device.h"
 #include "string.h"
+#include <algorithm>
 
 /*******************************************************************************
 
@@ -33,19 +34,17 @@
 
 *******************************************************************************/
 
-Command::Command(uint8_t commandType, uint8_t *data, uint8_t len) {
-  uint8_t length = len;
+Command::Command(uint8_t commandType, uint8_t *_data, uint8_t len) {
+  size_t length = len;
 
   this->commandType = commandType;
   this->crc = 0;
-  memset(this->data, 0, COMMAND_SIZE);
+  memset(this->data, 0, sizeof(this->data));
 
-  if (COMMAND_SIZE < length) {
-    length = COMMAND_SIZE;
-  }
+  length = std::min(length, sizeof(this->data));
 
-  if ((0 != length) && (NULL != data)) {
-    memcpy(this->data, data, length);
+  if ((length != 0) && (_data != NULL)) {
+    memcpy(this->data, _data, length);
   }
 }
 
@@ -64,21 +63,17 @@ Command::Command(uint8_t commandType, uint8_t *data, uint8_t len) {
 void Command::generateCRC() {
   int i;
 
-  uint8_t report[REPORT_SIZE + 1];
-
   uint32_t crc = 0xffffffff;
-
+  uint8_t report[REPORT_SIZE + 1] = {0};
   memset(report, 0, sizeof(report));
 
   report[1] = this->commandType;
-
-  memcpy(report + 2, this->data, COMMAND_SIZE); // (2+59 = 61 not 60 !!!)
+  size_t len = std::min(sizeof(report) - 2, sizeof(data));
+  memcpy(report + 2, this->data, len);
 
   for (i = 0; i < 15; i++) {
     crc = Crc32(crc, ((uint32_t *)(report + 1))[i]);
   }
-
-  ((uint32_t *)(report + 1))[15] = crc;
 
   this->crc = crc;
 }

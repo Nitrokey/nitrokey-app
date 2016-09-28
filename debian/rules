@@ -1,21 +1,25 @@
 #!/usr/bin/make -f
 
 export DEB_BUILD_HARDENING=1
+export QT_SELECT=qt5
 
 clean:
+	-rm build
 	dh_testdir
-	dh_testroot
+	qmake -qt=qt5
 	make clean
 	dh_clean -A
+
+build:
+	qmake -qt=qt5
+	make
+	touch build
 
 binary:
 	dh_testdir
 	dh_testroot
 	dh_prep
 	dh_installdirs
-
-	qmake
-	make
 
 	install -m755 nitrokey-app debian/nitrokey-app/usr/bin/nitrokey-app
 
@@ -46,3 +50,12 @@ binary:
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
+
+
+binary-arch: binary
+binary-indep: binary
+
+build-arch: build
+build-indep: build
+
+.PHONY: clean binary

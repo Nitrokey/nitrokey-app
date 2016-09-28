@@ -1,11 +1,18 @@
-nitrokey-app (0.4) unstable; urgency=low
+nitrokey-app (0.5) xenial; urgency=low
+
+  * Update to version 0.5
+
+-- Szczepan Zalega <szczepan@nitrokey.com> Tue, 27 Sep 2016 14:41:41 +0200
+
+
+nitrokey-app (0.4) xenial; urgency=low
 
   * Update to version 0.4
 
  -- Jan Suhr <jan@nitrokey.com>  Fri, 15 Jul 2016 15:22:59 +0200
 
 
-nitrokey-app (0.3.2) unstable; urgency=low
+nitrokey-app (0.3.2) xenial; urgency=low
 
   * Initial release package
 

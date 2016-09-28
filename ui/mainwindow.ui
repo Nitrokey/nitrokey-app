@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -818,14 +818,14 @@
              <item>
               <widget class="QCheckBox" name="enableUserPasswordCheckBox">
                <property name="text">
-                <string>Protect OTP by user PIN</string>
+                <string>Protect OTP by user PIN (will be requested on first use each session)</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="deleteUserPasswordCheckBox">
                <property name="text">
-                <string>Forget PIN after 10 minutes</string>
+                <string>Forget user PIN after 10 minutes (if unchecked user PIN will remain in memory until application exits)</string>
                </property>
               </widget>
              </item>
@@ -966,134 +966,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="frame_6">
-          <property name="autoFillBackground">
-           <bool>false</bool>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_13">
-           <item>
-            <widget class="QLabel" name="label_20">
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Tests</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_13">
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_20">
-               <item>
-                <widget class="QLabel" name="testsLabel">
-                 <property name="text">
-                  <string>Number of tests:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="testsLabel_2">
-                 <property name="text">
-                  <string>HOTP counter:</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout">
-               <item>
-                <widget class="QSpinBox" name="testsSpinBox">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>65536</number>
-                 </property>
-                 <property name="value">
-                  <number>30</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="testsSpinBox_2">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>3</number>
-                 </property>
-                 <property name="value">
-                  <number>1</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_9">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
-               <item>
-                <widget class="QPushButton" name="testHOTPButton">
-                 <property name="text">
-                  <string>Test HOTP</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="testTOTPButton">
-                 <property name="text">
-                  <string>Test TOTP</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_5">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -1197,7 +1069,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
+             <item row="0" column="3">
               <widget class="QPushButton" name="PWS_ButtonClearSlot">
                <property name="text">
                 <string>Erase Slot</string>
@@ -1223,7 +1095,7 @@
                </item>
               </widget>
              </item>
-             <item row="3" column="2">
+             <item row="3" column="3">
               <widget class="QPushButton" name="PWS_ButtonCreatePW">
                <property name="text">
                 <string>Generate random password</string>
@@ -1250,9 +1122,56 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="l_chars_left_info">
+               <property name="text">
+                <string>Characters left:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="l_c_name">
+               <property name="text">
+                <string notr="true">...</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="l_c_login">
+               <property name="text">
+                <string notr="true">...</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QLabel" name="l_c_password">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="l_utf8_info">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Password Safe fields support UTF8 data. It means that you can use your national characters here. Please remember however that non-English characters could take more space (up to 4 characters). The counters next to each field are to inform how much more standard English characters can given field accept.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -1359,10 +1278,6 @@
   <tabstop>writeButton</tabstop>
   <tabstop>enableUserPasswordCheckBox</tabstop>
   <tabstop>deleteUserPasswordCheckBox</tabstop>
-  <tabstop>testsSpinBox</tabstop>
-  <tabstop>testsSpinBox_2</tabstop>
-  <tabstop>testHOTPButton</tabstop>
-  <tabstop>testTOTPButton</tabstop>
   <tabstop>generalCancelButton</tabstop>
   <tabstop>writeGeneralConfigButton</tabstop>
   <tabstop>PWS_EditSlotName</tabstop>

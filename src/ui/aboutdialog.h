@@ -4,8 +4,8 @@
 #include "device.h"
 #include <QDialog>
 
-#define GUI_VERSION "0.4.0" // 0.0 = development version,last prod
-                            // version was 0.6
+#define GUI_VERSION "0.5.0"
+
 
 namespace Ui {
 class AboutDialog;

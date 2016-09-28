@@ -164,7 +164,7 @@ void Stick20Dialog::on_buttonBox_accepted() {
 
   // No Stick no work
   if (false == cryptostick->isConnected) {
-    csApplet->warningBox("Stick20Dialog: No stick 2.0 connected!");
+      csApplet()->warningBox("Stick20Dialog: No stick 2.0 connected!");
     return;
   }
 
@@ -172,7 +172,7 @@ void Stick20Dialog::on_buttonBox_accepted() {
     passwordString = ui->PasswordEdit->text().toLatin1();
     // No password entered ?
     if (0 == passwordString.size()) {
-      csApplet->warningBox("Please enter a password");
+        csApplet()->warningBox("Please enter a password");
       return;
     }
   }
@@ -185,7 +185,7 @@ void Stick20Dialog::on_buttonBox_accepted() {
     passwordString = ui->PasswordEdit->text().toLatin1();
     n = passwordString.size();
     if (30 <= n) {
-      csApplet->warningBox("Password too long! (Max = 30 char)");
+        csApplet()->warningBox("Password too long! (Max = 30 char)");
       return;
     }
     memset(&password[1], 0, 49);
@@ -274,11 +274,9 @@ void Stick20Dialog::on_buttonBox_accepted() {
   case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS: {
     bool answer;
 
-    answer = csApplet->detailedYesOrNoBox("WARNING",
-                                          "This command initializes the storage with random data. "
-                                          "\nThis will destroy the encrypted volume and all hidden "
-                                          "volumes!",
-                                          0, false);
+    answer = csApplet()->detailedYesOrNoBox("WARNING", "This command initializes the storage with random data. "
+            "\nThis will destroy the encrypted volume and all hidden "
+            "volumes!", false);
     if (answer) {
       ret = cryptostick->stick20FillSDCardWithRandomChars(
           password, STICK20_FILL_SD_CARD_WITH_RANDOM_CHARS_ENCRYPTED_VOL);
@@ -288,7 +286,7 @@ void Stick20Dialog::on_buttonBox_accepted() {
     }
   } break;
   case STICK20_CMD_WRITE_STATUS_DATA:
-    csApplet->warningBox("Not implemented");
+      csApplet()->warningBox("Not implemented");
     break;
   case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
     ret = cryptostick->stick20SendSetReadonlyToUncryptedVolume(password);
@@ -332,7 +330,7 @@ void Stick20Dialog::on_buttonBox_accepted() {
 
   default:
     // ui->comboBox->currentIndex()
-    csApplet->warningBox("Stick20Dialog: Wrong combobox value! ");
+      csApplet()->warningBox("Stick20Dialog: Wrong combobox value! ");
     break;
   }
 

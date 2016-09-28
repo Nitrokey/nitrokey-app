@@ -102,7 +102,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
     break;
   }
   if (retryCount == 0) {
-    csApplet->warningBox(noTrialsLeft);
+    csApplet()->warningBox(noTrialsLeft);
     QString cssRed = "QLabel {color: red; font-weight: bold}";
     ui->retryCount->setStyleSheet(cssRed);
     ui->retryCountLabel->setStyleSheet(cssRed);
@@ -122,6 +122,11 @@ void DialogChangePassword::InitData(void) {
   int minimumPasswordLengthAdmin = 8;
   QString text = ui->label_additional_information->text();
   text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
+  if (PasswordKind == STICK20_PASSWORD_KIND_UPDATE) {
+    text += QString("<i>") + tr("Once the firmware password is forgotten the Nitrokey can't be "
+                                "updated or reset. Don't lose your firmware password, please.") +
+            QString("</i>");
+  }
   ui->label_additional_information->setText(text);
 
   this->UpdatePasswordRetry();
@@ -194,13 +199,13 @@ bool DialogChangePassword::SendNewPassword(void) {
 
   communicationSuccess = cryptostick->stick20SendPassword(Data);
   if (!communicationSuccess) {
-    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
     return false;
   }
 
   bool isOldPasswordCorrect = CheckResponse(TRUE) == 1;
   if (!isOldPasswordCorrect) {
-    csApplet->warningBox(tr("Current password is not correct. Please retry."));
+    csApplet()->warningBox(tr("Current password is not correct. Please retry."));
     return false;
   }
 
@@ -212,16 +217,16 @@ bool DialogChangePassword::SendNewPassword(void) {
 
   communicationSuccess = cryptostick->stick20SendNewPassword(Data);
   if (!communicationSuccess) {
-    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
     return false;
   }
 
   bool isNewPasswordCorrect = CheckResponse(FALSE) == 1;
   if (!isNewPasswordCorrect) {
-    csApplet->warningBox(tr("New password is not correct. Please retry."));
+    csApplet()->warningBox(tr("New password is not correct. Please retry."));
     return false;
   }
-  csApplet->messageBox(tr("New password is set"));
+  csApplet()->messageBox(tr("New password is set"));
   return true;
 }
 
@@ -233,8 +238,8 @@ bool DialogChangePassword::Stick10ChangePassword(void) {
   unsigned char old_pin[password_length + 1];
   unsigned char new_pin[password_length + 1];
 
-  memset(old_pin, 0, sizeof(old_pin) );
-  memset(new_pin, 0, sizeof(new_pin) );
+  memset(old_pin, 0, sizeof(old_pin));
+  memset(new_pin, 0, sizeof(new_pin));
 
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
   strncpy((char *)old_pin, PasswordString.data(), password_length);
@@ -249,14 +254,14 @@ bool DialogChangePassword::Stick10ChangePassword(void) {
     ret = cryptostick->changeUserPin(old_pin, new_pin);
 
   if (ret == CMD_STATUS_WRONG_PASSWORD) {
-    csApplet->warningBox(tr("Wrong password."));
+    csApplet()->warningBox(tr("Wrong password."));
   } else if (ret != CMD_STATUS_OK) {
-    csApplet->warningBox(tr("Couldn't change %1 password")
-                             .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
+    csApplet()->warningBox(tr("Couldn't change %1 password")
+                                   .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
   }
   bool success = ret == CMD_STATUS_OK;
-  if (success){
-      csApplet->messageBox(tr("New password is set"));
+  if (success) {
+    csApplet()->messageBox(tr("New password is set"));
   }
   return success;
 }
@@ -276,13 +281,13 @@ bool DialogChangePassword::ResetUserPassword(void) {
 
   communicationAndCommandSuccess = cryptostick->stick20SendPassword(Data);
   if (!communicationAndCommandSuccess) {
-    csApplet->warningBox(tr("There was a problem during communicating with device. Please retry."));
+    csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
     return false;
   }
 
   bool isAdminPasswordCorrect = CheckResponse(TRUE) == 1;
   if (!isAdminPasswordCorrect) {
-    csApplet->warningBox(tr("Current Admin password is not correct. Please retry."));
+    csApplet()->warningBox(tr("Current Admin password is not correct. Please retry."));
     return false;
   }
 
@@ -292,12 +297,12 @@ bool DialogChangePassword::ResetUserPassword(void) {
   Data[STICK20_PASSOWRD_LEN + 1] = 0;
   communicationAndCommandSuccess = cryptostick->unlockUserPassword(Data) == 0;
   if (!communicationAndCommandSuccess) {
-    csApplet->warningBox(tr("There was a problem during communicating with device or new password "
-                            "is not correct. Please retry."));
+    csApplet()->warningBox(tr("There was a problem during communicating with device or new password "
+                                      "is not correct. Please retry."));
     return false;
   }
 
-  csApplet->messageBox(tr("New User password is set"));
+  csApplet()->messageBox(tr("New User password is set"));
   return true;
 }
 
@@ -321,12 +326,12 @@ bool DialogChangePassword::ResetUserPasswordStick10(void) {
   bool success = ret == CMD_STATUS_OK;
   if (!success) {
     if (CMD_STATUS_WRONG_PASSWORD == ret) {
-      csApplet->warningBox(tr("Wrong Admin PIN."));
+      csApplet()->warningBox(tr("Wrong Admin PIN."));
     } else {
-      csApplet->warningBox(tr("Couldn't unblock the user PIN. Error: %1").arg(ret));
+      csApplet()->warningBox(tr("Couldn't unblock the user PIN. Error: %1").arg(ret));
     }
   } else {
-    csApplet->messageBox(tr("User PIN successfully unblocked"));
+    csApplet()->messageBox(tr("User PIN successfully unblocked"));
   }
   return success;
 }
@@ -352,11 +357,10 @@ bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
   commandSuccess = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
 
   if (!commandSuccess) {
-    csApplet->warningBox(
-        tr("Wrong password or there was a communication problem with the device."));
+    csApplet()->warningBox(tr("Wrong password or there was a communication problem with the device."));
     return false;
   }
-  csApplet->warningBox(tr("Password has been changed with success!"));
+  csApplet()->warningBox(tr("Password has been changed with success!"));
   return true;
 }
 
@@ -369,7 +373,7 @@ void DialogChangePassword::accept() {
     OutputText = tr("The minimum length of the old password is ") +
                  QString("%1").arg(minimumPasswordLength) + tr(" chars");
 
-    csApplet->warningBox(OutputText);
+    csApplet()->warningBox(OutputText);
     return;
   }
 
@@ -377,7 +381,7 @@ void DialogChangePassword::accept() {
   if (0 !=
       strcmp(ui->lineEdit_NewPW_1->text().toLatin1(), ui->lineEdit_NewPW_2->text().toLatin1())) {
     clearFields();
-    csApplet->warningBox(tr("The new password entrys are not the same"));
+    csApplet()->warningBox(tr("The new password entrys are not the same"));
     return;
   }
 
@@ -391,7 +395,7 @@ void DialogChangePassword::accept() {
     OutputText = tr("The maximum length of a password is ") +
                  QString("%1").arg(STICK20_PASSOWRD_LEN) + tr(" chars");
 
-    csApplet->warningBox(OutputText);
+    csApplet()->warningBox(OutputText);
     return;
   }
 
@@ -403,7 +407,7 @@ void DialogChangePassword::accept() {
     OutputText = tr("The minimum length of a password is ") +
                  QString("%1").arg(minimumPasswordLength) + tr(" chars");
 
-    csApplet->warningBox(OutputText);
+    csApplet()->warningBox(OutputText);
     return;
   }
 

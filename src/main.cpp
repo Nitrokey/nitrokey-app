@@ -47,8 +47,6 @@ int main(int argc, char *argv[]) {
   }
 #endif
 
-  csApplet = new CryptostickApplet;
-
   int i;
 
   char *p;
@@ -87,7 +85,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   if (!success) {
-    success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg("en"));
+    myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg("en"));
   }
   a.installTranslator(&myappTranslator);
 
@@ -137,6 +135,7 @@ int main(int argc, char *argv[]) {
     if (0 == strcmp(p, "--debugAll")) {
       StartupInfo_st.FlagDebug = DEBUG_STATUS_DEBUG_ALL;
     }
+
     if ((0 == strcmp(p, "--admin")) || (0 == strcmp(p, "-a"))) {
       StartupInfo_st.ExtendedConfigActive = TRUE;
     }
@@ -160,6 +159,7 @@ int main(int argc, char *argv[]) {
   }
 
   MainWindow w(&StartupInfo_st);
+//    csApplet()->setParent(&w);
 
   QDateTime local(QDateTime::currentDateTime());
 

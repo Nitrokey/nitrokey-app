@@ -41,16 +41,22 @@ class stick20HiddenVolumeDialog : public QDialog {
   uint8_t SdCardHighWatermark_Write_Min;
   uint8_t SdCardHighWatermark_Write_Max;
 
+  uint8_t HighWatermarkMin;
+  uint8_t HighWatermarkMax;
+
   void setHighWaterMarkText(void);
+  void on_rd_unit_clicked(QString text);
 
 private slots:
   void on_ShowPasswordCheckBox_toggled(bool checked);
 
-  // void on_buttonBox_accepted();
-
   void on_buttonBox_clicked(QAbstractButton *button);
 
   void on_HVPasswordEdit_textChanged(const QString &arg1);
+
+  void on_rd_percent_clicked();
+  void on_rd_MB_clicked();
+  void on_rd_GB_clicked();
 
 private:
   Ui::stick20HiddenVolumeDialog *ui;
