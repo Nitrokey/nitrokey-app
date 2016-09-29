@@ -6,7 +6,6 @@
 **Implemented enhancements:**
 
 - Improve dialogue to setup hidden volumes [\#106](https://github.com/Nitrokey/nitrokey-app/issues/106)
-- Allow reset of blocked NK Pro [\#77](https://github.com/Nitrokey/nitrokey-app/issues/77)
 
 **Fixed bugs:**
 
@@ -24,8 +23,6 @@
 - Debian Jessie:  Nitrokey-app "active" but no GUI [\#140](https://github.com/Nitrokey/nitrokey-app/issues/140)
 - Warn about OTP secrets starting from 0x00 [\#139](https://github.com/Nitrokey/nitrokey-app/issues/139)
 - Send 20 null bytes as a secret on OTP edit [\#138](https://github.com/Nitrokey/nitrokey-app/issues/138)
-- Tray icon unreachable on Debian 8.5 and Gnome 3.14 [\#137](https://github.com/Nitrokey/nitrokey-app/issues/137)
-- the official windows distribution is unsigned. [\#136](https://github.com/Nitrokey/nitrokey-app/issues/136)
 - Password Safe: Store Unicode characters in passwords [\#131](https://github.com/Nitrokey/nitrokey-app/issues/131)
 - Notification Window after initialization [\#130](https://github.com/Nitrokey/nitrokey-app/issues/130)
 - QAction file not found. Missing QT widgets in QT5 [\#121](https://github.com/Nitrokey/nitrokey-app/issues/121)
