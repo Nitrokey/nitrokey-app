@@ -100,7 +100,7 @@ Cleanup with:
  fakeroot make -f debian/rules clean
  ```
 
-Requirements: fakeroot, debhelper, hardening-wrapper.
+Requirements: fakeroot, debhelper, hardening-wrapper, qt5-default, gtk2.0, libusb-1.0-0-dev, libappindicator-dev, libnotify-dev.
 
 
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux
