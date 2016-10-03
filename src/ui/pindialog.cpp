@@ -184,6 +184,10 @@ void PinDialog::updateTryCounter() {
     break;
   }
 
+  if (!cryptostick->isUserPasswordRetryCountInitialized()){
+      csApplet()->warningBox(tr("Device is not yet initialized. Please try again later."));
+      done(false);
+  }
   // Update 'tries-left' field
   ui->status->setText(tr("Tries left: %1").arg(triesLeft));
 }

@@ -44,6 +44,8 @@
 
 // #define LOCAL_DEBUG // activate for debugging
 
+const int userPasswordRetryCount_notInitialized = 99;
+
 /*******************************************************************************
 
   Device
@@ -121,7 +123,7 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
   lastBlockNrStick20 = 0;
   passwordRetryCount = 0;
 
-  this->userPasswordRetryCount = 99;
+  this->userPasswordRetryCount = userPasswordRetryCount_notInitialized;
 }
 
 /*******************************************************************************
@@ -201,13 +203,14 @@ int Device::checkConnection(int InitConfigFlag) {
 
 *******************************************************************************/
 
-void Device::disconnect() {
+void Device::disconnect() {  
   activStick20 = false;
   if (NULL != dev_hid_handle) {
     hid_close(dev_hid_handle);
     dev_hid_handle = NULL;
     hid_exit();
   }
+  this->userPasswordRetryCount = userPasswordRetryCount_notInitialized;
 }
 
 void Device::connect() {
@@ -254,7 +257,7 @@ int Device::sendCommand(Command *cmd) {
   if (!activStick20 &&
       cmd->commandType != CMD_GET_USER_PASSWORD_RETRY_COUNT &&
       cmd->commandType != CMD_GET_STATUS &&
-      this->userPasswordRetryCount == 99) {
+          !isUserPasswordRetryCountInitialized()) {
     return (-1); // Return error
   }
   err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
@@ -284,6 +287,8 @@ int Device::sendCommand(Command *cmd) {
 
   return err;
 }
+
+bool Device::isUserPasswordRetryCountInitialized() const { return userPasswordRetryCount != userPasswordRetryCount_notInitialized; }
 
 int Device::sendCommandGetResponse(Command *cmd, Response *resp) {
   uint8_t report[REPORT_SIZE + 1];
@@ -819,6 +824,7 @@ int Device::getStatus() {
   const int maxTriesToReconnection = 2 * maxTries;
   static int connectionProblemCounter = 0;
   QString logMessage;
+  ++connectionProblemCounter;
   if (res != -1 && !correctCRC) {
     logMessage = QString(__FUNCTION__) +
                  QString(": CRC other than expected %1/%2\n").arg(connectionProblemCounter).arg(maxTries);
@@ -829,7 +835,6 @@ int Device::getStatus() {
                  QString(": Other communication problem %1/%2\n").arg(connectionProblemCounter).arg(maxTries);
     DebugAppendTextGui(logMessage.toLatin1().data());
   }
-  ++connectionProblemCounter;
   if (connectionProblemCounter % maxTries == 0) {
     if (connectionProblemCounter > maxTriesToReconnection) {
       connectionProblemCounter = 0;
