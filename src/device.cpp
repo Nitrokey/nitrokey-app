@@ -251,6 +251,12 @@ int Device::sendCommand(Command *cmd) {
   if (0 == dev_hid_handle) {
     return (-1); // Return error
   }
+  if (!activStick20 &&
+      cmd->commandType != CMD_GET_USER_PASSWORD_RETRY_COUNT &&
+      cmd->commandType != CMD_GET_STATUS &&
+      this->userPasswordRetryCount == 99) {
+    return (-1); // Return error
+  }
   err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
 
   {
@@ -740,8 +746,9 @@ int Device::readSlot(uint8_t slotNo) {
 
 void Device::initializeConfig() {
   int i;
-
   unsigned int currentTime;
+  getStatus();
+  getUserPasswordRetryCount();
 
   for (i = 0; i < HOTP_SlotCount; i++) {
     readSlot(0x10 + i);
@@ -783,46 +790,55 @@ void Device::getSlotConfigs() {
 *******************************************************************************/
 
 int Device::getStatus() {
-  int res;
+  bool correctCRC=false;
 
-  if (isConnected) {
-    Command cmd(CMD_GET_STATUS, Q_NULLPTR, 0);
-    res = sendCommand(&cmd);
+  if (!isConnected) {
+    return -2; // device not connected
+  }
 
-    if (res == -1) {
-      return -1; //sending error
-    } else { // sending the command was successful
-      Sleep::msleep(100);
-      Response resp;
-      resp.getResponse(this);
+  Command cmd(CMD_GET_STATUS, Q_NULLPTR, 0);
+  int res = sendCommand(&cmd);
 
-      if (cmd.crc == resp.lastCommandCRC) {
-        memcpy(firmwareVersion, resp.data, 2);
-        memcpy(cardSerial, resp.data + 2, 4);
-        memcpy(generalConfig, resp.data + 6, 3);
-        memcpy(otpPasswordConfig, resp.data + 9, 2);
-      } else {
-          const int maxTries = 5;
-          const int maxTriesToReconnection = 2*maxTries;
-          static int invalidCRCCounter = 0;
-          QString text;
-          text = QString(__FUNCTION__) + QString(": CRC other than expected %1/%2\n").arg(invalidCRCCounter).arg(maxTries);
-          DebugAppendTextGui(text.toLatin1().data());
-          if (++invalidCRCCounter%maxTries == 0){
-              if(invalidCRCCounter>maxTriesToReconnection){
-                  invalidCRCCounter = 0;
-                  return -11; // fatal error, cannot resume communication, ask user for reinsertion
-              }
-              text = QString(__FUNCTION__)+ ": Reconnecting device\n";
-              DebugAppendTextGui(text.toLatin1().data());
-              this->disconnect();
-              return -10; // problems with communication, received CRC other than expected, try to reinitialize
-          }
-      }
-    }
+  if (res != -1) {
+  // sending the command was successful
+  Sleep::msleep(100);
+  Response resp;
+  resp.getResponse(this);
+
+  correctCRC = cmd.crc == resp.lastCommandCRC;
+  if (correctCRC) {
+    memcpy(firmwareVersion, resp.data, 2);
+    memcpy(cardSerial, resp.data + 2, 4);
+    memcpy(generalConfig, resp.data + 6, 3);
+    memcpy(otpPasswordConfig, resp.data + 9, 2);
     return 0; //OK
   }
-  return -2; // device not connected
+}
+
+  const int maxTries = 5;
+  const int maxTriesToReconnection = 2 * maxTries;
+  static int connectionProblemCounter = 0;
+  QString logMessage;
+  if (res != -1 && !correctCRC) {
+    logMessage = QString(__FUNCTION__) +
+                 QString(": CRC other than expected %1/%2\n").arg(connectionProblemCounter).arg(maxTries);
+    DebugAppendTextGui(logMessage.toLatin1().data());
+  }
+  if (res == -1) {
+    logMessage = QString(__FUNCTION__) +
+                 QString(": Other communication problem %1/%2\n").arg(connectionProblemCounter).arg(maxTries);
+    DebugAppendTextGui(logMessage.toLatin1().data());
+  }
+  ++connectionProblemCounter;
+  if (connectionProblemCounter % maxTries == 0) {
+    if (connectionProblemCounter > maxTriesToReconnection) {
+      connectionProblemCounter = 0;
+      return -11; // fatal error, cannot resume communication, ask user for reinsertion
+    }
+    return -10; // problems with communication, received CRC other than expected, try to reinitialize
+  }
+
+  return -100; //another error, should not be reached
 }
 
 /*******************************************************************************
