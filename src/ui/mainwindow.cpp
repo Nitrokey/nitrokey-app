@@ -3111,52 +3111,53 @@ void MainWindow::on_slotComboBox_currentIndexChanged(int index) {
 }
 
 void MainWindow::on_hexRadioButton_toggled(bool checked) {
+  if (!checked) {
+    return;
+  }
+
   QByteArray secret;
+  uint8_t encoded[32] = {};
+  uint8_t data[32] = {};
+  uint8_t decoded[20] = {};
 
-  uint8_t encoded[128];
+  secret = ui->secretEdit->text().toLatin1();
+  if (secret.size() != 0) {
+    const size_t encoded_size = std::min(sizeof(encoded), (size_t) secret.length());
+    memset(encoded, 'A', sizeof(encoded));
+    memcpy(encoded, secret.data(), encoded_size);
 
-  uint8_t data[128];
+    base32_clean(encoded, encoded_size, data);
+    const size_t decoded_size = sizeof(decoded);
+    base32_decode(data, decoded, decoded_size);
 
-  uint8_t decoded[20];
+    secret = QByteArray((char *) decoded, decoded_size).toHex();
 
-  if (checked) {
-
-    secret = ui->secretEdit->text().toLatin1();
-    if (secret.size() != 0) {
-      memset(encoded, 'A', 32);
-      memcpy(encoded, secret.data(), secret.length());
-
-      base32_clean(encoded, 32, data);
-      base32_decode(data, decoded, 20);
-
-      secret = QByteArray((char *)decoded, 20).toHex();
-
-      ui->secretEdit->setText(QString(secret));
-      secretInClipboard = ui->secretEdit->text();
-      copyToClipboard(secretInClipboard);
-    }
+    ui->secretEdit->setMaxLength(40);
+    ui->secretEdit->setText(QString(secret));
+    secretInClipboard = ui->secretEdit->text();
+    copyToClipboard(secretInClipboard);
   }
 }
 
 void MainWindow::on_base32RadioButton_toggled(bool checked) {
+  if (!checked) {
+    return;
+  }
+
   QByteArray secret;
+  uint8_t encoded[32] = {};
+  uint8_t decoded[20] = {};
 
-  uint8_t encoded[128];
+  secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
+  if (secret.size() != 0) {
+    const size_t decoded_size = std::min(sizeof(decoded), (size_t) secret.length());
+    memcpy(decoded, secret.data(), decoded_size);
+    base32_encode(decoded, decoded_size, encoded, sizeof(encoded));
 
-  uint8_t decoded[20];
-
-  if (checked) {
-    secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
-    if (secret.size() != 0) {
-      memset(decoded, 0, 20);
-      memcpy(decoded, secret.data(), secret.length());
-
-      base32_encode(decoded, secret.length(), encoded, 128);
-
-      ui->secretEdit->setText(QString((char *)encoded));
-      secretInClipboard = ui->secretEdit->text();
-      copyToClipboard(secretInClipboard);
-    }
+    ui->secretEdit->setMaxLength(32);
+    ui->secretEdit->setText(QString((char *) encoded));
+    secretInClipboard = ui->secretEdit->text();
+    copyToClipboard(secretInClipboard);
   }
 }
 
