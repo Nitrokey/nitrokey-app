@@ -79,19 +79,11 @@ void PinDialog::getPassword(QString &pin) {
 }
 
 void PinDialog::on_checkBox_toggled(bool checked) {
-  if (checked)
-    ui->lineEdit->setEchoMode(QLineEdit::Normal);
-  else
-    ui->lineEdit->setEchoMode(QLineEdit::Password);
+  ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }
 
 void PinDialog::on_checkBox_PasswordMatrix_toggled(bool checked) {
-
-  if (checked) {
-    ui->lineEdit->setDisabled(TRUE);
-  } else {
-    ui->lineEdit->setDisabled(FALSE);
-  }
+  ui->lineEdit->setDisabled(checked);
 }
 
 void PinDialog::onOkButtonClicked() {
