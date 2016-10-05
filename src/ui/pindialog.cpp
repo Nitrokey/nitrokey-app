@@ -164,9 +164,17 @@ void PinDialog::onOkButtonClicked() {
   done(Accepted);
 }
 
+int PinDialog::exec() {
+  if (!cryptostick->isUserPasswordRetryCountInitialized()) {
+        UI_deviceNotInitialized();
+        done(Rejected);
+        return QDialog::Rejected;
+  }
+  return QDialog::exec();
+}
+
 void PinDialog::updateTryCounter() {
   int triesLeft = 0;
-
 
   switch (_pinType) {
   case ADMIN_PIN:
@@ -184,13 +192,12 @@ void PinDialog::updateTryCounter() {
     break;
   }
 
-  if (!cryptostick->isUserPasswordRetryCountInitialized()){
-      csApplet()->warningBox(tr("Device is not yet initialized. Please try again later."));
-      done(false);
-  }
+
   // Update 'tries-left' field
   ui->status->setText(tr("Tries left: %1").arg(triesLeft));
 }
+
+void PinDialog::UI_deviceNotInitialized() const { csApplet()->warningBox(tr("Device is not yet initialized. Please try again later.")); }
 
 void PinDialog::clearBuffers() {
   memset(password, 0, 50);

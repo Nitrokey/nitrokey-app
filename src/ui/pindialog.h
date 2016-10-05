@@ -45,6 +45,8 @@ class PinDialog : public QDialog {
   void getPassword(char *text);
   void getPassword(QString &pin);
 
+  virtual int exec();
+
 private slots:
   void on_checkBox_toggled(bool checked);
 
@@ -60,6 +62,7 @@ private:
 
   void updateTryCounter();
   void clearBuffers();
+  void UI_deviceNotInitialized() const;
 };
 
 #endif // PINDIALOG_H
