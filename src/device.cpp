@@ -124,6 +124,7 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
   passwordRetryCount = 0;
 
   this->userPasswordRetryCount = userPasswordRetryCount_notInitialized;
+  this->passwordRetryCount = userPasswordRetryCount_notInitialized;
 }
 
 /*******************************************************************************
@@ -211,6 +212,7 @@ void Device::disconnect() {
     hid_exit();
   }
   this->userPasswordRetryCount = userPasswordRetryCount_notInitialized;
+  this->passwordRetryCount = userPasswordRetryCount_notInitialized;
 }
 
 void Device::connect() {
@@ -288,7 +290,11 @@ int Device::sendCommand(Command *cmd) {
   return err;
 }
 
-bool Device::isUserPasswordRetryCountInitialized() const { return userPasswordRetryCount != userPasswordRetryCount_notInitialized; }
+bool Device::isUserPasswordRetryCountInitialized() const { return
+            userPasswordRetryCount != userPasswordRetryCount_notInitialized
+            && HID_Stick20Configuration_st.UserPwRetryCount != userPasswordRetryCount_notInitialized
+            && HID_Stick20Configuration_st.AdminPwRetryCount != userPasswordRetryCount_notInitialized
+            ; }
 
 int Device::sendCommandGetResponse(Command *cmd, Response *resp) {
   uint8_t report[REPORT_SIZE + 1];
@@ -754,6 +760,7 @@ void Device::initializeConfig() {
   unsigned int currentTime;
   getStatus();
   getUserPasswordRetryCount();
+  getPasswordRetryCount();
 
   for (i = 0; i < HOTP_SlotCount; i++) {
     readSlot(0x10 + i);
