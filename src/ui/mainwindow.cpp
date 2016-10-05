@@ -3139,24 +3139,24 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
 }
 
 void MainWindow::on_base32RadioButton_toggled(bool checked) {
+    if (!checked) {
+      return;
+    }
+
   QByteArray secret;
-
   uint8_t encoded[128];
-
   uint8_t decoded[20];
 
-  if (checked) {
-    secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
-    if (secret.size() != 0) {
-      memset(decoded, 0, 20);
-      memcpy(decoded, secret.data(), secret.length());
+  secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
+  if (secret.size() != 0) {
+    memset(decoded, 0, sizeof(decoded));
+    size_t decoded_size = std::min(sizeof(decoded), (size_t) secret.length());
+    memcpy(decoded, secret.data(), decoded_size);
+    base32_encode(decoded, decoded_size, encoded, sizeof(encoded));
 
-      base32_encode(decoded, secret.length(), encoded, 128);
-
-      ui->secretEdit->setText(QString((char *)encoded));
-      secretInClipboard = ui->secretEdit->text();
-      copyToClipboard(secretInClipboard);
-    }
+    ui->secretEdit->setText(QString((char *)encoded));
+    secretInClipboard = ui->secretEdit->text();
+    copyToClipboard(secretInClipboard);
   }
 }
 
