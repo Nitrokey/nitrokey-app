@@ -75,7 +75,17 @@ PasswordDialog::PasswordDialog(bool ShowMatrix, QWidget *parent)
 
   cryptostick = NULL;
 }
+void PasswordDialog::UI_deviceNotInitialized() const { csApplet()->warningBox(tr("Device is not yet initialized. Please try again later.")); }
 
+
+int PasswordDialog::exec() {
+  if (cryptostick == NULL || !cryptostick->isUserPasswordRetryCountInitialized()) {
+    UI_deviceNotInitialized();
+    done(Rejected);
+    return QDialog::Rejected;
+  }
+  return QDialog::exec();
+}
 /*******************************************************************************
 
   PasswordDialog
