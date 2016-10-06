@@ -258,8 +258,11 @@ int Device::sendCommand(Command *cmd) {
   }
   if (!activStick20 &&
       cmd->commandType != CMD_GET_USER_PASSWORD_RETRY_COUNT &&
+      cmd->commandType != CMD_GET_PASSWORD_RETRY_COUNT &&
       cmd->commandType != CMD_GET_STATUS &&
           !isUserPasswordRetryCountInitialized()) {
+    DebugAppendTextGui(QString("Device not initialized. Skipping command %1.\n")
+                           .arg(cmd->commandType).toLatin1().data() );
     return (-1); // Return error
   }
   err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
