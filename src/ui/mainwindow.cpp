@@ -3602,6 +3602,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
       cryptostick->passwordSafeSlotNames[Slot][0] = 0;
       ui->PWS_ComboBoxSelectSlot->setItemText(
           Slot, QString("Slot ").append(QString::number(Slot + 1, 10)));
+      csApplet()->messageBox(tr("Slot has been erased successfully."));
     } else
         csApplet()->warningBox(tr("Can't clear slot."));
   } else
@@ -3701,6 +3702,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
                             .append(QString("]"))));
 
   generateMenu();
+  csApplet()->messageBox(tr("Slot successfully written."));
 }
 
 char *MainWindow::PWS_GetSlotName(int Slot) {
