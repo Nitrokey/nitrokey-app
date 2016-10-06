@@ -151,6 +151,14 @@ Bitte versuchen Sie es erneut</translation>
 
 </translation>
     </message>
+    <message>
+        <source>Storage Capacity:</source>
+        <translation>Speichergröße:</translation>
+    </message>
+    <message>
+        <source>%1 GB</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>DebugDialog</name>

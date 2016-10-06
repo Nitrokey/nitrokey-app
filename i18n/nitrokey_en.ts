@@ -141,6 +141,14 @@ Please retry</source>
 </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Storage Capacity:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>%1 GB</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>DebugDialog</name>
