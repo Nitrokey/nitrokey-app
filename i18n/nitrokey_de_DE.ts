@@ -1198,6 +1198,10 @@ Falls das Problem erneut auftritt:
         <source>Your secret is invalid. Please change the secret.</source>
         <translation>Ihr Geheimnis ist ungültig. Bitte ändern Sie das Geheimnis.</translation>
     </message>
+    <message>
+        <source>Slot successfully written.</source>
+        <translation>Eintrag erfolgreich gespeichert.</translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
