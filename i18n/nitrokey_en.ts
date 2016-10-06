@@ -1170,6 +1170,10 @@ If problem will occur again please:
         <source>Your secret is invalid. Please change the secret.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Slot successfully written.</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
