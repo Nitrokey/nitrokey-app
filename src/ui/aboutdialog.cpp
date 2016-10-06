@@ -174,6 +174,14 @@ void AboutDialog::showStick20Configuration(void) {
       QString("%1").sprintf("%08x", HID_Stick20Configuration_st.ActiveSmartCardID_u32));
 
   ui->DeviceStatusLabel->setText(OutputText);
+
+  if (cryptostick->activStick20){
+    cryptostick->stick20ProductionTest();
+    const size_t sd_size_GB = Stick20ProductionInfos_st.SD_Card_Size_u8;
+    QString capacity_text = QString(tr("%1 GB")).arg(sd_size_GB);
+    ui->l_storage_capacity->setText(capacity_text);
+  }
+
   this->resize(0, 0);
   this->adjustSize();
   this->updateGeometry();
@@ -229,6 +237,7 @@ void AboutDialog::hideStick20Menu(void) {
   ui->hidden_volume_label->hide();
   ui->not_erased_sd_label->hide();
   ui->newsd_label->hide();
+  ui->static_storage_info->hide();
   /*
   ui->label_8->hide();
   ui->label_9->hide();
@@ -248,6 +257,7 @@ void AboutDialog::showStick20Menu(void) {
   ui->hidden_volume_label->show();
   ui->unencrypted_volume_label->show();
   ui->encrypted_volume_label->show();
+  ui->static_storage_info->show();
   /*
   ui->label_8->show();
   ui->label_9->show();
