@@ -64,6 +64,7 @@ const int userPasswordRetryCount_notInitialized = 99;
 
 Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20UpdateMode,
                int pidStick20UpdateMode) {
+  needsReconnect = false;
   int i;
 
   LastStickError = OUTPUT_CMD_STICK20_STATUS_OK;
@@ -294,6 +295,7 @@ int Device::sendCommand(Command *cmd) {
 }
 
 bool Device::isUserPasswordRetryCountInitialized() const { return
+            !needsReconnect &&
             userPasswordRetryCount != userPasswordRetryCount_notInitialized
             && HID_Stick20Configuration_st.UserPwRetryCount != userPasswordRetryCount_notInitialized
             && HID_Stick20Configuration_st.AdminPwRetryCount != userPasswordRetryCount_notInitialized
@@ -806,7 +808,6 @@ void Device::getSlotConfigs() {
 
 int Device::getStatus() {
   bool correctCRC=false;  
-  static bool needsReconnect = false;
   QString logMessage;
 
   if (!isConnected) {

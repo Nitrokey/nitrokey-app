@@ -406,6 +406,7 @@ private:
 
   int vidStick20UpdateMode;
   int pidStick20UpdateMode;
+  bool needsReconnect;
 };
 
 #endif // DEVICE_H
