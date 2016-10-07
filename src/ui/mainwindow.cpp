@@ -3357,8 +3357,11 @@ void MainWindow::getTOTP15() { getTOTPDialog(14); }
 
 void MainWindow::on_eraseButton_clicked() {
   bool answer = csApplet()->yesOrNoBox(tr("WARNING: Are you sure you want to erase the slot?"), false);
-  char clean[8] = {' '};
+  if (!answer) {
+    return;
+  }
 
+  char clean[8] = {' '};
   uint8_t slotNo = ui->slotComboBox->currentIndex();
 
   if (slotNo > TOTP_SlotCount) {
@@ -3374,40 +3377,39 @@ void MainWindow::on_eraseButton_clicked() {
     slotNo = slotNo + 0x20 - HOTP_SlotCount;
   }
 
-  if (answer) {
-    int res = cryptostick->eraseSlot(slotNo);
-    if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
-      uint8_t tempPassword[25] = {0};
-      QString password;
+  int res = cryptostick->eraseSlot(slotNo);
+  if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
+    uint8_t tempPassword[25] = {0};
+    QString password;
 
-      do {
-          PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-                           PinDialog::ADMIN_PIN);
-          int ok = dialog.exec();
-        if (ok != QDialog::Accepted) {
-          return;
-        }
-        dialog.getPassword(password);
+    do {
+      PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                       PinDialog::ADMIN_PIN);
+      int ok = dialog.exec();
+      if (ok != QDialog::Accepted) {
+        return;
+      }
+      dialog.getPassword(password);
 
-        generateTemporaryPassword(tempPassword);
-        cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
-        if (cryptostick->validPassword) {
-          lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-        } else {
-            csApplet()->warningBox(tr("Wrong PIN. Please try again."));
-        }
-        res = cryptostick->eraseSlot(slotNo);
-      } while (res != CMD_STATUS_OK);
-    }
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    Sleep::msleep(1000);
-    QApplication::restoreOverrideCursor();
-    generateAllConfigs();
+      generateTemporaryPassword(tempPassword);
+      cryptostick->firstAuthenticate((uint8_t *) password.toLatin1().data(), tempPassword);
+      if (cryptostick->validPassword) {
+        lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+      } else {
+        csApplet()->warningBox(tr("Wrong PIN. Please try again."));
+      }
+      res = cryptostick->eraseSlot(slotNo);
+    } while (res != CMD_STATUS_OK);
+  }
+  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+  Sleep::msleep(1000);
+  QApplication::restoreOverrideCursor();
+  generateAllConfigs();
 
-    if (res == CMD_STATUS_OK)
-        csApplet()->messageBox(tr("Slot has been erased successfully."));
+  if (res == CMD_STATUS_OK) {
+    csApplet()->messageBox(tr("Slot has been erased successfully."));
   } else {
-      csApplet()->messageBox(tr("Command execution failed. Please try again."));
+    csApplet()->messageBox(tr("Command execution failed. Please try again."));
   }
 
   displayCurrentSlotConfig();
@@ -3587,10 +3589,13 @@ void MainWindow::SetupPasswordSafeConfig(void) {
 }
 
 void MainWindow::on_PWS_ButtonClearSlot_clicked() {
+  bool answer = csApplet()->yesOrNoBox(tr("WARNING: Are you sure you want to erase the slot?"), false);
+  if (!answer){
+      return;
+  }
+
   int Slot;
-
   unsigned int ret;
-
   QMessageBox msgBox;
 
   Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
