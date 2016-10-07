@@ -694,6 +694,12 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason) {
 
 void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
     switch (getStatus) {
+        case 1:
+            //regained connection
+            showTrayMessage(
+                tr("Regained connection to the device.")
+            );
+        break;
         case -10:
             // problems with communication, received CRC other than expected, try to reinitialize
             showTrayMessage(

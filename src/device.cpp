@@ -805,7 +805,9 @@ void Device::getSlotConfigs() {
 *******************************************************************************/
 
 int Device::getStatus() {
-  bool correctCRC=false;
+  bool correctCRC=false;  
+  static bool needsReconnect = false;
+  QString logMessage;
 
   if (!isConnected) {
     return -2; // device not connected
@@ -821,19 +823,27 @@ int Device::getStatus() {
   resp.getResponse(this);
 
   correctCRC = cmd.crc == resp.lastCommandCRC;
-  if (correctCRC) {
+    if (correctCRC) {
+        int responseCode = 0;
+      if(needsReconnect){
+          needsReconnect = false;
+          logMessage = QString(__FUNCTION__) + ": Reconnecting device\n";
+          DebugAppendTextGui(logMessage.toLatin1().data());
+          this->disconnect();
+          responseCode = 1;
+      }
     memcpy(firmwareVersion, resp.data, 2);
     memcpy(cardSerial, resp.data + 2, 4);
     memcpy(generalConfig, resp.data + 6, 3);
     memcpy(otpPasswordConfig, resp.data + 9, 2);
-    return 0; //OK
+    return responseCode; //OK
   }
 }
 
   const int maxTries = 5;
   const int maxTriesToReconnection = 2 * maxTries;
   static int connectionProblemCounter = 0;
-  QString logMessage;
+
   ++connectionProblemCounter;
   if (res != -1 && !correctCRC) {
     logMessage = QString(__FUNCTION__) +
@@ -850,6 +860,7 @@ int Device::getStatus() {
       connectionProblemCounter = 0;
       return -11; // fatal error, cannot resume communication, ask user for reinsertion
     }
+    needsReconnect = true;
     return -10; // problems with communication, received CRC other than expected, try to reinitialize
   }
 
