@@ -73,7 +73,7 @@ void PasswordDialog::UI_deviceNotInitialized() const { csApplet()->warningBox(tr
 
 
 int PasswordDialog::exec() {
-  if (cryptostick == NULL || !cryptostick->isUserPasswordRetryCountInitialized()) {
+  if (cryptostick == NULL || !cryptostick->isInitialized()) {
     UI_deviceNotInitialized();
     done(Rejected);
     return QDialog::Rejected;

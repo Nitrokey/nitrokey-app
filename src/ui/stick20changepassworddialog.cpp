@@ -116,7 +116,7 @@ void DialogChangePassword::UI_deviceNotInitialized() const { csApplet()->warning
 
 
 int DialogChangePassword::exec() {
-  if (!cryptostick->isUserPasswordRetryCountInitialized()) {
+  if (!cryptostick->isInitialized()) {
     UI_deviceNotInitialized();
     done(Rejected);
     return QDialog::Rejected;

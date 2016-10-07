@@ -261,7 +261,7 @@ int Device::sendCommand(Command *cmd) {
       cmd->commandType != CMD_GET_USER_PASSWORD_RETRY_COUNT &&
       cmd->commandType != CMD_GET_PASSWORD_RETRY_COUNT &&
       cmd->commandType != CMD_GET_STATUS &&
-          !isUserPasswordRetryCountInitialized()) {
+          !isInitialized()) {
     DebugAppendTextGui(QString("Device not initialized. Skipping command %1.\n")
                            .arg(cmd->commandType).toLatin1().data() );
     return (-1); // Return error
@@ -294,7 +294,7 @@ int Device::sendCommand(Command *cmd) {
   return err;
 }
 
-bool Device::isUserPasswordRetryCountInitialized() const { return
+bool Device::isInitialized() const { return
             !needsReconnect &&
             userPasswordRetryCount != userPasswordRetryCount_notInitialized
             && HID_Stick20Configuration_st.UserPwRetryCount != userPasswordRetryCount_notInitialized

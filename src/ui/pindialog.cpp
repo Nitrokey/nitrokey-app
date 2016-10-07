@@ -157,7 +157,7 @@ void PinDialog::onOkButtonClicked() {
 }
 
 int PinDialog::exec() {
-  if (!cryptostick->isUserPasswordRetryCountInitialized()) {
+  if (!cryptostick->isInitialized()) {
         UI_deviceNotInitialized();
         done(Rejected);
         return QDialog::Rejected;

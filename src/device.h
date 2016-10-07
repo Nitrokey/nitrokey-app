@@ -395,7 +395,7 @@ public:
   int TOTP_SlotCount;
 
   bool is_nkpro_rtm1();
-  bool isUserPasswordRetryCountInitialized() const;
+  bool isInitialized() const;
 
 private:
   int vid;
