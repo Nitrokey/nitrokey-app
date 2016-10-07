@@ -112,6 +112,18 @@ void DialogChangePassword::UpdatePasswordRetry() {
   ui->retryCount->repaint();
 }
 
+void DialogChangePassword::UI_deviceNotInitialized() const { csApplet()->warningBox(tr("Device is not yet initialized. Please try again later.")); }
+
+
+int DialogChangePassword::exec() {
+  if (!cryptostick->isInitialized()) {
+    UI_deviceNotInitialized();
+    done(Rejected);
+    return QDialog::Rejected;
+  }
+  return QDialog::exec();
+}
+
 void DialogChangePassword::InitData(void) {
   // center the password window
   QDesktopWidget *desktop = QApplication::desktop();

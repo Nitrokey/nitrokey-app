@@ -343,6 +343,10 @@ Please retry</source>
         <source>The minimum length of a password is </source>
         <translation>The minimum length of a PIN/password is </translation>
     </message>
+    <message>
+        <source>Device is not yet initialized. Please try again later.</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>HOTPDialog</name>
@@ -1174,6 +1178,18 @@ If problem will occur again please:
         <source>Slot successfully written.</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Regained connection to the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detected some communication problems with the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot get OTP code.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
@@ -1263,6 +1279,10 @@ If problem will occur again please:
     <message>
         <source>Warning: Default PIN is used.
 Please change the PIN.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device is not yet initialized. Please try again later.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1393,6 +1413,10 @@ Please change the PIN.</source>
     </message>
     <message>
         <source>Tries left: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device is not yet initialized. Please try again later.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

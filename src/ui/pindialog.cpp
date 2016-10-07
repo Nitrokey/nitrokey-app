@@ -79,19 +79,11 @@ void PinDialog::getPassword(QString &pin) {
 }
 
 void PinDialog::on_checkBox_toggled(bool checked) {
-  if (checked)
-    ui->lineEdit->setEchoMode(QLineEdit::Normal);
-  else
-    ui->lineEdit->setEchoMode(QLineEdit::Password);
+  ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }
 
 void PinDialog::on_checkBox_PasswordMatrix_toggled(bool checked) {
-
-  if (checked) {
-    ui->lineEdit->setDisabled(TRUE);
-  } else {
-    ui->lineEdit->setDisabled(FALSE);
-  }
+  ui->lineEdit->setDisabled(checked);
 }
 
 void PinDialog::onOkButtonClicked() {
@@ -164,9 +156,17 @@ void PinDialog::onOkButtonClicked() {
   done(Accepted);
 }
 
+int PinDialog::exec() {
+  if (!cryptostick->isInitialized()) {
+        UI_deviceNotInitialized();
+        done(Rejected);
+        return QDialog::Rejected;
+  }
+  return QDialog::exec();
+}
+
 void PinDialog::updateTryCounter() {
   int triesLeft = 0;
-
 
   switch (_pinType) {
   case ADMIN_PIN:
@@ -184,9 +184,12 @@ void PinDialog::updateTryCounter() {
     break;
   }
 
+
   // Update 'tries-left' field
   ui->status->setText(tr("Tries left: %1").arg(triesLeft));
 }
+
+void PinDialog::UI_deviceNotInitialized() const { csApplet()->warningBox(tr("Device is not yet initialized. Please try again later.")); }
 
 void PinDialog::clearBuffers() {
   memset(password, 0, 50);

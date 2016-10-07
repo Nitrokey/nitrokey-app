@@ -694,6 +694,12 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason) {
 
 void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
     switch (getStatus) {
+        case 1:
+            //regained connection
+            showTrayMessage(
+                tr("Regained connection to the device.")
+            );
+        break;
         case -10:
             // problems with communication, received CRC other than expected, try to reinitialize
             showTrayMessage(
@@ -4009,7 +4015,15 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       return 1;
   }
 
-  cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval, result);
+  ret = cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval, result);
+  if(ret!=0){
+      //show error message
+      csApplet()->warningBox(
+        tr("Detected some communication problems with the device.")
+                  +QString(" ")+tr("Cannot get OTP code.")
+      );
+      return ret;
+  }
   code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
   config = result[4];
 

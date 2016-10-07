@@ -395,6 +395,7 @@ public:
   int TOTP_SlotCount;
 
   bool is_nkpro_rtm1();
+  bool isInitialized() const;
 
 private:
   int vid;
@@ -405,6 +406,7 @@ private:
 
   int vidStick20UpdateMode;
   int pidStick20UpdateMode;
+  bool needsReconnect;
 };
 
 #endif // DEVICE_H

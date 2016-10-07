@@ -95,6 +95,9 @@ void AboutDialog::showStick20Configuration(void) {
   bool ErrorFlag;
   ErrorFlag = FALSE;
 
+  cryptostick->getPasswordRetryCount();
+  cryptostick->getUserPasswordRetryCount();
+
   showPasswordCounters();
   showStick20Menu();
 
