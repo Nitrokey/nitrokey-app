@@ -4,7 +4,7 @@ cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
 
 PROJECT(NitrokeyApp)
-SET(PROJECT_VERSION "0.5.0")
+SET(PROJECT_VERSION "0.5.1")
 #ADD_DEFINITIONS(-DSEAFILE_CLIENT_VERSION=${PROJECT_VERSION}) 
 
 #Please use either 'cmake -DHAVE_LIBAPPINDICATOR=NO' or 'ccmake' to change this value
