@@ -35,7 +35,9 @@ class DialogChangePassword : public QDialog {
 
   void InitData(void);
 
-  int PasswordKind;
+    virtual int exec();
+
+    int PasswordKind;
 
   Device *cryptostick;
 
@@ -53,6 +55,8 @@ private:
   bool Stick20ChangeUpdatePassword(void);
   int CheckResponse(bool NoStopFlag);
   void clearFields();
+
+    void UI_deviceNotInitialized() const;
 };
 
 #endif // DIALOGCHANGEPASSWORD_H

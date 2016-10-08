@@ -40,6 +40,8 @@ class PasswordDialog : public QDialog {
   void init(char *text, int RetryCount);
   void getPassword(char *text);
 
+    virtual int exec();
+
 private slots:
   void on_checkBox_toggled(bool checked);
 
@@ -49,6 +51,8 @@ private slots:
 
 private:
   Ui::PasswordDialog *ui;
+
+    void UI_deviceNotInitialized() const;
 };
 
 #endif // PASSWORDDIALOG_H

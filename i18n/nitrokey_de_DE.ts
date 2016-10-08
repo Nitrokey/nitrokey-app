@@ -151,6 +151,14 @@ Bitte versuchen Sie es erneut</translation>
 
 </translation>
     </message>
+    <message>
+        <source>Storage Capacity:</source>
+        <translation>Speichergröße:</translation>
+    </message>
+    <message>
+        <source>%1 GB</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>DebugDialog</name>
@@ -344,6 +352,10 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>The minimum length of a password is </source>
         <translation>Minimale Passwortlänge beträgt </translation>
+    </message>
+    <message>
+        <source>Device is not yet initialized. Please try again later.</source>
+        <translation>Gerät ist noch nicht initialisiert. Bitte versuchen Sie es später erneut.</translation>
     </message>
 </context>
 <context>
@@ -1190,6 +1202,22 @@ Falls das Problem erneut auftritt:
         <source>Your secret is invalid. Please change the secret.</source>
         <translation>Ihr Geheimnis ist ungültig. Bitte ändern Sie das Geheimnis.</translation>
     </message>
+    <message>
+        <source>Slot successfully written.</source>
+        <translation>Eintrag erfolgreich gespeichert.</translation>
+    </message>
+    <message>
+        <source>Regained connection to the device.</source>
+        <translation>Verbindung zum Gerät wurde wiederhergestellt.</translation>
+    </message>
+    <message>
+        <source>Detected some communication problems with the device.</source>
+        <translation>Es wurde ein Kommunikationsproblem mit dem Gerät festgestellt.</translation>
+    </message>
+    <message>
+        <source>Cannot get OTP code.</source>
+        <translation>Einmalpasswort konnte nicht erhalten werden.</translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
@@ -1281,6 +1309,10 @@ Falls das Problem erneut auftritt:
 Please change the PIN.</source>
         <translation>Warnung: Die Standard-PIN wird verwendet.
 Bitte ändern Sie die PIN.</translation>
+    </message>
+    <message>
+        <source>Device is not yet initialized. Please try again later.</source>
+        <translation>Gerät ist noch nicht initialisiert. Bitte versuchen Sie es später erneut.</translation>
     </message>
 </context>
 <context>
@@ -1415,6 +1447,10 @@ Bitte ändern Sie die PIN.</translation>
     <message>
         <source>Tries left: %1</source>
         <translation>Versuche möglich: %1</translation>
+    </message>
+    <message>
+        <source>Device is not yet initialized. Please try again later.</source>
+        <translation>Gerät ist noch nicht initialisiert. Bitte versuchen Sie es später erneut.</translation>
     </message>
 </context>
 <context>

@@ -44,6 +44,8 @@
 
 // #define LOCAL_DEBUG // activate for debugging
 
+const int userPasswordRetryCount_notInitialized = 99;
+
 /*******************************************************************************
 
   Device
@@ -62,6 +64,7 @@
 
 Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20UpdateMode,
                int pidStick20UpdateMode) {
+  needsReconnect = false;
   int i;
 
   LastStickError = OUTPUT_CMD_STICK20_STATUS_OK;
@@ -121,7 +124,8 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
   lastBlockNrStick20 = 0;
   passwordRetryCount = 0;
 
-  this->userPasswordRetryCount = 99;
+  this->userPasswordRetryCount = userPasswordRetryCount_notInitialized;
+  this->passwordRetryCount = userPasswordRetryCount_notInitialized;
 }
 
 /*******************************************************************************
@@ -201,13 +205,15 @@ int Device::checkConnection(int InitConfigFlag) {
 
 *******************************************************************************/
 
-void Device::disconnect() {
+void Device::disconnect() {  
   activStick20 = false;
   if (NULL != dev_hid_handle) {
     hid_close(dev_hid_handle);
     dev_hid_handle = NULL;
     hid_exit();
   }
+  this->userPasswordRetryCount = userPasswordRetryCount_notInitialized;
+  this->passwordRetryCount = userPasswordRetryCount_notInitialized;
 }
 
 void Device::connect() {
@@ -251,6 +257,15 @@ int Device::sendCommand(Command *cmd) {
   if (0 == dev_hid_handle) {
     return (-1); // Return error
   }
+  if (!activStick20 &&
+      cmd->commandType != CMD_GET_USER_PASSWORD_RETRY_COUNT &&
+      cmd->commandType != CMD_GET_PASSWORD_RETRY_COUNT &&
+      cmd->commandType != CMD_GET_STATUS &&
+          !isInitialized()) {
+    DebugAppendTextGui(QString("Device not initialized. Skipping command %1.\n")
+                           .arg(cmd->commandType).toLatin1().data() );
+    return (-1); // Return error
+  }
   err = hid_send_feature_report(dev_hid_handle, report, sizeof(report));
 
   {
@@ -278,6 +293,13 @@ int Device::sendCommand(Command *cmd) {
 
   return err;
 }
+
+bool Device::isInitialized() const { return
+            !needsReconnect &&
+            userPasswordRetryCount != userPasswordRetryCount_notInitialized
+            && HID_Stick20Configuration_st.UserPwRetryCount != userPasswordRetryCount_notInitialized
+            && HID_Stick20Configuration_st.AdminPwRetryCount != userPasswordRetryCount_notInitialized
+            ; }
 
 int Device::sendCommandGetResponse(Command *cmd, Response *resp) {
   uint8_t report[REPORT_SIZE + 1];
@@ -740,8 +762,10 @@ int Device::readSlot(uint8_t slotNo) {
 
 void Device::initializeConfig() {
   int i;
-
   unsigned int currentTime;
+  getStatus();
+  getUserPasswordRetryCount();
+  getPasswordRetryCount();
 
   for (i = 0; i < HOTP_SlotCount; i++) {
     readSlot(0x10 + i);
@@ -783,46 +807,65 @@ void Device::getSlotConfigs() {
 *******************************************************************************/
 
 int Device::getStatus() {
-  int res;
+  bool correctCRC=false;  
+  QString logMessage;
 
-  if (isConnected) {
-    Command cmd(CMD_GET_STATUS, Q_NULLPTR, 0);
-    res = sendCommand(&cmd);
-
-    if (res == -1) {
-      return -1; //sending error
-    } else { // sending the command was successful
-      Sleep::msleep(100);
-      Response resp;
-      resp.getResponse(this);
-
-      if (cmd.crc == resp.lastCommandCRC) {
-        memcpy(firmwareVersion, resp.data, 2);
-        memcpy(cardSerial, resp.data + 2, 4);
-        memcpy(generalConfig, resp.data + 6, 3);
-        memcpy(otpPasswordConfig, resp.data + 9, 2);
-      } else {
-          const int maxTries = 5;
-          const int maxTriesToReconnection = 2*maxTries;
-          static int invalidCRCCounter = 0;
-          QString text;
-          text = QString(__FUNCTION__) + QString(": CRC other than expected %1/%2\n").arg(invalidCRCCounter).arg(maxTries);
-          DebugAppendTextGui(text.toLatin1().data());
-          if (++invalidCRCCounter%maxTries == 0){
-              if(invalidCRCCounter>maxTriesToReconnection){
-                  invalidCRCCounter = 0;
-                  return -11; // fatal error, cannot resume communication, ask user for reinsertion
-              }
-              text = QString(__FUNCTION__)+ ": Reconnecting device\n";
-              DebugAppendTextGui(text.toLatin1().data());
-              this->disconnect();
-              return -10; // problems with communication, received CRC other than expected, try to reinitialize
-          }
-      }
-    }
-    return 0; //OK
+  if (!isConnected) {
+    return -2; // device not connected
   }
-  return -2; // device not connected
+
+  Command cmd(CMD_GET_STATUS, Q_NULLPTR, 0);
+  int res = sendCommand(&cmd);
+
+  if (res != -1) {
+  // sending the command was successful
+  Sleep::msleep(100);
+  Response resp;
+  resp.getResponse(this);
+
+  correctCRC = cmd.crc == resp.lastCommandCRC;
+    if (correctCRC) {
+        int responseCode = 0;
+      if(needsReconnect){
+          needsReconnect = false;
+          logMessage = QString(__FUNCTION__) + ": Reconnecting device\n";
+          DebugAppendTextGui(logMessage.toLatin1().data());
+          this->disconnect();
+          responseCode = 1;
+      }
+    memcpy(firmwareVersion, resp.data, 2);
+    memcpy(cardSerial, resp.data + 2, 4);
+    memcpy(generalConfig, resp.data + 6, 3);
+    memcpy(otpPasswordConfig, resp.data + 9, 2);
+    return responseCode; //OK
+  }
+}
+
+  const int maxTries = 5;
+  const int maxTriesToReconnection = 2 * maxTries;
+  static int connectionProblemCounter = 0;
+
+  ++connectionProblemCounter;
+  if (res != -1 && !correctCRC) {
+    logMessage = QString(__FUNCTION__) +
+                 QString(": CRC other than expected %1/%2\n").arg(connectionProblemCounter).arg(maxTries);
+    DebugAppendTextGui(logMessage.toLatin1().data());
+  }
+  if (res == -1) {
+    logMessage = QString(__FUNCTION__) +
+                 QString(": Other communication problem %1/%2\n").arg(connectionProblemCounter).arg(maxTries);
+    DebugAppendTextGui(logMessage.toLatin1().data());
+  }
+  if (connectionProblemCounter % maxTries == 0) {
+    if (connectionProblemCounter > maxTriesToReconnection) {
+      connectionProblemCounter = 0;
+      return -11; // fatal error, cannot resume communication, ask user for reinsertion
+    }
+    needsReconnect = true;
+    return -10; // problems with communication, received CRC other than expected, try to reinitialize
+  }
+
+  return -100; //another error, should not be reached
 }
 
 /*******************************************************************************

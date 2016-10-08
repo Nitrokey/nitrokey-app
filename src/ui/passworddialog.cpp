@@ -62,20 +62,24 @@ PasswordDialog::PasswordDialog(bool ShowMatrix, QWidget *parent)
   cryptostick = NULL;
 
   ui->setupUi(this);
-
-  cryptostick = NULL; // Set it manuel
-
   ui->checkBox_PasswordMatrix->setCheckState(Qt::Unchecked);
-
   if (FALSE == ShowMatrix) {
     ui->checkBox_PasswordMatrix->hide();
   }
-
   ui->lineEdit->setFocus();
-
-  cryptostick = NULL;
 }
 
+void PasswordDialog::UI_deviceNotInitialized() const { csApplet()->warningBox(tr("Device is not yet initialized. Please try again later.")); }
+
+
+int PasswordDialog::exec() {
+  if (cryptostick == NULL || !cryptostick->isInitialized()) {
+    UI_deviceNotInitialized();
+    done(Rejected);
+    return QDialog::Rejected;
+  }
+  return QDialog::exec();
+}
 /*******************************************************************************
 
   PasswordDialog
@@ -146,10 +150,7 @@ void PasswordDialog::getPassword(char *text) {
 *******************************************************************************/
 
 void PasswordDialog::on_checkBox_toggled(bool checked) {
-  if (checked)
-    ui->lineEdit->setEchoMode(QLineEdit::Normal);
-  else
-    ui->lineEdit->setEchoMode(QLineEdit::Password);
+  ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }
 
 /*******************************************************************************
@@ -166,12 +167,7 @@ void PasswordDialog::on_checkBox_toggled(bool checked) {
 *******************************************************************************/
 
 void PasswordDialog::on_checkBox_PasswordMatrix_toggled(bool checked) {
-
-  if (checked) {
-    ui->lineEdit->setDisabled(TRUE);
-  } else {
-    ui->lineEdit->setDisabled(FALSE);
-  }
+  ui->lineEdit->setDisabled(checked ? TRUE : FALSE);
 }
 
 /*******************************************************************************

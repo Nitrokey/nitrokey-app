@@ -694,6 +694,12 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason) {
 
 void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
     switch (getStatus) {
+        case 1:
+            //regained connection
+            showTrayMessage(
+                tr("Regained connection to the device.")
+            );
+        break;
         case -10:
             // problems with communication, received CRC other than expected, try to reinitialize
             showTrayMessage(
@@ -3111,52 +3117,53 @@ void MainWindow::on_slotComboBox_currentIndexChanged(int index) {
 }
 
 void MainWindow::on_hexRadioButton_toggled(bool checked) {
+  if (!checked) {
+    return;
+  }
+
   QByteArray secret;
+  uint8_t encoded[32] = {};
+  uint8_t data[32] = {};
+  uint8_t decoded[20] = {};
 
-  uint8_t encoded[128];
+  secret = ui->secretEdit->text().toLatin1();
+  if (secret.size() != 0) {
+    const size_t encoded_size = std::min(sizeof(encoded), (size_t) secret.length());
+    memset(encoded, 'A', sizeof(encoded));
+    memcpy(encoded, secret.data(), encoded_size);
 
-  uint8_t data[128];
+    base32_clean(encoded, encoded_size, data);
+    const size_t decoded_size = sizeof(decoded);
+    base32_decode(data, decoded, decoded_size);
 
-  uint8_t decoded[20];
+    secret = QByteArray((char *) decoded, decoded_size).toHex();
 
-  if (checked) {
-
-    secret = ui->secretEdit->text().toLatin1();
-    if (secret.size() != 0) {
-      memset(encoded, 'A', 32);
-      memcpy(encoded, secret.data(), secret.length());
-
-      base32_clean(encoded, 32, data);
-      base32_decode(data, decoded, 20);
-
-      secret = QByteArray((char *)decoded, 20).toHex();
-
-      ui->secretEdit->setText(QString(secret));
-      secretInClipboard = ui->secretEdit->text();
-      copyToClipboard(secretInClipboard);
-    }
+    ui->secretEdit->setMaxLength(40);
+    ui->secretEdit->setText(QString(secret));
+    secretInClipboard = ui->secretEdit->text();
+    copyToClipboard(secretInClipboard);
   }
 }
 
 void MainWindow::on_base32RadioButton_toggled(bool checked) {
+  if (!checked) {
+    return;
+  }
+
   QByteArray secret;
+  uint8_t encoded[32] = {};
+  uint8_t decoded[20] = {};
 
-  uint8_t encoded[128];
+  secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
+  if (secret.size() != 0) {
+    const size_t decoded_size = std::min(sizeof(decoded), (size_t) secret.length());
+    memcpy(decoded, secret.data(), decoded_size);
+    base32_encode(decoded, decoded_size, encoded, sizeof(encoded));
 
-  uint8_t decoded[20];
-
-  if (checked) {
-    secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
-    if (secret.size() != 0) {
-      memset(decoded, 0, 20);
-      memcpy(decoded, secret.data(), secret.length());
-
-      base32_encode(decoded, secret.length(), encoded, 128);
-
-      ui->secretEdit->setText(QString((char *)encoded));
-      secretInClipboard = ui->secretEdit->text();
-      copyToClipboard(secretInClipboard);
-    }
+    ui->secretEdit->setMaxLength(32);
+    ui->secretEdit->setText(QString((char *) encoded));
+    secretInClipboard = ui->secretEdit->text();
+    copyToClipboard(secretInClipboard);
   }
 }
 
@@ -3350,8 +3357,11 @@ void MainWindow::getTOTP15() { getTOTPDialog(14); }
 
 void MainWindow::on_eraseButton_clicked() {
   bool answer = csApplet()->yesOrNoBox(tr("WARNING: Are you sure you want to erase the slot?"), false);
-  char clean[8] = {' '};
+  if (!answer) {
+    return;
+  }
 
+  char clean[8] = {' '};
   uint8_t slotNo = ui->slotComboBox->currentIndex();
 
   if (slotNo > TOTP_SlotCount) {
@@ -3367,40 +3377,39 @@ void MainWindow::on_eraseButton_clicked() {
     slotNo = slotNo + 0x20 - HOTP_SlotCount;
   }
 
-  if (answer) {
-    int res = cryptostick->eraseSlot(slotNo);
-    if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
-      uint8_t tempPassword[25] = {0};
-      QString password;
+  int res = cryptostick->eraseSlot(slotNo);
+  if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
+    uint8_t tempPassword[25] = {0};
+    QString password;
 
-      do {
-          PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-                           PinDialog::ADMIN_PIN);
-          int ok = dialog.exec();
-        if (ok != QDialog::Accepted) {
-          return;
-        }
-        dialog.getPassword(password);
+    do {
+      PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                       PinDialog::ADMIN_PIN);
+      int ok = dialog.exec();
+      if (ok != QDialog::Accepted) {
+        return;
+      }
+      dialog.getPassword(password);
 
-        generateTemporaryPassword(tempPassword);
-        cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
-        if (cryptostick->validPassword) {
-          lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-        } else {
-            csApplet()->warningBox(tr("Wrong PIN. Please try again."));
-        }
-        res = cryptostick->eraseSlot(slotNo);
-      } while (res != CMD_STATUS_OK);
-    }
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    Sleep::msleep(1000);
-    QApplication::restoreOverrideCursor();
-    generateAllConfigs();
+      generateTemporaryPassword(tempPassword);
+      cryptostick->firstAuthenticate((uint8_t *) password.toLatin1().data(), tempPassword);
+      if (cryptostick->validPassword) {
+        lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
+      } else {
+        csApplet()->warningBox(tr("Wrong PIN. Please try again."));
+      }
+      res = cryptostick->eraseSlot(slotNo);
+    } while (res != CMD_STATUS_OK);
+  }
+  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+  Sleep::msleep(1000);
+  QApplication::restoreOverrideCursor();
+  generateAllConfigs();
 
-    if (res == CMD_STATUS_OK)
-        csApplet()->messageBox(tr("Slot has been erased successfully."));
+  if (res == CMD_STATUS_OK) {
+    csApplet()->messageBox(tr("Slot has been erased successfully."));
   } else {
-      csApplet()->messageBox(tr("Command execution failed. Please try again."));
+    csApplet()->messageBox(tr("Command execution failed. Please try again."));
   }
 
   displayCurrentSlotConfig();
@@ -3580,10 +3589,13 @@ void MainWindow::SetupPasswordSafeConfig(void) {
 }
 
 void MainWindow::on_PWS_ButtonClearSlot_clicked() {
+  bool answer = csApplet()->yesOrNoBox(tr("WARNING: Are you sure you want to erase the slot?"), false);
+  if (!answer){
+      return;
+  }
+
   int Slot;
-
   unsigned int ret;
-
   QMessageBox msgBox;
 
   Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
@@ -3601,6 +3613,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
       cryptostick->passwordSafeSlotNames[Slot][0] = 0;
       ui->PWS_ComboBoxSelectSlot->setItemText(
           Slot, QString("Slot ").append(QString::number(Slot + 1, 10)));
+      csApplet()->messageBox(tr("Slot has been erased successfully."));
     } else
         csApplet()->warningBox(tr("Can't clear slot."));
   } else
@@ -3700,6 +3713,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
                             .append(QString("]"))));
 
   generateMenu();
+  csApplet()->messageBox(tr("Slot successfully written."));
 }
 
 char *MainWindow::PWS_GetSlotName(int Slot) {
@@ -4006,7 +4020,15 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       return 1;
   }
 
-  cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval, result);
+  ret = cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval, result);
+  if(ret!=0){
+      //show error message
+      csApplet()->warningBox(
+        tr("Detected some communication problems with the device.")
+                  +QString(" ")+tr("Cannot get OTP code.")
+      );
+      return ret;
+  }
   code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
   config = result[4];
 
