@@ -251,34 +251,34 @@ IF(NOT WIN32)
       #      ${CMAKE_SOURCE_DIR}/data/icons/48x48
       #      ${CMAKE_SOURCE_DIR}/data/icons/128x128
     ${CMAKE_SOURCE_DIR}/data/icons/
-    DESTINATION usr/share/icons/
+    DESTINATION share/icons
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
-    DESTINATION usr/share/applications
+    DESTINATION share/applications
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
-    DESTINATION usr/share/pixmaps
+    DESTINATION share/pixmaps
   )
 
   # Install Nitrokey udev rules
   install(FILES
    ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
-   DESTINATION usr/lib/udev/rules.d
+   DESTINATION lib/udev/rules.d
   )
 
   # Install autocompletion scripts
   install(FILES
-   ${CMAKE_SOURCE_DIR}/data//bash-autocomplete/nitrokey-app
-    DESTINATION etc/bash_completion.d
+   ${CMAKE_SOURCE_DIR}/data/bash-autocomplete/nitrokey-app
+    DESTINATION /etc/bash_completion.d
   )
 
   install(FILES
    ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
-   DESTINATION usr/share/locale/de_DE/LC_MESSAGES
+   DESTINATION share/locale/de_DE/LC_MESSAGES
   )
 
   install(FILES
@@ -286,7 +286,7 @@ IF(NOT WIN32)
     ${CMAKE_SOURCE_DIR}/images/quit.png
     ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
     ${CMAKE_SOURCE_DIR}/images/settings.png
-    DESTINATION usr/share/nitrokey
+    DESTINATION share/nitrokey
   )
 
 ENDIF () # NOT WIN32
@@ -299,7 +299,7 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${resources_ouput}
 )
 
-INSTALL(TARGETS nitrokey-app DESTINATION usr/bin)
+INSTALL(TARGETS nitrokey-app DESTINATION bin)
 
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${QT_LIBRARIES}
