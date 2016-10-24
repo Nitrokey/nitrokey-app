@@ -1,14 +1,16 @@
 Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app)  [![Code Health](https://landscape.io/github/Nitrokey/nitrokey-app/master/landscape.svg?style=flat)](https://landscape.io/github/Nitrokey/nitrokey-app/master)  [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
 ============
-Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator and Qt 5 and MinGW 4.4.
+Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator and Qt 5 and MinGW 4.4. Lately developed under Ubuntu 16.04 with Qt5.5.
 
 The implementation is compatible to the Google Authenticator application which can be used for testing purposes. See [google-authenticator](http://google-authenticator.googlecode.com/git/libpam/totp.html)
 
-Using the application under Linux also requires root privileges, or configuration of device privileges in udev (due to USB communication).
+Using the application under Linux also requires root privileges, or configuration of device privileges in udev (due to USB communication). Udev configuration is installed automatically with application (either with package or after `make install`).
 
-To compile the Nitrokey App under Linux install the package libusb-1.0.0-dev and QT Creator. You may need to add to the .pro file:
+To compile the Nitrokey App under Linux install the package `libusb-1.0.0-dev` and QT Creator (optionally). In case it would not work out-of-the-box you may need to add to the .pro file:
+```
 QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
 QMAKE_CFLAGS= -I/usr/include/libusb-1.0
+```
 
 Note: In case `libusb-1.0.0-dev` is not available to install please check other name: `libusb-1.0-0-dev` (the difference is the `-` char between zeroes).
 
@@ -34,20 +36,27 @@ Clone the Nitrokey repository into your $HOME git folder.
 
 ```
 cd $HOME
-mkdir git
-cd git
-Git clone https://github.com/Nitrokey/nitrokey-app.git
+mkdir git && cd git
+git clone https://github.com/Nitrokey/nitrokey-app.git
 ```
 
 #### QT5
-Prerequisite: [Install QT5](http://www.qt.io/download-open-source/#section-2) or `sudo apt-get install qt5-default qtcreator`
+Prerequisites: Install Qt manually using [download page](http://www.qt.io/download-open-source/#section-2) or through package manager:
+```
+sudo apt-get install qt5-default
+sudo apt-get install qtcreator #for compilation using IDE
+```
 
-Use QT Creator for compilation or perform the following steps:
+Use QT Creator (IDE) for compilation or perform the following steps:
 
-1. cd to a build directory parallel to the nitrokey-app directory
-2. For 64 bit system: 
-   $HOME/Qt/5.5/gcc_64/bin/qmake -spec  $HOME/Qt/5.5/gcc_64/mkspecs/linux-g++-64 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro
-4. make -j4
+- out of source build:
+   1. cd to a build directory
+   2. For 64 bit system (assuming Qt is installed in `~/Qt` and the app sources are in `~/git/nitrokey-app`): 
+      `$HOME/Qt/5.5/gcc_64/bin/qmake -spec  $HOME/Qt/5.5/gcc_64/mkspecs/linux-g++-64 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro`
+   3. `make -j4`
+
+- simple build in source directory (assuming Qt being in `$PATH`):
+   `qmake && make -j4`
 
 #### Using cmake:
 General use:
@@ -57,8 +66,8 @@ make -j4
 make install
 ```
 
-Note: You have to set CMAKE_PREFIX_PATH to your corresponding Qt path.
-Example: (If QT5.5 (64bit) was installed in your $HOME DIR): 
+Note: In case you have downloaded Qt manually from web download page you have to set `CMAKE_PREFIX_PATH` to your corresponding Qt path.
+Example: (If QT5.5 (64bit) was installed in your `$HOME` DIR): 
 ```
 export CMAKE_PREFIX_PATH=$HOME/Qt/5.5/gcc_64/
 ```
@@ -102,34 +111,40 @@ Cleanup with:
 
 Requirements: fakeroot, debhelper, hardening-wrapper, qt5-default, gtk2.0, libusb-1.0-0-dev, libappindicator-dev, libnotify-dev.
 
+#### Building RPM and Debian Packages (alternative)
+CMake can generate RPM packages using CPack. It can also generate `.deb` package using other method than presented in previous section. To create both packages please execute the following in directory "nitrokey-app":
+```
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j4 package
+```
+This will result in two packages: `.deb` and `.rpm`. 
 
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux
 Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
 
-1. sudo apt-get install bison cmake flex intltool libtool scons
-2. git clone https://github.com/mxe/mxe.git
-3. cd mxe && make qt5
-4. export PATH=<mxe root>/usr/bin:$PATH
-5. Change to build directory parallel to PC CryptoStickGUI directory, e.g. build-CryptoStickGUI-Win32-release
-6. <mxe root>/usr/i686-w64-mingw32.static/qt5/bin/qmake -spec <mxe root>/usr/i686-w64-mingw32.static/qt5/mkspecs/win32-g++ -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
-7. make
+1. `sudo apt-get install bison cmake flex intltool libtool scons`
+2. `git clone https://github.com/mxe/mxe.git`
+3. `cd mxe && make qt5`
+4. `export PATH=<mxe root>/usr/bin:$PATH`
+5. Change to build directory parallel to source directory, e.g. `build-nitrokeyapp-Win32-release`
+6. `<mxe root>/usr/i686-w64-mingw32.static/qt5/bin/qmake -spec <mxe root>/usr/i686-w64-mingw32.static/qt5/mkspecs/win32-g++ -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro`
+7. `make`
 8. optional: use upx to compress the executable
 
 
 #### Compiling for MAC OS
 1. Use Qt to compile the Nitrokey App
-2. Navigate to <build_dir>/CryptoStickGUI.app/Contents
-3. Create a .dmg file
-   Go to the build directory and use
-
-     `macdeployqt CryptoStickGUI.app/ -dmg`
+2. Navigate to `<build_dir>/<app_name>/Contents`
+3. Create a .dmg file: go to the build directory and use
      
-   CryptoStickGUI.dmg file will be created at the same folder. This is the final file for distributing the App on Mac OS
-4. Compress the .dmg package:
+     `macdeployqt <app_name>/ -dmg`
+     
+   `<app_name>.dmg` file will be created at the same folder. This is the final file for distributing the App on Mac OS
+4. Compress the `.dmg` package:
    * Open Disk Utility
    * Select the dmg package from left column (or drag'n'drop)
    * Select Convert, check "compressed" option and then "Save"
-
 
 Tray
 ---
