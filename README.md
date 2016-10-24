@@ -109,30 +109,30 @@ mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make -j4 package
 ```
-This will result in two packages: .deb and .rpm. 
+This will result in two packages: `.deb` and `.rpm`. 
 
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux
 Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
 
-1. sudo apt-get install bison cmake flex intltool libtool scons
-2. git clone https://github.com/mxe/mxe.git
-3. cd mxe && make qt5
-4. export PATH=<mxe root>/usr/bin:$PATH
-5. Change to build directory parallel to source directory, e.g. build-nitrokeyapp-Win32-release
-6. <mxe root>/usr/i686-w64-mingw32.static/qt5/bin/qmake -spec <mxe root>/usr/i686-w64-mingw32.static/qt5/mkspecs/win32-g++ -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
-7. make
+1. `sudo apt-get install bison cmake flex intltool libtool scons`
+2. `git clone https://github.com/mxe/mxe.git`
+3. `cd mxe && make qt5`
+4. `export PATH=<mxe root>/usr/bin:$PATH`
+5. Change to build directory parallel to source directory, e.g. `build-nitrokeyapp-Win32-release`
+6. `<mxe root>/usr/i686-w64-mingw32.static/qt5/bin/qmake -spec <mxe root>/usr/i686-w64-mingw32.static/qt5/mkspecs/win32-g++ -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro`
+7. `make`
 8. optional: use upx to compress the executable
 
 
 #### Compiling for MAC OS
 1. Use Qt to compile the Nitrokey App
-2. Navigate to <build_dir>/<app_name>/Contents
+2. Navigate to `<build_dir>/<app_name>/Contents`
 3. Create a .dmg file: go to the build directory and use
      
      `macdeployqt <app_name>/ -dmg`
      
-   <app_name>.dmg file will be created at the same folder. This is the final file for distributing the App on Mac OS
-4. Compress the .dmg package:
+   `<app_name>.dmg` file will be created at the same folder. This is the final file for distributing the App on Mac OS
+4. Compress the `.dmg` package:
    * Open Disk Utility
    * Select the dmg package from left column (or drag'n'drop)
    * Select Convert, check "compressed" option and then "Save"
