@@ -102,6 +102,14 @@ Cleanup with:
 
 Requirements: fakeroot, debhelper, hardening-wrapper, qt5-default, gtk2.0, libusb-1.0-0-dev, libappindicator-dev, libnotify-dev.
 
+#### Building RPM and Debian Packages (alternative)
+CMake can generate RPM packages using CPack. It will also generate .deb package using other method than presented in previous section. To create the packages please execute the following in directory "nitrokey-app":
+```
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make -j4 package
+```
+This will result in two packages: .deb and .rpm. 
 
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux
 Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
@@ -110,7 +118,7 @@ Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-
 2. git clone https://github.com/mxe/mxe.git
 3. cd mxe && make qt5
 4. export PATH=<mxe root>/usr/bin:$PATH
-5. Change to build directory parallel to PC CryptoStickGUI directory, e.g. build-CryptoStickGUI-Win32-release
+5. Change to build directory parallel to source directory, e.g. build-nitrokeyapp-Win32-release
 6. <mxe root>/usr/i686-w64-mingw32.static/qt5/bin/qmake -spec <mxe root>/usr/i686-w64-mingw32.static/qt5/mkspecs/win32-g++ -o Makefile ../nitrokey-app/nitrokey-app-qt5.pro
 7. make
 8. optional: use upx to compress the executable
