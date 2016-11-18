@@ -12,7 +12,7 @@ OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" YES)
 
 INCLUDE(FindPkgConfig)
 
-IF (NOT (${CMAKE_BUILD_TYPE} MATCHES Release))
+IF (NOT ${CMAKE_BUILD_TYPE})
   SET(CMAKE_BUILD_TYPE Debug) 
 ENDIF()
 MESSAGE("Build type: ${CMAKE_BUILD_TYPE}") 
