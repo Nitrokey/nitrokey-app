@@ -443,7 +443,7 @@ int Device::eraseSlot(uint8_t slotNo) {
   data[0] = slotNo;
 
   if (!isConnected) {
-    return -1; // communication error
+    return ERR_NOT_CONNECTED; // communication error
   }
 
   const auto data_with_password_len = sizeof(data) + sizeof(adminTemporaryPassword);
@@ -456,7 +456,7 @@ int Device::eraseSlot(uint8_t slotNo) {
   res = sendCommand(&cmd);
 
   if (res == -1) {
-    return -1; // communication error
+    return ERR_SENDING; // communication error
   }
   Sleep::msleep(200);
 
@@ -465,7 +465,7 @@ int Device::eraseSlot(uint8_t slotNo) {
   if (cmd.crc == resp.lastCommandCRC) {
     return resp.lastCommandStatus;
   }
-  return -2; // wrong crc
+  return ERR_WRONG_RESPONSE_CRC; // wrong crc
 }
 
 /*******************************************************************************
