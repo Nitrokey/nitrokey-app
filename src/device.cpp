@@ -533,24 +533,86 @@ int Device::setTime(int reset) {
 
 *******************************************************************************/
 
+#define __packed __attribute__((__packed__))
+
+
+struct WriteToOTPSlot {
+    uint8_t temporary_admin_password[25];
+    uint8_t slot_number;
+    union {
+        uint64_t slot_counter_or_interval;
+        uint8_t slot_counter_s[8];
+    };
+    uint8_t _slot_config;
+    uint8_t slot_token_id[13]; /** OATH Token Identifier */
+} __packed;
+
+struct SendOTPData {
+    uint8_t temporary_admin_password[25];
+    uint8_t type; //S-secret, N-name
+    uint8_t id; //multiple reports for values longer than 30 bytes
+    uint8_t data[30]; //data, does not need null termination
+} __packed;
+
 int Device::writeToHOTPSlot(HOTPSlot *slot) {
   if (!((slot->slotNumber >= 0x10) && (slot->slotNumber < 0x10 + HOTP_SlotCount))) {
     return -1; // wrong slot number checked on app side //TODO ret code conflict
   }
   int res;
-
   uint8_t data[COMMAND_SIZE];
-  memset(data, 0, sizeof(data));
+  WriteToOTPSlot write_data;
+  int buffer_size = 0;
+  uint8_t *buffer = nullptr;
 
-  data[0] = slot->slotNumber;
-  memcpy(data + 1, slot->slotName, 15);
-  memcpy(data + 16, slot->secret, 20);
-  data[36] = slot->config;
-  memcpy(data + 37, slot->tokenID, 13);
-  memcpy(data + 50, slot->counter, 8);
+  if (false){
+    buffer = data;
+    buffer_size = sizeof(data);
+    memset(data, 0, sizeof(data));
+    data[0] = slot->slotNumber;
+    memcpy(data + 1, slot->slotName, 15);
+    memcpy(data + 16, slot->secret, 20);
+    data[36] = slot->config;
+    memcpy(data + 37, slot->tokenID, 13);
+    memcpy(data + 50, slot->counter, 8);
+  } else {
+    //copy other OTP data
+    //name
+    SendOTPData otpData;
+    otpData.id = 0;
+    otpData.type = 'N';
+    memcpy(otpData.data, slot->slotName, sizeof(slot->slotName));
+    memcpy(otpData.temporary_admin_password, adminTemporaryPassword, sizeof(adminTemporaryPassword));
+    //execute command
+
+    //secret
+    otpData.type = 'S';
+    memset(otpData.data, 0, sizeof(otpData.data));
+
+    const auto secret_size = sizeof(slot->secret);
+    auto remaining_secret_length = secret_size;
+
+    while (remaining_secret_length>0){
+      const auto bytesToCopy = std::min(sizeof(otpData.data), remaining_secret_length);
+      const auto start = secret_size - remaining_secret_length;
+      memset(otpData.data, 0, sizeof(otpData.data));
+      memcpy(otpData.data, slot->secret + start, bytesToCopy);
+      //execute command
+      remaining_secret_length -= bytesToCopy;
+      otpData.id++;
+    }
+
+    //write OTP slot data
+    buffer = (uint8_t*) &write_data;
+    buffer_size = sizeof(write_data);
+    memcpy(write_data.temporary_admin_password, adminTemporaryPassword, sizeof(adminTemporaryPassword));
+    write_data.slot_number = slot->slotNumber;
+    memcpy(write_data.slot_counter_s, slot->counter, sizeof(slot->counter));
+    write_data._slot_config = slot->config;
+    memcpy(write_data.slot_token_id, slot->tokenID, sizeof(slot->tokenID));
+  }
 
   if (isConnected) {
-    Command cmd(CMD_WRITE_TO_SLOT, data, sizeof(data));
+    Command cmd(CMD_WRITE_TO_SLOT, buffer, buffer_size);
     authorize(&cmd);
     res = sendCommand(&cmd);
 

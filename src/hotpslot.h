@@ -31,11 +31,11 @@
 class HOTPSlot {
 public:
   HOTPSlot();
-  HOTPSlot(uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[20], uint8_t counter[8],
+  HOTPSlot(uint8_t slotNumber, uint8_t slotName[15], uint8_t secret[40], uint8_t counter[8],
            uint8_t config);
   uint8_t slotNumber;
   uint8_t slotName[15];
-  uint8_t secret[20];
+  uint8_t secret[40];
   uint8_t counter[8];
   uint8_t config;
   uint8_t tokenID[13];
