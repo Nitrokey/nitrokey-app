@@ -653,14 +653,10 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
     if (is_OTP_PIN_protected) {
       userAuthorize(&cmd);
     }
-    //          userAuthenticate((uint8_t *) "123456", (uint8_t *) "123123123");
-
-    //    validUserPassword = false;
-    //    memset(userTemporaryPassword, 0, 25);
 
     int res = sendCommand(&cmd);
     if (res == -1) {
-      return -1; // connection problem
+      return ERR_SENDING; // connection problem
     }
     Sleep::msleep(100);
 
@@ -669,12 +665,12 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
     if (cmd.crc == resp.lastCommandCRC) { // the response was for the last command
       if (resp.lastCommandStatus == CMD_STATUS_OK) {
         memcpy(result, resp.data, 18);
-        return 0; // OK!
+        return ERR_NO_ERROR; // OK!
       }
     }
-    return -2; // wrong CRC or not OK status
+    return ERR_WRONG_RESPONSE_CRC; // wrong CRC or not OK status
   }
-  return -1; // connection problem
+  return ERR_NOT_CONNECTED; // connection problem
 }
 
 int Device::getHOTP(uint8_t slotNo) {
