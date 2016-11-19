@@ -1596,37 +1596,36 @@ void Device::getGeneralConfig() {}
 int Device::writeGeneralConfig(uint8_t data[]) {
   int res;
 
-  if (isConnected) {
-    Command cmd(CMD_WRITE_CONFIG, data, 5);
-    authorize(&cmd);
-    res = sendCommand(&cmd);
-
-    if (res == -1) {
-      return ERR_SENDING;
-    } else { // sending the command was successful
-      Sleep::msleep(100);
-      Response resp;
-
-      resp.getResponse(this);
-
-      if (cmd.crc == resp.lastCommandCRC) {
-        switch (resp.lastCommandStatus) {
-        case CMD_STATUS_OK:
-          return CMD_STATUS_OK;
-        case CMD_STATUS_NOT_AUTHORIZED:
-          return CMD_STATUS_NOT_AUTHORIZED;
-        default:
-          break;
-        }
-        if (resp.lastCommandStatus == CMD_STATUS_OK) {
-          return 0;
-        }
-      } else {
-        return ERR_WRONG_RESPONSE_CRC;
-      }
-    }
+  if (!isConnected) {
+    return ERR_NOT_CONNECTED;
   }
-  return ERR_NOT_CONNECTED;
+  Command cmd(CMD_WRITE_CONFIG, data, 5);
+  authorize(&cmd);
+  res = sendCommand(&cmd);
+
+  if (res == -1) {
+    return ERR_SENDING;
+  }
+  // sending the command was successful
+  Sleep::msleep(100);
+  Response resp;
+
+  resp.getResponse(this);
+
+  if (cmd.crc != resp.lastCommandCRC) {
+    return ERR_WRONG_RESPONSE_CRC;
+  }
+  switch (resp.lastCommandStatus) {
+    case CMD_STATUS_OK:
+    case CMD_STATUS_NOT_AUTHORIZED:
+      return resp.lastCommandStatus;
+    default:
+      break;
+  }
+  if (resp.lastCommandStatus == CMD_STATUS_OK) {
+    return 0;
+  }
+  return ERR_STATUS_NOT_OK;
 }
 
 /*******************************************************************************
