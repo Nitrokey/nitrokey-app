@@ -632,7 +632,7 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
                     uint8_t result[18]) {
   bool is_OTP_PIN_protected = otpPasswordConfig[0] == 1;
 
-  uint8_t data[30];
+  uint8_t data[18];
   data[0] = slotNo;
   memcpy(data + 1, &challenge, 8);
   // Time of challenge: Warning:
@@ -643,7 +643,12 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
   memcpy(data + 17, &lastInterval, 1);
 
   if (isConnected) {
-    Command cmd(CMD_GET_CODE, data, 18);
+    const auto data_with_password_len = sizeof(data) + sizeof(userTemporaryPassword);
+    uint8_t data_with_password[data_with_password_len] = {};
+    memcpy(data_with_password, data, sizeof(data));
+    memcpy(data_with_password + sizeof(data), userTemporaryPassword, sizeof(userTemporaryPassword));
+
+    Command cmd(CMD_GET_CODE, data_with_password, sizeof(data_with_password));
 
     if (is_OTP_PIN_protected) {
       userAuthorize(&cmd);
