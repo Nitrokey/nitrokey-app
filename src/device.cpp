@@ -445,7 +445,8 @@ int Device::eraseSlot(uint8_t slotNo) {
   if (!isConnected) {
     return -1; // communication error
   }
-  Command cmd(CMD_ERASE_SLOT, data, 1);
+
+  Command cmd(CMD_ERASE_SLOT, data, sizeof(data));
   authorize(&cmd);
   res = sendCommand(&cmd);
 
@@ -1599,7 +1600,13 @@ int Device::writeGeneralConfig(uint8_t data[]) {
   if (!isConnected) {
     return ERR_NOT_CONNECTED;
   }
-  Command cmd(CMD_WRITE_CONFIG, data, 5);
+
+  const auto data_with_password_len = 5 + sizeof(adminTemporaryPassword);
+  uint8_t data_with_password[data_with_password_len] = {};
+  memcpy(data_with_password, data, 5);
+  memcpy(data_with_password + 5, adminTemporaryPassword, sizeof(adminTemporaryPassword));
+
+  Command cmd(CMD_WRITE_CONFIG, data_with_password, sizeof(data_with_password));
   authorize(&cmd);
   res = sendCommand(&cmd);
 
@@ -1621,9 +1628,6 @@ int Device::writeGeneralConfig(uint8_t data[]) {
       return resp.lastCommandStatus;
     default:
       break;
-  }
-  if (resp.lastCommandStatus == CMD_STATUS_OK) {
-    return 0;
   }
   return ERR_STATUS_NOT_OK;
 }
