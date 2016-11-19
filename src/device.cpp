@@ -446,7 +446,12 @@ int Device::eraseSlot(uint8_t slotNo) {
     return -1; // communication error
   }
 
-  Command cmd(CMD_ERASE_SLOT, data, sizeof(data));
+  const auto data_with_password_len = sizeof(data) + sizeof(adminTemporaryPassword);
+  uint8_t data_with_password[data_with_password_len] = {};
+  memcpy(data_with_password, data, sizeof(data));
+  memcpy(data_with_password + sizeof(data), adminTemporaryPassword, sizeof(adminTemporaryPassword));
+
+  Command cmd(CMD_ERASE_SLOT, data_with_password, sizeof(data_with_password));
   authorize(&cmd);
   res = sendCommand(&cmd);
 
