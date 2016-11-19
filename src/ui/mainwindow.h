@@ -57,6 +57,12 @@ typedef struct {
 
 enum trayMessageType { INFORMATION, WARNING, CRITICAL };
 
+static const int SECRET_LENGTH = 20;
+
+static const int SECRET_LENGTH_BASE32 = 32;
+
+static const int SECRET_LENGTH_HEX = 40;
+
 class MainWindow : public QMainWindow {
   Q_OBJECT public : explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
   void startTimer();

@@ -1858,18 +1858,18 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
     QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
 
     uint8_t encoded[128];
-    uint8_t decoded[20];
+    uint8_t decoded[SECRET_LENGTH];
     uint8_t data[128];
 
-    memset(encoded, 'A', 32);
-    memset(data, 'A', 32);
+    memset(encoded, 'A', SECRET_LENGTH_BASE32);
+    memset(data, 'A', SECRET_LENGTH_BASE32);
     memcpy(encoded, secretFromGUI.data(), secretFromGUI.length());
 
-    base32_clean(encoded, 32, data);
-    base32_decode(data, decoded, 20);
+    base32_clean(encoded, SECRET_LENGTH_BASE32, data);
+    base32_decode(data, decoded, SECRET_LENGTH);
 
-    secretFromGUI = QByteArray((char *)decoded, 20); // .toHex();
-    memset(slot->secret, 0, 20);
+    secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH); // .toHex();
+    memset(slot->secret, 0, SECRET_LENGTH);
     memcpy(slot->secret, secretFromGUI.data(), secretFromGUI.size());
 
     QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
@@ -1944,19 +1944,19 @@ void MainWindow::generateTOTPConfig(TOTPSlot *slot) {
     QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
 
     uint8_t encoded[128] = {'A'};
-    uint8_t decoded[20] = {'0'};
+    uint8_t decoded[SECRET_LENGTH] = {'0'};
     uint8_t data[128] = {'A'};
 
-    memset(encoded, 'A', 32);
-    memset(data, 'A', 32);
+    memset(encoded, 'A', SECRET_LENGTH_BASE32);
+    memset(data, 'A', SECRET_LENGTH_BASE32);
     memcpy(encoded, secretFromGUI.data(), secretFromGUI.length());
 
-    base32_clean(encoded, 32, data);
-    base32_decode(data, decoded, 20);
+    base32_clean(encoded, SECRET_LENGTH_BASE32, data);
+    base32_decode(data, decoded, SECRET_LENGTH);
 
-    secretFromGUI = QByteArray((char *)decoded, 20); // .toHex();
+    secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH); // .toHex();
 
-    memset(slot->secret, 0, 20);
+    memset(slot->secret, 0, SECRET_LENGTH);
     memcpy(slot->secret, secretFromGUI.data(), secretFromGUI.size());
 
     QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
@@ -2017,7 +2017,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->secretEdit->setPlaceholderText("********************************");
 
   ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
-  QByteArray secret((char *)cryptostick->TOTPSlots[slotNo]->secret, 20);
+  QByteArray secret((char *)cryptostick->TOTPSlots[slotNo]->secret, SECRET_LENGTH);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secret); // .toHex());
@@ -2078,7 +2078,7 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
 
   // slotNo=slotNo+0x10;
   ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
-  QByteArray secret((char *)cryptostick->HOTPSlots[slotNo]->secret, 20);
+  QByteArray secret((char *)cryptostick->HOTPSlots[slotNo]->secret, SECRET_LENGTH);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secret); // .toHex());
@@ -3102,7 +3102,7 @@ bool MainWindow::validate_secret(const uint8_t *secret) const {
   //check if the secret consist only from null bytes
   //(this value is reserved - it would be ignored by device)
   //assuming secret points to 20 byte array
-  for (int i=0; i<20; i++){
+  for (int i=0; i < SECRET_LENGTH; i++){
     if (secret[i] != 0){
       return true;
     }
@@ -3122,9 +3122,9 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
   }
 
   QByteArray secret;
-  uint8_t encoded[32] = {};
-  uint8_t data[32] = {};
-  uint8_t decoded[20] = {};
+  uint8_t encoded[SECRET_LENGTH_BASE32] = {};
+  uint8_t data[SECRET_LENGTH_BASE32] = {};
+  uint8_t decoded[SECRET_LENGTH] = {};
 
   secret = ui->secretEdit->text().toLatin1();
   if (secret.size() != 0) {
@@ -3138,7 +3138,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
 
     secret = QByteArray((char *) decoded, decoded_size).toHex();
 
-    ui->secretEdit->setMaxLength(40);
+    ui->secretEdit->setMaxLength(SECRET_LENGTH_HEX);
     ui->secretEdit->setText(QString(secret));
     secretInClipboard = ui->secretEdit->text();
     copyToClipboard(secretInClipboard);
@@ -3151,8 +3151,8 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
   }
 
   QByteArray secret;
-  uint8_t encoded[32] = {};
-  uint8_t decoded[20] = {};
+  uint8_t encoded[SECRET_LENGTH_BASE32] = {};
+  uint8_t decoded[SECRET_LENGTH] = {};
 
   secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
   if (secret.size() != 0) {
@@ -3160,7 +3160,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
     memcpy(decoded, secret.data(), decoded_size);
     base32_encode(decoded, decoded_size, encoded, sizeof(encoded));
 
-    ui->secretEdit->setMaxLength(32);
+    ui->secretEdit->setMaxLength(SECRET_LENGTH_BASE32);
     ui->secretEdit->setText(QString((char *) encoded));
     secretInClipboard = ui->secretEdit->text();
     copyToClipboard(secretInClipboard);
@@ -3418,11 +3418,11 @@ void MainWindow::on_eraseButton_clicked() {
 void MainWindow::on_randomSecretButton_clicked() {
   int i = 0;
 
-  uint8_t secret[32];
+  uint8_t secret[SECRET_LENGTH_BASE32];
 
   char temp;
 
-  while (i < 32) {
+  while (i < SECRET_LENGTH_BASE32) {
     temp = qrand() & 0xFF;
     if ((temp >= 'A' && temp <= 'Z') || (temp >= '2' && temp <= '7')) {
       secret[i] = temp;
@@ -3430,7 +3430,7 @@ void MainWindow::on_randomSecretButton_clicked() {
     }
   }
 
-  QByteArray secretArray((char *)secret, 32);
+  QByteArray secretArray((char *)secret, SECRET_LENGTH_BASE32);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secretArray);
@@ -3788,7 +3788,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       if (ERR_NO_ERROR != ret_s32) {
         switch (ret_s32) {
         case CMD_STATUS_AES_DEC_FAILED:
-          uint8_t admin_password[40];
+          uint8_t admin_password[SECRET_LENGTH_HEX];
           cryptostick->getUserPasswordRetryCount();
           dialog.init((char *)(tr("Enter admin PIN").toUtf8().data()),
                       HID_Stick20Configuration_st.UserPwRetryCount);
