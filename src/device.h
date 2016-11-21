@@ -410,6 +410,10 @@ private:
   bool needsReconnect;
 
     bool is_auth08_supported() const;
+
+    bool is_TOTP_slot_number(const uint8_t slotNumber) const;
+
+    bool is_HOTP_slot_number(const uint8_t slotNumber) const;
 };
 
 #endif // DEVICE_H
