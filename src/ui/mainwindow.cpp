@@ -1861,12 +1861,12 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
     uint8_t decoded[SECRET_LENGTH];
     uint8_t data[128];
 
-    memset(encoded, 'A', SECRET_LENGTH_BASE32);
-    memset(data, 'A', SECRET_LENGTH_BASE32);
+    memset(encoded, 'A', sizeof(encoded));
+    memset(data, 'A', sizeof(data));
     memcpy(encoded, secretFromGUI.data(), secretFromGUI.length());
 
-    base32_clean(encoded, SECRET_LENGTH_BASE32, data);
-    base32_decode(data, decoded, SECRET_LENGTH);
+    base32_clean(encoded, sizeof(data), data);
+    base32_decode(data, decoded, sizeof(decoded));
 
     secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH); // .toHex();
     memset(slot->secret, 0, SECRET_LENGTH);
@@ -4060,7 +4060,7 @@ int MainWindow::userAuthenticate(const QString &password) {
 
 void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {
   for (int i = 0; i < 25; i++)
-    tempPassword[i] = qrand() & 0xFF;
+   tempPassword[i] = qrand() & 0xFF;
 }
 
 #define PWS_RANDOM_PASSWORD_CHAR_SPACE                                                             \
