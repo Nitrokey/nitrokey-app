@@ -28,13 +28,15 @@
 #include "inttypes.h"
 #endif
 
+#include "hotpslot.h"
+
 class TOTPSlot {
 public:
   TOTPSlot();
-  TOTPSlot(uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[20], uint8_t config);
+  TOTPSlot(uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[SECRET_LENGTH], uint8_t config);
   uint8_t slotNumber;
   uint8_t slotName[15];
-  uint8_t secret[20];
+  uint8_t secret[SECRET_LENGTH];
   uint8_t config;
   uint8_t tokenID[13];
   uint16_t interval;

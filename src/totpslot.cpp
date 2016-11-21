@@ -69,8 +69,8 @@ TOTPSlot::TOTPSlot() {
 
 TOTPSlot::TOTPSlot(uint8_t slotNumber, uint8_t slotName[], uint8_t secret[], uint8_t config) {
   this->slotNumber = slotNumber;
-  memcpy(this->slotName, slotName, 15);
-  memcpy(this->secret, secret, 20);
+  memcpy(this->slotName, slotName, sizeof(this->slotName));
+  memcpy(this->secret, secret, SECRET_LENGTH);
   this->config = config;
   isProgrammed = false;
   interval = 30;
