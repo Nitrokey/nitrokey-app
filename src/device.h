@@ -394,7 +394,7 @@ public:
   int HOTP_SlotCount;
   int TOTP_SlotCount;
 
-  bool is_nkpro_rtm1();
+  bool is_nkpro_07_rtm1() const;
   bool isInitialized() const;
 
 private:
@@ -413,6 +413,14 @@ private:
     bool is_TOTP_slot_number(const uint8_t slotNumber) const;
 
     bool is_HOTP_slot_number(const uint8_t slotNumber) const;
+
+    bool is_nkpro_08_rtm2() const;
+
+    uint8_t get_major_firmware_version() const;
+
+    bool is_nk_pro() const;
+
+    bool is_nk_storage() const;
 };
 
 #endif // DEVICE_H

@@ -3096,11 +3096,11 @@ void MainWindow::on_writeButton_clicked() {
 
 bool MainWindow::validate_secret(const uint8_t *secret) const {
   //assuming secret points to 20 byte array
-  if(cryptostick->is_nkpro_rtm1() && safe_strlen(secret, SECRET_LENGTH) > 20){
+  if(cryptostick->is_nkpro_07_rtm1() && safe_strlen(secret, SECRET_LENGTH) > 20){
     csApplet()->warningBox(tr("Nitrokey Pro v0.7 does not support secrets longer than 20 bytes (32 base32 characters or 160 bits). Please change the secret."));
     return false;
   }
-  if(cryptostick->is_nkpro_rtm1() && secret[0] == 0){
+  if(cryptostick->is_nkpro_07_rtm1() && secret[0] == 0){
       csApplet()->warningBox(tr("Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret."));
     return false;
   }
@@ -3389,7 +3389,7 @@ void MainWindow::on_eraseButton_clicked() {
   }
 
   int res = cryptostick->eraseSlot(slotNo);
-  if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
+  if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_07_rtm1()) {
     uint8_t tempPassword[25] = {0};
     QString password;
 
@@ -3977,7 +3977,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       QString password;
       dialog.getPassword(password);
 
-      if (cryptostick->is_nkpro_rtm1()) {
+      if (cryptostick->is_nkpro_07_rtm1()) {
         nkpro_user_PIN = password;
       }
 
@@ -3989,7 +3989,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
         return 1; // user does not click OK button
       }
     } else { // valid user password
-      if (cryptostick->is_nkpro_rtm1()) {
+      if (cryptostick->is_nkpro_07_rtm1()) {
         userAuthenticate(nkpro_user_PIN);
       }
     }
@@ -4194,7 +4194,7 @@ void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
-  if (checked && cryptostick->is_nkpro_rtm1()) {
+  if (checked && cryptostick->is_nkpro_07_rtm1()) {
     bool answer = csApplet()->yesOrNoBox(tr("To handle this functionality "
                                                     "application will keep your user PIN in memory. "
                                                     "Do you want to continue?"), false);

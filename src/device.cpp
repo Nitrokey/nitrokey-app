@@ -658,7 +658,10 @@ bool Device::is_HOTP_slot_number(const uint8_t slotNumber) const {
   return ((slotNumber >= 0x10) && (slotNumber < 0x10 + HOTP_SlotCount));
 }
 
-bool Device::is_auth08_supported() const { return true; } //TODO detect firmware version and decide
+bool Device::is_auth08_supported() const {
+  return is_nk_pro() && get_major_firmware_version() >= 8 ||
+      is_nk_storage() && get_major_firmware_version() >= 44;
+}
 
 bool Device::is_TOTP_slot_number(const uint8_t slotNumber) const {
   return (slotNumber >= 0x20) && (slotNumber < 0x20 + TOTP_SlotCount);
@@ -2952,7 +2955,11 @@ int Device::stick20GetDebugData(void) {
   return success;
 }
 
-bool Device::is_nkpro_rtm1() { return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0 && !activStick20); }
+bool Device::is_nkpro_07_rtm1() const { return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0 && !activStick20); }
+bool Device::is_nkpro_08_rtm2() const { return (firmwareVersion[0] == 8 && firmwareVersion[1] == 0 && !activStick20); }
+uint8_t Device::get_major_firmware_version() const { return (firmwareVersion[0]); }
+bool Device::is_nk_pro() const {return !activStick20;}
+bool Device::is_nk_storage() const {return activStick20;}
 
 /*******************************************************************************
 
