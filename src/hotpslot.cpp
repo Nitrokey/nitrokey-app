@@ -31,12 +31,12 @@ HOTPSlot::HOTPSlot() {
   slotNumber = 0;
 }
 
-HOTPSlot::HOTPSlot(uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[20], uint8_t counter[8],
+HOTPSlot::HOTPSlot(uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[SECRET_LENGTH], uint8_t counter[8],
                    uint8_t config) {
   this->slotNumber = slotNumber;
-  memcpy(this->slotName, slotName, 15);
-  memcpy(this->secret, secret, 20);
-  memcpy(this->counter, counter, 8);
+  memcpy(this->slotName, slotName, sizeof(slotName));
+  memcpy(this->secret, secret, sizeof(secret));
+  memcpy(this->counter, counter, sizeof(counter));
   this->config = config;
   isProgrammed = false;
 }

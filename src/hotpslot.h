@@ -28,14 +28,18 @@
 #include "inttypes.h"
 #endif
 
+static const int SECRET_LENGTH = 40;
+static const int SECRET_LENGTH_BASE32 = SECRET_LENGTH/10*16;
+static const int SECRET_LENGTH_HEX = SECRET_LENGTH*2;
+
 class HOTPSlot {
 public:
   HOTPSlot();
-  HOTPSlot(uint8_t slotNumber, uint8_t slotName[15], uint8_t secret[40], uint8_t counter[8],
+  HOTPSlot(uint8_t slotNumber, uint8_t slotName[15], uint8_t secret[SECRET_LENGTH], uint8_t counter[8],
            uint8_t config);
   uint8_t slotNumber;
   uint8_t slotName[15];
-  uint8_t secret[40];
+  uint8_t secret[SECRET_LENGTH];
   uint8_t counter[8];
   uint8_t config;
   uint8_t tokenID[13];

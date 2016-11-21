@@ -578,15 +578,20 @@ int Device::writeToHOTPSlot(HOTPSlot *slot) {
     //copy other OTP data
     //name
     SendOTPData otpData;
+    memset(&otpData, 0, sizeof(otpData));
     otpData.id = 0;
     otpData.type = 'N';
     memcpy(otpData.data, slot->slotName, sizeof(slot->slotName));
     memcpy(otpData.temporary_admin_password, adminTemporaryPassword, sizeof(adminTemporaryPassword));
     //execute command
+    Command cmd_otp_name(CMD_SEND_OTP_DATA, (uint8_t *) &otpData, sizeof(otpData));
+    res = sendCommand(&cmd_otp_name);
+    Response resp;
+    resp.getResponse(this);
 
     //secret
     otpData.type = 'S';
-    memset(otpData.data, 0, sizeof(otpData.data));
+    otpData.id = 0;
 
     const auto secret_size = sizeof(slot->secret);
     auto remaining_secret_length = secret_size;
@@ -597,6 +602,11 @@ int Device::writeToHOTPSlot(HOTPSlot *slot) {
       memset(otpData.data, 0, sizeof(otpData.data));
       memcpy(otpData.data, slot->secret + start, bytesToCopy);
       //execute command
+      Command cmd_otp_secret(CMD_SEND_OTP_DATA, (uint8_t *) &otpData, sizeof(otpData));
+      res = sendCommand(&cmd_otp_secret);
+      Response resp;
+      resp.getResponse(this);
+
       remaining_secret_length -= bytesToCopy;
       otpData.id++;
     }
