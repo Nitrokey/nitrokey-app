@@ -42,7 +42,7 @@ public:
   uint8_t secret[SECRET_LENGTH];
     union{
       uint8_t counter[8];
-      uint16_t interval;
+      uint64_t interval;
     };
   uint8_t config;
   uint8_t tokenID[13];

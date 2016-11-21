@@ -621,7 +621,12 @@ int Device::writeToHOTPSlot(OTPSlot *slot) {
     buffer_size = sizeof(write_data);
     memcpy(write_data.temporary_admin_password, adminTemporaryPassword, sizeof(adminTemporaryPassword));
     write_data.slot_number = slotNumber;
-    memcpy(write_data.slot_counter_s, slot->counter, sizeof(slot->counter));
+    if(is_HOTP_slot_number(slotNumber)){
+      memcpy(write_data.slot_counter_s, slot->counter, sizeof(slot->counter));
+    } else if (is_TOTP_slot_number(slotNumber)){
+      write_data.slot_counter_or_interval = slot->interval;
+    }
+
     write_data._slot_config = slot->config;
     memcpy(write_data.slot_token_id, slot->tokenID, sizeof(slot->tokenID));
   }
@@ -653,7 +658,7 @@ bool Device::is_HOTP_slot_number(const uint8_t slotNumber) const {
   return ((slotNumber >= 0x10) && (slotNumber < 0x10 + HOTP_SlotCount));
 }
 
-bool Device::is_auth08_supported() const { return false; } //TODO detect firmware version and decide
+bool Device::is_auth08_supported() const { return true; } //TODO detect firmware version and decide
 
 bool Device::is_TOTP_slot_number(const uint8_t slotNumber) const {
   return (slotNumber >= 0x20) && (slotNumber < 0x20 + TOTP_SlotCount);
