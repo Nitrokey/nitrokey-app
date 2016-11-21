@@ -408,6 +408,8 @@ private:
   int vidStick20UpdateMode;
   int pidStick20UpdateMode;
   bool needsReconnect;
+
+    bool is_auth08_supported() const;
 };
 
 #endif // DEVICE_H

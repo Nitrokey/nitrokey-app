@@ -564,7 +564,7 @@ int Device::writeToHOTPSlot(HOTPSlot *slot) {
   int buffer_size = 0;
   uint8_t *buffer = nullptr;
 
-  if (false){
+  if (!is_auth08_supported()){
     buffer = data;
     buffer_size = sizeof(data);
     memset(data, 0, sizeof(data));
@@ -643,6 +643,8 @@ int Device::writeToHOTPSlot(HOTPSlot *slot) {
   }
     return -3; // other issue
 }
+
+bool Device::is_auth08_supported() const { return false; } //TODO detect firmware version and decide
 
 /*******************************************************************************
 
