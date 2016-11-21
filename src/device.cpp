@@ -98,12 +98,12 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
   TOTP_SlotCount = TOTP_SLOT_COUNT;
 
   for (i = 0; i < HOTP_SLOT_COUNT_MAX; i++) {
-    HOTPSlots[i] = new HOTPSlot();
+    HOTPSlots[i] = new OTPSlot();
     HOTPSlots[i]->slotNumber = 0x10 + i;
   }
 
   for (i = 0; i < TOTP_SLOT_COUNT_MAX; i++) {
-    TOTPSlots[i] = new TOTPSlot();
+    TOTPSlots[i] = new OTPSlot();
     TOTPSlots[i]->slotNumber = 0x20 + i;
   }
 
@@ -554,7 +554,7 @@ struct SendOTPData {
     uint8_t data[30]; //data, does not need null termination
 } __packed;
 
-int Device::writeToHOTPSlot(HOTPSlot *slot) {
+int Device::writeToHOTPSlot(OTPSlot *slot) {
   const auto slotNumber = slot->slotNumber;
   if (!is_HOTP_slot_number(slotNumber) && !is_TOTP_slot_number(slotNumber)) {
     return -1; // wrong slot number checked on app side //TODO ret code conflict

@@ -30,7 +30,6 @@ UTILSDIR=$${SRCDIR}/utils
 SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCUIDIR}/mainwindow.cpp \
             $${SRCDIR}/hotpslot.cpp \
-            $${SRCDIR}/totpslot.cpp \
             $${SRCUIDIR}/stick20window.cpp \
             $${SRCUIDIR}/stick20updatedialog.cpp \
             $${SRCUIDIR}/stick20setup.cpp \
@@ -71,7 +70,6 @@ unix:!macx{
 }
 
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
-            $${SRCDIR}/totpslot.h \
             $${SRCUIDIR}/stick20window.h \
             $${SRCUIDIR}/stick20updatedialog.h \
             $${SRCUIDIR}/stick20setup.h \

@@ -1848,7 +1848,7 @@ void MainWindow::generateMenuForStorageDevice() {
   }
 }
 
-void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
+void MainWindow::generateHOTPConfig(OTPSlot *slot) {
   uint8_t selectedSlot = ui->slotComboBox->currentIndex();
   selectedSlot -= (TOTP_SlotCount + 1);
 
@@ -1934,7 +1934,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
   }
 }
 
-void MainWindow::generateTOTPConfig(HOTPSlot *slot) {
+void MainWindow::generateTOTPConfig(OTPSlot *slot) {
   uint8_t selectedSlot = ui->slotComboBox->currentIndex();
 
   // get the TOTP slot number
@@ -3021,14 +3021,14 @@ void MainWindow::on_writeButton_clicked() {
       ui->base32RadioButton->toggle();
 
       if (slotNo < HOTP_SlotCount) { // HOTP slot
-        HOTPSlot hotp;
+        OTPSlot hotp;
         generateHOTPConfig(&hotp);
         if(!validate_secret(hotp.secret)) {
           return;
         }
         res = cryptostick->writeToHOTPSlot(&hotp);
       } else { // TOTP slot
-        HOTPSlot totp;
+        OTPSlot totp;
         generateTOTPConfig(&totp);
         if(!validate_secret(totp.secret)) {
           return;

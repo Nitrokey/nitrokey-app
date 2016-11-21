@@ -64,7 +64,6 @@ SET(moc_headers
     ${SRCUIDIR}/stick20setup.h
     ${SRCUIDIR}/stick20updatedialog.h
     ${SRCUIDIR}/stick20window.h
-    ${SRCDIR}/totpslot.h
 )
 
 
@@ -235,7 +234,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20setup.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${SRCUIDIR}/stick20window.cpp
-    ${SRCDIR}/totpslot.cpp
     ${UTILSDIR}/stick20hid.c
     ${UTILSDIR}/hid_libusb.c
     ${platform_specific_sources}

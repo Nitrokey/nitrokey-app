@@ -27,7 +27,6 @@
 #include "hidapi.h"
 #include "hotpslot.h"
 #include "stick20hid.h"
-#include "totpslot.h"
 
 /***************************************************************
 
@@ -273,9 +272,9 @@ public:
   int getSlotName(uint8_t slotNo);
   int eraseSlot(uint8_t slotNo);
   int setTime(int reset);
-  int writeToHOTPSlot(HOTPSlot *slot);
-  int writeToTOTPSlot(TOTPSlot *slot);
-  int getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval,
+  int writeToHOTPSlot(OTPSlot *slot);
+
+    int getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval,
               uint8_t result[18]);
   int getHOTP(uint8_t slotNo);
   int readSlot(uint8_t slotNo);
@@ -318,8 +317,8 @@ public:
   bool newConnection;
   int LastStickError;
   void initializeConfig();
-  HOTPSlot *HOTPSlots[HOTP_SLOT_COUNT_MAX];
-  TOTPSlot *TOTPSlots[TOTP_SLOT_COUNT_MAX];
+  OTPSlot *HOTPSlots[HOTP_SLOT_COUNT_MAX];
+  OTPSlot *TOTPSlots[TOTP_SLOT_COUNT_MAX];
   void getSlotConfigs();
   uint8_t adminTemporaryPassword[25];
   bool validPassword;

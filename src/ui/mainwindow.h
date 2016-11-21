@@ -182,8 +182,8 @@ private:
 
   void generateComboBoxEntrys();
   void generateMenu();
-  void generateHOTPConfig(HOTPSlot *slot);
-  void generateTOTPConfig(HOTPSlot *slot);
+  void generateHOTPConfig(OTPSlot *slot);
+  void generateTOTPConfig(OTPSlot *slot);
   void generateAllConfigs();
 
   void generateMenuForStorageDevice();
