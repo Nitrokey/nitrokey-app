@@ -556,7 +556,7 @@ struct SendOTPData {
 
 int Device::writeToHOTPSlot(HOTPSlot *slot) {
   const auto slotNumber = slot->slotNumber;
-  if (!is_HOTP_slot_number(slotNumber)) {
+  if (!is_HOTP_slot_number(slotNumber) && !is_TOTP_slot_number(slotNumber)) {
     return -1; // wrong slot number checked on app side //TODO ret code conflict
   }
   int res;
@@ -574,7 +574,11 @@ int Device::writeToHOTPSlot(HOTPSlot *slot) {
     memcpy(data + 16, slot->secret, 20);
     data[36] = slot->config;
     memcpy(data + 37, slot->tokenID, 13);
-    memcpy(data + 50, slot->counter, 8);
+    if (!is_HOTP_slot_number(slotNumber)) {
+      memcpy(data + 50, slot->counter, 8);
+    } else if (is_TOTP_slot_number(slotNumber)) {
+      memcpy(data + 50, &slot->interval, 2);
+    }
   } else {
     //copy other OTP data
     //name
@@ -650,53 +654,6 @@ bool Device::is_HOTP_slot_number(const uint8_t slotNumber) const {
 }
 
 bool Device::is_auth08_supported() const { return false; } //TODO detect firmware version and decide
-
-/*******************************************************************************
-
-  writeToTOTPSlot
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
-
-int Device::writeToTOTPSlot(TOTPSlot *slot) {
-  const auto slotNumber = slot->slotNumber;
-  if (is_TOTP_slot_number(slotNumber)) {
-    int res;
-
-    uint8_t data[COMMAND_SIZE] = {0};
-
-    data[0] = slotNumber;
-    memcpy(data + 1, slot->slotName, 15);
-    memcpy(data + 16, slot->secret, 20);
-    data[36] = slot->config;
-    memcpy(data + 37, slot->tokenID, 13);
-    memcpy(data + 50, &(slot->interval), 2);
-
-    if (isConnected) {
-      Command cmd(CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
-      authorize(&cmd);
-      res = sendCommand(&cmd);
-
-      if (res == -1) {
-        return -1;
-      } else { // sending the command was successful
-        Sleep::msleep(100);
-        Response resp;
-
-        resp.getResponse(this);
-
-        if (cmd.crc == resp.lastCommandCRC) {
-          return resp.lastCommandStatus;
-        }
-        return -2;
-      }
-    }
-  }
-  return -1;
-}
 
 bool Device::is_TOTP_slot_number(const uint8_t slotNumber) const {
   return (slotNumber >= 0x20) && (slotNumber < 0x20 + TOTP_SlotCount);
