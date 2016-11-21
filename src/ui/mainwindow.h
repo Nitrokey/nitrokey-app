@@ -330,6 +330,7 @@ private slots:
 
   void on_enableUserPasswordCheckBox_clicked(bool checked);
 
+    int safe_strlen(const uint8_t *secret, int buffer_length) const;
 };
 
 class utf8FieldLengthValidator : public QValidator {
