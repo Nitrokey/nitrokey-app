@@ -595,6 +595,7 @@ int Device::writeToOTPSlot(OTPSlot *slot) {
     //execute command
     Command cmd_otp_name(CMD_SEND_OTP_DATA, (uint8_t *) &otpData, sizeof(otpData));
     res = sendCommand(&cmd_otp_name);
+    if (res == -1) return ERR_SENDING; // communication error
     Response resp;
     resp.getResponse(this);
 
@@ -613,6 +614,7 @@ int Device::writeToOTPSlot(OTPSlot *slot) {
       //execute command
       Command cmd_otp_secret(CMD_SEND_OTP_DATA, (uint8_t *) &otpData, sizeof(otpData));
       res = sendCommand(&cmd_otp_secret);
+      if (res == -1) return ERR_SENDING; // communication error
       Response resp;
       resp.getResponse(this);
 
@@ -638,10 +640,8 @@ int Device::writeToOTPSlot(OTPSlot *slot) {
   Command cmd(CMD_WRITE_TO_SLOT, buffer, buffer_size);
   authorize(&cmd);
   res = sendCommand(&cmd);
+  if (res == -1) return ERR_SENDING; // communication error
 
-  if (res == -1) {
-    return ERR_SENDING; // communication error
-  }
   Sleep::msleep(100);
   Response resp;
   resp.getResponse(this);
