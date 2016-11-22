@@ -555,6 +555,10 @@ struct SendOTPData {
 } __packed;
 
 int Device::writeToHOTPSlot(OTPSlot *slot) {
+  if (!isConnected) {
+    return ERR_NOT_CONNECTED; // other issue
+  }
+
   const auto slotNumber = slot->slotNumber;
   if (!is_HOTP_slot_number(slotNumber) && !is_TOTP_slot_number(slotNumber)) {
     return -1; // wrong slot number checked on app side //TODO ret code conflict
@@ -631,27 +635,21 @@ int Device::writeToHOTPSlot(OTPSlot *slot) {
     memcpy(write_data.slot_token_id, slot->tokenID, sizeof(slot->tokenID));
   }
 
-  if (isConnected) {
-    Command cmd(CMD_WRITE_TO_SLOT, buffer, buffer_size);
-    authorize(&cmd);
-    res = sendCommand(&cmd);
+  Command cmd(CMD_WRITE_TO_SLOT, buffer, buffer_size);
+  authorize(&cmd);
+  res = sendCommand(&cmd);
 
-    if (res == -1) {
-      return -1; // communication error
-    } else {     // sending the command was successful
-      Sleep::msleep(100);
-      Response resp;
-
-      resp.getResponse(this);
-
-      if (cmd.crc == resp.lastCommandCRC) {
-        return resp.lastCommandStatus;
-      }
-
-      return -2; // wrong crc
-    }
+  if (res == -1) {
+    return ERR_SENDING; // communication error
   }
-    return -3; // other issue
+  Sleep::msleep(100);
+  Response resp;
+  resp.getResponse(this);
+
+  if (cmd.crc != resp.lastCommandCRC) {
+    return ERR_WRONG_RESPONSE_CRC; // wrong crc
+  }
+  return resp.lastCommandStatus;
 }
 
 bool Device::is_HOTP_slot_number(const uint8_t slotNumber) const {
