@@ -31,12 +31,3 @@ OTPSlot::OTPSlot() {
   slotNumber = 0;
 }
 
-OTPSlot::OTPSlot(uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[SECRET_LENGTH], uint8_t counter[8],
-                   uint8_t config) {
-  this->slotNumber = slotNumber;
-  memcpy(this->slotName, slotName, sizeof(this->slotName));
-  memcpy(this->secret, secret, sizeof(this->secret));
-  memcpy(this->counter, counter, sizeof(this->counter));
-  this->config = config;
-  isProgrammed = false;
-}
