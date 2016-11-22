@@ -357,6 +357,8 @@ LIST(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
     "/etc/bash_completion.d"
     "/etc/udev"
     "/etc/udev/rules.d"
+    "/usr/lib/udev"
+    "/usr/lib/udev/rules.d"
     "/usr/share/locale"
     "/usr/share/locale/de_DE"
     "/usr/share/locale/de_DE/LC_MESSAGES"
