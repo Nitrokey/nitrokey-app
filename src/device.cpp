@@ -554,7 +554,7 @@ struct SendOTPData {
     uint8_t data[30]; //data, does not need null termination
 } __packed;
 
-int Device::writeToHOTPSlot(OTPSlot *slot) {
+int Device::writeToOTPSlot(OTPSlot *slot) {
   if (!isConnected) {
     return ERR_NOT_CONNECTED; // other issue
   }

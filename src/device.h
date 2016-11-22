@@ -272,7 +272,7 @@ public:
   int getSlotName(uint8_t slotNo);
   int eraseSlot(uint8_t slotNo);
   int setTime(int reset);
-  int writeToHOTPSlot(OTPSlot *slot);
+  int writeToOTPSlot(OTPSlot *slot);
 
     int getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval,
               uint8_t result[18]);

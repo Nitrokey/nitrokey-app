@@ -3026,14 +3026,14 @@ void MainWindow::on_writeButton_clicked() {
         if(!validate_secret(hotp.secret)) {
           return;
         }
-        res = cryptostick->writeToHOTPSlot(&hotp);
+        res = cryptostick->writeToOTPSlot(&hotp);
       } else { // TOTP slot
         OTPSlot totp;
         generateTOTPConfig(&totp);
         if(!validate_secret(totp.secret)) {
           return;
         }
-        res = cryptostick->writeToHOTPSlot(&totp);
+        res = cryptostick->writeToOTPSlot(&totp);
       }
 
       if (DebugingActive == TRUE) {
