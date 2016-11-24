@@ -396,6 +396,8 @@ public:
 
   bool is_nkpro_07_rtm1() const;
   bool isInitialized() const;
+  bool is_auth08_supported() const;
+  bool is_secret320_supported() const;
 
 private:
   int vid;
@@ -407,8 +409,6 @@ private:
   int vidStick20UpdateMode;
   int pidStick20UpdateMode;
   bool needsReconnect;
-
-    bool is_auth08_supported() const;
 
     bool is_TOTP_slot_number(const uint8_t slotNumber) const;
 
