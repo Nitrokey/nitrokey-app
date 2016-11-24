@@ -2037,7 +2037,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->muiEdit->setText(QString(mui));
 
   int interval = cryptostick->TOTPSlots[slotNo]->interval;
-
+  if (interval<1) interval = 30;
   ui->intervalSpinBox->setValue(interval);
 
   if (cryptostick->TOTPSlots[slotNo]->config & (1 << 0))
