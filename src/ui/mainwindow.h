@@ -324,13 +324,13 @@ private slots:
   void on_PWS_EditLoginName_textChanged(const QString &arg1);
   void on_PWS_EditPassword_textChanged(const QString &arg1);
 
+public:
   void generateTemporaryPassword(uint8_t *tempPassword) const;
-
   int userAuthenticate(const QString &password);
-
   void on_enableUserPasswordCheckBox_clicked(bool checked);
-
-    int safe_strlen(const uint8_t *secret, int buffer_length) const;
+  void generateOTPConfig(OTPSlot *slot) const;
+  int get_supported_secret_length_base32() const;
+  int get_supported_secret_length_hex() const;
 };
 
 class utf8FieldLengthValidator : public QValidator {

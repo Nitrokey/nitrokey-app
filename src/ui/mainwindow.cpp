@@ -3095,11 +3095,6 @@ void MainWindow::on_writeButton_clicked() {
 }
 
 bool MainWindow::validate_secret(const uint8_t *secret) const {
-  //assuming secret points to 20 byte array
-  if(cryptostick->is_nkpro_07_rtm1() && safe_strlen(secret, SECRET_LENGTH) > 20){
-    csApplet()->warningBox(tr("Nitrokey Pro v0.7 does not support secrets longer than 20 bytes (32 base32 characters or 160 bits). Please change the secret."));
-    return false;
-  }
   if(cryptostick->is_nkpro_07_rtm1() && secret[0] == 0){
       csApplet()->warningBox(tr("Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret."));
     return false;
@@ -3113,13 +3108,6 @@ bool MainWindow::validate_secret(const uint8_t *secret) const {
   }
   csApplet()->warningBox(tr("Your secret is invalid. Please change the secret."));
   return false;
-}
-
-int MainWindow::safe_strlen(const uint8_t *secret, int buffer_length) const {
-  for(int i = 0; i < buffer_length; i++){
-      if (secret[buffer_length] == 0) return i;
-    }
-  return buffer_length;
 }
 
 void MainWindow::on_slotComboBox_currentIndexChanged(int index) {
