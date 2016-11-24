@@ -1855,38 +1855,8 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
   if (selectedSlot < HOTP_SlotCount) {
     slot->slotNumber = selectedSlot + 0x10;
 
-    QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
+    generateOTPConfig(slot);
 
-    uint8_t encoded[128];
-    uint8_t decoded[SECRET_LENGTH];
-    uint8_t data[128];
-
-    memset(encoded, 'A', sizeof(encoded));
-    memset(data, 'A', sizeof(data));
-    memcpy(encoded, secretFromGUI.data(), secretFromGUI.length());
-
-    base32_clean(encoded, sizeof(data), data);
-    base32_decode(data, decoded, sizeof(decoded));
-
-    secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH); // .toHex();
-    memset(slot->secret, 0, SECRET_LENGTH);
-    memcpy(slot->secret, secretFromGUI.data(), secretFromGUI.size());
-
-    QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
-    memset(slot->slotName, 0, 15);
-    memcpy(slot->slotName, slotNameFromGUI.data(), slotNameFromGUI.size());
-
-    memset(slot->tokenID, 32, 13);
-    QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-    memcpy(slot->tokenID, ompFromGUI, 2);
-
-    QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-    memcpy(slot->tokenID + 2, ttFromGUI, 2);
-
-    QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-    memcpy(slot->tokenID + 4, muiFromGUI, 8);
-
-    slot->tokenID[12] = ui->keyboardComboBox->currentIndex() & 0xFF;
 
     memset(slot->counter, 0, 8);
     // Nitrokey Storage needs counter value in text but Pro in binary [#60]
@@ -1907,7 +1877,7 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
       QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
       int digitsInCounter = counterFromGUI.length();
       if (0 < digitsInCounter && digitsInCounter < 8) {
-        memcpy(slot->counter, counterFromGUI.data(), std::min(counterFromGUI.length(), 7));
+        memcpy(slot->counter, counterFromGUI.constData(), std::min(counterFromGUI.length(), 7));
         // 8th char has to be '\0' since in firmware atoi is used directly on buffer
         slot->counter[7] = 0;
       } else {
@@ -1921,17 +1891,59 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
       else
         qDebug() << "HOTP counter value: " << *(quint64 *)slot->counter;
     }
-    slot->config = 0;
 
-    if (TRUE == ui->digits8radioButton->isChecked())
-      slot->config += (1 << 0);
-
-    if (TRUE == ui->enterCheckBox->isChecked())
-      slot->config += (1 << 1);
-
-    if (TRUE == ui->tokenIDCheckBox->isChecked())
-      slot->config += (1 << 2);
   }
+}
+
+
+void MainWindow::generateOTPConfig(OTPSlot *slot) const {
+  QByteArray secretFromGUI = this->ui->secretEdit->text().toLatin1();
+
+  uint8_t encoded[128] = {};
+  uint8_t decoded[2*SECRET_LENGTH] = {};
+  uint8_t data[128] = {};
+
+  memset(encoded, 'A', sizeof(encoded));
+  memset(data, 'A', sizeof(data));
+  size_t toCopy;
+  toCopy = std::min(sizeof(encoded), (const size_t &) secretFromGUI.length());
+  memcpy(encoded, secretFromGUI.constData(), toCopy);
+
+  base32_clean(encoded, sizeof(data), data);
+  base32_decode(data, decoded, sizeof(decoded));
+
+  secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH); // .toHex();
+  memset(slot->secret, 0, sizeof(slot->secret));
+  toCopy = std::min(sizeof(slot->secret), (const size_t &) secretFromGUI.length());
+  memcpy(slot->secret, secretFromGUI.constData(), toCopy);
+
+  QByteArray slotNameFromGUI = QByteArray(this->ui->nameEdit->text().toLatin1());
+  memset(slot->slotName, 0, sizeof(slot->slotName));
+  toCopy = std::min(sizeof(slot->slotName), (const size_t &) slotNameFromGUI.length());
+  memcpy(slot->slotName, slotNameFromGUI.constData(), toCopy);
+
+  memset(slot->tokenID, 32, sizeof(slot->tokenID));
+  QByteArray ompFromGUI = (this->ui->ompEdit->text().toLatin1());
+  toCopy = std::min(2ul, (const unsigned long &) ompFromGUI.length());
+  memcpy(slot->tokenID, ompFromGUI.constData(), toCopy);
+
+  QByteArray ttFromGUI = (this->ui->ttEdit->text().toLatin1());
+  toCopy = std::min(2ul, (const unsigned long &) ttFromGUI.length());
+  memcpy(slot->tokenID + 2, ttFromGUI.constData(), toCopy);
+
+  QByteArray muiFromGUI = (this->ui->muiEdit->text().toLatin1());
+  toCopy = std::min(8ul, (const unsigned long &) muiFromGUI.length());
+  memcpy(slot->tokenID + 4, muiFromGUI.constData(), toCopy);
+
+  slot->tokenID[12] = (uint8_t) (this->ui->keyboardComboBox->currentIndex() & 0xFF);
+
+  slot->config = 0;
+  if (ui->digits8radioButton->isChecked())
+      slot->config += (1 << 0);
+  if (ui->enterCheckBox->isChecked())
+      slot->config += (1 << 1);
+  if (ui->tokenIDCheckBox->isChecked())
+      slot->config += (1 << 2);
 }
 
 void MainWindow::generateTOTPConfig(OTPSlot *slot) {
@@ -1941,51 +1953,7 @@ void MainWindow::generateTOTPConfig(OTPSlot *slot) {
   if (selectedSlot < TOTP_SlotCount) {
     slot->slotNumber = selectedSlot + 0x20;
 
-    QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
-
-    uint8_t encoded[128] = {'A'};
-    uint8_t decoded[SECRET_LENGTH] = {'0'};
-    uint8_t data[128] = {'A'};
-
-    memset(encoded, 'A', SECRET_LENGTH_BASE32);
-    memset(data, 'A', SECRET_LENGTH_BASE32);
-    memcpy(encoded, secretFromGUI.data(), secretFromGUI.length());
-
-    base32_clean(encoded, SECRET_LENGTH_BASE32, data);
-    base32_decode(data, decoded, SECRET_LENGTH);
-
-    secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH); // .toHex();
-
-    memset(slot->secret, 0, SECRET_LENGTH);
-    memcpy(slot->secret, secretFromGUI.data(), secretFromGUI.size());
-
-    QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
-
-    memset(slot->slotName, 0, 15);
-    memcpy(slot->slotName, slotNameFromGUI.data(), slotNameFromGUI.size());
-
-    memset(slot->tokenID, 32, 13);
-
-    QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-
-    memcpy(slot->tokenID, ompFromGUI, 2);
-
-    QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-
-    memcpy(slot->tokenID + 2, ttFromGUI, 2);
-
-    QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-
-    memcpy(slot->tokenID + 4, muiFromGUI, 8);
-
-    slot->config = 0;
-
-    if (ui->digits8radioButton->isChecked())
-      slot->config += (1 << 0);
-    if (ui->enterCheckBox->isChecked())
-      slot->config += (1 << 1);
-    if (ui->tokenIDCheckBox->isChecked())
-      slot->config += (1 << 2);
+    generateOTPConfig(slot);
 
     uint16_t lastInterval = ui->intervalSpinBox->value();
 
@@ -3130,9 +3098,9 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
   if (secret.size() != 0) {
     const size_t encoded_size = std::min(sizeof(encoded), (size_t) secret.length());
     memset(encoded, 'A', sizeof(encoded));
-    memcpy(encoded, secret.data(), encoded_size);
+    memcpy(encoded, secret.constData(), encoded_size);
 
-    base32_clean(encoded, encoded_size, data);
+    base32_clean(encoded, sizeof(encoded), data);
     const size_t decoded_size = sizeof(decoded);
     base32_decode(data, decoded, decoded_size);
 
@@ -3156,7 +3124,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
   secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
   if (secret.size() != 0) {
     const size_t decoded_size = std::min(sizeof(decoded), (size_t) secret.length());
-    memcpy(decoded, secret.data(), decoded_size);
+    memcpy(decoded, secret.constData(), decoded_size);
     base32_encode(decoded, decoded_size, encoded, sizeof(encoded));
 
     ui->secretEdit->setText(QString((char *) encoded));

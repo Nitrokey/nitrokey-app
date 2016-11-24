@@ -80,6 +80,7 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
+
     bool validate_secret(const uint8_t *secret) const;
     void initialTimeReset(int ret);
     QMutex check_connection_mutex;
