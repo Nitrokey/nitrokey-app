@@ -3118,7 +3118,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
   }
 
   QByteArray secret;
-  uint8_t encoded[SECRET_LENGTH_BASE32] = {};
+  uint8_t encoded[SECRET_LENGTH_BASE32+1] = {}; //+1 for \0
   uint8_t decoded[SECRET_LENGTH] = {};
 
   secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
