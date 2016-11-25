@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-CONFIG   += qt
+CONFIG   += qt c++11
 QT       += core gui
 
 target.path = /usr/local/bin
