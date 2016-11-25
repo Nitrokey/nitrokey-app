@@ -160,7 +160,7 @@ Please retry</source>
     </message>
     <message>
         <source>%1 GB</source>
-        <translation>1% جيجابايت</translation>
+        <translation>%1 جيجابايت</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey Pro and Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -334,7 +334,7 @@ Please retry</source>
     </message>
     <message>
         <source>Couldn&apos;t unblock the user PIN. Error: %1</source>
-        <translation>لم يمكن حظر كلمة سر المستخدم. خطأ 1%</translation>
+        <translation>لم يمكن حظر كلمة سر المستخدم. خطأ %1</translation>
     </message>
     <message>
         <source>User PIN successfully unblocked</source>
@@ -1843,8 +1843,8 @@ Firmware update is not possible.</source>
         <translation type="vanished">&lt;html&gt;&lt;head /&gt;&lt;body&gt;&lt;p&gt;سوف يتم تقريب الحجم للأدنى كنسبة كلية من الحجم الكلي (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>Hidden volume not positioned in unwritten space. Please set your volume between %1% and %2% of total SD card size.</source>
-        <translation>الجزء المخفي غير متموضع في المنطقة التي لم يكتب عليها. يرجى تحديد الحجم بين 1% و 2% من الحجم الكلي لكرت إس دي</translation>
+        <source>Hidden volume not positioned in unwritten space. Please set your volume between %%1 and %%2 of total SD card size.</source>
+        <translation type="vanished">الجزء المخفي غير متموضع في المنطقة التي لم يكتب عليها. يرجى تحديد الحجم بين %1 و %2 من الحجم الكلي لكرت إس دي</translation>
     </message>
     <message>
         <source>Very Weak</source>
@@ -1870,19 +1870,19 @@ Firmware update is not possible.</source>
         <source>The unwritten area available for hidden volume
 is between %1 % and %2 % of the storage size</source>
         <translation>المنطقة التي لم يكتب عليها موجودة للجزء المخفي
-بين 1% و 2% من الحجم الكلي</translation>
+بين %1 و %2 من الحجم الكلي</translation>
     </message>
     <message>
         <source>Storage capacity: %1GB</source>
-        <translation>حجم التخزين: 1% جيجابايت</translation>
+        <translation>حجم التخزين: %1 جيجابايت</translation>
     </message>
     <message>
         <source>Start hidden volume at %1 of the encrypted storage:</source>
-        <translation>إبدأ الجزء المخفي عند 1% من الجزء المشفر</translation>
+        <translation>إبدأ الجزء المخفي عند %1 من الجزء المشفر</translation>
     </message>
     <message>
         <source>End hidden volume at %1 of the encrypted storage:</source>
-        <translation>حدد نهاية الجزء المخفي عند 1% من الجزء المشفر</translation>
+        <translation>حدد نهاية الجزء المخفي عند %1 من الجزء المشفر</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -1894,6 +1894,10 @@ is between %1 % and %2 % of the storage size</source>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume not positioned in unwritten space. Please set your volume between %1% and %2% of total SD card size.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
