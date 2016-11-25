@@ -3385,11 +3385,16 @@ void MainWindow::on_eraseButton_clicked() {
 void MainWindow::on_randomSecretButton_clicked() {
   int i = 0;
 
-  uint8_t secret[SECRET_LENGTH_BASE32];
+
+  auto local_secret_length = SECRET_LENGTH_BASE32;
+  if (!cryptostick->is_secret320_supported()){
+    local_secret_length /= 2;
+  }
+  uint8_t secret[local_secret_length];
 
   char temp;
 
-  while (i < SECRET_LENGTH_BASE32) {
+  while (i < local_secret_length) {
     temp = qrand() & 0xFF;
     if ((temp >= 'A' && temp <= 'Z') || (temp >= '2' && temp <= '7')) {
       secret[i] = temp;
@@ -3397,7 +3402,7 @@ void MainWindow::on_randomSecretButton_clicked() {
     }
   }
 
-  QByteArray secretArray((char *)secret, SECRET_LENGTH_BASE32);
+  QByteArray secretArray((char *)secret, local_secret_length);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secretArray);
