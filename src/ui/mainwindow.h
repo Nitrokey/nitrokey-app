@@ -57,6 +57,8 @@ typedef struct {
 
 enum trayMessageType { INFORMATION, WARNING, CRITICAL };
 
+#include "hotpslot.h"
+
 class MainWindow : public QMainWindow {
   Q_OBJECT public : explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
   void startTimer();
@@ -78,6 +80,7 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
+
     bool validate_secret(const uint8_t *secret) const;
     void initialTimeReset(int ret);
     QMutex check_connection_mutex;
@@ -180,8 +183,8 @@ private:
 
   void generateComboBoxEntrys();
   void generateMenu();
-  void generateHOTPConfig(HOTPSlot *slot);
-  void generateTOTPConfig(TOTPSlot *slot);
+  void generateHOTPConfig(OTPSlot *slot);
+  void generateTOTPConfig(OTPSlot *slot);
   void generateAllConfigs();
 
   void generateMenuForStorageDevice();
@@ -322,12 +325,13 @@ private slots:
   void on_PWS_EditLoginName_textChanged(const QString &arg1);
   void on_PWS_EditPassword_textChanged(const QString &arg1);
 
+public:
   void generateTemporaryPassword(uint8_t *tempPassword) const;
-
   int userAuthenticate(const QString &password);
-
   void on_enableUserPasswordCheckBox_clicked(bool checked);
-
+  void generateOTPConfig(OTPSlot *slot) const;
+  int get_supported_secret_length_base32() const;
+  int get_supported_secret_length_hex() const;
 };
 
 class utf8FieldLengthValidator : public QValidator {

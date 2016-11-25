@@ -98,12 +98,12 @@ Device::Device(int vid, int pid, int vidStick20, int pidStick20, int vidStick20U
   TOTP_SlotCount = TOTP_SLOT_COUNT;
 
   for (i = 0; i < HOTP_SLOT_COUNT_MAX; i++) {
-    HOTPSlots[i] = new HOTPSlot();
+    HOTPSlots[i] = new OTPSlot();
     HOTPSlots[i]->slotNumber = 0x10 + i;
   }
 
   for (i = 0; i < TOTP_SLOT_COUNT_MAX; i++) {
-    TOTPSlots[i] = new TOTPSlot();
+    TOTPSlots[i] = new OTPSlot();
     TOTPSlots[i]->slotNumber = 0x20 + i;
   }
 
@@ -443,14 +443,20 @@ int Device::eraseSlot(uint8_t slotNo) {
   data[0] = slotNo;
 
   if (!isConnected) {
-    return -1; // communication error
+    return ERR_NOT_CONNECTED; // communication error
   }
-  Command cmd(CMD_ERASE_SLOT, data, 1);
+
+  const auto data_with_password_len = sizeof(data) + sizeof(adminTemporaryPassword);
+  uint8_t data_with_password[data_with_password_len] = {};
+  memcpy(data_with_password, data, sizeof(data));
+  memcpy(data_with_password + sizeof(data), adminTemporaryPassword, sizeof(adminTemporaryPassword));
+
+  Command cmd(CMD_ERASE_SLOT, data_with_password, sizeof(data_with_password));
   authorize(&cmd);
   res = sendCommand(&cmd);
 
   if (res == -1) {
-    return -1; // communication error
+    return ERR_SENDING; // communication error
   }
   Sleep::msleep(200);
 
@@ -459,7 +465,7 @@ int Device::eraseSlot(uint8_t slotNo) {
   if (cmd.crc == resp.lastCommandCRC) {
     return resp.lastCommandStatus;
   }
-  return -2; // wrong crc
+  return ERR_WRONG_RESPONSE_CRC; // wrong crc
 }
 
 /*******************************************************************************
@@ -527,89 +533,141 @@ int Device::setTime(int reset) {
 
 *******************************************************************************/
 
-int Device::writeToHOTPSlot(HOTPSlot *slot) {
-  if (!((slot->slotNumber >= 0x10) && (slot->slotNumber < 0x10 + HOTP_SlotCount))) {
+#define __packed __attribute__((__packed__))
+
+
+struct WriteToOTPSlot {
+    uint8_t temporary_admin_password[25];
+    uint8_t slot_number;
+    union {
+        uint64_t slot_counter_or_interval;
+        uint8_t slot_counter_s[8];
+    };
+    uint8_t _slot_config;
+    uint8_t slot_token_id[13]; /** OATH Token Identifier */
+} __packed;
+
+struct SendOTPData {
+    uint8_t temporary_admin_password[25];
+    uint8_t type; //S-secret, N-name
+    uint8_t id; //multiple reports for values longer than 30 bytes
+    uint8_t data[30]; //data, does not need null termination
+} __packed;
+
+int Device::writeToOTPSlot(OTPSlot *slot) {
+  if (!isConnected) {
+    return ERR_NOT_CONNECTED; // other issue
+  }
+
+  const auto slotNumber = slot->slotNumber;
+  if (!is_HOTP_slot_number(slotNumber) && !is_TOTP_slot_number(slotNumber)) {
     return -1; // wrong slot number checked on app side //TODO ret code conflict
   }
   int res;
-
   uint8_t data[COMMAND_SIZE];
-  memset(data, 0, sizeof(data));
+  WriteToOTPSlot write_data;
+  int buffer_size = 0;
+  uint8_t *buffer = nullptr;
 
-  data[0] = slot->slotNumber;
-  memcpy(data + 1, slot->slotName, 15);
-  memcpy(data + 16, slot->secret, 20);
-  data[36] = slot->config;
-  memcpy(data + 37, slot->tokenID, 13);
-  memcpy(data + 50, slot->counter, 8);
-
-  if (isConnected) {
-    Command cmd(CMD_WRITE_TO_SLOT, data, sizeof(data));
-    authorize(&cmd);
-    res = sendCommand(&cmd);
-
-    if (res == -1) {
-      return -1; // communication error
-    } else {     // sending the command was successful
-      Sleep::msleep(100);
-      Response resp;
-
-      resp.getResponse(this);
-
-      if (cmd.crc == resp.lastCommandCRC) {
-        return resp.lastCommandStatus;
-      }
-
-      return -2; // wrong crc
-    }
-  }
-    return -3; // other issue
-}
-
-/*******************************************************************************
-
-  writeToTOTPSlot
-
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
-
-*******************************************************************************/
-
-int Device::writeToTOTPSlot(TOTPSlot *slot) {
-  if ((slot->slotNumber >= 0x20) && (slot->slotNumber < 0x20 + TOTP_SlotCount)) {
-    int res;
-
-    uint8_t data[COMMAND_SIZE] = {0};
-
-    data[0] = slot->slotNumber;
+  if (!is_auth08_supported()){
+    buffer = data;
+    buffer_size = sizeof(data);
+    memset(data, 0, sizeof(data));
+    data[0] = slotNumber;
     memcpy(data + 1, slot->slotName, 15);
     memcpy(data + 16, slot->secret, 20);
     data[36] = slot->config;
     memcpy(data + 37, slot->tokenID, 13);
-    memcpy(data + 50, &(slot->interval), 2);
-
-    if (isConnected) {
-      Command cmd(CMD_WRITE_TO_SLOT, data, COMMAND_SIZE);
-      authorize(&cmd);
-      res = sendCommand(&cmd);
-
-      if (res == -1) {
-        return -1;
-      } else { // sending the command was successful
-        Sleep::msleep(100);
-        Response resp;
-
-        resp.getResponse(this);
-
-        if (cmd.crc == resp.lastCommandCRC) {
-          return resp.lastCommandStatus;
-        }
-        return -2;
-      }
+    if (!is_HOTP_slot_number(slotNumber)) {
+      memcpy(data + 50, slot->counter, 8);
+    } else if (is_TOTP_slot_number(slotNumber)) {
+      memcpy(data + 50, &slot->interval, 2);
     }
+  } else {
+    //copy other OTP data
+    //name
+    SendOTPData otpData;
+    memset(&otpData, 0, sizeof(otpData));
+    otpData.id = 0;
+    otpData.type = 'N';
+    memcpy(otpData.data, slot->slotName, sizeof(slot->slotName));
+    memcpy(otpData.temporary_admin_password, adminTemporaryPassword, sizeof(adminTemporaryPassword));
+    //execute command
+    Command cmd_otp_name(CMD_SEND_OTP_DATA, (uint8_t *) &otpData, sizeof(otpData));
+    res = sendCommand(&cmd_otp_name);
+    if (res == -1) return ERR_SENDING; // communication error
+    Response resp;
+    resp.getResponse(this);
+
+    //secret
+    otpData.type = 'S';
+    otpData.id = 0;
+
+    const auto secret_size = sizeof(slot->secret);
+    auto remaining_secret_length = secret_size;
+
+    while (remaining_secret_length>0){
+      const auto bytesToCopy = std::min(sizeof(otpData.data), remaining_secret_length);
+      const auto start = secret_size - remaining_secret_length;
+      memset(otpData.data, 0, sizeof(otpData.data));
+      memcpy(otpData.data, slot->secret + start, bytesToCopy);
+      //execute command
+      Command cmd_otp_secret(CMD_SEND_OTP_DATA, (uint8_t *) &otpData, sizeof(otpData));
+      res = sendCommand(&cmd_otp_secret);
+      if (res == -1) return ERR_SENDING; // communication error
+      Response resp;
+      resp.getResponse(this);
+
+      remaining_secret_length -= bytesToCopy;
+      otpData.id++;
+    }
+
+    //write OTP slot data
+    buffer = (uint8_t*) &write_data;
+    buffer_size = sizeof(write_data);
+    memcpy(write_data.temporary_admin_password, adminTemporaryPassword, sizeof(adminTemporaryPassword));
+    write_data.slot_number = slotNumber;
+    if(is_HOTP_slot_number(slotNumber)){
+      memcpy(write_data.slot_counter_s, slot->counter, sizeof(slot->counter));
+    } else if (is_TOTP_slot_number(slotNumber)){
+      write_data.slot_counter_or_interval = slot->interval;
+    }
+
+    write_data._slot_config = slot->config;
+    memcpy(write_data.slot_token_id, slot->tokenID, sizeof(slot->tokenID));
   }
-  return -1;
+
+  Command cmd(CMD_WRITE_TO_SLOT, buffer, buffer_size);
+  authorize(&cmd);
+  res = sendCommand(&cmd);
+  if (res == -1) return ERR_SENDING; // communication error
+
+  Sleep::msleep(100);
+  Response resp;
+  resp.getResponse(this);
+
+  if (cmd.crc != resp.lastCommandCRC) {
+    return ERR_WRONG_RESPONSE_CRC; // wrong crc
+  }
+  return resp.lastCommandStatus;
+}
+
+bool Device::is_HOTP_slot_number(const uint8_t slotNumber) const {
+  return ((slotNumber >= 0x10) && (slotNumber < 0x10 + HOTP_SlotCount));
+}
+
+bool Device::is_secret320_supported() const {
+  return is_nk_pro() && get_major_firmware_version() >= 8 ||
+      is_nk_storage() && get_major_firmware_version() >= 44;
+}
+
+bool Device::is_auth08_supported() const {
+  return is_nk_pro() && get_major_firmware_version() >= 8 ||
+      is_nk_storage() && get_major_firmware_version() >= 44;
+}
+
+bool Device::is_TOTP_slot_number(const uint8_t slotNumber) const {
+  return (slotNumber >= 0x20) && (slotNumber < 0x20 + TOTP_SlotCount);
 }
 
 /*******************************************************************************
@@ -626,7 +684,7 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
                     uint8_t result[18]) {
   bool is_OTP_PIN_protected = otpPasswordConfig[0] == 1;
 
-  uint8_t data[30];
+  uint8_t data[18];
   data[0] = slotNo;
   memcpy(data + 1, &challenge, 8);
   // Time of challenge: Warning:
@@ -637,19 +695,20 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
   memcpy(data + 17, &lastInterval, 1);
 
   if (isConnected) {
-    Command cmd(CMD_GET_CODE, data, 18);
+    const auto data_with_password_len = sizeof(data) + sizeof(userTemporaryPassword);
+    uint8_t data_with_password[data_with_password_len] = {};
+    memcpy(data_with_password, data, sizeof(data));
+    memcpy(data_with_password + sizeof(data), userTemporaryPassword, sizeof(userTemporaryPassword));
+
+    Command cmd(CMD_GET_CODE, data_with_password, sizeof(data_with_password));
 
     if (is_OTP_PIN_protected) {
       userAuthorize(&cmd);
     }
-    //          userAuthenticate((uint8_t *) "123456", (uint8_t *) "123123123");
-
-    //    validUserPassword = false;
-    //    memset(userTemporaryPassword, 0, 25);
 
     int res = sendCommand(&cmd);
     if (res == -1) {
-      return -1; // connection problem
+      return ERR_SENDING; // connection problem
     }
     Sleep::msleep(100);
 
@@ -658,12 +717,12 @@ int Device::getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, u
     if (cmd.crc == resp.lastCommandCRC) { // the response was for the last command
       if (resp.lastCommandStatus == CMD_STATUS_OK) {
         memcpy(result, resp.data, 18);
-        return 0; // OK!
+        return ERR_NO_ERROR; // OK!
       }
     }
-    return -2; // wrong CRC or not OK status
+    return ERR_WRONG_RESPONSE_CRC; // wrong CRC or not OK status
   }
-  return -1; // connection problem
+  return ERR_NOT_CONNECTED; // connection problem
 }
 
 int Device::getHOTP(uint8_t slotNo) {
@@ -1596,37 +1655,39 @@ void Device::getGeneralConfig() {}
 int Device::writeGeneralConfig(uint8_t data[]) {
   int res;
 
-  if (isConnected) {
-    Command cmd(CMD_WRITE_CONFIG, data, 5);
-    authorize(&cmd);
-    res = sendCommand(&cmd);
-
-    if (res == -1) {
-      return ERR_SENDING;
-    } else { // sending the command was successful
-      Sleep::msleep(100);
-      Response resp;
-
-      resp.getResponse(this);
-
-      if (cmd.crc == resp.lastCommandCRC) {
-        switch (resp.lastCommandStatus) {
-        case CMD_STATUS_OK:
-          return CMD_STATUS_OK;
-        case CMD_STATUS_NOT_AUTHORIZED:
-          return CMD_STATUS_NOT_AUTHORIZED;
-        default:
-          break;
-        }
-        if (resp.lastCommandStatus == CMD_STATUS_OK) {
-          return 0;
-        }
-      } else {
-        return ERR_WRONG_RESPONSE_CRC;
-      }
-    }
+  if (!isConnected) {
+    return ERR_NOT_CONNECTED;
   }
-  return ERR_NOT_CONNECTED;
+
+  const auto data_with_password_len = 5 + sizeof(adminTemporaryPassword);
+  uint8_t data_with_password[data_with_password_len] = {};
+  memcpy(data_with_password, data, 5);
+  memcpy(data_with_password + 5, adminTemporaryPassword, sizeof(adminTemporaryPassword));
+
+  Command cmd(CMD_WRITE_CONFIG, data_with_password, sizeof(data_with_password));
+  authorize(&cmd);
+  res = sendCommand(&cmd);
+
+  if (res == -1) {
+    return ERR_SENDING;
+  }
+  // sending the command was successful
+  Sleep::msleep(100);
+  Response resp;
+
+  resp.getResponse(this);
+
+  if (cmd.crc != resp.lastCommandCRC) {
+    return ERR_WRONG_RESPONSE_CRC;
+  }
+  switch (resp.lastCommandStatus) {
+    case CMD_STATUS_OK:
+    case CMD_STATUS_NOT_AUTHORIZED:
+      return resp.lastCommandStatus;
+    default:
+      break;
+  }
+  return ERR_STATUS_NOT_OK;
 }
 
 /*******************************************************************************
@@ -2897,7 +2958,11 @@ int Device::stick20GetDebugData(void) {
   return success;
 }
 
-bool Device::is_nkpro_rtm1() { return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0 && !activStick20); }
+bool Device::is_nkpro_07_rtm1() const { return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0 && !activStick20); }
+bool Device::is_nkpro_08_rtm2() const { return (firmwareVersion[0] == 8 && firmwareVersion[1] == 0 && !activStick20); }
+uint8_t Device::get_major_firmware_version() const { return (firmwareVersion[0]); }
+bool Device::is_nk_pro() const {return !activStick20;}
+bool Device::is_nk_storage() const {return activStick20;}
 
 /*******************************************************************************
 
