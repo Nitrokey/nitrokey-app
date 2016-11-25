@@ -3087,7 +3087,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
   if (!checked) {
     return;
   }
-  ui->secretEdit->setMaxLength(SECRET_LENGTH_HEX);
+  ui->secretEdit->setMaxLength(get_supported_secret_length_hex());
 
   QByteArray secret;
   uint8_t encoded[SECRET_LENGTH_BASE32] = {};
@@ -3112,6 +3112,14 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
   }
 }
 
+int MainWindow::get_supported_secret_length_hex() const {
+  auto local_secret_length = SECRET_LENGTH_HEX;
+  if (!cryptostick->is_secret320_supported()){
+    local_secret_length /= 2;
+  }
+  return local_secret_length;
+}
+
 void MainWindow::on_base32RadioButton_toggled(bool checked) {
   if (!checked) {
     return;
@@ -3131,7 +3139,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
     secretInClipboard = ui->secretEdit->text();
     copyToClipboard(secretInClipboard);
   }
-  ui->secretEdit->setMaxLength(SECRET_LENGTH_BASE32);
+  ui->secretEdit->setMaxLength(get_supported_secret_length_base32());
 }
 
 void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
@@ -3386,10 +3394,7 @@ void MainWindow::on_randomSecretButton_clicked() {
   int i = 0;
 
 
-  auto local_secret_length = SECRET_LENGTH_BASE32;
-  if (!cryptostick->is_secret320_supported()){
-    local_secret_length /= 2;
-  }
+  int local_secret_length = get_supported_secret_length_base32();
   uint8_t secret[local_secret_length];
 
   char temp;
@@ -3410,6 +3415,14 @@ void MainWindow::on_randomSecretButton_clicked() {
   ui->checkBox->setChecked(true);
   secretInClipboard = ui->secretEdit->text();
   copyToClipboard(secretInClipboard);
+}
+
+int MainWindow::get_supported_secret_length_base32() const {
+  auto local_secret_length = SECRET_LENGTH_BASE32;
+  if (!cryptostick->is_secret320_supported()){
+    local_secret_length /= 2;
+  }
+  return local_secret_length;
 }
 
 void MainWindow::on_checkBox_toggled(bool checked) {
