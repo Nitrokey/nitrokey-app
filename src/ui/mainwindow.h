@@ -53,6 +53,8 @@ typedef struct {
   int LockHardware;
   int Cmd;
   char *CmdLine;
+  bool language_set;
+  char *language_string;
 } StartUpParameter_tst;
 
 enum trayMessageType { INFORMATION, WARNING, CRITICAL };
