@@ -1,10 +1,21 @@
-Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app)  [![Code Health](https://landscape.io/github/Nitrokey/nitrokey-app/master/landscape.svg?style=flat)](https://landscape.io/github/Nitrokey/nitrokey-app/master)  [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
+Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app) [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
 ============
 Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator and Qt 5 and MinGW 4.4. Lately developed under Ubuntu 16.04 with Qt5.5.
 
 The implementation is compatible to the Google Authenticator application which can be used for testing purposes. See [google-authenticator](http://google-authenticator.googlecode.com/git/libpam/totp.html)
 
 Using the application under Linux also requires root privileges, or configuration of device privileges in udev (due to USB communication). Udev configuration is installed automatically with application (either with package or after `make install`).
+
+Known issue: tray icon under Debian Jessy
+----------------
+Under Debian Jessy application's tray icon might be unavailable. There were reports it can be fixed with updating Qt libraries to 5.4.2 version and up. The packages are available in experimental branch. For more details please refer to: https://github.com/Nitrokey/nitrokey-app/issues/86
+
+Installation and downloads
+-------------------------
+Ready to use packages and install instructions are available on main site in download section: https://www.nitrokey.com/download
+
+Compilation
+===========
 
 To compile the Nitrokey App under Linux install the package `libusb-1.0.0-dev` and QT Creator (optionally). In case it would not work out-of-the-box you may need to add to the .pro file:
 ```
@@ -14,9 +25,7 @@ QMAKE_CFLAGS= -I/usr/include/libusb-1.0
 
 Note: In case `libusb-1.0.0-dev` is not available to install please check other name: `libusb-1.0-0-dev` (the difference is the `-` char between zeroes).
 
-Known issue: tray icon under Debian Jessy
-----------------
-Under Debian Jessy application's tray icon might be unavailable. There were reports it can be fixed with updating Qt libraries to 5.4.2 version and up. The packages are available in experimental branch. For more details please refer to: https://github.com/Nitrokey/nitrokey-app/issues/86
+
 
 Compiling on Ubuntu Linux
 -------------------------
