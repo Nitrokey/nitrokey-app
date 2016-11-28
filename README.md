@@ -1,4 +1,4 @@
-Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app)  [![Code Health](https://landscape.io/github/Nitrokey/nitrokey-app/master/landscape.svg?style=flat)](https://landscape.io/github/Nitrokey/nitrokey-app/master)  [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
+Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app)  [![Code Health](https://landscape.io/github/Nitrokey/nitrokey-app/master/landscape.svg?style=flat)](https://landscape.io/github/Nitrokey/nitrokey-app/master)
 ============
 Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator and Qt 5 and MinGW 4.4. Lately developed under Ubuntu 16.04 with Qt5.5.
 
