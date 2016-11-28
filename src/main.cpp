@@ -27,12 +27,15 @@
 #include <QDebug>
 #include <QSharedMemory>
 #include <stdlib.h>
+#include <src/ui/aboutdialog.h>
 
 StartUpParameter_tst &
 parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st);
 
 void HelpInfos(void) {
-  puts("Nitrokey App\n\n"
+  puts("Nitrokey App "
+  GUI_VERSION
+           "\n\n"
        "-h, --help        display this help and exit\n"
        "-a, --admin       enable extra administrativefunctions\n"
        "-d, --debug       enable debug options\n"
