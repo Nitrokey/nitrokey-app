@@ -1848,45 +1848,15 @@ void MainWindow::generateMenuForStorageDevice() {
   }
 }
 
-void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
+void MainWindow::generateHOTPConfig(OTPSlot *slot) {
   uint8_t selectedSlot = ui->slotComboBox->currentIndex();
   selectedSlot -= (TOTP_SlotCount + 1);
 
   if (selectedSlot < HOTP_SlotCount) {
     slot->slotNumber = selectedSlot + 0x10;
 
-    QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
+    generateOTPConfig(slot);
 
-    uint8_t encoded[128];
-    uint8_t decoded[20];
-    uint8_t data[128];
-
-    memset(encoded, 'A', 32);
-    memset(data, 'A', 32);
-    memcpy(encoded, secretFromGUI.data(), secretFromGUI.length());
-
-    base32_clean(encoded, 32, data);
-    base32_decode(data, decoded, 20);
-
-    secretFromGUI = QByteArray((char *)decoded, 20); // .toHex();
-    memset(slot->secret, 0, 20);
-    memcpy(slot->secret, secretFromGUI.data(), secretFromGUI.size());
-
-    QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
-    memset(slot->slotName, 0, 15);
-    memcpy(slot->slotName, slotNameFromGUI.data(), slotNameFromGUI.size());
-
-    memset(slot->tokenID, 32, 13);
-    QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-    memcpy(slot->tokenID, ompFromGUI, 2);
-
-    QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-    memcpy(slot->tokenID + 2, ttFromGUI, 2);
-
-    QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-    memcpy(slot->tokenID + 4, muiFromGUI, 8);
-
-    slot->tokenID[12] = ui->keyboardComboBox->currentIndex() & 0xFF;
 
     memset(slot->counter, 0, 8);
     // Nitrokey Storage needs counter value in text but Pro in binary [#60]
@@ -1907,7 +1877,7 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
       QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
       int digitsInCounter = counterFromGUI.length();
       if (0 < digitsInCounter && digitsInCounter < 8) {
-        memcpy(slot->counter, counterFromGUI.data(), std::min(counterFromGUI.length(), 7));
+        memcpy(slot->counter, counterFromGUI.constData(), std::min(counterFromGUI.length(), 7));
         // 8th char has to be '\0' since in firmware atoi is used directly on buffer
         slot->counter[7] = 0;
       } else {
@@ -1921,71 +1891,69 @@ void MainWindow::generateHOTPConfig(HOTPSlot *slot) {
       else
         qDebug() << "HOTP counter value: " << *(quint64 *)slot->counter;
     }
-    slot->config = 0;
 
-    if (TRUE == ui->digits8radioButton->isChecked())
-      slot->config += (1 << 0);
-
-    if (TRUE == ui->enterCheckBox->isChecked())
-      slot->config += (1 << 1);
-
-    if (TRUE == ui->tokenIDCheckBox->isChecked())
-      slot->config += (1 << 2);
   }
 }
 
-void MainWindow::generateTOTPConfig(TOTPSlot *slot) {
+
+void MainWindow::generateOTPConfig(OTPSlot *slot) const {
+  QByteArray secretFromGUI = this->ui->secretEdit->text().toLatin1();
+
+  uint8_t encoded[128] = {};
+  uint8_t decoded[2*SECRET_LENGTH] = {};
+  uint8_t data[128] = {};
+
+  memset(encoded, 'A', sizeof(encoded));
+  memset(data, 'A', sizeof(data));
+  size_t toCopy;
+  toCopy = std::min(sizeof(encoded), (const size_t &) secretFromGUI.length());
+  memcpy(encoded, secretFromGUI.constData(), toCopy);
+
+  base32_clean(encoded, sizeof(data), data);
+  base32_decode(data, decoded, sizeof(decoded));
+
+  secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH); // .toHex();
+  memset(slot->secret, 0, sizeof(slot->secret));
+  toCopy = std::min(sizeof(slot->secret), (const size_t &) secretFromGUI.length());
+  memcpy(slot->secret, secretFromGUI.constData(), toCopy);
+
+  QByteArray slotNameFromGUI = QByteArray(this->ui->nameEdit->text().toLatin1());
+  memset(slot->slotName, 0, sizeof(slot->slotName));
+  toCopy = std::min(sizeof(slot->slotName), (const size_t &) slotNameFromGUI.length());
+  memcpy(slot->slotName, slotNameFromGUI.constData(), toCopy);
+
+  memset(slot->tokenID, 32, sizeof(slot->tokenID));
+  QByteArray ompFromGUI = (this->ui->ompEdit->text().toLatin1());
+  toCopy = std::min(2ul, (const unsigned long &) ompFromGUI.length());
+  memcpy(slot->tokenID, ompFromGUI.constData(), toCopy);
+
+  QByteArray ttFromGUI = (this->ui->ttEdit->text().toLatin1());
+  toCopy = std::min(2ul, (const unsigned long &) ttFromGUI.length());
+  memcpy(slot->tokenID + 2, ttFromGUI.constData(), toCopy);
+
+  QByteArray muiFromGUI = (this->ui->muiEdit->text().toLatin1());
+  toCopy = std::min(8ul, (const unsigned long &) muiFromGUI.length());
+  memcpy(slot->tokenID + 4, muiFromGUI.constData(), toCopy);
+
+  slot->tokenID[12] = (uint8_t) (this->ui->keyboardComboBox->currentIndex() & 0xFF);
+
+  slot->config = 0;
+  if (ui->digits8radioButton->isChecked())
+      slot->config += (1 << 0);
+  if (ui->enterCheckBox->isChecked())
+      slot->config += (1 << 1);
+  if (ui->tokenIDCheckBox->isChecked())
+      slot->config += (1 << 2);
+}
+
+void MainWindow::generateTOTPConfig(OTPSlot *slot) {
   uint8_t selectedSlot = ui->slotComboBox->currentIndex();
 
   // get the TOTP slot number
   if (selectedSlot < TOTP_SlotCount) {
     slot->slotNumber = selectedSlot + 0x20;
 
-    QByteArray secretFromGUI = ui->secretEdit->text().toLatin1();
-
-    uint8_t encoded[128] = {'A'};
-    uint8_t decoded[20] = {'0'};
-    uint8_t data[128] = {'A'};
-
-    memset(encoded, 'A', 32);
-    memset(data, 'A', 32);
-    memcpy(encoded, secretFromGUI.data(), secretFromGUI.length());
-
-    base32_clean(encoded, 32, data);
-    base32_decode(data, decoded, 20);
-
-    secretFromGUI = QByteArray((char *)decoded, 20); // .toHex();
-
-    memset(slot->secret, 0, 20);
-    memcpy(slot->secret, secretFromGUI.data(), secretFromGUI.size());
-
-    QByteArray slotNameFromGUI = QByteArray(ui->nameEdit->text().toLatin1());
-
-    memset(slot->slotName, 0, 15);
-    memcpy(slot->slotName, slotNameFromGUI.data(), slotNameFromGUI.size());
-
-    memset(slot->tokenID, 32, 13);
-
-    QByteArray ompFromGUI = (ui->ompEdit->text().toLatin1());
-
-    memcpy(slot->tokenID, ompFromGUI, 2);
-
-    QByteArray ttFromGUI = (ui->ttEdit->text().toLatin1());
-
-    memcpy(slot->tokenID + 2, ttFromGUI, 2);
-
-    QByteArray muiFromGUI = (ui->muiEdit->text().toLatin1());
-
-    memcpy(slot->tokenID + 4, muiFromGUI, 8);
-
-    slot->config = 0;
-
-    if (ui->digits8radioButton->isChecked())
-      slot->config += (1 << 0);
-    if (ui->enterCheckBox->isChecked())
-      slot->config += (1 << 1);
-    if (ui->tokenIDCheckBox->isChecked())
-      slot->config += (1 << 2);
+    generateOTPConfig(slot);
 
     uint16_t lastInterval = ui->intervalSpinBox->value();
 
@@ -2017,7 +1985,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->secretEdit->setPlaceholderText("********************************");
 
   ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
-  QByteArray secret((char *)cryptostick->TOTPSlots[slotNo]->secret, 20);
+  QByteArray secret((char *)cryptostick->TOTPSlots[slotNo]->secret, SECRET_LENGTH);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secret); // .toHex());
@@ -2037,7 +2005,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->muiEdit->setText(QString(mui));
 
   int interval = cryptostick->TOTPSlots[slotNo]->interval;
-
+  if (interval<1) interval = 30;
   ui->intervalSpinBox->setValue(interval);
 
   if (cryptostick->TOTPSlots[slotNo]->config & (1 << 0))
@@ -2078,7 +2046,7 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
 
   // slotNo=slotNo+0x10;
   ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
-  QByteArray secret((char *)cryptostick->HOTPSlots[slotNo]->secret, 20);
+  QByteArray secret((char *)cryptostick->HOTPSlots[slotNo]->secret, SECRET_LENGTH);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secret); // .toHex());
@@ -3021,19 +2989,19 @@ void MainWindow::on_writeButton_clicked() {
       ui->base32RadioButton->toggle();
 
       if (slotNo < HOTP_SlotCount) { // HOTP slot
-        HOTPSlot hotp;
+        OTPSlot hotp;
         generateHOTPConfig(&hotp);
         if(!validate_secret(hotp.secret)) {
           return;
         }
-        res = cryptostick->writeToHOTPSlot(&hotp);
+        res = cryptostick->writeToOTPSlot(&hotp);
       } else { // TOTP slot
-        TOTPSlot totp;
+        OTPSlot totp;
         generateTOTPConfig(&totp);
         if(!validate_secret(totp.secret)) {
           return;
         }
-        res = cryptostick->writeToTOTPSlot(&totp);
+        res = cryptostick->writeToOTPSlot(&totp);
       }
 
       if (DebugingActive == TRUE) {
@@ -3095,14 +3063,13 @@ void MainWindow::on_writeButton_clicked() {
 }
 
 bool MainWindow::validate_secret(const uint8_t *secret) const {
-  if(cryptostick->is_nkpro_rtm1() && secret[0] == 0){
+  if(cryptostick->is_nkpro_07_rtm1() && secret[0] == 0){
       csApplet()->warningBox(tr("Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret."));
     return false;
   }
   //check if the secret consist only from null bytes
   //(this value is reserved - it would be ignored by device)
-  //assuming secret points to 20 byte array
-  for (int i=0; i<20; i++){
+  for (int i=0; i < SECRET_LENGTH; i++){
     if (secret[i] != 0){
       return true;
     }
@@ -3120,29 +3087,37 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
   if (!checked) {
     return;
   }
+  ui->secretEdit->setMaxLength(get_supported_secret_length_hex());
 
   QByteArray secret;
-  uint8_t encoded[32] = {};
-  uint8_t data[32] = {};
-  uint8_t decoded[20] = {};
+  uint8_t encoded[SECRET_LENGTH_BASE32] = {};
+  uint8_t data[SECRET_LENGTH_BASE32] = {};
+  uint8_t decoded[SECRET_LENGTH] = {};
 
   secret = ui->secretEdit->text().toLatin1();
   if (secret.size() != 0) {
     const size_t encoded_size = std::min(sizeof(encoded), (size_t) secret.length());
     memset(encoded, 'A', sizeof(encoded));
-    memcpy(encoded, secret.data(), encoded_size);
+    memcpy(encoded, secret.constData(), encoded_size);
 
-    base32_clean(encoded, encoded_size, data);
+    base32_clean(encoded, sizeof(encoded), data);
     const size_t decoded_size = sizeof(decoded);
     base32_decode(data, decoded, decoded_size);
 
     secret = QByteArray((char *) decoded, decoded_size).toHex();
 
-    ui->secretEdit->setMaxLength(40);
     ui->secretEdit->setText(QString(secret));
     secretInClipboard = ui->secretEdit->text();
     copyToClipboard(secretInClipboard);
   }
+}
+
+int MainWindow::get_supported_secret_length_hex() const {
+  auto local_secret_length = SECRET_LENGTH_HEX;
+  if (!cryptostick->is_secret320_supported()){
+    local_secret_length /= 2;
+  }
+  return local_secret_length;
 }
 
 void MainWindow::on_base32RadioButton_toggled(bool checked) {
@@ -3151,20 +3126,20 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
   }
 
   QByteArray secret;
-  uint8_t encoded[32] = {};
-  uint8_t decoded[20] = {};
+  uint8_t encoded[SECRET_LENGTH_BASE32+1] = {}; //+1 for \0
+  uint8_t decoded[SECRET_LENGTH] = {};
 
   secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
   if (secret.size() != 0) {
     const size_t decoded_size = std::min(sizeof(decoded), (size_t) secret.length());
-    memcpy(decoded, secret.data(), decoded_size);
+    memcpy(decoded, secret.constData(), decoded_size);
     base32_encode(decoded, decoded_size, encoded, sizeof(encoded));
 
-    ui->secretEdit->setMaxLength(32);
     ui->secretEdit->setText(QString((char *) encoded));
     secretInClipboard = ui->secretEdit->text();
     copyToClipboard(secretInClipboard);
   }
+  ui->secretEdit->setMaxLength(get_supported_secret_length_base32());
 }
 
 void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
@@ -3378,7 +3353,7 @@ void MainWindow::on_eraseButton_clicked() {
   }
 
   int res = cryptostick->eraseSlot(slotNo);
-  if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_rtm1()) {
+  if (res == CMD_STATUS_NOT_AUTHORIZED && cryptostick->is_nkpro_07_rtm1()) {
     uint8_t tempPassword[25] = {0};
     QString password;
 
@@ -3418,11 +3393,13 @@ void MainWindow::on_eraseButton_clicked() {
 void MainWindow::on_randomSecretButton_clicked() {
   int i = 0;
 
-  uint8_t secret[32];
+
+  int local_secret_length = get_supported_secret_length_base32();
+  uint8_t secret[local_secret_length];
 
   char temp;
 
-  while (i < 32) {
+  while (i < local_secret_length) {
     temp = qrand() & 0xFF;
     if ((temp >= 'A' && temp <= 'Z') || (temp >= '2' && temp <= '7')) {
       secret[i] = temp;
@@ -3430,7 +3407,7 @@ void MainWindow::on_randomSecretButton_clicked() {
     }
   }
 
-  QByteArray secretArray((char *)secret, 32);
+  QByteArray secretArray((char *)secret, local_secret_length);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secretArray);
@@ -3438,6 +3415,14 @@ void MainWindow::on_randomSecretButton_clicked() {
   ui->checkBox->setChecked(true);
   secretInClipboard = ui->secretEdit->text();
   copyToClipboard(secretInClipboard);
+}
+
+int MainWindow::get_supported_secret_length_base32() const {
+  auto local_secret_length = SECRET_LENGTH_BASE32;
+  if (!cryptostick->is_secret320_supported()){
+    local_secret_length /= 2;
+  }
+  return local_secret_length;
 }
 
 void MainWindow::on_checkBox_toggled(bool checked) {
@@ -3788,7 +3773,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       if (ERR_NO_ERROR != ret_s32) {
         switch (ret_s32) {
         case CMD_STATUS_AES_DEC_FAILED:
-          uint8_t admin_password[40];
+          uint8_t admin_password[SECRET_LENGTH_HEX];
           cryptostick->getUserPasswordRetryCount();
           dialog.init((char *)(tr("Enter admin PIN").toUtf8().data()),
                       HID_Stick20Configuration_st.UserPwRetryCount);
@@ -3966,7 +3951,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       QString password;
       dialog.getPassword(password);
 
-      if (cryptostick->is_nkpro_rtm1()) {
+      if (cryptostick->is_nkpro_07_rtm1()) {
         nkpro_user_PIN = password;
       }
 
@@ -3978,7 +3963,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
         return 1; // user does not click OK button
       }
     } else { // valid user password
-      if (cryptostick->is_nkpro_rtm1()) {
+      if (cryptostick->is_nkpro_07_rtm1()) {
         userAuthenticate(nkpro_user_PIN);
       }
     }
@@ -4060,7 +4045,7 @@ int MainWindow::userAuthenticate(const QString &password) {
 
 void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {
   for (int i = 0; i < 25; i++)
-    tempPassword[i] = qrand() & 0xFF;
+   tempPassword[i] = qrand() & 0xFF;
 }
 
 #define PWS_RANDOM_PASSWORD_CHAR_SPACE                                                             \
@@ -4183,7 +4168,7 @@ void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
-  if (checked && cryptostick->is_nkpro_rtm1()) {
+  if (checked && cryptostick->is_nkpro_07_rtm1()) {
     bool answer = csApplet()->yesOrNoBox(tr("To handle this functionality "
                                                     "application will keep your user PIN in memory. "
                                                     "Do you want to continue?"), false);

@@ -272,7 +272,7 @@
                   <string/>
                  </property>
                  <property name="maxLength">
-                  <number>32</number>
+                  <number>64</number>
                  </property>
                  <property name="echoMode">
                   <enum>QLineEdit::PasswordEchoOnEdit</enum>

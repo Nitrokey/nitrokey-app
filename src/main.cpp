@@ -26,9 +26,16 @@
 #include <QApplication>
 #include <QDebug>
 #include <QSharedMemory>
+#include <stdlib.h>
+#include <src/ui/aboutdialog.h>
+
+StartUpParameter_tst &
+parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st);
 
 void HelpInfos(void) {
-  puts("Nitrokey App\n\n"
+  puts("Nitrokey App "
+  GUI_VERSION
+           "\n\n"
        "-h, --help        display this help and exit\n"
        "-a, --admin       enable extra administrativefunctions\n"
        "-d, --debug       enable debug options\n"
@@ -36,6 +43,9 @@ void HelpInfos(void) {
        "--lock-hardware   enable hardware lock option\n"
        /* Disable password matrix printf ("--PWM Enable PIN entry via matrix\n"); */
        "--cmd ...         start a command line session\n"
+       "--language ...    load translation file with name i18n/nitrokey_xxx and store this choice "
+           "in settings file (use --debug for more details)\n"
+       "                  Use --language with empty parameter to clear the choice"
        "\n");
 }
 
@@ -47,13 +57,9 @@ int main(int argc, char *argv[]) {
   }
 #endif
 
-  int i;
-
-  char *p;
-
-  StartUpParameter_tst StartupInfo_st;
-
   QApplication a(argc, argv);
+  StartUpParameter_tst StartupInfo_st;
+  parseCommandLine(argc, argv, StartupInfo_st);
 
   // initialize i18n
   QTranslator qtTranslator;
@@ -65,29 +71,62 @@ int main(int argc, char *argv[]) {
 #endif
   a.installTranslator(&qtTranslator);
 
+  QSettings settings(QString("nitrokeyapp_config.ini"), QSettings::IniFormat);
+  const auto language_key = "main/language";
+  if (StartupInfo_st.language_set){
+    qDebug() << "Setting default language to " << StartupInfo_st.language_string;
+    settings.setValue(language_key, StartupInfo_st.language_string);
+  }
+  QString settings_language = settings.value(language_key).toString();
+  if(StartupInfo_st.FlagDebug) {
+    qDebug() << settings_language << settings.fileName();
+  }
+
   QTranslator myappTranslator;
-  bool success;
+  bool success = false;
+
 #if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC)
   QLocale loc = QLocale::system();
   QString lang = QLocale::languageToString(loc.language());
-
-  success = myappTranslator.load(QLocale::system(), // locale
+  if(StartupInfo_st.FlagDebug) {
+    qDebug() << loc << lang << loc.name();
+  }
+  if(!StartupInfo_st.language_set && settings_language.isEmpty()){
+    success = myappTranslator.load(QLocale::system(), // locale
                                  "",                // file name
                                  "nitrokey_",       // prefix
                                  ":/i18n/",         // folder
                                  ".qm");            // suffix
+  }
 
-  if (!success) {
-    success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
+  if(!success){
+    auto translation_paths = {
+        QString("/i18n/nitrokey_%1.qm").arg(settings_language),
+        QString("/i18n/nitrokey_%1.qm").arg(QLocale::system().name()),
+        QString("/i18n/nitrokey_%1.qm").arg(lang.toLower()),
+        QString("/i18n/nitrokey_%1.qm").arg("en"),
+    };
+
+    for (auto path : translation_paths ){
+      for(auto p : {QString(':'), QString('.')}){
+        auto path2 = p + path;
+        success = myappTranslator.load(path2);
+        QFileInfo fileInfo(path2);
+        if(StartupInfo_st.FlagDebug){
+          qDebug() << path2 << success << fileInfo.exists();
+        }
+        if (success) break;
+      }
+      if (success) break;
+    }
   }
 #else
   success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
 #endif
 
-  if (!success) {
-    myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg("en"));
+  if (success){
+    a.installTranslator(&myappTranslator);
   }
-  a.installTranslator(&myappTranslator);
 
   // Check for multiple instances
   // GUID from http://www.guidgenerator.com/online-guid-generator.aspx
@@ -113,13 +152,31 @@ int main(int argc, char *argv[]) {
 
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
+  HID_Stick20Init();
+
+  MainWindow w(&StartupInfo_st);
+//    csApplet()->setParent(&w);
+
+  QDateTime local(QDateTime::currentDateTime());
+
+  qsrand(local.currentMSecsSinceEpoch() % 2000000000);
+
+  a.setQuitOnLastWindowClosed(false);
+  return a.exec();
+}
+
+StartUpParameter_tst &
+parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st) {
+  //TODO rewrite with QCommandLineParser (does not support qt4)
   StartupInfo_st.ExtendedConfigActive = FALSE;
   StartupInfo_st.FlagDebug = DEBUG_STATUS_NO_DEBUGGING;
   StartupInfo_st.PasswordMatrix = FALSE;
   StartupInfo_st.LockHardware = FALSE;
   StartupInfo_st.Cmd = FALSE;
+  StartupInfo_st.language_set = FALSE;
 
-  HID_Stick20Init();
+  int i;
+  char *p;
 
   // Check for commandline parameter
   for (i = 2; i <= argc; i++) {
@@ -156,17 +213,18 @@ int main(int argc, char *argv[]) {
         StartupInfo_st.CmdLine = p;
       }
     }
+    if (0 == strcmp(p, "--language")) {
+      StartupInfo_st.language_set = TRUE;
+      i++;
+      if (i > argc) {
+        StartupInfo_st.language_string = "";
+      } else {
+        p = argv[i - 1];
+        StartupInfo_st.language_string = p;
+      }
+    }
   }
-
-  MainWindow w(&StartupInfo_st);
-//    csApplet()->setParent(&w);
-
-  QDateTime local(QDateTime::currentDateTime());
-
-  qsrand(local.currentMSecsSinceEpoch() % 2000000000);
-
-  a.setQuitOnLastWindowClosed(false);
-  return a.exec();
+  return StartupInfo_st;
 }
 
 extern "C" char *GetTimeStampForLog(void);

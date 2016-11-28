@@ -27,7 +27,6 @@
 #include "hidapi.h"
 #include "hotpslot.h"
 #include "stick20hid.h"
-#include "totpslot.h"
 
 /***************************************************************
 
@@ -75,6 +74,7 @@ class Response;
 #define CMD_FACTORY_RESET 0x13
 #define CMD_CHANGE_USER_PIN 0x14
 #define CMD_CHANGE_ADMIN_PIN 0x15
+#define CMD_SEND_OTP_DATA 0x17
 
 #define CMD_GET_PW_SAFE_SLOT_STATUS 0x60
 #define CMD_GET_PW_SAFE_SLOT_NAME 0x61
@@ -272,9 +272,9 @@ public:
   int getSlotName(uint8_t slotNo);
   int eraseSlot(uint8_t slotNo);
   int setTime(int reset);
-  int writeToHOTPSlot(HOTPSlot *slot);
-  int writeToTOTPSlot(TOTPSlot *slot);
-  int getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval,
+  int writeToOTPSlot(OTPSlot *slot);
+
+    int getCode(uint8_t slotNo, uint64_t challenge, uint64_t lastTOTPTime, uint8_t lastInterval,
               uint8_t result[18]);
   int getHOTP(uint8_t slotNo);
   int readSlot(uint8_t slotNo);
@@ -317,8 +317,8 @@ public:
   bool newConnection;
   int LastStickError;
   void initializeConfig();
-  HOTPSlot *HOTPSlots[HOTP_SLOT_COUNT_MAX];
-  TOTPSlot *TOTPSlots[TOTP_SLOT_COUNT_MAX];
+  OTPSlot *HOTPSlots[HOTP_SLOT_COUNT_MAX];
+  OTPSlot *TOTPSlots[TOTP_SLOT_COUNT_MAX];
   void getSlotConfigs();
   uint8_t adminTemporaryPassword[25];
   bool validPassword;
@@ -394,8 +394,10 @@ public:
   int HOTP_SlotCount;
   int TOTP_SlotCount;
 
-  bool is_nkpro_rtm1();
+  bool is_nkpro_07_rtm1() const;
   bool isInitialized() const;
+  bool is_auth08_supported() const;
+  bool is_secret320_supported() const;
 
 private:
   int vid;
@@ -407,6 +409,18 @@ private:
   int vidStick20UpdateMode;
   int pidStick20UpdateMode;
   bool needsReconnect;
+
+    bool is_TOTP_slot_number(const uint8_t slotNumber) const;
+
+    bool is_HOTP_slot_number(const uint8_t slotNumber) const;
+
+    bool is_nkpro_08_rtm2() const;
+
+    uint8_t get_major_firmware_version() const;
+
+    bool is_nk_pro() const;
+
+    bool is_nk_storage() const;
 };
 
 #endif // DEVICE_H

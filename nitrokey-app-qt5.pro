@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-CONFIG   += qt
+CONFIG   += qt c++11
 QT       += core gui
 
 target.path = /usr/local/bin
@@ -30,7 +30,6 @@ UTILSDIR=$${SRCDIR}/utils
 SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCUIDIR}/mainwindow.cpp \
             $${SRCDIR}/hotpslot.cpp \
-            $${SRCDIR}/totpslot.cpp \
             $${SRCUIDIR}/stick20window.cpp \
             $${SRCUIDIR}/stick20updatedialog.cpp \
             $${SRCUIDIR}/stick20setup.cpp \
@@ -71,7 +70,6 @@ unix:!macx{
 }
 
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
-            $${SRCDIR}/totpslot.h \
             $${SRCUIDIR}/stick20window.h \
             $${SRCUIDIR}/stick20updatedialog.h \
             $${SRCUIDIR}/stick20setup.h \
@@ -162,4 +160,5 @@ RESOURCES += \
     resources.qrc
 
 TRANSLATIONS += i18n/nitrokey_de_DE.ts \
+                i18n/nitrokey_ar.ts
                 i18n/nitrokey_en.ts
