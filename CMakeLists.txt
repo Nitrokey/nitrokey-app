@@ -4,7 +4,7 @@ cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
 
 PROJECT(NitrokeyApp)
-SET(PROJECT_VERSION "0.5.1")
+SET(PROJECT_VERSION "0.6")
 #ADD_DEFINITIONS(-DSEAFILE_CLIENT_VERSION=${PROJECT_VERSION}) 
 
 #Please use either 'cmake -DHAVE_LIBAPPINDICATOR=NO' or 'ccmake' to change this value
@@ -12,7 +12,7 @@ OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" YES)
 
 INCLUDE(FindPkgConfig)
 
-IF (NOT (${CMAKE_BUILD_TYPE} MATCHES Release))
+IF (NOT ${CMAKE_BUILD_TYPE})
   SET(CMAKE_BUILD_TYPE Debug) 
 ENDIF()
 MESSAGE("Build type: ${CMAKE_BUILD_TYPE}") 
@@ -64,7 +64,6 @@ SET(moc_headers
     ${SRCUIDIR}/stick20setup.h
     ${SRCUIDIR}/stick20updatedialog.h
     ${SRCUIDIR}/stick20window.h
-    ${SRCDIR}/totpslot.h
 )
 
 
@@ -235,7 +234,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20setup.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${SRCUIDIR}/stick20window.cpp
-    ${SRCDIR}/totpslot.cpp
     ${UTILSDIR}/stick20hid.c
     ${UTILSDIR}/hid_libusb.c
     ${platform_specific_sources}
@@ -251,34 +249,34 @@ IF(NOT WIN32)
       #      ${CMAKE_SOURCE_DIR}/data/icons/48x48
       #      ${CMAKE_SOURCE_DIR}/data/icons/128x128
     ${CMAKE_SOURCE_DIR}/data/icons/
-    DESTINATION usr/share/icons/
+    DESTINATION share/icons
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
-    DESTINATION usr/share/applications
+    DESTINATION share/applications
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
-    DESTINATION usr/share/pixmaps
+    DESTINATION share/pixmaps
   )
 
   # Install Nitrokey udev rules
   install(FILES
    ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
-   DESTINATION usr/lib/udev/rules.d
+   DESTINATION lib/udev/rules.d
   )
 
   # Install autocompletion scripts
   install(FILES
-   ${CMAKE_SOURCE_DIR}/data//bash-autocomplete/nitrokey-app
-    DESTINATION etc/bash_completion.d
+   ${CMAKE_SOURCE_DIR}/data/bash-autocomplete/nitrokey-app
+    DESTINATION /etc/bash_completion.d
   )
 
   install(FILES
    ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
-   DESTINATION usr/share/locale/de_DE/LC_MESSAGES
+   DESTINATION share/locale/de_DE/LC_MESSAGES
   )
 
   install(FILES
@@ -286,7 +284,7 @@ IF(NOT WIN32)
     ${CMAKE_SOURCE_DIR}/images/quit.png
     ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
     ${CMAKE_SOURCE_DIR}/images/settings.png
-    DESTINATION usr/share/nitrokey
+    DESTINATION share/nitrokey
   )
 
 ENDIF () # NOT WIN32
@@ -299,7 +297,7 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${resources_ouput}
 )
 
-INSTALL(TARGETS nitrokey-app DESTINATION usr/bin)
+INSTALL(TARGETS nitrokey-app DESTINATION bin)
 
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${QT_LIBRARIES}
@@ -331,7 +329,8 @@ IF("${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
     set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
 ENDIF("${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}" MATCHES "x86_64")
 
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "Mateusz Zalega <mateusz@nitrokey.com>" )
+SET(PACKAGE_MAINTAINER "Szczepan Zalega <szczepan@nitrokey.com>" )
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER ${PACKAGE_MAINTAINER} )
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
@@ -346,7 +345,7 @@ SET(CPACK_RPM_PACKAGE_DESCRIPTION  "Use and manage your Nitrokey")
 
 SET(CPACK_RPM_PACKAGE_SUMMARY "Use and manage your Nitrokey")
 SET(CPACK_RPM_PACKAGE_VENDOR "Nitrokey")
-SET(CPACK_RPM_PACKAGE_MAINTAINER "Mateusz Zalega <mateusz@nitrokey.com>" )
+SET(CPACK_RPM_PACKAGE_MAINTAINER ${PACKAGE_MAINTAINER} )
 SET(CPACK_RPM_PACKAGE_PRIORITY "optional")
 SET(CPACK_RPM_PACKAGE_SECTION "utils")
 
@@ -356,6 +355,8 @@ LIST(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
     "/etc/bash_completion.d"
     "/etc/udev"
     "/etc/udev/rules.d"
+    "/usr/lib/udev"
+    "/usr/lib/udev/rules.d"
     "/usr/share/locale"
     "/usr/share/locale/de_DE"
     "/usr/share/locale/de_DE/LC_MESSAGES"

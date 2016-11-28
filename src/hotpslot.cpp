@@ -21,7 +21,7 @@
 #include "hotpslot.h"
 #include "string.h"
 
-HOTPSlot::HOTPSlot() {
+OTPSlot::OTPSlot() {
   isProgrammed = false;
   memset(slotName, 0, sizeof(slotName));
   memset(secret, 0, sizeof(secret));
@@ -31,12 +31,3 @@ HOTPSlot::HOTPSlot() {
   slotNumber = 0;
 }
 
-HOTPSlot::HOTPSlot(uint8_t slotNumber, uint8_t slotName[20], uint8_t secret[20], uint8_t counter[8],
-                   uint8_t config) {
-  this->slotNumber = slotNumber;
-  memcpy(this->slotName, slotName, 15);
-  memcpy(this->secret, secret, 20);
-  memcpy(this->counter, counter, 8);
-  this->config = config;
-  isProgrammed = false;
-}

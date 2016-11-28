@@ -1,5 +1,34 @@
 # Change Log
 
+## [v0.6](https://github.com/Nitrokey/nitrokey-app/tree/v0.6) (2016-11-28)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.5.1...v0.6)
+
+**Implemented enhancements:**
+
+- Support for Pro stick version 0.8 [\#190](https://github.com/Nitrokey/nitrokey-app/issues/190)
+
+**Closed issues:**
+
+- Add command line parameter to force language [\#199](https://github.com/Nitrokey/nitrokey-app/issues/199)
+- OTP secret field's max length changes only with text inside [\#195](https://github.com/Nitrokey/nitrokey-app/issues/195)
+- Fedora 23 RPM has conflicts [\#193](https://github.com/Nitrokey/nitrokey-app/issues/193)
+- RPM package installs in wrong directory [\#178](https://github.com/Nitrokey/nitrokey-app/issues/178)
+- Invisible tray icon on openSUSE Tumbleweed unless run as root  [\#176](https://github.com/Nitrokey/nitrokey-app/issues/176)
+- Mac OS X version and missing QT libraries [\#163](https://github.com/Nitrokey/nitrokey-app/issues/163)
+
+**Merged pull requests:**
+
+- Update README.md [\#202](https://github.com/Nitrokey/nitrokey-app/pull/202) ([szszszsz](https://github.com/szszszsz))
+- Add language CLI param [\#200](https://github.com/Nitrokey/nitrokey-app/pull/200) ([szszszsz](https://github.com/szszszsz))
+- Bump version to 0.6 [\#198](https://github.com/Nitrokey/nitrokey-app/pull/198) ([szszszsz](https://github.com/szszszsz))
+- Support for Nitrokey Pro 0.8 [\#196](https://github.com/Nitrokey/nitrokey-app/pull/196) ([szszszsz](https://github.com/szszszsz))
+- Resolve conflict with udev rules \(for Fedora 23\) [\#194](https://github.com/Nitrokey/nitrokey-app/pull/194) ([vladimir-lu](https://github.com/vladimir-lu))
+- build: set CMAKE\_BUILD\_TYPE only if not set [\#188](https://github.com/Nitrokey/nitrokey-app/pull/188) ([ignatenkobrain](https://github.com/ignatenkobrain))
+- Translations: initial support for Arabic \(ar\) language [\#183](https://github.com/Nitrokey/nitrokey-app/pull/183) ([szszszsz](https://github.com/szszszsz))
+- Change RPM package installation dir [\#180](https://github.com/Nitrokey/nitrokey-app/pull/180) ([szszszsz](https://github.com/szszszsz))
+- Update README.md [\#179](https://github.com/Nitrokey/nitrokey-app/pull/179) ([szszszsz](https://github.com/szszszsz))
+- Update changelog [\#174](https://github.com/Nitrokey/nitrokey-app/pull/174) ([szszszsz](https://github.com/szszszsz))
+
 ## [v0.5.1](https://github.com/Nitrokey/nitrokey-app/tree/v0.5.1) (2016-10-08)
 [Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.5...v0.5.1)
 

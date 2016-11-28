@@ -246,6 +246,9 @@ void Response::DebugResponse() {
   case CMD_NEW_AES_KEY:
     DebugAppendTextGui((char *)"         Last command        : CMD_NEW_AES_KEY:\n");
     break;
+    case CMD_SEND_OTP_DATA:
+    DebugAppendTextGui((char *)"         Last command        : CMD_SEND_OTP_DATA:\n");
+    break;
 
   case STICK20_CMD_ENABLE_CRYPTED_PARI:
     DebugAppendTextGui(
