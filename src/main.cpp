@@ -81,23 +81,25 @@ int main(int argc, char *argv[]) {
                                  ":/i18n/",         // folder
                                  ".qm");            // suffix
 
-  auto translation_paths = {
-      QString("/i18n/nitrokey_%1.qm").arg(QLocale::system().name()),
-      QString("/i18n/nitrokey_%1.qm").arg(lang.toLower()),
-      QString("/i18n/nitrokey_%1.qm").arg("en"),
-  };
+  if(!success){
+    auto translation_paths = {
+        QString("/i18n/nitrokey_%1.qm").arg(QLocale::system().name()),
+        QString("/i18n/nitrokey_%1.qm").arg(lang.toLower()),
+        QString("/i18n/nitrokey_%1.qm").arg("en"),
+    };
 
-  for (auto path : translation_paths ){
-    for(auto p : {QString(':'), QString('.')}){
-      auto path2 = p + path;
-      success = myappTranslator.load(path2);
-      QFileInfo fileInfo(path2);
-      if(StartupInfo_st.FlagDebug){
-        qDebug() << path2 << success << fileInfo.exists();
+    for (auto path : translation_paths ){
+      for(auto p : {QString(':'), QString('.')}){
+        auto path2 = p + path;
+        success = myappTranslator.load(path2);
+        QFileInfo fileInfo(path2);
+        if(StartupInfo_st.FlagDebug){
+          qDebug() << path2 << success << fileInfo.exists();
+        }
+        if (success) break;
       }
       if (success) break;
     }
-    if (success) break;
   }
 #else
   success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
