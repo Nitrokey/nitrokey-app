@@ -71,7 +71,11 @@ int main(int argc, char *argv[]) {
 #endif
   a.installTranslator(&qtTranslator);
 
-  QSettings settings(QString("nitrokeyapp_config.ini"), QSettings::IniFormat);
+  QCoreApplication::setOrganizationName("Nitrokey");
+  QCoreApplication::setOrganizationDomain("nitrokey.com");
+  QCoreApplication::setApplicationName("Nitrokey App");
+
+  QSettings settings;
   const auto language_key = "main/language";
   if (StartupInfo_st.language_set){
     qDebug() << "Setting default language to " << StartupInfo_st.language_string;
