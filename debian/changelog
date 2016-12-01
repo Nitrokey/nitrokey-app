@@ -1,3 +1,9 @@
+nitrokey-app (0.6.1) xenial; urgency=low
+
+  * Update to version 0.6.1
+
+ -- Szczepan Zalega <szczepan@nitrokey.com>  Tue, 29 Nov 2016 12:05:36 +0100
+
 nitrokey-app (0.6) xenial; urgency=low
 
   * Update to version 0.6
