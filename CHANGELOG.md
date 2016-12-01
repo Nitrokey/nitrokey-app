@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.6.1](https://github.com/Nitrokey/nitrokey-app/tree/v0.6.1) (2016-11-29)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.6...v0.6.1)
+
+**Merged pull requests:**
+
+- Use native settings handler [\#206](https://github.com/Nitrokey/nitrokey-app/pull/206) ([szszszsz](https://github.com/szszszsz))
+- Add Arabic translation to resource file [\#204](https://github.com/Nitrokey/nitrokey-app/pull/204) ([szszszsz](https://github.com/szszszsz))
+
 ## [v0.6](https://github.com/Nitrokey/nitrokey-app/tree/v0.6) (2016-11-28)
 [Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.5.1...v0.6)
 
@@ -18,6 +26,7 @@
 
 **Merged pull requests:**
 
+- Changelog update [\#203](https://github.com/Nitrokey/nitrokey-app/pull/203) ([szszszsz](https://github.com/szszszsz))
 - Update README.md [\#202](https://github.com/Nitrokey/nitrokey-app/pull/202) ([szszszsz](https://github.com/szszszsz))
 - Add language CLI param [\#200](https://github.com/Nitrokey/nitrokey-app/pull/200) ([szszszsz](https://github.com/szszszsz))
 - Bump version to 0.6 [\#198](https://github.com/Nitrokey/nitrokey-app/pull/198) ([szszszsz](https://github.com/szszszsz))
