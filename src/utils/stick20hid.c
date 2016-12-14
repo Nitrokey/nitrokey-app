@@ -94,7 +94,7 @@ typeStick20ProductionInfos_st Stick20ProductionInfos_st;
 
 
 /* forward declaration */
-void DebugAppendFileGuiText (char* Text);
+void DebugAppendFileGuiText(const char *Text);
 
 void initDebugging (void)
 {
@@ -503,7 +503,7 @@ void DebugAppendFileStickText (char* Text)
 
 *******************************************************************************/
 
-void DebugAppendFileGuiText (char* Text)
+void DebugAppendFileGuiText(const char *Text)
 {
     FILE* fp;
 

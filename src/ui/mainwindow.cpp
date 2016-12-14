@@ -568,10 +568,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
 #define MAX_CONNECT_WAIT_TIME_IN_SEC 10
 
-int MainWindow::ExecStickCmd(char *Cmdline) {
+int MainWindow::ExecStickCmd(const char *Cmdline_) {
   int i;
   char *p;
   bool ret;
+  char * Cmdline = strdup(Cmdline_);
 
   printf("Connecting to nitrokey");
   // Wait for connect
@@ -667,6 +668,7 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
     printf("Unknown command\n");
   }
   cryptostick->disconnect();
+  free(Cmdline);
   return (0);
 }
 
@@ -1885,12 +1887,15 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
                                             "values up to 7 digits. Setting counter value to 0. Please retry."));
       }
     }
+
+#ifdef DEBUG
     if (DebugingActive) {
       if (cryptostick->activStick20)
-        qDebug() << "HOTP counter value: " << *(char *)slot->counter;
+        qDebug() << "HOTP counter value: " << *reinterpret_cast<char *>(slot->counter);
       else
-        qDebug() << "HOTP counter value: " << *(quint64 *)slot->counter;
+        qDebug() << "HOTP counter value: " << *reinterpret_cast<quint64 *> (slot->counter);
     }
+#endif
 
   }
 }
@@ -2057,7 +2062,8 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
     TextCount = QString("%1").arg(counter.toInt());
     ui->counterEdit->setText(TextCount); // .toHex());
   } else {
-    QString TextCount = QString("%1").arg(*(qulonglong *)cryptostick->HOTPSlots[slotNo]->counter);
+    QString TextCount = QString("%1")
+        .arg(cryptostick->HOTPSlots[slotNo]->interval); //use 64bit integer from counters union
     ui->counterEdit->setText(TextCount);
   }
   QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID, 2);
@@ -2652,8 +2658,6 @@ void MainWindow::startStick20SetupPasswordMatrix() {
 }
 
 void MainWindow::startStick20DebugAction() {
-  int ret;
-
   /*
      securitydialog dialog(this); ret = dialog.exec();
      csApplet()->warningBox("Encrypted volume is not secure.\nSelect \"Initialize
@@ -3608,8 +3612,6 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
 }
 
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
-  int ret;
-
   QString OutputText;
 
   if (FALSE == PWS_Access) {

@@ -1993,8 +1993,6 @@ int Device::changeUserPin(uint8_t *old_pin, uint8_t *new_pin) {
 
   uint8_t data[50];
 
-  uint32_t crc;
-
   memcpy(data, old_pin, 25);
   memcpy(data + 25, new_pin, 25);
 
@@ -2095,8 +2093,6 @@ int Device::changeAdminPin(uint8_t *old_pin, uint8_t *new_pin) {
   int res;
 
   uint8_t data[50];
-
-  uint32_t crc;
 
   memcpy(data, old_pin, 25);
   memcpy(data + 25, new_pin, 25);
@@ -2410,9 +2406,8 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
     return (false);
   }
 
-  int m = CS20_MAX_UPDATE_PASSWORD_LEN;
-  STRNCPY((char *)&SendString[1], sizeof(SendString) - 1, (char *)old_password, m);
-  STRNCPY((char *)&SendString[22], sizeof(SendString) - 22, (char *)new_password, m);
+  STRNCPY((char *)&SendString[1], sizeof(SendString) - 1, (char *)old_password, CS20_MAX_UPDATE_PASSWORD_LEN);
+  STRNCPY((char *)&SendString[22], sizeof(SendString) - 22, (char *)new_password, CS20_MAX_UPDATE_PASSWORD_LEN);
 
   cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN, SendString, sizeof(SendString));
   res = sendCommand(cmd);

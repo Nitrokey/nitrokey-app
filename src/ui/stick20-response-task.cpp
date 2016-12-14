@@ -296,7 +296,7 @@ void Stick20ResponseTask::checkStick20Status() {
   }
 }
 
-void Stick20ResponseTask::done(int Status) { EndFlag = TRUE; }
+void Stick20ResponseTask::done(int Status) { EndFlag = TRUE; Status;}
 
 void Stick20ResponseTask::GetResponse(void) {
   int i;
