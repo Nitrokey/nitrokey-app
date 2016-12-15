@@ -2955,7 +2955,14 @@ int Device::stick20GetDebugData(void) {
 
 bool Device::is_nkpro_07_rtm1() const { return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0 && !activStick20); }
 bool Device::is_nkpro_08_rtm2() const { return (firmwareVersion[0] == 8 && firmwareVersion[1] == 0 && !activStick20); }
-uint8_t Device::get_major_firmware_version() const { return (firmwareVersion[0]); }
+uint8_t Device::get_major_firmware_version() const {
+  if (is_nk_pro()){
+    return firmwareVersion[0];
+  } else if (is_nk_storage()){
+    return HID_Stick20Configuration_st.VersionInfo_au8[1];
+  }
+  return firmwareVersion[0];
+}
 bool Device::is_nk_pro() const {return !activStick20;}
 bool Device::is_nk_storage() const {return activStick20;}
 
