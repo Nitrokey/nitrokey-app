@@ -52,9 +52,9 @@ typedef struct {
   int PasswordMatrix;
   int LockHardware;
   int Cmd;
-  char *CmdLine;
+  const char *CmdLine;
   bool language_set;
-  char *language_string;
+  const char *language_string;
 } StartUpParameter_tst;
 
 enum trayMessageType { INFORMATION, WARNING, CRITICAL };
@@ -173,7 +173,7 @@ private:
   QString secretInClipboard;
   QString PWSInClipboard;
 
-  int ExecStickCmd(char *Cmdline);
+  int ExecStickCmd(const char *Cmdline_);
   int getNextCode(uint8_t slotNumber);
 
   void generatePasswordMenu();
