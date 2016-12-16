@@ -187,7 +187,7 @@ int DialogChangePassword::CheckResponse(bool NoStopFlag) {
 bool DialogChangePassword::SendNewPassword(void) {
   bool communicationSuccess;
   QByteArray PasswordString;
-  int password_length = STICK20_PASSOWRD_LEN;
+  constexpr int password_length = STICK20_PASSOWRD_LEN;
   unsigned char Data[password_length + 2];
 
   // Set kind of password
@@ -244,9 +244,8 @@ bool DialogChangePassword::SendNewPassword(void) {
 
 bool DialogChangePassword::Stick10ChangePassword(void) {
   int ret;
-  int password_length;
+  constexpr int password_length = STICK10_PASSWORD_LEN;
   QByteArray PasswordString;
-  password_length = STICK10_PASSWORD_LEN;
   unsigned char old_pin[password_length + 1];
   unsigned char new_pin[password_length + 1];
 
@@ -350,9 +349,8 @@ bool DialogChangePassword::ResetUserPasswordStick10(void) {
 
 bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
   bool commandSuccess;
-  int password_length;
   QByteArray PasswordString;
-  password_length = CS20_MAX_UPDATE_PASSWORD_LEN;
+  constexpr int password_length = CS20_MAX_UPDATE_PASSWORD_LEN;
   unsigned char old_pin[password_length + 1];
   unsigned char new_pin[password_length + 1];
 
