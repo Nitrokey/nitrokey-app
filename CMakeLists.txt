@@ -299,6 +299,8 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${resources_ouput}
 )
 
+#set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_EXTENSIONS OFF) ## on g++ this ensures: -std=c++11
 set_property(TARGET nitrokey-app PROPERTY CXX_STANDARD 11)
 
 INSTALL(TARGETS nitrokey-app DESTINATION bin)

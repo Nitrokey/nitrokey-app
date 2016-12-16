@@ -223,8 +223,6 @@ void DebugAppendTimestampToLog (void)
 {
     char* OutputString;
 
-    char CrString[2] = "\n";
-
     OutputString = GetTimeStampForLog ();
 
     if (0 == strlen (OutputString))

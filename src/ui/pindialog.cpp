@@ -31,8 +31,8 @@
 
 PinDialog::PinDialog(const QString &title, const QString &label, Device *cryptostick, Usage usage,
                      PinType pinType, bool ShowMatrix, QWidget *parent)
-    : cryptostick(cryptostick), _usage(usage), _pinType(pinType), QDialog(parent),
-      ui(new Ui::PinDialog) {
+    : QDialog(parent), cryptostick(cryptostick), ui(new Ui::PinDialog), _usage(usage), _pinType(pinType)
+{
   ui->setupUi(this);
 
   connect(ui->okButton, SIGNAL(clicked()), this, SLOT(onOkButtonClicked()));
