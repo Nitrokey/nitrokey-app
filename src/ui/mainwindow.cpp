@@ -2976,7 +2976,7 @@ void MainWindow::on_writeButton_clicked() {
 
   PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
                    PinDialog::ADMIN_PIN);
-  bool ok;
+  bool ok = true;
 
   if (slotNo > TOTP_SlotCount)
     slotNo -= (TOTP_SlotCount + 1);
@@ -3056,7 +3056,7 @@ void MainWindow::on_writeButton_clicked() {
         }
               csApplet()->warningBox(MsgText);
       }
-    } while (CMD_STATUS_NOT_AUTHORIZED == res);
+    } while (CMD_STATUS_NOT_AUTHORIZED == res && QDialog::Accepted == ok);
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Sleep::msleep(500);
@@ -3188,7 +3188,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 
   PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
                    PinDialog::ADMIN_PIN);
-  bool ok;
+  bool ok = true;
 
   if (cryptostick->isConnected) {
 
@@ -3248,7 +3248,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
       default:
           csApplet()->warningBox(tr("Error writing configuration!"));
       }
-    } while (CMD_STATUS_NOT_AUTHORIZED == res);
+    } while (CMD_STATUS_NOT_AUTHORIZED == res && QDialog::Accepted == ok);
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Sleep::msleep(500);
