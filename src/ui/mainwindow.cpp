@@ -2765,6 +2765,13 @@ int MainWindow::UpdateDynamicMenuEntrys(void) {
   return (TRUE);
 }
 
+void MainWindow::storage_check_symlink(){
+    if (!QFileInfo("/dev/nitrospace").isSymLink()) {
+        csApplet()->warningBox(tr("Warning: The encrypted Volume is not formatted.\n\"Use GParted "
+                                          "or fdisk for this.\""));
+    }
+}
+
 int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
   int ret;
 
@@ -2913,11 +2920,7 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
       HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_CRYPTED_VOLUME_BIT_PLACE);
       UpdateDynamicMenuEntrys();
 #ifdef Q_OS_LINUX
-      sleep(4); // FIXME change hard sleep to thread
-      if (!QFileInfo("/dev/nitrospace").isSymLink()) {
-          csApplet()->warningBox(tr("Warning: The encrypted Volume is not formatted.\n\"Use GParted "
-                                            "or fdisk for this.\""));
-      }
+      QTimer::singleShot(4000, this, SLOT(storage_check_symlink()));
 #endif // if Q_OS_LINUX
       break;
     case STICK20_CMD_DISABLE_CRYPTED_PARI:
