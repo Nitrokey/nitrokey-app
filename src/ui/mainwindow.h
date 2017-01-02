@@ -231,6 +231,7 @@ public slots:
 private slots:
   void resizeMin();
   void checkConnection();
+  void storage_check_symlink();
 
   void on_writeButton_clicked();
   void displayCurrentTotpSlotConfig(uint8_t slotNo);
