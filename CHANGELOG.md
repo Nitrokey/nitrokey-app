@@ -1,11 +1,26 @@
 # Change Log
 
-## [v0.6.1](https://github.com/Nitrokey/nitrokey-app/tree/v0.6.1) (2016-11-29)
+## [v0.6.2](https://github.com/Nitrokey/nitrokey-app/tree/v0.6.2) (2017-01-03)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.6.1...v0.6.2)
+
+**Fixed bugs:**
+
+- OTP not working on Windows [\#214](https://github.com/Nitrokey/nitrokey-app/issues/214)
+
+**Merged pull requests:**
+
+- Pack union for writing OTP slot data [\#215](https://github.com/Nitrokey/nitrokey-app/pull/215) ([szszszsz](https://github.com/szszszsz))
+- Do not block on waiting for symlink to storage being available [\#213](https://github.com/Nitrokey/nitrokey-app/pull/213) ([szszszsz](https://github.com/szszszsz))
+- Break asking PIN loop when user cancels it [\#212](https://github.com/Nitrokey/nitrokey-app/pull/212) ([szszszsz](https://github.com/szszszsz))
+- Fix compilation warnings [\#208](https://github.com/Nitrokey/nitrokey-app/pull/208) ([szszszsz](https://github.com/szszszsz))
+
+## [v0.6.1](https://github.com/Nitrokey/nitrokey-app/tree/v0.6.1) (2016-12-01)
 [Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.6...v0.6.1)
 
 **Merged pull requests:**
 
 - Use native settings handler [\#206](https://github.com/Nitrokey/nitrokey-app/pull/206) ([szszszsz](https://github.com/szszszsz))
+- Bump version to 0.6.1 [\#205](https://github.com/Nitrokey/nitrokey-app/pull/205) ([szszszsz](https://github.com/szszszsz))
 - Add Arabic translation to resource file [\#204](https://github.com/Nitrokey/nitrokey-app/pull/204) ([szszszsz](https://github.com/szszszsz))
 
 ## [v0.6](https://github.com/Nitrokey/nitrokey-app/tree/v0.6) (2016-11-28)

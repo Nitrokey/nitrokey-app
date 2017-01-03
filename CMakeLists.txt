@@ -4,7 +4,7 @@ cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
 
 PROJECT(NitrokeyApp)
-SET(PROJECT_VERSION "0.6.1")
+SET(PROJECT_VERSION "0.6.2")
 
 #Please use either 'cmake -DHAVE_LIBAPPINDICATOR=NO' or 'ccmake' to change this value
 OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" NO)
