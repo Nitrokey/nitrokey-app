@@ -542,7 +542,7 @@ struct WriteToOTPSlot {
     union {
         uint64_t slot_counter_or_interval;
         uint8_t slot_counter_s[8];
-    };
+    } __packed;
     uint8_t _slot_config;
     uint8_t slot_token_id[13]; /** OATH Token Identifier */
 } __packed;
