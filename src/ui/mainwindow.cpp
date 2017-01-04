@@ -3397,14 +3397,16 @@ void MainWindow::on_eraseButton_clicked() {
   displayCurrentSlotConfig();
 }
 
+#include <memory>
+
 void MainWindow::on_randomSecretButton_clicked() {
   int i = 0;
 
 
-  int local_secret_length = get_supported_secret_length_base32();
-  uint8_t secret[local_secret_length];
+  const int local_secret_length = get_supported_secret_length_base32();
+  std::array<uint8_t, SECRET_LENGTH_BASE32> secret;
 
-  char temp;
+  uint8_t temp;
 
   while (i < local_secret_length) {
     temp = qrand() & 0xFF;
@@ -3414,7 +3416,7 @@ void MainWindow::on_randomSecretButton_clicked() {
     }
   }
 
-  QByteArray secretArray((char *)secret, local_secret_length);
+  QByteArray secretArray((char*)secret.data(), local_secret_length);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secretArray);

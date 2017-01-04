@@ -102,7 +102,9 @@ typeStick20ProductionInfos_st Stick20ProductionInfos_st;
 #define CMAKE_CXX_FLAGS ""
 #endif
 #ifndef HAVE_LIBAPPINDICATOR
-#define HAVE_LIBAPPINDICATOR "NO"
+#define CMAKE_HAVE_LIBAPPINDICATOR "NO"
+#else
+#define CMAKE_HAVE_LIBAPPINDICATOR "YES"
 #endif
 
 /* forward declaration */
@@ -123,7 +125,7 @@ void initDebugging (void)
     DebugAppendTextGui ("CMAKE_BUILD_TYPE " CMAKE_BUILD_TYPE "\n");
     DebugAppendTextGui ("CMAKE_CXX_COMPILER " CMAKE_CXX_COMPILER "\n");
     DebugAppendTextGui ("CMAKE_CXX_FLAGS " CMAKE_CXX_FLAGS "\n");
-    DebugAppendTextGui ("HAVE_LIBAPPINDICATOR: " HAVE_LIBAPPINDICATOR "\n");
+    DebugAppendTextGui ("HAVE_LIBAPPINDICATOR: " CMAKE_HAVE_LIBAPPINDICATOR "\n");
 
     DebugAppendTextGui ((char *) "Start Debug - ");
 #ifdef WIN32
@@ -222,8 +224,6 @@ char* GetTimeStampForLog (void);
 void DebugAppendTimestampToLog (void)
 {
     char* OutputString;
-
-    char CrString[2] = "\n";
 
     OutputString = GetTimeStampForLog ();
 

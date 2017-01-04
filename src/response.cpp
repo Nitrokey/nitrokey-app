@@ -393,15 +393,34 @@ void Response::DebugResponse() {
   // responseCRC = ((uint32_t *)(reportBuffer+61))[0];
 }
 
-/*******************************************************************************
+#ifndef __WIN32
+#define __packed __attribute__((packed))
+#endif
 
-  getResponse
+#ifdef __WIN32
+#define __packed
+#pragma pack(push)
+#pragma pack(1)
+#endif
 
-  Reviews
-  Date      Reviewer        Info
-  12.08.13  RB              First review
+struct DeviceResponse{
+    union{
+        struct{
+          uint8_t _reserved;
+          uint8_t deviceStatus;
+          uint8_t lastCommandType;
+          uint32_t lastCommandCRC;
+          uint8_t lastCommandStatus;
+          uint8_t data[PAYLOAD_SIZE];
+          uint32_t responseCRC;
+        } __packed;
+        uint8_t rawData[65];
+    };
+};
+#ifdef __WIN32
+#pragma pack(pop)
+#endif
 
-*******************************************************************************/
 int Response::getResponse(Device *device) {
   int res;
 
@@ -415,11 +434,15 @@ int Response::getResponse(Device *device) {
   if (res == -1) {
     return -1;
   }
-  deviceStatus = reportBuffer[1];
-  lastCommandType = reportBuffer[2];
-  lastCommandCRC = reinterpret_cast<uint32_t *>(reportBuffer + 3)[0];
-  lastCommandStatus = reportBuffer[7];
-  responseCRC = reinterpret_cast<uint32_t *>(reportBuffer + 61)[0];
+  DeviceResponse response;
+  static_assert(sizeof(DeviceResponse) == sizeof(reportBuffer),
+                "response struct size not equal buffer size - please check pack instructions for your compiler");
+  memcpy (response.rawData, reportBuffer, sizeof(reportBuffer));
+  deviceStatus = response.deviceStatus;
+  lastCommandType = response.lastCommandType;
+  lastCommandCRC = response.lastCommandCRC;
+  lastCommandStatus = response.lastCommandStatus;
+  responseCRC = response.responseCRC;
 
   size_t len = std::min(sizeof(data), sizeof(reportBuffer) - 8);
   memcpy(data, reportBuffer + 8, len);

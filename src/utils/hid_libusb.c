@@ -873,8 +873,6 @@ extern "C"
 
     libusb_device* usb_dev;
 
-    ssize_t num_devs;
-
     int res;
 
     int d = 0;
@@ -883,7 +881,7 @@ extern "C"
 
         hid_init ();
 
-        num_devs = libusb_get_device_list (usb_context, &devs);
+        libusb_get_device_list (usb_context, &devs);
         while ((usb_dev = devs[d++]) != NULL)
         {
     struct libusb_device_descriptor desc;
