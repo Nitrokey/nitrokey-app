@@ -542,7 +542,7 @@ struct WriteToOTPSlot {
     union {
         uint64_t slot_counter_or_interval;
         uint8_t slot_counter_s[8];
-    };
+    } __packed;
     uint8_t _slot_config;
     uint8_t slot_token_id[13]; /** OATH Token Identifier */
 } __packed;
@@ -1993,8 +1993,6 @@ int Device::changeUserPin(uint8_t *old_pin, uint8_t *new_pin) {
 
   uint8_t data[50];
 
-  uint32_t crc;
-
   memcpy(data, old_pin, 25);
   memcpy(data + 25, new_pin, 25);
 
@@ -2095,8 +2093,6 @@ int Device::changeAdminPin(uint8_t *old_pin, uint8_t *new_pin) {
   int res;
 
   uint8_t data[50];
-
-  uint32_t crc;
 
   memcpy(data, old_pin, 25);
   memcpy(data + 25, new_pin, 25);
@@ -2410,9 +2406,8 @@ bool Device::stick20NewUpdatePassword(uint8_t *old_password, uint8_t *new_passwo
     return (false);
   }
 
-  int m = CS20_MAX_UPDATE_PASSWORD_LEN;
-  STRNCPY((char *)&SendString[1], sizeof(SendString) - 1, (char *)old_password, m);
-  STRNCPY((char *)&SendString[22], sizeof(SendString) - 22, (char *)new_password, m);
+  STRNCPY((char *)&SendString[1], sizeof(SendString) - 1, (char *)old_password, CS20_MAX_UPDATE_PASSWORD_LEN);
+  STRNCPY((char *)&SendString[22], sizeof(SendString) - 22, (char *)new_password, CS20_MAX_UPDATE_PASSWORD_LEN);
 
   cmd = new Command(STICK20_CMD_CHANGE_UPDATE_PIN, SendString, sizeof(SendString));
   res = sendCommand(cmd);
@@ -2960,7 +2955,14 @@ int Device::stick20GetDebugData(void) {
 
 bool Device::is_nkpro_07_rtm1() const { return (firmwareVersion[0] == 7 && firmwareVersion[1] == 0 && !activStick20); }
 bool Device::is_nkpro_08_rtm2() const { return (firmwareVersion[0] == 8 && firmwareVersion[1] == 0 && !activStick20); }
-uint8_t Device::get_major_firmware_version() const { return (firmwareVersion[0]); }
+uint8_t Device::get_major_firmware_version() const {
+  if (is_nk_pro()){
+    return firmwareVersion[0];
+  } else if (is_nk_storage()){
+    return HID_Stick20Configuration_st.VersionInfo_au8[1];
+  }
+  return firmwareVersion[0];
+}
 bool Device::is_nk_pro() const {return !activStick20;}
 bool Device::is_nk_storage() const {return activStick20;}
 
