@@ -568,10 +568,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
 #define MAX_CONNECT_WAIT_TIME_IN_SEC 10
 
-int MainWindow::ExecStickCmd(char *Cmdline) {
+int MainWindow::ExecStickCmd(const char *Cmdline_) {
   int i;
   char *p;
   bool ret;
+  char * Cmdline = strdup(Cmdline_);
 
   printf("Connecting to nitrokey");
   // Wait for connect
@@ -667,6 +668,7 @@ int MainWindow::ExecStickCmd(char *Cmdline) {
     printf("Unknown command\n");
   }
   cryptostick->disconnect();
+  free(Cmdline);
   return (0);
 }
 
@@ -1885,12 +1887,15 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
                                             "values up to 7 digits. Setting counter value to 0. Please retry."));
       }
     }
+
+#ifdef DEBUG
     if (DebugingActive) {
       if (cryptostick->activStick20)
-        qDebug() << "HOTP counter value: " << *(char *)slot->counter;
+        qDebug() << "HOTP counter value: " << *reinterpret_cast<char *>(slot->counter);
       else
-        qDebug() << "HOTP counter value: " << *(quint64 *)slot->counter;
+        qDebug() << "HOTP counter value: " << *reinterpret_cast<quint64 *> (slot->counter);
     }
+#endif
 
   }
 }
@@ -2057,7 +2062,8 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
     TextCount = QString("%1").arg(counter.toInt());
     ui->counterEdit->setText(TextCount); // .toHex());
   } else {
-    QString TextCount = QString("%1").arg(*(qulonglong *)cryptostick->HOTPSlots[slotNo]->counter);
+    QString TextCount = QString("%1")
+        .arg(cryptostick->HOTPSlots[slotNo]->interval); //use 64bit integer from counters union
     ui->counterEdit->setText(TextCount);
   }
   QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID, 2);
@@ -2652,8 +2658,6 @@ void MainWindow::startStick20SetupPasswordMatrix() {
 }
 
 void MainWindow::startStick20DebugAction() {
-  int ret;
-
   /*
      securitydialog dialog(this); ret = dialog.exec();
      csApplet()->warningBox("Encrypted volume is not secure.\nSelect \"Initialize
@@ -2759,6 +2763,13 @@ int MainWindow::UpdateDynamicMenuEntrys(void) {
   generateMenu();
 
   return (TRUE);
+}
+
+void MainWindow::storage_check_symlink(){
+    if (!QFileInfo("/dev/nitrospace").isSymLink()) {
+        csApplet()->warningBox(tr("Warning: The encrypted Volume is not formatted.\n\"Use GParted "
+                                          "or fdisk for this.\""));
+    }
 }
 
 int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
@@ -2909,11 +2920,7 @@ int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
       HID_Stick20Configuration_st.VolumeActiceFlag_u8 = (1 << SD_CRYPTED_VOLUME_BIT_PLACE);
       UpdateDynamicMenuEntrys();
 #ifdef Q_OS_LINUX
-      sleep(4); // FIXME change hard sleep to thread
-      if (!QFileInfo("/dev/nitrospace").isSymLink()) {
-          csApplet()->warningBox(tr("Warning: The encrypted Volume is not formatted.\n\"Use GParted "
-                                            "or fdisk for this.\""));
-      }
+      QTimer::singleShot(4000, this, SLOT(storage_check_symlink()));
 #endif // if Q_OS_LINUX
       break;
     case STICK20_CMD_DISABLE_CRYPTED_PARI:
@@ -2969,7 +2976,7 @@ void MainWindow::on_writeButton_clicked() {
 
   PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
                    PinDialog::ADMIN_PIN);
-  bool ok;
+  bool ok = true;
 
   if (slotNo > TOTP_SlotCount)
     slotNo -= (TOTP_SlotCount + 1);
@@ -3049,7 +3056,7 @@ void MainWindow::on_writeButton_clicked() {
         }
               csApplet()->warningBox(MsgText);
       }
-    } while (CMD_STATUS_NOT_AUTHORIZED == res);
+    } while (CMD_STATUS_NOT_AUTHORIZED == res && QDialog::Accepted == ok);
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Sleep::msleep(500);
@@ -3181,7 +3188,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 
   PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
                    PinDialog::ADMIN_PIN);
-  bool ok;
+  bool ok = true;
 
   if (cryptostick->isConnected) {
 
@@ -3241,7 +3248,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
       default:
           csApplet()->warningBox(tr("Error writing configuration!"));
       }
-    } while (CMD_STATUS_NOT_AUTHORIZED == res);
+    } while (CMD_STATUS_NOT_AUTHORIZED == res && QDialog::Accepted == ok);
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Sleep::msleep(500);
@@ -3608,8 +3615,6 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
 }
 
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
-  int ret;
-
   QString OutputText;
 
   if (FALSE == PWS_Access) {
