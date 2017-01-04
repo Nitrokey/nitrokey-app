@@ -5,6 +5,7 @@ export QT_SELECT=qt5
 
 clean:
 	-rm build
+	-rm nitrokey-app
 	dh_testdir
 	qmake -qt=qt5
 	make clean
@@ -12,10 +13,13 @@ clean:
 
 build:
 	qmake -qt=qt5
-	make
+	${MAKE}
 	touch build
 
-binary:
+nitrokey-app: build
+	
+
+binary: nitrokey-app
 	dh_testdir
 	dh_testroot
 	dh_prep

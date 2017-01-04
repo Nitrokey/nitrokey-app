@@ -417,9 +417,9 @@ int Response::getResponse(Device *device) {
   }
   deviceStatus = reportBuffer[1];
   lastCommandType = reportBuffer[2];
-  lastCommandCRC = ((uint32_t *)(reportBuffer + 3))[0];
+  lastCommandCRC = reinterpret_cast<uint32_t *>(reportBuffer + 3)[0];
   lastCommandStatus = reportBuffer[7];
-  responseCRC = ((uint32_t *)(reportBuffer + 61))[0];
+  responseCRC = reinterpret_cast<uint32_t *>(reportBuffer + 61)[0];
 
   size_t len = std::min(sizeof(data), sizeof(reportBuffer) - 8);
   memcpy(data, reportBuffer + 8, len);

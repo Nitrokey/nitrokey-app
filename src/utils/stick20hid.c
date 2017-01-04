@@ -92,9 +92,21 @@ int Stick20_ProductionInfosChanged = FALSE;
 
 typeStick20ProductionInfos_st Stick20ProductionInfos_st;
 
+#ifndef CMAKE_BUILD_TYPE
+#define CMAKE_BUILD_TYPE ""
+#endif
+#ifndef CMAKE_CXX_COMPILER
+#define CMAKE_CXX_COMPILER ""
+#endif
+#ifndef CMAKE_CXX_FLAGS
+#define CMAKE_CXX_FLAGS ""
+#endif
+#ifndef HAVE_LIBAPPINDICATOR
+#define HAVE_LIBAPPINDICATOR "NO"
+#endif
 
 /* forward declaration */
-void DebugAppendFileGuiText (char* Text);
+void DebugAppendFileGuiText(const char *Text);
 
 void initDebugging (void)
 {
@@ -107,6 +119,11 @@ void initDebugging (void)
 
     STRCPY (DebugingStickFilename, sizeof (DebugingStickFilename), "Firmwarelog.txt");
     STRCPY (DebugingGuiFilename, sizeof (DebugingGuiFilename), "Guilog.txt");
+
+    DebugAppendTextGui ("CMAKE_BUILD_TYPE " CMAKE_BUILD_TYPE "\n");
+    DebugAppendTextGui ("CMAKE_CXX_COMPILER " CMAKE_CXX_COMPILER "\n");
+    DebugAppendTextGui ("CMAKE_CXX_FLAGS " CMAKE_CXX_FLAGS "\n");
+    DebugAppendTextGui ("HAVE_LIBAPPINDICATOR: " HAVE_LIBAPPINDICATOR "\n");
 
     DebugAppendTextGui ((char *) "Start Debug - ");
 #ifdef WIN32
@@ -503,7 +520,7 @@ void DebugAppendFileStickText (char* Text)
 
 *******************************************************************************/
 
-void DebugAppendFileGuiText (char* Text)
+void DebugAppendFileGuiText(const char *Text)
 {
     FILE* fp;
 
