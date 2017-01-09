@@ -35,8 +35,7 @@ class PinDialog : public QDialog {
 
   unsigned char password[50];
 
-  explicit PinDialog(const QString &title, const QString &label, Usage usage, PinType pinType, bool ShowMatrix,
-                       QWidget *parent);
+  explicit PinDialog(const QString &title, const QString &label, Usage usage, PinType pinType, QWidget *parent);
   ~PinDialog();
 
   // void init(char *text,int RetryCount);

@@ -21,31 +21,26 @@
 #ifndef HOTPSLOT_H
 #define HOTPSLOT_H
 
-#ifdef _MSC_VER
-#define uint8_t unsigned char
-#define uint32_t unsigned long
-#else
 #include "inttypes.h"
-#endif
 
 static const int SECRET_LENGTH = 40;
-static const int SECRET_LENGTH_BASE32 = SECRET_LENGTH/10*16;
-static const int SECRET_LENGTH_HEX = SECRET_LENGTH*2;
+static const int SECRET_LENGTH_BASE32 = SECRET_LENGTH / 10 * 16;
+static const int SECRET_LENGTH_HEX = SECRET_LENGTH * 2;
 
 class OTPSlot {
 public:
-  OTPSlot();
+    OTPSlot();
 
     uint8_t slotNumber;
-  uint8_t slotName[15];
-  uint8_t secret[SECRET_LENGTH];
-    union{
-      uint8_t counter[8];
-      uint64_t interval;
+    uint8_t slotName[15];
+    uint8_t secret[SECRET_LENGTH];
+    union {
+        uint8_t counter[8];
+        uint64_t interval;
     };
-  uint8_t config;
-  uint8_t tokenID[13];
-  bool isProgrammed;
+    uint8_t config;
+    uint8_t tokenID[13];
+    bool isProgrammed;
 };
 
 #endif // HOTPSLOT_H

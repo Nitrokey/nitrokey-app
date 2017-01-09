@@ -29,8 +29,7 @@
 
 #define LOCAL_PASSWORD_SIZE 40 // Todo make define global
 
-PinDialog::PinDialog(const QString &title, const QString &label, Usage usage, PinType pinType, bool ShowMatrix,
-                     QWidget *parent)
+PinDialog::PinDialog(const QString &title, const QString &label, Usage usage, PinType pinType, QWidget *parent)
     : _usage(usage), _pinType(pinType), QDialog(parent),
       ui(new Ui::PinDialog) {
   ui->setupUi(this);
