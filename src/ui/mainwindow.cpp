@@ -889,7 +889,7 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
 
     memset(slot->counter, 0, 8);
     // Nitrokey Storage needs counter value in text but Pro in binary [#60]
-    if (cryptostick->activStick20 == false) {
+    if (libada::i()->isStorageDeviceConnected() == false) {
       bool conversionSuccess = false;
       uint64_t counterFromGUI = 0;
       if (0 != ui->counterEdit->text().toLatin1().length()) {
@@ -997,8 +997,6 @@ void MainWindow::generateTOTPConfig(OTPSlot *slot) {
 }
 
 void MainWindow::generateAllConfigs() {
-  cryptostick->initializeConfig();
-  cryptostick->getSlotConfigs();
   displayCurrentSlotConfig();
   generateMenu();
 }
@@ -1016,50 +1014,41 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->checkBox->setEnabled(false);
   ui->secretEdit->setPlaceholderText("********************************");
 
-  ui->nameEdit->setText(QString((char *)cryptostick->TOTPSlots[slotNo]->slotName));
-  QByteArray secret((char *)cryptostick->TOTPSlots[slotNo]->secret, SECRET_LENGTH);
+  ui->nameEdit->setText(QString::fromStdString(libada::i()->getTOTPSlotName(slotNo)));
+//  QByteArray secret((char *)cryptostick->TOTPSlots[slotNo]->secret, SECRET_LENGTH);
 
   ui->base32RadioButton->setChecked(true);
-  ui->secretEdit->setText(secret); // .toHex());
+//  ui->secretEdit->setText(secret); // .toHex());
 
   ui->counterEdit->setText("0");
 
-  QByteArray omp((char *)cryptostick->TOTPSlots[slotNo]->tokenID, 2);
+  //TODO readout TOTP slot data
+//  QByteArray omp((char *)cryptostick->TOTPSlots[slotNo]->tokenID, 2);
+//  ui->ompEdit->setText(QString(omp));
 
-  ui->ompEdit->setText(QString(omp));
+//  QByteArray tt((char *)cryptostick->TOTPSlots[slotNo]->tokenID + 2, 2);
+//  ui->ttEdit->setText(QString(tt));
 
-  QByteArray tt((char *)cryptostick->TOTPSlots[slotNo]->tokenID + 2, 2);
+//  QByteArray mui((char *)cryptostick->TOTPSlots[slotNo]->tokenID + 4, 8);
+//  ui->muiEdit->setText(QString(mui));
 
-  ui->ttEdit->setText(QString(tt));
+//  int interval = cryptostick->TOTPSlots[slotNo]->interval;
+//  if (interval<1) interval = 30;
+//  ui->intervalSpinBox->setValue(interval);
 
-  QByteArray mui((char *)cryptostick->TOTPSlots[slotNo]->tokenID + 4, 8);
+//  if (cryptostick->TOTPSlots[slotNo]->config & (1 << 0))
+//    ui->digits8radioButton->setChecked(true);
+//  else
+//    ui->digits6radioButton->setChecked(true);
 
-  ui->muiEdit->setText(QString(mui));
+//  ui->enterCheckBox->setChecked((cryptostick->TOTPSlots[slotNo]->config & (1 << 1)));
+//  ui->tokenIDCheckBox->setChecked(cryptostick->TOTPSlots[slotNo]->config & (1 << 2));
 
-  int interval = cryptostick->TOTPSlots[slotNo]->interval;
-  if (interval<1) interval = 30;
-  ui->intervalSpinBox->setValue(interval);
-
-  if (cryptostick->TOTPSlots[slotNo]->config & (1 << 0))
-    ui->digits8radioButton->setChecked(true);
-  else
-    ui->digits6radioButton->setChecked(true);
-
-  if (cryptostick->TOTPSlots[slotNo]->config & (1 << 1))
-    ui->enterCheckBox->setChecked(true);
-  else
-    ui->enterCheckBox->setChecked(false);
-
-  if (cryptostick->TOTPSlots[slotNo]->config & (1 << 2))
-    ui->tokenIDCheckBox->setChecked(true);
-  else
-    ui->tokenIDCheckBox->setChecked(false);
-
-  if (!cryptostick->TOTPSlots[slotNo]->isProgrammed) {
+  if (!libada::i()->isTOTPSlotProgrammed(i)) {
     ui->ompEdit->setText("NK");
     ui->ttEdit->setText("01");
-    QByteArray cardSerial = QByteArray((char *)cryptostick->cardSerial).toHex();
-    ui->muiEdit->setText(QString("%1").arg(QString(cardSerial), 8, '0'));
+//    QByteArray cardSerial = QByteArray((char *)cryptostick->cardSerial).toHex();
+//    ui->muiEdit->setText(QString("%1").arg(QString(cardSerial), 8, '0'));
   }
 }
 
@@ -1077,54 +1066,48 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->secretEdit->setPlaceholderText("********************************");
 
   // slotNo=slotNo+0x10;
-  ui->nameEdit->setText(QString((char *)cryptostick->HOTPSlots[slotNo]->slotName));
+  ui->nameEdit->setText(QString::fromStdString(libada::i()->getHOTPSlotName(slotNo)));
   QByteArray secret((char *)cryptostick->HOTPSlots[slotNo]->secret, SECRET_LENGTH);
 
   ui->base32RadioButton->setChecked(true);
   ui->secretEdit->setText(secret); // .toHex());
 
-  if (cryptostick->activStick20) {
-    QByteArray counter((char *)cryptostick->HOTPSlots[slotNo]->counter, 8);
-    QString TextCount;
-    TextCount = QString("%1").arg(counter.toInt());
-    ui->counterEdit->setText(TextCount); // .toHex());
-  } else {
-    QString TextCount = QString("%1")
-        .arg(cryptostick->HOTPSlots[slotNo]->interval); //use 64bit integer from counters union
-    ui->counterEdit->setText(TextCount);
-  }
-  QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID, 2);
+  //TODO get data for HOTP slot
 
-  ui->ompEdit->setText(QString(omp));
+//  if (libada::i()->isStorageDeviceConnected()) {
+//    QByteArray counter((char *)cryptostick->HOTPSlots[slotNo]->counter, 8);
+//    QString TextCount;
+//    TextCount = QString("%1").arg(counter.toInt());
+//    ui->counterEdit->setText(TextCount); // .toHex());
+//  } else {
+//    QString TextCount = QString("%1")
+//        .arg(cryptostick->HOTPSlots[slotNo]->interval); //use 64bit integer from counters union
+//    ui->counterEdit->setText(TextCount);
+//  }
+//
+//  QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID, 2);
+//  ui->ompEdit->setText(QString(omp));
+//
+//  QByteArray tt((char *)cryptostick->HOTPSlots[slotNo]->tokenID + 2, 2);
+//  ui->ttEdit->setText(QString(tt));
+//
+//  QByteArray mui((char *)cryptostick->HOTPSlots[slotNo]->tokenID + 4, 8);
+//  ui->muiEdit->setText(QString(mui));
+//
+//  if (cryptostick->HOTPSlots[slotNo]->config & (1 << 0))
+//    ui->digits8radioButton->setChecked(true);
+//  else
+//    ui->digits6radioButton->setChecked(true);
 
-  QByteArray tt((char *)cryptostick->HOTPSlots[slotNo]->tokenID + 2, 2);
+  ui->enterCheckBox->setChecked((cryptostick->HOTPSlots[slotNo]->config & (1 << 1)));
 
-  ui->ttEdit->setText(QString(tt));
-
-  QByteArray mui((char *)cryptostick->HOTPSlots[slotNo]->tokenID + 4, 8);
-
-  ui->muiEdit->setText(QString(mui));
-
-  if (cryptostick->HOTPSlots[slotNo]->config & (1 << 0))
-    ui->digits8radioButton->setChecked(true);
-  else
-    ui->digits6radioButton->setChecked(true);
-
-  if (cryptostick->HOTPSlots[slotNo]->config & (1 << 1))
-    ui->enterCheckBox->setChecked(true);
-  else
-    ui->enterCheckBox->setChecked(false);
-
-  if (cryptostick->HOTPSlots[slotNo]->config & (1 << 2))
-    ui->tokenIDCheckBox->setChecked(true);
-  else
-    ui->tokenIDCheckBox->setChecked(false);
+  ui->tokenIDCheckBox->setChecked((cryptostick->HOTPSlots[slotNo]->config & (1 << 2)));
 
   if (!cryptostick->HOTPSlots[slotNo]->isProgrammed) {
     ui->ompEdit->setText("NK");
     ui->ttEdit->setText("01");
-    QByteArray cardSerial = QByteArray((char *)cryptostick->cardSerial).toHex();
-    ui->muiEdit->setText(QString("%1").arg(QString(cardSerial), 8, '0'));
+//    QByteArray cardSerial = QByteArray((char *)cryptostick->cardSerial).toHex();
+//    ui->muiEdit->setText(QString("%1").arg(QString(cardSerial), 8, '0'));
   }
 }
 
@@ -1203,7 +1186,7 @@ void MainWindow::startConfiguration() {
     cryptostick->getSlotConfigs();
     displayCurrentSlotConfig();
 
-      translateDeviceStatusToUserMessage(cryptostick->getStatus());
+//      translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
     displayCurrentGeneralConfig();
 
     SetupPasswordSafeConfig();
