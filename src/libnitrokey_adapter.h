@@ -8,6 +8,9 @@
 #include <memory>
 #include <string>
 
+#define HOTP_SLOT_COUNT 3
+#define TOTP_SLOT_COUNT 15
+#define STICK20_PASSOWRD_LEN 25
 
 class libnitrokey_adapter {
   private:
@@ -27,6 +30,7 @@ public:
     int getStorageSDCardSize();
 
     bool isDeviceConnected();
+    bool isDeviceInitialized();
     bool isStorageDeviceConnected();
 };
 

@@ -24,22 +24,11 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QValidator>
-
+#include <QMutex>
 #include <climits>
-
-#define uint64_t unsigned long long
+#include "hotpslot.h"
 
 #define TRAY_MSG_TIMEOUT 5000
-
-#ifdef HAVE_LIBAPPINDICATOR
-#undef signals
-extern "C" {
-#include <gtk/gtk.h>
-#include <libappindicator/app-indicator.h>
-#include <libnotify/notify.h>
-}
-#define signals public
-#endif // HAVE_LIBAPPINDICATOR
 
 namespace Ui {
 class MainWindow;
@@ -58,7 +47,6 @@ typedef struct {
 
 enum trayMessageType { INFORMATION, WARNING, CRITICAL };
 
-#include "hotpslot.h"
 
 class MainWindow : public QMainWindow {
   Q_OBJECT public : explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
@@ -95,10 +83,6 @@ private:
                        int timeout);
 
   Ui::MainWindow *ui;
-#ifdef HAVE_LIBAPPINDICATOR
-  AppIndicator *indicator;
-  GtkWidget *indicatorMenu;
-#endif // HAVE_LIBAPPINDICATOR
 
   QSystemTrayIcon *trayIcon;
   QMenu *trayMenu;
@@ -112,7 +96,6 @@ private:
   unsigned char HOTP_SlotCount;
   unsigned char TOTP_SlotCount;
 
-  Device *cryptostick;
   void getSlotNames();
 
   int PWS_Access;

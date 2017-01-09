@@ -20,7 +20,6 @@
 #ifndef STICK20HIDDENVOLUMEDIALOG_H
 #define STICK20HIDDENVOLUMEDIALOG_H
 
-#include "device.h"
 #include <QDialog>
 
 namespace Ui {

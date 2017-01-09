@@ -23,7 +23,6 @@
 
 #include <QDialog>
 
-#include "device.h"
 #include "ui_pindialog.h"
 
 namespace Ui {
@@ -35,10 +34,9 @@ class PinDialog : public QDialog {
   enum PinType { USER_PIN, ADMIN_PIN, FIRMWARE_PIN, OTHER };
 
   unsigned char password[50];
-  Device *cryptostick;
 
-  explicit PinDialog(const QString &title, const QString &label, Device *cryptostick, Usage usage,
-                     PinType pinType, bool ShowMatrix = FALSE, QWidget *parent = NULL);
+  explicit PinDialog(const QString &title, const QString &label, Usage usage, PinType pinType, bool ShowMatrix,
+                       QWidget *parent);
   ~PinDialog();
 
   // void init(char *text,int RetryCount);

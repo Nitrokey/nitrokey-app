@@ -18,11 +18,11 @@
  */
 
 #include "stick20changepassworddialog.h"
-#include "device.h" //for STICK20_PASSOWRD_LEN
 #include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
 #include "stick20responsedialog.h"
 #include "ui_stick20changepassworddialog.h"
+#include "libnitrokey_adapter.h"
 
 /*******************************************************************************
 

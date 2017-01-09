@@ -40,7 +40,6 @@ PasswordSafeDialog::PasswordSafeDialog(int Slot, QWidget *parent)
     : QDialog(parent), ui(new Ui::PasswordSafeDialog) {
   QString MsgText;
 
-  cryptostick = NULL;
   ui->setupUi(this);
 
   clipboard = QApplication::clipboard();

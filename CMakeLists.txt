@@ -43,20 +43,17 @@ SET(moc_headers
     ${SRCDIR}/hotpslot.h
     ${SRCUIDIR}/mainwindow.h
     ${SRCDIR}/mcvs-wrapper.h
-    ${SRCUIDIR}/passworddialog.h
     ${SRCUIDIR}/passwordsafedialog.h
     ${SRCUIDIR}/pindialog.h
     ${SRCUIDIR}/securitydialog.h
     ${UTILSDIR}/sleep.h
     ${SRCUIDIR}/stick20changepassworddialog.h
     ${SRCUIDIR}/stick20debugdialog.h
-    ${SRCUIDIR}/stick20dialog.h
     ${SRCUIDIR}/stick20hiddenvolumedialog.h
     ${SRCUIDIR}/stick20infodialog.h
     ${SRCUIDIR}/stick20lockfirmwaredialog.h
     ${SRCUIDIR}/stick20responsedialog.h
     ${SRCUIDIR}/stick20-response-task.h
-    ${SRCUIDIR}/stick20setup.h
     ${SRCUIDIR}/stick20updatedialog.h
     ${SRCUIDIR}/stick20window.h
     ${SRCUIDIR}/stick20window.h
@@ -67,18 +64,15 @@ SET(moc_headers
 SET(ui_files
     ${UIDIR}/aboutdialog.ui
     ${UIDIR}/mainwindow.ui
-    ${UIDIR}/passworddialog.ui
     ${UIDIR}/passwordsafedialog.ui
     ${UIDIR}/pindialog.ui
 #    ${UIDIR}/securitydialog.ui
     ${UIDIR}/stick20changepassworddialog.ui
     ${UIDIR}/stick20debugdialog.ui
-    ${UIDIR}/stick20dialog.ui
     ${UIDIR}/stick20hiddenvolumedialog.ui
     ${UIDIR}/stick20infodialog.ui
     ${UIDIR}/stick20lockfirmwaredialog.ui
     ${UIDIR}/stick20responsedialog.ui
-    ${UIDIR}/stick20setup.ui
     ${UIDIR}/stick20updatedialog.ui
     ${UIDIR}/stick20window.ui
 )
@@ -135,19 +129,16 @@ SET(nitrokey_app_sources
     ${SRCDIR}/hotpslot.cpp
     ${SRCDIR}/main.cpp
     ${SRCUIDIR}/mainwindow.cpp
-    ${SRCUIDIR}/passworddialog.cpp
     ${SRCUIDIR}/passwordsafedialog.cpp
     ${SRCUIDIR}/pindialog.cpp
     ${SRCUIDIR}/securitydialog.cpp
     ${SRCUIDIR}/stick20changepassworddialog.cpp
     ${SRCUIDIR}/stick20debugdialog.cpp
-    ${SRCUIDIR}/stick20dialog.cpp
     ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
     ${SRCUIDIR}/stick20infodialog.cpp
     ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
     ${SRCUIDIR}/stick20responsedialog.cpp
     ${SRCUIDIR}/stick20-response-task.cpp
-    ${SRCUIDIR}/stick20setup.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${SRCUIDIR}/stick20window.cpp
     ${platform_specific_sources}

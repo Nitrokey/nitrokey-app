@@ -20,16 +20,14 @@
 #include "stick20debugdialog.h"
 #include "ui_stick20debugdialog.h"
 
-#include "device.h"
 #include "mcvs-wrapper.h"
-#include "response.h"
+
+#include "src/utils/bool_values.h"
 
 #include <QDateTime>
 #include <QMenu>
 #include <QTimer>
 #include <QtWidgets>
-
-#include "stick20hid.h"
 
 /*******************************************************************************
 
@@ -70,7 +68,6 @@ public:
 *******************************************************************************/
 
 DebugDialog::DebugDialog(QWidget *parent) : QDialog(parent), ui(new Ui::DebugDialog) {
-  cryptostick = NULL;
   bool ret;
 
   static int GUIOrginalSizeY = 0;
@@ -148,13 +145,13 @@ void DebugDialog::UpdateDebugText() {
 
   if (TRUE == DebugingStick20PoolingActive) {
     // Send request
-    cryptostick->stick20GetDebugData();
+//    cryptostick->stick20GetDebugData();
 
     // Poll data from stick 20
-    Response *stick20Response = new Response();
-
-    stick20Response->DebugResponseFlag = FALSE; // Don't log response
-    stick20Response->getResponse(cryptostick);
+//    Response *stick20Response = new Response();
+//
+//    stick20Response->DebugResponseFlag = FALSE; // Don't log response
+//    stick20Response->getResponse(cryptostick);
 
     if (TRUE == DebugTextHasChanged_Stick20) {
       RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME_FAST);

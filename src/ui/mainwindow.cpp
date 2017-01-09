@@ -21,33 +21,24 @@
 #include "mainwindow.h"
 #include "aboutdialog.h"
 #include "base32.h"
-#include "device.h"
-#include "hotpdialog.h"
-#include "passworddialog.h"
 #include "pindialog.h"
-#include "response.h"
 #include "sleep.h"
 #include "stick20debugdialog.h"
-#include "stick20dialog.h"
 #include "string.h"
 #include "ui_mainwindow.h"
 #include <stdio.h>
 #include <string.h>
 
-#include "device.h"
 #include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
 #include "passwordsafedialog.h"
-#include "response.h"
 #include "securitydialog.h"
 #include "stick20-response-task.h"
 #include "stick20changepassworddialog.h"
 #include "stick20hiddenvolumedialog.h"
 #include "stick20infodialog.h"
 #include "stick20lockfirmwaredialog.h"
-#include "stick20matrixpassworddialog.h"
 #include "stick20responsedialog.h"
-#include "stick20setup.h"
 #include "stick20updatedialog.h"
 
 #include <QDateTime>
@@ -129,253 +120,6 @@ void local_sync() {
 
 #define LOCAL_PASSWORD_SIZE 40
 
-#ifdef HAVE_LIBAPPINDICATOR
-/*
- * Indicator call backs
- */
-extern "C" {
-void onQuit(GtkMenu *, gpointer);
-void onAbout(GtkMenu *, gpointer);
-void onChangeUserPin(GtkMenu *, gpointer);
-void onChangeAdminPin(GtkMenu *, gpointer);
-void onChangeUpdatePin(GtkMenu *, gpointer);
-void onResetUserPin(GtkMenu *, gpointer);
-void onConfigure(GtkMenu *, gpointer);
-void onEnablePasswordSafe(GtkMenu *, gpointer);
-void onReset(GtkMenu *, gpointer);
-void onGetTOTP(GtkMenu *, gpointer);
-void onGetHOTP(GtkMenu *, gpointer);
-void onGetPasswordSafeSlot(GtkMenu *, gpointer);
-void onInitEncryptedVolume(GtkMenu *, gpointer);
-void onFillSDCardWithRandomChars(GtkMenu *, gpointer);
-void onEnableEncryptedVolume(GtkMenu *, gpointer);
-void onDisableEncryptedVolume(GtkMenu *, gpointer);
-void onEnableHiddenVolume(GtkMenu *, gpointer);
-void onDisableHiddenVolume(GtkMenu *, gpointer);
-void onSetupHiddenVolumeItem(GtkMenu *, gpointer);
-void onLockDevice(GtkMenu *, gpointer);
-void onSetReadOnlyUnencryptedVolumeItem(GtkMenu *, gpointer);
-void onSetReadWriteUnencryptedVolumeItem(GtkMenu *, gpointer);
-void onChangeUserPinStorage(GtkMenu *, gpointer);
-void onChangeAdminPinStorage(GtkMenu *, gpointer);
-void onLockHardware(GtkMenu *, gpointer);
-void onEnableFirmwareUpdate(GtkMenu *, gpointer);
-void onExportFirmwareToFile(GtkMenu *, gpointer);
-void onResetUserPassword(GtkMenu *, gpointer);
-void onDebug(GtkMenu *, gpointer);
-void onClearNewSDCardFound(GtkMenu *, gpointer);
-void onSetupHiddenVolume(GtkMenu *, gpointer);
-void onSetupPasswordMatrix(GtkMenu *, gpointer);
-bool isUnity(void);
-}
-
-void onQuit(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  QApplication *self = static_cast<QApplication *>(data);
-  self->quit();
-}
-
-void onAbout(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startAboutDialog();
-}
-
-void onChangeUserPin(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick10ActionChangeUserPIN();
-}
-
-void onChangeAdminPin(GtkMenu *menu, gpointer data) {
-
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick10ActionChangeAdminPIN();
-}
-
-void onChangeUpdatePin(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20ActionChangeUpdatePIN();
-}
-
-void onResetUserPin(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startResetUserPassword();
-}
-
-void onConfigure(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startConfiguration();
-}
-
-void onEnablePasswordSafe(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->PWS_Clicked_EnablePWSAccess();
-}
-
-void onReset(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->factoryReset();
-}
-
-struct getOTPData {
-  MainWindow *window;
-  int slot;
-};
-
-void onGetTOTP(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  struct getOTPData *otp_data = static_cast<struct getOTPData *>(data);
-  otp_data->window->getTOTPDialog(otp_data->slot);
-}
-
-void onGetHOTP(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  struct getOTPData *otp_data = static_cast<struct getOTPData *>(data);
-  otp_data->window->getHOTPDialog(otp_data->slot);
-}
-
-void onGetPasswordSafeSlot(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  struct getOTPData *otp_data = static_cast<struct getOTPData *>(data);
-  otp_data->window->PWS_ExceClickedSlot(otp_data->slot);
-}
-
-void onInitEncryptedVolume(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20DestroyCryptedVolume(1);
-}
-
-void onFillSDCardWithRandomChars(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20FillSDCardWithRandomChars();
-}
-
-void onEnableEncryptedVolume(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20EnableCryptedVolume();
-}
-
-void onDisableEncryptedVolume(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20DisableCryptedVolume();
-}
-
-void onEnableHiddenVolume(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20EnableHiddenVolume();
-}
-
-void onDisableHiddenVolume(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20DisableHiddenVolume();
-}
-
-void onSetupHiddenVolumeItem(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20SetupHiddenVolume();
-}
-
-void onLockDevice(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startLockDeviceAction();
-}
-
-void onChangeUserPinStorage(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20ActionChangeUserPIN();
-}
-
-void onChangeAdminPinStorage(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20ActionChangeAdminPIN();
-}
-
-void onSetReadOnlyUnencryptedVolumeItem(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20SetReadOnlyUncryptedVolume();
-}
-
-void onSetReadWriteUnencryptedVolumeItem(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20SetReadWriteUncryptedVolume();
-}
-
-void onLockHardware(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20LockStickHardware();
-}
-
-void onEnableFirmwareUpdate(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20EnableFirmwareUpdate();
-}
-
-void onExportFirmwareToFile(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20ExportFirmwareToFile();
-}
-
-void onResetUserPassword(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startResetUserPassword();
-}
-
-void onDebug(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20DebugAction();
-}
-
-void onClearNewSDCardFound(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20ClearNewSdCardFound();
-}
-
-void onSetupHiddenVolume(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20SetupHiddenVolume();
-}
-
-void onSetupPasswordMatrix(GtkMenu *menu, gpointer data) {
-  Q_UNUSED(menu);
-  MainWindow *window = static_cast<MainWindow *>(data);
-  window->startStick20SetupPasswordMatrix();
-}
-
-bool isUnity() {
-  QString desktop = getenv("XDG_CURRENT_DESKTOP");
-
-  return (desktop.toLower() == "unity" || desktop.toLower() == "kde" ||
-          desktop.toLower() == "lxde" || desktop.toLower() == "xfce");
-}
-
-#endif // HAVE_LIBAPPINDICATOR
-
 void MainWindow::overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
 
 void MainWindow::showTrayMessage(QString message) {
@@ -384,19 +128,6 @@ void MainWindow::showTrayMessage(QString message) {
 
 void MainWindow::showTrayMessage(const QString &title, const QString &msg,
                                  enum trayMessageType type, int timeout) {
-#ifdef HAVE_LIBAPPINDICATOR
-  if (isUnity()) {
-    if (!notify_init("example"))
-      return;
-
-    NotifyNotification *notf;
-
-    notf = notify_notification_new(title.toUtf8().data(), msg.toUtf8().data(), NULL);
-    notify_notification_show(notf, NULL);
-    notify_uninit();
-  } else
-#endif // HAVE_LIBAPPINDICATOR
-  {
     if (TRUE == trayIcon->supportsMessages()) {
       switch (type) {
       case INFORMATION:
@@ -411,7 +142,6 @@ void MainWindow::showTrayMessage(const QString &title, const QString &msg,
       }
     } else
         csApplet()->messageBox(msg);
-  }
 }
 
 /*
@@ -420,20 +150,12 @@ void MainWindow::showTrayMessage(const QString &title, const QString &msg,
  * In all other systems we use Qt's tray
  */
 void MainWindow::createIndicator() {
-#ifdef HAVE_LIBAPPINDICATOR
-  if (isUnity()) {
-    indicator = app_indicator_new("Nitrokey App", "nitrokey-app", APP_INDICATOR_CATEGORY_OTHER);
-    app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ACTIVE);
-  } else // other DE's and OS's
-#endif   // HAVE_LIBAPPINDICATOR
-  {
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon(":/images/CS_icon.png"));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
             SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     trayIcon->show();
-  }
 
   // Initial message
   if (TRUE == DebugWindowActive)

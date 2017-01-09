@@ -20,7 +20,6 @@
 #ifndef DIALOGCHANGEPASSWORD_H
 #define DIALOGCHANGEPASSWORD_H
 
-#include "device.h"
 #include <QDialog>
 
 namespace Ui {
@@ -38,8 +37,6 @@ class DialogChangePassword : public QDialog {
     virtual int exec();
 
     int PasswordKind;
-
-  Device *cryptostick;
 
 private slots:
   void on_checkBox_clicked(bool checked);

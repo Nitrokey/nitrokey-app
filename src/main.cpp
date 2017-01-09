@@ -29,6 +29,8 @@
 
 #include "src/utils/bool_values.h"
 
+enum {DEBUG_STATUS_NO_DEBUGGING, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
+
 StartUpParameter_tst &
 parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st);
 

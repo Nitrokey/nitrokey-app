@@ -20,7 +20,6 @@
 #ifndef PASSWORDSAFEDIALOG_H
 #define PASSWORDSAFEDIALOG_H
 
-#include "device.h"
 #include <QDialog>
 
 namespace Ui {
@@ -30,8 +29,6 @@ class PasswordSafeDialog;
 class PasswordSafeDialog : public QDialog {
   Q_OBJECT public : explicit PasswordSafeDialog(int Slot, QWidget *parent = 0);
   ~PasswordSafeDialog();
-
-  Device *cryptostick;
 
   int delaySendTextInMs;
   int UsedSlot;

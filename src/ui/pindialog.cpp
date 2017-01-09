@@ -18,7 +18,6 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device.h"
 #include "mcvs-wrapper.h"
 
 #include "pindialog.h"
@@ -26,12 +25,14 @@
 
 #include "nitrokey-applet.h"
 #include "stick20matrixpassworddialog.h"
+#include "libnitrokey_adapter.h"
+#include "src/utils/bool_values.h"
 
 #define LOCAL_PASSWORD_SIZE 40 // Todo make define global
 
-PinDialog::PinDialog(const QString &title, const QString &label, Device *cryptostick, Usage usage,
-                     PinType pinType, bool ShowMatrix, QWidget *parent)
-    : cryptostick(cryptostick), _usage(usage), _pinType(pinType), QDialog(parent),
+PinDialog::PinDialog(const QString &title, const QString &label, Usage usage, PinType pinType, bool ShowMatrix,
+                     QWidget *parent)
+    : _usage(usage), _pinType(pinType), QDialog(parent),
       ui(new Ui::PinDialog) {
   ui->setupUi(this);
 
@@ -157,7 +158,7 @@ void PinDialog::onOkButtonClicked() {
 }
 
 int PinDialog::exec() {
-  if (!cryptostick->isInitialized()) {
+  if (!libnitrokey_adapter::instance()->isDeviceInitialized()) {
         UI_deviceNotInitialized();
         done(Rejected);
         return QDialog::Rejected;
@@ -170,12 +171,10 @@ void PinDialog::updateTryCounter() {
 
   switch (_pinType) {
   case ADMIN_PIN:
-    cryptostick->getPasswordRetryCount();
-    triesLeft = HID_Stick20Configuration_st.AdminPwRetryCount;
+    triesLeft = libnitrokey_adapter::instance()->getPasswordRetryCount();
     break;
   case USER_PIN:
-    cryptostick->getUserPasswordRetryCount();
-    triesLeft = HID_Stick20Configuration_st.UserPwRetryCount;
+    triesLeft = libnitrokey_adapter::instance()->getUserPasswordRetryCount();
     break;
   case FIRMWARE_PIN:
   case OTHER:
@@ -183,7 +182,6 @@ void PinDialog::updateTryCounter() {
     ui->status->setVisible(false);
     break;
   }
-
 
   // Update 'tries-left' field
   ui->status->setText(tr("Tries left: %1").arg(triesLeft));
