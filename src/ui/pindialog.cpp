@@ -75,6 +75,13 @@ void PinDialog::getPassword(QString &pin) {
   clearBuffers();
 }
 
+std::string && PinDialog::getPassword() {
+  std::string pin = ui->lineEdit->text().toStdString();
+  clearBuffers();
+  ui->lineEdit->setText(ui->lineEdit->placeholderText());
+  return std::move(pin);
+}
+
 void PinDialog::on_checkBox_toggled(bool checked) {
   ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }

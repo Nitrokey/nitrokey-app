@@ -41,6 +41,7 @@ class PinDialog : public QDialog {
   // void init(char *text,int RetryCount);
   void getPassword(char *text);
   void getPassword(QString &pin);
+  std::string && getPassword();
 
   virtual int exec();
 

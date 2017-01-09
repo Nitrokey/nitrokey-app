@@ -51,6 +51,7 @@ class stick20HiddenVolumeDialog : public QDialog {
 
   void setHighWaterMarkText(void);
   void on_rd_unit_clicked(QString text);
+  HiddenVolumeSetup_tst HV_Setup_st;
 
 private slots:
   void on_ShowPasswordCheckBox_toggled(bool checked);
@@ -65,7 +66,6 @@ private slots:
 
 private:
   Ui::stick20HiddenVolumeDialog *ui;
-    HiddenVolumeSetup_tst HV_Setup_st;
 };
 
 #endif // STICK20HIDDENVOLUMEDIALOG_H

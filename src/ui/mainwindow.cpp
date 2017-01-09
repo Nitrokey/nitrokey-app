@@ -1474,78 +1474,57 @@ void MainWindow::startStick20SetReadOnlyUncryptedVolume() {
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
-    dialog.getPassword((char *)password);
+    const auto pass = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_only(const_cast<char*>(password));
+    m->set_unencrypted_read_only(pass.data());
+//    pass.safe_clear(); //TODO
   }
 }
 
 void MainWindow::startStick20SetReadWriteUncryptedVolume() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
-
   bool ret;
 
-  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), cryptostick, PinDialog::PREFIXED,
+  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), PinDialog::PREFIXED,
                    PinDialog::USER_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
-    dialog.getPassword((char *)password);
-
-    stick20SendCommand(STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN, password);
+    const auto pass = dialog.getPassword();
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->set_unencrypted_read_write(pass.data());
+//    pass.safe_clear(); //TODO
   }
 }
 
 void MainWindow::startStick20LockStickHardware() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
-
   bool ret;
-
   stick20LockFirmwareDialog dialog(this);
 
   ret = dialog.exec();
   if (QDialog::Accepted == ret) {
-    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PREFIXED,
+    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PREFIXED,
                      PinDialog::ADMIN_PIN);
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret) {
-      dialog.getPassword((char *)password);
-      stick20SendCommand(STICK20_CMD_SEND_LOCK_STICK_HARDWARE, password);
+      const auto pass = dialog.getPassword();
+      auto m = nitrokey::NitrokeyManager::instance();
+//    pass.safe_clear(); //TODO
+// TODO     stick20SendCommand(STICK20_CMD_SEND_LOCK_STICK_HARDWARE, password);
     }
   }
 }
 
 void MainWindow::startStick20SetupPasswordMatrix() {
-  MatrixPasswordDialog dialog(this);
-
-    csApplet()->warningBox(tr("The selected lines must be greater then greatest password length"));
-
-  dialog.setModal(TRUE);
-
-  dialog.cryptostick = cryptostick;
-  dialog.SetupInterfaceFlag = TRUE;
-
-  dialog.InitSecurePasswordDialog();
-
-  dialog.exec();
 }
 
 void MainWindow::startStick20DebugAction() {
-  /*
-     securitydialog dialog(this); ret = dialog.exec();
-     csApplet()->warningBox("Encrypted volume is not secure.\nSelect \"Initialize
-     keys\"");
-
-     StickNotInitated = TRUE; generateMenu(); */
-
-  // cryptostick->stick20NewUpdatePassword((uint8_t *)"12345678",(uint8_t
-  // *)"123456");
 }
 
 void MainWindow::startStick20SetupHiddenVolume() {
   bool ret;
-
   stick20HiddenVolumeDialog HVDialog(this);
 
   if (FALSE == CryptedVolumeActive) {
@@ -1553,38 +1532,28 @@ void MainWindow::startStick20SetupHiddenVolume() {
     return;
   }
 
+//FIXME this should be called from HVDialog
   HVDialog.SdCardHighWatermark_Read_Min = 0;
   HVDialog.SdCardHighWatermark_Read_Max = 100;
   HVDialog.SdCardHighWatermark_Write_Min = 0;
   HVDialog.SdCardHighWatermark_Write_Max = 100;
-
-  ret = cryptostick->getHighwaterMarkFromSdCard(
-      &HVDialog.SdCardHighWatermark_Write_Min, &HVDialog.SdCardHighWatermark_Write_Max,
-      &HVDialog.SdCardHighWatermark_Read_Min, &HVDialog.SdCardHighWatermark_Read_Max);
-  /*
-     qDebug () << "High water mark : WriteMin WriteMax ReadMin ReadMax"; qDebug
-     () << HVDialog.SdCardHighWatermark_Write_Min; qDebug () <<
-     HVDialog.SdCardHighWatermark_Write_Max; qDebug () <<
-     HVDialog.SdCardHighWatermark_Read_Min; qDebug () <<
-     HVDialog.SdCardHighWatermark_Read_Max; */
-  if (ERR_NO_ERROR != ret) {
-    ret = 0; // Do something ?
-  }
-
-
-  //get SD card size
-  ret = cryptostick->stick20ProductionTest();
-  HVDialog.setHighWaterMarkText();
-
+//  ret = cryptostick->getHighwaterMarkFromSdCard(
+//      &HVDialog.SdCardHighWatermark_Write_Min, &HVDialog.SdCardHighWatermark_Write_Max,
+//      &HVDialog.SdCardHighWatermark_Read_Min, &HVDialog.SdCardHighWatermark_Read_Max);
+//  HVDialog.setHighWaterMarkText();
   ret = HVDialog.exec();
 
   if (true == ret) {
-    stick20SendCommand(STICK20_CMD_SEND_HIDDEN_VOLUME_SETUP,
-                       (unsigned char *)&HVDialog.HV_Setup_st);
+    const auto d = HVDialog.HV_Setup_st;
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
+                            d.EndBlockPercent_u8, const_cast<char*>(d.HiddenVolumePassword_au8));
   }
 }
 
 int MainWindow::UpdateDynamicMenuEntrys(void) {
+//  auto m = nitrokey::NitrokeyManager::instance();
+
   if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8)
     NormalVolumeRWActive = FALSE;
   else
@@ -1605,33 +1574,11 @@ int MainWindow::UpdateDynamicMenuEntrys(void) {
   else
     StickNotInitated = FALSE;
 
-  /*
-     SDFillWithRandomChars_u8 Bit 0 = 0 SD card is *** not *** filled with
-     random chars Bit 0 = 1 SD card is filled with random chars */
-
   if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01))
     SdCardNotErased = TRUE;
   else
     SdCardNotErased = FALSE;
-  /*
-      if ((0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) || (0 ==
-     HID_Stick20Configuration_st.ActiveSmartCardID_u32))
-      {
-          Stick20ScSdCardOnline = FALSE;  // SD card or smartcard are not ready
 
-          if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32)
-              Stick20ActionUpdateStickStatus->setText (tr ("SD card is not
-     ready"));
-          if (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32)
-              Stick20ActionUpdateStickStatus->setText (tr ("Smartcard is not
-     ready"));
-          if ((0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) && (0 ==
-     HID_Stick20Configuration_st.ActiveSmartCardID_u32))
-              Stick20ActionUpdateStickStatus->setText (tr ("Smartcard and SD
-     card are not ready"));
-      }
-      else
-  */
   Stick20ScSdCardOnline = TRUE;
 
   generateMenu();

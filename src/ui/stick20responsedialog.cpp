@@ -21,10 +21,9 @@
 #include <QDesktopWidget>
 #include <QMenu>
 #include <QTimer>
+#include <QGraphicsScene>
 
-#include "device.h"
 #include "nitrokey-applet.h"
-#include "response.h"
 
 #include "stick20-response-task.h"
 #include "stick20responsedialog.h"
