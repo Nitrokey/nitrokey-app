@@ -8,9 +8,21 @@
 #include <memory>
 #include <string>
 
+#define HOTP_SLOT_COUNT_MAX 3
+#define TOTP_SLOT_COUNT_MAX 15
 #define HOTP_SLOT_COUNT 3
 #define TOTP_SLOT_COUNT 15
-#define STICK20_PASSOWRD_LEN 25
+
+#define STICK10_PASSWORD_LEN 20
+#define STICK20_PASSOWRD_LEN 20
+#define CS20_MAX_UPDATE_PASSWORD_LEN 20
+
+#define PWS_SLOT_COUNT 16
+#define PWS_SLOTNAME_LENGTH 11
+#define PWS_PASSWORD_LENGTH 20
+#define PWS_LOGINNAME_LENGTH 32
+
+#define MAX_HIDDEN_VOLUME_PASSOWORD_SIZE 20
 
 class libnitrokey_adapter {
   private:

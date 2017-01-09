@@ -30,8 +30,6 @@ class stick20HiddenVolumeDialog : public QDialog {
   Q_OBJECT public : explicit stick20HiddenVolumeDialog(QWidget *parent = 0);
   ~stick20HiddenVolumeDialog();
 
-  HiddenVolumeSetup_tst HV_Setup_st;
-
   int GetCharsetSpace(unsigned char *Password, size_t size);
   double GetEntropy(unsigned char *Password, size_t size);
 

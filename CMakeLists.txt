@@ -43,7 +43,6 @@ SET(moc_headers
     ${SRCDIR}/hotpslot.h
     ${SRCUIDIR}/mainwindow.h
     ${SRCDIR}/mcvs-wrapper.h
-    ${SRCUIDIR}/passwordsafedialog.h
     ${SRCUIDIR}/pindialog.h
     ${SRCUIDIR}/securitydialog.h
     ${UTILSDIR}/sleep.h
@@ -55,8 +54,6 @@ SET(moc_headers
     ${SRCUIDIR}/stick20responsedialog.h
     ${SRCUIDIR}/stick20-response-task.h
     ${SRCUIDIR}/stick20updatedialog.h
-    ${SRCUIDIR}/stick20window.h
-    ${SRCUIDIR}/stick20window.h
 )
 
 
@@ -64,7 +61,6 @@ SET(moc_headers
 SET(ui_files
     ${UIDIR}/aboutdialog.ui
     ${UIDIR}/mainwindow.ui
-    ${UIDIR}/passwordsafedialog.ui
     ${UIDIR}/pindialog.ui
 #    ${UIDIR}/securitydialog.ui
     ${UIDIR}/stick20changepassworddialog.ui
@@ -74,7 +70,6 @@ SET(ui_files
     ${UIDIR}/stick20lockfirmwaredialog.ui
     ${UIDIR}/stick20responsedialog.ui
     ${UIDIR}/stick20updatedialog.ui
-    ${UIDIR}/stick20window.ui
 )
 
 
@@ -129,7 +124,6 @@ SET(nitrokey_app_sources
     ${SRCDIR}/hotpslot.cpp
     ${SRCDIR}/main.cpp
     ${SRCUIDIR}/mainwindow.cpp
-    ${SRCUIDIR}/passwordsafedialog.cpp
     ${SRCUIDIR}/pindialog.cpp
     ${SRCUIDIR}/securitydialog.cpp
     ${SRCUIDIR}/stick20changepassworddialog.cpp
@@ -140,7 +134,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20responsedialog.cpp
     ${SRCUIDIR}/stick20-response-task.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
-    ${SRCUIDIR}/stick20window.cpp
     ${platform_specific_sources}
         src/libnitrokey_adapter.cpp src/libnitrokey_adapter.h src/utils/bool_values.h)
 

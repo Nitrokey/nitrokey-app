@@ -23,6 +23,7 @@
 #include "stick20responsedialog.h"
 #include "ui_stick20changepassworddialog.h"
 #include "libnitrokey_adapter.h"
+#include "src/utils/bool_values.h"
 
 /*******************************************************************************
 
@@ -63,7 +64,6 @@ DialogChangePassword::DialogChangePassword(QWidget *parent)
   ui->lineEdit_NewPW_2->setMaxLength(STICK20_PASSOWRD_LEN);
 
   ui->lineEdit_OldPW->setFocus();
-  cryptostick = NULL;
   PasswordKind = 0;
 }
 
@@ -73,16 +73,11 @@ void DialogChangePassword::UpdatePasswordRetry() {
   QString noTrialsLeft;
   int retryCount = 0;
   // update password retry values
-  if (TRUE == cryptostick->activStick20) {
-    cryptostick->stick20GetStatusData();
-    CheckResponse(FALSE);
-  }
-  cryptostick->getPasswordRetryCount();
-  cryptostick->getUserPasswordRetryCount();
+
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_USER:
-    retryCount = HID_Stick20Configuration_st.UserPwRetryCount;
+    retryCount = libnitrokey_adapter::instance()->getUserPasswordRetryCount();
     noTrialsLeft = tr("Unfortunately you have no more trials left. Please use 'Reset User PIN' "
                       "option from menu to reset password");
     break;
@@ -90,7 +85,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
   case STICK10_PASSWORD_KIND_ADMIN:
   case STICK20_PASSWORD_KIND_RESET_USER:
   case STICK10_PASSWORD_KIND_RESET_USER:
-    retryCount = HID_Stick20Configuration_st.AdminPwRetryCount;
+    retryCount = libnitrokey_adapter::instance()->getPasswordRetryCount();
     noTrialsLeft = tr("Unfortunately you have no more trials left. Please check instruction how to "
                       "reset Admin password.");
     break;
@@ -116,14 +111,14 @@ void DialogChangePassword::UI_deviceNotInitialized() const { csApplet()->warning
 
 
 int DialogChangePassword::exec() {
-  if (!cryptostick->isInitialized()) {
+  if (!libnitrokey_adapter::instance()->isDeviceInitialized()) {
     UI_deviceNotInitialized();
     done(Rejected);
     return QDialog::Rejected;
   }
   return QDialog::exec();
 }
-
+#include <QDesktopWidget>
 void DialogChangePassword::InitData(void) {
   // center the password window
   QDesktopWidget *desktop = QApplication::desktop();

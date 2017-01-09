@@ -24,7 +24,6 @@
 #include "ui_passworddialog.h"
 
 #include "nitrokey-applet.h"
-#include "stick20matrixpassworddialog.h"
 #include "libnitrokey_adapter.h"
 #include "src/utils/bool_values.h"
 
@@ -125,32 +124,6 @@ void PinDialog::onOkButtonClicked() {
       memcpy(&password[1], passwordString.data(), n);
     } else {
       memcpy(password, passwordString.data(), n);
-    }
-  } else {
-    if (NULL != cryptostick) {
-      // Get matrix password
-      MatrixPasswordDialog dialog(this);
-
-      dialog.setModal(TRUE);
-
-      dialog.cryptostick = cryptostick;
-      dialog.PasswordLen = 19;
-      dialog.SetupInterfaceFlag = false;
-
-      dialog.InitSecurePasswordDialog();
-
-      if (false == dialog.exec()) {
-        done(FALSE);
-        return;
-      }
-
-      // Copy the matrix password
-      if (PREFIXED == _usage) {
-        password[0] = 'M'; // For matrix password
-        dialog.CopyMatrixPassword((char *)&password[1], 49);
-      } else {
-        dialog.CopyMatrixPassword((char *)password, 50);
-      }
     }
   }
 

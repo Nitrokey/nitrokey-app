@@ -18,7 +18,6 @@
  */
 
 #include "stick20hiddenvolumedialog.h"
-#include "device.h"
 #include "math.h"
 #include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"

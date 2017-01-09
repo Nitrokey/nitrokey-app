@@ -31,7 +31,6 @@
 
 #include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
-#include "passwordsafedialog.h"
 #include "securitydialog.h"
 #include "stick20-response-task.h"
 #include "stick20changepassworddialog.h"
@@ -40,6 +39,7 @@
 #include "stick20lockfirmwaredialog.h"
 #include "stick20responsedialog.h"
 #include "stick20updatedialog.h"
+#include "libnitrokey_adapter.h"
 
 #include <QDateTime>
 #include <QDialog>
