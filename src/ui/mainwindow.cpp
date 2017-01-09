@@ -235,12 +235,12 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
-  cryptostick = new Device(VID_STICK_OTP, PID_STICK_OTP, VID_STICK_20, PID_STICK_20,
-                           VID_STICK_20_UPDATE_MODE, PID_STICK_20_UPDATE_MODE);
+//  cryptostick = new Device(VID_STICK_OTP, PID_STICK_OTP, VID_STICK_20, PID_STICK_20,
+//                           VID_STICK_20_UPDATE_MODE, PID_STICK_20_UPDATE_MODE);
 
   // Check for comamd line execution after init "nitrokey"
   if (0 != StartupInfo_st->Cmd) {
-    initDebugging();
+//    initDebugging();
     ret = ExecStickCmd(StartupInfo_st->CmdLine);
     exit(ret);
   }
@@ -272,12 +272,13 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
   // Init debug text
-  initDebugging();
+//  initDebugging();
 
   ui->deleteUserPasswordCheckBox->setEnabled(false);
   ui->deleteUserPasswordCheckBox->setChecked(false);
 
-    translateDeviceStatusToUserMessage(cryptostick->getStatus());
+  //TODO
+//    translateDeviceStatusToUserMessage(cryptostick->getStatus());
   generateMenu();
 
   ui->PWS_EditPassword->setValidator(
@@ -291,106 +292,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 #define MAX_CONNECT_WAIT_TIME_IN_SEC 10
 
 int MainWindow::ExecStickCmd(const char *Cmdline_) {
-  int i;
-  char *p;
-  bool ret;
-  char * Cmdline = strdup(Cmdline_);
-
-  printf("Connecting to nitrokey");
-  // Wait for connect
-  for (i = 0; i < 2 * MAX_CONNECT_WAIT_TIME_IN_SEC; i++) {
-    if (cryptostick->isConnected == true) {
-      break;
-    } else {
-      cryptostick->connect();
-      OwnSleep::msleep(500);
-      cryptostick->checkConnection(FALSE);
-      printf(".");
-      fflush(stdout);
-    }
-  }
-  if (MAX_CONNECT_WAIT_TIME_IN_SEC <= i) {
-    printf("ERROR: Can't get connection to nitrokey\n");
-    return (1);
-  }
-  // Check device
-  printf(" connected. \n");
-
-  // Get command
-  p = strchr(Cmdline, '=');
-  if (NULL == p) {
-    p = NULL;
-  } else {
-    *p = 0; // set end of string in place of '=' sign
-    p++;    // Points now to 1. parameter of command
-  }
-
-  // Check password and set default for empty
-  if (p == NULL || 0 == strlen(p)) {
-    p = (char *)"12345678";
-    //   FIXME should issue warning instead of silent password assigning?
-  }
-  uint8_t password[40] = {0};
-  password[0] = 'p'; // Send a clear password
-  STRCPY((char *)&password[1], sizeof(password) - 1, p);
-
-  // --cmd factoryReset=<ADMIN PIN>
-  if (0 == strcmp(Cmdline, "factoryReset")) {
-    // this command requires clear password without prefix
-    ret = cryptostick->factoryReset(p);
-    printf("%s\n", getFactoryResetMessage(ret));
-    cryptostick->disconnect();
-    return ret;
-  }
-  // --cmd setUpdateMode=<FIRMWARE PASSWORD>
-  else if (0 == strcmp(Cmdline, "setUpdateMode")) {
-    ret = cryptostick->stick20EnableFirmwareUpdate(password);
-    if (false == ret) {
-      printf("Command execution has failed or device stopped responding.\n");
-      cryptostick->disconnect();
-      return (1);
-    }
-  }
-  //  usage:
-  // --cmd unlockencrypted=<user_pin>
-  //  example:
-  // --cmd unlockencrypted=123456
-  else if (0 == strncmp(Cmdline, "unlockencrypted", strlen("unlockencrypted"))) {
-    printf("Unlock encrypted volume ");
-    ret = cryptostick->stick20EnableCryptedPartition(password);
-
-    if (false == ret) {
-      printf("FAIL sending command via HID\n");
-    } else {
-      printf("success\n");
-    }
-    cryptostick->disconnect();
-    return (ret);
-    //  usage:
-    // --cmd prodinfo
-  } else if (0 == strcmp(Cmdline, "prodinfo")) {
-    printf("Send -get production infos-\n");
-
-    bool commandSuccess = cryptostick->stick20ProductionTest();
-    if (!commandSuccess) {
-      printf("Command execution has failed or device stopped responding.\n");
-    }
-
-    if (TRUE == Stick20_ProductionInfosChanged) {
-      Stick20_ProductionInfosChanged = FALSE;
-      if (FALSE == AnalyseProductionInfos()) {
-        cryptostick->disconnect();
-        return (1);
-      }
-    } else {
-      cryptostick->disconnect();
-      return (1);
-    }
-  } else {
-    printf("Unknown command\n");
-  }
-  cryptostick->disconnect();
-  free(Cmdline);
   return (0);
 }
 
@@ -457,115 +358,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
 }
 
 int MainWindow::AnalyseProductionInfos() {
-  char text[100];
-
-  bool ProductStateOK = TRUE;
-
-  printf("\nGet production infos\n");
-
-  printf("Firmware     %d.%d - %d\n",
-         (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0],
-         (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1],
-         (unsigned int)Stick20ProductionInfos_st.FirmwareVersionInternal_u8);
-  printf("CPU ID       0x%08x\n", Stick20ProductionInfos_st.CPU_CardID_u32);
-  printf("Smartcard ID 0x%08x\n", Stick20ProductionInfos_st.SmartCardID_u32);
-  printf("SD card ID   0x%08x\n", Stick20ProductionInfos_st.SD_CardID_u32);
-
-  printf((char *)"\nSD card infos\n");
-  printf("Manufacturer 0x%02x\n", Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
-  printf("OEM          0x%04x\n", Stick20ProductionInfos_st.SD_Card_OEM_u16);
-  printf("Manufa. date %d.%02d\n", Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000,
-         Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-  printf("Size         %2d GB\n", Stick20ProductionInfos_st.SD_Card_Size_u8);
-
-  // Valid manufacturers
-  if ((0x74 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8)    // Transcend
-      && (0x03 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8) // SanDisk
-      && (0x73 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8) // ?
-      // Amazon
-      && (0x28 != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8) // Lexar
-      && (0x1b != Stick20ProductionInfos_st.SD_Card_Manufacturer_u8) // Samsung
-      ) {
-    ProductStateOK = FALSE;
-    printf((char *)"Manufacturers error\n");
-  }
-
-  // Write to log
-  {
-    FILE *fp;
-
-    char *LogFile = (char *)"prodlog.txt";
-
-    FOPEN(fp, LogFile, "a+");
-    if (0 != fp) {
-      QDateTime ActualTimeStamp(QDateTime::currentDateTime());
-      std::string timestr = ActualTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toStdString();
-      const char *timestamp = timestr.c_str();
-      fprintf(fp, "timestamp:%s,", timestamp);
-      fprintf(fp, "CPU:0x%08x,", Stick20ProductionInfos_st.CPU_CardID_u32);
-      fprintf(fp, "SC:0x%08x,", Stick20ProductionInfos_st.SmartCardID_u32);
-      fprintf(fp, "SD:0x%08x,", Stick20ProductionInfos_st.SD_CardID_u32);
-      fprintf(fp, "SCM:0x%02x,", Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
-      fprintf(fp, "SCO:0x%04x,", Stick20ProductionInfos_st.SD_Card_OEM_u16);
-      fprintf(fp, "DAT:%d.%02d,", Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000,
-              Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-      fprintf(fp, "Size:%d,", Stick20ProductionInfos_st.SD_Card_Size_u8);
-      fprintf(fp, "Firmware:%d.%d - %d",
-              (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0],
-              (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1],
-              (unsigned int)Stick20ProductionInfos_st.FirmwareVersionInternal_u8);
-      if (FALSE == ProductStateOK) {
-        fprintf(fp, ",*** FAIL");
-      }
-      fprintf(fp, "\n");
-      fclose(fp);
-    } else {
-      printf((char *)"\n*** CAN'T WRITE TO LOG FILE -%s-***\n", LogFile);
-    }
-  }
-
-  if (TRUE == ProductStateOK) {
-    printf((char *)"\nStick OK\n");
-  } else {
-    printf((char *)"\n**** Stick NOT OK ****\n");
-  }
-
-  DebugAppendTextGui((char *)"Production Infos\n");
-
-  SNPRINTF(text, sizeof(text), "Firmware     %d.%d\n",
-           (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[0],
-           (unsigned int)Stick20ProductionInfos_st.FirmwareVersion_au8[1]);
-  DebugAppendTextGui(text);
-  SNPRINTF(text, sizeof(text), "CPU ID       0x%08x\n", Stick20ProductionInfos_st.CPU_CardID_u32);
-  DebugAppendTextGui(text);
-  SNPRINTF(text, sizeof(text), "Smartcard ID 0x%08x\n", Stick20ProductionInfos_st.SmartCardID_u32);
-  DebugAppendTextGui(text);
-  SNPRINTF(text, sizeof(text), "SD card ID   0x%08x\n", Stick20ProductionInfos_st.SD_CardID_u32);
-  DebugAppendTextGui(text);
-
-  DebugAppendTextGui("Password retry count\n");
-  SNPRINTF(text, sizeof(text), "Admin        %d\n", Stick20ProductionInfos_st.SC_AdminPwRetryCount);
-  DebugAppendTextGui(text);
-  SNPRINTF(text, sizeof(text), "User         %d\n", Stick20ProductionInfos_st.SC_UserPwRetryCount);
-  DebugAppendTextGui(text);
-
-  DebugAppendTextGui("SD card infos\n");
-  SNPRINTF(text, sizeof(text), "Manufacturer 0x%02x\n",
-           Stick20ProductionInfos_st.SD_Card_Manufacturer_u8);
-  DebugAppendTextGui(text);
-  SNPRINTF(text, sizeof(text), "OEM          0x%04x\n", Stick20ProductionInfos_st.SD_Card_OEM_u16);
-  DebugAppendTextGui(text);
-  SNPRINTF(text, sizeof(text), "Manufa. date %d.%02d\n",
-           Stick20ProductionInfos_st.SD_Card_ManufacturingYear_u8 + 2000,
-           Stick20ProductionInfos_st.SD_Card_ManufacturingMonth_u8);
-  DebugAppendTextGui(text);
-  SNPRINTF(text, sizeof(text), "Write speed  %d kB/sec\n",
-           Stick20ProductionInfos_st.SD_WriteSpeed_u16);
-  DebugAppendTextGui(text);
-  SNPRINTF(text, sizeof(text), "Size         %d GB\n", Stick20ProductionInfos_st.SD_Card_Size_u8);
-  DebugAppendTextGui(text);
-
-  return (ProductStateOK);
+return 0;
 }
 
 void MainWindow::checkConnection() {
@@ -649,35 +442,37 @@ void MainWindow::checkConnection() {
 }
 
 void MainWindow::initialTimeReset(int ret) {
-  if (set_initial_time == FALSE) {
-        ret = cryptostick->setTime(TOTP_CHECK_TIME);
-        set_initial_time = TRUE;
-      } else {
-        ret = 0;
-      }
+  //TODO do it only on TOTP code access
 
-  bool answer;
-
-  if (ret == -2) {
-        answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
-                                                tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-                                                           "sync. Your computer may be configured with a wrong time or "
-                                                           "your Nitrokey may have been attacked. If an attacker or "
-                                                           "malware could have used your Nitrokey you should reset the "
-                                                           "secrets of your configured One Time Passwords. If your "
-                                                           "computer's time is wrong, please configure it correctly and "
-                                                           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-                                                false);
-        if (answer) {
-          resetTime();
-          QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-          Sleep::msleep(1000);
-          QGuiApplication::restoreOverrideCursor();
-          generateAllConfigs();
-
-            csApplet()->messageBox(tr("Time reset!"));
-        }
-      }
+//  if (set_initial_time == FALSE) {
+//        ret = cryptostick->setTime(TOTP_CHECK_TIME);
+//        set_initial_time = TRUE;
+//      } else {
+//        ret = 0;
+//      }
+//
+//  bool answer;
+//
+//  if (ret == -2) {
+//        answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
+//                                                tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+//                                                           "sync. Your computer may be configured with a wrong time or "
+//                                                           "your Nitrokey may have been attacked. If an attacker or "
+//                                                           "malware could have used your Nitrokey you should reset the "
+//                                                           "secrets of your configured One Time Passwords. If your "
+//                                                           "computer's time is wrong, please configure it correctly and "
+//                                                           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+//                                                false);
+//        if (answer) {
+//          resetTime();
+//          QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+//          Sleep::msleep(1000);
+//          QGuiApplication::restoreOverrideCursor();
+//          generateAllConfigs();
+//
+//            csApplet()->messageBox(tr("Time reset!"));
+//        }
+//      }
 }
 
 void MainWindow::startTimer() {}
@@ -706,7 +501,7 @@ void MainWindow::generateComboBoxEntrys() {
       ui->slotComboBox->addItem(QString(tr("TOTP slot "))
                                     .append(QString::number(i + 1, 10))
                                     .append(" [")
-                                    .append((char *)cryptostick->TOTPSlots[i]->slotName)
+                                    .append(QString::fromStdString(libnitrokey_adapter::instance()->getTOTPSlotName(i)))
                                     .append("]"));
   }
 
@@ -719,7 +514,7 @@ void MainWindow::generateComboBoxEntrys() {
       ui->slotComboBox->addItem(QString(tr("HOTP slot "))
                                     .append(QString::number(i + 1, 10))
                                     .append(" [")
-                                    .append((char *)cryptostick->HOTPSlots[i]->slotName)
+                                    .append(QString::fromStdString(libnitrokey_adapter::instance()->getHOTPSlotName(i)))
                                     .append("]"));
   }
 
@@ -727,54 +522,6 @@ void MainWindow::generateComboBoxEntrys() {
 }
 
 void MainWindow::generateMenu() {
-#ifdef HAVE_LIBAPPINDICATOR
-  if (isUnity()) {
-    indicatorMenu = gtk_menu_new();
-    GtkWidget *notConnItem = gtk_menu_item_new_with_label(_("Nitrokey not connected"));
-    GtkWidget *debugItem;
-
-    GtkWidget *aboutItem = gtk_image_menu_item_new_with_label(_("About"));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(aboutItem), TRUE);
-    GtkWidget *aboutItemImg = gtk_image_new_from_file("/usr/share/nitrokey/info.png");
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(aboutItem), GTK_WIDGET(aboutItemImg));
-
-    GtkWidget *quitItem = gtk_image_menu_item_new_with_label(_("Quit"));
-    gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(quitItem), TRUE);
-    GtkWidget *quitItemImg = gtk_image_new_from_file("/usr/share/nitrokey/quit.png");
-    gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quitItem), GTK_WIDGET(quitItemImg));
-
-    // gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quitItem),
-    // quitItemImg);
-
-    GtkWidget *separItem = gtk_separator_menu_item_new();
-
-    g_signal_connect(aboutItem, "activate", G_CALLBACK(onAbout), this);
-    g_signal_connect(quitItem, "activate", G_CALLBACK(onQuit), qApp);
-
-    if (cryptostick->isConnected == false) {
-      gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), notConnItem);
-      gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), separItem);
-    } else {
-      if (false == cryptostick->activStick20)
-        generateMenuForProDevice();
-      else
-        generateMenuForStorageDevice();
-    }
-
-    if (TRUE == DebugWindowActive) {
-    }
-
-    gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), aboutItem);
-    gtk_menu_shell_append(GTK_MENU_SHELL(indicatorMenu), quitItem);
-
-    gtk_widget_show(notConnItem);
-    gtk_widget_show(separItem);
-    gtk_widget_show(aboutItem);
-    gtk_widget_show(quitItem);
-
-    app_indicator_set_menu(indicator, GTK_MENU(indicatorMenu));
-  } else
-#endif // HAVE_LIBAPPINDICATOR
   {
     if (NULL == trayMenu)
       trayMenu = new QMenu();

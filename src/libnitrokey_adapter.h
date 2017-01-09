@@ -22,6 +22,10 @@
 #define PWS_PASSWORD_LENGTH 20
 #define PWS_LOGINNAME_LENGTH 32
 
+#define DEBUG_STATUS_NO_DEBUGGING 0
+#define DEBUG_STATUS_LOCAL_DEBUG 1
+#define DEBUG_STATUS_DEBUG_ALL 2
+
 #define MAX_HIDDEN_VOLUME_PASSOWORD_SIZE 20
 
 class libnitrokey_adapter {
@@ -38,8 +42,15 @@ public:
     int getPasswordRetryCount();
     int getUserPasswordRetryCount();
     std::string getCardSerial();
+    std::string getTOTPSlotName(const int i);
+    std::string getHOTPSlotName(const int i);
+
     int getStorageInfoData();
     int getStorageSDCardSize();
+
+    int setUserPIN();
+    int setAdminPIN();
+    int setStorageUpdatePassword();
 
     bool isDeviceConnected();
     bool isDeviceInitialized();

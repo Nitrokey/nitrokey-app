@@ -50,6 +50,7 @@ private slots:
   void on_checkBox_clicked(bool checked);
 
 private:
+  bool _changePassword();
   Ui::DialogChangePassword *ui;
   void accept(void);
   void UpdatePasswordRetry(void);

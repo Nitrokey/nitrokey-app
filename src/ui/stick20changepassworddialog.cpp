@@ -171,202 +171,139 @@ void DialogChangePassword::InitData(void) {
 }
 
 int DialogChangePassword::CheckResponse(bool NoStopFlag) {
-  Stick20ResponseTask ResponseTask(this, cryptostick, NULL);
-  if (FALSE == NoStopFlag) {
-    ResponseTask.NoStopWhenStatusOK();
-  }
-  ResponseTask.GetResponse();
-  return (ResponseTask.ResultValue);
+//  Stick20ResponseTask ResponseTask(this, cryptostick, NULL);
+//  if (FALSE == NoStopFlag) {
+//    ResponseTask.NoStopWhenStatusOK();
+//  }
+//  ResponseTask.GetResponse();
+//  return (ResponseTask.ResultValue);
+  //TODO implement waiting for results
 }
 
-bool DialogChangePassword::SendNewPassword(void) {
-  bool communicationSuccess;
-  QByteArray PasswordString;
-  int password_length = STICK20_PASSOWRD_LEN;
-  unsigned char Data[password_length + 2];
+bool DialogChangePassword::_changePassword(void) {
+  //takes data from UI
+  QByteArray PasswordString, PasswordStringNew;
+  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+  PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
+  int returnCode = 0;
 
   // Set kind of password
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
-    Data[0] = 'P';
+    returnCode = libnitrokey_adapter::instance()->setUserPIN();
     break;
   case STICK20_PASSWORD_KIND_ADMIN:
-    Data[0] = 'A';
+    returnCode = libnitrokey_adapter::instance()->setAdminPIN();
     break;
   default:
-    Data[0] = '?';
     break;
   }
 
-  // Send old password
-  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-
-  STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
-  Data[STICK20_PASSOWRD_LEN + 1] = 0;
-
-  communicationSuccess = cryptostick->stick20SendPassword(Data);
-  if (!communicationSuccess) {
-    csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
-    return false;
-  }
-
-  bool isOldPasswordCorrect = CheckResponse(TRUE) == 1;
+  //TODO implement handling return code
+  bool isOldPasswordCorrect = returnCode != 0;
   if (!isOldPasswordCorrect) {
     csApplet()->warningBox(tr("Current password is not correct. Please retry."));
     return false;
   }
 
-  // Change password
-  PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-
-  STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN, PasswordString.data(), STICK20_PASSOWRD_LEN);
-  Data[STICK20_PASSOWRD_LEN + 1] = 0;
-
-  communicationSuccess = cryptostick->stick20SendNewPassword(Data);
-  if (!communicationSuccess) {
-    csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
-    return false;
-  }
-
-  bool isNewPasswordCorrect = CheckResponse(FALSE) == 1;
+  bool isNewPasswordCorrect = returnCode != 0;
   if (!isNewPasswordCorrect) {
     csApplet()->warningBox(tr("New password is not correct. Please retry."));
     return false;
   }
+
   csApplet()->messageBox(tr("New password is set"));
   return true;
 }
 
+
+bool DialogChangePassword::SendNewPassword(void) {
+  return _changePassword();
+}
+
 bool DialogChangePassword::Stick10ChangePassword(void) {
-  int ret;
-  int password_length;
-  QByteArray PasswordString;
-  password_length = STICK10_PASSWORD_LEN;
-  unsigned char old_pin[password_length + 1];
-  unsigned char new_pin[password_length + 1];
-
-  memset(old_pin, 0, sizeof(old_pin));
-  memset(new_pin, 0, sizeof(new_pin));
-
-  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-  strncpy((char *)old_pin, PasswordString.data(), password_length);
-
-  PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-  strncpy((char *)new_pin, PasswordString.data(), password_length);
-
-  // Change password
-  if (PasswordKind == STICK10_PASSWORD_KIND_ADMIN)
-    ret = cryptostick->changeAdminPin(old_pin, new_pin);
-  else // if ( PasswordKind == STICK10_PASSWORD_KIND_USER )
-    ret = cryptostick->changeUserPin(old_pin, new_pin);
-
-  if (ret == CMD_STATUS_WRONG_PASSWORD) {
-    csApplet()->warningBox(tr("Wrong password."));
-  } else if (ret != CMD_STATUS_OK) {
-    csApplet()->warningBox(tr("Couldn't change %1 password")
-                                   .arg((PasswordKind == STICK10_PASSWORD_KIND_USER) ? "user" : "admin"));
-  }
-  bool success = ret == CMD_STATUS_OK;
-  if (success) {
-    csApplet()->messageBox(tr("New password is set"));
-  }
-  return success;
+  return _changePassword();
 }
 
 // FIXME code doubles SendNewPassword
 bool DialogChangePassword::ResetUserPassword(void) {
-  bool communicationAndCommandSuccess;
-  QByteArray PasswordString;
-  unsigned char Data[STICK20_PASSOWRD_LEN + 2];
-
-  // Set kind of password
-  Data[0] = 'A';
-  // Send old password
-  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-  STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
-  Data[STICK20_PASSOWRD_LEN + 1] = 0;
-
-  communicationAndCommandSuccess = cryptostick->stick20SendPassword(Data);
-  if (!communicationAndCommandSuccess) {
-    csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
-    return false;
-  }
-
-  bool isAdminPasswordCorrect = CheckResponse(TRUE) == 1;
-  if (!isAdminPasswordCorrect) {
-    csApplet()->warningBox(tr("Current Admin password is not correct. Please retry."));
-    return false;
-  }
-
-  // Reset new user PIN
-  PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-  STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
-  Data[STICK20_PASSOWRD_LEN + 1] = 0;
-  communicationAndCommandSuccess = cryptostick->unlockUserPassword(Data) == 0;
-  if (!communicationAndCommandSuccess) {
-    csApplet()->warningBox(tr("There was a problem during communicating with device or new password "
-                                      "is not correct. Please retry."));
-    return false;
-  }
+//  bool communicationAndCommandSuccess;
+//  QByteArray PasswordString;
+//  unsigned char Data[STICK20_PASSOWRD_LEN + 2];
+//
+//  // Set kind of password
+//  Data[0] = 'A';
+//  // Send old password
+//  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+//  STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
+//  Data[STICK20_PASSOWRD_LEN + 1] = 0;
+//
+//  communicationAndCommandSuccess = cryptostick->stick20SendPassword(Data);
+//  if (!communicationAndCommandSuccess) {
+//    csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
+//    return false;
+//  }
+//
+//  bool isAdminPasswordCorrect = CheckResponse(TRUE) == 1;
+//  if (!isAdminPasswordCorrect) {
+//    csApplet()->warningBox(tr("Current Admin password is not correct. Please retry."));
+//    return false;
+//  }
+//
+//  // Reset new user PIN
+//  PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
+//  STRNCPY((char *)&Data[1], STICK20_PASSOWRD_LEN - 1, PasswordString.data(), STICK20_PASSOWRD_LEN);
+//  Data[STICK20_PASSOWRD_LEN + 1] = 0;
+//  communicationAndCommandSuccess = cryptostick->unlockUserPassword(Data) == 0;
+//  if (!communicationAndCommandSuccess) {
+//    csApplet()->warningBox(tr("There was a problem during communicating with device or new password "
+//                                      "is not correct. Please retry."));
+//    return false;
+//  }
 
   csApplet()->messageBox(tr("New User password is set"));
   return true;
 }
 
 bool DialogChangePassword::ResetUserPasswordStick10(void) {
-  int ret;
-  QByteArray PasswordString;
-  unsigned char data[50 + 1];
-
-  memset(data, 0, sizeof(data));
-
-  // New User PIN
-  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-  STRNCPY((char *)data, 25, PasswordString.data(), 25);
-
-  // Admin PIN
-  PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-  STRNCPY((char *)&(data[25]), 25, PasswordString.data(), 25);
-
-  ret = cryptostick->unlockUserPasswordStick10(data);
-
-  bool success = ret == CMD_STATUS_OK;
-  if (!success) {
-    if (CMD_STATUS_WRONG_PASSWORD == ret) {
-      csApplet()->warningBox(tr("Wrong Admin PIN."));
-    } else {
-      csApplet()->warningBox(tr("Couldn't unblock the user PIN. Error: %1").arg(ret));
-    }
-  } else {
+//  int ret;
+//  QByteArray PasswordString;
+//  unsigned char data[50 + 1];
+//
+//  memset(data, 0, sizeof(data));
+//
+//  // New User PIN
+//  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+//  STRNCPY((char *)data, 25, PasswordString.data(), 25);
+//
+//  // Admin PIN
+//  PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
+//  STRNCPY((char *)&(data[25]), 25, PasswordString.data(), 25);
+//
+//  ret = cryptostick->unlockUserPasswordStick10(data);
+//
+//  bool success = ret == CMD_STATUS_OK;
+//  if (!success) {
+//    if (CMD_STATUS_WRONG_PASSWORD == ret) {
+//      csApplet()->warningBox(tr("Wrong Admin PIN."));
+//    } else {
+//      csApplet()->warningBox(tr("Couldn't unblock the user PIN. Error: %1").arg(ret));
+//    }
+//  } else {
     csApplet()->messageBox(tr("User PIN successfully unblocked"));
-  }
-  return success;
+//  }
+//  return success;
+  return true;
 }
 
 bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
-  bool commandSuccess;
-  int password_length;
-  QByteArray PasswordString;
-  password_length = CS20_MAX_UPDATE_PASSWORD_LEN;
-  unsigned char old_pin[password_length + 1];
-  unsigned char new_pin[password_length + 1];
+//  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
+//  PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
+//  Change password
+//  commandSuccess = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
 
-  memset(old_pin, 0, password_length + 1);
-  memset(new_pin, 0, password_length + 1);
+  libnitrokey_adapter::instance()->setStorageUpdatePassword();
 
-  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-  strncpy((char *)old_pin, PasswordString.data(), password_length);
-
-  PasswordString = ui->lineEdit_NewPW_1->text().toLatin1();
-  strncpy((char *)new_pin, PasswordString.data(), password_length);
-
-  // Change password
-  commandSuccess = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
-
-  if (!commandSuccess) {
-    csApplet()->warningBox(tr("Wrong password or there was a communication problem with the device."));
-    return false;
-  }
   csApplet()->warningBox(tr("Password has been changed with success!"));
   return true;
 }
@@ -442,7 +379,7 @@ void DialogChangePassword::accept() {
     break;
   }
 
-  cryptostick->getStatus();
+//  cryptostick->getStatus();
 
   if (success) {
     done(true);
