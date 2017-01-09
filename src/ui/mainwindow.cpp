@@ -1535,10 +1535,11 @@ void MainWindow::startStick20SetupHiddenVolume() {
   ret = HVDialog.exec();
 
   if (true == ret) {
+    auto p = std::string(d.HiddenVolumePassword_au8);
     const auto d = HVDialog.HV_Setup_st;
     auto m = nitrokey::NitrokeyManager::instance();
     m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
-                            d.EndBlockPercent_u8, reinterpret_cast<char*>(&d.HiddenVolumePassword_au8[0]));
+                            d.EndBlockPercent_u8, p.data());
   }
 }
 

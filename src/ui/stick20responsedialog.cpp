@@ -107,9 +107,9 @@ Stick20ResponseDialog::~Stick20ResponseDialog() {
 }
 
 #include "libnitrokey/include/NitrokeyManager.h"
-void Stick20ResponseDialog::showStick20Configuration(int Status) {
-  auto m = nitrokey::NitrokeyManager::instance();
-  auto status = m->get_status_storage();
+//void Stick20ResponseDialog::showStick20Configuration(int Status) {
+//  auto m = nitrokey::NitrokeyManager::instance();
+//  auto status = m->get_status_storage();
 
 //  QString OutputText;
 //
@@ -198,7 +198,7 @@ void Stick20ResponseDialog::showStick20Configuration(int Status) {
 //  ui->OutputText->setText(OutputText);
 //  ui->OutputText->show();
 //  DebugAppendTextGui(OutputText.toLatin1().data());
-}
+//}
 
 //void Stick20ResponseDialog::checkStick20StatusDebug(Response *stick20Response, int Status) {
 //  QString OutputText;
@@ -227,124 +227,124 @@ void Stick20ResponseDialog::showStick20Configuration(int Status) {
 //}
 
 void Stick20ResponseDialog::checkStick20StatusDialog(void) {
-  QString OutputText;
-
-  if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS == Stick20Task->ActiveCommand) {
-    ui->HeaderText->show();
-  }
-
-  Stick20Task->checkStick20Status();
-
-  if (TRUE == DebugingActive) {
-    checkStick20StatusDebug(Stick20Task->stick20Response, Stick20Task->retStick20Respone);
-  }
-
-  if (0 == Stick20Task->retStick20Respone) {
-    switch (Stick20Task->stick20Response->HID_Stick20Status_st.LastCommand_u8) {
-    case STICK20_CMD_ENABLE_CRYPTED_PARI:
-      OutputText.append(QString("Enabling encrypted volume"));
-      break;
-    case STICK20_CMD_DISABLE_CRYPTED_PARI:
-      OutputText.append(QString("Disabling encrypted volume"));
-      break;
-    case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
-      OutputText.append(QString("Enabling encrypted volume"));
-      break;
-    case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
-      OutputText.append(QString("Disabling encrypted volume"));
-      break;
-    case STICK20_CMD_SEND_NEW_PASSWORD:
-      OutputText.append(QString("Changing PIN"));
-      break;
-    case STICK20_CMD_ENABLE_FIRMWARE_UPDATE:
-      OutputText.append(QString("Enabling firmeware update"));
-      break;
-    case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE:
-      OutputText.append(QString("Exporting firmware to file"));
-      break;
-    case STICK20_CMD_GENERATE_NEW_KEYS:
-      OutputText.append(QString("Generating new keys"));
-      break;
-    case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
-      OutputText.append(QString("Initializing storage with random data"));
-      break;
-    case STICK20_CMD_GET_DEVICE_STATUS:
-      OutputText.append(QString("Getting device configuration"));
-      break;
-    case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
-      OutputText.append(QString("Enabling read-only configuration for the unencrypted volume"));
-      break;
-    case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
-      OutputText.append(QString("Enabling read-write configuration for the unencrypted volume"));
-      break;
-    case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND:
-      OutputText.append(QString("Disabling 'initialize storage with random data' warning"));
-      break;
-    case STICK20_CMD_PRODUCTION_TEST:
-      OutputText.append(QString("Production test"));
-      break;
-    case STICK20_CMD_SEND_STARTUP:
-      OutputText.append(QString("Startup infos"));
-      break;
-    case STICK20_CMD_SEND_LOCK_STICK_HARDWARE:
-      OutputText.append(QString("Locking"));
-      break;
-
-    default:
-      break;
-    }
-
-    OutputText.append(QString(" ("));
-
-    switch (Stick20Task->stick20Response->HID_Stick20Status_st.Status_u8) {
-    case OUTPUT_CMD_STICK20_STATUS_IDLE:
-      OutputText.append(QString("IDLE"));
-      break;
-    case OUTPUT_CMD_STICK20_STATUS_OK:
-      OutputText.append(QString("OK"));
-      pollStick20Timer->stop();
-      done(TRUE);
-      break;
-    case OUTPUT_CMD_STICK20_STATUS_BUSY:
-      OutputText.append(QString("BUSY"));
-      break;
-    case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD:
-      OutputText.append(QString("WRONG PASSWORD"));
-      pollStick20Timer->stop();
-      done(TRUE);
-      break;
-    case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR:
-      OutputText.append(QString("BUSY"));
-      ui->progressBar->show();
-      ui->LabelProgressWheel->hide();
-      ui->progressBar->setValue(
-          Stick20Task->stick20Response->HID_Stick20Status_st.ProgressBarValue_u8);
-      break;
-    case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY:
-      OutputText.append(QString("PASSWORD MATRIX READY"));
-      pollStick20Timer->stop();
-      done(TRUE);
-      break;
-    case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK:
-      OutputText.append(QString("NO USER PASSWORD UNLOCK"));
-      pollStick20Timer->stop();
-      done(TRUE);
-      break;
-    case OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR:
-      OutputText.append(QString("SMARTCARD ERROR"));
-      pollStick20Timer->stop();
-      done(TRUE);
-      break;
-    case OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE:
-      OutputText.append(QString("SECURITY BIT ACTIVE"));
-      pollStick20Timer->stop();
-      done(TRUE);
-      break;
-    default:
-      break;
-    }
-    OutputText.append(QString(")"));
-    ui->HeaderText->setText(OutputText);
-    ui->label->setText(OutputText);
-  }
+//  QString OutputText;
+//
+//  if (STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS == Stick20Task->ActiveCommand) {
+//    ui->HeaderText->show();
+//  }
+//
+//  Stick20Task->checkStick20Status();
+//
+//  if (TRUE == DebugingActive) {
+//    checkStick20StatusDebug(Stick20Task->stick20Response, Stick20Task->retStick20Respone);
+//  }
+//
+//  if (0 == Stick20Task->retStick20Respone) {
+//    switch (Stick20Task->stick20Response->HID_Stick20Status_st.LastCommand_u8) {
+//    case STICK20_CMD_ENABLE_CRYPTED_PARI:
+//      OutputText.append(QString("Enabling encrypted volume"));
+//      break;
+//    case STICK20_CMD_DISABLE_CRYPTED_PARI:
+//      OutputText.append(QString("Disabling encrypted volume"));
+//      break;
+//    case STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI:
+//      OutputText.append(QString("Enabling encrypted volume"));
+//      break;
+//    case STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI:
+//      OutputText.append(QString("Disabling encrypted volume"));
+//      break;
+//    case STICK20_CMD_SEND_NEW_PASSWORD:
+//      OutputText.append(QString("Changing PIN"));
+//      break;
+//    case STICK20_CMD_ENABLE_FIRMWARE_UPDATE:
+//      OutputText.append(QString("Enabling firmeware update"));
+//      break;
+//    case STICK20_CMD_EXPORT_FIRMWARE_TO_FILE:
+//      OutputText.append(QString("Exporting firmware to file"));
+//      break;
+//    case STICK20_CMD_GENERATE_NEW_KEYS:
+//      OutputText.append(QString("Generating new keys"));
+//      break;
+//    case STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS:
+//      OutputText.append(QString("Initializing storage with random data"));
+//      break;
+//    case STICK20_CMD_GET_DEVICE_STATUS:
+//      OutputText.append(QString("Getting device configuration"));
+//      break;
+//    case STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN:
+//      OutputText.append(QString("Enabling read-only configuration for the unencrypted volume"));
+//      break;
+//    case STICK20_CMD_ENABLE_READWRITE_UNCRYPTED_LUN:
+//      OutputText.append(QString("Enabling read-write configuration for the unencrypted volume"));
+//      break;
+//    case STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND:
+//      OutputText.append(QString("Disabling 'initialize storage with random data' warning"));
+//      break;
+//    case STICK20_CMD_PRODUCTION_TEST:
+//      OutputText.append(QString("Production test"));
+//      break;
+//    case STICK20_CMD_SEND_STARTUP:
+//      OutputText.append(QString("Startup infos"));
+//      break;
+//    case STICK20_CMD_SEND_LOCK_STICK_HARDWARE:
+//      OutputText.append(QString("Locking"));
+//      break;
+//
+//    default:
+//      break;
+//    }
+//
+//    OutputText.append(QString(" ("));
+//
+//    switch (Stick20Task->stick20Response->HID_Stick20Status_st.Status_u8) {
+//    case OUTPUT_CMD_STICK20_STATUS_IDLE:
+//      OutputText.append(QString("IDLE"));
+//      break;
+//    case OUTPUT_CMD_STICK20_STATUS_OK:
+//      OutputText.append(QString("OK"));
+//      pollStick20Timer->stop();
+//      done(TRUE);
+//      break;
+//    case OUTPUT_CMD_STICK20_STATUS_BUSY:
+//      OutputText.append(QString("BUSY"));
+//      break;
+//    case OUTPUT_CMD_STICK20_STATUS_WRONG_PASSWORD:
+//      OutputText.append(QString("WRONG PASSWORD"));
+//      pollStick20Timer->stop();
+//      done(TRUE);
+//      break;
+//    case OUTPUT_CMD_STICK20_STATUS_BUSY_PROGRESSBAR:
+//      OutputText.append(QString("BUSY"));
+//      ui->progressBar->show();
+//      ui->LabelProgressWheel->hide();
+//      ui->progressBar->setValue(
+//          Stick20Task->stick20Response->HID_Stick20Status_st.ProgressBarValue_u8);
+//      break;
+//    case OUTPUT_CMD_STICK20_STATUS_PASSWORD_MATRIX_READY:
+//      OutputText.append(QString("PASSWORD MATRIX READY"));
+//      pollStick20Timer->stop();
+//      done(TRUE);
+//      break;
+//    case OUTPUT_CMD_STICK20_STATUS_NO_USER_PASSWORD_UNLOCK:
+//      OutputText.append(QString("NO USER PASSWORD UNLOCK"));
+//      pollStick20Timer->stop();
+//      done(TRUE);
+//      break;
+//    case OUTPUT_CMD_STICK20_STATUS_SMARTCARD_ERROR:
+//      OutputText.append(QString("SMARTCARD ERROR"));
+//      pollStick20Timer->stop();
+//      done(TRUE);
+//      break;
+//    case OUTPUT_CMD_STICK20_STATUS_SECURITY_BIT_ACTIVE:
+//      OutputText.append(QString("SECURITY BIT ACTIVE"));
+//      pollStick20Timer->stop();
+//      done(TRUE);
+//      break;
+//    default:
+//      break;
+//    }
+//    OutputText.append(QString(")"));
+//    ui->HeaderText->setText(OutputText);
+//    ui->label->setText(OutputText);
+//  }
 }

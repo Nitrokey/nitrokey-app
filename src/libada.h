@@ -31,10 +31,10 @@
 
 class libada {
   private:
-    libada();
     static std::shared_ptr <libada> _instance;
 
 public:
+    explicit libada();
     ~libada();
     static std::shared_ptr<libada> i();
 
