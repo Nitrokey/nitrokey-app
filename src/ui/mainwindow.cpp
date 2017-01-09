@@ -1157,7 +1157,8 @@ void MainWindow::startConfiguration() {
 
   if (!cryptostick->validPassword) {
     do {
-      PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN, nullptr);
+      PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                       PinDialog::ADMIN_PIN);
       ok = dialog.exec();
       QString password;
 
@@ -1242,7 +1243,8 @@ void MainWindow::startStick20EnableCryptedVolume() {
       return;
   }
 
-  PinDialog dialog(tr("User pin dialog"), tr("Enter user PIN:"), cryptostick, PinDialog::PREFIXED, nullptr);
+  PinDialog dialog(tr("User pin dialog"), tr("Enter user PIN:"), cryptostick, PinDialog::PREFIXED,
+                   PinDialog::USER_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1289,8 +1291,8 @@ void MainWindow::startStick20EnableHiddenVolume() {
   if (false == answer)
     return;
 
-  PinDialog dialog(tr("Enter password for hidden volume"), tr("Enter password for hidden volume:"), cryptostick,
-                   PinDialog::PREFIXED, nullptr);
+  PinDialog dialog(tr("Enter password for hidden volume"), tr("Enter password for hidden volume:"),
+                   cryptostick, PinDialog::PREFIXED, PinDialog::OTHER);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1354,8 +1356,8 @@ void MainWindow::startStick20EnableFirmwareUpdate() {
     return;
   }
 
-  PinDialog dialog(tr("Enter Firmware Password"), tr("Enter Firmware Password:"), cryptostick, PinDialog::PREFIXED,
-                   nullptr);
+  PinDialog dialog(tr("Enter Firmware Password"), tr("Enter Firmware Password:"), cryptostick,
+                   PinDialog::PREFIXED, PinDialog::FIRMWARE_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1446,7 +1448,8 @@ void MainWindow::startStick20ExportFirmwareToFile() {
 
   bool ret;
 
-  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, nullptr);
+  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED,
+                   PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1467,7 +1470,8 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
   answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
                                              "hidden volumes, and password safe! Continue?"), false);
   if (true == answer) {
-    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PREFIXED, nullptr);
+    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PREFIXED,
+                     PinDialog::ADMIN_PIN);
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret) {
@@ -1487,7 +1491,8 @@ void MainWindow::startStick20FillSDCardWithRandomChars() {
 
   bool ret;
 
-  PinDialog dialog(tr("Enter admin PIN"), tr("Admin Pin:"), cryptostick, PinDialog::PREFIXED, nullptr);
+  PinDialog dialog(tr("Enter admin PIN"), tr("Admin Pin:"), cryptostick, PinDialog::PREFIXED,
+                   PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1503,7 +1508,8 @@ void MainWindow::startStick20ClearNewSdCardFound() {
 
   bool ret;
 
-  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED, nullptr);
+  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED,
+                   PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1541,7 +1547,8 @@ void MainWindow::startStick20SetReadOnlyUncryptedVolume() {
 
   bool ret;
 
-  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), cryptostick, PinDialog::PREFIXED, nullptr);
+  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), cryptostick, PinDialog::PREFIXED,
+                   PinDialog::USER_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1556,7 +1563,8 @@ void MainWindow::startStick20SetReadWriteUncryptedVolume() {
 
   bool ret;
 
-  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), cryptostick, PinDialog::PREFIXED, nullptr);
+  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), cryptostick, PinDialog::PREFIXED,
+                   PinDialog::USER_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1575,7 +1583,8 @@ void MainWindow::startStick20LockStickHardware() {
 
   ret = dialog.exec();
   if (QDialog::Accepted == ret) {
-    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PREFIXED, nullptr);
+    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PREFIXED,
+                     PinDialog::ADMIN_PIN);
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret) {
@@ -1976,7 +1985,8 @@ void MainWindow::on_eraseButton_clicked() {
     QString password;
 
     do {
-      PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN, nullptr);
+      PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                       PinDialog::ADMIN_PIN);
       int ok = dialog.exec();
       if (ok != QDialog::Accepted) {
         return;
@@ -2484,7 +2494,8 @@ void MainWindow::resetTime() {
   if (!cryptostick->validPassword) {
 
     do {
-      PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN, nullptr);
+      PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                       PinDialog::ADMIN_PIN);
       ok = dialog.exec();
       QString password;
 
@@ -2527,7 +2538,8 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     if (!cryptostick->validUserPassword) {
       cryptostick->getUserPasswordRetryCount();
 
-      PinDialog dialog(tr("Enter card user PIN"), tr("User PIN:"), cryptostick, PinDialog::PLAIN, nullptr);
+      PinDialog dialog(tr("Enter card user PIN"), tr("User PIN:"), cryptostick, PinDialog::PLAIN,
+                       PinDialog::USER_PIN);
       ok = dialog.exec();
       QString password;
       dialog.getPassword(password);
@@ -2698,7 +2710,8 @@ int MainWindow::factoryReset() {
   bool ok;
 
   do {
-    PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN, nullptr);
+    PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+                     PinDialog::ADMIN_PIN);
     ok = dialog.exec();
     char password[LOCAL_PASSWORD_SIZE];
     dialog.getPassword(password);
