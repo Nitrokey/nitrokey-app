@@ -247,43 +247,6 @@ private slots:
   void generateMenuPasswordSafe();
   char *PWS_GetSlotName(int Slot);
 
-  void PWS_Clicked_Slot00();
-  void PWS_Clicked_Slot01();
-  void PWS_Clicked_Slot02();
-  void PWS_Clicked_Slot03();
-  void PWS_Clicked_Slot04();
-  void PWS_Clicked_Slot05();
-  void PWS_Clicked_Slot06();
-  void PWS_Clicked_Slot07();
-  void PWS_Clicked_Slot08();
-  void PWS_Clicked_Slot09();
-  void PWS_Clicked_Slot10();
-  void PWS_Clicked_Slot11();
-  void PWS_Clicked_Slot12();
-  void PWS_Clicked_Slot13();
-  void PWS_Clicked_Slot14();
-  void PWS_Clicked_Slot15();
-
-  // Functions for OTP
-  void getHOTP1();
-  void getHOTP2();
-  void getHOTP3();
-
-  void getTOTP1();
-  void getTOTP2();
-  void getTOTP3();
-  void getTOTP4();
-  void getTOTP5();
-  void getTOTP6();
-  void getTOTP7();
-  void getTOTP8();
-  void getTOTP9();
-  void getTOTP10();
-  void getTOTP11();
-  void getTOTP12();
-  void getTOTP13();
-  void getTOTP14();
-  void getTOTP15();
   void on_eraseButton_clicked();
   void on_randomSecretButton_clicked();
   void on_checkBox_toggled(bool checked);

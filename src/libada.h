@@ -45,6 +45,9 @@ public:
     std::string getTOTPSlotName(const int i);
     std::string getHOTPSlotName(const int i);
 
+    std::string getPWSSlotName(const int i);
+    bool getPWSSlotStatus(const int i);
+
     int getStorageInfoData();
     int getStorageSDCardSize();
 
@@ -55,6 +58,10 @@ public:
     bool isDeviceConnected();
     bool isDeviceInitialized();
     bool isStorageDeviceConnected();
+    bool isPasswordSafeAvailable();
+    bool isPasswordSafeUnlocked();
+    bool isTOTPSlotProgrammed(const int i);
+    bool isHOTPSlotProgrammed(const int i);
 };
 
 
