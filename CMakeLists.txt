@@ -135,7 +135,7 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20-response-task.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${platform_specific_sources}
-        src/libnitrokey_adapter.cpp src/libnitrokey_adapter.h src/utils/bool_values.h)
+        src/libada.cpp src/libada.h src/utils/bool_values.h)
 
 # Freedesktop files
 IF(NOT WIN32)

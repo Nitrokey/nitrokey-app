@@ -28,14 +28,14 @@
 
 #define MAX_HIDDEN_VOLUME_PASSOWORD_SIZE 20
 
-class libnitrokey_adapter {
+class libada {
   private:
-    libnitrokey_adapter();
-    static std::shared_ptr <libnitrokey_adapter> _instance;
+    libada();
+    static std::shared_ptr <libada> _instance;
 
 public:
-    ~libnitrokey_adapter();
-    static std::shared_ptr<libnitrokey_adapter> instance();
+    ~libada();
+    static std::shared_ptr<libada> i();
 
     int getMajorFirmwareVersion();
     int getMinorFirmwareVersion();

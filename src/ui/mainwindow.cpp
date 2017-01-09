@@ -39,7 +39,7 @@
 #include "stick20lockfirmwaredialog.h"
 #include "stick20responsedialog.h"
 #include "stick20updatedialog.h"
-#include "libnitrokey_adapter.h"
+#include "libada.h"
 
 #include <QDateTime>
 #include <QDialog>
@@ -501,7 +501,7 @@ void MainWindow::generateComboBoxEntrys() {
       ui->slotComboBox->addItem(QString(tr("TOTP slot "))
                                     .append(QString::number(i + 1, 10))
                                     .append(" [")
-                                    .append(QString::fromStdString(libnitrokey_adapter::instance()->getTOTPSlotName(i)))
+                                    .append(QString::fromStdString(libada::i()->getTOTPSlotName(i)))
                                     .append("]"));
   }
 
@@ -514,7 +514,7 @@ void MainWindow::generateComboBoxEntrys() {
       ui->slotComboBox->addItem(QString(tr("HOTP slot "))
                                     .append(QString::number(i + 1, 10))
                                     .append(" [")
-                                    .append(QString::fromStdString(libnitrokey_adapter::instance()->getHOTPSlotName(i)))
+                                    .append(QString::fromStdString(libada::i()->getHOTPSlotName(i)))
                                     .append("]"));
   }
 
@@ -529,16 +529,14 @@ void MainWindow::generateMenu() {
       trayMenu->clear(); // Clear old menu
 
     // Setup the new menu
-    if (cryptostick->isConnected == false) {
+    if (libada::i()->isDeviceConnected() == false) {
       trayMenu->addAction(tr("Nitrokey not connected"));
-      cryptostick->passwordSafeAvailable = true;
     } else {
-      if (false == cryptostick->activStick20) // Nitrokey Pro connected
+      if (false == libada::i()->isStorageDeviceConnected()) // Nitrokey Pro connected
         generateMenuForProDevice();
       else {
         // Nitrokey Storage is connected
         generateMenuForStorageDevice();
-        cryptostick->passwordSafeAvailable = true;
       }
     }
 

@@ -24,7 +24,7 @@
 #include "ui_passworddialog.h"
 
 #include "nitrokey-applet.h"
-#include "libnitrokey_adapter.h"
+#include "libada.h"
 #include "src/utils/bool_values.h"
 
 #define LOCAL_PASSWORD_SIZE 40 // Todo make define global
@@ -131,7 +131,7 @@ void PinDialog::onOkButtonClicked() {
 }
 
 int PinDialog::exec() {
-  if (!libnitrokey_adapter::instance()->isDeviceInitialized()) {
+  if (!libada::i()->isDeviceInitialized()) {
         UI_deviceNotInitialized();
         done(Rejected);
         return QDialog::Rejected;
@@ -144,10 +144,10 @@ void PinDialog::updateTryCounter() {
 
   switch (_pinType) {
   case ADMIN_PIN:
-    triesLeft = libnitrokey_adapter::instance()->getPasswordRetryCount();
+    triesLeft = libada::i()->getPasswordRetryCount();
     break;
   case USER_PIN:
-    triesLeft = libnitrokey_adapter::instance()->getUserPasswordRetryCount();
+    triesLeft = libada::i()->getUserPasswordRetryCount();
     break;
   case FIRMWARE_PIN:
   case OTHER:

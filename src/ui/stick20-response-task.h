@@ -4,7 +4,7 @@
 #include "nitrokey-applet.h"
 #include <QWidget>
 #include <QtWidgets/QSystemTrayIcon>
-#include "libnitrokey_adapter.h"
+#include "libada.h"
 
 class Stick20ResponseTask : public QObject {
   Q_OBJECT public : Stick20ResponseTask(QWidget *parent, QSystemTrayIcon *MainWndTrayIcon);

@@ -23,7 +23,7 @@
 
 #include "stick20infodialog.h"
 #include "stick20responsedialog.h"
-#include "libnitrokey_adapter.h"
+#include "libada.h"
 
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::AboutDialog) {
@@ -43,8 +43,8 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->warning_sign->setPixmap(warning);
 
 
-  int majorFirmwareVersion = libnitrokey_adapter::instance()->getMajorFirmwareVersion();
-  int minorFirmwareVersion = libnitrokey_adapter::instance()->getMinorFirmwareVersion();
+  int majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
+  int minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
 
   ui->IconLabel->setPixmap(small_img);
   ui->VersionLabel->setText(tr(GUI_VERSION));
@@ -52,13 +52,13 @@ AboutDialog::AboutDialog(QWidget *parent)
                                  .append(".")
                                  .append(QString::number(minorFirmwareVersion)));
 
-  auto cardSerial = libnitrokey_adapter::instance()->getCardSerial();
+  auto cardSerial = libada::i()->getCardSerial();
   ui->serialEdit->setText(QString::fromStdString(cardSerial));
 
   ui->ButtonStickStatus->hide();
 
-  if (libnitrokey_adapter::instance()->isDeviceConnected()) {
-    if (libnitrokey_adapter::instance()->isStorageDeviceConnected()) {
+  if (libada::i()->isDeviceConnected()) {
+    if (libada::i()->isStorageDeviceConnected()) {
       showStick20Configuration();
     } else {
       showStick10Configuration();
@@ -98,7 +98,7 @@ void AboutDialog::showStick20Configuration(void) {
   showPasswordCounters();
   showStick20Menu();
 
-  auto storageInfoData = libnitrokey_adapter::instance()->getStorageInfoData();
+  auto storageInfoData = libada::i()->getStorageInfoData();
 
 //  if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) {
 //    OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
@@ -166,8 +166,8 @@ void AboutDialog::showStick20Configuration(void) {
 //  ui->sd_id_label->setText(
 //      QString("0x").append(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32, 16)));
 
-  ui->admin_retry_label->setText(QString::number(libnitrokey_adapter::instance()->getPasswordRetryCount()));
-  ui->user_retry_label->setText(QString::number(libnitrokey_adapter::instance()->getUserPasswordRetryCount()));
+  ui->admin_retry_label->setText(QString::number(libada::i()->getPasswordRetryCount()));
+  ui->user_retry_label->setText(QString::number(libada::i()->getUserPasswordRetryCount()));
 //  ui->firmwareLabel->setText(
 //      QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0])
 //          .append(".")
@@ -177,8 +177,8 @@ void AboutDialog::showStick20Configuration(void) {
 
 //  ui->DeviceStatusLabel->setText(OutputText);
 
-  if (libnitrokey_adapter::instance()->isStorageDeviceConnected()){
-    const size_t sd_size_GB = libnitrokey_adapter::instance()->getStorageSDCardSize();
+  if (libada::i()->isStorageDeviceConnected()){
+    const size_t sd_size_GB = libada::i()->getStorageSDCardSize();
     QString capacity_text = QString(tr("%1 GB")).arg(sd_size_GB);
     ui->l_storage_capacity->setText(capacity_text);
   }
@@ -205,8 +205,8 @@ void AboutDialog::showStick10Configuration(void) {
   showPasswordCounters();
   hideStick20Menu();
 
-  ui->admin_retry_label->setText(QString::number(libnitrokey_adapter::instance()->getPasswordRetryCount()));
-  ui->user_retry_label->setText(QString::number(libnitrokey_adapter::instance()->getUserPasswordRetryCount()));
+  ui->admin_retry_label->setText(QString::number(libada::i()->getPasswordRetryCount()));
+  ui->user_retry_label->setText(QString::number(libada::i()->getUserPasswordRetryCount()));
   this->resize(0, 0);
   this->adjustSize();
   this->updateGeometry();

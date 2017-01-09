@@ -22,7 +22,7 @@
 #include "nitrokey-applet.h"
 #include "stick20responsedialog.h"
 #include "ui_stick20changepassworddialog.h"
-#include "libnitrokey_adapter.h"
+#include "libada.h"
 #include "src/utils/bool_values.h"
 
 /*******************************************************************************
@@ -77,7 +77,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
   case STICK10_PASSWORD_KIND_USER:
-    retryCount = libnitrokey_adapter::instance()->getUserPasswordRetryCount();
+    retryCount = libada::i()->getUserPasswordRetryCount();
     noTrialsLeft = tr("Unfortunately you have no more trials left. Please use 'Reset User PIN' "
                       "option from menu to reset password");
     break;
@@ -85,7 +85,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
   case STICK10_PASSWORD_KIND_ADMIN:
   case STICK20_PASSWORD_KIND_RESET_USER:
   case STICK10_PASSWORD_KIND_RESET_USER:
-    retryCount = libnitrokey_adapter::instance()->getPasswordRetryCount();
+    retryCount = libada::i()->getPasswordRetryCount();
     noTrialsLeft = tr("Unfortunately you have no more trials left. Please check instruction how to "
                       "reset Admin password.");
     break;
@@ -111,7 +111,7 @@ void DialogChangePassword::UI_deviceNotInitialized() const { csApplet()->warning
 
 
 int DialogChangePassword::exec() {
-  if (!libnitrokey_adapter::instance()->isDeviceInitialized()) {
+  if (!libada::i()->isDeviceInitialized()) {
     UI_deviceNotInitialized();
     done(Rejected);
     return QDialog::Rejected;
@@ -190,10 +190,10 @@ bool DialogChangePassword::_changePassword(void) {
   // Set kind of password
   switch (PasswordKind) {
   case STICK20_PASSWORD_KIND_USER:
-    returnCode = libnitrokey_adapter::instance()->setUserPIN();
+    returnCode = libada::i()->setUserPIN();
     break;
   case STICK20_PASSWORD_KIND_ADMIN:
-    returnCode = libnitrokey_adapter::instance()->setAdminPIN();
+    returnCode = libada::i()->setAdminPIN();
     break;
   default:
     break;
@@ -302,7 +302,7 @@ bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
 //  Change password
 //  commandSuccess = cryptostick->stick20NewUpdatePassword((uint8_t *)old_pin, (uint8_t *)new_pin);
 
-  libnitrokey_adapter::instance()->setStorageUpdatePassword();
+  libada::i()->setStorageUpdatePassword();
 
   csApplet()->warningBox(tr("Password has been changed with success!"));
   return true;
