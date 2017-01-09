@@ -50,7 +50,7 @@ public:
     bool getPWSSlotStatus(const int i);
 
     int getStorageInfoData();
-    int getStorageSDCardSize();
+    int getStorageSDCardSizeGB();
 
     int setUserPIN();
     int setAdminPIN();

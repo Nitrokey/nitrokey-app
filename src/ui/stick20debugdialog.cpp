@@ -86,11 +86,12 @@ DebugDialog::DebugDialog(QWidget *parent) : QDialog(parent), ui(new Ui::DebugDia
   RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME);
 
   ui->TextGUI->clear();
-  ui->TextGUI->appendPlainText(DebugText_GUI);
+//  ui->TextGUI->appendPlainText(DebugText_GUI);
 
   ui->TextStick->clear();
-  ui->TextStick->appendPlainText(DebugText_Stick20);
+//  ui->TextStick->appendPlainText(DebugText_Stick20);
 
+  bool DebugingStick20PoolingActive = FALSE;
   if (FALSE == DebugingStick20PoolingActive) // When no stick debugging is
                                              // active, resize the GUI
                                              // window

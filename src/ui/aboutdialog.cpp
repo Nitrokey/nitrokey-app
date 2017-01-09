@@ -177,7 +177,7 @@ void AboutDialog::showStick20Configuration(void) {
 //  ui->DeviceStatusLabel->setText(OutputText);
 
   if (libada::i()->isStorageDeviceConnected()){
-    const size_t sd_size_GB = libada::i()->getStorageSDCardSize();
+    const size_t sd_size_GB = libada::i()->getStorageSDCardSizeGB();
     QString capacity_text = QString(tr("%1 GB")).arg(sd_size_GB);
     ui->l_storage_capacity->setText(capacity_text);
   }
@@ -319,7 +319,4 @@ void AboutDialog::showNoStickFound(void) {
 }
 
 void AboutDialog::on_ButtonStickStatus_clicked() {
-  Stick20InfoDialog InfoDialog(this);
-
-  InfoDialog.exec();
 }

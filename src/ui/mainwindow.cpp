@@ -1206,6 +1206,8 @@ void MainWindow::startAboutDialog() {
   dialog.exec();
 }
 
+#include "libnitrokey/include/NitrokeyManager.h"
+
 void MainWindow::startStick20EnableCryptedVolume() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
@@ -1219,32 +1221,29 @@ void MainWindow::startStick20EnableCryptedVolume() {
       return;
   }
 
-  PinDialog dialog(tr("User pin dialog"), tr("Enter user PIN:"), cryptostick, PinDialog::PREFIXED,
-                   PinDialog::USER_PIN);
+  PinDialog dialog(tr("User pin dialog"), tr("Enter user PIN:"), PinDialog::PREFIXED,
+                   PinDialog::USER_PIN, this);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
     local_sync();
     dialog.getPassword((char *)password);
-    stick20SendCommand(STICK20_CMD_ENABLE_CRYPTED_PARI, password);
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->unlock_encrypted_volume(const_cast<char*>(password));
   }
 }
 
 void MainWindow::startStick20DisableCryptedVolume() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-
-  bool answer;
-
   if (TRUE == CryptedVolumeActive) {
-    answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
+    bool answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
                                                "proceed?\nTo avoid data loss, please unmount the partitions before "
                                                "proceeding."), false);
     if (false == answer)
       return;
 
     local_sync();
-    password[0] = 0;
-    stick20SendCommand(STICK20_CMD_DISABLE_CRYPTED_PARI, password);
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->lock_device();
   }
 }
 
@@ -1268,7 +1267,7 @@ void MainWindow::startStick20EnableHiddenVolume() {
     return;
 
   PinDialog dialog(tr("Enter password for hidden volume"), tr("Enter password for hidden volume:"),
-                   cryptostick, PinDialog::PREFIXED, PinDialog::OTHER);
+                   PinDialog::PREFIXED, PinDialog::OTHER, this);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -1276,24 +1275,22 @@ void MainWindow::startStick20EnableHiddenVolume() {
     // password[0] = 'P';
     dialog.getPassword((char *)password);
 
-    stick20SendCommand(STICK20_CMD_ENABLE_HIDDEN_CRYPTED_PARI, password);
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->unlock_hidden_volume(const_cast<char*>(password));
   }
 }
 
 void MainWindow::startStick20DisableHiddenVolume() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-
-  bool answer;
-
-  answer =
+  bool answer =
           csApplet()->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to proceed?\nTo "
                                             "avoid data loss, please unmount the partitions before proceeding."), true);
   if (false == answer)
     return;
 
   local_sync();
-  password[0] = 0;
-  stick20SendCommand(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, password);
+//  stick20SendCommand(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, password);
+  auto m = nitrokey::NitrokeyManager::instance();
+  m->lock_device();
 }
 
 void MainWindow::startLockDeviceAction() {
@@ -1309,11 +1306,9 @@ void MainWindow::startLockDeviceAction() {
     local_sync();
   }
 
-  if (cryptostick->lockDevice()) {
-    cryptostick->passwordSafeUnlocked = false;
-  }
+  auto m = nitrokey::NitrokeyManager::instance();
+  m->lock_device();
 
-  HID_Stick20Configuration_st.VolumeActiceFlag_u8 = 0;
   PasswordSafeEnabled = FALSE;
 
   UpdateDynamicMenuEntrys();

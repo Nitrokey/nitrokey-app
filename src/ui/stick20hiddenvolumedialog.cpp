@@ -251,7 +251,7 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
   //  ui->EndBlockSpin->setMaximum(HighWatermarkMax);
   //  ui->EndBlockSpin->setMinimum(HighWatermarkMin + 1);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
-  int sd_size_GB = Stick20ProductionInfos_st.SD_Card_Size_u8;
+  int sd_size_GB = libada::i()->getStorageSDCardSizeGB();
   ui->l_sd_size->setText(tr("Storage capacity: %1GB").arg(sd_size_GB));
   ui->l_rounding_info->setText(ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100)));
 }
@@ -261,7 +261,7 @@ static double i_start_MB = 0;
 static double i_end_MB = 0;
 
 void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
-  size_t sd_size_MB = Stick20ProductionInfos_st.SD_Card_Size_u8 * 1024;
+  size_t sd_size_MB = libada::i()->getStorageSDCardSizeGB() * 1024;
 
   double current_block_start = ui->StartBlockSpin->value();
   double current_block_end = ui->EndBlockSpin->value();
