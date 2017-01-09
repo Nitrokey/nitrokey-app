@@ -26,7 +26,6 @@
 #include "ui_hotpdialog.h"
 
 HOTPDialog::HOTPDialog(QWidget *parent) : QDialog(parent), ui(new Ui::HOTPDialog) {
-  device = NULL;
   slotNumber = 0;
   lastTOTPTime = 0;
   lastInterval = 0;

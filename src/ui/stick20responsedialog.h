@@ -20,8 +20,6 @@
 #ifndef STICK20RESPONSEDIALOG_H
 #define STICK20RESPONSEDIALOG_H
 
-#include "device.h"
-#include "response.h"
 #include "stick20-response-task.h"
 #include <QDialog>
 #include <QTimer>
@@ -51,8 +49,8 @@ class Stick20ResponseDialog : public QDialog {
   explicit Stick20ResponseDialog(QWidget *parent = 0, Stick20ResponseTask *Stick20TaskPointer = 0);
   ~Stick20ResponseDialog();
 
-  void checkStick20StatusDebug(Response *stick20Response, int Status);
-  void showStick20Configuration(int Status);
+//  void checkStick20StatusDebug(int Status);
+//  void showStick20Configuration(int Status);
 
   QTimer *pollStick20Timer;
 

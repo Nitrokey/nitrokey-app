@@ -17,17 +17,17 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
 #include "stick20infodialog.h"
 #include "stick20responsedialog.h"
+#include "libnitrokey_adapter.h"
 
-AboutDialog::AboutDialog(Device *global_cryptostick, QWidget *parent)
+AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
-
-  cryptostick = global_cryptostick;
 
   QPixmap image(":/images/splash.png");
 
@@ -41,10 +41,10 @@ AboutDialog::AboutDialog(Device *global_cryptostick, QWidget *parent)
 
   ui->info_icon->setPixmap(small_info);
   ui->warning_sign->setPixmap(warning);
-  // cryptostick->getStatus();
-  int majorFirmwareVersion = cryptostick->firmwareVersion[0] / 10;
 
-  int minorFirmwareVersion = cryptostick->firmwareVersion[0] % 10;
+
+  int majorFirmwareVersion = libnitrokey_adapter::instance()->getMajorFirmwareVersion();
+  int minorFirmwareVersion = libnitrokey_adapter::instance()->getMinorFirmwareVersion();
 
   ui->IconLabel->setPixmap(small_img);
   ui->VersionLabel->setText(tr(GUI_VERSION));
@@ -52,13 +52,13 @@ AboutDialog::AboutDialog(Device *global_cryptostick, QWidget *parent)
                                  .append(".")
                                  .append(QString::number(minorFirmwareVersion)));
 
-  QByteArray cardSerial = QByteArray((char *)cryptostick->cardSerial).toHex();
-  ui->serialEdit->setText(QString("%1").arg(QString(cardSerial), 8, '0'));
+  auto cardSerial = libnitrokey_adapter::instance()->getCardSerial();
+  ui->serialEdit->setText(QString::fromStdString(cardSerial));
 
   ui->ButtonStickStatus->hide();
 
-  if (true == cryptostick->isConnected) {
-    if (TRUE == cryptostick->activStick20) {
+  if (libnitrokey_adapter::instance()->isDeviceConnected()) {
+    if (libnitrokey_adapter::instance()->isStorageDeviceConnected()) {
       showStick20Configuration();
     } else {
       showStick10Configuration();
@@ -95,92 +95,90 @@ void AboutDialog::showStick20Configuration(void) {
   bool ErrorFlag;
   ErrorFlag = FALSE;
 
-  cryptostick->getPasswordRetryCount();
-  cryptostick->getUserPasswordRetryCount();
-
   showPasswordCounters();
   showStick20Menu();
 
-  if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) {
-    OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
-    ErrorFlag = TRUE;
-  }
+  auto storageInfoData = libnitrokey_adapter::instance()->getStorageInfoData();
 
-  if (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32) {
-    ui->serialEdit->setText("-");
-    OutputText.append(QString(tr("\nSmartcard is not accessible\n\n")));
-    ErrorFlag = TRUE;
-  }
+//  if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) {
+//    OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
+//    ErrorFlag = TRUE;
+//  }
+//
+//  if (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32) {
+//    ui->serialEdit->setText("-");
+//    OutputText.append(QString(tr("\nSmartcard is not accessible\n\n")));
+//    ErrorFlag = TRUE;
+//  }
+//
+//  if (TRUE == ErrorFlag) {
+//    ui->DeviceStatusLabel->setText(OutputText);
+//    return;
+//  }
+//
+//  if (99 == HID_Stick20Configuration_st.UserPwRetryCount) {
+//    OutputText.append(QString(tr("No connection\nPlease retry")));
+//    ui->DeviceStatusLabel->setText(OutputText);
+//    return;
+//  }
+//
+//  if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated) {
+//    showWarning();
+//  } else {
+//    hideWarning();
+//  }
+//
+//  if (TRUE == HID_Stick20Configuration_st.FirmwareLocked_u8) {
+//    // OutputText.append (QString (tr ("      *** Firmware is locked ***
+//    // ")).append ("\n"));
+//  }
+//
+//  if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01)) {
+//    ui->newsd_label->show();
+//  } else {
+//    ui->newsd_label->hide();
+//  }
+//
+//  if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01)) {
+//    ui->not_erased_sd_label->show();
+//  } else {
+//    ui->not_erased_sd_label->hide();
+//  }
+//
+//  if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8) {
+//    ui->sd_id_label->setText(tr("READ/WRITE"));
+//  } else {
+//    ui->sd_id_label->setText(tr("READ ONLY"));
+//  }
+//
+//  if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE))) {
+//    ui->hidden_volume_label->setText(tr("Active"));
+//  } else {
+//    ui->hidden_volume_label->setText(tr("Not active"));
+//    if (0 !=
+//        (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE))) {
+//      ui->encrypted_volume_label->setText(tr("Active"));
+//    } else {
+//      ui->encrypted_volume_label->setText(tr("Not active"));
+//    }
+//  }
 
-  if (TRUE == ErrorFlag) {
-    ui->DeviceStatusLabel->setText(OutputText);
-    return;
-  }
+//  ui->sd_id_label->setText(
+//      QString("0x").append(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32, 16)));
 
-  if (99 == HID_Stick20Configuration_st.UserPwRetryCount) {
-    OutputText.append(QString(tr("No connection\nPlease retry")));
-    ui->DeviceStatusLabel->setText(OutputText);
-    return;
-  }
+  ui->admin_retry_label->setText(QString::number(libnitrokey_adapter::instance()->getPasswordRetryCount()));
+  ui->user_retry_label->setText(QString::number(libnitrokey_adapter::instance()->getUserPasswordRetryCount()));
+//  ui->firmwareLabel->setText(
+//      QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0])
+//          .append(".")
+//          .append(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[1])));
+//  ui->serialEdit->setText(
+//      QString("%1").sprintf("%08x", HID_Stick20Configuration_st.ActiveSmartCardID_u32));
 
-  if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated) {
-    showWarning();
-  } else {
-    hideWarning();
-  }
+//  ui->DeviceStatusLabel->setText(OutputText);
 
-  if (TRUE == HID_Stick20Configuration_st.FirmwareLocked_u8) {
-    // OutputText.append (QString (tr ("      *** Firmware is locked ***
-    // ")).append ("\n"));
-  }
-
-  if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01)) {
-    ui->newsd_label->show();
-  } else {
-    ui->newsd_label->hide();
-  }
-
-  if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01)) {
-    ui->not_erased_sd_label->show();
-  } else {
-    ui->not_erased_sd_label->hide();
-  }
-
-  if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8) {
-    ui->sd_id_label->setText(tr("READ/WRITE"));
-  } else {
-    ui->sd_id_label->setText(tr("READ ONLY"));
-  }
-
-  if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE))) {
-    ui->hidden_volume_label->setText(tr("Active"));
-  } else {
-    ui->hidden_volume_label->setText(tr("Not active"));
-    if (0 !=
-        (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE))) {
-      ui->encrypted_volume_label->setText(tr("Active"));
-    } else {
-      ui->encrypted_volume_label->setText(tr("Not active"));
-    }
-  }
-
-  ui->sd_id_label->setText(
-      QString("0x").append(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32, 16)));
-
-  ui->admin_retry_label->setText(QString::number(HID_Stick20Configuration_st.AdminPwRetryCount));
-  ui->user_retry_label->setText(QString::number(HID_Stick20Configuration_st.UserPwRetryCount));
-  ui->firmwareLabel->setText(
-      QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0])
-          .append(".")
-          .append(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[1])));
-  ui->serialEdit->setText(
-      QString("%1").sprintf("%08x", HID_Stick20Configuration_st.ActiveSmartCardID_u32));
-
-  ui->DeviceStatusLabel->setText(OutputText);
-
-  if (cryptostick->activStick20){
-    cryptostick->stick20ProductionTest();
-    const size_t sd_size_GB = Stick20ProductionInfos_st.SD_Card_Size_u8;
+  if (libnitrokey_adapter::instance()->isStorageDeviceConnected()){
+    const size_t sd_size_GB = libnitrokey_adapter::instance()->getStorageSDCardSize();
     QString capacity_text = QString(tr("%1 GB")).arg(sd_size_GB);
     ui->l_storage_capacity->setText(capacity_text);
   }
@@ -206,11 +204,9 @@ void AboutDialog::showStick20Configuration(void) {
 void AboutDialog::showStick10Configuration(void) {
   showPasswordCounters();
   hideStick20Menu();
-  cryptostick->getPasswordRetryCount();
-  cryptostick->getUserPasswordRetryCount();
 
-  ui->admin_retry_label->setText(QString::number(cryptostick->passwordRetryCount));
-  ui->user_retry_label->setText(QString::number(cryptostick->userPasswordRetryCount));
+  ui->admin_retry_label->setText(QString::number(libnitrokey_adapter::instance()->getPasswordRetryCount()));
+  ui->user_retry_label->setText(QString::number(libnitrokey_adapter::instance()->getUserPasswordRetryCount()));
   this->resize(0, 0);
   this->adjustSize();
   this->updateGeometry();

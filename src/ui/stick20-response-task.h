@@ -1,14 +1,13 @@
 #ifndef STICK20RESPONSETASK_H
 #define STICK20RESPONSETASK_H
 
-#include "device.h"
 #include "nitrokey-applet.h"
-#include "response.h"
 #include <QWidget>
+#include <QtWidgets/QSystemTrayIcon>
+#include "libnitrokey_adapter.h"
 
 class Stick20ResponseTask : public QObject {
-  Q_OBJECT public : Stick20ResponseTask(QWidget *parent, Device *Cryptostick20,
-                                        QSystemTrayIcon *MainWndTrayIcon);
+  Q_OBJECT public : Stick20ResponseTask(QWidget *parent, QSystemTrayIcon *MainWndTrayIcon);
   ~Stick20ResponseTask();
 
   void done(int Status);
@@ -18,9 +17,7 @@ class Stick20ResponseTask : public QObject {
 
   QWidget *Stick20ResponseTaskParent;
 
-  Device *cryptostick;
   QSystemTrayIcon *trayIcon;
-  Response *stick20Response;
 
   int ActiveCommand;
   bool FlagNoStopWhenStatusOK;

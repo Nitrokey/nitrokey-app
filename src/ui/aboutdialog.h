@@ -1,7 +1,6 @@
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
-#include "device.h"
 #include <QDialog>
 
 #define GUI_VERSION "0.6.2"
@@ -12,7 +11,7 @@ class AboutDialog;
 }
 
 class AboutDialog : public QDialog {
-  Q_OBJECT public : explicit AboutDialog(Device *global_cryptostick, QWidget *parent = 0);
+  Q_OBJECT public : explicit AboutDialog(QWidget *parent = 0);
   ~AboutDialog();
   void showStick20Configuration(void);
   void showStick10Configuration(void);
@@ -23,7 +22,6 @@ class AboutDialog : public QDialog {
   void showPasswordCounters(void);
   void hideWarning(void);
   void showWarning(void);
-  Device *cryptostick;
 
 private slots:
   void on_ButtonOK_clicked();

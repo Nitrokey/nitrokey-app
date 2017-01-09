@@ -17,6 +17,7 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QtWidgets/QSystemTrayIcon>
 #include "stick20-response-task.h"
 #include "stick20responsedialog.h"
 
@@ -37,8 +38,7 @@ public:
   static void sleep(unsigned long secs) { QThread::sleep(secs); }
 };
 
-Stick20ResponseTask::Stick20ResponseTask(QWidget *parent, Device *Cryptostick20,
-                                         QSystemTrayIcon *MainWndTrayIcon) {
+Stick20ResponseTask::Stick20ResponseTask(QWidget *parent, QSystemTrayIcon *MainWndTrayIcon) {
   ActiveCommand = -1;
   EndFlag = FALSE;
   FlagNoStopWhenStatusOK = FALSE;
@@ -48,10 +48,8 @@ Stick20ResponseTask::Stick20ResponseTask(QWidget *parent, Device *Cryptostick20,
 
   Stick20ResponseTaskParent = parent;
 
-  cryptostick = Cryptostick20;
   trayIcon = MainWndTrayIcon;
 
-  stick20Response = new Response();
 }
 
 void Stick20ResponseTask::NoStopWhenStatusOK() { FlagNoStopWhenStatusOK = TRUE; }

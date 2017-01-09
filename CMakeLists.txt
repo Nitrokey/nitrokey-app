@@ -29,6 +29,7 @@ FIND_PACKAGE(Qt5Widgets)
 # Directory structure
 
 SET(ROOTDIR ${CMAKE_CURRENT_SOURCE_DIR})
+SET(LIBDIR ${ROOTDIR}/libnitrokey)
 SET(UIDIR ${ROOTDIR}/ui)
 SET(SRCDIR ${ROOTDIR}/src)
 SET(SRCUIDIR ${SRCDIR}/ui)
@@ -38,33 +39,27 @@ SET(UTILSDIR ${SRCDIR}/utils)
 SET(moc_headers
     ${SRCUIDIR}/aboutdialog.h
     ${UTILSDIR}/base32.h
-    ${SRCDIR}/command.h
-    ${UTILSDIR}/crc32.h
     ${SRCUIDIR}/nitrokey-applet.h
-    ${SRCDIR}/device.h
     ${SRCUIDIR}/hotpdialog.h
     ${SRCDIR}/hotpslot.h
-    ${SRCDIR}/inttypes.h
     ${SRCUIDIR}/mainwindow.h
     ${SRCDIR}/mcvs-wrapper.h
     ${SRCUIDIR}/passworddialog.h
     ${SRCUIDIR}/passwordsafedialog.h
     ${SRCUIDIR}/pindialog.h
-    ${SRCDIR}/response.h
     ${SRCUIDIR}/securitydialog.h
     ${UTILSDIR}/sleep.h
     ${SRCUIDIR}/stick20changepassworddialog.h
     ${SRCUIDIR}/stick20debugdialog.h
     ${SRCUIDIR}/stick20dialog.h
     ${SRCUIDIR}/stick20hiddenvolumedialog.h
-    ${UTILSDIR}/stick20hid.h
     ${SRCUIDIR}/stick20infodialog.h
     ${SRCUIDIR}/stick20lockfirmwaredialog.h
-    ${SRCUIDIR}/stick20matrixpassworddialog.h
     ${SRCUIDIR}/stick20responsedialog.h
     ${SRCUIDIR}/stick20-response-task.h
     ${SRCUIDIR}/stick20setup.h
     ${SRCUIDIR}/stick20updatedialog.h
+    ${SRCUIDIR}/stick20window.h
     ${SRCUIDIR}/stick20window.h
 )
 
@@ -108,84 +103,14 @@ QT5_WRAP_CPP(moc_output ${moc_headers})
 QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
 
 
-FIND_PACKAGE(PkgConfig REQUIRED)
-SET(LIBUSB_INCLUDE_DIRS_HINT "/usr/include/libusb-1.0")
+#FIND_PACKAGE(PkgConfig REQUIRED)
 
 IF (WIN32)
-    SET( platform_specific_sources hid_win.c)
 ELSEIF(APPLE)
-    SET( platform_specific_sources hid_mac.c)
-    SET( platform_specific_libs "-framework IOKit -framework CoreFoundation")
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
-
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
 
-    pkg_check_modules(LIBUSB libusb-1.0)
-    find_path(LIBUSB_INCLUDE_DIRS NAMES libusb.h
-        HINTS ${LIBUSB_INCLUDE_DIRS} ${LIB_USB_INCLUDEDIR} ${LIBUSB_INCLUDE_DIRS_HINT}
-        PATH_SUFFIXES libusb-1.0 )
-        IF (NOT LIBUSB_INCLUDE_DIRS )
-            message(FATAL_ERROR "libusb development library is required (package libusb-1.0-0-dev under Ubuntu 16.04)")
-        ENDIF()
-
-
-    if(HAVE_LIBAPPINDICATOR)
-
-        find_package(Libnotify 0.7 REQUIRED)
-        find_path(NOTIFY_INCLUDE_DIR NAMES libnotify/notify.h
-            HINTS ${LIB_NOTIFY_INCLUDEDIR} ${LIB_NOTIFY_INCLUDE_DIRS}
-            PATH_SUFFIXES libnotify)
-        IF (NOT NOTIFY_INCLUDE_DIR )
-            message(FATAL_ERROR "libappindicator support could only be compiled when libnotify development files are installed (package libnotify-dev under Ubuntu)")
-        ENDIF()
-
-        pkg_check_modules(GTK2 gtk+-2.0) 
-        find_package(GTK2 2.6 QUIET)
-        IF (NOT GTK2_FOUND)
-            message(FATAL_ERROR "libappindicator support could only be compiled when GTK2 libraries are available (package libgtk2.0-dev under Ubuntu)")
-        ENDIF()
-        #Needs package libappindicator-dev under ubuntu
-        pkg_check_modules(LIB_APPINDICATOR QUIET appindicator-0.1)
-
-        find_path(APPINDICATOR_INCLUDE_DIR NAMES libappindicator/app-indicator.h
-            HINTS ${LIB_APPINDICATOR_INCLUDEDIR} ${LIB_APPINDICATOR_INCLUDE_DIRS}
-            PATH_SUFFIXES libappindicator-0.1)
-
-        find_library(APPINDICATOR_LIBRARY NAMES appindicator)
-        include(FindPackageHandleStandardArgs)
-        find_package_handle_standard_args(APPINDICATOR DEFAULT_MSG APPINDICATOR_LIBRARY APPINDICATOR_INCLUDE_DIR)
-        if(APPINDICATOR_FOUND)
-            set(APPINDICATOR_LIBRARIES ${APPINDICATOR_LIBRARY})
-            set(APPINDICATOR_INCLUDE_DIRS ${APPINDICATOR_INCLUDE_DIR})
-        endif()
-
-        mark_as_advanced(APPINDICATOR_INCLUDE_DIR APPINDICATOR_LIBRARY)
-        IF (NOT APPINDICATOR_FOUND)
-            message(FATAL_ERROR "You have selected HAVE_LIBAPPINDICATOR but libappindicator support could only be compiled when development package is available (package libappindicator-dev under Ubuntu)")
-        ENDIF()
-    endif()
-    IF (GTK2_FOUND AND HAVE_LIBAPPINDICATOR)
-
-
-      SET(GTK2_INCLUDE_DIRS
-          ${GTK2_INCLUDE_DIRS}
-          /usr/include/libappindicator-0.1
-          /usr/include/gtk-2.0
-          /usr/lib/gtk-2.0/include
-          /usr/include/glib-2.0
-          /usr/lib/glib-2.0/include
-          /usr/include/cairo
-          /usr/include/atk-1.0
-          /usr/include/pango-1.0
-      )
-
-      SET(EXTRA_LIBS ${GTK2_LIBRARIES} appindicator notify)
-
-      ADD_DEFINITIONS(${GTK2_CFLAGS_OTHER} -DHAVE_LIBAPPINDICATOR)
-
-    ENDIF () # GTK2_FOUND AND HAVE_LIBAPPINDICATOR
-
-    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread ${LIBUSB_LIBRARIES} )
+#    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread ${LIBUSB_LIBRARIES} )
 
     INCLUDE_DIRECTORIES(
       ${CMAKE_CURRENT_SOURCE_DIR}
@@ -196,13 +121,11 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
       ${PROJECT_SOURCE_DIR}
       ${QT_INCLUDE_DIR}
       ${LIBUSB_INCLUDE_DIRS}
-      ${GTK2_INCLUDE_DIRS}
     )
 
     LINK_DIRECTORIES(
       ${QT_LIBRARY_DIR}
       ${LIBUSB_LIBRARY_DIRS}
-      ${GTK2_LIBRARY_DIRS}
     )
 
 ENDIF () # WIN32
@@ -211,10 +134,7 @@ ENDIF () # WIN32
 SET(nitrokey_app_sources
     ${SRCUIDIR}/aboutdialog.cpp
     ${UTILSDIR}/base32.cpp
-    ${SRCDIR}/command.cpp
-    ${UTILSDIR}/crc32.cpp
     ${SRCUIDIR}/nitrokey-applet.cpp
-    ${SRCDIR}/device.cpp
     ${SRCUIDIR}/hotpdialog.cpp
     ${SRCDIR}/hotpslot.cpp
     ${SRCDIR}/main.cpp
@@ -222,7 +142,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/passworddialog.cpp
     ${SRCUIDIR}/passwordsafedialog.cpp
     ${SRCUIDIR}/pindialog.cpp
-    ${SRCDIR}/response.cpp
     ${SRCUIDIR}/securitydialog.cpp
     ${SRCUIDIR}/stick20changepassworddialog.cpp
     ${SRCUIDIR}/stick20debugdialog.cpp
@@ -230,16 +149,13 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
     ${SRCUIDIR}/stick20infodialog.cpp
     ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
-    ${SRCUIDIR}/stick20matrixpassworddialog.cpp
     ${SRCUIDIR}/stick20responsedialog.cpp
     ${SRCUIDIR}/stick20-response-task.cpp
     ${SRCUIDIR}/stick20setup.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${SRCUIDIR}/stick20window.cpp
-    ${UTILSDIR}/stick20hid.c
-    ${UTILSDIR}/hid_libusb.c
     ${platform_specific_sources}
-)
+        src/libnitrokey_adapter.cpp src/libnitrokey_adapter.h)
 
 # Freedesktop files
 IF(NOT WIN32)

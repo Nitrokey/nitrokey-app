@@ -21,7 +21,6 @@
 #ifndef HOTPDIALOG_H
 #define HOTPDIALOG_H
 
-#include "device.h"
 #include <QDialog>
 #include <QTimer>
 
@@ -31,7 +30,6 @@ class HOTPDialog;
 
 class HOTPDialog : public QDialog {
   Q_OBJECT public : explicit HOTPDialog(QWidget *parent);
-  Device *device;
   uint8_t slotNumber;
   QString title;
 
