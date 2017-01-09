@@ -17,17 +17,17 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device.h"
 #include "mainwindow.h"
 #include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
 #include "splash.h"
-#include "stick20hid.h"
 #include <QApplication>
 #include <QDebug>
 #include <QSharedMemory>
 #include <stdlib.h>
 #include <src/ui/aboutdialog.h>
+
+#include "src/utils/bool_values.h"
 
 StartUpParameter_tst &
 parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st);
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
-  HID_Stick20Init();
+//  HID_Stick20Init();
 
   MainWindow w(&StartupInfo_st);
 //    csApplet()->setParent(&w);

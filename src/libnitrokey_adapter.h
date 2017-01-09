@@ -8,8 +8,6 @@
 #include <memory>
 #include <string>
 
-#define TRUE 1
-#define FALSE 0
 
 class libnitrokey_adapter {
   private:

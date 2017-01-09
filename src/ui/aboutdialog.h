@@ -2,6 +2,7 @@
 #define ABOUTDIALOG_H
 
 #include <QDialog>
+#include "src/utils/bool_values.h"
 
 #define GUI_VERSION "0.6.2"
 

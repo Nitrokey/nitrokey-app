@@ -21,7 +21,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "device.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QValidator>

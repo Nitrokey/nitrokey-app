@@ -40,7 +40,6 @@ SET(moc_headers
     ${SRCUIDIR}/aboutdialog.h
     ${UTILSDIR}/base32.h
     ${SRCUIDIR}/nitrokey-applet.h
-    ${SRCUIDIR}/hotpdialog.h
     ${SRCDIR}/hotpslot.h
     ${SRCUIDIR}/mainwindow.h
     ${SRCDIR}/mcvs-wrapper.h
@@ -67,19 +66,17 @@ SET(moc_headers
 # Ui files
 SET(ui_files
     ${UIDIR}/aboutdialog.ui
-    ${UIDIR}/hotpdialog.ui
     ${UIDIR}/mainwindow.ui
     ${UIDIR}/passworddialog.ui
     ${UIDIR}/passwordsafedialog.ui
     ${UIDIR}/pindialog.ui
-    ${UIDIR}/securitydialog.ui
+#    ${UIDIR}/securitydialog.ui
     ${UIDIR}/stick20changepassworddialog.ui
     ${UIDIR}/stick20debugdialog.ui
     ${UIDIR}/stick20dialog.ui
     ${UIDIR}/stick20hiddenvolumedialog.ui
     ${UIDIR}/stick20infodialog.ui
     ${UIDIR}/stick20lockfirmwaredialog.ui
-    ${UIDIR}/stick20matrixpassworddialog.ui
     ${UIDIR}/stick20responsedialog.ui
     ${UIDIR}/stick20setup.ui
     ${UIDIR}/stick20updatedialog.ui
@@ -135,7 +132,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/aboutdialog.cpp
     ${UTILSDIR}/base32.cpp
     ${SRCUIDIR}/nitrokey-applet.cpp
-    ${SRCUIDIR}/hotpdialog.cpp
     ${SRCDIR}/hotpslot.cpp
     ${SRCDIR}/main.cpp
     ${SRCUIDIR}/mainwindow.cpp
@@ -155,7 +151,7 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${SRCUIDIR}/stick20window.cpp
     ${platform_specific_sources}
-        src/libnitrokey_adapter.cpp src/libnitrokey_adapter.h)
+        src/libnitrokey_adapter.cpp src/libnitrokey_adapter.h src/utils/bool_values.h)
 
 # Freedesktop files
 IF(NOT WIN32)
