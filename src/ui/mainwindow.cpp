@@ -643,10 +643,6 @@ void MainWindow::initActionsForStick20() {
   connect(Stick20ActionFillSDCardWithRandomChars, SIGNAL(triggered()), this,
           SLOT(startStick20FillSDCardWithRandomChars()));
 
-  Stick20ActionGetStickStatus = new QAction(tr("&Get stick status"), this);
-  connect(Stick20ActionGetStickStatus, SIGNAL(triggered()), this,
-          SLOT(startStick20GetStickStatus()));
-
   Stick20ActionSetReadonlyUncryptedVolume =
       new QAction(tr("&Set unencrypted volume read-only"), this);
   connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), this,
@@ -1327,7 +1323,7 @@ void MainWindow::startStick20EnableFirmwareUpdate() {
     return;
   }
 
-  PinDialog dialog(tr("Enter Firmware Password"), tr("Enter Firmware Password:"), cryptostick,
+  PinDialog dialog(tr("Enter Firmware Password"), tr("Enter Firmware Password:"),
                    PinDialog::PREFIXED, PinDialog::FIRMWARE_PIN);
   ret = dialog.exec();
 
@@ -1335,28 +1331,24 @@ void MainWindow::startStick20EnableFirmwareUpdate() {
     // FIXME unmount all volumes and sync
     dialog.getPassword((char *)password);
 
-    stick20SendCommand(STICK20_CMD_ENABLE_FIRMWARE_UPDATE, password);
+    //TODO add firmware update logic
+//    stick20SendCommand(STICK20_CMD_ENABLE_FIRMWARE_UPDATE, password);
+//    auto m = nitrokey::NitrokeyManager::instance();
+//    m->enable_firmware_update();
   }
 }
 
 void MainWindow::startStick10ActionChangeUserPIN() {
   DialogChangePassword dialog(this);
-
   dialog.setModal(TRUE);
-
-  dialog.cryptostick = cryptostick;
-
   dialog.PasswordKind = STICK10_PASSWORD_KIND_USER;
-
   dialog.InitData();
   dialog.exec();
 }
 
 void MainWindow::startStick10ActionChangeAdminPIN() {
   DialogChangePassword dialog(this);
-
   dialog.setModal(TRUE);
-  dialog.cryptostick = cryptostick;
   dialog.PasswordKind = STICK10_PASSWORD_KIND_ADMIN;
   dialog.InitData();
   dialog.exec();
@@ -1364,9 +1356,7 @@ void MainWindow::startStick10ActionChangeAdminPIN() {
 
 void MainWindow::startStick20ActionChangeUpdatePIN() {
   DialogChangePassword dialog(this);
-
   dialog.setModal(TRUE);
-  dialog.cryptostick = cryptostick;
   dialog.PasswordKind = STICK20_PASSWORD_KIND_UPDATE;
   dialog.InitData();
   dialog.exec();
@@ -1374,38 +1364,24 @@ void MainWindow::startStick20ActionChangeUpdatePIN() {
 
 void MainWindow::startStick20ActionChangeUserPIN() {
   DialogChangePassword dialog(this);
-
   dialog.setModal(TRUE);
-
-  dialog.cryptostick = cryptostick;
-
   dialog.PasswordKind = STICK20_PASSWORD_KIND_USER;
-
   dialog.InitData();
   dialog.exec();
 }
 
 void MainWindow::startStick20ActionChangeAdminPIN() {
   DialogChangePassword dialog(this);
-
   dialog.setModal(TRUE);
-
-  dialog.cryptostick = cryptostick;
-
   dialog.PasswordKind = STICK20_PASSWORD_KIND_ADMIN;
-
   dialog.InitData();
   dialog.exec();
 }
 
 void MainWindow::startResetUserPassword() {
   DialogChangePassword dialog(this);
-
   dialog.setModal(TRUE);
-
-  dialog.cryptostick = cryptostick;
-
-  if (cryptostick->activStick20)
+  if (libada::i()->isStorageDeviceConnected())
     dialog.PasswordKind = STICK20_PASSWORD_KIND_RESET_USER;
   else
     dialog.PasswordKind = STICK10_PASSWORD_KIND_RESET_USER;
@@ -1416,10 +1392,9 @@ void MainWindow::startResetUserPassword() {
 
 void MainWindow::startStick20ExportFirmwareToFile() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
-
   bool ret;
 
-  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED,
+  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), PinDialog::PREFIXED,
                    PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
@@ -1427,30 +1402,31 @@ void MainWindow::startStick20ExportFirmwareToFile() {
     // password[0] = 'P';
     dialog.getPassword((char *)password);
 
-    stick20SendCommand(STICK20_CMD_EXPORT_FIRMWARE_TO_FILE, password);
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->export_firmware(const_cast<char*>(password));
   }
 }
 
 void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
   uint8_t password[LOCAL_PASSWORD_SIZE];
-
   int ret;
-
   bool answer;
 
   answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
                                              "hidden volumes, and password safe! Continue?"), false);
   if (true == answer) {
-    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PREFIXED,
+    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PREFIXED,
                      PinDialog::ADMIN_PIN);
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret) {
       dialog.getPassword((char *)password);
 
-      bool success = stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
-      if (success && fillSDWithRandomChars != 0) {
-        stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
+      auto m = nitrokey::NitrokeyManager::instance();
+      m->build_aes_key(const_cast<char*>(password));
+//      bool success = stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
+      if (fillSDWithRandomChars != 0) {
+        m->fill_SD_card_with_random_data(const_cast<char*>(password));
       }
       refreshStick20StatusData();
     }
@@ -1459,73 +1435,48 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
 
 void MainWindow::startStick20FillSDCardWithRandomChars() {
   uint8_t password[40];
-
   bool ret;
 
-  PinDialog dialog(tr("Enter admin PIN"), tr("Admin Pin:"), cryptostick, PinDialog::PREFIXED,
+  PinDialog dialog(tr("Enter admin PIN"), tr("Admin Pin:"), PinDialog::PREFIXED,
                    PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
-    // password[0] = 'P';
     dialog.getPassword((char *)password);
-
-    stick20SendCommand(STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS, password);
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->fill_SD_card_with_random_data(const_cast<char*>(password));
   }
 }
 
 void MainWindow::startStick20ClearNewSdCardFound() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
-
   bool ret;
-
-  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), cryptostick, PinDialog::PREFIXED,
+  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), PinDialog::PREFIXED,
                    PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
     dialog.getPassword((char *)password);
-
-    stick20SendCommand(STICK20_CMD_CLEAR_NEW_SD_CARD_FOUND, password);
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->clear_new_sd_card_warning(const_cast<char*>(password));
   }
 }
 
 void MainWindow::startStick20GetStickStatus() {
-
-  // Get actual data from stick 20
-  cryptostick->stick20GetStatusData();
-
-  // Wait for response
-  Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
-
-  ResponseTask.NoStopWhenStatusOK();
-  ResponseTask.GetResponse();
-
-  /*
-     Stick20ResponseDialog ResponseDialog(this);
-
-     ResponseDialog.NoStopWhenStatusOK ();
-
-     ResponseDialog.cryptostick = cryptostick; ResponseDialog.exec();
-     ResponseDialog.ResultValue; */
-  Stick20InfoDialog InfoDialog(this);
-
-  InfoDialog.exec();
 }
 
 void MainWindow::startStick20SetReadOnlyUncryptedVolume() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
-
   bool ret;
 
-  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), cryptostick, PinDialog::PREFIXED,
+  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), PinDialog::PREFIXED,
                    PinDialog::USER_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
     dialog.getPassword((char *)password);
-
-    stick20SendCommand(STICK20_CMD_ENABLE_READONLY_UNCRYPTED_LUN, password);
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->set_unencrypted_read_only(const_cast<char*>(password));
   }
 }
 
