@@ -49,7 +49,6 @@ SET(moc_headers
     ${SRCUIDIR}/stick20changepassworddialog.h
     ${SRCUIDIR}/stick20debugdialog.h
     ${SRCUIDIR}/stick20hiddenvolumedialog.h
-    ${SRCUIDIR}/stick20infodialog.h
     ${SRCUIDIR}/stick20lockfirmwaredialog.h
     ${SRCUIDIR}/stick20responsedialog.h
     ${SRCUIDIR}/stick20-response-task.h
@@ -66,7 +65,6 @@ SET(ui_files
     ${UIDIR}/stick20changepassworddialog.ui
     ${UIDIR}/stick20debugdialog.ui
     ${UIDIR}/stick20hiddenvolumedialog.ui
-    ${UIDIR}/stick20infodialog.ui
     ${UIDIR}/stick20lockfirmwaredialog.ui
     ${UIDIR}/stick20responsedialog.ui
     ${UIDIR}/stick20updatedialog.ui
@@ -129,7 +127,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20changepassworddialog.cpp
     ${SRCUIDIR}/stick20debugdialog.cpp
     ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
-    ${SRCUIDIR}/stick20infodialog.cpp
     ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
     ${SRCUIDIR}/stick20responsedialog.cpp
     ${SRCUIDIR}/stick20-response-task.cpp

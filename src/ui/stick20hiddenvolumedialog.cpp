@@ -22,6 +22,9 @@
 #include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
 #include "ui_stick20hiddenvolumedialog.h"
+#include "src/utils/bool_values.h"
+
+
 
 stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::stick20HiddenVolumeDialog) {

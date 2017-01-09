@@ -38,9 +38,7 @@ PinDialog::PinDialog(const QString &title, const QString &label, Usage usage, Pi
 
   // Setup pwd-matrix
   ui->checkBox_PasswordMatrix->setCheckState(Qt::Unchecked);
-  if (FALSE == ShowMatrix) {
-    ui->checkBox_PasswordMatrix->hide();
-  }
+  ui->checkBox_PasswordMatrix->hide();
 
   // Setup title and label
   this->setWindowTitle(title);

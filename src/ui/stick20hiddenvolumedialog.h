@@ -21,10 +21,18 @@
 #define STICK20HIDDENVOLUMEDIALOG_H
 
 #include <QDialog>
+#include <QAbstractButton>
+#include "libada.h"
 
 namespace Ui {
 class stick20HiddenVolumeDialog;
 }
+typedef struct {
+    unsigned char SlotNr_u8;
+    unsigned char StartBlockPercent_u8;
+    unsigned char EndBlockPercent_u8;
+    unsigned char HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE + 1];
+} HiddenVolumeSetup_tst;
 
 class stick20HiddenVolumeDialog : public QDialog {
   Q_OBJECT public : explicit stick20HiddenVolumeDialog(QWidget *parent = 0);
@@ -57,6 +65,7 @@ private slots:
 
 private:
   Ui::stick20HiddenVolumeDialog *ui;
+    HiddenVolumeSetup_tst HV_Setup_st;
 };
 
 #endif // STICK20HIDDENVOLUMEDIALOG_H

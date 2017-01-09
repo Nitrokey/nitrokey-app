@@ -35,7 +35,6 @@
 #include "stick20-response-task.h"
 #include "stick20changepassworddialog.h"
 #include "stick20hiddenvolumedialog.h"
-#include "stick20infodialog.h"
 #include "stick20lockfirmwaredialog.h"
 #include "stick20responsedialog.h"
 #include "stick20updatedialog.h"
@@ -1044,7 +1043,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
 //  ui->enterCheckBox->setChecked((cryptostick->TOTPSlots[slotNo]->config & (1 << 1)));
 //  ui->tokenIDCheckBox->setChecked(cryptostick->TOTPSlots[slotNo]->config & (1 << 2));
 
-  if (!libada::i()->isTOTPSlotProgrammed(i)) {
+  if (!libada::i()->isTOTPSlotProgrammed(slotNo)) {
     ui->ompEdit->setText("NK");
     ui->ttEdit->setText("01");
 //    QByteArray cardSerial = QByteArray((char *)cryptostick->cardSerial).toHex();
@@ -1153,37 +1152,14 @@ void MainWindow::displayCurrentGeneralConfig() {
 }
 
 void MainWindow::startConfiguration() {
-  bool ok;
+  //TODO authenticate admin plain
+//  PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
+  csApplet()->warningBox(tr("Wrong PIN. Please try again."));
 
-  if (!cryptostick->validPassword) {
-    do {
-      PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-                       PinDialog::ADMIN_PIN);
-      ok = dialog.exec();
-      QString password;
-
-      dialog.getPassword(password);
-
-      if (QDialog::Accepted == ok) {
-        uint8_t tempPassword[25];
-
-        for (int i = 0; i < 25; i++)
-          tempPassword[i] = qrand() & 0xFF;
-
-        cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
-        if (cryptostick->validPassword) {
-          lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-        } else {
-            csApplet()->warningBox(tr("Wrong PIN. Please try again."));
-        }
-        password.clear();
-      }
-    } while (QDialog::Accepted == ok && !cryptostick->validPassword);
-  }
-
+  bool validPassword = true;
   // Start the config dialog
-  if (cryptostick->validPassword) {
-    cryptostick->getSlotConfigs();
+  if (validPassword) {
+//    cryptostick->getSlotConfigs();
     displayCurrentSlotConfig();
 
 //      translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO

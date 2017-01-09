@@ -21,7 +21,6 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
-#include "stick20infodialog.h"
 #include "stick20responsedialog.h"
 #include "libada.h"
 
