@@ -192,7 +192,7 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${resources_ouput}
 )
 
-set_property(TARGET nitrokey-app PROPERTY CXX_STANDARD 11)
+set_property(TARGET nitrokey-app PROPERTY CXX_STANDARD 14)
 
 INSTALL(TARGETS nitrokey-app DESTINATION bin)
 

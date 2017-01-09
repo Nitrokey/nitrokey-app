@@ -106,121 +106,125 @@ Stick20ResponseDialog::~Stick20ResponseDialog() {
   delete pollStick20Timer;
 }
 
+#include "libnitrokey/include/NitrokeyManager.h"
 void Stick20ResponseDialog::showStick20Configuration(int Status) {
-  QString OutputText;
+  auto m = nitrokey::NitrokeyManager::instance();
+  auto status = m->get_status_storage();
 
-  Status = 0;
-  if (0 == Status) {
-    OutputText.append(QString("Firmware version      "));
-    OutputText.append(
-        QString("%1").arg(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0])));
-    OutputText.append(QString("."));
-    OutputText.append(
-        QString("%1").arg(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[1])));
-    OutputText.append(QString("\n"));
-
-    if (TRUE == HID_Stick20Configuration_st.FirmwareLocked_u8) {
-      OutputText.append(QString("    *** Firmware is locked *** ")).append("\n");
-    }
-
-    if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8) {
-      OutputText.append(QString("Uncrypted volume     READ/WRITE mode ")).append("\n");
-    } else {
-      OutputText.append(QString("Uncrypted volume     READ ONLY mode ")).append("\n");
-    }
-
-    if (0 !=
-        (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE))) {
-      OutputText.append(QString("Crypted volume        active")).append("\n");
-    } else {
-      OutputText.append(QString("Crypted volume        not active")).append("\n");
-    }
-
-    if (0 !=
-        (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE))) {
-      OutputText.append(QString("Hidden volume         active")).append("\n");
-    }
-
-    if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01)) {
-      OutputText.append(QString("*** New SD card found - Change Counter "));
-      OutputText
-          .append(QString("%1").arg(
-              QString::number(HID_Stick20Configuration_st.NewSDCardFound_u8 >> 1)))
-          .append("\n");
-    } else {
-      OutputText.append(QString("SD card              Change Counter "));
-      OutputText
-          .append(QString("%1").arg(
-              QString::number(HID_Stick20Configuration_st.NewSDCardFound_u8 >> 1)))
-          .append("\n");
-    }
-
-    if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01)) {
-      OutputText.append(QString("*** Not initialized with random data - Fill Counter "));
-      OutputText
-          .append(QString("%1").arg(
-              QString::number(HID_Stick20Configuration_st.SDFillWithRandomChars_u8 >> 1)))
-          .append("\n");
-    } else {
-      OutputText.append(QString("Filled with random    Fill Counter "));
-      OutputText
-          .append(QString("%1").arg(
-              QString::number(HID_Stick20Configuration_st.SDFillWithRandomChars_u8 >> 1)))
-          .append("\n");
-    }
-
-    OutputText.append(QString("Smartcard ID "));
-    OutputText
-        .append(
-            QString("%1").arg(QString::number(HID_Stick20Configuration_st.ActiveSmartCardID_u32)))
-        .append("\n");
-
-    OutputText.append(QString("SD ID "));
-    OutputText
-        .append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32)))
-        .append("\n");
-
-    OutputText.append(QString("Admin PIN retry counter "));
-    OutputText
-        .append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.AdminPwRetryCount)))
-        .append("\n");
-
-    OutputText.append(QString("User PIN retry counter  "));
-    OutputText
-        .append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.UserPwRetryCount)))
-        .append("\n");
-  }
-  /* else { OutputText.append(QString("Can't read HID interface\n")); } */
-  ui->OutputText->setText(OutputText);
-  ui->OutputText->show();
-  DebugAppendTextGui(OutputText.toLatin1().data());
+//  QString OutputText;
+//
+//  Status = 0;
+//  if (0 == Status) {
+//    OutputText.append(QString("Firmware version      "));
+//    OutputText.append(
+//        QString("%1").arg(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0])));
+//    OutputText.append(QString("."));
+//    OutputText.append(
+//        QString("%1").arg(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[1])));
+//    OutputText.append(QString("\n"));
+//
+//    if (TRUE == HID_Stick20Configuration_st.FirmwareLocked_u8) {
+//      OutputText.append(QString("    *** Firmware is locked *** ")).append("\n");
+//    }
+//
+//    if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8) {
+//      OutputText.append(QString("Uncrypted volume     READ/WRITE mode ")).append("\n");
+//    } else {
+//      OutputText.append(QString("Uncrypted volume     READ ONLY mode ")).append("\n");
+//    }
+//
+//    if (0 !=
+//        (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE))) {
+//      OutputText.append(QString("Crypted volume        active")).append("\n");
+//    } else {
+//      OutputText.append(QString("Crypted volume        not active")).append("\n");
+//    }
+//
+//    if (0 !=
+//        (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE))) {
+//      OutputText.append(QString("Hidden volume         active")).append("\n");
+//    }
+//
+//    if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01)) {
+//      OutputText.append(QString("*** New SD card found - Change Counter "));
+//      OutputText
+//          .append(QString("%1").arg(
+//              QString::number(HID_Stick20Configuration_st.NewSDCardFound_u8 >> 1)))
+//          .append("\n");
+//    } else {
+//      OutputText.append(QString("SD card              Change Counter "));
+//      OutputText
+//          .append(QString("%1").arg(
+//              QString::number(HID_Stick20Configuration_st.NewSDCardFound_u8 >> 1)))
+//          .append("\n");
+//    }
+//
+//    if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01)) {
+//      OutputText.append(QString("*** Not initialized with random data - Fill Counter "));
+//      OutputText
+//          .append(QString("%1").arg(
+//              QString::number(HID_Stick20Configuration_st.SDFillWithRandomChars_u8 >> 1)))
+//          .append("\n");
+//    } else {
+//      OutputText.append(QString("Filled with random    Fill Counter "));
+//      OutputText
+//          .append(QString("%1").arg(
+//              QString::number(HID_Stick20Configuration_st.SDFillWithRandomChars_u8 >> 1)))
+//          .append("\n");
+//    }
+//
+//    OutputText.append(QString("Smartcard ID "));
+//    OutputText
+//        .append(
+//            QString("%1").arg(QString::number(HID_Stick20Configuration_st.ActiveSmartCardID_u32)))
+//        .append("\n");
+//
+//    OutputText.append(QString("SD ID "));
+//    OutputText
+//        .append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32)))
+//        .append("\n");
+//
+//    OutputText.append(QString("Admin PIN retry counter "));
+//    OutputText
+//        .append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.AdminPwRetryCount)))
+//        .append("\n");
+//
+//    OutputText.append(QString("User PIN retry counter  "));
+//    OutputText
+//        .append(QString("%1").arg(QString::number(HID_Stick20Configuration_st.UserPwRetryCount)))
+//        .append("\n");
+//  }
+//  /* else { OutputText.append(QString("Can't read HID interface\n")); } */
+//  ui->OutputText->setText(OutputText);
+//  ui->OutputText->show();
+//  DebugAppendTextGui(OutputText.toLatin1().data());
 }
 
-void Stick20ResponseDialog::checkStick20StatusDebug(Response *stick20Response, int Status) {
-  QString OutputText;
-
-  OutputText.append(QByteArray::number(Stick20Task->Counter_u32, 10)).append(" Calls\n");
-
-  if (0 == Status) {
-    OutputText.append(QString("CommandCounter   "))
-        .append(QByteArray::number(stick20Response->HID_Stick20Status_st.CommandCounter_u8))
-        .append("\n");
-    OutputText.append(QString("LastCommand      "))
-        .append(QByteArray::number(stick20Response->HID_Stick20Status_st.LastCommand_u8))
-        .append("\n");
-    OutputText.append(QString("Status           "))
-        .append(QByteArray::number(stick20Response->HID_Stick20Status_st.Status_u8))
-        .append("\n");
-    OutputText.append(QString("ProgressBarValue "))
-        .append(QByteArray::number(stick20Response->HID_Stick20Status_st.ProgressBarValue_u8))
-        .append("\n");
-  } else {
-    OutputText.append(QString("Can't read HID interface\n"));
-  }
-
-  ui->OutputText->setText(OutputText);
-  ui->OutputText->show();
-}
+//void Stick20ResponseDialog::checkStick20StatusDebug(Response *stick20Response, int Status) {
+//  QString OutputText;
+//
+//  OutputText.append(QByteArray::number(Stick20Task->Counter_u32, 10)).append(" Calls\n");
+//
+//  if (0 == Status) {
+//    OutputText.append(QString("CommandCounter   "))
+//        .append(QByteArray::number(stick20Response->HID_Stick20Status_st.CommandCounter_u8))
+//        .append("\n");
+//    OutputText.append(QString("LastCommand      "))
+//        .append(QByteArray::number(stick20Response->HID_Stick20Status_st.LastCommand_u8))
+//        .append("\n");
+//    OutputText.append(QString("Status           "))
+//        .append(QByteArray::number(stick20Response->HID_Stick20Status_st.Status_u8))
+//        .append("\n");
+//    OutputText.append(QString("ProgressBarValue "))
+//        .append(QByteArray::number(stick20Response->HID_Stick20Status_st.ProgressBarValue_u8))
+//        .append("\n");
+//  } else {
+//    OutputText.append(QString("Can't read HID interface\n"));
+//  }
+//
+//  ui->OutputText->setText(OutputText);
+//  ui->OutputText->show();
+//}
 
 void Stick20ResponseDialog::checkStick20StatusDialog(void) {
   QString OutputText;

@@ -21,6 +21,7 @@
 #define STICK20RESPONSEDIALOG_H
 
 #include "stick20-response-task.h"
+#include "src/utils/bool_values.h"
 #include <QDialog>
 #include <QTimer>
 

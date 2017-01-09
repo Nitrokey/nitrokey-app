@@ -1205,7 +1205,6 @@ void MainWindow::startAboutDialog() {
 #include "libnitrokey/include/NitrokeyManager.h"
 
 void MainWindow::startStick20EnableCryptedVolume() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
   bool answer;
 
@@ -1223,9 +1222,9 @@ void MainWindow::startStick20EnableCryptedVolume() {
 
   if (QDialog::Accepted == ret) {
     local_sync();
-    dialog.getPassword((char *)password);
+    const auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
-    m->unlock_encrypted_volume(const_cast<char*>(password));
+    m->unlock_encrypted_volume(s.data());
   }
 }
 
@@ -1244,10 +1243,7 @@ void MainWindow::startStick20DisableCryptedVolume() {
 }
 
 void MainWindow::startStick20EnableHiddenVolume() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-
   bool ret;
-
   bool answer;
 
   if (FALSE == CryptedVolumeActive) {
@@ -1269,10 +1265,10 @@ void MainWindow::startStick20EnableHiddenVolume() {
   if (QDialog::Accepted == ret) {
     local_sync();
     // password[0] = 'P';
-    dialog.getPassword((char *)password);
+    auto s = dialog.getPassword();
 
     auto m = nitrokey::NitrokeyManager::instance();
-    m->unlock_hidden_volume(const_cast<char*>(password));
+    m->unlock_hidden_volume(s.data());
   }
 }
 
@@ -1400,15 +1396,14 @@ void MainWindow::startStick20ExportFirmwareToFile() {
 
   if (QDialog::Accepted == ret) {
     // password[0] = 'P';
-    dialog.getPassword((char *)password);
+    auto s = dialog.getPassword();
 
     auto m = nitrokey::NitrokeyManager::instance();
-    m->export_firmware(const_cast<char*>(password));
+    m->export_firmware(s.data());
   }
 }
 
 void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
   int ret;
   bool answer;
 
@@ -1420,13 +1415,12 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
     ret = dialog.exec();
 
     if (QDialog::Accepted == ret) {
-      dialog.getPassword((char *)password);
+      auto s = dialog.getPassword();
 
       auto m = nitrokey::NitrokeyManager::instance();
-      m->build_aes_key(const_cast<char*>(password));
-//      bool success = stick20SendCommand(STICK20_CMD_GENERATE_NEW_KEYS, password);
+      m->build_aes_key(s.data());
       if (fillSDWithRandomChars != 0) {
-        m->fill_SD_card_with_random_data(const_cast<char*>(password));
+        m->fill_SD_card_with_random_data(s.data());
       }
       refreshStick20StatusData();
     }
@@ -1434,17 +1428,15 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
 }
 
 void MainWindow::startStick20FillSDCardWithRandomChars() {
-  uint8_t password[40];
   bool ret;
-
   PinDialog dialog(tr("Enter admin PIN"), tr("Admin Pin:"), PinDialog::PREFIXED,
                    PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
-    dialog.getPassword((char *)password);
+    auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
-    m->fill_SD_card_with_random_data(const_cast<char*>(password));
+    m->fill_SD_card_with_random_data(s.data());
   }
 }
 
@@ -1456,9 +1448,9 @@ void MainWindow::startStick20ClearNewSdCardFound() {
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
-    dialog.getPassword((char *)password);
+    auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
-    m->clear_new_sd_card_warning(const_cast<char*>(password));
+    m->clear_new_sd_card_warning(s.data());
   }
 }
 
@@ -1466,7 +1458,6 @@ void MainWindow::startStick20GetStickStatus() {
 }
 
 void MainWindow::startStick20SetReadOnlyUncryptedVolume() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
 
   PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), PinDialog::PREFIXED,
@@ -1547,12 +1538,14 @@ void MainWindow::startStick20SetupHiddenVolume() {
     const auto d = HVDialog.HV_Setup_st;
     auto m = nitrokey::NitrokeyManager::instance();
     m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
-                            d.EndBlockPercent_u8, const_cast<char*>(d.HiddenVolumePassword_au8));
+                            d.EndBlockPercent_u8, reinterpret_cast<char*>(&d.HiddenVolumePassword_au8[0]));
   }
 }
 
 int MainWindow::UpdateDynamicMenuEntrys(void) {
-//  auto m = nitrokey::NitrokeyManager::instance();
+  auto m = nitrokey::NitrokeyManager::instance();
+  auto s = m->get_status_storage();
+
 
   if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8)
     NormalVolumeRWActive = FALSE;

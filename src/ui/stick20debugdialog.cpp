@@ -144,7 +144,7 @@ DebugDialog::~DebugDialog() {
 void DebugDialog::UpdateDebugText() {
   static int nCallCounter = 0;
 
-  if (TRUE == DebugingStick20PoolingActive) {
+//  if (TRUE == DebugingStick20PoolingActive) {
     // Send request
 //    cryptostick->stick20GetDebugData();
 
@@ -154,12 +154,12 @@ void DebugDialog::UpdateDebugText() {
 //    stick20Response->DebugResponseFlag = FALSE; // Don't log response
 //    stick20Response->getResponse(cryptostick);
 
-    if (TRUE == DebugTextHasChanged_Stick20) {
-      RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME_FAST);
-    } else {
-      RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME);
-    }
-  }
+//    if (TRUE == DebugTextHasChanged_Stick20) {
+//      RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME_FAST);
+//    } else {
+//      RefreshTimer->start(CS20_DEBUG_DIALOG_POLL_TIME);
+//    }
+//  }
 
 #ifdef LOCAL_DEBUG
   { // For debugging
@@ -172,29 +172,29 @@ void DebugDialog::UpdateDebugText() {
 #endif
 
   // Check for auto scroll activ
-  if (0 != ui->checkBox->checkState()) {
-    if (TRUE == DebugTextHasChanged_GUI) {
-      STRCAT(DebugText_GUI, sizeof(DebugText_GUI), DebugNewText_GUI);
-      ui->TextGUI->moveCursor(QTextCursor::End);
-      ui->TextGUI->insertPlainText(DebugNewText_GUI);
-      DebugNewText_GUI[0] = 0;
-      DebugNewTextLen_GUI = 0;
-      DebugTextHasChanged_GUI = FALSE;
-      ui->TextGUI->moveCursor(QTextCursor::End);
-    }
+//  if (0 != ui->checkBox->checkState()) {
+//    if (TRUE == DebugTextHasChanged_GUI) {
+//      STRCAT(DebugText_GUI, sizeof(DebugText_GUI), DebugNewText_GUI);
+//      ui->TextGUI->moveCursor(QTextCursor::End);
+//      ui->TextGUI->insertPlainText(DebugNewText_GUI);
+//      DebugNewText_GUI[0] = 0;
+//      DebugNewTextLen_GUI = 0;
+//      DebugTextHasChanged_GUI = FALSE;
+//      ui->TextGUI->moveCursor(QTextCursor::End);
+//    }
 
-    if (TRUE == DebugTextHasChanged_Stick20) {
-      STRCAT(DebugText_Stick20, sizeof(DebugText_Stick20), DebugNewText_Stick20);
-      ui->TextStick->moveCursor(QTextCursor::End);
-      ui->TextStick->insertPlainText(DebugNewText_Stick20);
-      DebugNewText_Stick20[0] = 0;
-      DebugNewTextLen_Stick20 = 0;
-      ui->TextStick->moveCursor(QTextCursor::End);
-      DebugTextHasChanged_Stick20 = FALSE;
-    }
-  }
+//    if (TRUE == DebugTextHasChanged_Stick20) {
+//      STRCAT(DebugText_Stick20, sizeof(DebugText_Stick20), DebugNewText_Stick20);
+//      ui->TextStick->moveCursor(QTextCursor::End);
+//      ui->TextStick->insertPlainText(DebugNewText_Stick20);
+//      DebugNewText_Stick20[0] = 0;
+//      DebugNewTextLen_Stick20 = 0;
+//      ui->TextStick->moveCursor(QTextCursor::End);
+//      DebugTextHasChanged_Stick20 = FALSE;
+//    }
+//  }
 
-  nCallCounter++;
+//  nCallCounter++;
 }
 
 /*******************************************************************************
@@ -208,27 +208,27 @@ void DebugDialog::UpdateDebugText() {
 *******************************************************************************/
 
 void DebugDialog::updateText(void) {
-  if (TRUE == DebugTextHasChanged_GUI) {
-    STRCAT(DebugText_GUI, sizeof(DebugText_GUI), DebugNewText_GUI);
-    ui->TextGUI->moveCursor(QTextCursor::End);
-    ui->TextGUI->insertPlainText(DebugNewText_GUI);
-    DebugNewText_GUI[0] = 0;
-    DebugNewTextLen_GUI = 0;
+//  if (TRUE == DebugTextHasChanged_GUI) {
+////    STRCAT(DebugText_GUI, sizeof(DebugText_GUI), DebugNewText_GUI);
+//    ui->TextGUI->moveCursor(QTextCursor::End);
+//    ui->TextGUI->insertPlainText(DebugNewText_GUI);
+////    DebugNewText_GUI[0] = 0;
+////    DebugNewTextLen_GUI = 0;
+//
+//    ui->TextGUI->moveCursor(QTextCursor::End);
+//    DebugTextHasChanged_GUI = FALSE;
+//  }
 
-    ui->TextGUI->moveCursor(QTextCursor::End);
-    DebugTextHasChanged_GUI = FALSE;
-  }
-
-  if (TRUE == DebugTextHasChanged_Stick20) {
-    STRCAT(DebugText_Stick20, sizeof(DebugText_Stick20), DebugNewText_Stick20);
-    ui->TextStick->moveCursor(QTextCursor::End);
-    ui->TextStick->insertPlainText(DebugNewText_Stick20);
-    DebugNewText_Stick20[0] = 0;
-    DebugNewTextLen_Stick20 = 0;
-
-    ui->TextStick->moveCursor(QTextCursor::End);
-    DebugTextHasChanged_Stick20 = FALSE;
-  }
+//  if (TRUE == DebugTextHasChanged_Stick20) {
+//    STRCAT(DebugText_Stick20, sizeof(DebugText_Stick20), DebugNewText_Stick20);
+//    ui->TextStick->moveCursor(QTextCursor::End);
+//    ui->TextStick->insertPlainText(DebugNewText_Stick20);
+//    DebugNewText_Stick20[0] = 0;
+//    DebugNewTextLen_Stick20 = 0;
+//
+//    ui->TextStick->moveCursor(QTextCursor::End);
+//    DebugTextHasChanged_Stick20 = FALSE;
+//  }
 }
 
 /*******************************************************************************
@@ -244,25 +244,25 @@ void DebugDialog::updateText(void) {
 *******************************************************************************/
 
 void DebugDialog::on_pushButton_clicked() {
-  if (TRUE == DebugTextHasChanged_GUI) {
-    STRCAT(DebugText_GUI, sizeof(DebugText_GUI), DebugNewText_GUI);
-    ui->TextGUI->moveCursor(QTextCursor::End);
-    ui->TextGUI->insertPlainText(DebugNewText_GUI);
-    DebugNewText_GUI[0] = 0;
-    DebugNewTextLen_GUI = 0;
-
-    ui->TextGUI->moveCursor(QTextCursor::End);
-    DebugTextHasChanged_GUI = FALSE;
-  }
-
-  if (TRUE == DebugTextHasChanged_Stick20) {
-    STRCAT(DebugText_Stick20, sizeof(DebugText_Stick20), DebugNewText_Stick20);
-    ui->TextStick->moveCursor(QTextCursor::End);
-    ui->TextStick->insertPlainText(DebugNewText_Stick20);
-    DebugNewText_Stick20[0] = 0;
-    DebugNewTextLen_Stick20 = 0;
-
-    ui->TextStick->moveCursor(QTextCursor::End);
-    DebugTextHasChanged_Stick20 = FALSE;
-  }
+//  if (TRUE == DebugTextHasChanged_GUI) {
+//    STRCAT(DebugText_GUI, sizeof(DebugText_GUI), DebugNewText_GUI);
+//    ui->TextGUI->moveCursor(QTextCursor::End);
+//    ui->TextGUI->insertPlainText(DebugNewText_GUI);
+//    DebugNewText_GUI[0] = 0;
+//    DebugNewTextLen_GUI = 0;
+//
+//    ui->TextGUI->moveCursor(QTextCursor::End);
+//    DebugTextHasChanged_GUI = FALSE;
+//  }
+//
+//  if (TRUE == DebugTextHasChanged_Stick20) {
+//    STRCAT(DebugText_Stick20, sizeof(DebugText_Stick20), DebugNewText_Stick20);
+//    ui->TextStick->moveCursor(QTextCursor::End);
+//    ui->TextStick->insertPlainText(DebugNewText_Stick20);
+//    DebugNewText_Stick20[0] = 0;
+//    DebugNewTextLen_Stick20 = 0;
+//
+//    ui->TextStick->moveCursor(QTextCursor::End);
+//    DebugTextHasChanged_Stick20 = FALSE;
+//  }
 }
