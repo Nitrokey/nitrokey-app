@@ -95,6 +95,7 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
 
 #    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread ${LIBUSB_LIBRARIES} )
+    SET(EXTRA_LIBS ${EXTRA_LIBS} nitrokey )
 
     INCLUDE_DIRECTORIES(
       ${CMAKE_CURRENT_SOURCE_DIR}
@@ -110,6 +111,7 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
     LINK_DIRECTORIES(
       ${QT_LIBRARY_DIR}
       ${LIBUSB_LIBRARY_DIRS}
+      "libnitrokey/build/"
     )
 
 ENDIF () # WIN32

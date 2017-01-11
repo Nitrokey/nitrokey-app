@@ -91,13 +91,13 @@ void unmountEncryptedVolumes() {
   if (endev.size() < 1)
     return;
   std::string mntdir = systemutils::getMntPoint(endev);
-  if (DebugingActive == TRUE)
+//  if (DebugingActive == TRUE)
     qDebug() << "Unmounting " << mntdir.c_str();
   // TODO polling with MNT_EXPIRE? test which will suit better
   // int err = umount2("/dev/nitrospace", MNT_DETACH);
   int err = umount(mntdir.c_str());
   if (err != 0) {
-    if (DebugingActive == TRUE)
+//    if (DebugingActive == TRUE)
       qDebug() << "Unmount error: " << strerror(errno);
   }
 #endif // Q_OS_LINUX
@@ -209,26 +209,26 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   if (0 != StartupInfo_st->LockHardware)
     LockHardware = TRUE;
 
-  switch (StartupInfo_st->FlagDebug) {
-  case DEBUG_STATUS_LOCAL_DEBUG:
-    DebugWindowActive = TRUE;
-    DebugingActive = TRUE;
-    DebugingStick20PoolingActive = FALSE;
-    break;
-
-  case DEBUG_STATUS_DEBUG_ALL:
-    DebugWindowActive = TRUE;
-    DebugingActive = TRUE;
-    DebugingStick20PoolingActive = TRUE;
-    break;
-
-  case DEBUG_STATUS_NO_DEBUGGING:
-  default:
-    DebugWindowActive = FALSE;
-    DebugingActive = FALSE;
-    DebugingStick20PoolingActive = FALSE;
-    break;
-  }
+//  switch (StartupInfo_st->FlagDebug) {
+//  case DEBUG_STATUS_LOCAL_DEBUG:
+//    DebugWindowActive = TRUE;
+//    DebugingActive = TRUE;
+//    DebugingStick20PoolingActive = FALSE;
+//    break;
+//
+//  case DEBUG_STATUS_DEBUG_ALL:
+//    DebugWindowActive = TRUE;
+//    DebugingActive = TRUE;
+//    DebugingStick20PoolingActive = TRUE;
+//    break;
+//
+//  case DEBUG_STATUS_NO_DEBUGGING:
+//  default:
+//    DebugWindowActive = FALSE;
+//    DebugingActive = FALSE;
+//    DebugingStick20PoolingActive = FALSE;
+//    break;
+//  }
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
@@ -577,12 +577,6 @@ void MainWindow::initCommonActions() {
 void MainWindow::initActionsForStick20() {
   configureActionStick20 = new QAction(tr("&OTP and Password safe"), this);
   connect(configureActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
-
-  SecPasswordAction = new QAction(tr("&SecPassword"), this);
-  connect(SecPasswordAction, SIGNAL(triggered()), this, SLOT(startMatrixPasswordDialog()));
-
-  Stick20SetupAction = new QAction(tr("&Stick 20 Setup"), this);
-  connect(Stick20SetupAction, SIGNAL(triggered()), this, SLOT(startStick20Setup()));
 
   Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), this);
   Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));

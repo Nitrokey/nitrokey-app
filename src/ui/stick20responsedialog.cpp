@@ -63,7 +63,8 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent,
     this->setWindowFlags(Qt::Window);
   }
 
-  if (FALSE == DebugingActive) // Resize the dialog when debugging is
+  bool no_debug = true; // todo FALSE == DebugingActive;
+  if (no_debug) // Resize the dialog when debugging is
                                // inactive
   {
     ui->OutputText->hide();
