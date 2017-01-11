@@ -77,48 +77,47 @@ void stick20HiddenVolumeDialog::on_ShowPasswordCheckBox_toggled(bool checked) {
 }
 
 void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
-  if (button == ui->buttonBox->button(QDialogButtonBox::Ok)) {
-    on_rd_percent_clicked();
-    ui->rd_percent->setChecked(true);
-
-    if (8 > strlen(ui->HVPasswordEdit->text().toLatin1().data())) {
-        csApplet()->warningBox(tr("Your password is too short. Use at least 8 characters."));
-      return;
-    }
-
-    if (ui->HVPasswordEdit->text().toLatin1() != ui->HVPasswordEdit_2->text().toLatin1()) {
-        csApplet()->warningBox(tr("The passwords are not identical"));
-      return;
-    }
-
-    HV_Setup_st.SlotNr_u8 = ui->comboBox->currentIndex();
-    HV_Setup_st.StartBlockPercent_u8 = ui->StartBlockSpin->value();
-    HV_Setup_st.EndBlockPercent_u8 = ui->EndBlockSpin->value();
-
-    if (HV_Setup_st.StartBlockPercent_u8 >= HV_Setup_st.EndBlockPercent_u8) {
-        csApplet()->warningBox(tr("Wrong size of hidden volume"));
-      return;
-    }
-
-    if (HV_Setup_st.StartBlockPercent_u8 < HighWatermarkMin ||
-        HV_Setup_st.EndBlockPercent_u8 > HighWatermarkMax) {
-      csApplet()->warningBox(tr("Hidden volume not positioned in unwritten space. Please set your "
-                              "volume between %1% and %2% of total SD card size.")
-                               .arg(HighWatermarkMin)
-                               .arg(HighWatermarkMax));
-      return;
-    }
-
-    STRNCPY((char *)HV_Setup_st.HiddenVolumePassword_au8,
-            sizeof(HV_Setup_st.HiddenVolumePassword_au8), ui->HVPasswordEdit->text().toLatin1(),
-            MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-    HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
-    done(true);
-  }
-
-  if (button == ui->buttonBox->button(QDialogButtonBox::Cancel)) {
-    done(false);
-  }
+  //TODO fix button check
+//  if (button == ui->buttonBox->button(QDialogButtonBox::Ok)) {
+//    on_rd_percent_clicked();
+//    ui->rd_percent->setChecked(true);
+//
+//    if (8 > strlen(ui->HVPasswordEdit->text().toLatin1().data())) {
+//        csApplet()->warningBox(tr("Your password is too short. Use at least 8 characters."));
+//      return;
+//    }
+//
+//    if (ui->HVPasswordEdit->text().toLatin1() != ui->HVPasswordEdit_2->text().toLatin1()) {
+//        csApplet()->warningBox(tr("The passwords are not identical"));
+//      return;
+//    }
+//
+//    HV_Setup_st.SlotNr_u8 = ui->comboBox->currentIndex();
+//    HV_Setup_st.StartBlockPercent_u8 = ui->StartBlockSpin->value();
+//    HV_Setup_st.EndBlockPercent_u8 = ui->EndBlockSpin->value();
+//
+//    if (HV_Setup_st.StartBlockPercent_u8 >= HV_Setup_st.EndBlockPercent_u8) {
+//        csApplet()->warningBox(tr("Wrong size of hidden volume"));
+//      return;
+//    }
+//
+//    if (HV_Setup_st.StartBlockPercent_u8 < HighWatermarkMin ||
+//        HV_Setup_st.EndBlockPercent_u8 > HighWatermarkMax) {
+//      csApplet()->warningBox(tr("Hidden volume not positioned in unwritten space. Please set your "
+//                              "volume between %1% and %2% of total SD card size.")
+//                               .arg(HighWatermarkMin)
+//                               .arg(HighWatermarkMax));
+//      return;
+//    }
+//
+//    STRNCPY((char *)HV_Setup_st.HiddenVolumePassword_au8,
+//            sizeof(HV_Setup_st.HiddenVolumePassword_au8), ui->HVPasswordEdit->text().toLatin1(),
+//            MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
+//    HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
+//    done(true);
+//  } else if (button == ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+//    done(false);
+//  }
 }
 
 // Based on

@@ -27,6 +27,9 @@
 #define DEBUG_STATUS_LOCAL_DEBUG 1
 #define DEBUG_STATUS_DEBUG_ALL 2
 
+#define STICK20_CMD_START_VALUE 0x20
+#define STICK20_CMD_FILL_SD_CARD_WITH_RANDOM_CHARS (STICK20_CMD_START_VALUE + 7)
+
 #define MAX_HIDDEN_VOLUME_PASSOWORD_SIZE 20
 
 class libada {
@@ -48,6 +51,7 @@ public:
 
     std::string getPWSSlotName(const int i);
     bool getPWSSlotStatus(const int i);
+    void erasePWSSlot(const int i);
 
     int getStorageInfoData();
     int getStorageSDCardSizeGB();

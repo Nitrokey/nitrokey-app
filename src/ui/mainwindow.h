@@ -251,12 +251,7 @@ private slots:
   void on_randomSecretButton_clicked();
   void on_checkBox_toggled(bool checked);
 
-  void destroyPasswordSafeStick10();
-  void startStick20Configuration();
   void startStickDebug();
-  void startMatrixPasswordDialog();
-  void startStick20Setup();
-
   void startStick20GetStickStatus();
 
   void on_PWS_ButtonClearSlot_clicked();

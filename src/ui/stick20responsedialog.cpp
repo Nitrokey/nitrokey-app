@@ -28,6 +28,7 @@
 #include "stick20-response-task.h"
 #include "stick20responsedialog.h"
 #include "ui_stick20responsedialog.h"
+#include "libada.h"
 
 class OwnSleep : public QThread {
 public:
