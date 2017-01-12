@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "libnitrokey/include/NitrokeyManager.h"
 
 #include "mainwindow.h"
 #include "aboutdialog.h"
@@ -203,11 +204,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   clipboard = QApplication::clipboard();
   ExtendedConfigActive = StartupInfo_st->ExtendedConfigActive;
 
-  if (0 != StartupInfo_st->PasswordMatrix)
-    MatrixInputActive = TRUE;
-
   if (0 != StartupInfo_st->LockHardware)
     LockHardware = TRUE;
+
+  nitrokey::NitrokeyManager::instance()->connect();
+
 
 //  switch (StartupInfo_st->FlagDebug) {
 //  case DEBUG_STATUS_LOCAL_DEBUG:
@@ -361,8 +362,11 @@ return 0;
 }
 
 void MainWindow::checkConnection() {
-    if (!check_connection_mutex.tryLock(500))
-        return;
+//    if (!check_connection_mutex.tryLock(500))
+//        return;
+//  check_connection_mutex.unlock();
+
+  QMutexLocker locker(&check_connection_mutex);
 
   //move to constructor
   HOTP_SlotCount = HOTP_SLOT_COUNT;
@@ -373,7 +377,7 @@ void MainWindow::checkConnection() {
   int ret = 0;
   currentTime = QDateTime::currentDateTime().toTime_t();
 
-  int result = libada::i()->isDeviceConnected();
+  int result = libada::i()->isDeviceConnected()? 0 : -1;
 
 
   if (result == 0) { //connected
@@ -399,7 +403,7 @@ void MainWindow::checkConnection() {
     if (false == libada::i()->isStorageDeviceConnected()) {
       ui->statusBar->showMessage(tr("Nitrokey connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
-      initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
+//      initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
 //        translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
     } else {
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
@@ -423,7 +427,6 @@ void MainWindow::checkConnection() {
 //                                            "storage with random data\""));
 //    }
 //  }
-    check_connection_mutex.unlock();
 }
 
 void MainWindow::initialTimeReset(int ret) {
@@ -1197,7 +1200,6 @@ void MainWindow::startAboutDialog() {
   dialog.exec();
 }
 
-#include "libnitrokey/include/NitrokeyManager.h"
 
 void MainWindow::startStick20EnableCryptedVolume() {
   bool ret;
@@ -1540,6 +1542,7 @@ void MainWindow::startStick20SetupHiddenVolume() {
 
 int MainWindow::UpdateDynamicMenuEntrys(void) {
   auto m = nitrokey::NitrokeyManager::instance();
+  if (!m->is_connected()) return FALSE;
   auto s = m->get_status_storage();
 
   NormalVolumeRWActive =
@@ -1948,6 +1951,9 @@ void MainWindow::checkClipboard_Valid(bool ignore_time) {
 void MainWindow::checkPasswordTime_Valid() {
   uint64_t currentTime;
   currentTime = QDateTime::currentDateTime().toTime_t();
+
+  if(!nitrokey::NitrokeyManager::instance()->is_connected())
+    return;
 
   auto status = nitrokey::NitrokeyManager::instance()->get_status();
 

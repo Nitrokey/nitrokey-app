@@ -2,9 +2,16 @@
 // Created by sz on 09.01.17.
 //
 
+#include <libnitrokey/include/NitrokeyManager.h>
 #include "libada.h"
+#include <mutex>
+
+std::mutex mex_dev_com;
+
 
 std::shared_ptr <libada> libada::_instance = nullptr;
+
+using nm = nitrokey::NitrokeyManager;
 
 std::shared_ptr<libada> libada::i() {
   if (_instance == nullptr){
@@ -22,19 +29,27 @@ libada::~libada() {
 }
 
 int libada::getMajorFirmwareVersion() {
-  return 0;
+//  std::lock_guard<std::mutex> lock(mex_dev_com);
+  return nm::instance()->get_major_firmware_version();
 }
 
 int libada::getMinorFirmwareVersion() {
-  return 0;
+  return 42;
 }
 
 int libada::getPasswordRetryCount() {
-  return 0;
+//  std::lock_guard<std::mutex> lock(mex_dev_com);
+  if (nm::instance()->is_connected())
+    return nm::instance()->get_admin_retry_count();
+  return 99;
 }
 
 int libada::getUserPasswordRetryCount() {
-  return 0;
+//  std::lock_guard<std::mutex> lock(mex_dev_com);
+  if (nm::instance()->is_connected()){
+    return nm::instance()->get_user_retry_count();
+  }
+  return 99;
 }
 
 std::string libada::getCardSerial() {
@@ -82,15 +97,21 @@ int libada::setStorageUpdatePassword() {
 }
 
 bool libada::isDeviceConnected() {
-  return false;
+//  std::lock_guard<std::mutex> lock(mex_dev_com);
+  auto conn = nm::instance()->is_connected();
+//  if(!conn){
+//    nm::instance()->connect();
+//    conn = nm::instance()->is_connected();
+//  }
+  return conn;
 }
 
 bool libada::isDeviceInitialized() {
   return false;
 }
 
-bool libada::isStorageDeviceConnected() {
-  return false;
+bool libada::isStorageDeviceConnected() const throw() {
+  return nm::instance()->get_connected_device_model() == nitrokey::DeviceModel::STORAGE;
 }
 
 bool libada::isPasswordSafeAvailable() {

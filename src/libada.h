@@ -62,7 +62,7 @@ public:
 
     bool isDeviceConnected();
     bool isDeviceInitialized();
-    bool isStorageDeviceConnected();
+    bool isStorageDeviceConnected()  const throw();
     bool isPasswordSafeAvailable();
     bool isPasswordSafeUnlocked();
     bool isTOTPSlotProgrammed(const int i);
