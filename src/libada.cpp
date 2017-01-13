@@ -29,23 +29,20 @@ libada::~libada() {
 }
 
 int libada::getMajorFirmwareVersion() {
-//  std::lock_guard<std::mutex> lock(mex_dev_com);
-  return nm::instance()->get_major_firmware_version();
+  return 0; //FIXME get real version
 }
 
 int libada::getMinorFirmwareVersion() {
-  return 42;
+  return nm::instance()->get_minor_firmware_version();
 }
 
 int libada::getPasswordRetryCount() {
-//  std::lock_guard<std::mutex> lock(mex_dev_com);
   if (nm::instance()->is_connected())
     return nm::instance()->get_admin_retry_count();
   return 99;
 }
 
 int libada::getUserPasswordRetryCount() {
-//  std::lock_guard<std::mutex> lock(mex_dev_com);
   if (nm::instance()->is_connected()){
     return nm::instance()->get_user_retry_count();
   }
