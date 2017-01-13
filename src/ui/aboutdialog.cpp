@@ -24,6 +24,8 @@
 #include "stick20responsedialog.h"
 #include "libada.h"
 
+using namespace AboutDialogUI;
+
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::AboutDialog) {
   ui->setupUi(this);
@@ -40,17 +42,20 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->IconLabel->setPixmap(small_img);
 
 
-  int majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
-  int minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
+  ui->admin_retry_label->setDisabled(true);
+  ui->user_retry_label->setDisabled(true);
+  ui->l_storage_capacity->setDisabled(true);
+  ui->firmwareLabel->setDisabled(true);
+  ui->serialEdit->setDisabled(true);
 
-  ui->IconLabel->setPixmap(small_img);
+
+  worker.moveToThread(&thread);
+  connect(&thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
+  connect(&worker, SIGNAL(finished()), this, SLOT(update_device_slots()));
+
+  thread.start(); //on exec?
+
   ui->VersionLabel->setText(tr(GUI_VERSION));
-  ui->firmwareLabel->setText(QString::number(majorFirmwareVersion)
-                                 .append(".")
-                                 .append(QString::number(minorFirmwareVersion)));
-
-  auto cardSerial = libada::i()->getCardSerial();
-  ui->serialEdit->setText(QString::fromStdString(cardSerial));
 
   ui->ButtonStickStatus->hide();
 
@@ -70,22 +75,13 @@ AboutDialog::AboutDialog(QWidget *parent)
   this->updateGeometry();
 }
 
-AboutDialog::~AboutDialog() { delete ui; }
+AboutDialog::~AboutDialog() {
+  thread.quit();
+  thread.wait();
+  delete ui;
+}
 
 void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
-
-/*******************************************************************************
-
-  showStick20Configuration
-
-  Changes
-  Date      Author        Info
-  02.07.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
 
 void AboutDialog::showStick20Configuration(void) {
   QString OutputText;
@@ -95,7 +91,7 @@ void AboutDialog::showStick20Configuration(void) {
   showPasswordCounters();
   showStick20Menu();
 
-  auto storageInfoData = libada::i()->getStorageInfoData();
+//  auto storageInfoData = libada::i()->getStorageInfoData();
 
 //  if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) {
 //    OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
@@ -163,22 +159,7 @@ void AboutDialog::showStick20Configuration(void) {
 //  ui->sd_id_label->setText(
 //      QString("0x").append(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32, 16)));
 
-  ui->admin_retry_label->setText(QString::number(libada::i()->getPasswordRetryCount()));
-  ui->user_retry_label->setText(QString::number(libada::i()->getUserPasswordRetryCount()));
-//  ui->firmwareLabel->setText(
-//      QString::number(HID_Stick20Configuration_st.VersionInfo_au8[0])
-//          .append(".")
-//          .append(QString::number(HID_Stick20Configuration_st.VersionInfo_au8[1])));
-//  ui->serialEdit->setText(
-//      QString("%1").sprintf("%08x", HID_Stick20Configuration_st.ActiveSmartCardID_u32));
-
 //  ui->DeviceStatusLabel->setText(OutputText);
-
-  if (libada::i()->isStorageDeviceConnected()){
-    const size_t sd_size_GB = libada::i()->getStorageSDCardSizeGB();
-    QString capacity_text = QString(tr("%1 GB")).arg(sd_size_GB);
-    ui->l_storage_capacity->setText(capacity_text);
-  }
 
   this->resize(0, 0);
   this->adjustSize();
@@ -202,8 +183,6 @@ void AboutDialog::showStick10Configuration(void) {
   showPasswordCounters();
   hideStick20Menu();
 
-  ui->admin_retry_label->setText(QString::number(libada::i()->getPasswordRetryCount()));
-  ui->user_retry_label->setText(QString::number(libada::i()->getUserPasswordRetryCount()));
   this->resize(0, 0);
   this->adjustSize();
   this->updateGeometry();
@@ -317,4 +296,41 @@ void AboutDialog::showNoStickFound(void) {
 }
 
 void AboutDialog::on_ButtonStickStatus_clicked() {
+}
+
+void Worker::fetch_device_data() {
+  QMutexLocker lock(&mutex);
+  devdata.passwordRetryCount = libada::i()->getPasswordRetryCount();
+  devdata.userPasswordRetryCount = libada::i()->getUserPasswordRetryCount();
+  devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
+  devdata.minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
+  if (libada::i()->isStorageDeviceConnected()) {
+    devdata.sd_size_GB = libada::i()->getStorageSDCardSizeGB();
+  }
+  devdata.cardSerial = libada::i()->getCardSerial();
+
+  emit finished();
+}
+
+
+void AboutDialog::update_device_slots() {
+  QMutexLocker lock(&worker.mutex);
+  ui->admin_retry_label->setText(QString::number(worker.devdata.passwordRetryCount));
+  ui->user_retry_label->setText(QString::number(worker.devdata.userPasswordRetryCount));
+
+  if (worker.devdata.sd_size_GB != 0){
+    QString capacity_text = QString(tr("%1 GB")).arg(worker.devdata.sd_size_GB);
+    ui->l_storage_capacity->setText(capacity_text);
+  }
+  ui->firmwareLabel->setText(QString::number(worker.devdata.majorFirmwareVersion)
+                                 .append(".")
+                                 .append(QString::number(worker.devdata.minorFirmwareVersion)));
+
+  ui->serialEdit->setText(QString::fromStdString(worker.devdata.cardSerial));
+
+  ui->admin_retry_label->setEnabled(true);
+  ui->user_retry_label->setEnabled(true);
+  ui->l_storage_capacity->setEnabled(true);
+  ui->firmwareLabel->setEnabled(true);
+  ui->serialEdit->setEnabled(true);
 }
