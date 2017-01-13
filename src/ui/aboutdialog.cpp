@@ -27,8 +27,14 @@
 using namespace AboutDialogUI;
 
 AboutDialog::AboutDialog(QWidget *parent)
-    : QDialog(parent), ui(new Ui::AboutDialog) {
+    : QDialog(parent), ui(nullptr) {
+  ui = std::make_shared<Ui::AboutDialog>();
   ui->setupUi(this);
+
+  connect(&worker_thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
+  connect(&worker, SIGNAL(finished()), this, SLOT(update_device_slots()));
+  worker.moveToThread(&worker_thread);
+  worker_thread.start();
 
   QPixmap image(":/images/splash.png");
   QPixmap small_img = image.scaled(346, 80, Qt::KeepAspectRatio, Qt::FastTransformation);
@@ -47,13 +53,6 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->l_storage_capacity->setDisabled(true);
   ui->firmwareLabel->setDisabled(true);
   ui->serialEdit->setDisabled(true);
-
-
-  worker.moveToThread(&thread);
-  connect(&thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
-  connect(&worker, SIGNAL(finished()), this, SLOT(update_device_slots()));
-
-  thread.start(); //on exec?
 
   ui->VersionLabel->setText(tr(GUI_VERSION));
 
@@ -76,9 +75,8 @@ AboutDialog::AboutDialog(QWidget *parent)
 }
 
 AboutDialog::~AboutDialog() {
-  thread.quit();
-  thread.wait();
-  delete ui;
+  worker_thread.quit();
+  worker_thread.wait();
 }
 
 void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }

@@ -93,13 +93,8 @@ int libada::setStorageUpdatePassword() {
   return 0;
 }
 
-bool libada::isDeviceConnected() {
-//  std::lock_guard<std::mutex> lock(mex_dev_com);
+bool libada::isDeviceConnected() const throw() {
   auto conn = nm::instance()->is_connected();
-//  if(!conn){
-//    nm::instance()->connect();
-//    conn = nm::instance()->is_connected();
-//  }
   return conn;
 }
 

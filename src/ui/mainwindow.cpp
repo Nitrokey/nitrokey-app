@@ -1195,7 +1195,6 @@ void MainWindow::refreshStick20StatusData() {
 }
 
 void MainWindow::startAboutDialog() {
-  refreshStick20StatusData();
   AboutDialog dialog(this);
   dialog.exec();
 }

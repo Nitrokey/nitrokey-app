@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QMutex>
 #include <QThread>
+#include <memory>
 #include "src/utils/bool_values.h"
 
 #define GUI_VERSION "0.6.2"
@@ -35,7 +36,9 @@ namespace AboutDialogUI{
 }
 
 class AboutDialog : public QDialog {
-  Q_OBJECT public : explicit AboutDialog(QWidget *parent = 0);
+  Q_OBJECT
+  public :
+  explicit AboutDialog(QWidget *parent = 0);
   ~AboutDialog();
   void showStick20Configuration(void);
   void showStick10Configuration(void);
@@ -47,17 +50,15 @@ class AboutDialog : public QDialog {
   void hideWarning(void);
   void showWarning(void);
 
- AboutDialogUI::Worker worker;
- QThread thread;
-
-
 private slots:
   void on_ButtonOK_clicked();
   void on_ButtonStickStatus_clicked();
   void update_device_slots();
 
 private:
-  Ui::AboutDialog *ui;
+  std::shared_ptr<Ui::AboutDialog> ui;
+  AboutDialogUI::Worker worker;
+  QThread worker_thread;
 };
 
 #endif // ABOUTDIALOG_H

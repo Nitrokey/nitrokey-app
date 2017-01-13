@@ -60,9 +60,9 @@ public:
     int setAdminPIN();
     int setStorageUpdatePassword();
 
-    bool isDeviceConnected();
+    bool isDeviceConnected()  const throw();
     bool isDeviceInitialized();
-    bool isStorageDeviceConnected()  const throw();
+    bool isStorageDeviceConnected() const throw();
     bool isPasswordSafeAvailable();
     bool isPasswordSafeUnlocked();
     bool isTOTPSlotProgrammed(const int i);
