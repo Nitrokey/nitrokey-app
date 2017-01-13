@@ -29,17 +29,15 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->setupUi(this);
 
   QPixmap image(":/images/splash.png");
-
   QPixmap small_img = image.scaled(346, 80, Qt::KeepAspectRatio, Qt::FastTransformation);
-
   QPixmap warning(":/images/warning.png");
-  QPixmap small_warning = warning.scaled(50, 50, Qt::KeepAspectRatio, Qt::FastTransformation);
-
+//  QPixmap small_warning = warning.scaled(50, 50, Qt::KeepAspectRatio, Qt::FastTransformation);
   QPixmap info_img(":/images/info-icon.png");
   QPixmap small_info = info_img.scaled(15, 15, Qt::KeepAspectRatio, Qt::FastTransformation);
 
   ui->info_icon->setPixmap(small_info);
   ui->warning_sign->setPixmap(warning);
+  ui->IconLabel->setPixmap(small_img);
 
 
   int majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
