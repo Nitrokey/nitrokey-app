@@ -67,7 +67,6 @@ AboutDialog::AboutDialog(QWidget *parent)
     }
   } else {
     showNoStickFound();
-    // ui->ButtonStickStatus->hide();
   }
 
   this->adjustSize();
@@ -298,6 +297,11 @@ void AboutDialog::on_ButtonStickStatus_clicked() {
 
 void Worker::fetch_device_data() {
   QMutexLocker lock(&mutex);
+  if (!libada::i()->isDeviceConnected()) {
+    emit finished();
+    return;
+  }
+
   devdata.passwordRetryCount = libada::i()->getPasswordRetryCount();
   devdata.userPasswordRetryCount = libada::i()->getUserPasswordRetryCount();
   devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();

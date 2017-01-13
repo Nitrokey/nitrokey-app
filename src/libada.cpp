@@ -78,7 +78,7 @@ int libada::getStorageInfoData() {
 }
 
 int libada::getStorageSDCardSizeGB() {
-  return 0;
+  return 42;
 }
 
 int libada::setUserPIN() {

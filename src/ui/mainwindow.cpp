@@ -381,7 +381,7 @@ void MainWindow::checkConnection() {
 
 
   if (result == 0) { //connected
-    if (false == libada::i()->isStorageDeviceConnected()) {
+    if (!libada::i()->isStorageDeviceConnected()) {
       ui->statusBar->showMessage(tr("Nitrokey Pro connected"));
 //        translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
     } else
@@ -400,10 +400,9 @@ void MainWindow::checkConnection() {
     }
 
   } else if (result == 1) { // recreate the settings and menus
-    if (false == libada::i()->isStorageDeviceConnected()) {
+    if (!libada::i()->isStorageDeviceConnected()) {
       ui->statusBar->showMessage(tr("Nitrokey connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
-//      initialTimeReset(ret); // TODO make call just before getting TOTP instead of every connection
 //        translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
     } else {
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
