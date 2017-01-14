@@ -27,8 +27,8 @@
 #include <QMutex>
 #include <climits>
 #include "hotpslot.h"
+#include "GUI/Tray.h"
 
-#define TRAY_MSG_TIMEOUT 5000
 
 namespace Ui {
 class MainWindow;
@@ -45,18 +45,6 @@ typedef struct {
   const char *language_string;
 } StartUpParameter_tst;
 
-enum trayMessageType { INFORMATION, WARNING, CRITICAL };
-
-class tray_Worker : public QObject
-{
-Q_OBJECT
-
-public slots:
-    void doWork();
-
-signals:
-    void resultReady();
-};
 
 class MainWindow : public QMainWindow {
   Q_OBJECT public : explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
@@ -85,20 +73,11 @@ private:
   QString nkpro_user_PIN;
 
   void InitState();
-  void createIndicator();
   void startDebug();
-  void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type,
-                       int timeout);
+
 
   Ui::MainWindow *ui;
 
-  QSystemTrayIcon *trayIcon;
-  QMenu *trayMenu;
-  QMenu *trayMenuSubConfigure;
-  QMenu *trayMenuPasswdSubMenu;
-  QMenu *trayMenuTOTPSubMenu;
-  QMenu *trayMenuHOTPSubMenu;
-  QMenu *trayMenuSubSpecialConfigure;
   QClipboard *clipboard;
 
   unsigned char HOTP_SlotCount;
@@ -122,40 +101,6 @@ private:
   bool StickNotInitated_DontAsk;
   bool set_initial_time;
 
-  QAction *quitAction;
-  QAction *configureAction;
-  QAction *resetAction;
-  QAction *configureActionStick20;
-  QAction *DebugAction;
-  QAction *ActionAboutDialog;
-  QAction *SecPasswordAction;
-  QAction *Stick20SetupAction;
-  QAction *Stick10ActionChangeUserPIN;
-  QAction *Stick10ActionChangeAdminPIN;
-  QAction *LockDeviceAction;
-  QAction *UnlockPasswordSafeAction;
-
-  QAction *Stick20ActionEnableCryptedVolume;
-  QAction *Stick20ActionDisableCryptedVolume;
-  QAction *Stick20ActionEnableHiddenVolume;
-  QAction *Stick20ActionDisableHiddenVolume;
-  QAction *Stick20ActionChangeUserPIN;
-  QAction *Stick20ActionChangeAdminPIN;
-  QAction *Stick20ActionChangeUpdatePIN;
-  QAction *Stick20ActionEnableFirmwareUpdate;
-  QAction *Stick20ActionExportFirmwareToFile;
-  QAction *Stick20ActionDestroyCryptedVolume;
-  QAction *Stick20ActionInitCryptedVolume;
-  QAction *Stick20ActionFillSDCardWithRandomChars;
-  QAction *Stick20ActionGetStickStatus;
-  QAction *Stick20ActionUpdateStickStatus;
-  QAction *Stick20ActionSetReadonlyUncryptedVolume;
-  QAction *Stick20ActionSetReadWriteUncryptedVolume;
-  QAction *Stick20ActionDebugAction;
-  QAction *Stick20ActionSetupHiddenVolume;
-  QAction *Stick20ActionClearNewSDCardFound;
-    QAction *Stick20ActionLockStickHardware;
-  QAction *Stick20ActionResetUserPassword;
 
   QString DebugText;
   QString otpInClipboard;
@@ -165,24 +110,12 @@ private:
   int ExecStickCmd(const char *Cmdline_);
   int getNextCode(uint8_t slotNumber);
 
-  void generatePasswordMenu();
-  void generateMenuForProDevice();
-  void initActionsForStick10();
-  void initActionsForStick20();
-  void initCommonActions();
-  int stick20SendCommand(uint8_t stick20Command, uint8_t *password);
-
-  void generateMenu(bool init);
   void generateHOTPConfig(OTPSlot *slot);
   void generateTOTPConfig(OTPSlot *slot);
   void generateAllConfigs();
 
-  void generateMenuForStorageDevice();
-  int UpdateDynamicMenuEntrys(void);
-  int AnalyseProductionInfos();
   void refreshStick20StatusData();
   void translateDeviceStatusToUserMessage(const int getStatus);
-  void showTrayMessage(QString message);
 
 public slots:
   void startAboutDialog();
@@ -214,12 +147,12 @@ public slots:
   void startStick20ClearNewSdCardFound();
   void startStick20SetupHiddenVolume();
 
-    void startStick20ActionChangeUpdatePIN();
+  void startStick20ActionChangeUpdatePIN();
 
 private slots:
   void generateComboBoxEntrys();
 
-    void resizeMin();
+  void resizeMin();
   void checkConnection();
   void storage_check_symlink();
 
@@ -247,12 +180,9 @@ private slots:
      void on_testHOTPButton_clicked(); void on_testTOTPButton_clicked(); */
   // END - OTP Test Routine ----------------------------------
 
-  bool eventFilter(QObject *obj, QEvent *event);
-  void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
   // Functions for password safe
   void SetupPasswordSafeConfig(void);
-  void generateMenuPasswordSafe();
   char *PWS_GetSlotName(int Slot);
 
   void on_eraseButton_clicked();
@@ -275,7 +205,6 @@ private slots:
   void on_PWS_EditSlotName_textChanged(const QString &arg1);
   void on_PWS_EditLoginName_textChanged(const QString &arg1);
   void on_PWS_EditPassword_textChanged(const QString &arg1);
-    void populateOTPPasswordMenu();
 
 
 public:
