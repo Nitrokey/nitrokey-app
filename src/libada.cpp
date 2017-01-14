@@ -4,9 +4,9 @@
 
 #include <libnitrokey/include/NitrokeyManager.h>
 #include "libada.h"
-#include <mutex>
 
-std::mutex mex_dev_com;
+//#include <mutex>
+//std::mutex mex_dev_com;
 
 
 std::shared_ptr <libada> libada::_instance = nullptr;
@@ -52,27 +52,45 @@ int libada::getUserPasswordRetryCount() {
 std::string libada::getCardSerial() {
   return std::__cxx11::string();
 }
+#include <QCache>
+#include <QtCore/QMutex>
 #include "libnitrokey/include/CommandFailedException.h"
 std::string libada::getTOTPSlotName(const int i) {
+  static QMutex mut;
+  QMutexLocker locker(&mut);
+  static QCache<int, std::string> cache;
+  if (cache.contains(i)){
+    return *cache[i];
+  }
   try{
-    return nm::instance()->get_totp_slot_name(i);
+    const auto slot_name = nm::instance()->get_totp_slot_name(i);
+    cache.insert(i, new std::string(slot_name));
   }
   catch (CommandFailedException &e){
-    if (e.reason_slot_not_programmed())
-      return "(empty)";
-    throw;
+    if (!e.reason_slot_not_programmed())
+      throw;
+    cache.insert(i, new std::string("(empty)"));
   }
+  return *cache[i];
 }
 
 std::string libada::getHOTPSlotName(const int i) {
+  static QMutex mut;
+  QMutexLocker locker(&mut);
+  static QCache<int, std::string> cache;
+  if (cache.contains(i)){
+    return *cache[i];
+  }
   try{
-    return nm::instance()->get_hotp_slot_name(i);
+    const auto slot_name = nm::instance()->get_hotp_slot_name(i);
+    cache.insert(i, new std::string(slot_name));
   }
   catch (CommandFailedException &e){
-    if (e.reason_slot_not_programmed())
-      return "(empty)";
-    throw;
+    if (!e.reason_slot_not_programmed())
+      throw;
+    cache.insert(i, new std::string("(empty)"));
   }
+  return *cache[i];
 }
 
 std::string libada::getPWSSlotName(const int i) {

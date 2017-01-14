@@ -53,38 +53,20 @@
 #include <locale.h>
 #define _(String) gettext(String)
 #include "systemutils.h"
-#include <errno.h>     // for unmounting on linux
+#include "src/core/SecureString.h"
 #include <sys/mount.h> // for unmounting on linux
 #endif                 // Q_OS_LINUX
 
-#include <stdio.h> //for fflush to sync on all OSes including Windows
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
 #include <unistd.h> //for sync syscall
 #endif              // Q_OS_LINUX || Q_OS_MAC
 
 #include <QString>
-
-/*******************************************************************************
- External declarations
-*******************************************************************************/
-
-extern "C" void DebugAppendTextGui(const char *Text);
-
-extern "C" void DebugInitDebugging(void);
+#include <OwnSleep.h>
 
 /*******************************************************************************
  Local defines
 *******************************************************************************/
-
-#include <algorithm>
-#include <libnitrokey/include/stick20_commands.h>
-
-class OwnSleep : public QThread {
-public:
-  static void usleep(unsigned long usecs) { QThread::usleep(usecs); }
-  static void msleep(unsigned long msecs) { QThread::msleep(msecs); }
-  static void sleep(unsigned long secs) { QThread::sleep(secs); }
-};
 
 void unmountEncryptedVolumes() {
 // TODO check will this work also on Mac
@@ -120,8 +102,6 @@ void local_sync() {
 }
 
 #define LOCAL_PASSWORD_SIZE 40
-
-void MainWindow::overwrite_string(QString &str) { std::fill(str.begin(), str.end(), '*'); }
 
 void MainWindow::showTrayMessage(QString message) {
     showTrayMessage("Nitrokey App", message, INFORMATION, 2000);
@@ -178,7 +158,6 @@ void MainWindow::InitState() {
   HiddenVolumeAccessable = FALSE;
   StickNotInitated = FALSE;
   SdCardNotErased = FALSE;
-  MatrixInputActive = FALSE;
   LockHardware = FALSE;
   PasswordSafeEnabled = FALSE;
 
@@ -667,10 +646,6 @@ void MainWindow::initActionsForStick20() {
       new QAction(tr("&Disable 'initialize storage with random data' warning"), this);
   connect(Stick20ActionClearNewSDCardFound, SIGNAL(triggered()), this,
           SLOT(startStick20ClearNewSdCardFound()));
-
-  Stick20ActionSetupPasswordMatrix = new QAction(tr("&Setup password matrix"), this);
-  connect(Stick20ActionSetupPasswordMatrix, SIGNAL(triggered()), this,
-          SLOT(startStick20SetupPasswordMatrix()));
 
   Stick20ActionLockStickHardware = new QAction(tr("&Lock stick hardware"), this);
   connect(Stick20ActionLockStickHardware, SIGNAL(triggered()), this,
@@ -1517,9 +1492,6 @@ void MainWindow::startStick20LockStickHardware() {
   }
 }
 
-void MainWindow::startStick20SetupPasswordMatrix() {
-}
-
 void MainWindow::startStick20DebugAction() {
 }
 
@@ -1930,11 +1902,12 @@ void MainWindow::copyToClipboard(QString text) {
   }
 }
 
-void MainWindow::checkClipboard_Valid(bool ignore_time) {
+#include <core/SecureString.h>
+void MainWindow::checkClipboard_Valid(bool force_clear) {
   uint64_t currentTime, far_future_delta = 60000;
 
   currentTime = QDateTime::currentDateTime().toTime_t();
-  if (ignore_time)
+  if (force_clear)
     currentTime += far_future_delta;
   if ((currentTime >= (lastClipboardTime + (uint64_t)60)) &&
       (clipboard->text() == otpInClipboard)) {

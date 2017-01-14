@@ -55,7 +55,6 @@ class MainWindow : public QMainWindow {
 
   bool DebugWindowActive;
   bool ExtendedConfigActive;
-  bool MatrixInputActive;
   bool LockHardware;
 
   uint64_t lastTOTPTime;
@@ -74,7 +73,6 @@ private:
     void initialTimeReset(int ret);
     QMutex check_connection_mutex;
   QString nkpro_user_PIN;
-  void overwrite_string(QString &str);
 
   void InitState();
   void createIndicator();
@@ -146,8 +144,7 @@ private:
   QAction *Stick20ActionDebugAction;
   QAction *Stick20ActionSetupHiddenVolume;
   QAction *Stick20ActionClearNewSDCardFound;
-  QAction *Stick20ActionSetupPasswordMatrix;
-  QAction *Stick20ActionLockStickHardware;
+    QAction *Stick20ActionLockStickHardware;
   QAction *Stick20ActionResetUserPassword;
 
   QString DebugText;
@@ -207,8 +204,8 @@ public slots:
   void startStick20DebugAction();
   void startStick20ClearNewSdCardFound();
   void startStick20SetupHiddenVolume();
-  void startStick20SetupPasswordMatrix();
-  void startStick20ActionChangeUpdatePIN();
+
+    void startStick20ActionChangeUpdatePIN();
 
 private slots:
   void resizeMin();
@@ -230,7 +227,7 @@ private slots:
   void on_writeGeneralConfigButton_clicked();
 
   void copyToClipboard(QString text);
-  void checkClipboard_Valid(bool ignore_time = false);
+  void checkClipboard_Valid(bool force_clear = false);
   void checkPasswordTime_Valid();
   void checkTextEdited();
 

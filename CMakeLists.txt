@@ -123,6 +123,7 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/nitrokey-applet.cpp
     ${SRCDIR}/hotpslot.cpp
     ${SRCDIR}/main.cpp
+    ${SRCDIR}/core/SecureString.cpp
     ${SRCUIDIR}/mainwindow.cpp
     ${SRCUIDIR}/pindialog.cpp
     ${SRCUIDIR}/securitydialog.cpp
@@ -134,7 +135,7 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20-response-task.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${platform_specific_sources}
-        src/libada.cpp src/libada.h src/utils/bool_values.h)
+        src/libada.cpp src/libada.h src/utils/bool_values.h src/GUI/Tray.cpp src/GUI/Tray.h)
 
 # Freedesktop files
 IF(NOT WIN32)
