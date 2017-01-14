@@ -77,6 +77,7 @@ extern "C" void DebugInitDebugging(void);
 *******************************************************************************/
 
 #include <algorithm>
+#include <libnitrokey/include/stick20_commands.h>
 
 class OwnSleep : public QThread {
 public:
@@ -128,6 +129,7 @@ void MainWindow::showTrayMessage(QString message) {
 
 void MainWindow::showTrayMessage(const QString &title, const QString &msg,
                                  enum trayMessageType type, int timeout) {
+  qDebug() << msg;
     if (TRUE == trayIcon->supportsMessages()) {
       switch (type) {
       case INFORMATION:
@@ -378,7 +380,8 @@ void MainWindow::checkConnection() {
   currentTime = QDateTime::currentDateTime().toTime_t();
 
   int result = libada::i()->isDeviceConnected()? 0 : -1;
-
+  if (DeviceOffline == TRUE)
+    result = 1;
 
   if (result == 0) { //connected
     if (!libada::i()->isStorageDeviceConnected()) {
@@ -400,6 +403,7 @@ void MainWindow::checkConnection() {
     }
 
   } else if (result == 1) { // recreate the settings and menus
+    DeviceOffline = FALSE;
     if (!libada::i()->isStorageDeviceConnected()) {
       ui->statusBar->showMessage(tr("Nitrokey connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
@@ -482,26 +486,28 @@ void MainWindow::generateComboBoxEntrys() {
   ui->slotComboBox->clear();
 
   for (i = 0; i < TOTP_SlotCount; i++) {
-    if (libada::i()->getTOTPSlotName(i).empty())
+    auto slotName = libada::i()->getTOTPSlotName(i);
+    if (slotName.empty())
       ui->slotComboBox->addItem(QString(tr("TOTP slot ")).append(QString::number(i + 1, 10)));
     else
       ui->slotComboBox->addItem(QString(tr("TOTP slot "))
                                     .append(QString::number(i + 1, 10))
                                     .append(" [")
-                                    .append(QString::fromStdString(libada::i()->getTOTPSlotName(i)))
+                                    .append(QString::fromStdString(slotName))
                                     .append("]"));
   }
 
   ui->slotComboBox->insertSeparator(TOTP_SlotCount + 1);
 
   for (i = 0; i < HOTP_SlotCount; i++) {
-    if (libada::i()->getHOTPSlotName(i).empty())
+    auto slotName = libada::i()->getHOTPSlotName(i);
+    if (slotName.empty())
       ui->slotComboBox->addItem(QString(tr("HOTP slot ")).append(QString::number(i + 1, 10)));
     else
       ui->slotComboBox->addItem(QString(tr("HOTP slot "))
                                     .append(QString::number(i + 1, 10))
                                     .append(" [")
-                                    .append(QString::fromStdString(libada::i()->getHOTPSlotName(i)))
+                                    .append(QString::fromStdString(slotName))
                                     .append("]"));
   }
 
@@ -516,10 +522,10 @@ void MainWindow::generateMenu() {
       trayMenu->clear(); // Clear old menu
 
     // Setup the new menu
-    if (libada::i()->isDeviceConnected() == false) {
+    if (!libada::i()->isDeviceConnected()) {
       trayMenu->addAction(tr("Nitrokey not connected"));
     } else {
-      if (false == libada::i()->isStorageDeviceConnected()) // Nitrokey Pro connected
+      if (!libada::i()->isStorageDeviceConnected()) // Nitrokey Pro connected
         generateMenuForProDevice();
       else {
         // Nitrokey Storage is connected
@@ -689,15 +695,17 @@ void MainWindow::generatePasswordMenu() {
     trayMenuPasswdSubMenu = new QMenu(tr("Passwords")); //TODO make shared pointer
 
     for (int i=0; i<TOTP_SLOT_COUNT; i++){
-      if (libada::i()->isTOTPSlotProgrammed(i)){
-        trayMenuPasswdSubMenu->addAction(QString::fromStdString(libada::i()->getTOTPSlotName(i)),
+      auto slotName = libada::i()->getTOTPSlotName(i);
+      if (!slotName.empty()){
+        trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
         this, [=](){getTOTPDialog(i);} );
       }
     }
 
     for (int i=0; i<HOTP_SLOT_COUNT; i++){
-      if (libada::i()->isTOTPSlotProgrammed(i)){
-        trayMenuPasswdSubMenu->addAction(QString::fromStdString(libada::i()->getHOTPSlotName(i)),
+      auto slotName = libada::i()->getHOTPSlotName(i);
+      if (!slotName.empty()){
+        trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
         this, [=](){getHOTPDialog(i);} );
       }
     }
@@ -749,12 +757,15 @@ void MainWindow::generateMenuForProDevice() {
     }
   }
 }
+using nm = nitrokey::NitrokeyManager;
 
 void MainWindow::generateMenuForStorageDevice() {
   int AddSeperator = FALSE;
   {
+    auto status = nm::instance()->get_status_storage();
 
-    if (FALSE == Stick20ScSdCardOnline) // Is Stick 2.0 online (SD + SC
+
+    if (status.ActiveSD_CardID_u32 == 0) // Is Stick 2.0 online (SD + SC
                                         // accessable?)
     {
       trayMenu->addAction(Stick20ActionUpdateStickStatus);
@@ -762,12 +773,14 @@ void MainWindow::generateMenuForStorageDevice() {
     }
 
     // Add special entrys
-    if (TRUE == StickNotInitated) {
+//    if (TRUE == StickNotInitated) {
+    if (TRUE == status.StickKeysNotInitiated) {
       trayMenu->addAction(Stick20ActionInitCryptedVolume);
       AddSeperator = TRUE;
     }
 
-    if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
+//    if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
+    if (!status.StickKeysNotInitiated && !status.SDFillWithRandomChars_u8) {
       trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars);
       AddSeperator = TRUE;
     }
@@ -778,7 +791,7 @@ void MainWindow::generateMenuForStorageDevice() {
     generatePasswordMenu();
     trayMenu->addSeparator();
 
-    if (FALSE == StickNotInitated) {
+    if (!status.StickKeysNotInitiated) {
       // Enable tab for password safe for stick 2
       if (-1 == ui->tabWidget->indexOf(ui->tab_3)) {
         ui->tabWidget->addTab(ui->tab_3, tr("Password Safe"));
@@ -788,19 +801,23 @@ void MainWindow::generateMenuForStorageDevice() {
       generateMenuPasswordSafe();
     }
 
-    if (FALSE == SdCardNotErased) {
-      if (FALSE == CryptedVolumeActive)
+//    if (FALSE == SdCardNotErased) {
+    if (!status.SDFillWithRandomChars_u8) {
+//      if (FALSE == CryptedVolumeActive)
+      if (status.VolumeActiceFlag_st.encrypted)
         trayMenu->addAction(Stick20ActionEnableCryptedVolume);
       else
         trayMenu->addAction(Stick20ActionDisableCryptedVolume);
 
-      if (FALSE == HiddenVolumeActive)
+//      if (FALSE == HiddenVolumeActive)
+      if (status.VolumeActiceFlag_st.hidden)
         trayMenu->addAction(Stick20ActionEnableHiddenVolume);
       else
         trayMenu->addAction(Stick20ActionDisableHiddenVolume);
     }
 
-    if (FALSE != (HiddenVolumeActive || CryptedVolumeActive || PasswordSafeEnabled))
+//    if (FALSE != (HiddenVolumeActive || CryptedVolumeActive || PasswordSafeEnabled))
+    if (FALSE != (status.VolumeActiceFlag_st.hidden || status.VolumeActiceFlag_st.encrypted || PasswordSafeEnabled))
       trayMenu->addAction(LockDeviceAction);
 
     trayMenuSubConfigure = trayMenu->addMenu(tr("Configure"));
@@ -812,12 +829,10 @@ void MainWindow::generateMenuForStorageDevice() {
     trayMenuSubConfigure->addAction(Stick20ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeAdminPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUpdatePIN);
-    if (TRUE == MatrixInputActive)
-      trayMenuSubConfigure->addAction(Stick20ActionSetupPasswordMatrix);
     trayMenuSubConfigure->addSeparator();
 
     // Storage actions
-    if (FALSE == NormalVolumeRWActive)
+    if (status.ReadWriteFlagUncryptedVolume_u8)
       trayMenuSubConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume); // Set
     // RW
     // active
@@ -826,7 +841,8 @@ void MainWindow::generateMenuForStorageDevice() {
                                                                                  // readonly
                                                                                  // active
 
-    if (FALSE == SdCardNotErased)
+//    if (FALSE == SdCardNotErased)
+    if (FALSE == status.SDFillWithRandomChars_u8)
       trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
 
     trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
@@ -836,8 +852,6 @@ void MainWindow::generateMenuForStorageDevice() {
     if (TRUE == LockHardware)
       trayMenuSubConfigure->addAction(Stick20ActionLockStickHardware);
 
-    if (TRUE == HiddenVolumeAccessable) {
-    }
 
     trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate);
     trayMenuSubConfigure->addAction(Stick20ActionExportFirmwareToFile);
@@ -848,7 +862,7 @@ void MainWindow::generateMenuForStorageDevice() {
       trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu(tr("Special Configure"));
       trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars);
 
-      if (TRUE == SdCardNotErased)
+      if (TRUE == status.SDFillWithRandomChars_u8)
         trayMenuSubSpecialConfigure->addAction(Stick20ActionClearNewSDCardFound);
     }
 
@@ -858,11 +872,11 @@ void MainWindow::generateMenuForStorageDevice() {
       trayMenu->addAction(Stick20ActionResetUserPassword);
     }
 
-    // Add debug window ?
-    if (TRUE == DebugWindowActive) {
-      trayMenu->addSeparator();
-      trayMenu->addAction(Stick20ActionDebugAction);
-    }
+//    // Add debug window ?
+//    if (TRUE == DebugWindowActive) {
+//      trayMenu->addSeparator();
+//      trayMenu->addAction(Stick20ActionDebugAction);
+//    }
 
     // Setup OTP combo box
     generateComboBoxEntrys();
@@ -2350,6 +2364,12 @@ void MainWindow::resetTime() {
 }
 
 int MainWindow::getNextCode(uint8_t slotNumber) {
+  if (slotNumber>=0x20){
+    libada::i()->getTOTPCode(slotNumber-0x20);
+  } else {
+    libada::i()->getHOTPCode(slotNumber-0x10);
+  }
+  return 0;
 //  uint8_t result[18] = {0};
 //  uint32_t code;
 //  uint8_t config;
@@ -2449,7 +2469,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
 //  if (DebugingActive)
 //    qDebug() << otpInClipboard;
 //
-//  return 0;
+  return 0;
 }
 
 int MainWindow::userAuthenticate(const QString &password) {

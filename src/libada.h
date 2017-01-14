@@ -48,6 +48,8 @@ public:
     std::string getCardSerial();
     std::string getTOTPSlotName(const int i);
     std::string getHOTPSlotName(const int i);
+    int getTOTPCode(const int i);
+    int getHOTPCode(const int i);
 
     std::string getPWSSlotName(const int i);
     bool getPWSSlotStatus(const int i);

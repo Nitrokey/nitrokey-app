@@ -52,21 +52,37 @@ int libada::getUserPasswordRetryCount() {
 std::string libada::getCardSerial() {
   return std::__cxx11::string();
 }
-
+#include "libnitrokey/include/CommandFailedException.h"
 std::string libada::getTOTPSlotName(const int i) {
-  return std::__cxx11::string();
+  try{
+    return nm::instance()->get_totp_slot_name(i);
+  }
+  catch (CommandFailedException &e){
+    if (e.reason_slot_not_programmed())
+      return "(empty)";
+    throw;
+  }
 }
 
 std::string libada::getHOTPSlotName(const int i) {
-  return std::__cxx11::string();
+  try{
+    return nm::instance()->get_hotp_slot_name(i);
+  }
+  catch (CommandFailedException &e){
+    if (e.reason_slot_not_programmed())
+      return "(empty)";
+    throw;
+  }
 }
 
 std::string libada::getPWSSlotName(const int i) {
-  return std::__cxx11::string();
+  return "";
+  return nm::instance()->get_password_safe_slot_name(i);
 }
 
 bool libada::getPWSSlotStatus(const int i) {
   return false;
+  return nm::instance()->get_password_safe_slot_status()[i];
 }
 
 void libada::erasePWSSlot(const int i) {
@@ -132,4 +148,12 @@ bool libada::is_nkpro_07_rtm1() {
 
 bool libada::is_secret320_supported() {
   return false;
+}
+
+int libada::getTOTPCode(const int i){
+  nm::instance()->get_TOTP_code(i, 0, 0, 0, "");
+}
+
+int libada::getHOTPCode(const int i){
+  nm::instance()->get_HOTP_code(i, "");
 }
