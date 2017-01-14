@@ -190,34 +190,10 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   nitrokey::NitrokeyManager::instance()->connect();
 
-
-//  switch (StartupInfo_st->FlagDebug) {
-//  case DEBUG_STATUS_LOCAL_DEBUG:
-//    DebugWindowActive = TRUE;
-//    DebugingActive = TRUE;
-//    DebugingStick20PoolingActive = FALSE;
-//    break;
-//
-//  case DEBUG_STATUS_DEBUG_ALL:
-//    DebugWindowActive = TRUE;
-//    DebugingActive = TRUE;
-//    DebugingStick20PoolingActive = TRUE;
-//    break;
-//
-//  case DEBUG_STATUS_NO_DEBUGGING:
-//  default:
-//    DebugWindowActive = FALSE;
-//    DebugingActive = FALSE;
-//    DebugingStick20PoolingActive = FALSE;
-//    break;
-//  }
-
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
-//  cryptostick = new Device(VID_STICK_OTP, PID_STICK_OTP, VID_STICK_20, PID_STICK_20,
-//                           VID_STICK_20_UPDATE_MODE, PID_STICK_20_UPDATE_MODE);
 
   // Check for comamd line execution after init "nitrokey"
   if (0 != StartupInfo_st->Cmd) {
@@ -252,15 +228,12 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
-  // Init debug text
-//  initDebugging();
-
   ui->deleteUserPasswordCheckBox->setEnabled(false);
   ui->deleteUserPasswordCheckBox->setChecked(false);
 
   //TODO
 //    translateDeviceStatusToUserMessage(cryptostick->getStatus());
-  generateMenu();
+  generateMenu(true);
 
   ui->PWS_EditPassword->setValidator(
       new utf8FieldLengthValidator(PWS_PASSWORD_LENGTH, ui->PWS_EditPassword));
@@ -349,11 +322,6 @@ void MainWindow::checkConnection() {
 
   QMutexLocker locker(&check_connection_mutex);
 
-  //move to constructor
-  HOTP_SlotCount = HOTP_SLOT_COUNT;
-  TOTP_SlotCount = TOTP_SLOT_COUNT;
-
-
   static int DeviceOffline = TRUE;
   int ret = 0;
   currentTime = QDateTime::currentDateTime().toTime_t();
@@ -376,7 +344,7 @@ void MainWindow::checkConnection() {
     if (FALSE == DeviceOffline) // To avoid the continuous reseting of
                                 // the menu
     {
-      generateMenu();
+      generateMenu(false);
       DeviceOffline = TRUE;
       showTrayMessage(tr("Nitrokey disconnected"), "", INFORMATION, TRAY_MSG_TIMEOUT);
     }
@@ -391,7 +359,7 @@ void MainWindow::checkConnection() {
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
       showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
     }
-    generateMenu();
+    generateMenu(false);
   }
 
 //  if (TRUE == Stick20_ConfigurationChanged && libada::i()->isStorageDeviceConnected()) {
@@ -493,22 +461,24 @@ void MainWindow::generateComboBoxEntrys() {
   ui->slotComboBox->setCurrentIndex(0);
 }
 
-void MainWindow::generateMenu() {
+void MainWindow::generateMenu(bool init) {
   {
     if (NULL == trayMenu)
       trayMenu = new QMenu();
     else
       trayMenu->clear(); // Clear old menu
 
-    // Setup the new menu
-    if (!libada::i()->isDeviceConnected()) {
-      trayMenu->addAction(tr("Nitrokey not connected"));
-    } else {
-      if (!libada::i()->isStorageDeviceConnected()) // Nitrokey Pro connected
-        generateMenuForProDevice();
-      else {
-        // Nitrokey Storage is connected
-        generateMenuForStorageDevice();
+    if (!init){
+      // Setup the new menu
+      if (!libada::i()->isDeviceConnected()) {
+        trayMenu->addAction(tr("Nitrokey not connected"));
+      } else {
+        if (!libada::i()->isStorageDeviceConnected()) // Nitrokey Pro connected
+          generateMenuForProDevice();
+        else {
+          // Nitrokey Storage is connected
+          generateMenuForStorageDevice();
+        }
       }
     }
 
@@ -524,7 +494,6 @@ void MainWindow::generateMenu() {
     trayMenu->addAction(quitAction);
     trayIcon->setContextMenu(trayMenu);
   }
-  generateComboBoxEntrys();
 }
 
 void MainWindow::initActionsForStick10() {
@@ -662,30 +631,57 @@ void MainWindow::initActionsForStick20() {
   connect(Stick20ActionUpdateStickStatus, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
 }
 
-void MainWindow::generatePasswordMenu() {
-  {
-    if (trayMenuPasswdSubMenu != NULL) {
-      delete trayMenuPasswdSubMenu;
-    }
-    trayMenuPasswdSubMenu = new QMenu(tr("Passwords")); //TODO make shared pointer
+QThread thread_tray_populateOTP;
 
-    for (int i=0; i<TOTP_SLOT_COUNT; i++){
+void tray_Worker::doWork() {
+  //populate OTP name cache
+  for (int i=0; i < TOTP_SLOT_COUNT; i++){
+    auto slotName = libada::i()->getTOTPSlotName(i);
+  }
+
+  for (int i=0; i<HOTP_SLOT_COUNT; i++){
+    auto slotName = libada::i()->getHOTPSlotName(i);
+  }
+  emit resultReady();
+}
+
+void MainWindow::generatePasswordMenu() {
+  if (trayMenuPasswdSubMenu != NULL) {
+    delete trayMenuPasswdSubMenu;
+  }
+  trayMenuPasswdSubMenu = new QMenu(tr("Passwords")); //TODO make shared pointer
+
+  trayMenu->addMenu(trayMenuPasswdSubMenu);
+  trayMenu->addSeparator();
+
+  tray_Worker *worker = new tray_Worker;
+  worker->moveToThread(&thread_tray_populateOTP);
+//  connect(&tray_populateOTP, &QThread::finished, worker, &QObject::deleteLater);
+  connect(&thread_tray_populateOTP, SIGNAL(started()), worker, SLOT(doWork()));
+  connect(worker, SIGNAL(resultReady()), this, SLOT(populateOTPPasswordMenu()));
+  connect(worker, SIGNAL(resultReady()), this, SLOT(generateComboBoxEntrys()));
+
+  thread_tray_populateOTP.start();
+}
+
+void MainWindow::populateOTPPasswordMenu() {
+  for (int i=0; i < TOTP_SLOT_COUNT; i++){
       auto slotName = libada::i()->getTOTPSlotName(i);
       if (!slotName.empty()){
         trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
-        this, [=](){getTOTPDialog(i);} );
+                                         this, [=](){ getTOTPDialog(i);} );
       }
     }
 
-    for (int i=0; i<HOTP_SLOT_COUNT; i++){
+  for (int i=0; i<HOTP_SLOT_COUNT; i++){
       auto slotName = libada::i()->getHOTPSlotName(i);
       if (!slotName.empty()){
         trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
-        this, [=](){getHOTPDialog(i);} );
+                                         this, [=](){ getHOTPDialog(i);} );
       }
     }
 
-    if (TRUE == libada::i()->isPasswordSafeUnlocked()) {
+  if (TRUE == libada::i()->isPasswordSafeUnlocked()) {
       for (int i = 0; i < PWS_SLOT_COUNT; i++) {
         if (libada::i()->getPWSSlotStatus(i)) {
           trayMenuPasswdSubMenu->addAction(QString::fromStdString(libada::i()->getPWSSlotName(i)),
@@ -693,11 +689,8 @@ void MainWindow::generatePasswordMenu() {
         }
       }
     }
-
-     if (!trayMenuPasswdSubMenu->actions().empty()) {
-      trayMenu->addMenu(trayMenuPasswdSubMenu);
-      trayMenu->addSeparator();
-    }
+   if (trayMenuPasswdSubMenu->actions().empty()) {
+     trayMenuPasswdSubMenu->hide();
   }
 }
 
@@ -854,7 +847,7 @@ void MainWindow::generateMenuForStorageDevice() {
 //    }
 
     // Setup OTP combo box
-    generateComboBoxEntrys();
+  //  generateComboBoxEntrys();
   }
 }
 
@@ -979,7 +972,7 @@ void MainWindow::generateTOTPConfig(OTPSlot *slot) {
 
 void MainWindow::generateAllConfigs() {
   displayCurrentSlotConfig();
-  generateMenu();
+  generateMenu(false);
 }
 
 void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
@@ -1525,26 +1518,26 @@ void MainWindow::startStick20SetupHiddenVolume() {
 }
 
 int MainWindow::UpdateDynamicMenuEntrys(void) {
-  auto m = nitrokey::NitrokeyManager::instance();
-  if (!m->is_connected()) return FALSE;
-  auto s = m->get_status_storage();
+//  auto m = nitrokey::NitrokeyManager::instance();
+//  if (!m->is_connected()) return FALSE;
+//  auto s = m->get_status_storage();
+//
+//  NormalVolumeRWActive =
+//      s.ReadWriteFlagUncryptedVolume_u8 ? FALSE : TRUE;
+//
+//  CryptedVolumeActive =
+//      s.VolumeActiceFlag_st.encrypted ? TRUE : FALSE;
+//
+//  HiddenVolumeActive =
+//      s.VolumeActiceFlag_st.hidden ? TRUE : FALSE;
+//
+//  StickNotInitated = s.StickKeysNotInitiated ? TRUE : FALSE;
+//
+//  SdCardNotErased = s.SDFillWithRandomChars_u8 ? TRUE : FALSE;
+//
+//  Stick20ScSdCardOnline = TRUE;
 
-  NormalVolumeRWActive =
-      s.ReadWriteFlagUncryptedVolume_u8 ? FALSE : TRUE;
-
-  CryptedVolumeActive =
-      s.VolumeActiceFlag_st.encrypted ? TRUE : FALSE;
-
-  HiddenVolumeActive =
-      s.VolumeActiceFlag_st.hidden ? TRUE : FALSE;
-
-  StickNotInitated = s.StickKeysNotInitiated ? TRUE : FALSE;
-
-  SdCardNotErased = s.SDFillWithRandomChars_u8 ? TRUE : FALSE;
-
-  Stick20ScSdCardOnline = TRUE;
-
-  generateMenu();
+  generateMenu(false);
 
   return (TRUE);
 }
@@ -2066,7 +2059,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
   } else
       csApplet()->messageBox(tr("Slot is erased already."));
 
-  generateMenu();
+  generateMenu(false);
 }
 
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {

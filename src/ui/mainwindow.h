@@ -47,6 +47,16 @@ typedef struct {
 
 enum trayMessageType { INFORMATION, WARNING, CRITICAL };
 
+class tray_Worker : public QObject
+{
+Q_OBJECT
+
+public slots:
+    void doWork();
+
+signals:
+    void resultReady();
+};
 
 class MainWindow : public QMainWindow {
   Q_OBJECT public : explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
@@ -162,8 +172,7 @@ private:
   void initCommonActions();
   int stick20SendCommand(uint8_t stick20Command, uint8_t *password);
 
-  void generateComboBoxEntrys();
-  void generateMenu();
+  void generateMenu(bool init);
   void generateHOTPConfig(OTPSlot *slot);
   void generateTOTPConfig(OTPSlot *slot);
   void generateAllConfigs();
@@ -208,7 +217,9 @@ public slots:
     void startStick20ActionChangeUpdatePIN();
 
 private slots:
-  void resizeMin();
+  void generateComboBoxEntrys();
+
+    void resizeMin();
   void checkConnection();
   void storage_check_symlink();
 
@@ -264,6 +275,8 @@ private slots:
   void on_PWS_EditSlotName_textChanged(const QString &arg1);
   void on_PWS_EditLoginName_textChanged(const QString &arg1);
   void on_PWS_EditPassword_textChanged(const QString &arg1);
+    void populateOTPPasswordMenu();
+
 
 public:
   void generateTemporaryPassword(uint8_t *tempPassword) const;
@@ -272,6 +285,7 @@ public:
   void generateOTPConfig(OTPSlot *slot) const;
   int get_supported_secret_length_base32() const;
   int get_supported_secret_length_hex() const;
+
 };
 
 class utf8FieldLengthValidator : public QValidator {
