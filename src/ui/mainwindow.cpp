@@ -136,16 +136,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   textdomain("nitrokey-app");
 #endif
   lastUserAuthenticateTime = lastClipboardTime = QDateTime::currentDateTime().toTime_t();
-  int ret;
-
-  QMetaObject::Connection ret_connection;
-
-//  InitState();
-//  clipboard = QApplication::clipboard();
-//  ExtendedConfigActive = StartupInfo_st->ExtendedConfigActive;
-
-//  if (0 != StartupInfo_st->LockHardware)
-//    LockHardware = TRUE;
 
   nitrokey::NitrokeyManager::instance()->connect();
 
@@ -154,16 +144,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
 
-//  // Check for comamd line execution after init "nitrokey"
-//  if (0 != StartupInfo_st->Cmd) {
-//    ret = ExecStickCmd(StartupInfo_st->CmdLine);
-//    exit(ret);
-//  }
-
-//  set_initial_time = false;
   QTimer *timer = new QTimer(this);
-
-  ret_connection = connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
+  connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
   timer->start(2000);
 
 
@@ -181,8 +163,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   //TODO
 //    translateDeviceStatusToUserMessage(cryptostick->getStatus());
-//  generateMenu(true);
-//  tray.generateMenu(true);
 
   ui->PWS_EditPassword->setValidator(
       new utf8FieldLengthValidator(PWS_PASSWORD_LENGTH, ui->PWS_EditPassword));
@@ -315,8 +295,6 @@ void MainWindow::initialTimeReset(int ret) {
 //        }
 //      }
 }
-
-void MainWindow::startTimer() {}
 
 MainWindow::~MainWindow() {
   delete ui;

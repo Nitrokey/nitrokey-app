@@ -49,12 +49,7 @@ typedef struct {
 
 class MainWindow : public QMainWindow {
   Q_OBJECT public : explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
-  void startTimer();
   ~MainWindow();
-
-  bool DebugWindowActive;
-  bool ExtendedConfigActive;
-  bool LockHardware;
 
   uint64_t lastTOTPTime;
   uint64_t lastClipboardTime;
