@@ -310,7 +310,7 @@ void Tray::generatePasswordMenu() {
   connect(&thread_tray_populateOTP, SIGNAL(started()), worker, SLOT(doWork()));
   connect(worker, SIGNAL(resultReady()), this, SLOT(populateOTPPasswordMenu()));
   //FIXME connect this to mainwindow
-//  connect(worker, SIGNAL(resultReady()), this, SLOT(generateComboBoxEntrys()));
+  connect(worker, SIGNAL(resultReady()), main_window, SLOT(generateComboBoxEntrys()));
 
   thread_tray_populateOTP.start();
 }

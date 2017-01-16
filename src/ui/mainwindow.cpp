@@ -106,10 +106,6 @@ void local_sync() {
 
 
 void MainWindow::InitState() {
-  HOTP_SlotCount = HOTP_SLOT_COUNT;
-  TOTP_SlotCount = TOTP_SLOT_COUNT;
-
-//  trayMenu = NULL;
   Stick20ScSdCardOnline = FALSE;
   CryptedVolumeActive = FALSE;
   HiddenVolumeActive = FALSE;
@@ -131,6 +127,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
       tray(this, true, true),
       otpInClipboard("not empty"), secretInClipboard("not empty"), PWSInClipboard("not empty") {
+  HOTP_SlotCount = HOTP_SLOT_COUNT;
+  TOTP_SlotCount = TOTP_SLOT_COUNT;
 #ifdef Q_OS_LINUX
   setlocale(LC_ALL, "");
   bindtextdomain("nitrokey-app", "/usr/share/locale");
