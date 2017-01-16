@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include "hotpslot.h"
+#include <QString>
 
 #define HOTP_SLOT_COUNT_MAX 3
 #define TOTP_SLOT_COUNT_MAX 15
@@ -69,9 +70,10 @@ public:
     bool isPasswordSafeUnlocked();
     bool isTOTPSlotProgrammed(const int i);
     bool isHOTPSlotProgrammed(const int i);
-    void writeToOTPSlot(const OTPSlot& otpconf);
+    void writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword);
 
-    bool is_nkpro_07_rtm1();
+
+      bool is_nkpro_07_rtm1();
     bool is_secret320_supported();
 };
 

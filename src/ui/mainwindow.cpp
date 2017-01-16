@@ -346,14 +346,13 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
   selectedSlot -= (TOTP_SlotCount + 1);
 
   if (selectedSlot < HOTP_SlotCount) {
-    slot->slotNumber = selectedSlot + 0x10;
+    slot->slotNumber = selectedSlot;// + 0x10;
 
     generateOTPConfig(slot);
 
-
     memset(slot->counter, 0, 8);
     // Nitrokey Storage needs counter value in text but Pro in binary [#60]
-    if (libada::i()->isStorageDeviceConnected() == false) {
+//    if (libada::i()->isStorageDeviceConnected() == false) {
       bool conversionSuccess = false;
       uint64_t counterFromGUI = 0;
       if (0 != ui->counterEdit->text().toLatin1().length()) {
@@ -365,20 +364,21 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
           csApplet()->warningBox(tr("Counter value not copied - there was an error in conversion. "
                                             "Setting counter value to 0. Please retry."));
       }
-    } else { // nitrokey storage version
-      QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
-      int digitsInCounter = counterFromGUI.length();
-      if (0 < digitsInCounter && digitsInCounter < 8) {
-        memcpy(slot->counter, counterFromGUI.constData(), std::min(counterFromGUI.length(), 7));
-        // 8th char has to be '\0' since in firmware atoi is used directly on buffer
-        slot->counter[7] = 0;
-      } else {
-          csApplet()->warningBox(tr("Counter value not copied - Nitrokey Storage handles HOTP counter "
-                                            "values up to 7 digits. Setting counter value to 0. Please retry."));
-      }
     }
+//  else { // nitrokey storage version
+//      QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
+//      int digitsInCounter = counterFromGUI.length();
+//      if (0 < digitsInCounter && digitsInCounter < 8) {
+//        memcpy(slot->counter, counterFromGUI.constData(), std::min(counterFromGUI.length(), 7));
+//        // 8th char has to be '\0' since in firmware atoi is used directly on buffer
+//        slot->counter[7] = 0;
+//      } else {
+//          csApplet()->warningBox(tr("Counter value not copied - Nitrokey Storage handles HOTP counter "
+//                                            "values up to 7 digits. Setting counter value to 0. Please retry."));
+//      }
+//    }
 
-  }
+//  }
 }
 
 
@@ -398,7 +398,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   base32_clean(encoded, sizeof(data), data);
   base32_decode(data, decoded, sizeof(decoded));
 
-  secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH); // .toHex();
+  secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH).toHex(); //FIXME check
   memset(slot->secret, 0, sizeof(slot->secret));
   toCopy = std::min(sizeof(slot->secret), (const size_t &) secretFromGUI.length());
   memcpy(slot->secret, secretFromGUI.constData(), toCopy);
@@ -437,7 +437,7 @@ void MainWindow::generateTOTPConfig(OTPSlot *slot) {
 
   // get the TOTP slot number
   if (selectedSlot < TOTP_SlotCount) {
-    slot->slotNumber = selectedSlot + 0x20;
+    slot->slotNumber = selectedSlot;// + 0x20;
 
     generateOTPConfig(slot);
 
@@ -1020,7 +1020,7 @@ void MainWindow::storage_check_symlink(){
 void MainWindow::on_writeButton_clicked() {
   uint8_t slotNo = (uint8_t) ui->slotComboBox->currentIndex();
 
-  PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PLAIN, PinDialog::ADMIN_PIN, this);
+//  PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PLAIN, PinDialog::ADMIN_PIN, this);
 
   if (slotNo > TOTP_SlotCount)
     slotNo -= (TOTP_SlotCount + 1);
@@ -1038,13 +1038,16 @@ void MainWindow::on_writeButton_clicked() {
     OTPSlot otp;
     if (slotNo < HOTP_SlotCount) { // HOTP slot
       generateHOTPConfig(&otp);
+      otp.type = OTPSlot::OTPType::HOTP;
     } else {
       generateTOTPConfig(&otp);
+      otp.type = OTPSlot::OTPType::TOTP;
     }
     if (!validate_secret(otp.secret)) {
       return;
     }
-    libada::i()->writeToOTPSlot(otp);
+    auth.authenticate();
+    libada::i()->writeToOTPSlot(otp, auth.getTempPassword());
 
 //          csApplet()->messageBox(tr("Configuration successfully written."));
 //          csApplet()->warningBox(tr("The name of the slot must not be empty."));
@@ -1063,7 +1066,7 @@ void MainWindow::on_writeButton_clicked() {
   displayCurrentSlotConfig();
 }
 
-bool MainWindow::validate_secret(const uint8_t *secret) const {
+bool MainWindow::validate_secret(const char *secret) const {
   if(libada::i()->is_nkpro_07_rtm1() && secret[0] == 0){
       csApplet()->warningBox(tr("Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret."));
     return false;

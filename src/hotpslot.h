@@ -27,19 +27,33 @@ static const int SECRET_LENGTH = 40;
 static const int SECRET_LENGTH_BASE32 = SECRET_LENGTH / 10 * 16;
 static const int SECRET_LENGTH_HEX = SECRET_LENGTH * 2;
 
+
+
 class OTPSlot {
 public:
+    enum OTPType{
+        UNKNOWN, HOTP, TOTP
+    };
+
     OTPSlot();
 
+    OTPType type;
     uint8_t slotNumber;
-    uint8_t slotName[15];
-    uint8_t secret[SECRET_LENGTH];
+    char slotName[15];
+    char secret[SECRET_LENGTH];
     union {
         uint8_t counter[8];
         uint64_t interval;
     };
+    union{
     uint8_t config;
-    uint8_t tokenID[13];
+        struct {
+            bool useEightDigits :1;
+            bool useEnter :1;
+            bool useTokenID :1;
+        } config_st;
+    };
+    char tokenID[13];
     bool isProgrammed;
 };
 

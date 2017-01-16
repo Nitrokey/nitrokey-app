@@ -55,6 +55,8 @@ std::string libada::getCardSerial() {
 #include <QCache>
 #include <QtCore/QMutex>
 #include "libnitrokey/include/CommandFailedException.h"
+#include "hotpslot.h"
+
 std::string libada::getTOTPSlotName(const int i) {
   static QMutex mut;
   QMutexLocker locker(&mut);
@@ -156,8 +158,23 @@ bool libada::isHOTPSlotProgrammed(const int i) {
   return false;
 }
 
-void libada::writeToOTPSlot(const OTPSlot &otpconf) {
+void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword) {
+  bool res;
+  switch(otpconf.type){
+    case OTPSlot::OTPType::HOTP: {
+      res = nm::instance()->write_HOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
+        otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
+      otpconf.tokenID, tempPassword.toLatin1().constData());
+    }
+      break;
+    case OTPSlot::OTPType::TOTP:
+      res = nm::instance()->write_TOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
+                                otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
+                                otpconf.tokenID, tempPassword.toLatin1().constData());
+      break;
 
+  }
+//  nm::write_HOTP_slot()
 }
 
 bool libada::is_nkpro_07_rtm1() {

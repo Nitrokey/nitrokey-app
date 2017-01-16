@@ -67,7 +67,7 @@ private:
     Clipboard clipboard;
     Authentication auth;
 
-    bool validate_secret(const uint8_t *secret) const;
+    bool validate_secret(const char *secret) const;
     void initialTimeReset(int ret);
     QMutex check_connection_mutex;
   QString nkpro_user_PIN;
