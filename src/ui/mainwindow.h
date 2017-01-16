@@ -28,6 +28,7 @@
 #include <climits>
 #include "hotpslot.h"
 #include "GUI/Tray.h"
+#include "GUI/Clipboard.h"
 
 
 namespace Ui {
@@ -67,6 +68,7 @@ protected:
 
 private:
     Tray tray;
+    Clipboard clipboard;
 
     bool validate_secret(const uint8_t *secret) const;
     void initialTimeReset(int ret);
@@ -78,8 +80,6 @@ private:
 
 
   Ui::MainWindow *ui;
-
-  QClipboard *clipboard;
 
   unsigned char HOTP_SlotCount;
   unsigned char TOTP_SlotCount;
@@ -104,9 +104,6 @@ private:
 
 
   QString DebugText;
-  QString otpInClipboard;
-  QString secretInClipboard;
-  QString PWSInClipboard;
 
   int ExecStickCmd(const char *Cmdline_);
   int getNextCode(uint8_t slotNumber);
@@ -115,7 +112,7 @@ private:
   void generateTOTPConfig(OTPSlot *slot);
   void generateAllConfigs();
 
-  void refreshStick20StatusData();
+//  void refreshStick20StatusData();
   void translateDeviceStatusToUserMessage(const int getStatus);
 
 public slots:
@@ -171,8 +168,6 @@ private slots:
   void on_enableUserPasswordCheckBox_toggled(bool checked);
   void on_writeGeneralConfigButton_clicked();
 
-  void copyToClipboard(QString text);
-  void checkClipboard_Valid(bool force_clear = false);
   void checkPasswordTime_Valid();
   void checkTextEdited();
 

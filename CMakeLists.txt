@@ -54,6 +54,7 @@ SET(moc_headers
     ${SRCUIDIR}/stick20-response-task.h
     ${SRCUIDIR}/stick20updatedialog.h
     ${SRCDIR}/GUI/Tray.h
+    src/GUI/Clipboard.h
 )
 
 
@@ -136,7 +137,7 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20-response-task.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${platform_specific_sources}
-        src/libada.cpp src/libada.h src/utils/bool_values.h src/GUI/Tray.cpp src/GUI/Tray.h)
+        src/libada.cpp src/libada.h src/utils/bool_values.h src/GUI/Tray.cpp src/GUI/Tray.h src/GUI/Clipboard.cpp src/GUI/Clipboard.h)
 
 # Freedesktop files
 IF(NOT WIN32)

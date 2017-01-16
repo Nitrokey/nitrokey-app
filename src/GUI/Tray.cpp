@@ -11,7 +11,7 @@
 #include <QMenu>
 
 Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config):
-    trayMenuPasswdSubMenu(nullptr), trayMenu(nullptr) {
+    QObject(_parent), trayMenuPasswdSubMenu(nullptr), trayMenu(nullptr) {
   main_window = _parent;
   debug_mode = _debug_mode;
   ExtendedConfigActive = _extended_config;

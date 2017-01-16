@@ -106,18 +106,18 @@ void local_sync() {
 
 
 void MainWindow::InitState() {
-  Stick20ScSdCardOnline = FALSE;
-  CryptedVolumeActive = FALSE;
-  HiddenVolumeActive = FALSE;
-  NormalVolumeRWActive = FALSE;
-  HiddenVolumeAccessable = FALSE;
-  StickNotInitated = FALSE;
-  SdCardNotErased = FALSE;
-  LockHardware = FALSE;
-  PasswordSafeEnabled = FALSE;
-
-  SdCardNotErased_DontAsk = FALSE;
-  StickNotInitated_DontAsk = FALSE;
+//  Stick20ScSdCardOnline = FALSE;
+//  CryptedVolumeActive = FALSE;
+//  HiddenVolumeActive = FALSE;
+//  NormalVolumeRWActive = FALSE;
+//  HiddenVolumeAccessable = FALSE;
+//  StickNotInitated = FALSE;
+//  SdCardNotErased = FALSE;
+//  LockHardware = FALSE;
+//  PasswordSafeEnabled = FALSE;
+//
+//  SdCardNotErased_DontAsk = FALSE;
+//  StickNotInitated_DontAsk = FALSE;
 
   PWS_Access = FALSE;
   PWS_CreatePWSize = 12;
@@ -125,8 +125,9 @@ void MainWindow::InitState() {
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
-      tray(this, true, true),
-      otpInClipboard("not empty"), secretInClipboard("not empty"), PWSInClipboard("not empty") {
+      tray(this, true, true), clipboard(this)
+//      otpInClipboard("not empty"), secretInClipboard("not empty"), PWSInClipboard("not empty")
+{
   HOTP_SlotCount = HOTP_SLOT_COUNT;
   TOTP_SlotCount = TOTP_SLOT_COUNT;
 #ifdef Q_OS_LINUX
@@ -140,7 +141,7 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   QMetaObject::Connection ret_connection;
 
 //  InitState();
-  clipboard = QApplication::clipboard();
+//  clipboard = QApplication::clipboard();
 //  ExtendedConfigActive = StartupInfo_st->ExtendedConfigActive;
 
 //  if (0 != StartupInfo_st->LockHardware)
@@ -159,23 +160,18 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 //    exit(ret);
 //  }
 
-  set_initial_time = false;
+//  set_initial_time = false;
   QTimer *timer = new QTimer(this);
 
   ret_connection = connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
   timer->start(2000);
 
-  QTimer *Clipboard_ValidTimer = new QTimer(this);
-
-  // Start timer for Clipboard delete check
-  connect(Clipboard_ValidTimer, SIGNAL(timeout()), this, SLOT(checkClipboard_Valid()));
-  Clipboard_ValidTimer->start(2000);
 
   QTimer *Password_ValidTimer = new QTimer(this);
 
   // Start timer for Password check
   connect(Password_ValidTimer, SIGNAL(timeout()), this, SLOT(checkPasswordTime_Valid()));
-  Password_ValidTimer->start(2000);
+  Password_ValidTimer->start(20*1000);
 
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
@@ -197,11 +193,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 }
 
 #define MAX_CONNECT_WAIT_TIME_IN_SEC 10
-
-int MainWindow::ExecStickCmd(const char *Cmdline_) {
-  return (0);
-}
-
 
 
 void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
@@ -232,15 +223,11 @@ void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
 
 
 void MainWindow::checkConnection() {
-//    if (!check_connection_mutex.tryLock(500))
-//        return;
-//  check_connection_mutex.unlock();
-
   QMutexLocker locker(&check_connection_mutex);
 
   static int DeviceOffline = TRUE;
   int ret = 0;
-  currentTime = QDateTime::currentDateTime().toTime_t();
+//  currentTime = QDateTime::currentDateTime().toTime_t();
 
   int result = libada::i()->isDeviceConnected()? 0 : -1;
   if (DeviceOffline == TRUE)
@@ -332,7 +319,6 @@ void MainWindow::initialTimeReset(int ret) {
 void MainWindow::startTimer() {}
 
 MainWindow::~MainWindow() {
-  checkClipboard_Valid(true);
   delete ui;
 }
 
@@ -340,8 +326,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   this->hide();
   event->ignore();
 }
-
-void MainWindow::getSlotNames() {}
 
 void MainWindow::generateComboBoxEntrys() {
   int i;
@@ -692,7 +676,7 @@ void MainWindow::startStickDebug() {
   dialog.exec();
 }
 
-void MainWindow::refreshStick20StatusData() {
+//void MainWindow::refreshStick20StatusData() {
 //  if (TRUE == libada::i()->isStorageDeviceConnected()) {
 //    // Get actual data from stick 20
 //    cryptostick->stick20GetStatusData();
@@ -701,7 +685,7 @@ void MainWindow::refreshStick20StatusData() {
 //    ResponseTask.GetResponse();
 //    UpdateDynamicMenuEntrys(); // Use new data to update menu
 //  }
-}
+//}
 
 void MainWindow::startAboutDialog() {
   AboutDialog dialog(this);
@@ -927,7 +911,7 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
       if (fillSDWithRandomChars != 0) {
         m->fill_SD_card_with_random_data(s.data());
       }
-      refreshStick20StatusData();
+//      refreshStick20StatusData();
     }
   }
 }
@@ -1153,9 +1137,9 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
 
     secret = QByteArray((char *) decoded, decoded_size).toHex();
 
-    ui->secretEdit->setText(QString(secret));
-    secretInClipboard = ui->secretEdit->text();
-    copyToClipboard(secretInClipboard);
+    auto secret_str = QString(secret);
+    ui->secretEdit->setText(secret_str);
+    clipboard.copyToClipboard(secret_str);
   }
 }
 
@@ -1182,9 +1166,9 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
     memcpy(decoded, secret.constData(), decoded_size);
     base32_encode(decoded, decoded_size, encoded, sizeof(encoded));
 
-    ui->secretEdit->setText(QString((char *) encoded));
-    secretInClipboard = ui->secretEdit->text();
-    copyToClipboard(secretInClipboard);
+    auto secret_str = QString((char *) encoded);
+    ui->secretEdit->setText(secret_str);
+    clipboard.copyToClipboard(secret_str);
   }
   ui->secretEdit->setMaxLength(get_supported_secret_length_base32());
 }
@@ -1249,30 +1233,27 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 }
 
 void MainWindow::getHOTPDialog(int slot) {
-  int ret;
+  auto OTPcode = getNextCode(0x10 + slot);
+  clipboard.copyToClipboard(QString::number(OTPcode));
 
-  ret = getNextCode(0x10 + slot);
-  if (ret == 0) {
-    if (libada::i()->getHOTPSlotName(slot).empty())
-      tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
-                      tr("One-time password has been copied to clipboard."), INFORMATION,
-                      TRAY_MSG_TIMEOUT);
-    else
-      tray.showTrayMessage(QString(tr("HOTP slot "))
-                          .append(QString::number(slot + 1, 10))
-                          .append(" [")
-                          .append(QString::fromStdString(libada::i()->getHOTPSlotName(slot)))
-                          .append("]"),
-                      tr("One-time password has been copied to clipboard."), INFORMATION,
-                      TRAY_MSG_TIMEOUT);
-  }
+  if (libada::i()->getHOTPSlotName(slot).empty())
+    tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
+                    tr("One-time password has been copied to clipboard."), INFORMATION,
+                    TRAY_MSG_TIMEOUT);
+  else
+    tray.showTrayMessage(QString(tr("HOTP slot "))
+                        .append(QString::number(slot + 1, 10))
+                        .append(" [")
+                        .append(QString::fromStdString(libada::i()->getHOTPSlotName(slot)))
+                        .append("]"),
+                    tr("One-time password has been copied to clipboard."), INFORMATION,
+                    TRAY_MSG_TIMEOUT);
 }
 
 void MainWindow::getTOTPDialog(int slot) {
-  int ret;
+  auto OTPcode = getNextCode(0x20 + slot);
+  clipboard.copyToClipboard(QString::number(OTPcode));
 
-  ret = getNextCode(0x20 + slot);
-  if (ret == 0) {
     if (libada::i()->getTOTPSlotName(slot).empty())
         tray.showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
                       tr("One-time password has been copied to clipboard."), INFORMATION,
@@ -1285,7 +1266,6 @@ void MainWindow::getTOTPDialog(int slot) {
                           .append("]"),
                       tr("One-time password has been copied to clipboard."), INFORMATION,
                       TRAY_MSG_TIMEOUT);
-  }
 }
 
 void MainWindow::on_eraseButton_clicked() {
@@ -1373,8 +1353,7 @@ void MainWindow::on_randomSecretButton_clicked() {
   ui->secretEdit->setText(secretArray);
   ui->checkBox->setEnabled(true);
   ui->checkBox->setChecked(true);
-  secretInClipboard = ui->secretEdit->text();
-  copyToClipboard(secretInClipboard);
+  clipboard.copyToClipboard(secretArray);
 }
 
 int MainWindow::get_supported_secret_length_base32() const {
@@ -1390,45 +1369,6 @@ void MainWindow::on_checkBox_toggled(bool checked) {
     ui->secretEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
   else
     ui->secretEdit->setEchoMode(QLineEdit::Normal);
-}
-
-void MainWindow::copyToClipboard(QString text) {
-  if (text.length() != 0) {
-    lastClipboardTime = QDateTime::currentDateTime().toTime_t();
-    clipboard->setText(text);
-    ui->labelNotify->show();
-  }
-}
-
-#include <core/SecureString.h>
-void MainWindow::checkClipboard_Valid(bool force_clear) {
-  uint64_t currentTime, far_future_delta = 60000;
-
-  currentTime = QDateTime::currentDateTime().toTime_t();
-  if (force_clear)
-    currentTime += far_future_delta;
-  if ((currentTime >= (lastClipboardTime + (uint64_t)60)) &&
-      (clipboard->text() == otpInClipboard)) {
-    overwrite_string(otpInClipboard);
-    clipboard->setText(QString(""));
-  }
-
-  if ((currentTime >= (lastClipboardTime + (uint64_t)60)) &&
-      (clipboard->text() == PWSInClipboard)) {
-    overwrite_string(PWSInClipboard);
-    clipboard->setText(QString(""));
-  }
-
-  if ((currentTime >= (lastClipboardTime + (uint64_t)120)) &&
-      (clipboard->text() == secretInClipboard)) {
-    overwrite_string(secretInClipboard);
-    clipboard->setText(QString(""));
-    ui->labelNotify->hide();
-  }
-
-  if (QString::compare(clipboard->text(), secretInClipboard) != 0) {
-    ui->labelNotify->hide();
-  }
 }
 
 void MainWindow::checkPasswordTime_Valid() {
@@ -1827,10 +1767,11 @@ void MainWindow::resetTime() {
 }
 
 int MainWindow::getNextCode(uint8_t slotNumber) {
+  //TODO authentication here
   if (slotNumber>=0x20){
-    libada::i()->getTOTPCode(slotNumber-0x20);
+    return libada::i()->getTOTPCode(slotNumber-0x20);
   } else {
-    libada::i()->getHOTPCode(slotNumber-0x10);
+    return libada::i()->getHOTPCode(slotNumber-0x10);
   }
   return 0;
 //  uint8_t result[18] = {0};
