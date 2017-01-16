@@ -109,7 +109,7 @@ void MainWindow::InitState() {
   HOTP_SlotCount = HOTP_SLOT_COUNT;
   TOTP_SlotCount = TOTP_SLOT_COUNT;
 
-  trayMenu = NULL;
+//  trayMenu = NULL;
   Stick20ScSdCardOnline = FALSE;
   CryptedVolumeActive = FALSE;
   HiddenVolumeActive = FALSE;
@@ -128,7 +128,8 @@ void MainWindow::InitState() {
 }
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow), trayMenuPasswdSubMenu(NULL),
+    : QMainWindow(parent), ui(new Ui::MainWindow),
+      tray(this, true, true),
       otpInClipboard("not empty"), secretInClipboard("not empty"), PWSInClipboard("not empty") {
 #ifdef Q_OS_LINUX
   setlocale(LC_ALL, "");
@@ -154,11 +155,11 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
 
-  // Check for comamd line execution after init "nitrokey"
-  if (0 != StartupInfo_st->Cmd) {
-    ret = ExecStickCmd(StartupInfo_st->CmdLine);
-    exit(ret);
-  }
+//  // Check for comamd line execution after init "nitrokey"
+//  if (0 != StartupInfo_st->Cmd) {
+//    ret = ExecStickCmd(StartupInfo_st->CmdLine);
+//    exit(ret);
+//  }
 
   set_initial_time = false;
   QTimer *timer = new QTimer(this);
@@ -179,7 +180,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
   Password_ValidTimer->start(2000);
 
 
-
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
   ui->deleteUserPasswordCheckBox->setEnabled(false);
@@ -187,7 +187,8 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
   //TODO
 //    translateDeviceStatusToUserMessage(cryptostick->getStatus());
-  generateMenu(true);
+//  generateMenu(true);
+//  tray.generateMenu(true);
 
   ui->PWS_EditPassword->setValidator(
       new utf8FieldLengthValidator(PWS_PASSWORD_LENGTH, ui->PWS_EditPassword));
@@ -209,13 +210,13 @@ void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
     switch (getStatus) {
         case 1:
             //regained connection
-            showTrayMessage(
+            tray.showTrayMessage(
                 tr("Regained connection to the device.")
             );
         break;
         case -10:
             // problems with communication, received CRC other than expected, try to reinitialize
-            showTrayMessage(
+          tray.showTrayMessage(
                     tr("Detected some communication problems with the device. Reinitializing.")
             );
             break;
@@ -231,10 +232,6 @@ void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
 }
 
 
-
-int MainWindow::AnalyseProductionInfos() {
-return 0;
-}
 
 void MainWindow::checkConnection() {
 //    if (!check_connection_mutex.tryLock(500))
@@ -265,22 +262,22 @@ void MainWindow::checkConnection() {
     if (FALSE == DeviceOffline) // To avoid the continuous reseting of
                                 // the menu
     {
-      generateMenu(false);
+      tray.regenerateMenu();
       DeviceOffline = TRUE;
-      showTrayMessage(tr("Nitrokey disconnected"), "", INFORMATION, TRAY_MSG_TIMEOUT);
+      tray.showTrayMessage(tr("Nitrokey disconnected"), "", INFORMATION, TRAY_MSG_TIMEOUT);
     }
 
   } else if (result == 1) { // recreate the settings and menus
     DeviceOffline = FALSE;
     if (!libada::i()->isStorageDeviceConnected()) {
       ui->statusBar->showMessage(tr("Nitrokey connected"));
-      showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
+      tray.showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
 //        translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
     } else {
       ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
-      showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
+      tray.showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
     }
-    generateMenu(false);
+    tray.regenerateMenu();
   }
 
 //  if (TRUE == Stick20_ConfigurationChanged && libada::i()->isStorageDeviceConnected()) {
@@ -505,7 +502,7 @@ void MainWindow::generateTOTPConfig(OTPSlot *slot) {
 
 void MainWindow::generateAllConfigs() {
   displayCurrentSlotConfig();
-  generateMenu(false);
+//  generateMenu(false);
 }
 
 void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
@@ -813,8 +810,8 @@ void MainWindow::startLockDeviceAction() {
 
   PasswordSafeEnabled = FALSE;
 
-  UpdateDynamicMenuEntrys();
-  showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
+  tray.regenerateMenu();
+  tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
 }
 
 void MainWindow::startStick20EnableFirmwareUpdate() {
@@ -1059,15 +1056,15 @@ void MainWindow::storage_check_symlink(){
     }
 }
 
-int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
+//int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
 //  csApplet()->warningBox(tr("There was an error during communicating with device. Please try again."));
 //  csApplet()->yesOrNoBox(tr("This command fills the encrypted volumes with random data "
 //                                "and will destroy all encrypted volumes!\n"
 //                                "It requires more than 1 hour for 32GB. Do you want to continue?"), false);
 //  csApplet()->warningBox(tr("Either the password is not correct or the command execution resulted "
 //                                "in an error. Please try again."));
-  return (true);
-}
+//  return (true);
+//}
 
 void MainWindow::on_writeButton_clicked() {
   uint8_t slotNo = (uint8_t) ui->slotComboBox->currentIndex();
@@ -1259,11 +1256,11 @@ void MainWindow::getHOTPDialog(int slot) {
   ret = getNextCode(0x10 + slot);
   if (ret == 0) {
     if (libada::i()->getHOTPSlotName(slot).empty())
-      showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
+      tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
                       tr("One-time password has been copied to clipboard."), INFORMATION,
                       TRAY_MSG_TIMEOUT);
     else
-      showTrayMessage(QString(tr("HOTP slot "))
+      tray.showTrayMessage(QString(tr("HOTP slot "))
                           .append(QString::number(slot + 1, 10))
                           .append(" [")
                           .append(QString::fromStdString(libada::i()->getHOTPSlotName(slot)))
@@ -1279,11 +1276,11 @@ void MainWindow::getTOTPDialog(int slot) {
   ret = getNextCode(0x20 + slot);
   if (ret == 0) {
     if (libada::i()->getTOTPSlotName(slot).empty())
-        showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
+        tray.showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
                       tr("One-time password has been copied to clipboard."), INFORMATION,
                       TRAY_MSG_TIMEOUT);
     else
-      showTrayMessage(QString(tr("TOTP slot "))
+      tray.showTrayMessage(QString(tr("TOTP slot "))
                           .append(QString::number(slot + 1, 10))
                           .append(" [")
                           .append(QString::fromStdString(libada::i()->getTOTPSlotName(slot)))
@@ -1569,7 +1566,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
   } else
       csApplet()->messageBox(tr("Slot is erased already."));
 
-  generateMenu(false);
+  tray.regenerateMenu();
 }
 
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {

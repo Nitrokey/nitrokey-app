@@ -66,6 +66,7 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
+    Tray tray;
 
     bool validate_secret(const uint8_t *secret) const;
     void initialTimeReset(int ret);

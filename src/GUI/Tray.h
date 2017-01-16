@@ -8,19 +8,23 @@
 #define TRAY_MSG_TIMEOUT 5000
 
 #include <QObject>
+
+enum trayMessageType { INFORMATION, WARNING, CRITICAL };
+
+namespace Ui {
+    class Tray;
+}
+
 class tray_Worker : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 
 public slots:
     void doWork();
 
-    signals:
+signals:
     void resultReady();
 };
-
-enum trayMessageType { INFORMATION, WARNING, CRITICAL };
-
 
 #include <QSystemTrayIcon>
 #include <QAction>
@@ -28,10 +32,12 @@ class Tray : public QObject {
 Q_OBJECT
 
 public:
-    Tray(QObject *_parent, bool _debug_mode);
-    ~Tray();
-
+    Tray(QObject *_parent, bool _debug_mode, bool _extended_config);
     virtual ~Tray();
+    void showTrayMessage(QString message);
+    void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type,
+                         int timeout);
+    void regenerateMenu();
 
 private slots:
     bool eventFilter(QObject *obj, QEvent *event);
@@ -40,28 +46,26 @@ private slots:
     void populateOTPPasswordMenu();
 
 private:
-    void generateMenu(bool init);
+    void generateMenu(bool init=false);
     void generateMenuForStorageDevice();
     void generatePasswordMenu();
     void generateMenuForProDevice();
     void initActionsForStick10();
     void initActionsForStick20();
     void initCommonActions();
-    void showTrayMessage(QString message);
     int UpdateDynamicMenuEntrys(void);
     void createIndicator();
-    void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type,
-                         int timeout);
 
     QObject *main_window;
     bool debug_mode;
+    bool ExtendedConfigActive;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     QMenu *trayMenuSubConfigure;
     QMenu *trayMenuPasswdSubMenu;
-    QMenu *trayMenuTOTPSubMenu;
-    QMenu *trayMenuHOTPSubMenu;
+//    QMenu *trayMenuTOTPSubMenu;
+//    QMenu *trayMenuHOTPSubMenu;
     QMenu *trayMenuSubSpecialConfigure;
 
     QAction *quitAction;
@@ -70,8 +74,8 @@ private:
     QAction *configureActionStick20;
     QAction *DebugAction;
     QAction *ActionAboutDialog;
-    QAction *SecPasswordAction;
-    QAction *Stick20SetupAction;
+//    QAction *SecPasswordAction;
+//    QAction *Stick20SetupAction;
     QAction *Stick10ActionChangeUserPIN;
     QAction *Stick10ActionChangeAdminPIN;
     QAction *LockDeviceAction;

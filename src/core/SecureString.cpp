@@ -1,4 +1,3 @@
-#include "mainwindow.h"
 #include "SecureString.h"
 #include <algorithm>
 

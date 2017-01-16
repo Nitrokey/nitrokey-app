@@ -44,7 +44,7 @@ SET(moc_headers
     ${SRCUIDIR}/mainwindow.h
     ${SRCDIR}/mcvs-wrapper.h
     ${SRCUIDIR}/pindialog.h
-    ${SRCUIDIR}/securitydialog.h
+#    ${SRCUIDIR}/securitydialog.h
     ${UTILSDIR}/sleep.h
     ${SRCUIDIR}/stick20changepassworddialog.h
     ${SRCUIDIR}/stick20debugdialog.h
@@ -53,6 +53,7 @@ SET(moc_headers
     ${SRCUIDIR}/stick20responsedialog.h
     ${SRCUIDIR}/stick20-response-task.h
     ${SRCUIDIR}/stick20updatedialog.h
+    ${SRCDIR}/GUI/Tray.h
 )
 
 
@@ -126,7 +127,7 @@ SET(nitrokey_app_sources
     ${SRCDIR}/core/SecureString.cpp
     ${SRCUIDIR}/mainwindow.cpp
     ${SRCUIDIR}/pindialog.cpp
-    ${SRCUIDIR}/securitydialog.cpp
+#    ${SRCUIDIR}/securitydialog.cpp
     ${SRCUIDIR}/stick20changepassworddialog.cpp
     ${SRCUIDIR}/stick20debugdialog.cpp
     ${SRCUIDIR}/stick20hiddenvolumedialog.cpp

@@ -7,34 +7,27 @@
 #include "libada.h"
 #include "bool_values.h"
 #include "nitrokey-applet.h"
+#include <libnitrokey/include/NitrokeyManager.h>
+#include <QMenu>
 
-Tray::Tray(QObject *_parent, bool _debug_mode){
+Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config):
+    trayMenuPasswdSubMenu(nullptr), trayMenu(nullptr) {
   main_window = _parent;
   debug_mode = _debug_mode;
+  ExtendedConfigActive = _extended_config;
 
   createIndicator();
   initActionsForStick10();
   initActionsForStick20();
   initCommonActions();
+
+  generateMenu(true);
 }
 
 Tray::~Tray() {
 }
 
 
-QThread thread_tray_populateOTP;
-
-void tray_Worker::doWork() {
-  //populate OTP name cache
-  for (int i=0; i < TOTP_SLOT_COUNT; i++){
-    auto slotName = libada::i()->getTOTPSlotName(i);
-  }
-
-  for (int i=0; i<HOTP_SLOT_COUNT; i++){
-    auto slotName = libada::i()->getHOTPSlotName(i);
-  }
-  emit resultReady();
-}
 
 
 /*
@@ -139,7 +132,7 @@ void Tray::generateMenu(bool init) {
     }
 
     // Add debug window ?
-    if (TRUE == DebugWindowActive)
+    if (debug_mode)
       trayMenu->addAction(DebugAction);
 
     trayMenu->addSeparator();
@@ -153,140 +146,154 @@ void Tray::generateMenu(bool init) {
 }
 
 void Tray::initActionsForStick10() {
-  UnlockPasswordSafeAction = new QAction(tr("Unlock password safe"), this);
+  UnlockPasswordSafeAction = new QAction(tr("Unlock password safe"), main_window);
   UnlockPasswordSafeAction->setIcon(QIcon(":/images/safe.png"));
-  connect(UnlockPasswordSafeAction, SIGNAL(triggered()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
+  connect(UnlockPasswordSafeAction, SIGNAL(triggered()), main_window, SLOT(PWS_Clicked_EnablePWSAccess()));
 
-  configureAction = new QAction(tr("&OTP"), this);
-  connect(configureAction, SIGNAL(triggered()), this, SLOT(startConfiguration()));
+  configureAction = new QAction(tr("&OTP"), main_window);
+  connect(configureAction, SIGNAL(triggered()), main_window, SLOT(startConfiguration()));
 
-  resetAction = new QAction(tr("&Factory reset"), this);
-  connect(resetAction, SIGNAL(triggered()), this, SLOT(factoryReset()));
+  resetAction = new QAction(tr("&Factory reset"), main_window);
+  connect(resetAction, SIGNAL(triggered()), main_window, SLOT(factoryReset()));
 
-  Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), this);
-  connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), this,
+  Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), main_window);
+  connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), main_window,
           SLOT(startStick10ActionChangeUserPIN()));
 
-  Stick10ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), this);
-  connect(Stick10ActionChangeAdminPIN, SIGNAL(triggered()), this,
+  Stick10ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), main_window);
+  connect(Stick10ActionChangeAdminPIN, SIGNAL(triggered()), main_window,
           SLOT(startStick10ActionChangeAdminPIN()));
 }
 
 void Tray::initCommonActions() {
-  DebugAction = new QAction(tr("&Debug"), this);
-  connect(DebugAction, SIGNAL(triggered()), this, SLOT(startStickDebug()));
+  DebugAction = new QAction(tr("&Debug"), main_window);
+  connect(DebugAction, SIGNAL(triggered()), main_window, SLOT(startStickDebug()));
 
-  quitAction = new QAction(tr("&Quit"), this);
+  quitAction = new QAction(tr("&Quit"), main_window);
   quitAction->setIcon(QIcon(":/images/quit.png"));
   connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-  ActionAboutDialog = new QAction(tr("&About Nitrokey"), this);
+  ActionAboutDialog = new QAction(tr("&About Nitrokey"), main_window);
 
   ActionAboutDialog->setIcon(QIcon(":/images/about.png"));
-  connect(ActionAboutDialog, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
+  connect(ActionAboutDialog, SIGNAL(triggered()), main_window, SLOT(startAboutDialog()));
 }
 
 void Tray::initActionsForStick20() {
-  configureActionStick20 = new QAction(tr("&OTP and Password safe"), this);
-  connect(configureActionStick20, SIGNAL(triggered()), this, SLOT(startConfiguration()));
+  configureActionStick20 = new QAction(tr("&OTP and Password safe"), main_window);
+  connect(configureActionStick20, SIGNAL(triggered()), main_window, SLOT(startConfiguration()));
 
-  Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), this);
+  Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), main_window);
   Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
-  connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), this,
+  connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), main_window,
           SLOT(startStick20EnableCryptedVolume()));
 
-  Stick20ActionDisableCryptedVolume = new QAction(tr("&Lock encrypted volume"), this);
+  Stick20ActionDisableCryptedVolume = new QAction(tr("&Lock encrypted volume"), main_window);
   Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
-  connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), this,
+  connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), main_window,
           SLOT(startStick20DisableCryptedVolume()));
 
-  Stick20ActionEnableHiddenVolume = new QAction(tr("&Unlock hidden volume"), this);
+  Stick20ActionEnableHiddenVolume = new QAction(tr("&Unlock hidden volume"), main_window);
   Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/harddrive.png"));
-  connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), this,
+  connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), main_window,
           SLOT(startStick20EnableHiddenVolume()));
 
-  Stick20ActionDisableHiddenVolume = new QAction(tr("&Lock hidden volume"), this);
-  connect(Stick20ActionDisableHiddenVolume, SIGNAL(triggered()), this,
+  Stick20ActionDisableHiddenVolume = new QAction(tr("&Lock hidden volume"), main_window);
+  connect(Stick20ActionDisableHiddenVolume, SIGNAL(triggered()), main_window,
           SLOT(startStick20DisableHiddenVolume()));
 
-  Stick20ActionChangeUserPIN = new QAction(tr("&Change User PIN"), this);
-  connect(Stick20ActionChangeUserPIN, SIGNAL(triggered()), this,
+  Stick20ActionChangeUserPIN = new QAction(tr("&Change User PIN"), main_window);
+  connect(Stick20ActionChangeUserPIN, SIGNAL(triggered()), main_window,
           SLOT(startStick20ActionChangeUserPIN()));
 
-  Stick20ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), this);
-  connect(Stick20ActionChangeAdminPIN, SIGNAL(triggered()), this,
+  Stick20ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), main_window);
+  connect(Stick20ActionChangeAdminPIN, SIGNAL(triggered()), main_window,
           SLOT(startStick20ActionChangeAdminPIN()));
 
-  Stick20ActionChangeUpdatePIN = new QAction(tr("&Change Firmware Password"), this);
-  connect(Stick20ActionChangeUpdatePIN, SIGNAL(triggered()), this,
+  Stick20ActionChangeUpdatePIN = new QAction(tr("&Change Firmware Password"), main_window);
+  connect(Stick20ActionChangeUpdatePIN, SIGNAL(triggered()), main_window,
           SLOT(startStick20ActionChangeUpdatePIN()));
 
-  Stick20ActionEnableFirmwareUpdate = new QAction(tr("&Enable firmware update"), this);
-  connect(Stick20ActionEnableFirmwareUpdate, SIGNAL(triggered()), this,
+  Stick20ActionEnableFirmwareUpdate = new QAction(tr("&Enable firmware update"), main_window);
+  connect(Stick20ActionEnableFirmwareUpdate, SIGNAL(triggered()), main_window,
           SLOT(startStick20EnableFirmwareUpdate()));
 
-  Stick20ActionExportFirmwareToFile = new QAction(tr("&Export firmware to file"), this);
-  connect(Stick20ActionExportFirmwareToFile, SIGNAL(triggered()), this,
+  Stick20ActionExportFirmwareToFile = new QAction(tr("&Export firmware to file"), main_window);
+  connect(Stick20ActionExportFirmwareToFile, SIGNAL(triggered()), main_window,
           SLOT(startStick20ExportFirmwareToFile()));
 
   QSignalMapper *signalMapper_startStick20DestroyCryptedVolume =
-      new QSignalMapper(this); // FIXME memory leak
+      new QSignalMapper(main_window); // FIXME memory leak
 
-  Stick20ActionDestroyCryptedVolume = new QAction(tr("&Destroy encrypted data"), this);
+  Stick20ActionDestroyCryptedVolume = new QAction(tr("&Destroy encrypted data"), main_window);
   signalMapper_startStick20DestroyCryptedVolume->setMapping(Stick20ActionDestroyCryptedVolume, 0);
   connect(Stick20ActionDestroyCryptedVolume, SIGNAL(triggered()),
           signalMapper_startStick20DestroyCryptedVolume, SLOT(map()));
 
-  Stick20ActionInitCryptedVolume = new QAction(tr("&Initialize device"), this);
+  Stick20ActionInitCryptedVolume = new QAction(tr("&Initialize device"), main_window);
   signalMapper_startStick20DestroyCryptedVolume->setMapping(Stick20ActionInitCryptedVolume, 1);
   connect(Stick20ActionInitCryptedVolume, SIGNAL(triggered()),
           signalMapper_startStick20DestroyCryptedVolume, SLOT(map()));
 
-  connect(signalMapper_startStick20DestroyCryptedVolume, SIGNAL(mapped(int)), this,
+  connect(signalMapper_startStick20DestroyCryptedVolume, SIGNAL(mapped(int)), main_window,
           SLOT(startStick20DestroyCryptedVolume(int)));
 
   Stick20ActionFillSDCardWithRandomChars =
-      new QAction(tr("&Initialize storage with random data"), this);
-  connect(Stick20ActionFillSDCardWithRandomChars, SIGNAL(triggered()), this,
+      new QAction(tr("&Initialize storage with random data"), main_window);
+  connect(Stick20ActionFillSDCardWithRandomChars, SIGNAL(triggered()), main_window,
           SLOT(startStick20FillSDCardWithRandomChars()));
 
   Stick20ActionSetReadonlyUncryptedVolume =
-      new QAction(tr("&Set unencrypted volume read-only"), this);
-  connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), this,
+      new QAction(tr("&Set unencrypted volume read-only"), main_window);
+  connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), main_window,
           SLOT(startStick20SetReadOnlyUncryptedVolume()));
 
   Stick20ActionSetReadWriteUncryptedVolume =
-      new QAction(tr("&Set unencrypted volume read-write"), this);
-  connect(Stick20ActionSetReadWriteUncryptedVolume, SIGNAL(triggered()), this,
+      new QAction(tr("&Set unencrypted volume read-write"), main_window);
+  connect(Stick20ActionSetReadWriteUncryptedVolume, SIGNAL(triggered()), main_window,
           SLOT(startStick20SetReadWriteUncryptedVolume()));
 
-  Stick20ActionDebugAction = new QAction(tr("&Debug"), this);
-  connect(Stick20ActionDebugAction, SIGNAL(triggered()), this, SLOT(startStick20DebugAction()));
+  Stick20ActionDebugAction = new QAction(tr("&Debug"), main_window);
+  connect(Stick20ActionDebugAction, SIGNAL(triggered()), main_window, SLOT(startStick20DebugAction()));
 
-  Stick20ActionSetupHiddenVolume = new QAction(tr("&Setup hidden volume"), this);
-  connect(Stick20ActionSetupHiddenVolume, SIGNAL(triggered()), this,
+  Stick20ActionSetupHiddenVolume = new QAction(tr("&Setup hidden volume"), main_window);
+  connect(Stick20ActionSetupHiddenVolume, SIGNAL(triggered()), main_window,
           SLOT(startStick20SetupHiddenVolume()));
 
   Stick20ActionClearNewSDCardFound =
-      new QAction(tr("&Disable 'initialize storage with random data' warning"), this);
-  connect(Stick20ActionClearNewSDCardFound, SIGNAL(triggered()), this,
+      new QAction(tr("&Disable 'initialize storage with random data' warning"), main_window);
+  connect(Stick20ActionClearNewSDCardFound, SIGNAL(triggered()), main_window,
           SLOT(startStick20ClearNewSdCardFound()));
 
-  Stick20ActionLockStickHardware = new QAction(tr("&Lock stick hardware"), this);
-  connect(Stick20ActionLockStickHardware, SIGNAL(triggered()), this,
+  Stick20ActionLockStickHardware = new QAction(tr("&Lock stick hardware"), main_window);
+  connect(Stick20ActionLockStickHardware, SIGNAL(triggered()), main_window,
           SLOT(startStick20LockStickHardware()));
 
-  Stick20ActionResetUserPassword = new QAction(tr("&Reset User PIN"), this);
-  connect(Stick20ActionResetUserPassword, SIGNAL(triggered()), this,
+  Stick20ActionResetUserPassword = new QAction(tr("&Reset User PIN"), main_window);
+  connect(Stick20ActionResetUserPassword, SIGNAL(triggered()), main_window,
           SLOT(startResetUserPassword()));
 
-  LockDeviceAction = new QAction(tr("&Lock Device"), this);
-  connect(LockDeviceAction, SIGNAL(triggered()), this, SLOT(startLockDeviceAction()));
+  LockDeviceAction = new QAction(tr("&Lock Device"), main_window);
+  connect(LockDeviceAction, SIGNAL(triggered()), main_window, SLOT(startLockDeviceAction()));
 
-  Stick20ActionUpdateStickStatus = new QAction(tr("Smartcard or SD card are not ready"), this);
-  connect(Stick20ActionUpdateStickStatus, SIGNAL(triggered()), this, SLOT(startAboutDialog()));
+  Stick20ActionUpdateStickStatus = new QAction(tr("Smartcard or SD card are not ready"), main_window);
+  connect(Stick20ActionUpdateStickStatus, SIGNAL(triggered()), main_window, SLOT(startAboutDialog()));
 }
 
+
+QThread thread_tray_populateOTP;
+
+void tray_Worker::doWork() {
+  //populate OTP name cache
+  for (int i=0; i < TOTP_SLOT_COUNT; i++){
+    auto slotName = libada::i()->getTOTPSlotName(i);
+  }
+
+  for (int i=0; i<HOTP_SLOT_COUNT; i++){
+    auto slotName = libada::i()->getHOTPSlotName(i);
+  }
+  emit resultReady();
+}
 
 void Tray::generatePasswordMenu() {
   if (trayMenuPasswdSubMenu != NULL) {
@@ -313,7 +320,10 @@ void Tray::populateOTPPasswordMenu() {
     auto slotName = libada::i()->getTOTPSlotName(i);
     if (!slotName.empty()){
       trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
-                                       this, [=](){ getTOTPDialog(i);} );
+                                       this, [=](){
+              //dynamic cast?
+//              main_window->getTOTPDialog(i);
+          } );
     }
   }
 
@@ -321,7 +331,9 @@ void Tray::populateOTPPasswordMenu() {
     auto slotName = libada::i()->getHOTPSlotName(i);
     if (!slotName.empty()){
       trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
-                                       this, [=](){ getHOTPDialog(i);} );
+                                       this, [=](){
+//              main_window->getHOTPDialog(i);
+          } );
     }
   }
 
@@ -329,7 +341,9 @@ void Tray::populateOTPPasswordMenu() {
     for (int i = 0; i < PWS_SLOT_COUNT; i++) {
       if (libada::i()->getPWSSlotStatus(i)) {
         trayMenuPasswdSubMenu->addAction(QString::fromStdString(libada::i()->getPWSSlotName(i)),
-                                         this, [=]() { PWS_ExceClickedSlot(i); });
+                                         this, [=]() {
+//                main_window->PWS_ExceClickedSlot(i);
+            });
       }
     }
   }
@@ -405,10 +419,11 @@ void Tray::generateMenuForStorageDevice() {
     trayMenu->addSeparator();
 
     if (!status.StickKeysNotInitiated) {
+      //FIXME move to mainwindow
       // Enable tab for password safe for stick 2
-      if (-1 == ui->tabWidget->indexOf(ui->tab_3)) {
-        ui->tabWidget->addTab(ui->tab_3, tr("Password Safe"));
-      }
+//      if (-1 == ui->tabWidget->indexOf(ui->tab_3)) {
+//        ui->tabWidget->addTab(ui->tab_3, tr("Password Safe"));
+//      }
 
       // Setup entrys for password safe
       generateMenuPasswordSafe();
@@ -430,6 +445,7 @@ void Tray::generateMenuForStorageDevice() {
     }
 
 //    if (FALSE != (HiddenVolumeActive || CryptedVolumeActive || PasswordSafeEnabled))
+    const auto PasswordSafeEnabled = false; //FIXME
     if (FALSE != (status.VolumeActiceFlag_st.hidden || status.VolumeActiceFlag_st.encrypted || PasswordSafeEnabled))
       trayMenu->addAction(LockDeviceAction);
 
@@ -462,8 +478,8 @@ void Tray::generateMenuForStorageDevice() {
     trayMenuSubConfigure->addSeparator();
 
     // Other actions
-    if (TRUE == LockHardware)
-      trayMenuSubConfigure->addAction(Stick20ActionLockStickHardware);
+//    if (TRUE == LockHardware) //FIXME
+//      trayMenuSubConfigure->addAction(Stick20ActionLockStickHardware);
 
 
     trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate);
@@ -529,6 +545,10 @@ void Tray::generateMenuPasswordSafe() {
 //      UnlockPasswordSafeAction->setEnabled(true == cryptostick->passwordSafeAvailable);
 //    }
 //  }
+}
+
+void Tray::regenerateMenu() {
+  generateMenu(false);
 }
 
 

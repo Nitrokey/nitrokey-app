@@ -21,7 +21,6 @@
 #include "mcvs-wrapper.h"
 
 #include "pindialog.h"
-#include "ui_passworddialog.h"
 
 #include "nitrokey-applet.h"
 #include "libada.h"
