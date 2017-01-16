@@ -315,14 +315,15 @@ void Tray::generatePasswordMenu() {
   thread_tray_populateOTP.start();
 }
 
+#include "mainwindow.h"
 void Tray::populateOTPPasswordMenu() {
   for (int i=0; i < TOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getTOTPSlotName(i);
     if (!slotName.empty()){
       trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
                                        this, [=](){
-              //dynamic cast?
-//              main_window->getTOTPDialog(i);
+              //FIXME change in final code to static_cast
+              dynamic_cast<MainWindow *>(main_window)->getTOTPDialog(i);
           } );
     }
   }
@@ -332,7 +333,8 @@ void Tray::populateOTPPasswordMenu() {
     if (!slotName.empty()){
       trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
                                        this, [=](){
-//              main_window->getHOTPDialog(i);
+              //FIXME change in final code to static_cast
+              dynamic_cast<MainWindow *>(main_window)->getHOTPDialog(i);
           } );
     }
   }
@@ -342,7 +344,8 @@ void Tray::populateOTPPasswordMenu() {
       if (libada::i()->getPWSSlotStatus(i)) {
         trayMenuPasswdSubMenu->addAction(QString::fromStdString(libada::i()->getPWSSlotName(i)),
                                          this, [=]() {
-//                main_window->PWS_ExceClickedSlot(i);
+                //FIXME change in final code to static_cast
+                dynamic_cast<MainWindow *>(main_window)->PWS_ExceClickedSlot(i);
             });
       }
     }

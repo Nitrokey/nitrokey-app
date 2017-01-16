@@ -8,7 +8,6 @@
 #define TRAY_MSG_TIMEOUT 5000
 
 #include <QObject>
-
 enum trayMessageType { INFORMATION, WARNING, CRITICAL };
 
 namespace Ui {
