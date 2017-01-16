@@ -133,7 +133,7 @@ bool libada::isDeviceConnected() const throw() {
 }
 
 bool libada::isDeviceInitialized() {
-  return false;
+  return true;
 }
 
 bool libada::isStorageDeviceConnected() const throw() {

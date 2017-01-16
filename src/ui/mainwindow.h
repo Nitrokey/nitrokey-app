@@ -29,6 +29,7 @@
 #include "hotpslot.h"
 #include "GUI/Tray.h"
 #include "GUI/Clipboard.h"
+#include "GUI/Authentication.h"
 
 
 namespace Ui {
@@ -64,6 +65,7 @@ protected:
 private:
     Tray tray;
     Clipboard clipboard;
+    Authentication auth;
 
     bool validate_secret(const uint8_t *secret) const;
     void initialTimeReset(int ret);

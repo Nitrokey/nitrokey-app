@@ -33,8 +33,6 @@ class PinDialog : public QDialog {
   Q_OBJECT public : enum Usage { PLAIN, PREFIXED };
   enum PinType { USER_PIN, ADMIN_PIN, FIRMWARE_PIN, OTHER };
 
-  unsigned char password[50];
-
   explicit PinDialog(const QString &title, const QString &label, Usage usage, PinType pinType, QWidget *parent = nullptr);
   ~PinDialog();
 
@@ -43,7 +41,7 @@ class PinDialog : public QDialog {
   void getPassword(QString &pin);
   std::string && getPassword();
 
-  virtual int exec();
+  virtual int exec() override;
 
 private slots:
   void on_checkBox_toggled(bool checked);

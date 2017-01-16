@@ -125,7 +125,7 @@ void MainWindow::InitState() {
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
-      tray(this, true, true), clipboard(this)
+      tray(this, true, true), clipboard(this), auth(this)
 //      otpInClipboard("not empty"), secretInClipboard("not empty"), PWSInClipboard("not empty")
 {
   HOTP_SlotCount = HOTP_SLOT_COUNT;
@@ -360,7 +360,6 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
         counterFromGUI = ui->counterEdit->text().toLatin1().toULongLong(&conversionSuccess);
       }
       if (conversionSuccess) {
-        // FIXME check for little endian/big endian conversion (test on Macintosh)
         memcpy(slot->counter, &counterFromGUI, sizeof counterFromGUI);
       } else {
           csApplet()->warningBox(tr("Counter value not copied - there was an error in conversion. "
@@ -378,15 +377,6 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
                                             "values up to 7 digits. Setting counter value to 0. Please retry."));
       }
     }
-
-#ifdef DEBUG
-    if (DebugingActive) {
-      if (cryptostick->activStick20)
-        qDebug() << "HOTP counter value: " << *reinterpret_cast<char *>(slot->counter);
-      else
-        qDebug() << "HOTP counter value: " << *reinterpret_cast<quint64 *> (slot->counter);
-    }
-#endif
 
   }
 }
@@ -792,7 +782,8 @@ void MainWindow::startStick20EnableFirmwareUpdate() {
 
   if (QDialog::Accepted == ret) {
     // FIXME unmount all volumes and sync
-    dialog.getPassword((char *)password);
+    //TODO get password
+//    dialog.getPassword((char *)password);
 
     //TODO add firmware update logic
 //    stick20SendCommand(STICK20_CMD_ENABLE_FIRMWARE_UPDATE, password);
@@ -1744,7 +1735,11 @@ void MainWindow::resetTime() {
 //  }
 }
 
+#include "GUI/Authentication.h"
 int MainWindow::getNextCode(uint8_t slotNumber) {
+  qDebug() << auth.authenticate();
+
+
   //TODO authentication here
   if (slotNumber>=0x20){
     return libada::i()->getTOTPCode(slotNumber-0x20);
@@ -1863,10 +1858,6 @@ int MainWindow::userAuthenticate(const QString &password) {
 //  return result;
 }
 
-void MainWindow::generateTemporaryPassword(uint8_t *tempPassword) const {
-  for (int i = 0; i < 25; i++)
-   tempPassword[i] = qrand() & 0xFF;
-}
 
 #define PWS_RANDOM_PASSWORD_CHAR_SPACE                                                             \
   "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"$%&/"                          \
