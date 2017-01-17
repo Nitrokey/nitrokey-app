@@ -1056,9 +1056,8 @@ void MainWindow::on_writeButton_clicked() {
 //          csApplet()->warningBox(tr("Error writing configuration!"));
 
 
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    Sleep::msleep(500);
-    QApplication::restoreOverrideCursor();
+//    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+//    QApplication::restoreOverrideCursor();
 
     generateAllConfigs();
   } else
