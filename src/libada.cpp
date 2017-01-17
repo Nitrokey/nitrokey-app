@@ -185,10 +185,18 @@ bool libada::is_secret320_supported() {
   return false;
 }
 
-int libada::getTOTPCode(const int i){
-  return nm::instance()->get_TOTP_code(i, 0, 0, 0, "");
+int libada::getTOTPCode(int i, char *string) {
+  return nm::instance()->get_TOTP_code(i, 0, 0, 0, string);
 }
 
-int libada::getHOTPCode(const int i){
-  return nm::instance()->get_HOTP_code(i, "");
+int libada::getHOTPCode(int i, char* string) {
+  return nm::instance()->get_HOTP_code(i, string);
+}
+
+int libada::eraseHOTPSlot(const int i, char *string) {
+  return nm::instance()->erase_hotp_slot(i, string);
+}
+
+int libada::eraseTOTPSlot(const int i, char *string) {
+  return nm::instance()->erase_totp_slot(i, string);
 }

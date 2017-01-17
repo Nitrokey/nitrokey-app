@@ -49,8 +49,10 @@ public:
     std::string getCardSerial();
     std::string getTOTPSlotName(const int i);
     std::string getHOTPSlotName(const int i);
-    int getTOTPCode(const int i);
-    int getHOTPCode(const int i);
+    int getTOTPCode(int i, char *string);
+    int getHOTPCode(int i, char *string);
+    int eraseHOTPSlot(const int i, char *string);
+    int eraseTOTPSlot(const int i, char *string);
 
     std::string getPWSSlotName(const int i);
     bool getPWSSlotStatus(const int i);
@@ -75,6 +77,7 @@ public:
 
       bool is_nkpro_07_rtm1();
     bool is_secret320_supported();
+
 };
 
 

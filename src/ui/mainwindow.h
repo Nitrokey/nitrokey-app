@@ -57,8 +57,6 @@ class MainWindow : public QMainWindow {
   uint64_t lastAuthenticateTime;
   uint64_t lastUserAuthenticateTime;
 
-  void resetTime();
-
 protected:
   void closeEvent(QCloseEvent *event);
 
@@ -165,8 +163,7 @@ private slots:
   void on_enableUserPasswordCheckBox_toggled(bool checked);
   void on_writeGeneralConfigButton_clicked();
 
-  void checkPasswordTime_Valid();
-  void checkTextEdited();
+    void checkTextEdited();
 
   // START - OTP Test Routine --------------------------------
   /*
@@ -202,8 +199,8 @@ private slots:
 
 public:
   void generateTemporaryPassword(uint8_t *tempPassword) const;
-  int userAuthenticate(const QString &password);
-  void on_enableUserPasswordCheckBox_clicked(bool checked);
+
+    void on_enableUserPasswordCheckBox_clicked(bool checked);
   void generateOTPConfig(OTPSlot *slot) const;
   int get_supported_secret_length_base32() const;
   int get_supported_secret_length_hex() const;

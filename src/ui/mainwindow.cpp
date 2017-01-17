@@ -63,6 +63,9 @@
 
 #include <QString>
 #include <OwnSleep.h>
+#include <libnitrokey/include/NitrokeyManager.h>
+using nm = nitrokey::NitrokeyManager;
+
 
 /*******************************************************************************
  Local defines
@@ -150,11 +153,6 @@ MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 
 
   QTimer *Password_ValidTimer = new QTimer(this);
-
-  // Start timer for Password check
-  connect(Password_ValidTimer, SIGNAL(timeout()), this, SLOT(checkPasswordTime_Valid()));
-  Password_ValidTimer->start(20*1000);
-
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
@@ -342,6 +340,8 @@ void MainWindow::generateComboBoxEntrys() {
 
 
 void MainWindow::generateHOTPConfig(OTPSlot *slot) {
+  slot->type = OTPSlot::OTPType::HOTP;
+
   uint8_t selectedSlot = ui->slotComboBox->currentIndex();
   selectedSlot -= (TOTP_SlotCount + 1);
 
@@ -433,6 +433,8 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
 }
 
 void MainWindow::generateTOTPConfig(OTPSlot *slot) {
+  slot->type = OTPSlot::OTPType::TOTP;
+
   uint8_t selectedSlot = ui->slotComboBox->currentIndex();
 
   // get the TOTP slot number
@@ -587,21 +589,14 @@ void MainWindow::displayCurrentSlotConfig() {
 }
 
 void MainWindow::displayCurrentGeneralConfig() {
-  ui->numLockComboBox->setCurrentIndex(0);
-  ui->capsLockComboBox->setCurrentIndex(0);
-  ui->scrollLockComboBox->setCurrentIndex(0);
+  auto status = nm::instance()->get_status();
 
-//  if (cryptostick->generalConfig[0] == 0 || cryptostick->generalConfig[0] == 1)
-//    ui->numLockComboBox->setCurrentIndex(cryptostick->generalConfig[0] + 1);
-//
-//  if (cryptostick->generalConfig[1] == 0 || cryptostick->generalConfig[1] == 1)
-//    ui->capsLockComboBox->setCurrentIndex(cryptostick->generalConfig[1] + 1);
-//
-//  if (cryptostick->generalConfig[2] == 0 || cryptostick->generalConfig[2] == 1)
-//    ui->scrollLockComboBox->setCurrentIndex(cryptostick->generalConfig[2] + 1);
-//
-//  ui->enableUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[0] == 1);
-//  ui->deleteUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[1] == 1);
+  ui->numLockComboBox->setCurrentIndex(status.numlock<2?status.numlock+1:0);
+  ui->capsLockComboBox->setCurrentIndex(status.capslock<2?status.capslock+1:0);
+  ui->scrollLockComboBox->setCurrentIndex(status.scrolllock<2?status.scrolllock+1:0);
+
+  ui->enableUserPasswordCheckBox->setChecked(status.enable_user_password != 0);
+  ui->deleteUserPasswordCheckBox->setChecked(status.delete_user_password != 0);
 
   lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 }
@@ -609,7 +604,7 @@ void MainWindow::displayCurrentGeneralConfig() {
 void MainWindow::startConfiguration() {
   //TODO authenticate admin plain
 //  PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-  csApplet()->warningBox(tr("Wrong PIN. Please try again."));
+//  csApplet()->warningBox(tr("Wrong PIN. Please try again."));
 
   bool validPassword = true;
   // Start the config dialog
@@ -673,8 +668,7 @@ void MainWindow::startStick20EnableCryptedVolume() {
       return;
   }
 
-  PinDialog dialog(tr("User pin dialog"), tr("Enter user PIN:"), PinDialog::PREFIXED,
-                   PinDialog::USER_PIN, this);
+  PinDialog dialog(PinDialog::USER_PIN, this);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -715,8 +709,7 @@ void MainWindow::startStick20EnableHiddenVolume() {
   if (false == answer)
     return;
 
-  PinDialog dialog(tr("Enter password for hidden volume"), tr("Enter password for hidden volume:"),
-                   PinDialog::PREFIXED, PinDialog::OTHER, this);
+  PinDialog dialog(PinDialog::HIDDEN_VOLUME, this);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -776,8 +769,7 @@ void MainWindow::startStick20EnableFirmwareUpdate() {
     return;
   }
 
-  PinDialog dialog(tr("Enter Firmware Password"), tr("Enter Firmware Password:"),
-                   PinDialog::PREFIXED, PinDialog::FIRMWARE_PIN);
+  PinDialog dialog(PinDialog::FIRMWARE_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -848,8 +840,7 @@ void MainWindow::startStick20ExportFirmwareToFile() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
 
-  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), PinDialog::PREFIXED,
-                   PinDialog::ADMIN_PIN);
+  PinDialog dialog(PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -868,9 +859,9 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
   answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
                                              "hidden volumes, and password safe! Continue?"), false);
   if (true == answer) {
-    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PREFIXED,
-                     PinDialog::ADMIN_PIN);
-    ret = dialog.exec();
+      PinDialog dialog(PinDialog::ADMIN_PIN);
+
+      ret = dialog.exec();
 
     if (QDialog::Accepted == ret) {
       auto s = dialog.getPassword();
@@ -887,9 +878,9 @@ void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
 
 void MainWindow::startStick20FillSDCardWithRandomChars() {
   bool ret;
-  PinDialog dialog(tr("Enter admin PIN"), tr("Admin Pin:"), PinDialog::PREFIXED,
-                   PinDialog::ADMIN_PIN);
-  ret = dialog.exec();
+    PinDialog dialog(PinDialog::ADMIN_PIN);
+
+    ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
     auto s = dialog.getPassword();
@@ -901,9 +892,9 @@ void MainWindow::startStick20FillSDCardWithRandomChars() {
 void MainWindow::startStick20ClearNewSdCardFound() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
-  PinDialog dialog(tr("Enter admin PIN"), tr("Enter admin PIN:"), PinDialog::PREFIXED,
-                   PinDialog::ADMIN_PIN);
-  ret = dialog.exec();
+    PinDialog dialog(PinDialog::ADMIN_PIN);
+
+    ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
     auto s = dialog.getPassword();
@@ -918,9 +909,9 @@ void MainWindow::startStick20GetStickStatus() {
 void MainWindow::startStick20SetReadOnlyUncryptedVolume() {
   bool ret;
 
-  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), PinDialog::PREFIXED,
-                   PinDialog::USER_PIN);
-  ret = dialog.exec();
+    PinDialog dialog(PinDialog::USER_PIN);
+
+    ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
     const auto pass = dialog.getPassword();
@@ -934,9 +925,9 @@ void MainWindow::startStick20SetReadWriteUncryptedVolume() {
   uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
 
-  PinDialog dialog(tr("Enter user PIN"), tr("User PIN:"), PinDialog::PREFIXED,
-                   PinDialog::USER_PIN);
-  ret = dialog.exec();
+    PinDialog dialog(PinDialog::USER_PIN);
+
+    ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
     const auto pass = dialog.getPassword();
@@ -953,9 +944,9 @@ void MainWindow::startStick20LockStickHardware() {
 
   ret = dialog.exec();
   if (QDialog::Accepted == ret) {
-    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PREFIXED,
-                     PinDialog::ADMIN_PIN);
-    ret = dialog.exec();
+      PinDialog dialog(PinDialog::ADMIN_PIN);
+
+      ret = dialog.exec();
 
     if (QDialog::Accepted == ret) {
       const auto pass = dialog.getPassword();
@@ -1019,51 +1010,45 @@ void MainWindow::storage_check_symlink(){
 
 void MainWindow::on_writeButton_clicked() {
   uint8_t slotNo = (uint8_t) ui->slotComboBox->currentIndex();
+  const auto isHOTP = slotNo > TOTP_SlotCount;
 
-//  PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PLAIN, PinDialog::ADMIN_PIN, this);
-
-  if (slotNo > TOTP_SlotCount)
-    slotNo -= (TOTP_SlotCount + 1);
-  else
-    slotNo += HOTP_SlotCount;
 
   if (ui->nameEdit->text().isEmpty()) {
     csApplet()->warningBox(tr("Please enter a slotname."));
+//          csApplet()->warningBox(tr("The name of the slot must not be empty."));
     return;
   }
 
-  if (libada::i()->isDeviceConnected()) {
+  if (!libada::i()->isDeviceConnected()) {
+    csApplet()->warningBox(tr("Nitrokey is not connected!"));
+    return;
+  }
     ui->base32RadioButton->toggle();
 
     OTPSlot otp;
-    if (slotNo < HOTP_SlotCount) { // HOTP slot
+    if (isHOTP) { // HOTP slot
       generateHOTPConfig(&otp);
-      otp.type = OTPSlot::OTPType::HOTP;
     } else {
       generateTOTPConfig(&otp);
-      otp.type = OTPSlot::OTPType::TOTP;
     }
     if (!validate_secret(otp.secret)) {
       return;
     }
     if(auth.authenticate()){
+      try{
         libada::i()->writeToOTPSlot(otp, auth.getTempPassword());
+        csApplet()->messageBox(tr("Configuration successfully written."));
+      }
+      catch (CommandFailedException &e){
+        csApplet()->warningBox(tr("Error writing configuration!"));
+      }
     }
-
-//          csApplet()->messageBox(tr("Configuration successfully written."));
-//          csApplet()->warningBox(tr("The name of the slot must not be empty."));
-//          csApplet()->warningBox(tr("Wrong PIN. Please try again."));
-//          csApplet()->warningBox(tr("Error writing configuration!"));
-
 
 //    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 //    QApplication::restoreOverrideCursor();
 
     generateAllConfigs();
-  } else
-    csApplet()->warningBox(tr("Nitrokey is not connected!"));
-
-  displayCurrentSlotConfig();
+    displayCurrentSlotConfig();
 }
 
 bool MainWindow::validate_secret(const char *secret) const {
@@ -1087,6 +1072,7 @@ void MainWindow::on_slotComboBox_currentIndexChanged(int) {
 }
 
 void MainWindow::on_hexRadioButton_toggled(bool checked) {
+  //TODO move conversion logic to separate class
   if (!checked) {
     return;
   }
@@ -1116,6 +1102,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
 }
 
 int MainWindow::get_supported_secret_length_hex() const {
+  //TODO move to libada or libnitrokey
   auto local_secret_length = SECRET_LENGTH_HEX;
   if (!libada::i()->is_secret320_supported()){
     local_secret_length /= 2;
@@ -1124,6 +1111,7 @@ int MainWindow::get_supported_secret_length_hex() const {
 }
 
 void MainWindow::on_base32RadioButton_toggled(bool checked) {
+  //TODO move conversion logic to separate class
   if (!checked) {
     return;
   }
@@ -1150,6 +1138,7 @@ void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
 void MainWindow::on_setToRandomButton_clicked() {
   quint64 counter;
   counter = qrand();
+//  TODO check counter digits limit on storage with libnitrokey
   if (libada::i()->isStorageDeviceConnected()) {
     const int maxDigits = 7;
     counter = counter % ((quint64)pow(10, maxDigits));
@@ -1158,49 +1147,47 @@ void MainWindow::on_setToRandomButton_clicked() {
 }
 
 void MainWindow::on_tokenIDCheckBox_toggled(bool checked) {
-  if (checked) {
-    ui->ompEdit->setEnabled(checked);
-    ui->ttEdit->setEnabled(checked);
-    ui->muiEdit->setEnabled(checked);
-  }
+  ui->ompEdit->setEnabled(checked);
+  ui->ttEdit->setEnabled(checked);
+  ui->muiEdit->setEnabled(checked);
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
   ui->deleteUserPasswordCheckBox->setEnabled(checked);
-  //TODO read state of deleteUserPassword on check
-//  cryptostick->otpPasswordConfig[0] = (uint8_t)checked;
-//  ui->deleteUserPasswordCheckBox->setChecked(cryptostick->otpPasswordConfig[1]);
+  if(checked){
+    //TODO run status request in separate thread or cache result
+    uint8_t delete_user_password = nm::instance()->get_status().delete_user_password;
+    ui->deleteUserPasswordCheckBox->setChecked(delete_user_password);
+  }
 }
 
 void MainWindow::on_writeGeneralConfigButton_clicked() {
-  uint8_t data[5];
-
-//  PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PLAIN, PinDialog::ADMIN_PIN, this);
-
-  if (libada::i()->isDeviceConnected()) {
-
-    data[0] = ui->numLockComboBox->currentIndex() - 1;
-    data[1] = ui->capsLockComboBox->currentIndex() - 1;
-    data[2] = ui->scrollLockComboBox->currentIndex() - 1;
-
-    data[3] = (uint8_t)(ui->enableUserPasswordCheckBox->isChecked() ? 1 : 0);
-    data[4] = (uint8_t)(ui->deleteUserPasswordCheckBox->isChecked() &&
-                                ui->enableUserPasswordCheckBox->isChecked()
-                            ? 1
-                            : 0);
-    csApplet()->messageBox(tr("Configuration successfully written."));
-    csApplet()->warningBox(tr("Wrong PIN. Please try again."));
-    csApplet()->warningBox(tr("Error writing configuration!"));
-    //TODO authorize
-
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    Sleep::msleep(500);
-    QApplication::restoreOverrideCursor();
-//      translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
-    generateAllConfigs();
-  } else {
+  if (!libada::i()->isDeviceConnected()) {
       csApplet()->warningBox(tr("Nitrokey not connected!"));
   }
+    if(!auth.authenticate()){
+      csApplet()->warningBox(tr("Wrong PIN. Please try again."));
+      return;
+    }
+  try{
+    nm::instance()->write_config(
+        ui->numLockComboBox->currentIndex() - 1,
+        ui->capsLockComboBox->currentIndex() - 1,
+        ui->scrollLockComboBox->currentIndex() - 1,
+        ui->enableUserPasswordCheckBox->isChecked(),
+        ui->deleteUserPasswordCheckBox->isChecked() &&
+        ui->enableUserPasswordCheckBox->isChecked(),
+        auth.getTempPassword().toLatin1().data()
+    );
+    csApplet()->messageBox(tr("Configuration successfully written."));
+  }
+  catch (CommandFailedException &e){
+    csApplet()->warningBox(tr("Error writing configuration!"));
+    qDebug() << "should throw?";
+  }
+
+//      translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
+    generateAllConfigs();
   displayCurrentGeneralConfig();
 }
 
@@ -1246,59 +1233,32 @@ void MainWindow::on_eraseButton_clicked() {
     return;
   }
 
-  char clean[8] = {' '};
   uint8_t slotNo = ui->slotComboBox->currentIndex();
 
-  if (slotNo > TOTP_SlotCount) {
+  const auto isHOTP = slotNo > TOTP_SlotCount;
+  if (isHOTP) {
     slotNo -= (TOTP_SlotCount + 1);
+  }
+
+    if (!auth.authenticate()){
+        csApplet()->messageBox(tr("Command execution failed. Please try again."));
+        return;
+    };
+    int res;
+  if (isHOTP) {
+    res = libada::i()->eraseHOTPSlot(slotNo, auth.getTempPassword().toLatin1().data());
   } else {
-    slotNo += HOTP_SlotCount;
+    res = libada::i()->eraseTOTPSlot(slotNo, auth.getTempPassword().toLatin1().data());
   }
+    csApplet()->messageBox(tr("Slot has been erased successfully."));
 
-  if (slotNo < HOTP_SlotCount) {
-    slotNo = slotNo + 0x10;
-  } else if ((slotNo >= HOTP_SlotCount) && (slotNo <= TOTP_SlotCount + HOTP_SlotCount)) {
-    slotNo = slotNo + 0x20 - HOTP_SlotCount;
-  }
+    //TODO remove values from OTP name cache
+    //TODO regenerate menu (change name for given slot)
+    //TODO regenerate combo box (change name for given slot)
 
-  //todo erase slot
-//  int res = cryptostick->eraseSlot(slotNo);
-  //todo catch exception not authorized
-  if (libada::i()->is_nkpro_07_rtm1()) {
-    uint8_t tempPassword[25] = {0};
-    QString password;
-
-    //TODO do authentication
-//    do {
-//      PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-//                       PinDialog::ADMIN_PIN);
-//      int ok = dialog.exec();
-//      if (ok != QDialog::Accepted) {
-//        return;
-//      }
-//      dialog.getPassword(password);
-//
-//      generateTemporaryPassword(tempPassword);
-//      cryptostick->firstAuthenticate((uint8_t *) password.toLatin1().data(), tempPassword);
-//      if (cryptostick->validPassword) {
-//        lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-//      } else {
-//        csApplet()->warningBox(tr("Wrong PIN. Please try again."));
-//      }
-//      res = cryptostick->eraseSlot(slotNo);
-//    } while (res != CMD_STATUS_OK);
-  }
-  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-  Sleep::msleep(1000);
-  QApplication::restoreOverrideCursor();
+//  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+//  QApplication::restoreOverrideCursor();
   generateAllConfigs();
-
-//  if (res == CMD_STATUS_OK) {
-//    csApplet()->messageBox(tr("Slot has been erased successfully."));
-//  } else {
-//    csApplet()->messageBox(tr("Command execution failed. Please try again."));
-//  }
-
   displayCurrentSlotConfig();
 }
 
@@ -1337,40 +1297,7 @@ int MainWindow::get_supported_secret_length_base32() const {
 }
 
 void MainWindow::on_checkBox_toggled(bool checked) {
-  if (checked)
-    ui->secretEdit->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-  else
-    ui->secretEdit->setEchoMode(QLineEdit::Normal);
-}
-
-void MainWindow::checkPasswordTime_Valid() {
-  uint64_t currentTime;
-  currentTime = QDateTime::currentDateTime().toTime_t();
-
-  if(!nitrokey::NitrokeyManager::instance()->is_connected())
-    return;
-
-  auto status = nitrokey::NitrokeyManager::instance()->get_status();
-
-  bool is_OTP_PIN_protected = status.enable_user_password;
-  bool is_forget_PIN_after_10_minutes_enabled = status.delete_user_password;
-
-  // invalidate admin authentication after 10 minutes
-  if (currentTime >= lastAuthenticateTime + (uint64_t)600) {
-    //todo invalidate password
-//    cryptostick->validPassword = false;
-//    memset(cryptostick->adminTemporaryPassword, 0, 25);
-  }
-
-  // invalidate user authentication after 10 minutes
-  //(only when OTP is PIN protected and forget PIN is enabled)
-  if (currentTime >= lastUserAuthenticateTime + (uint64_t)600 && is_OTP_PIN_protected &&
-      is_forget_PIN_after_10_minutes_enabled) {
-    //todo invalidate password
-//    cryptostick->validUserPassword = false;
-//    memset(cryptostick->userTemporaryPassword, 0, 25);
-    overwrite_string(nkpro_user_PIN); // for NK Pro 0.7 only
-  }
+    ui->secretEdit->setEchoMode(checked ? QLineEdit::PasswordEchoOnEdit : QLineEdit::Normal);
 }
 
 void MainWindow::checkTextEdited() {
@@ -1392,10 +1319,8 @@ void MainWindow::SetupPasswordSafeConfig(void) {
   PWS_Access = FALSE;
 
   // Get active password slots
-//  ret = cryptostick->getPasswordSafeSlotStatus();
-  ret = libada::i()->getPWSSlotStatus(0);
-  const auto no_err = true; //TODO ERR_NO_ERROR == ret;
-  if (no_err) {
+  const auto no_err = false; //TODO ERR_NO_ERROR == ret;
+  if (libada::i()->isPasswordSafeUnlocked()) {
     PWS_Access = TRUE;
     // Setup combobox
     for (i = 0; i < PWS_SLOT_COUNT; i++) {
@@ -1501,10 +1426,7 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
 }
 
 void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked) {
-  if (checked)
-    ui->PWS_EditPassword->setEchoMode(QLineEdit::Password);
-  else
-    ui->PWS_EditPassword->setEchoMode(QLineEdit::Normal);
+    ui->PWS_EditPassword->setEchoMode(checked ? QLineEdit::Password : QLineEdit::Normal);
 }
 
 void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
@@ -1578,8 +1500,6 @@ char *MainWindow::PWS_GetSlotName(int Slot) {
 }
 
 void MainWindow::on_PWS_ButtonClose_pressed() { hide(); }
-
-
 
 void MainWindow::PWS_Clicked_EnablePWSAccess() {
 //  uint8_t password[LOCAL_PASSWORD_SIZE];
@@ -1702,52 +1622,23 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
 //  }
 }
 
-void MainWindow::resetTime() {
-//  bool ok;
-//
-//  if (!cryptostick->validPassword) {
-//
-//    do {
-//      PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-//                       PinDialog::ADMIN_PIN);
-//      ok = dialog.exec();
-//      QString password;
-//
-//      dialog.getPassword(password);
-//
-//      if (QDialog::Accepted == ok) {
-//        uint8_t tempPassword[25];
-//
-//        for (int i = 0; i < 25; i++)
-//          tempPassword[i] = qrand() & 0xFF;
-//
-//        cryptostick->firstAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
-//        if (cryptostick->validPassword) {
-//          lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-//        } else {
-//            csApplet()->warningBox(tr("Wrong Pin. Please try again."));
-//        }
-//        password.clear();
-//      }
-//    } while (QDialog::Accepted == ok && !cryptostick->validPassword);
-//  }
-//
-//  // Start the config dialog
-//  if (cryptostick->validPassword) {
-//    cryptostick->setTime(TOTP_SET_TIME);
-//  }
-}
-
 #include "GUI/Authentication.h"
 int MainWindow::getNextCode(uint8_t slotNumber) {
-  qDebug() << auth.authenticate();
+    const auto status = nm::instance()->get_status();
+    QString tempPassword;
 
-
+    if(status.enable_user_password != 0){
+        if(!auth.authenticate()){
+            return 0; //TODO throw
+        }
+        tempPassword = auth.getTempPassword();
+    }
   //TODO authentication here
   if (slotNumber>=0x20){
-    return libada::i()->getTOTPCode(slotNumber-0x20);
+      //FIXME set correct time on stick
+    return libada::i()->getTOTPCode(slotNumber - 0x20, tempPassword.toLatin1().data());
   } else {
-    return libada::i()->getHOTPCode(slotNumber-0x10);
+    return libada::i()->getHOTPCode(slotNumber - 0x10, tempPassword.toLatin1().data());
   }
   return 0;
 //  uint8_t result[18] = {0};
@@ -1852,15 +1743,6 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   return 0;
 }
 
-int MainWindow::userAuthenticate(const QString &password) {
-//  uint8_t tempPassword[25];
-//  generateTemporaryPassword(tempPassword);
-//  int result = cryptostick->userAuthenticate((uint8_t *)password.toLatin1().data(), tempPassword);
-//  if (cryptostick->validUserPassword)
-//    lastUserAuthenticateTime = QDateTime::currentDateTime().toTime_t();
-//  return result;
-}
-
 
 #define PWS_RANDOM_PASSWORD_CHAR_SPACE                                                             \
   "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"$%&/"                          \
@@ -1896,20 +1778,20 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked() {
 void MainWindow::on_PWS_ButtonEnable_clicked() { PWS_Clicked_EnablePWSAccess(); }
 
 void MainWindow::on_counterEdit_editingFinished() {
-//  bool conversionSuccess = false;
-//  ui->counterEdit->text().toLatin1().toULongLong(&conversionSuccess);
-//  if (cryptostick->activStick20 == false) {
-//    quint64 counterMaxValue = ULLONG_MAX;
-//    if (!conversionSuccess) {
-//      ui->counterEdit->setText(QString("%1").arg(0));
-//        csApplet()->warningBox(tr("Counter must be a value between 0 and %1").arg(counterMaxValue));
-//    }
-//  } else { // for nitrokey storage
-//    if (!conversionSuccess || ui->counterEdit->text().toLatin1().length() > 7) {
-//      ui->counterEdit->setText(QString("%1").arg(0));
-//        csApplet()->warningBox(tr("For Nitrokey Storage counter must be a value between 0 and 9999999"));
-//    }
-//  }
+  bool conversionSuccess = false;
+  ui->counterEdit->text().toLatin1().toULongLong(&conversionSuccess);
+  if (!libada::i()->isStorageDeviceConnected()) {
+    quint64 counterMaxValue = ULLONG_MAX;
+    if (!conversionSuccess) {
+      ui->counterEdit->setText(QString("%1").arg(0));
+        csApplet()->warningBox(tr("Counter must be a value between 0 and %1").arg(counterMaxValue));
+    }
+  } else { // for nitrokey storage
+    if (!conversionSuccess || ui->counterEdit->text().toLatin1().length() > 7) {
+      ui->counterEdit->setText(QString("%1").arg(0));
+        csApplet()->warningBox(tr("For Nitrokey Storage counter must be a value between 0 and 9999999"));
+    }
+  }
 }
 
 char *MainWindow::getFactoryResetMessage(int retCode) {
@@ -1982,10 +1864,10 @@ void MainWindow::on_PWS_EditPassword_textChanged(const QString &arg1) {
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
-//  if (checked && cryptostick->is_nkpro_07_rtm1()) {
-//    bool answer = csApplet()->yesOrNoBox(tr("To handle this functionality "
-//                                                    "application will keep your user PIN in memory. "
-//                                                    "Do you want to continue?"), false);
-//    ui->enableUserPasswordCheckBox->setChecked(answer);
-//  }
+  if (checked && libada::i()->is_nkpro_07_rtm1()) {
+    bool answer = csApplet()->yesOrNoBox(tr("To handle this functionality "
+                                                    "application will keep your user PIN in memory. "
+                                                    "Do you want to continue?"), false);
+    ui->enableUserPasswordCheckBox->setChecked(answer);
+  }
 }
