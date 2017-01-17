@@ -50,8 +50,9 @@ int libada::getUserPasswordRetryCount() {
 }
 
 std::string libada::getCardSerial() {
-  return std::__cxx11::string();
+    return nm::instance()->get_serial_number();
 }
+
 #include <QCache>
 #include <QtCore/QMutex>
 #include "libnitrokey/include/CommandFailedException.h"

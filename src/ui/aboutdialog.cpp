@@ -328,7 +328,7 @@ void AboutDialog::update_device_slots() {
                                  .append(".")
                                  .append(QString::number(worker.devdata.minorFirmwareVersion)));
 
-  ui->serialEdit->setText(QString::fromStdString(worker.devdata.cardSerial));
+  ui->serialEdit->setText(QString::fromStdString(worker.devdata.cardSerial).trimmed());
 
   ui->admin_retry_label->setEnabled(true);
   ui->user_retry_label->setEnabled(true);
