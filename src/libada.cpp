@@ -178,7 +178,7 @@ void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword)
 }
 
 bool libada::is_nkpro_07_rtm1() {
-  return false;
+  return true;
 }
 
 bool libada::is_secret320_supported() {

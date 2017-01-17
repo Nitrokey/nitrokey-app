@@ -15,6 +15,7 @@ Authentication::Authentication(QObject *parent) : QObject(parent) {
 }
 
 bool Authentication::authenticate(){
+  qDebug() << tempPassword.toLatin1().toHex();
   bool authenticationSuccess = false;
 
   const auto validation_period = 10 * 60 * 1000; //TODO move to field, add to ctr as param
@@ -36,7 +37,7 @@ bool Authentication::authenticate(){
 
     //emit signal with password to authenticate (by pointer)
     auto password = dialog.getPassword();
-    tempPassword = generateTemporaryPassword();
+    auto tempPasswordLocal = generateTemporaryPassword();
     //emit end
 
     //slot receiving signal
@@ -44,6 +45,7 @@ bool Authentication::authenticate(){
       nm::instance()->first_authenticate(password.c_str(), tempPassword.toLatin1().constData());
       //FIXME securedelete password
       authenticationValidUntilTime = getCurrentTime() + validation_period;
+      tempPassword = tempPasswordLocal;
       authenticationSuccess = true;
       return authenticationSuccess;
     }
@@ -79,7 +81,7 @@ QString Authentication::generateTemporaryPassword() const {
 #include "core/ScopedGuard.h"
 const QString Authentication::getTempPassword() {
     QString local_tempPassword = tempPassword;
-    bool is_07nkpro_device = true;
+    bool is_07nkpro_device = libada::i()->is_nkpro_07_rtm1();
   if (is_07nkpro_device){
     clearTemporaryPassword(true);
   }
