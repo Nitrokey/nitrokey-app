@@ -19,19 +19,45 @@
  */
 
 #include "mcvs-wrapper.h"
-
 #include "pindialog.h"
-
 #include "nitrokey-applet.h"
 #include "libada.h"
 #include "src/utils/bool_values.h"
 
 #define LOCAL_PASSWORD_SIZE 40 // Todo make define global
 
-PinDialog::PinDialog(const QString &title, const QString &label, Usage usage, PinType pinType, QWidget *parent)
-    : _usage(usage), _pinType(pinType), QDialog(parent),
+PinDialog::PinDialog(PinType pinType, QWidget *parent)
+    : _pinType(pinType), QDialog(parent),
       ui(new Ui::PinDialog) {
   ui->setupUi(this);
+
+  ui->status->setText(tr("Tries left: %1").arg("..."));
+  QString title, label;
+  switch (pinType){
+    case USER_PIN:
+      title = tr("Enter user PIN");
+      label = tr("User PIN:");
+      break;
+    case ADMIN_PIN:
+      title = tr("Enter admin PIN");
+      label = tr("Admin PIN:");
+      break;
+    case FIRMWARE_PIN:
+        title = tr("Enter Firmware Password");
+        label = tr("Enter Firmware Password:");
+      break;
+    case OTHER:
+        break;
+      case HIDDEN_VOLUME:
+      title = tr("Enter password for hidden volume");
+      label = tr("Enter password for hidden volume:");
+      break;
+  }
+
+  connect(&worker_thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
+  connect(&worker, SIGNAL(finished()), this, SLOT(updateTryCounter()));
+  worker.moveToThread(&worker_thread);
+  worker_thread.start();
 
   connect(ui->okButton, SIGNAL(clicked()), this, SLOT(onOkButtonClicked()));
 
@@ -47,12 +73,15 @@ PinDialog::PinDialog(const QString &title, const QString &label, Usage usage, Pi
                                                     // other occurences
 
   // ui->status->setVisible(false);
-  updateTryCounter();
 
   ui->lineEdit->setFocus();
 }
 
-PinDialog::~PinDialog() { delete ui; }
+PinDialog::~PinDialog() {
+  worker_thread.quit();
+  worker_thread.wait();
+  delete ui;
+}
 
 void PinDialog::getPassword(QString &pin) {
   pin = ui->lineEdit->text();
@@ -62,7 +91,6 @@ void PinDialog::getPassword(QString &pin) {
 std::string && PinDialog::getPassword() {
   std::string pin = ui->lineEdit->text().toStdString();
   clearBuffers();
-  ui->lineEdit->setText(ui->lineEdit->placeholderText());
   return std::move(pin);
 }
 
@@ -114,10 +142,10 @@ void PinDialog::updateTryCounter() {
 
   switch (_pinType) {
   case ADMIN_PIN:
-    triesLeft = libada::i()->getPasswordRetryCount();
+    triesLeft = worker.devdata.retry_admin_count;
     break;
   case USER_PIN:
-    triesLeft = libada::i()->getUserPasswordRetryCount();
+    triesLeft = worker.devdata.retry_user_count;
     break;
   case FIRMWARE_PIN:
   case OTHER:
@@ -137,6 +165,14 @@ void PinDialog::UI_deviceNotInitialized() const {
 void PinDialog::clearBuffers() {
   //FIXME securely delete string in UI
   //FIXME make sure compiler will not ignore this
-//  memset(password, 0, 50);
   ui->lineEdit->clear();
+  ui->lineEdit->setText(ui->lineEdit->placeholderText());
 }
+
+//TODO get only the one interesting counter
+void PinDialogUI::Worker::fetch_device_data() {
+  devdata.retry_admin_count = libada::i()->getPasswordRetryCount();
+  devdata.retry_user_count = libada::i()->getUserPasswordRetryCount();
+  emit finished();
+}
+
