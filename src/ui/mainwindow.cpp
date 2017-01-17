@@ -128,11 +128,10 @@ void MainWindow::InitState() {
 
 MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
-      tray(this, true, true), clipboard(this), auth(this)
-//      otpInClipboard("not empty"), secretInClipboard("not empty"), PWSInClipboard("not empty")
+      tray(this, true, true), clipboard(this), auth_admin(this, Authentication::Type::ADMIN),
+      auth_user(this, Authentication::Type::USER),
+      HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
-  HOTP_SlotCount = HOTP_SLOT_COUNT;
-  TOTP_SlotCount = TOTP_SLOT_COUNT;
 #ifdef Q_OS_LINUX
   setlocale(LC_ALL, "");
   bindtextdomain("nitrokey-app", "/usr/share/locale");
@@ -1034,9 +1033,9 @@ void MainWindow::on_writeButton_clicked() {
     if (!validate_secret(otp.secret)) {
       return;
     }
-    if(auth.authenticate()){
+    if(auth_admin.authenticate()){
       try{
-        libada::i()->writeToOTPSlot(otp, auth.getTempPassword());
+        libada::i()->writeToOTPSlot(otp, auth_admin.getTempPassword());
         csApplet()->messageBox(tr("Configuration successfully written."));
       }
       catch (CommandFailedException &e){
@@ -1165,7 +1164,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
   if (!libada::i()->isDeviceConnected()) {
       csApplet()->warningBox(tr("Nitrokey not connected!"));
   }
-    if(!auth.authenticate()){
+    if(!auth_admin.authenticate()){
       csApplet()->warningBox(tr("Wrong PIN. Please try again."));
       return;
     }
@@ -1177,7 +1176,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
         ui->enableUserPasswordCheckBox->isChecked(),
         ui->deleteUserPasswordCheckBox->isChecked() &&
         ui->enableUserPasswordCheckBox->isChecked(),
-        auth.getTempPassword().toLatin1().data()
+        auth_admin.getTempPassword().toLatin1().data()
     );
     csApplet()->messageBox(tr("Configuration successfully written."));
   }
@@ -1240,15 +1239,15 @@ void MainWindow::on_eraseButton_clicked() {
     slotNo -= (TOTP_SlotCount + 1);
   }
 
-    if (!auth.authenticate()){
+    if (!auth_admin.authenticate()){
         csApplet()->messageBox(tr("Command execution failed. Please try again."));
         return;
     };
     int res;
   if (isHOTP) {
-    res = libada::i()->eraseHOTPSlot(slotNo, auth.getTempPassword().toLatin1().data());
+    res = libada::i()->eraseHOTPSlot(slotNo, auth_admin.getTempPassword().toLatin1().data());
   } else {
-    res = libada::i()->eraseTOTPSlot(slotNo, auth.getTempPassword().toLatin1().data());
+    res = libada::i()->eraseTOTPSlot(slotNo, auth_admin.getTempPassword().toLatin1().data());
   }
     csApplet()->messageBox(tr("Slot has been erased successfully."));
 
@@ -1628,10 +1627,10 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     QString tempPassword;
 
     if(status.enable_user_password != 0){
-        if(!auth.authenticate()){
+        if(!auth_admin.authenticate()){
             return 0; //TODO throw
         }
-        tempPassword = auth.getTempPassword();
+        tempPassword = auth_admin.getTempPassword();
     }
   //TODO authentication here
   if (slotNumber>=0x20){

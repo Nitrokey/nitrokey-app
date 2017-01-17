@@ -13,19 +13,19 @@ class Authentication : public QObject
 {
 Q_OBJECT
 public:
-    Authentication(QObject *parent);
+    enum Type{ADMIN, USER, FIRMWARE, HIDDEN_VOLUME};
+    Authentication(QObject *parent, Type _type);
     bool authenticate();
-
     const QString getTempPassword();
-
 private:
     quint64 authenticationValidUntilTime;
     QString tempPassword;
     QString generateTemporaryPassword() const;
+    const Type type;
+    Q_DISABLE_COPY(Authentication);
+    uint getCurrentTime() const;
 private slots:
     void clearTemporaryPassword(bool force=false);
-
-    uint getCurrentTime() const;
 };
 
 

@@ -63,7 +63,8 @@ protected:
 private:
     Tray tray;
     Clipboard clipboard;
-    Authentication auth;
+    Authentication auth_admin;
+    Authentication auth_user;
 
     bool validate_secret(const char *secret) const;
     void initialTimeReset(int ret);
@@ -76,8 +77,8 @@ private:
 
   Ui::MainWindow *ui;
 
-  unsigned char HOTP_SlotCount;
-  unsigned char TOTP_SlotCount;
+  const unsigned char HOTP_SlotCount;
+  const unsigned char TOTP_SlotCount;
 
   void getSlotNames();
 

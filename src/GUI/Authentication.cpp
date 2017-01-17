@@ -10,7 +10,7 @@ using nm = nitrokey::NitrokeyManager;
 #include "nitrokey-applet.h"
 #include <QTimer>
 
-Authentication::Authentication(QObject *parent) : QObject(parent) {
+Authentication::Authentication(QObject *parent, Type _type) : QObject(parent), type(_type) {
     tempPassword.clear();
 }
 
@@ -28,7 +28,8 @@ bool Authentication::authenticate(){
 
   QString password;
   do {
-      PinDialog dialog(PinDialog::ADMIN_PIN);
+      const auto pinType = type==ADMIN? PinDialog::ADMIN_PIN : PinDialog::USER_PIN;
+      PinDialog dialog(pinType);
 
     int ok = dialog.exec();
     if (ok != QDialog::Accepted) {
