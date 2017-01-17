@@ -11,25 +11,25 @@ using nm = nitrokey::NitrokeyManager;
 #include <QTimer>
 
 Authentication::Authentication(QObject *parent) : QObject(parent) {
-
+    tempPassword.clear();
 }
 
 bool Authentication::authenticate(){
-  qDebug() << tempPassword.toLatin1().toHex();
+//  qDebug() << tempPassword.toLatin1().toHex();
   bool authenticationSuccess = false;
 
   const auto validation_period = 10 * 60 * 1000; //TODO move to field, add to ctr as param
-  if (!tempPassword.isEmpty() && authenticationValidUntilTime >= getCurrentTime()){
-    authenticationValidUntilTime = getCurrentTime() + validation_period;
-    authenticationSuccess = true;
-    QTimer::singleShot(validation_period, this, SLOT(clearTemporaryPassword()));
-    return authenticationSuccess;
-  }
+//  if (!tempPassword.isEmpty() && authenticationValidUntilTime >= getCurrentTime()){
+//    authenticationValidUntilTime = getCurrentTime() + validation_period;
+//    authenticationSuccess = true;
+//    QTimer::singleShot(validation_period, this, SLOT(clearTemporaryPassword()));
+//    return authenticationSuccess;
+//  }
 
   QString password;
   do {
-    PinDialog dialog(tr("Enter admin PIN"), tr("Admin PIN:"), PinDialog::PLAIN,
-                     PinDialog::ADMIN_PIN); //TODO move user/admin to field, add to ctr as param
+      PinDialog dialog(PinDialog::ADMIN_PIN);
+
     int ok = dialog.exec();
     if (ok != QDialog::Accepted) {
       return authenticationSuccess;
@@ -37,7 +37,8 @@ bool Authentication::authenticate(){
 
     //emit signal with password to authenticate (by pointer)
     auto password = dialog.getPassword();
-    auto tempPasswordLocal = generateTemporaryPassword();
+//    auto tempPasswordLocal = generateTemporaryPassword();
+    tempPassword = generateTemporaryPassword();
     //emit end
 
     //slot receiving signal
@@ -45,7 +46,7 @@ bool Authentication::authenticate(){
       nm::instance()->first_authenticate(password.c_str(), tempPassword.toLatin1().constData());
       //FIXME securedelete password
       authenticationValidUntilTime = getCurrentTime() + validation_period;
-      tempPassword = tempPasswordLocal;
+//      tempPassword = tempPasswordLocal;
       authenticationSuccess = true;
       return authenticationSuccess;
     }
@@ -79,11 +80,13 @@ QString Authentication::generateTemporaryPassword() const {
 }
 
 #include "core/ScopedGuard.h"
+
 const QString Authentication::getTempPassword() {
+//    authenticate(); //TODO check?
     QString local_tempPassword = tempPassword;
     bool is_07nkpro_device = libada::i()->is_nkpro_07_rtm1();
-  if (is_07nkpro_device){
-    clearTemporaryPassword(true);
-  }
-  return local_tempPassword;
+    if (is_07nkpro_device) {
+        clearTemporaryPassword(true);
+    }
+    return local_tempPassword;
 }
