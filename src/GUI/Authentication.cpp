@@ -61,8 +61,8 @@ bool Authentication::authenticate(){
 
 uint Authentication::getCurrentTime() const { return QDateTime::currentDateTime().toTime_t(); }
 
-void Authentication::clearTemporaryPassword(){
-  if (authenticationValidUntilTime < getCurrentTime()) {
+void Authentication::clearTemporaryPassword(bool force){
+  if (force || authenticationValidUntilTime < getCurrentTime()) {
     tempPassword.clear(); //FIXME securely delete
   }
 }
@@ -76,6 +76,12 @@ QString Authentication::generateTemporaryPassword() const {
   return tmp_p;
 }
 
-const QString &Authentication::getTempPassword() const {
-  return tempPassword;
+#include "core/ScopedGuard.h"
+const QString Authentication::getTempPassword() {
+    QString local_tempPassword = tempPassword;
+    bool is_07nkpro_device = true;
+  if (is_07nkpro_device){
+    clearTemporaryPassword(true);
+  }
+  return local_tempPassword;
 }

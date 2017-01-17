@@ -16,14 +16,14 @@ public:
     Authentication(QObject *parent);
     bool authenticate();
 
-    const QString &getTempPassword() const;
+    const QString getTempPassword();
 
 private:
     quint64 authenticationValidUntilTime;
     QString tempPassword;
     QString generateTemporaryPassword() const;
 private slots:
-    void clearTemporaryPassword();
+    void clearTemporaryPassword(bool force=false);
 
     uint getCurrentTime() const;
 };
