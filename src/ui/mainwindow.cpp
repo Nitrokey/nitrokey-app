@@ -1046,8 +1046,9 @@ void MainWindow::on_writeButton_clicked() {
     if (!validate_secret(otp.secret)) {
       return;
     }
-    auth.authenticate();
-    libada::i()->writeToOTPSlot(otp, auth.getTempPassword());
+    if(auth.authenticate()){
+        libada::i()->writeToOTPSlot(otp, auth.getTempPassword());
+    }
 
 //          csApplet()->messageBox(tr("Configuration successfully written."));
 //          csApplet()->warningBox(tr("The name of the slot must not be empty."));
