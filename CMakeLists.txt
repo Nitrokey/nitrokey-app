@@ -5,10 +5,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
 
 PROJECT(NitrokeyApp)
 SET(PROJECT_VERSION "0.7.0")
-SET(ADD_ASAN 1)
-
-#Please use either 'cmake -DHAVE_LIBAPPINDICATOR=NO' or 'ccmake' to change this value
-OPTION(HAVE_LIBAPPINDICATOR "Compile support for libappindicator" NO)
+OPTION(ADD_ASAN "Additional debug checks" 0)
+#SET(ADD_ASAN 0)
 
 INCLUDE(FindPkgConfig)
 
