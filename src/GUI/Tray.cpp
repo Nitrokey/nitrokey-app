@@ -1,6 +1,8 @@
-//
-// Created by sz on 14.01.17.
-//
+/*
+TODO
+1. remove doubled debug
+2. remove stick10 changing pin
+*/
 
 #include "Tray.h"
 #include <QThread>
