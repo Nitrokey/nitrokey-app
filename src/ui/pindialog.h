@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QtCore/QThread>
 #include "ui_pindialog.h"
+#include <memory>
 
 namespace Ui {
 class PinDialog;
@@ -60,16 +61,15 @@ public :
 
 private slots:
   void on_checkBox_toggled(bool checked);
-  void on_checkBox_PasswordMatrix_toggled(bool checked);
   void onOkButtonClicked();
     void updateTryCounter();
 
 private:
-  Ui::PinDialog *ui;
+    Q_DISABLE_COPY(PinDialog);
+    std::shared_ptr<Ui::PinDialog> ui;
   PinDialogUI::Worker worker;
   QThread worker_thread;
 
-//  const Usage _usage;
   const PinType _pinType;
 
   void clearBuffers();

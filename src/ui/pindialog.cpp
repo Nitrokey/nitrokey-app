@@ -27,8 +27,9 @@
 #define LOCAL_PASSWORD_SIZE 40 // Todo make define global
 
 PinDialog::PinDialog(PinType pinType, QWidget *parent)
-    : _pinType(pinType), QDialog(parent),
-      ui(new Ui::PinDialog) {
+    : _pinType(pinType), QDialog(parent)
+{
+  ui = std::make_shared<Ui::PinDialog>();
   ui->setupUi(this);
 
   ui->status->setText(tr("Tries left: %1").arg("..."));
@@ -61,10 +62,6 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent)
 
   connect(ui->okButton, SIGNAL(clicked()), this, SLOT(onOkButtonClicked()));
 
-  // Setup pwd-matrix
-  ui->checkBox_PasswordMatrix->setCheckState(Qt::Unchecked);
-  ui->checkBox_PasswordMatrix->hide();
-
   // Setup title and label
   this->setWindowTitle(title);
   ui->label->setText(label);
@@ -80,7 +77,6 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent)
 PinDialog::~PinDialog() {
   worker_thread.quit();
   worker_thread.wait();
-  delete ui;
 }
 
 void PinDialog::getPassword(QString &pin) {
@@ -98,9 +94,6 @@ void PinDialog::on_checkBox_toggled(bool checked) {
   ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }
 
-void PinDialog::on_checkBox_PasswordMatrix_toggled(bool checked) {
-  ui->lineEdit->setDisabled(checked);
-}
 
 void PinDialog::onOkButtonClicked() {
   int n;
