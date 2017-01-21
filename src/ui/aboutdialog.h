@@ -7,8 +7,7 @@
 #include <memory>
 #include "src/utils/bool_values.h"
 
-#define GUI_VERSION "0.6.2"
-
+#include "src/version.h"
 
 namespace Ui {
 class AboutDialog;

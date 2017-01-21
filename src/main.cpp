@@ -28,8 +28,8 @@
 #include <QFileInfo>
 #include <QDebug>
 //#include <QSharedMemory>
-#include <src/ui/aboutdialog.h> //TODO move GUI_VERSION to separate file
 //#include <src/ui/mainwindow.h>
+#include "src/version.h"
 
 #include "src/utils/bool_values.h"
 
