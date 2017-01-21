@@ -18,11 +18,11 @@ public:
     bool authenticate();
     const QString getTempPassword();
 private:
+    Q_DISABLE_COPY(Authentication);
     quint64 authenticationValidUntilTime;
     QString tempPassword;
     QString generateTemporaryPassword() const;
     const Type type;
-    Q_DISABLE_COPY(Authentication);
     uint getCurrentTime() const;
 private slots:
     void clearTemporaryPassword(bool force=false);
