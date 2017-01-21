@@ -39,12 +39,12 @@ public:
     void regenerateMenu();
 
 private slots:
-    bool eventFilter(QObject *obj, QEvent *event);
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void generateMenuPasswordSafe();
     void populateOTPPasswordMenu();
 
 private:
+    bool eventFilter(QObject *obj, QEvent *event) override;
     void generateMenu(bool init=false);
     void generateMenuForStorageDevice();
     void generatePasswordMenu();

@@ -18,21 +18,33 @@
  */
 
 #include "mainwindow.h"
-#include "mcvs-wrapper.h"
-#include "nitrokey-applet.h"
-#include "splash.h"
+//#include "mcvs-wrapper.h"
+//#include "nitrokey-applet.h"
+//#include "splash.h"
 #include <QApplication>
+#include <QTranslator>
+#include <QLibraryInfo>
+#include <QSettings>
+#include <QFileInfo>
 #include <QDebug>
-#include <QSharedMemory>
-#include <stdlib.h>
-#include <src/ui/aboutdialog.h>
+//#include <QSharedMemory>
+#include <src/ui/aboutdialog.h> //TODO move GUI_VERSION to separate file
+//#include <src/ui/mainwindow.h>
 
 #include "src/utils/bool_values.h"
 
-enum {DEBUG_STATUS_NO_DEBUGGING, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
+#ifdef Q_OS_LINUX
+//#include <libintl.h>
+//#include <locale.h>
+//#define _(String) gettext(String)
+#endif //Q_OS_LINUX
+
+enum {DEBUG_STATUS_NO_DEBUGGING = 0, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
 
 StartUpParameter_tst &
 parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st);
+
+void initialize_startup_info(StartUpParameter_tst &StartupInfo_st);
 
 void HelpInfos(void) {
   puts("Nitrokey App "
@@ -61,7 +73,9 @@ int main(int argc, char *argv[]) {
 
   QApplication a(argc, argv);
   StartUpParameter_tst StartupInfo_st;
-  parseCommandLine(argc, argv, StartupInfo_st);
+  initialize_startup_info(StartupInfo_st);
+  qDebug() << "Command line arguments disabled";
+//  parseCommandLine(argc, argv, StartupInfo_st);
 
   // initialize i18n
   QTranslator qtTranslator;
@@ -133,6 +147,11 @@ int main(int argc, char *argv[]) {
   if (success){
     a.installTranslator(&myappTranslator);
   }
+#ifdef Q_OS_LINUX
+//  setlocale(LC_ALL, "");
+//  bindtextdomain("nitrokey-app", "/usr/share/locale");
+//  textdomain("nitrokey-app");
+#endif
 
   // Check for multiple instances
   // GUID from http://www.guidgenerator.com/online-guid-generator.aspx
@@ -158,28 +177,24 @@ int main(int argc, char *argv[]) {
 
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
-//  HID_Stick20Init();
-
-  MainWindow w(&StartupInfo_st);
+//  MainWindow w(&StartupInfo_st);
 //    csApplet()->setParent(&w);
 
-  QDateTime local(QDateTime::currentDateTime());
-
-  qsrand(local.currentMSecsSinceEpoch() % 2000000000);
+  {
+    QDateTime local(QDateTime::currentDateTime());
+    qsrand(static_cast<uint> (local.currentMSecsSinceEpoch() % 2000000000));
+  }
 
   a.setQuitOnLastWindowClosed(false);
+
+  MainWindow w;
   return a.exec();
 }
 
 StartUpParameter_tst &
 parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st) {
   //TODO rewrite with QCommandLineParser (does not support qt4)
-  StartupInfo_st.ExtendedConfigActive = FALSE;
-  StartupInfo_st.FlagDebug = DEBUG_STATUS_NO_DEBUGGING;
-  StartupInfo_st.PasswordMatrix = FALSE;
-  StartupInfo_st.LockHardware = FALSE;
-  StartupInfo_st.Cmd = FALSE;
-  StartupInfo_st.language_set = FALSE;
+  initialize_startup_info(StartupInfo_st);
 
   int i;
   char *p;
@@ -233,21 +248,32 @@ parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_
   return StartupInfo_st;
 }
 
-extern "C" char *GetTimeStampForLog(void);
-
-char *GetTimeStampForLog(void) {
-  static QDateTime LastTimeStamp(QDateTime::currentDateTime());
-
-  QDateTime ActualTimeStamp(QDateTime::currentDateTime());
-
-  static char DateString[40];
-
-  if (ActualTimeStamp.toTime_t() != LastTimeStamp.toTime_t()) {
-    LastTimeStamp = ActualTimeStamp;
-    STRCPY(DateString, sizeof(DateString) - 1,
-           LastTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toLatin1());
-  } else
-    DateString[0] = 0;
-
-  return (DateString);
+void initialize_startup_info(StartUpParameter_tst &StartupInfo_st) {
+  StartupInfo_st.ExtendedConfigActive = FALSE;
+//  StartupInfo_st.FlagDebug = DEBUG_STATUS_NO_DEBUGGING;
+  StartupInfo_st.FlagDebug = DEBUG_STATUS_DEBUG_ALL;
+  StartupInfo_st.PasswordMatrix = FALSE;
+  StartupInfo_st.LockHardware = FALSE;
+  StartupInfo_st.Cmd = FALSE;
+  StartupInfo_st.language_set = FALSE;
+  StartupInfo_st.language_string = "";
 }
+
+//extern "C" char *GetTimeStampForLog(void);
+//
+//char *GetTimeStampForLog(void) {
+//  static QDateTime LastTimeStamp(QDateTime::currentDateTime());
+//
+//  QDateTime ActualTimeStamp(QDateTime::currentDateTime());
+//
+//  static char DateString[40];
+//
+//  if (ActualTimeStamp.toTime_t() != LastTimeStamp.toTime_t()) {
+//    LastTimeStamp = ActualTimeStamp;
+//    STRCPY(DateString, sizeof(DateString) - 1,
+//           LastTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toLatin1());
+//  } else
+//    DateString[0] = 0;
+//
+//  return (DateString);
+//}

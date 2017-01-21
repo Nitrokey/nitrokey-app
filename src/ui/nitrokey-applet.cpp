@@ -18,8 +18,8 @@ void CryptostickApplet::warningBox(const QString msg) {
 }
 
 void CryptostickApplet::messageBox(const QString msg) {
-    const QString brand = getBrand();
-  QMessageBox::information(_parent,  brand, msg, QMessageBox::Ok);
+//  QMessageBox msgbox(QMessageBox::Information, getBrand(), msg, QMessageBox::Ok, _parent);
+//  QMessageBox::information(_parent,  getBrand(), msg, QMessageBox::Ok);
 }
 
 bool CryptostickApplet::yesOrNoBox(const QString msg, bool default_val) {
@@ -49,7 +49,8 @@ bool CryptostickApplet::detailedYesOrNoBox(const QString msg, const QString deta
 }
 
 QString getBrand() {
-  const QString string = QString::fromUtf8(CRYPTOSTICK_APP_BRAND);
-  return string;
+//  const QString string = QString::fromUtf8(CRYPTOSTICK_APP_BRAND);
+//  return string;
+  return QStringLiteral(CRYPTOSTICK_APP_BRAND);
 }
 

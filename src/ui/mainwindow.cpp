@@ -49,9 +49,6 @@
 #include <QtWidgets>
 
 #ifdef Q_OS_LINUX
-#include <libintl.h>
-#include <locale.h>
-#define _(String) gettext(String)
 #include "systemutils.h"
 #include "src/core/SecureString.h"
 #include <sys/mount.h> // for unmounting on linux
@@ -126,18 +123,13 @@ void MainWindow::InitState() {
   PWS_CreatePWSize = 12;
 }
 
-MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
+//MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
       tray(this, true, true), clipboard(this), auth_admin(this, Authentication::Type::ADMIN),
       auth_user(this, Authentication::Type::USER),
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
-#ifdef Q_OS_LINUX
-  setlocale(LC_ALL, "");
-  bindtextdomain("nitrokey-app", "/usr/share/locale");
-  textdomain("nitrokey-app");
-#endif
-  lastUserAuthenticateTime = lastClipboardTime = QDateTime::currentDateTime().toTime_t();
 
   nitrokey::NitrokeyManager::instance()->connect();
 
@@ -584,7 +576,6 @@ void MainWindow::displayCurrentSlotConfig() {
     displayCurrentTotpSlotConfig(slotNo);
   }
 
-  lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 }
 
 void MainWindow::displayCurrentGeneralConfig() {
@@ -597,7 +588,6 @@ void MainWindow::displayCurrentGeneralConfig() {
   ui->enableUserPasswordCheckBox->setChecked(status.enable_user_password != 0);
   ui->deleteUserPasswordCheckBox->setChecked(status.delete_user_password != 0);
 
-  lastAuthenticateTime = QDateTime::currentDateTime().toTime_t();
 }
 
 void MainWindow::startConfiguration() {

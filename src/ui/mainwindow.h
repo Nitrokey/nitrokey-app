@@ -22,7 +22,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSystemTrayIcon>
+//#include <QSystemTrayIcon>
 #include <QValidator>
 #include <QMutex>
 #include <climits>
@@ -49,18 +49,18 @@ typedef struct {
 
 
 class MainWindow : public QMainWindow {
-  Q_OBJECT public : explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
+  Q_OBJECT
+public :
+//    explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
-
-  uint64_t lastTOTPTime;
-  uint64_t lastClipboardTime;
-  uint64_t lastAuthenticateTime;
-  uint64_t lastUserAuthenticateTime;
 
 protected:
   void closeEvent(QCloseEvent *event);
 
 private:
+    Q_DISABLE_COPY(MainWindow);
+
     Tray tray;
     Clipboard clipboard;
     Authentication auth_admin;
@@ -212,6 +212,8 @@ class utf8FieldLengthValidator : public QValidator {
   Q_OBJECT
 private:
   int field_max_length;
+  Q_DISABLE_COPY(utf8FieldLengthValidator);
+
 
 public:
   explicit utf8FieldLengthValidator(QObject *parent = 0);
