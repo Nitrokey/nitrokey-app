@@ -130,7 +130,7 @@ MainWindow::MainWindow(QWidget *parent)
       auth_user(this, Authentication::Type::USER),
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
-
+    PWS_Access = FALSE;
   nitrokey::NitrokeyManager::instance()->connect();
 
   ui->setupUi(this);
@@ -142,8 +142,6 @@ MainWindow::MainWindow(QWidget *parent)
   connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
   timer->start(2000);
 
-
-  QTimer *Password_ValidTimer = new QTimer(this);
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 

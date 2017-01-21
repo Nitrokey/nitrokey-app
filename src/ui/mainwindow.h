@@ -199,8 +199,6 @@ private slots:
 
 
 public:
-  void generateTemporaryPassword(uint8_t *tempPassword) const;
-
     void on_enableUserPasswordCheckBox_clicked(bool checked);
   void generateOTPConfig(OTPSlot *slot) const;
   int get_supported_secret_length_base32() const;

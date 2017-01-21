@@ -19,7 +19,7 @@ void CryptostickApplet::warningBox(const QString msg) {
 
 void CryptostickApplet::messageBox(const QString msg) {
 //  QMessageBox msgbox(QMessageBox::Information, getBrand(), msg, QMessageBox::Ok, _parent);
-//  QMessageBox::information(_parent,  getBrand(), msg, QMessageBox::Ok);
+  QMessageBox::information(_parent,  getBrand(), msg, QMessageBox::Ok);
 }
 
 bool CryptostickApplet::yesOrNoBox(const QString msg, bool default_val) {
