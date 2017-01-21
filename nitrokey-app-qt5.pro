@@ -46,6 +46,8 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCUIDIR}/nitrokey-applet.cpp \
             $${SRCDIR}/core/SecureString.cpp \
             $${SRCDIR}/GUI/Tray.cpp \
+            $${SRCDIR}/GUI/Clipboard.cpp \
+            $${SRCDIR}/GUI/Authentication.cpp \
             $${SRCDIR}/libada.cpp
 
 
@@ -67,6 +69,8 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCDIR}/mcvs-wrapper.h \
             $${SRCUIDIR}/nitrokey-applet.h \
             $${SRCDIR}/core/SecureString.h \
+            $${SRCDIR}/GUI/Clipboard.h \
+            $${SRCDIR}/GUI/Authentication.h \
             $${SRCDIR}/libada.h \
             $${SRCDIR}/GUI/Tray.h
 
@@ -115,7 +119,7 @@ unix:!macx{
     LIBS  = -lrt -lpthread
 }
 
-LIBS += -lnitrokey -L libnitrokey/build/
+LIBS += -lnitrokey -L libnitrokey/build -L/home/sz/work/nitrokey-app/libnitrokey/build
 
 OTHER_FILES +=
 
