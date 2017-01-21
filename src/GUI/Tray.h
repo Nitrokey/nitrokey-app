@@ -27,6 +27,7 @@ signals:
 
 #include <QSystemTrayIcon>
 #include <QAction>
+#include <memory>
 class Tray : public QObject {
 Q_OBJECT
 
@@ -44,7 +45,8 @@ private slots:
     void populateOTPPasswordMenu();
 
 private:
-    bool eventFilter(QObject *obj, QEvent *event) override;
+    Q_DISABLE_COPY(Tray);
+    virtual bool eventFilter(QObject *obj, QEvent *event) override;
     void generateMenu(bool init=false);
     void generateMenuForStorageDevice();
     void generatePasswordMenu();
@@ -60,7 +62,7 @@ private:
     bool ExtendedConfigActive;
 
     QSystemTrayIcon *trayIcon;
-    QMenu *trayMenu;
+    std::shared_ptr<QMenu> trayMenu;
     QMenu *trayMenuSubConfigure;
     QMenu *trayMenuPasswdSubMenu;
 //    QMenu *trayMenuTOTPSubMenu;

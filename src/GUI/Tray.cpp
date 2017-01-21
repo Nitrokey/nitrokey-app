@@ -113,7 +113,7 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
 void Tray::generateMenu(bool init) {
   {
     if (NULL == trayMenu)
-      trayMenu = new QMenu();
+      trayMenu = std::make_shared<QMenu>();//new QMenu();
     else
       trayMenu->clear(); // Clear old menu
 
@@ -141,7 +141,7 @@ void Tray::generateMenu(bool init) {
     trayMenu->addAction(ActionAboutDialog);
 
     trayMenu->addAction(quitAction);
-    trayIcon->setContextMenu(trayMenu);
+    trayIcon->setContextMenu(trayMenu.get());
   }
 }
 
