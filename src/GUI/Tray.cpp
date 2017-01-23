@@ -31,7 +31,6 @@ Tray::~Tray() {
 
 
 
-
 /*
  * Create the tray menu.
  * In all other systems we use Qt's tray

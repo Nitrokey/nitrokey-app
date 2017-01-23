@@ -18,36 +18,11 @@
  */
 
 #include "stick20changepassworddialog.h"
-#include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
 #include "stick20responsedialog.h"
 #include "ui_stick20changepassworddialog.h"
 #include "libada.h"
 #include "src/utils/bool_values.h"
-
-/*******************************************************************************
-
- External declarations
-
-*******************************************************************************/
-
-/*******************************************************************************
-
- Local defines
-
-*******************************************************************************/
-
-/*******************************************************************************
-
-  DialogChangePassword
-
-  Constructor DialogChangePassword
-
-  Reviews
-  Date      Reviewer        Info
-  13.08.13  RB              First review
-
-*******************************************************************************/
 
 DialogChangePassword::DialogChangePassword(QWidget *parent)
     : QDialog(parent), ui(new Ui::DialogChangePassword) {
@@ -118,12 +93,11 @@ int DialogChangePassword::exec() {
   }
   return QDialog::exec();
 }
+
 #include <QDesktopWidget>
 void DialogChangePassword::InitData(void) {
-  // center the password window
-  QDesktopWidget *desktop = QApplication::desktop();
-  setGeometry(
-      QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), desktop->availableGeometry()));
+  moveWindowToCenter();
+
   // replace %1 and %2 from text with proper values
   //(min and max of password length)
   int minimumPasswordLengthAdmin = 8;
@@ -168,6 +142,12 @@ void DialogChangePassword::InitData(void) {
     ui->checkBox->setText(tr("Show password"));
     break;
   }
+}
+
+void DialogChangePassword::moveWindowToCenter() {// center the password window
+  QDesktopWidget *desktop = QApplication::desktop();
+  setGeometry(
+      QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), desktop->availableGeometry()));
 }
 
 int DialogChangePassword::CheckResponse(bool NoStopFlag) {
@@ -325,7 +305,7 @@ void DialogChangePassword::accept() {
   if (0 !=
       strcmp(ui->lineEdit_NewPW_1->text().toLatin1(), ui->lineEdit_NewPW_2->text().toLatin1())) {
     clearFields();
-    csApplet()->warningBox(tr("The new password entrys are not the same"));
+    csApplet()->warningBox(tr("The new password entries are not the same"));
     return;
   }
 
