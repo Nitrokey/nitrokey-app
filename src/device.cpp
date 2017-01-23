@@ -657,13 +657,13 @@ bool Device::is_HOTP_slot_number(const uint8_t slotNumber) const {
 }
 
 bool Device::is_secret320_supported() const {
-  return is_nk_pro() && get_major_firmware_version() >= 8 ||
-      is_nk_storage() && get_major_firmware_version() >= 44;
+  return is_nk_pro() && get_major_firmware_version() >= 8;
+      //|| is_nk_storage() && get_major_firmware_version() >= 44;
 }
 
 bool Device::is_auth08_supported() const {
-  return is_nk_pro() && get_major_firmware_version() >= 8 ||
-      is_nk_storage() && get_major_firmware_version() >= 44;
+  return is_nk_pro() && get_major_firmware_version() >= 8;
+      //|| is_nk_storage() && get_major_firmware_version() >= 44;
 }
 
 bool Device::is_TOTP_slot_number(const uint8_t slotNumber) const {

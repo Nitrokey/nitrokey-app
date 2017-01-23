@@ -4,7 +4,7 @@
 #include "device.h"
 #include <QDialog>
 
-#define GUI_VERSION "0.6.2"
+#define GUI_VERSION "0.6.3"
 
 
 namespace Ui {
