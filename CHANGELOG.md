@@ -1,5 +1,18 @@
 # Change Log
 
+## [v0.6.3](https://github.com/Nitrokey/nitrokey-app/tree/v0.6.3) (2017-01-23)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.6.2...v0.6.3)
+
+**Closed issues:**
+
+- Do not enable new HID protocol for Storage yet [\#218](https://github.com/Nitrokey/nitrokey-app/issues/218)
+- nitrokey-app keeps asking for admin PIN when trying to configure TOTP or HOTP slot [\#211](https://github.com/Nitrokey/nitrokey-app/issues/211)
+
+**Merged pull requests:**
+
+- Disable support of new HID protocol for Storage [\#219](https://github.com/Nitrokey/nitrokey-app/pull/219) ([szszszsz](https://github.com/szszszsz))
+- Debian packaging rules changes [\#217](https://github.com/Nitrokey/nitrokey-app/pull/217) ([szszszsz](https://github.com/szszszsz))
+
 ## [v0.6.2](https://github.com/Nitrokey/nitrokey-app/tree/v0.6.2) (2017-01-03)
 [Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.6.1...v0.6.2)
 
@@ -9,6 +22,7 @@
 
 **Merged pull requests:**
 
+- Bump version to 0.6.2 [\#216](https://github.com/Nitrokey/nitrokey-app/pull/216) ([szszszsz](https://github.com/szszszsz))
 - Pack union for writing OTP slot data [\#215](https://github.com/Nitrokey/nitrokey-app/pull/215) ([szszszsz](https://github.com/szszszsz))
 - Do not block on waiting for symlink to storage being available [\#213](https://github.com/Nitrokey/nitrokey-app/pull/213) ([szszszsz](https://github.com/szszszsz))
 - Break asking PIN loop when user cancels it [\#212](https://github.com/Nitrokey/nitrokey-app/pull/212) ([szszszsz](https://github.com/szszszsz))
