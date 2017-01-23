@@ -140,7 +140,8 @@ bool libada::isDeviceInitialized() {
 }
 
 bool libada::isStorageDeviceConnected() const throw() {
-  return nm::instance()->get_connected_device_model() == nitrokey::DeviceModel::STORAGE;
+  return nm::instance()->is_connected() &&
+          nm::instance()->get_connected_device_model() == nitrokey::DeviceModel::STORAGE;
 }
 
 bool libada::isPasswordSafeAvailable() {
