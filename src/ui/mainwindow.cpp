@@ -52,6 +52,8 @@
 
 #include <QString>
 #include <libnitrokey/include/NitrokeyManager.h>
+#include <libnitrokey/include/stick10_commands.h>
+
 using nm = nitrokey::NitrokeyManager;
 
 
@@ -418,43 +420,42 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->secretEdit->setPlaceholderText("********************************");
 
   ui->nameEdit->setText(QString::fromStdString(libada::i()->getTOTPSlotName(slotNo)));
-//  QByteArray secret((char *)cryptostick->TOTPSlots[slotNo]->secret, SECRET_LENGTH);
-
   ui->base32RadioButton->setChecked(true);
-//  ui->secretEdit->setText(secret); // .toHex());
 
   ui->counterEdit->setText("0");
+  ui->tokenIDCheckBox->setChecked(false);
+  ui->digits6radioButton->setChecked(true);
 
   //TODO readout TOTP slot data
   //TODO implement reading slot data in libnitrokey
   //TODO move reading to separate thread
 
-//  QByteArray omp((char *)cryptostick->TOTPSlots[slotNo]->tokenID, 2);
-//  ui->ompEdit->setText(QString(omp));
+  if (libada::i()->isTOTPSlotProgrammed(slotNo)) {
+    auto p = nm::instance()->get_TOTP_slot_data(slotNo);
 
-//  QByteArray tt((char *)cryptostick->TOTPSlots[slotNo]->tokenID + 2, 2);
-//  ui->ttEdit->setText(QString(tt));
+    ui->ompEdit->setText(QString((char *) p.slot_token_fields.omp));
+    ui->ttEdit->setText(QString((char *) p.slot_token_fields.tt));
+    ui->muiEdit->setText(QString((char *) p.slot_token_fields.mui));
 
-//  QByteArray mui((char *)cryptostick->TOTPSlots[slotNo]->tokenID + 4, 8);
-//  ui->muiEdit->setText(QString(mui));
+    int interval = p.slot_counter;
+    if (interval < 1) interval = 30;
+    ui->intervalSpinBox->setValue(interval);
 
-//  int interval = cryptostick->TOTPSlots[slotNo]->interval;
-//  if (interval<1) interval = 30;
-//  ui->intervalSpinBox->setValue(interval);
+    if (p.use_8_digits)
+      ui->digits8radioButton->setChecked(true);
+    else
+      ui->digits6radioButton->setChecked(true);
 
-//  if (cryptostick->TOTPSlots[slotNo]->config & (1 << 0))
-//    ui->digits8radioButton->setChecked(true);
-//  else
-//    ui->digits6radioButton->setChecked(true);
-
-//  ui->enterCheckBox->setChecked((cryptostick->TOTPSlots[slotNo]->config & (1 << 1)));
-//  ui->tokenIDCheckBox->setChecked(cryptostick->TOTPSlots[slotNo]->config & (1 << 2));
+    ui->enterCheckBox->setChecked(p.use_enter);
+    ui->tokenIDCheckBox->setChecked(p.use_tokenID);
+  }
 
   if (!libada::i()->isTOTPSlotProgrammed(slotNo)) {
     ui->ompEdit->setText("NK");
     ui->ttEdit->setText("01");
-//    QByteArray cardSerial = QByteArray((char *)cryptostick->cardSerial).toHex();
-//    ui->muiEdit->setText(QString("%1").arg(QString(cardSerial), 8, '0'));
+    static std::string cardSerial = nm::instance()->get_serial_number();
+    ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
+    ui->intervalSpinBox->setValue(30);
   }
 }
 

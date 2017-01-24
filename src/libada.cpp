@@ -153,11 +153,11 @@ bool libada::isPasswordSafeUnlocked() {
 }
 
 bool libada::isTOTPSlotProgrammed(const int i) {
-  return false;
+  return getTOTPSlotName(i).find("empty") == std::string::npos; //FIXME
 }
 
 bool libada::isHOTPSlotProgrammed(const int i) {
-  return false;
+  return getHOTPSlotName(i).find("empty") == std::string::npos; //FIXME
 }
 
 void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword) {
