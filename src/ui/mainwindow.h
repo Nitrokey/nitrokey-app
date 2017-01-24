@@ -121,7 +121,7 @@ public slots:
   void startStick20ActionChangeUpdatePIN();
   void startResetUserPassword();
   void startLockDeviceAction();
-
+  void updateProgressBar(int i);
 
 
 private slots:

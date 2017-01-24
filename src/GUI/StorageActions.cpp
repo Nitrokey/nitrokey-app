@@ -61,7 +61,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
     answer = csApplet()->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to "
                                            "proceed?\nTo avoid data loss, please unmount the partitions before "
                                            "proceeding."), false);
-    if (false == answer)
+    if (!answer)
       return;
   }
 
@@ -73,6 +73,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
     const auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
     m->unlock_encrypted_volume(s.data());
+    emit storageStatusChanged();
   }
 }
 
@@ -87,6 +88,7 @@ void StorageActions::startStick20DisableCryptedVolume() {
     local_sync();
     auto m = nitrokey::NitrokeyManager::instance();
     m->lock_device();
+    emit storageStatusChanged();
   }
 }
 
@@ -103,7 +105,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
       csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
                                     "proceed?\nTo avoid data loss, please unmount the partitions before "
                                     "proceeding."), true);
-  if (false == answer)
+  if (!answer)
     return;
 
   PinDialog dialog(PinDialog::HIDDEN_VOLUME, nullptr);
@@ -116,6 +118,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
 
     auto m = nitrokey::NitrokeyManager::instance();
     m->unlock_hidden_volume(s.data());
+    emit storageStatusChanged();
   }
 }
 
@@ -123,13 +126,14 @@ void StorageActions::startStick20DisableHiddenVolume() {
   bool answer =
       csApplet()->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to proceed?\nTo "
                                     "avoid data loss, please unmount the partitions before proceeding."), true);
-  if (false == answer)
+  if (!answer)
     return;
 
   local_sync();
 //  stick20SendCommand(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, password);
   auto m = nitrokey::NitrokeyManager::instance();
-  m->lock_device();
+  m->lock_device(); //FIXME disable volume instead of locking the device
+  emit storageStatusChanged();
 }
 
 void StorageActions::startLockDeviceAction() {
@@ -139,7 +143,7 @@ void StorageActions::startLockDeviceAction() {
     answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
                                            "proceed?\nTo avoid data loss, please unmount the partitions before "
                                            "proceeding."), true);
-    if (false == answer) {
+    if (!answer) {
       return;
     }
     local_sync();
@@ -147,14 +151,13 @@ void StorageActions::startLockDeviceAction() {
 
   auto m = nitrokey::NitrokeyManager::instance();
   m->lock_device();
+  emit storageStatusChanged();
 
 }
 
 #include "stick20updatedialog.h"
 
 void StorageActions::startStick20EnableFirmwareUpdate() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-
   bool ret;
 
   UpdateDialog dialogUpdate(nullptr);
@@ -181,18 +184,17 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
 
 
 void StorageActions::startStick20ExportFirmwareToFile() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
 
   PinDialog dialog(PinDialog::ADMIN_PIN);
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
-    // password[0] = 'P';
     auto s = dialog.getPassword();
 
     auto m = nitrokey::NitrokeyManager::instance();
     m->export_firmware(s.data());
+    //TODO UI add confirmation
   }
 }
 
@@ -202,7 +204,7 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
 
   answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
                                          "hidden volumes, and password safe! Continue?"), false);
-  if (true == answer) {
+  if (answer) {
     PinDialog dialog(PinDialog::ADMIN_PIN);
 
     ret = dialog.exec();
@@ -230,6 +232,7 @@ void StorageActions::startStick20FillSDCardWithRandomChars() {
     auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
     m->fill_SD_card_with_random_data(s.data());
+    emit storageStatusChanged();
   }
 }
 
@@ -260,6 +263,7 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
     auto m = nitrokey::NitrokeyManager::instance();
     m->set_unencrypted_read_only(pass.data());
 //    pass.safe_clear(); //TODO
+    emit storageStatusChanged();
   }
 }
 
@@ -276,6 +280,7 @@ void StorageActions::startStick20SetReadWriteUncryptedVolume() {
     auto m = nitrokey::NitrokeyManager::instance();
     m->set_unencrypted_read_write(pass.data());
 //    pass.safe_clear(); //TODO
+    emit storageStatusChanged();
   }
 }
 

@@ -23,6 +23,7 @@ public slots:
 
 signals:
     void resultReady();
+    void progress(int i);
 };
 
 #include <QSystemTrayIcon>
@@ -39,12 +40,18 @@ public:
     void showTrayMessage(QString message);
     void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type,
                          int timeout);
+  public slots:
     void regenerateMenu();
+
+  signals:
+    void progress(int i);
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void generateMenuPasswordSafe();
     void populateOTPPasswordMenu();
+    void passOTPProgressFurther(int i);
+    void showOTPProgressInTray(int i);
 
 private:
     Q_DISABLE_COPY(Tray);

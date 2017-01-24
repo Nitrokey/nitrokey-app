@@ -89,6 +89,9 @@ MainWindow::MainWindow(QWidget *parent)
     PWS_Access = FALSE;
   nitrokey::NitrokeyManager::instance()->connect();
 
+  connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
+  connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
+
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
@@ -695,7 +698,7 @@ void MainWindow::on_writeButton_clicked() {
     if (isHOTP) { // HOTP slot
       generateHOTPConfig(&otp);
     } else {
-      generateTOTPConfig(&otp);
+        generateTOTPConfig(&otp);
     }
     if (!validate_secret(otp.secret)) {
       return;
@@ -1544,4 +1547,13 @@ void MainWindow::startLockDeviceAction() {
 
   tray.regenerateMenu();
   tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
+}
+
+void MainWindow::updateProgressBar(int i) {
+  ui->progressBar->setValue(i);
+  if(i == 100){
+    QTimer::singleShot(1000, [&](){
+      ui->progressBar->hide();
+    });
+  }
 }

@@ -20,6 +20,9 @@ Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
   debug_mode = _debug_mode;
   ExtendedConfigActive = _extended_config;
 
+
+
+
   createIndicator();
   initActionsForStick10();
   initActionsForStick20();
@@ -284,22 +287,26 @@ void Tray::initActionsForStick20() {
 }
 
 
-QThread thread_tray_populateOTP;
+std::shared_ptr<QThread> thread_tray_populateOTP;
 
 void tray_Worker::doWork() {
+  const auto total = TOTP_SLOT_COUNT+HOTP_SLOT_COUNT+1;
   //populate OTP name cache
   for (int i=0; i < TOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getTOTPSlotName(i);
+    emit progress(i * 100 / total);
   }
 
   for (int i=0; i<HOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getHOTPSlotName(i);
+    emit progress((TOTP_SLOT_COUNT + i) * 100 / total);
   }
+  emit progress(100);
   emit resultReady();
 }
 
 void Tray::generatePasswordMenu() {
-  if (trayMenuPasswdSubMenu != NULL) {
+  if (trayMenuPasswdSubMenu != nullptr) {
     delete trayMenuPasswdSubMenu;
   }
   trayMenuPasswdSubMenu = new QMenu(tr("Passwords")); //TODO make shared pointer
@@ -307,15 +314,18 @@ void Tray::generatePasswordMenu() {
   trayMenu->addMenu(trayMenuPasswdSubMenu);
   trayMenu->addSeparator();
 
+  thread_tray_populateOTP = std::make_shared<QThread>();
   tray_Worker *worker = new tray_Worker;
-  worker->moveToThread(&thread_tray_populateOTP);
+  worker->moveToThread(thread_tray_populateOTP.get());
 //  connect(&tray_populateOTP, &QThread::finished, worker, &QObject::deleteLater);
-  connect(&thread_tray_populateOTP, SIGNAL(started()), worker, SLOT(doWork()));
+  connect(thread_tray_populateOTP.get(), SIGNAL(started()), worker, SLOT(doWork()));
   connect(worker, SIGNAL(resultReady()), this, SLOT(populateOTPPasswordMenu()));
-  //FIXME connect this to mainwindow
-  connect(worker, SIGNAL(resultReady()), main_window, SLOT(generateComboBoxEntrys()));
 
-  thread_tray_populateOTP.start();
+  connect(worker, SIGNAL(resultReady()), main_window, SLOT(generateComboBoxEntrys()));
+  connect(worker, SIGNAL(progress(int)), this, SLOT(passOTPProgressFurther(int)));
+  connect(worker, SIGNAL(progress(int)), this, SLOT(showOTPProgressInTray(int)));
+
+  thread_tray_populateOTP->start();
 }
 
 #include "mainwindow.h"
@@ -436,13 +446,15 @@ void Tray::generateMenuForStorageDevice() {
     }
 
 //    if (FALSE == SdCardNotErased) {
-    if (!status.SDFillWithRandomChars_u8) {
-      if (!status.VolumeActiceFlag_st.encrypted)
+    if (status.SDFillWithRandomChars_u8) { //filled randomly
+//      if (!status.VolumeActiceFlag_st.encrypted)
+      if (!status.ReadWriteFlagCryptedVolume_u8)
         trayMenu->addAction(Stick20ActionEnableCryptedVolume);
       else
         trayMenu->addAction(Stick20ActionDisableCryptedVolume);
 
-      if (!status.VolumeActiceFlag_st.hidden)
+//      if (!status.VolumeActiceFlag_st.hidden)
+      if (!status.ReadWriteFlagHiddenVolume_u8)
         trayMenu->addAction(Stick20ActionEnableHiddenVolume);
       else
         trayMenu->addAction(Stick20ActionDisableHiddenVolume);
@@ -511,8 +523,6 @@ void Tray::generateMenuForStorageDevice() {
 //      trayMenu->addAction(Stick20ActionDebugAction);
 //    }
 
-    // Setup OTP combo box
-    //  generateComboBoxEntrys();
   }
 }
 
@@ -553,6 +563,18 @@ void Tray::generateMenuPasswordSafe() {
 
 void Tray::regenerateMenu() {
   generateMenu(false);
+}
+
+void Tray::passOTPProgressFurther(int i) {
+  emit progress(i);
+}
+
+void Tray::showOTPProgressInTray(int i) {
+  static const QString &s = trayMenuPasswdSubMenu->title();
+  if (i!=100)
+    trayMenuPasswdSubMenu->setTitle(s +" ("+ QString::number(i) + "%)");
+  else
+    trayMenuPasswdSubMenu->setTitle(s);
 }
 
 
