@@ -16,8 +16,8 @@ private:
 
   Authentication * auth_admin;
   Authentication * auth_user;
-  bool CryptedVolumeActive;
-  bool HiddenVolumeActive;
+  bool CryptedVolumeActive = false;
+  bool HiddenVolumeActive = false;
   bool NormalVolumeRWActive;
   bool HiddenVolumeAccessable;
   bool StickNotInitated;

@@ -73,6 +73,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
     const auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
     m->unlock_encrypted_volume(s.data());
+    CryptedVolumeActive = true;
     emit storageStatusChanged();
   }
 }
@@ -88,6 +89,7 @@ void StorageActions::startStick20DisableCryptedVolume() {
     local_sync();
     auto m = nitrokey::NitrokeyManager::instance();
     m->lock_device();
+    CryptedVolumeActive = false;
     emit storageStatusChanged();
   }
 }
@@ -118,6 +120,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
 
     auto m = nitrokey::NitrokeyManager::instance();
     m->unlock_hidden_volume(s.data());
+    HiddenVolumeActive = true;
     emit storageStatusChanged();
   }
 }
@@ -133,6 +136,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
 //  stick20SendCommand(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, password);
   auto m = nitrokey::NitrokeyManager::instance();
   m->lock_device(); //FIXME disable volume instead of locking the device
+  HiddenVolumeActive = false;
   emit storageStatusChanged();
 }
 
@@ -151,6 +155,8 @@ void StorageActions::startLockDeviceAction() {
 
   auto m = nitrokey::NitrokeyManager::instance();
   m->lock_device();
+  HiddenVolumeActive = false;
+  CryptedVolumeActive = false;
   emit storageStatusChanged();
 
 }

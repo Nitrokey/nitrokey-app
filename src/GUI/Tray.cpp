@@ -487,7 +487,7 @@ void Tray::generateMenuForStorageDevice() {
     // active
 
 //    if (FALSE == SdCardNotErased)
-    if (FALSE == status.SDFillWithRandomChars_u8)
+    if (status.SDFillWithRandomChars_u8)
       trayMenuSubConfigure->addAction(Stick20ActionSetupHiddenVolume);
 
     trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
