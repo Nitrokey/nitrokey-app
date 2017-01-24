@@ -26,6 +26,7 @@
 #include <QValidator>
 #include <QMutex>
 #include <climits>
+#include <src/GUI/StorageActions.h>
 #include "hotpslot.h"
 #include "GUI/Tray.h"
 #include "GUI/Clipboard.h"
@@ -35,6 +36,8 @@
 namespace Ui {
 class MainWindow;
 }
+
+class Tray;
 
 typedef struct {
   int FlagDebug;
@@ -61,10 +64,11 @@ protected:
 private:
     Q_DISABLE_COPY(MainWindow);
 
-    Tray tray;
-    Clipboard clipboard;
     Authentication auth_admin;
     Authentication auth_user;
+    StorageActions storage;
+    Tray tray;
+    Clipboard clipboard;
 
     bool validate_secret(const char *secret) const;
     void initialTimeReset(int ret);
@@ -85,17 +89,7 @@ private:
   int PWS_Access;
   int PWS_CreatePWSize;
 
-  uint64_t currentTime;
-  bool Stick20ScSdCardOnline;
-  bool CryptedVolumeActive;
   bool PasswordSafeEnabled;
-  bool HiddenVolumeActive;
-  bool NormalVolumeRWActive;
-  bool HiddenVolumeAccessable;
-  bool StickNotInitated;
-  bool SdCardNotErased;
-  bool SdCardNotErased_DontAsk;
-  bool StickNotInitated_DontAsk;
   bool set_initial_time;
 
 
@@ -122,26 +116,13 @@ public slots:
   void getTOTPDialog(int slot);
   void getHOTPDialog(int slot);
   void PWS_ExceClickedSlot(int Slot);
-  void startStick20DestroyCryptedVolume(int fillSDWithRandomChars);
-  void startStick20FillSDCardWithRandomChars();
-  void startStick20EnableCryptedVolume();
-  void startStick20DisableCryptedVolume();
-  void startStick20EnableHiddenVolume();
-  void startStick20DisableHiddenVolume();
-  void startLockDeviceAction();
   void startStick20ActionChangeUserPIN();
   void startStick20ActionChangeAdminPIN();
-  void startStick20SetReadOnlyUncryptedVolume();
-  void startStick20SetReadWriteUncryptedVolume();
-  void startStick20LockStickHardware();
-  void startStick20EnableFirmwareUpdate();
-  void startStick20ExportFirmwareToFile();
-  void startResetUserPassword();
-  void startStick20DebugAction();
-  void startStick20ClearNewSdCardFound();
-  void startStick20SetupHiddenVolume();
-
   void startStick20ActionChangeUpdatePIN();
+  void startResetUserPassword();
+  void startLockDeviceAction();
+
+
 
 private slots:
   void generateComboBoxEntrys();
@@ -181,7 +162,6 @@ private slots:
   void on_checkBox_toggled(bool checked);
 
   void startStickDebug();
-  void startStick20GetStickStatus();
 
   void on_PWS_ButtonClearSlot_clicked();
   void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);

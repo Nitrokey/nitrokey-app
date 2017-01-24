@@ -28,11 +28,13 @@ signals:
 #include <QSystemTrayIcon>
 #include <QAction>
 #include <memory>
+#include "StorageActions.h"
+
 class Tray : public QObject {
 Q_OBJECT
 
 public:
-    Tray(QObject *_parent, bool _debug_mode, bool _extended_config);
+    Tray(QObject * _parent, bool _debug_mode, bool _extended_config, StorageActions *actions);
     virtual ~Tray();
     void showTrayMessage(QString message);
     void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type,
@@ -58,6 +60,7 @@ private:
     void createIndicator();
 
     QObject *main_window;
+    QObject *storageActions;
     bool debug_mode;
     bool ExtendedConfigActive;
 

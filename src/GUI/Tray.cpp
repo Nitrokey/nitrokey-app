@@ -12,9 +12,11 @@ TODO
 #include <libnitrokey/include/NitrokeyManager.h>
 #include <QMenu>
 
-Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config):
+Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
+           StorageActions *actions) :
     QObject(_parent), trayMenuPasswdSubMenu(nullptr), trayMenu(nullptr) {
   main_window = _parent;
+  storageActions = actions;
   debug_mode = _debug_mode;
   ExtendedConfigActive = _extended_config;
 
@@ -186,21 +188,21 @@ void Tray::initActionsForStick20() {
 
   Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), main_window);
   Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
-  connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20EnableCryptedVolume()));
 
   Stick20ActionDisableCryptedVolume = new QAction(tr("&Lock encrypted volume"), main_window);
   Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
-  connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20DisableCryptedVolume()));
 
   Stick20ActionEnableHiddenVolume = new QAction(tr("&Unlock hidden volume"), main_window);
   Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/harddrive.png"));
-  connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20EnableHiddenVolume()));
 
   Stick20ActionDisableHiddenVolume = new QAction(tr("&Lock hidden volume"), main_window);
-  connect(Stick20ActionDisableHiddenVolume, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionDisableHiddenVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20DisableHiddenVolume()));
 
   Stick20ActionChangeUserPIN = new QAction(tr("&Change User PIN"), main_window);
@@ -216,11 +218,11 @@ void Tray::initActionsForStick20() {
           SLOT(startStick20ActionChangeUpdatePIN()));
 
   Stick20ActionEnableFirmwareUpdate = new QAction(tr("&Enable firmware update"), main_window);
-  connect(Stick20ActionEnableFirmwareUpdate, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionEnableFirmwareUpdate, SIGNAL(triggered()), storageActions,
           SLOT(startStick20EnableFirmwareUpdate()));
 
   Stick20ActionExportFirmwareToFile = new QAction(tr("&Export firmware to file"), main_window);
-  connect(Stick20ActionExportFirmwareToFile, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionExportFirmwareToFile, SIGNAL(triggered()), storageActions,
           SLOT(startStick20ExportFirmwareToFile()));
 
   QSignalMapper *signalMapper_startStick20DestroyCryptedVolume =
@@ -236,38 +238,38 @@ void Tray::initActionsForStick20() {
   connect(Stick20ActionInitCryptedVolume, SIGNAL(triggered()),
           signalMapper_startStick20DestroyCryptedVolume, SLOT(map()));
 
-  connect(signalMapper_startStick20DestroyCryptedVolume, SIGNAL(mapped(int)), main_window,
+  connect(signalMapper_startStick20DestroyCryptedVolume, SIGNAL(mapped(int)), storageActions,
           SLOT(startStick20DestroyCryptedVolume(int)));
 
   Stick20ActionFillSDCardWithRandomChars =
       new QAction(tr("&Initialize storage with random data"), main_window);
-  connect(Stick20ActionFillSDCardWithRandomChars, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionFillSDCardWithRandomChars, SIGNAL(triggered()), storageActions,
           SLOT(startStick20FillSDCardWithRandomChars()));
 
   Stick20ActionSetReadonlyUncryptedVolume =
       new QAction(tr("&Set unencrypted volume read-only"), main_window);
-  connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionSetReadonlyUncryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20SetReadOnlyUncryptedVolume()));
 
   Stick20ActionSetReadWriteUncryptedVolume =
       new QAction(tr("&Set unencrypted volume read-write"), main_window);
-  connect(Stick20ActionSetReadWriteUncryptedVolume, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionSetReadWriteUncryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20SetReadWriteUncryptedVolume()));
 
   Stick20ActionDebugAction = new QAction(tr("&Debug"), main_window);
-  connect(Stick20ActionDebugAction, SIGNAL(triggered()), main_window, SLOT(startStick20DebugAction()));
+  connect(Stick20ActionDebugAction, SIGNAL(triggered()), storageActions, SLOT(startStick20DebugAction()));
 
   Stick20ActionSetupHiddenVolume = new QAction(tr("&Setup hidden volume"), main_window);
-  connect(Stick20ActionSetupHiddenVolume, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionSetupHiddenVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20SetupHiddenVolume()));
 
   Stick20ActionClearNewSDCardFound =
       new QAction(tr("&Disable 'initialize storage with random data' warning"), main_window);
-  connect(Stick20ActionClearNewSDCardFound, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionClearNewSDCardFound, SIGNAL(triggered()), storageActions,
           SLOT(startStick20ClearNewSdCardFound()));
 
   Stick20ActionLockStickHardware = new QAction(tr("&Lock stick hardware"), main_window);
-  connect(Stick20ActionLockStickHardware, SIGNAL(triggered()), main_window,
+  connect(Stick20ActionLockStickHardware, SIGNAL(triggered()), storageActions,
           SLOT(startStick20LockStickHardware()));
 
   Stick20ActionResetUserPassword = new QAction(tr("&Reset User PIN"), main_window);
@@ -435,14 +437,12 @@ void Tray::generateMenuForStorageDevice() {
 
 //    if (FALSE == SdCardNotErased) {
     if (!status.SDFillWithRandomChars_u8) {
-//      if (FALSE == CryptedVolumeActive)
-      if (status.VolumeActiceFlag_st.encrypted)
+      if (!status.VolumeActiceFlag_st.encrypted)
         trayMenu->addAction(Stick20ActionEnableCryptedVolume);
       else
         trayMenu->addAction(Stick20ActionDisableCryptedVolume);
 
-//      if (FALSE == HiddenVolumeActive)
-      if (status.VolumeActiceFlag_st.hidden)
+      if (!status.VolumeActiceFlag_st.hidden)
         trayMenu->addAction(Stick20ActionEnableHiddenVolume);
       else
         trayMenu->addAction(Stick20ActionDisableHiddenVolume);
@@ -465,7 +465,7 @@ void Tray::generateMenuForStorageDevice() {
     trayMenuSubConfigure->addSeparator();
 
     // Storage actions
-    if (status.ReadWriteFlagUncryptedVolume_u8)
+    if (!status.ReadWriteFlagUncryptedVolume_u8)
       trayMenuSubConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume); // Set
       // RW
       // active

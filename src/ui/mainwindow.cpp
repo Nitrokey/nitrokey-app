@@ -38,7 +38,6 @@
 #include "stick20hiddenvolumedialog.h"
 #include "stick20lockfirmwaredialog.h"
 #include "stick20responsedialog.h"
-#include "stick20updatedialog.h"
 #include "libada.h"
 
 #include <QDateTime>
@@ -48,18 +47,10 @@
 #include <QTimer>
 #include <QtWidgets>
 
-#ifdef Q_OS_LINUX
-#include "systemutils.h"
 #include "src/core/SecureString.h"
-#include <sys/mount.h> // for unmounting on linux
-#endif                 // Q_OS_LINUX
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-#include <unistd.h> //for sync syscall
-#endif              // Q_OS_LINUX || Q_OS_MAC
 
 #include <QString>
-#include <OwnSleep.h>
 #include <libnitrokey/include/NitrokeyManager.h>
 using nm = nitrokey::NitrokeyManager;
 
@@ -67,42 +58,6 @@ using nm = nitrokey::NitrokeyManager;
 /*******************************************************************************
  Local defines
 *******************************************************************************/
-
-void unmountEncryptedVolumes() {
-// TODO check will this work also on Mac
-#if defined(Q_OS_LINUX)
-  std::string endev = systemutils::getEncryptedDevice();
-  if (endev.size() < 1)
-    return;
-  std::string mntdir = systemutils::getMntPoint(endev);
-//  if (DebugingActive == TRUE)
-    qDebug() << "Unmounting " << mntdir.c_str();
-  // TODO polling with MNT_EXPIRE? test which will suit better
-  // int err = umount2("/dev/nitrospace", MNT_DETACH);
-  int err = umount(mntdir.c_str());
-  if (err != 0) {
-//    if (DebugingActive == TRUE)
-      qDebug() << "Unmount error: " << strerror(errno);
-  }
-#endif // Q_OS_LINUX
-}
-
-void local_sync() {
-  // TODO TEST unmount during/after big data transfer
-  fflush(NULL); // for windows, not necessarly needed or working
-#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
-  sync();
-#endif // Q_OS_LINUX || Q_OS_MAC
-  // manual says sync waits until it's done, but they
-  // are not guaranteeing will this save data integrity anyway,
-  // additional sleep should help
-  OwnSleep::sleep(2);
-  // unmount does sync on its own additionally (if successful)
-  unmountEncryptedVolumes();
-}
-
-#define LOCAL_PASSWORD_SIZE 40
-
 
 
 void MainWindow::InitState() {
@@ -126,8 +81,9 @@ void MainWindow::InitState() {
 //MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
-      tray(this, true, true), clipboard(this), auth_admin(this, Authentication::Type::ADMIN),
-      auth_user(this, Authentication::Type::USER),
+       clipboard(this), auth_admin(this, Authentication::Type::ADMIN),
+      auth_user(this, Authentication::Type::USER), storage(this, &auth_admin, &auth_user),
+      tray(this, true, true, &storage),
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
     PWS_Access = FALSE;
@@ -158,9 +114,6 @@ MainWindow::MainWindow(QWidget *parent)
   ui->PWS_EditSlotName->setValidator(
       new utf8FieldLengthValidator(PWS_SLOTNAME_LENGTH, ui->PWS_EditSlotName));
 }
-
-#define MAX_CONNECT_WAIT_TIME_IN_SEC 10
-
 
 void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
     switch (getStatus) {
@@ -293,6 +246,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::generateComboBoxEntrys() {
+  //FIXME run in separate thread
   int i;
 
   ui->slotComboBox->clear();
@@ -384,6 +338,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   toCopy = std::min(sizeof(encoded), (const size_t &) secretFromGUI.length());
   memcpy(encoded, secretFromGUI.constData(), toCopy);
 
+  //TODO use separate base32 encoding class
   base32_clean(encoded, sizeof(data), data);
   base32_decode(data, decoded, sizeof(decoded));
 
@@ -468,6 +423,9 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->counterEdit->setText("0");
 
   //TODO readout TOTP slot data
+  //TODO implement reading slot data in libnitrokey
+  //TODO move reading to separate thread
+
 //  QByteArray omp((char *)cryptostick->TOTPSlots[slotNo]->tokenID, 2);
 //  ui->ompEdit->setText(QString(omp));
 
@@ -643,133 +601,6 @@ void MainWindow::startAboutDialog() {
 }
 
 
-void MainWindow::startStick20EnableCryptedVolume() {
-  bool ret;
-  bool answer;
-
-  if (TRUE == HiddenVolumeActive) {
-    answer = csApplet()->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to "
-                                               "proceed?\nTo avoid data loss, please unmount the partitions before "
-                                               "proceeding."), false);
-    if (false == answer)
-      return;
-  }
-
-  PinDialog dialog(PinDialog::USER_PIN, this);
-  ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    local_sync();
-    const auto s = dialog.getPassword();
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->unlock_encrypted_volume(s.data());
-  }
-}
-
-void MainWindow::startStick20DisableCryptedVolume() {
-  if (TRUE == CryptedVolumeActive) {
-    bool answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
-                                               "proceed?\nTo avoid data loss, please unmount the partitions before "
-                                               "proceeding."), false);
-    if (false == answer)
-      return;
-
-    local_sync();
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->lock_device();
-  }
-}
-
-void MainWindow::startStick20EnableHiddenVolume() {
-  bool ret;
-  bool answer;
-
-  if (FALSE == CryptedVolumeActive) {
-      csApplet()->warningBox(tr("Please enable the encrypted volume first."));
-    return;
-  }
-
-  answer =
-          csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
-                                            "proceed?\nTo avoid data loss, please unmount the partitions before "
-                                            "proceeding."), true);
-  if (false == answer)
-    return;
-
-  PinDialog dialog(PinDialog::HIDDEN_VOLUME, this);
-  ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    local_sync();
-    // password[0] = 'P';
-    auto s = dialog.getPassword();
-
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->unlock_hidden_volume(s.data());
-  }
-}
-
-void MainWindow::startStick20DisableHiddenVolume() {
-  bool answer =
-          csApplet()->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to proceed?\nTo "
-                                            "avoid data loss, please unmount the partitions before proceeding."), true);
-  if (false == answer)
-    return;
-
-  local_sync();
-//  stick20SendCommand(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, password);
-  auto m = nitrokey::NitrokeyManager::instance();
-  m->lock_device();
-}
-
-void MainWindow::startLockDeviceAction() {
-  bool answer;
-
-  if ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive)) {
-    answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
-                                               "proceed?\nTo avoid data loss, please unmount the partitions before "
-                                               "proceeding."), true);
-    if (false == answer) {
-      return;
-    }
-    local_sync();
-  }
-
-  auto m = nitrokey::NitrokeyManager::instance();
-  m->lock_device();
-
-  PasswordSafeEnabled = FALSE;
-
-  tray.regenerateMenu();
-  tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
-}
-
-void MainWindow::startStick20EnableFirmwareUpdate() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-
-  bool ret;
-
-  UpdateDialog dialogUpdate(this);
-
-  ret = dialogUpdate.exec();
-  if (QDialog::Accepted != ret) {
-    return;
-  }
-
-  PinDialog dialog(PinDialog::FIRMWARE_PIN);
-  ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    // FIXME unmount all volumes and sync
-    //TODO get password
-//    dialog.getPassword((char *)password);
-
-    //TODO add firmware update logic
-//    stick20SendCommand(STICK20_CMD_ENABLE_FIRMWARE_UPDATE, password);
-//    auto m = nitrokey::NitrokeyManager::instance();
-//    m->enable_firmware_update();
-  }
-}
 
 void MainWindow::startStick10ActionChangeUserPIN() {
   DialogChangePassword dialog(this);
@@ -823,158 +654,6 @@ void MainWindow::startResetUserPassword() {
   dialog.exec();
 }
 
-void MainWindow::startStick20ExportFirmwareToFile() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-  bool ret;
-
-  PinDialog dialog(PinDialog::ADMIN_PIN);
-  ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    // password[0] = 'P';
-    auto s = dialog.getPassword();
-
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->export_firmware(s.data());
-  }
-}
-
-void MainWindow::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
-  int ret;
-  bool answer;
-
-  answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
-                                             "hidden volumes, and password safe! Continue?"), false);
-  if (true == answer) {
-      PinDialog dialog(PinDialog::ADMIN_PIN);
-
-      ret = dialog.exec();
-
-    if (QDialog::Accepted == ret) {
-      auto s = dialog.getPassword();
-
-      auto m = nitrokey::NitrokeyManager::instance();
-      m->build_aes_key(s.data());
-      if (fillSDWithRandomChars != 0) {
-        m->fill_SD_card_with_random_data(s.data());
-      }
-//      refreshStick20StatusData();
-    }
-  }
-}
-
-void MainWindow::startStick20FillSDCardWithRandomChars() {
-  bool ret;
-    PinDialog dialog(PinDialog::ADMIN_PIN);
-
-    ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    auto s = dialog.getPassword();
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->fill_SD_card_with_random_data(s.data());
-  }
-}
-
-void MainWindow::startStick20ClearNewSdCardFound() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-  bool ret;
-    PinDialog dialog(PinDialog::ADMIN_PIN);
-
-    ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    auto s = dialog.getPassword();
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->clear_new_sd_card_warning(s.data());
-  }
-}
-
-void MainWindow::startStick20GetStickStatus() {
-}
-
-void MainWindow::startStick20SetReadOnlyUncryptedVolume() {
-  bool ret;
-
-    PinDialog dialog(PinDialog::USER_PIN);
-
-    ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    const auto pass = dialog.getPassword();
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_only(pass.data());
-//    pass.safe_clear(); //TODO
-  }
-}
-
-void MainWindow::startStick20SetReadWriteUncryptedVolume() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-  bool ret;
-
-    PinDialog dialog(PinDialog::USER_PIN);
-
-    ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    const auto pass = dialog.getPassword();
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_write(pass.data());
-//    pass.safe_clear(); //TODO
-  }
-}
-
-void MainWindow::startStick20LockStickHardware() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-  bool ret;
-  stick20LockFirmwareDialog dialog(this);
-
-  ret = dialog.exec();
-  if (QDialog::Accepted == ret) {
-      PinDialog dialog(PinDialog::ADMIN_PIN);
-
-      ret = dialog.exec();
-
-    if (QDialog::Accepted == ret) {
-      const auto pass = dialog.getPassword();
-      auto m = nitrokey::NitrokeyManager::instance();
-//    pass.safe_clear(); //TODO
-// TODO     stick20SendCommand(STICK20_CMD_SEND_LOCK_STICK_HARDWARE, password);
-    }
-  }
-}
-
-void MainWindow::startStick20DebugAction() {
-}
-
-void MainWindow::startStick20SetupHiddenVolume() {
-  bool ret;
-  stick20HiddenVolumeDialog HVDialog(this);
-
-  if (FALSE == CryptedVolumeActive) {
-      csApplet()->warningBox(tr("Please enable the encrypted volume first."));
-    return;
-  }
-
-//FIXME this should be called from HVDialog
-  HVDialog.SdCardHighWatermark_Read_Min = 0;
-  HVDialog.SdCardHighWatermark_Read_Max = 100;
-  HVDialog.SdCardHighWatermark_Write_Min = 0;
-  HVDialog.SdCardHighWatermark_Write_Max = 100;
-//  ret = cryptostick->getHighwaterMarkFromSdCard(
-//      &HVDialog.SdCardHighWatermark_Write_Min, &HVDialog.SdCardHighWatermark_Write_Max,
-//      &HVDialog.SdCardHighWatermark_Read_Min, &HVDialog.SdCardHighWatermark_Read_Max);
-//  HVDialog.setHighWaterMarkText();
-  ret = HVDialog.exec();
-
-  if (true == ret) {
-    const auto d = HVDialog.HV_Setup_st;
-    auto p = std::string( reinterpret_cast< char const* >(d.HiddenVolumePassword_au8));
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
-                            d.EndBlockPercent_u8, p.data());
-  }
-}
 
 
 
@@ -1857,4 +1536,12 @@ void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
                                                     "Do you want to continue?"), false);
     ui->enableUserPasswordCheckBox->setChecked(answer);
   }
+}
+
+void MainWindow::startLockDeviceAction() {
+
+  PasswordSafeEnabled = FALSE;
+
+  tray.regenerateMenu();
+  tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
 }
