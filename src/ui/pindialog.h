@@ -56,7 +56,7 @@ public :
 
   void getPassword(char *text);
   void getPassword(QString &pin);
-  std::string && getPassword();
+  std::string getPassword();
   virtual int exec() override;
 
 private slots:

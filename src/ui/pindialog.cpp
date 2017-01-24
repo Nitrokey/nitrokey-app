@@ -84,10 +84,10 @@ void PinDialog::getPassword(QString &pin) {
   clearBuffers();
 }
 
-std::string && PinDialog::getPassword() {
+std::string PinDialog::getPassword() {
   std::string pin = ui->lineEdit->text().toStdString();
   clearBuffers();
-  return std::move(pin);
+  return pin;
 }
 
 void PinDialog::on_checkBox_toggled(bool checked) {
