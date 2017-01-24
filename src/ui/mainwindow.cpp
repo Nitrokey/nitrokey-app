@@ -406,6 +406,20 @@ void MainWindow::generateAllConfigs() {
 //  generateMenu(false);
 }
 
+void updateSlotConfig(const nitrokey::ReadSlot::ResponsePayload &p, Ui::MainWindow* ui)  {
+  ui->ompEdit->setText(QString((char *) p.slot_token_fields.omp));
+  ui->ttEdit->setText(QString((char *) p.slot_token_fields.tt));
+  ui->muiEdit->setText(QString((char *) p.slot_token_fields.mui));
+
+  if (p.use_8_digits)
+    ui->digits8radioButton->setChecked(true);
+  else
+    ui->digits6radioButton->setChecked(true);
+
+  ui->enterCheckBox->setChecked(p.use_enter);
+  ui->tokenIDCheckBox->setChecked(p.use_tokenID);
+}
+
 void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->label_5->setText(tr("TOTP length:"));
   ui->label_6->hide();
@@ -426,38 +440,26 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->tokenIDCheckBox->setChecked(false);
   ui->digits6radioButton->setChecked(true);
 
+  ui->ompEdit->setText("NK");
+  ui->ttEdit->setText("01");
+  static std::string cardSerial = nm::instance()->get_serial_number();
+  ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
+  ui->intervalSpinBox->setValue(30);
+
   //TODO readout TOTP slot data
   //TODO implement reading slot data in libnitrokey
   //TODO move reading to separate thread
 
   if (libada::i()->isTOTPSlotProgrammed(slotNo)) {
     auto p = nm::instance()->get_TOTP_slot_data(slotNo);
-
-    ui->ompEdit->setText(QString((char *) p.slot_token_fields.omp));
-    ui->ttEdit->setText(QString((char *) p.slot_token_fields.tt));
-    ui->muiEdit->setText(QString((char *) p.slot_token_fields.mui));
-
+    updateSlotConfig(p, ui);
     int interval = p.slot_counter;
     if (interval < 1) interval = 30;
     ui->intervalSpinBox->setValue(interval);
-
-    if (p.use_8_digits)
-      ui->digits8radioButton->setChecked(true);
-    else
-      ui->digits6radioButton->setChecked(true);
-
-    ui->enterCheckBox->setChecked(p.use_enter);
-    ui->tokenIDCheckBox->setChecked(p.use_tokenID);
   }
 
-  if (!libada::i()->isTOTPSlotProgrammed(slotNo)) {
-    ui->ompEdit->setText("NK");
-    ui->ttEdit->setText("01");
-    static std::string cardSerial = nm::instance()->get_serial_number();
-    ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
-    ui->intervalSpinBox->setValue(30);
-  }
 }
+
 
 void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->label_5->setText(tr("HOTP length:"));
@@ -472,49 +474,20 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->checkBox->setEnabled(false);
   ui->secretEdit->setPlaceholderText("********************************");
 
-  // slotNo=slotNo+0x10;
   ui->nameEdit->setText(QString::fromStdString(libada::i()->getHOTPSlotName(slotNo)));
-//  QByteArray secret((char *)cryptostick->HOTPSlots[slotNo]->secret, SECRET_LENGTH);
-//  ui->secretEdit->setText(secret); // .toHex());
 
   ui->base32RadioButton->setChecked(true);
+  static std::string cardSerial = nm::instance()->get_serial_number();
+  ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
+  ui->ompEdit->setText("NK");
+  ui->ttEdit->setText("01");
+  ui->counterEdit->setText(QString::number(0));
 
-  //TODO get data for HOTP slot
-
-//  if (libada::i()->isStorageDeviceConnected()) {
-//    QByteArray counter((char *)cryptostick->HOTPSlots[slotNo]->counter, 8);
-//    QString TextCount;
-//    TextCount = QString("%1").arg(counter.toInt());
-//    ui->counterEdit->setText(TextCount); // .toHex());
-//  } else {
-//    QString TextCount = QString("%1")
-//        .arg(cryptostick->HOTPSlots[slotNo]->interval); //use 64bit integer from counters union
-//    ui->counterEdit->setText(TextCount);
-//  }
-//
-//  QByteArray omp((char *)cryptostick->HOTPSlots[slotNo]->tokenID, 2);
-//  ui->ompEdit->setText(QString(omp));
-//
-//  QByteArray tt((char *)cryptostick->HOTPSlots[slotNo]->tokenID + 2, 2);
-//  ui->ttEdit->setText(QString(tt));
-//
-//  QByteArray mui((char *)cryptostick->HOTPSlots[slotNo]->tokenID + 4, 8);
-//  ui->muiEdit->setText(QString(mui));
-//
-//  if (cryptostick->HOTPSlots[slotNo]->config & (1 << 0))
-//    ui->digits8radioButton->setChecked(true);
-//  else
-//    ui->digits6radioButton->setChecked(true);
-
-//  ui->enterCheckBox->setChecked((cryptostick->HOTPSlots[slotNo]->config & (1 << 1)));
-
-//  ui->tokenIDCheckBox->setChecked((cryptostick->HOTPSlots[slotNo]->config & (1 << 2)));
-
-  if (!libada::i()->isHOTPSlotProgrammed(slotNo)) {
-    ui->ompEdit->setText("NK");
-    ui->ttEdit->setText("01");
-//    QByteArray cardSerial = QByteArray((char *)cryptostick->cardSerial).toHex();
-//    ui->muiEdit->setText(QString("%1").arg(QString(cardSerial), 8, '0'));
+  if (libada::i()->isHOTPSlotProgrammed(slotNo)) {
+    //FIXME use separate thread
+    auto p = nm::instance()->get_HOTP_slot_data(slotNo);
+    updateSlotConfig(p, ui);
+    ui->counterEdit->setText(QString::number(p.slot_counter));
   }
 }
 
@@ -535,7 +508,6 @@ void MainWindow::displayCurrentSlotConfig() {
     slotNo -= HOTP_SlotCount;
     displayCurrentTotpSlotConfig(slotNo);
   }
-
 }
 
 void MainWindow::displayCurrentGeneralConfig() {
@@ -547,7 +519,6 @@ void MainWindow::displayCurrentGeneralConfig() {
 
   ui->enableUserPasswordCheckBox->setChecked(status.enable_user_password != 0);
   ui->deleteUserPasswordCheckBox->setChecked(status.delete_user_password != 0);
-
 }
 
 void MainWindow::startConfiguration() {
