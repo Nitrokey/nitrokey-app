@@ -22,15 +22,33 @@ namespace AboutDialogUI{
         struct {
             int majorFirmwareVersion;
             int minorFirmwareVersion;
-            int sd_size_GB = 0;
             std::string cardSerial;
             int passwordRetryCount;
             int userPasswordRetryCount;
+          struct {
+            bool active;
+            struct {
+                bool plain;
+                bool encrypted;
+                bool hidden;
+                bool plain_RW;
+              bool encrypted_RW;
+              bool hidden_RW;
+            } volume_active;
+            struct{
+              int size_GB = 0;
+              bool is_new;
+              bool filled_with_random;
+              uint32_t id;
+            } sdcard;
+            bool keys_initiated;
+            uint8_t filled_with_random;
+          } storage;
         } devdata;
     public slots:
         void fetch_device_data();
     signals:
-        void finished();
+        void finished(bool connected);
     };
 }
 
@@ -52,7 +70,7 @@ class AboutDialog : public QDialog {
 private slots:
   void on_ButtonOK_clicked();
   void on_ButtonStickStatus_clicked();
-  void update_device_slots();
+  void update_device_slots(bool connected);
 
 private:
   std::shared_ptr<Ui::AboutDialog> ui;

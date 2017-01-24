@@ -32,7 +32,7 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->setupUi(this);
 
   connect(&worker_thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
-  connect(&worker, SIGNAL(finished()), this, SLOT(update_device_slots()));
+  connect(&worker, SIGNAL(finished(bool)), this, SLOT(update_device_slots(bool)));
   worker.moveToThread(&worker_thread);
   worker_thread.start();
 
@@ -295,10 +295,13 @@ void AboutDialog::showNoStickFound(void) {
 void AboutDialog::on_ButtonStickStatus_clicked() {
 }
 
+#include "libnitrokey/include/NitrokeyManager.h"
+using nm = nitrokey::NitrokeyManager;
+
 void Worker::fetch_device_data() {
   QMutexLocker lock(&mutex);
   if (!libada::i()->isDeviceConnected()) {
-    emit finished();
+    emit finished(false);
     return;
   }
 
@@ -306,23 +309,89 @@ void Worker::fetch_device_data() {
   devdata.userPasswordRetryCount = libada::i()->getUserPasswordRetryCount();
   devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
   devdata.minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
-  if (libada::i()->isStorageDeviceConnected()) {
-    devdata.sd_size_GB = libada::i()->getStorageSDCardSizeGB();
+  devdata.storage.active = libada::i()->isStorageDeviceConnected();
+  if (devdata.storage.active ) {
+    devdata.storage.sdcard.size_GB = libada::i()->getStorageSDCardSizeGB();
+    auto st = nm::instance()->get_status_storage(); //FIXME use libada?
+    devdata.storage.volume_active.plain = st.VolumeActiceFlag_st.unencrypted;
+    devdata.storage.volume_active.encrypted = st.VolumeActiceFlag_st.encrypted;
+    devdata.storage.volume_active.hidden = st.VolumeActiceFlag_st.hidden;
+    devdata.storage.volume_active.plain_RW = st.ReadWriteFlagUncryptedVolume_u8;
+    devdata.storage.volume_active.encrypted_RW = st.ReadWriteFlagCryptedVolume_u8;
+    devdata.storage.volume_active.hidden_RW = st.ReadWriteFlagHiddenVolume_u8;
+    devdata.storage.keys_initiated = !st.StickKeysNotInitiated;
+    devdata.storage.sdcard.is_new = st.NewSDCardFound_u8;
+    devdata.storage.sdcard.filled_with_random = st.SDFillWithRandomChars_u8;
+    devdata.storage.sdcard.id = st.ActiveSD_CardID_u32;
   }
   devdata.cardSerial = libada::i()->getCardSerial();
 
-  emit finished();
+  emit finished(true);
 }
 
 
-void AboutDialog::update_device_slots() {
+void AboutDialog::update_device_slots(bool connected) {
+  if(!connected){
+    showNoStickFound();
+    return;
+  }
+
   QMutexLocker lock(&worker.mutex);
   ui->admin_retry_label->setText(QString::number(worker.devdata.passwordRetryCount));
   ui->user_retry_label->setText(QString::number(worker.devdata.userPasswordRetryCount));
 
-  if (worker.devdata.sd_size_GB != 0){
-    QString capacity_text = QString(tr("%1 GB")).arg(worker.devdata.sd_size_GB);
+  if (worker.devdata.storage.active) {
+    QString capacity_text = QString(tr("%1 GB")).arg(worker.devdata.storage.sdcard.size_GB);
     ui->l_storage_capacity->setText(capacity_text);
+//    ui->hidden_volume_label->setText(worker.devdata.storage.volume_active.hidden ? "active" : "not active");
+//    ui->unencrypted_volume_label->setText(worker.devdata.storage.volume_active.hidden ? "active" : "not active");
+//    ui->encrypted_volume_label->setText(worker.devdata.storage.volume_active.hidden ? "active" : "not active");
+
+
+    if (!worker.devdata.storage.keys_initiated) {
+      showWarning();
+    } else {
+      hideWarning();
+    }
+
+//    if (worker.devdata.storage.firmware_locked) {
+      // OutputText.append (QString (tr ("      *** Firmware is locked ***
+      // ")).append ("\n"));
+//    }
+
+    if (worker.devdata.storage.sdcard.is_new) {
+      ui->newsd_label->show();
+    } else {
+      ui->newsd_label->hide();
+    }
+
+    if (!worker.devdata.storage.filled_with_random) {
+      ui->not_erased_sd_label->show();
+    } else {
+      ui->not_erased_sd_label->hide();
+    }
+
+    if (worker.devdata.storage.volume_active.plain_RW) {
+      ui->unencrypted_volume_label->setText(tr("READ/WRITE"));
+    } else {
+      ui->unencrypted_volume_label->setText(tr("READ ONLY"));
+    }
+
+    if (worker.devdata.storage.volume_active.hidden_RW) { //FIXME check correctness (.hidden not working?)
+      ui->hidden_volume_label->setText(tr("Active"));
+    } else {
+      ui->hidden_volume_label->setText(tr("Not active"));
+      if (worker.devdata.storage.volume_active.encrypted_RW) { //FIXME check correctness (as above)
+        ui->encrypted_volume_label->setText(tr("Active"));
+      } else {
+        ui->encrypted_volume_label->setText(tr("Not active"));
+      }
+    }
+
+    ui->sd_id_label->setText(
+        QString("0x").append(QString::number(worker.devdata.storage.sdcard.id, 16)));
+
+//    ui->DeviceStatusLabel->setText(OutputText);
   }
   ui->firmwareLabel->setText(QString::number(worker.devdata.majorFirmwareVersion)
                                  .append(".")
@@ -335,4 +404,7 @@ void AboutDialog::update_device_slots() {
   ui->l_storage_capacity->setEnabled(true);
   ui->firmwareLabel->setEnabled(true);
   ui->serialEdit->setEnabled(true);
+  this->resize(0, 0);
+  this->adjustSize();
+  this->updateGeometry();
 }
