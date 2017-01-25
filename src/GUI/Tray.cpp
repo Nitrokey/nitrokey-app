@@ -20,9 +20,6 @@ Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
   debug_mode = _debug_mode;
   ExtendedConfigActive = _extended_config;
 
-
-
-
   createIndicator();
   initActionsForStick10();
   initActionsForStick20();
@@ -62,7 +59,7 @@ void Tray::showTrayMessage(QString message) {
 void Tray::showTrayMessage(const QString &title, const QString &msg,
                                  enum trayMessageType type, int timeout) {
   qDebug() << msg;
-  if (TRUE == trayIcon->supportsMessages()) {
+  if (trayIcon->supportsMessages()) {
     switch (type) {
       case INFORMATION:
         trayIcon->showMessage(title, msg, QSystemTrayIcon::Information, timeout);
@@ -314,6 +311,10 @@ void Tray::generatePasswordMenu() {
   trayMenu->addMenu(trayMenuPasswdSubMenu);
   trayMenu->addSeparator();
 
+  if (thread_tray_populateOTP!= nullptr){
+    thread_tray_populateOTP->quit();
+//    thread_tray_populateOTP->wait();
+  }
   thread_tray_populateOTP = std::make_shared<QThread>();
   tray_Worker *worker = new tray_Worker;
   worker->moveToThread(thread_tray_populateOTP.get());
@@ -552,13 +553,13 @@ int Tray::UpdateDynamicMenuEntrys(void) {
 }
 
 void Tray::generateMenuPasswordSafe() {
-//  if (FALSE == cryptostick->passwordSafeUnlocked) {
-//    {
-//      trayMenu->addAction(UnlockPasswordSafeAction);
-//
-//      UnlockPasswordSafeAction->setEnabled(true == cryptostick->passwordSafeAvailable);
-//    }
-//  }
+  auto passwordSafeUnlocked = false; // cryptostick->passwordSafeUnlocked;
+  if (!passwordSafeUnlocked) {
+      trayMenu->addAction(UnlockPasswordSafeAction);
+
+      auto passwordSafeAvailable = true;
+      UnlockPasswordSafeAction->setEnabled(passwordSafeAvailable);
+  }
 }
 
 void Tray::regenerateMenu() {
