@@ -76,7 +76,7 @@ void MainWindow::InitState() {
 //  SdCardNotErased_DontAsk = FALSE;
 //  StickNotInitated_DontAsk = FALSE;
 
-  PWS_Access = FALSE;
+  PWS_Access = false;
   PWS_CreatePWSize = 12;
 }
 
@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
       tray(this, true, true, &storage),
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
-    PWS_Access = FALSE;
+    PWS_Access = false;
   nitrokey::NitrokeyManager::instance()->connect();
 
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
@@ -950,19 +950,17 @@ void MainWindow::checkTextEdited() {
 }
 
 void MainWindow::SetupPasswordSafeConfig(void) {
-  int ret;
-
   int i;
 
   QString Slotname;
 
   ui->PWS_ComboBoxSelectSlot->clear();
-  PWS_Access = FALSE;
+  PWS_Access = false;
 
   // Get active password slots
   const auto no_err = false; //TODO ERR_NO_ERROR == ret;
   if (libada::i()->isPasswordSafeUnlocked()) {
-    PWS_Access = TRUE;
+    PWS_Access = true;
     // Setup combobox
     for (i = 0; i < PWS_SLOT_COUNT; i++) {
       if (libada::i()->getPWSSlotStatus(i)) {
@@ -981,29 +979,15 @@ void MainWindow::SetupPasswordSafeConfig(void) {
     ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("Unlock password safe")));
   }
 
-  if (TRUE == PWS_Access) {
-    ui->PWS_ButtonEnable->hide();
-    ui->PWS_ButtonSaveSlot->setEnabled(TRUE);
-    ui->PWS_ButtonClearSlot->setEnabled(TRUE);
-
-    ui->PWS_ComboBoxSelectSlot->setEnabled(TRUE);
-    ui->PWS_EditSlotName->setEnabled(TRUE);
-    ui->PWS_EditLoginName->setEnabled(TRUE);
-    ui->PWS_EditPassword->setEnabled(TRUE);
-    ui->PWS_CheckBoxHideSecret->setEnabled(TRUE);
-    ui->PWS_ButtonCreatePW->setEnabled(TRUE);
-  } else {
-    ui->PWS_ButtonEnable->show();
-    ui->PWS_ButtonSaveSlot->setDisabled(TRUE);
-    ui->PWS_ButtonClearSlot->setDisabled(TRUE);
-
-    ui->PWS_ComboBoxSelectSlot->setDisabled(TRUE);
-    ui->PWS_EditSlotName->setDisabled(TRUE);
-    ui->PWS_EditLoginName->setDisabled(TRUE);
-    ui->PWS_EditPassword->setDisabled(TRUE);
-    ui->PWS_CheckBoxHideSecret->setDisabled(TRUE);
-    ui->PWS_ButtonCreatePW->setDisabled(TRUE);
-  }
+  (true == PWS_Access ? ui->PWS_ButtonEnable->hide() : ui->PWS_ButtonEnable->show());
+  ui->PWS_ButtonSaveSlot->setEnabled(PWS_Access);
+  ui->PWS_ButtonClearSlot->setEnabled(PWS_Access);
+  ui->PWS_ComboBoxSelectSlot->setEnabled(PWS_Access);
+  ui->PWS_EditSlotName->setEnabled(PWS_Access);
+  ui->PWS_EditLoginName->setEnabled(PWS_Access);
+  ui->PWS_EditPassword->setEnabled(PWS_Access);
+  ui->PWS_CheckBoxHideSecret->setEnabled(PWS_Access);
+  ui->PWS_ButtonCreatePW->setEnabled(PWS_Access);
 
   ui->PWS_EditSlotName->setMaxLength(PWS_SLOTNAME_LENGTH);
   ui->PWS_EditPassword->setMaxLength(PWS_PASSWORD_LENGTH);
@@ -1020,8 +1004,6 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
   }
 
   int Slot;
-  unsigned int ret;
-  QMessageBox msgBox;
 
   Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
   if (libada::i()->getPWSSlotStatus(Slot)) // Is slot active?
@@ -1048,7 +1030,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   QString OutputText;
 
-  if (FALSE == PWS_Access) {
+  if (false == PWS_Access) {
     return;
   }
 
