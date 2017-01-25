@@ -1282,42 +1282,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     return libada::i()->getHOTPCode(slotNumber - 0x10, tempPassword.toLatin1().data());
   }
   return 0;
-//  uint8_t result[18] = {0};
-//  uint32_t code;
-//  uint8_t config;
-//  int ret;
-//  int ok;
-//  uint16_t lastInterval = 30;
-//
-//    translateDeviceStatusToUserMessage(cryptostick->getStatus());
-//  bool is_OTP_PIN_protected = cryptostick->otpPasswordConfig[0] == 1;
-//  if (is_OTP_PIN_protected) {
-//    if (!cryptostick->validUserPassword) {
-//      cryptostick->getUserPasswordRetryCount();
-//
-//      PinDialog dialog(tr("Enter card user PIN"), tr("User PIN:"), cryptostick, PinDialog::PLAIN,
-//                       PinDialog::USER_PIN);
-//      ok = dialog.exec();
-//      QString password;
-//      dialog.getPassword(password);
-//
-//      if (cryptostick->is_nkpro_07_rtm1()) {
-//        nkpro_user_PIN = password;
-//      }
-//
-//      if (QDialog::Accepted == ok) {
-//        userAuthenticate(password);
-//      }
-//      overwrite_string(password);
-//      if (QDialog::Accepted != ok) {
-//        return 1; // user does not click OK button
-//      }
-//    } else { // valid user password
-//      if (cryptostick->is_nkpro_07_rtm1()) {
-//        userAuthenticate(nkpro_user_PIN);
-//      }
-//    }
-//  }
+
 //  if (is_OTP_PIN_protected && ok == QDialog::Accepted && !cryptostick->validUserPassword) {
 //      csApplet()->warningBox(tr("Invalid password!"));
 //    return 1;
@@ -1364,24 +1329,6 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
 //      );
 //      return ret;
 //  }
-//  code = result[0] + (result[1] << 8) + (result[2] << 16) + (result[3] << 24);
-//  config = result[4];
-//
-//  QString output;
-//  if (config & (1 << 0)) {
-//    code = code % 100000000;
-//    output.append(QString("%1").arg(QString::number(code), 8, '0'));
-//  } else {
-//    code = code % 1000000;
-//    output.append(QString("%1").arg(QString::number(code), 6, '0'));
-//  }
-//
-//  otpInClipboard = output;
-//  copyToClipboard(otpInClipboard);
-//  if (DebugingActive)
-//    qDebug() << otpInClipboard;
-//
-  return 0;
 }
 
 
