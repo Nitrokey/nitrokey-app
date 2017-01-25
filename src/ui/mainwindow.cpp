@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
       tray(this, true, true, &storage),
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
-    PWS_Access = false;
+  PWS_Access = false;
   nitrokey::NitrokeyManager::instance()->connect();
 
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
@@ -579,23 +579,6 @@ void MainWindow::startAboutDialog() {
   dialog.exec();
 }
 
-
-
-void MainWindow::startStick10ActionChangeUserPIN() {
-  DialogChangePassword dialog(this);
-  dialog.setModal(TRUE);
-  dialog.PasswordKind = STICK10_PASSWORD_KIND_USER;
-  dialog.InitData();
-  dialog.exec();
-}
-
-void MainWindow::startStick10ActionChangeAdminPIN() {
-  DialogChangePassword dialog(this);
-  dialog.setModal(TRUE);
-  dialog.PasswordKind = STICK10_PASSWORD_KIND_ADMIN;
-  dialog.InitData();
-  dialog.exec();
-}
 
 void MainWindow::startStick20ActionChangeUpdatePIN() {
   DialogChangePassword dialog(this);

@@ -161,11 +161,11 @@ void Tray::initActionsForStick10() {
 
   Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), main_window);
   connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), main_window,
-          SLOT(startStick10ActionChangeUserPIN()));
+          SLOT(startStick20ActionChangeUserPIN()));
 
   Stick10ActionChangeAdminPIN = new QAction(tr("&Change Admin PIN"), main_window);
   connect(Stick10ActionChangeAdminPIN, SIGNAL(triggered()), main_window,
-          SLOT(startStick10ActionChangeAdminPIN()));
+          SLOT(startStick20ActionChangeAdminPIN()));
 }
 
 void Tray::initCommonActions() {

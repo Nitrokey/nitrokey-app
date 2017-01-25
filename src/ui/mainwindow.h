@@ -104,8 +104,6 @@ private:
 
 public slots:
   void startAboutDialog();
-  void startStick10ActionChangeUserPIN();
-  void startStick10ActionChangeAdminPIN();
   void startConfiguration();
   void PWS_Clicked_EnablePWSAccess();
   char *getFactoryResetMessage(int retCode);
