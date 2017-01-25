@@ -1269,10 +1269,10 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     QString tempPassword;
 
     if(status.enable_user_password != 0){
-        if(!auth_admin.authenticate()){
+        if(!auth_user.authenticate()){
             return 0; //TODO throw
         }
-        tempPassword = auth_admin.getTempPassword();
+        tempPassword = auth_user.getTempPassword();
     }
   //TODO authentication here
   if (slotNumber>=0x20){
