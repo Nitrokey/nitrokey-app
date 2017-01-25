@@ -208,7 +208,7 @@ bool libada::is_secret320_supported() {
 }
 
 int libada::getTOTPCode(int i, const char *string) {
-  return nm::instance()->get_TOTP_code(i, 0, 0, 0, string);
+  return nm::instance()->get_TOTP_code(i, string);
 }
 
 int libada::getHOTPCode(int i, const char *string) {
