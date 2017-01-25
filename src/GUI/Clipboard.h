@@ -14,7 +14,7 @@ class Clipboard : public QObject
 Q_OBJECT
 public:
     Clipboard(QObject *parent);
-    void copyToClipboard(QString text, int time=10);
+    void copyToClipboard(QString text, int time=60);
 
     virtual ~Clipboard();
 
