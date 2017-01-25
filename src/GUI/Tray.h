@@ -38,8 +38,8 @@ public:
     Tray(QObject * _parent, bool _debug_mode, bool _extended_config, StorageActions *actions);
     virtual ~Tray();
     void showTrayMessage(QString message);
-    void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type,
-                         int timeout);
+    void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type = INFORMATION,
+                         int timeout = TRAY_MSG_TIMEOUT);
   public slots:
     void regenerateMenu();
 
