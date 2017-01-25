@@ -49,10 +49,10 @@ public:
     std::string getCardSerial();
     std::string getTOTPSlotName(const int i);
     std::string getHOTPSlotName(const int i);
-    int getTOTPCode(int i, char *string);
-    int getHOTPCode(int i, char *string);
-    int eraseHOTPSlot(const int i, char *string);
-    int eraseTOTPSlot(const int i, char *string);
+    int getTOTPCode(int i, const char *string);
+    int getHOTPCode(int i, const char *string);
+    int eraseHOTPSlot(const int i, const char *string);
+    int eraseTOTPSlot(const int i, const char *string);
 
     std::string getPWSSlotName(const int i);
     bool getPWSSlotStatus(const int i);

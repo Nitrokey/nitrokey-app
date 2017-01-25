@@ -461,8 +461,7 @@ void Tray::generateMenuForStorageDevice() {
         trayMenu->addAction(Stick20ActionDisableHiddenVolume);
     }
 
-//    if (FALSE != (HiddenVolumeActive || CryptedVolumeActive || PasswordSafeEnabled))
-    const auto PasswordSafeEnabled = false; //FIXME
+    const auto PasswordSafeEnabled = libada::i()->isPasswordSafeUnlocked();
     if (FALSE != (status.VolumeActiceFlag_st.hidden || status.VolumeActiceFlag_st.encrypted || PasswordSafeEnabled))
       trayMenu->addAction(LockDeviceAction);
 
@@ -553,12 +552,14 @@ int Tray::UpdateDynamicMenuEntrys(void) {
 }
 
 void Tray::generateMenuPasswordSafe() {
-  auto passwordSafeUnlocked = false; // cryptostick->passwordSafeUnlocked;
+  auto passwordSafeUnlocked = libada::i()->isPasswordSafeUnlocked();
   if (!passwordSafeUnlocked) {
       trayMenu->addAction(UnlockPasswordSafeAction);
 
-      auto passwordSafeAvailable = true;
+      auto passwordSafeAvailable = libada::i()->isPasswordSafeAvailable();
       UnlockPasswordSafeAction->setEnabled(passwordSafeAvailable);
+  } else {
+    trayMenu->addAction(LockDeviceAction);
   }
 }
 

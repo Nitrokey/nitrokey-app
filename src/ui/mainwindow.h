@@ -87,7 +87,6 @@ private:
   bool PWS_Access;
   int PWS_CreatePWSize;
 
-  bool PasswordSafeEnabled;
   bool set_initial_time;
 
 
@@ -121,6 +120,10 @@ public slots:
   void startLockDeviceAction();
   void updateProgressBar(int i);
 
+  signals:
+    void PWS_unlocked();
+    void PWS_slot_saved();
+    void DeviceLocked();
 
 private slots:
   void generateComboBoxEntrys();
@@ -143,13 +146,7 @@ private slots:
   void on_enableUserPasswordCheckBox_toggled(bool checked);
   void on_writeGeneralConfigButton_clicked();
 
-    void checkTextEdited();
-
-  // START - OTP Test Routine --------------------------------
-  /*
-     void on_testHOTPButton_clicked(); void on_testTOTPButton_clicked(); */
-  // END - OTP Test Routine ----------------------------------
-
+  void checkTextEdited();
 
   // Functions for password safe
   void SetupPasswordSafeConfig(void);
@@ -176,7 +173,7 @@ private slots:
 
 
 public:
-    void on_enableUserPasswordCheckBox_clicked(bool checked);
+  void on_enableUserPasswordCheckBox_clicked(bool checked);
   void generateOTPConfig(OTPSlot *slot) const;
   int get_supported_secret_length_base32() const;
   int get_supported_secret_length_hex() const;

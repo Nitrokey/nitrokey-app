@@ -121,7 +121,7 @@ bool libada::getPWSSlotStatus(const int i) {
 }
 
 void libada::erasePWSSlot(const int i) {
-
+  nm::instance()->erase_password_safe_slot(i);
 }
 
 int libada::getStorageSDCardSizeGB() {
@@ -155,11 +155,19 @@ bool libada::isStorageDeviceConnected() const throw() {
 }
 
 bool libada::isPasswordSafeAvailable() {
-  return false;
+  return true;
 }
 
 bool libada::isPasswordSafeUnlocked() {
-  return false;
+  try{
+    nm::instance()->get_password_safe_slot_status();
+    return true;
+  }
+  catch (CommandFailedException &e){
+    if (e.last_command_status == 5) //FIXME magic number change to not authorized
+      return false;
+    throw;
+  }
 }
 
 bool libada::isTOTPSlotProgrammed(const int i) {
@@ -190,25 +198,27 @@ void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword)
 }
 
 bool libada::is_nkpro_07_rtm1() {
+  //TODO
   return true;
 }
 
 bool libada::is_secret320_supported() {
+  //TODO
   return false;
 }
 
-int libada::getTOTPCode(int i, char *string) {
+int libada::getTOTPCode(int i, const char *string) {
   return nm::instance()->get_TOTP_code(i, 0, 0, 0, string);
 }
 
-int libada::getHOTPCode(int i, char* string) {
+int libada::getHOTPCode(int i, const char *string) {
   return nm::instance()->get_HOTP_code(i, string);
 }
 
-int libada::eraseHOTPSlot(const int i, char *string) {
+int libada::eraseHOTPSlot(const int i, const char *string) {
   return nm::instance()->erase_hotp_slot(i, string);
 }
 
-int libada::eraseTOTPSlot(const int i, char *string) {
+int libada::eraseTOTPSlot(const int i, const char *string) {
   return nm::instance()->erase_totp_slot(i, string);
 }

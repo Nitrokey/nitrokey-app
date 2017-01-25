@@ -92,6 +92,9 @@ MainWindow::MainWindow(QWidget *parent)
   nitrokey::NitrokeyManager::instance()->connect();
 
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(PWS_unlocked()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(PWS_slot_saved()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(DeviceLocked()), &tray, SLOT(regenerateMenu()));
   connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
 
   ui->setupUi(this);
@@ -331,6 +334,7 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
 
 
 void MainWindow::generateOTPConfig(OTPSlot *slot) const {
+  //TODO to rewrite
   QByteArray secretFromGUI = this->ui->secretEdit->text().toLatin1();
 
   uint8_t encoded[128] = {};
@@ -851,6 +855,7 @@ void MainWindow::getHOTPDialog(int slot) {
 }
 
 void MainWindow::getTOTPDialog(int slot) {
+  //FIXME check time and allow user to synchronize
   auto OTPcode = getNextCode(0x20 + slot);
   clipboard.copyToClipboard(QString::number(OTPcode));
 
@@ -961,6 +966,8 @@ void MainWindow::SetupPasswordSafeConfig(void) {
   const auto no_err = false; //TODO ERR_NO_ERROR == ret;
   if (libada::i()->isPasswordSafeUnlocked()) {
     PWS_Access = true;
+    emit PWS_unlocked();
+
     // Setup combobox
     for (i = 0; i < PWS_SLOT_COUNT; i++) {
       if (libada::i()->getPWSSlotStatus(i)) {
@@ -1003,22 +1010,20 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
       return;
   }
 
-  int Slot;
-
-  Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
-  if (libada::i()->getPWSSlotStatus(Slot)) // Is slot active?
+  const int slot_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
+  if (libada::i()->getPWSSlotStatus(slot_number)) // Is slot active?
   {
     try{
-      libada::i()->erasePWSSlot(Slot);
+      libada::i()->erasePWSSlot(slot_number);
 
       ui->PWS_EditSlotName->setText("");
       ui->PWS_EditPassword->setText("");
       ui->PWS_EditLoginName->setText("");
       ui->PWS_ComboBoxSelectSlot->setItemText(
-          Slot, QString("Slot ").append(QString::number(Slot + 1, 10)));
+          slot_number, QString("Slot ").append(QString::number(slot_number + 1)));
       csApplet()->messageBox(tr("Slot has been erased successfully."));
     }
-    catch (std::exception &e){
+    catch (CommandFailedException &e){
       csApplet()->warningBox(tr("Can't clear slot."));
     }
   } else
@@ -1026,22 +1031,21 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
 
 //  tray.regenerateMenu();
   //FIXME emit tray regenerate menu signal
+  emit PWS_slot_saved();
 }
 
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   QString OutputText;
 
-  if (false == PWS_Access) {
+  if (!PWS_Access) {
     return;
   }
 
   // Slot already used ?
   if (libada::i()->getPWSSlotStatus(index)) {
     ui->PWS_EditSlotName->setText(QString::fromStdString(libada::i()->getPWSSlotName(index)));
-
-    //TODO
-//    ui->PWS_EditPassword->setText((QString)(char *)cryptostick->passwordSafePassword);
-//    ui->PWS_EditLoginName->setText((QString)(char *)cryptostick->passwordSafeLoginName);
+    ui->PWS_EditPassword->setText(QString::fromStdString(nm::instance()->get_password_safe_slot_password(index)));
+    ui->PWS_EditLoginName->setText(QString::fromStdString(nm::instance()->get_password_safe_slot_login(index)));
   } else {
     ui->PWS_EditSlotName->setText("");
     ui->PWS_EditPassword->setText("");
@@ -1054,50 +1058,29 @@ void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked) {
 }
 
 void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
-//  int Slot;
-//  int ret;
-//
-//  uint8_t SlotName[PWS_SLOTNAME_LENGTH + 1];
-//  uint8_t LoginName[PWS_LOGINNAME_LENGTH + 1];
-//  uint8_t Password[PWS_PASSWORD_LENGTH + 1];
-//
-//  QMessageBox msgBox;
-//
-//  Slot = ui->PWS_ComboBoxSelectSlot->currentIndex();
-//
-//  STRNCPY((char *)SlotName, sizeof(SlotName), ui->PWS_EditSlotName->text().toUtf8(),
-//          PWS_SLOTNAME_LENGTH);
-//  SlotName[PWS_SLOTNAME_LENGTH] = 0;
-//  if (0 == strlen((char *)SlotName)) {
-//      csApplet()->warningBox(tr("Please enter a slotname."));
-//    return;
-//  }
-//
-//  STRNCPY((char *)LoginName, sizeof(LoginName), ui->PWS_EditLoginName->text().toUtf8(),
-//          PWS_LOGINNAME_LENGTH);
-//  LoginName[PWS_LOGINNAME_LENGTH] = 0;
-//
-//  STRNCPY((char *)Password, sizeof(Password), ui->PWS_EditPassword->text().toUtf8(),
-//          PWS_PASSWORD_LENGTH);
-//  Password[PWS_PASSWORD_LENGTH] = 0;
-//  if (0 == strlen((char *)Password)) {
-//      csApplet()->warningBox(tr("Please enter a password."));
-//    return;
-//  }
-//
-//  ret = cryptostick->setPasswordSafeSlotData_1(Slot, (uint8_t *)SlotName, (uint8_t *)Password);
-//  if (ERR_NO_ERROR != ret) {
-//    msgBox.setText(tr("Can't save slot. %1").arg(ret));
-//    msgBox.exec();
-//    return;
-//  }
-//
-//  ret = cryptostick->setPasswordSafeSlotData_2(Slot, (uint8_t *)LoginName);
-//  if (ERR_NO_ERROR != ret) {
-//      csApplet()->warningBox(tr("Can't save slot."));
-//    return;
-//  }
-//
+
+  int slot_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
+  if(ui->PWS_EditSlotName->text().isEmpty()){
+    csApplet()->warningBox(tr("Please enter a slotname."));
+    return;
+  }
+  if(ui->PWS_EditPassword->text().isEmpty()){
+    csApplet()->warningBox(tr("Please enter a password."));
+    return;
+  }
+
+  try{
+    nm::instance()->write_password_safe_slot(slot_number,
+       ui->PWS_EditSlotName->text().toUtf8().constData(),
+       ui->PWS_EditLoginName->text().toUtf8().constData(),
+       ui->PWS_EditPassword->text().toUtf8().constData());
+    csApplet()->messageBox(tr("Slot successfully written."));
+    emit PWS_slot_saved();
+  }
+  catch (CommandFailedException &e){
+    csApplet()->messageBox(tr("Can't save slot. %1").arg(e.last_command_status));
+  }
+
 //  cryptostick->passwordSafeStatus[Slot] = TRUE;
 //  STRCPY((char *)cryptostick->passwordSafeSlotNames[Slot],
 //         sizeof(cryptostick->passwordSafeSlotNames[Slot]), (char *)SlotName);
@@ -1122,6 +1105,8 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       if(user_password.empty()) return;
       nm::instance()->enable_password_safe(user_password.c_str());
       csApplet()->warningBox(tr("Password safe unlocked"));
+      PWS_Access = true;
+      emit PWS_unlocked();
       return;
     }
     catch (CommandFailedException &e){
@@ -1134,7 +1119,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       if(e.reason_wrong_password()){
         //show message if wrong password
         csApplet()->warningBox(tr("Wrong user password."));
-      } else if (e.last_command_status == 0xa){
+      } else if (e.last_command_status == 0xa){ // FIXME move status code to exception class
         //generate keys if not generated
         try{
           nm::instance()->build_aes_key(auth_admin.getPassword().c_str());
@@ -1177,9 +1162,9 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   //TODO authentication here
   if (slotNumber>=0x20){
       //FIXME set correct time on stick
-    return libada::i()->getTOTPCode(slotNumber - 0x20, tempPassword.toLatin1().data());
+    return libada::i()->getTOTPCode(slotNumber - 0x20, tempPassword.toLatin1().constData());
   } else {
-    return libada::i()->getHOTPCode(slotNumber - 0x10, tempPassword.toLatin1().data());
+    return libada::i()->getHOTPCode(slotNumber - 0x10, tempPassword.toLatin1().constData());
   }
   return 0;
 
@@ -1356,11 +1341,9 @@ void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
 }
 
 void MainWindow::startLockDeviceAction() {
-
-  PasswordSafeEnabled = FALSE;
-
-  tray.regenerateMenu();
+  PWS_Access = false;
   tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
+  emit DeviceLocked();
 }
 
 void MainWindow::updateProgressBar(int i) {
