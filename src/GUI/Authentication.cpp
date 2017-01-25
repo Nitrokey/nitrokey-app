@@ -14,6 +14,18 @@ Authentication::Authentication(QObject *parent, Type _type) : QObject(parent), t
     tempPassword.clear();
 }
 
+std::string Authentication::getPassword() {
+  const auto pinType = type==ADMIN? PinDialog::ADMIN_PIN : PinDialog::USER_PIN;
+  PinDialog dialog(pinType);
+
+  int ok = dialog.exec();
+  if (ok != QDialog::Accepted) {
+    return "";
+  }
+
+  return dialog.getPassword();
+}
+
 bool Authentication::authenticate(){
 //  qDebug() << tempPassword.toLatin1().toHex();
   bool authenticationSuccess = false;
@@ -44,7 +56,17 @@ bool Authentication::authenticate(){
 
     //slot receiving signal
     try{
-      nm::instance()->first_authenticate(password.c_str(), tempPassword.toLatin1().constData());
+      switch (pinType){
+        case PinDialog::USER_PIN:
+          nm::instance()->user_authenticate(password.c_str(), tempPassword.toLatin1().constData());
+          break;
+        case PinDialog::ADMIN_PIN:
+          nm::instance()->first_authenticate(password.c_str(), tempPassword.toLatin1().constData());
+          break;
+        default:
+          break;
+      }
+
       //FIXME securedelete password
       authenticationValidUntilTime = getCurrentTime() + validation_period;
 //      tempPassword = tempPasswordLocal;

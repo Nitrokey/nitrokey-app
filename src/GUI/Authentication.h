@@ -17,6 +17,7 @@ public:
     Authentication(QObject *parent, Type _type);
     bool authenticate();
     const QString getTempPassword();
+    std::string getPassword();
 private:
     Q_DISABLE_COPY(Authentication);
     quint64 authenticationValidUntilTime;
