@@ -58,8 +58,7 @@ public:
     bool getPWSSlotStatus(const int i);
     void erasePWSSlot(const int i);
 
-    int getStorageInfoData();
-    int getStorageSDCardSizeGB();
+  int getStorageSDCardSizeGB();
 
     int setUserPIN();
     int setAdminPIN();

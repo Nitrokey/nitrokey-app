@@ -97,21 +97,31 @@ std::string libada::getHOTPSlotName(const int i) {
 }
 
 std::string libada::getPWSSlotName(const int i) {
-  return "";
-  return nm::instance()->get_password_safe_slot_name(i);
+  static QMutex mut;
+  QMutexLocker locker(&mut);
+  static QCache<int, std::string> cache;
+  if (cache.contains(i)){
+    return *cache[i];
+  }
+  try{
+    const auto slot_name = nm::instance()->get_password_safe_slot_name(i);
+    cache.insert(i, new std::string(slot_name));
+  }
+  catch (CommandFailedException &e){
+    if (!e.reason_slot_not_programmed()) //FIXME correct reason
+      throw;
+    cache.insert(i, new std::string("(empty)"));
+  }
+  return *cache[i];
 }
 
 bool libada::getPWSSlotStatus(const int i) {
-  return false;
-  return nm::instance()->get_password_safe_slot_status()[i];
+  static auto status = nm::instance()->get_password_safe_slot_status();
+  return status[i];
 }
 
 void libada::erasePWSSlot(const int i) {
 
-}
-
-int libada::getStorageInfoData() {
-  return 0;
 }
 
 int libada::getStorageSDCardSizeGB() {

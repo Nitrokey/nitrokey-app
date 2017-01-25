@@ -84,9 +84,7 @@ private:
   const unsigned char HOTP_SlotCount;
   const unsigned char TOTP_SlotCount;
 
-  void getSlotNames();
-
-  int PWS_Access;
+  bool PWS_Access;
   int PWS_CreatePWSize;
 
   bool PasswordSafeEnabled;
@@ -155,7 +153,6 @@ private slots:
 
   // Functions for password safe
   void SetupPasswordSafeConfig(void);
-  char *PWS_GetSlotName(int Slot);
 
   void on_eraseButton_clicked();
   void on_randomSecretButton_clicked();

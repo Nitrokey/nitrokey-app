@@ -1024,7 +1024,8 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
   } else
       csApplet()->messageBox(tr("Slot is erased already."));
 
-  tray.regenerateMenu();
+//  tray.regenerateMenu();
+  //FIXME emit tray regenerate menu signal
 }
 
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
@@ -1111,138 +1112,55 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
 //  csApplet()->messageBox(tr("Slot successfully written."));
 }
 
-char *MainWindow::PWS_GetSlotName(int Slot) {
-//  if (0 == strlen((char *)cryptostick->passwordSafeSlotNames[Slot])) {
-//    cryptostick->getPasswordSafeSlotName(Slot);
-//
-//    STRCPY((char *)cryptostick->passwordSafeSlotNames[Slot],
-//           sizeof(cryptostick->passwordSafeSlotNames[Slot]),
-//           (char *)cryptostick->passwordSafeSlotName);
-//  }
-//  return ((char *)cryptostick->passwordSafeSlotNames[Slot]);
-}
 
 void MainWindow::on_PWS_ButtonClose_pressed() { hide(); }
 
 void MainWindow::PWS_Clicked_EnablePWSAccess() {
-//  uint8_t password[LOCAL_PASSWORD_SIZE];
-//  bool ret;
-//  int ret_s32;
-//
-//  QMessageBox msgBox;
-//  PasswordDialog dialog(FALSE, this);
-//
-//  cryptostick->getUserPasswordRetryCount();
-//  dialog.init((char *)(tr("Enter user PIN").toUtf8().data()),
-//              HID_Stick20Configuration_st.UserPwRetryCount);
-//  dialog.cryptostick = cryptostick;
-//
-//  ret = dialog.exec();
-//
-//  if (QDialog::Accepted == ret) {
-//    dialog.getPassword((char *)password);
-//
-//    ret_s32 = cryptostick->isAesSupported((uint8_t *)&password[1]);
-//
-//    if (CMD_STATUS_OK == ret_s32) // AES supported, continue
-//    {
-//      cryptostick->passwordSafeAvailable = TRUE;
-//      UnlockPasswordSafeAction->setEnabled(true);
-//
-//      // Continue to unlocking password safe
-//      ret_s32 = cryptostick->passwordSafeEnable((char *)&password[1]);
-//
-//      if (ERR_NO_ERROR != ret_s32) {
-//        switch (ret_s32) {
-//        case CMD_STATUS_AES_DEC_FAILED:
-//          uint8_t admin_password[SECRET_LENGTH_HEX];
-//          cryptostick->getUserPasswordRetryCount();
-//          dialog.init((char *)(tr("Enter admin PIN").toUtf8().data()),
-//                      HID_Stick20Configuration_st.UserPwRetryCount);
-//          dialog.cryptostick = cryptostick;
-//          ret = dialog.exec();
-//
-//          if (QDialog::Accepted == ret) {
-//            dialog.getPassword((char *)admin_password);
-//
-//            ret_s32 = cryptostick->buildAesKey((uint8_t *)&(admin_password[1]));
-//
-//            if (CMD_STATUS_OK != ret_s32) {
-//              if (CMD_STATUS_WRONG_PASSWORD == ret_s32)
-//                msgBox.setText(tr("Wrong password"));
-//              else
-//                msgBox.setText(tr("Unable to create new AES key"));
-//
-//              msgBox.exec();
-//            } else {
-//              Sleep::msleep(3000);
-//              cryptostick->passwordSafeEnable((char *)&password[1]);
-//            }
-//          }
-//
-//          break;
-//        default:
-//            csApplet()->warningBox(tr("Can't unlock password safe."));
-//          break;
-//        }
-//      } else {
-//        PasswordSafeEnabled = TRUE;
-//        showTrayMessage("Nitrokey App", tr("Password Safe unlocked successfully."), INFORMATION,
-//                        TRAY_MSG_TIMEOUT);
-//        SetupPasswordSafeConfig();
-//        generateMenu();
-//        ui->tabWidget->setTabEnabled(3, 1);
-//      }
-//    } else {
-//      if (CMD_STATUS_NOT_SUPPORTED == ret_s32) // AES NOT supported
-//      {
-//        // Mark password safe as disabled feature
-//        cryptostick->passwordSafeAvailable = FALSE;
-//        UnlockPasswordSafeAction->setEnabled(false);
-//          csApplet()->warningBox(tr("Password safe is not supported by this device."));
-//        generateMenu();
-//        ui->tabWidget->setTabEnabled(3, 0);
-//      } else {
-//        if (CMD_STATUS_WRONG_PASSWORD == ret_s32) // Wrong password
-//        {
-//            csApplet()->warningBox(tr("Wrong user password."));
-//        }
-//      }
-//      return;
-//    }
-//  }
+  do{
+    try{
+      auto user_password = auth_user.getPassword();
+      if(user_password.empty()) return;
+      nm::instance()->enable_password_safe(user_password.c_str());
+      csApplet()->warningBox(tr("Password safe unlocked"));
+      return;
+    }
+    catch (CommandFailedException &e){
+      //emit pw safe not available if not available
+  //    cryptostick->passwordSafeAvailable = FALSE;
+  //    UnlockPasswordSafeAction->setEnabled(false);
+  //    csApplet()->warningBox(tr("Password safe is not supported by this device."));
+  //    ui->tabWidget->setTabEnabled(3, 0);
+
+      if(e.reason_wrong_password()){
+        //show message if wrong password
+        csApplet()->warningBox(tr("Wrong user password."));
+      } else if (e.last_command_status == 0xa){
+        //generate keys if not generated
+        try{
+          nm::instance()->build_aes_key(auth_admin.getPassword().c_str());
+        } catch (CommandFailedException &e){
+          if (e.reason_wrong_password())
+            csApplet()->warningBox(tr("Wrong admin password."));
+          else {
+            csApplet()->warningBox(tr("Can't unlock password safe."));
+          }
+        }
+      } else {
+        //otherwise
+        csApplet()->warningBox(tr("Can't unlock password safe."));
+      }
+    }
+  } while (true);
 }
 
 void MainWindow::PWS_ExceClickedSlot(int Slot) {
-//  QString password_safe_password;
-//
-//  QString MsgText_1;
-//
-//  int ret_s32;
-//
-//  ret_s32 = cryptostick->getPasswordSafeSlotPassword(Slot);
-//  if (ERR_NO_ERROR != ret_s32) {
-//      csApplet()->warningBox(tr("Pasword safe: Can't get password"));
-//    return;
-//  }
-//  password_safe_password.append((char *)cryptostick->passwordSafePassword);
-//
-//  PWSInClipboard = password_safe_password;
-//  copyToClipboard(password_safe_password);
-//
-//  memset(cryptostick->passwordSafePassword, 0, sizeof(cryptostick->passwordSafePassword));
-//
-//  if (TRUE == trayIcon->supportsMessages()) {
-//    password_safe_password =
-//        QString(tr("Password safe [%1]").arg((char *)cryptostick->passwordSafeSlotNames[Slot]));
-//    MsgText_1 = QString("Password has been copied to clipboard");
-//
-//    showTrayMessage(password_safe_password, MsgText_1, INFORMATION, TRAY_MSG_TIMEOUT);
-//  } else {
-//    password_safe_password = QString("Password safe [%1] has been copied to clipboard")
-//                                 .arg((char *)cryptostick->passwordSafeSlotNames[Slot]);
-//      csApplet()->messageBox(password_safe_password);
-//  }
+  //TODO check assumptions - slot is not empty and PWS is active
+  auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
+  clipboard.copyToClipboard(slot_password);
+  QString password_safe_slot_info =
+    QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
+  QString title = QString("Password has been copied to clipboard");
+  tray.showTrayMessage(title, password_safe_slot_info);
 }
 
 #include "GUI/Authentication.h"
@@ -1319,27 +1237,22 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
   "()=?[]{}~*+#_'-`,.;:><^|@\\"
 
 void MainWindow::on_PWS_ButtonCreatePW_clicked() {
-  int i;
-
+  //FIXME generate in separate class
   int n;
-
   int PasswordCharSpaceLen;
-
   char RandomPassword[30];
-
   const char *PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
-
   QString Text;
 
   PasswordCharSpaceLen = strlen(PasswordCharSpace);
 
   PWS_CreatePWSize = 20;
-  for (i = 0; i < PWS_CreatePWSize; i++) {
+  for (int i = 0; i < PWS_CreatePWSize; i++) {
     n = qrand();
     n = n % PasswordCharSpaceLen;
     RandomPassword[i] = PasswordCharSpace[n];
   }
-  RandomPassword[i] = 0;
+  RandomPassword[PWS_CreatePWSize-1] = 0;
 
   Text = RandomPassword;
   ui->PWS_EditPassword->setText(Text.toLocal8Bit());
