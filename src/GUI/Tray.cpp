@@ -313,7 +313,7 @@ void Tray::generatePasswordMenu() {
 
   if (thread_tray_populateOTP!= nullptr){
     thread_tray_populateOTP->quit();
-//    thread_tray_populateOTP->wait();
+    thread_tray_populateOTP->wait();
   }
   thread_tray_populateOTP = std::make_shared<QThread>();
   tray_Worker *worker = new tray_Worker;
