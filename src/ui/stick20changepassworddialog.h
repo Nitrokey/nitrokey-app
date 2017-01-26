@@ -20,13 +20,12 @@
 #ifndef DIALOGCHANGEPASSWORD_H
 #define DIALOGCHANGEPASSWORD_H
 
-#define STICK20_PASSWORD_KIND_USER 0
-#define STICK20_PASSWORD_KIND_ADMIN 1
-#define STICK20_PASSWORD_KIND_RESET_USER 2
-#define STICK10_PASSWORD_KIND_USER 3
-#define STICK10_PASSWORD_KIND_ADMIN 4
-#define STICK10_PASSWORD_KIND_RESET_USER 5
-#define STICK20_PASSWORD_KIND_UPDATE 6
+ enum class PasswordKind {
+     USER,
+     ADMIN,
+     RESET_USER,
+     UPDATE
+ };
 
 #include <QDialog>
 
@@ -35,37 +34,29 @@ class DialogChangePassword;
 }
 
 class DialogChangePassword : public QDialog {
-  Q_OBJECT public :
+  Q_OBJECT
+  public :
     const static int minimumPasswordLength =
                         6; // FIXME extract constant to global config
-  explicit DialogChangePassword(QWidget *parent = 0);
+  explicit DialogChangePassword(QWidget *parent, PasswordKind _kind);
   ~DialogChangePassword();
 
   void InitData(void);
+  virtual int exec() override;
 
-    virtual int exec();
-
-    int PasswordKind;
 
 private slots:
   void on_checkBox_clicked(bool checked);
 
 private:
-  bool _changePassword();
+  PasswordKind kind;
   Ui::DialogChangePassword *ui;
+  bool _changePassword();
   void accept(void);
   void UpdatePasswordRetry(void);
-  bool SendNewPassword(void);
-  bool Stick10ChangePassword(void);
-  bool ResetUserPassword(void);
-  bool ResetUserPasswordStick10(void);
-  bool Stick20ChangeUpdatePassword(void);
-  int CheckResponse(bool NoStopFlag);
   void clearFields();
-
-    void UI_deviceNotInitialized() const;
-
-    void moveWindowToCenter();
+  void UI_deviceNotInitialized() const;
+  void moveWindowToCenter();
 };
 
 #endif // DIALOGCHANGEPASSWORD_H

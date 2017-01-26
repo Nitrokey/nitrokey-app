@@ -581,41 +581,28 @@ void MainWindow::startAboutDialog() {
 
 
 void MainWindow::startStick20ActionChangeUpdatePIN() {
-  DialogChangePassword dialog(this);
-  dialog.setModal(TRUE);
-  dialog.PasswordKind = STICK20_PASSWORD_KIND_UPDATE;
+  DialogChangePassword dialog(this, PasswordKind::UPDATE);
   dialog.InitData();
   dialog.exec();
 }
 
 void MainWindow::startStick20ActionChangeUserPIN() {
-  DialogChangePassword dialog(this);
-  dialog.setModal(TRUE);
-  dialog.PasswordKind = STICK20_PASSWORD_KIND_USER;
+  DialogChangePassword dialog(this, PasswordKind::USER);
   dialog.InitData();
   dialog.exec();
 }
 
 void MainWindow::startStick20ActionChangeAdminPIN() {
-  DialogChangePassword dialog(this);
-  dialog.setModal(TRUE);
-  dialog.PasswordKind = STICK20_PASSWORD_KIND_ADMIN;
+  DialogChangePassword dialog(this, PasswordKind::ADMIN);
   dialog.InitData();
   dialog.exec();
 }
 
 void MainWindow::startResetUserPassword() {
-  DialogChangePassword dialog(this);
-  dialog.setModal(TRUE);
-  if (libada::i()->isStorageDeviceConnected())
-    dialog.PasswordKind = STICK20_PASSWORD_KIND_RESET_USER;
-  else
-    dialog.PasswordKind = STICK10_PASSWORD_KIND_RESET_USER;
-
+  DialogChangePassword dialog(this, PasswordKind::RESET_USER);
   dialog.InitData();
   dialog.exec();
 }
-
 
 
 

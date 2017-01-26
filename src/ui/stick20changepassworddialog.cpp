@@ -26,8 +26,8 @@
 #include "libnitrokey/include/NitrokeyManager.h"
 using nm = nitrokey::NitrokeyManager;
 
-DialogChangePassword::DialogChangePassword(QWidget *parent)
-    : QDialog(parent), ui(new Ui::DialogChangePassword) {
+DialogChangePassword::DialogChangePassword(QWidget *parent, PasswordKind _kind)
+    : QDialog(parent), ui(new Ui::DialogChangePassword), kind(_kind) {
   ui->setupUi(this);
 
   ui->lineEdit_OldPW->setEchoMode(QLineEdit::Password);
@@ -41,7 +41,7 @@ DialogChangePassword::DialogChangePassword(QWidget *parent)
   ui->lineEdit_NewPW_2->setMaxLength(STICK20_PASSOWRD_LEN);
 
   ui->lineEdit_OldPW->setFocus();
-  PasswordKind = 0;
+  setModal(true);
 }
 
 DialogChangePassword::~DialogChangePassword() { delete ui; }
@@ -51,22 +51,19 @@ void DialogChangePassword::UpdatePasswordRetry() {
   int retryCount = 0;
   // update password retry values
 
-  switch (PasswordKind) {
-  case STICK20_PASSWORD_KIND_USER:
-  case STICK10_PASSWORD_KIND_USER:
+  switch (kind) {
+    case PasswordKind::USER:
     retryCount = libada::i()->getUserPasswordRetryCount();
     noTrialsLeft = tr("Unfortunately you have no more trials left. Please use 'Reset User PIN' "
                       "option from menu to reset password");
     break;
-  case STICK20_PASSWORD_KIND_ADMIN:
-  case STICK10_PASSWORD_KIND_ADMIN:
-  case STICK20_PASSWORD_KIND_RESET_USER:
-  case STICK10_PASSWORD_KIND_RESET_USER:
+    case PasswordKind::ADMIN:
+    case PasswordKind::RESET_USER:
     retryCount = libada::i()->getPasswordRetryCount();
     noTrialsLeft = tr("Unfortunately you have no more trials left. Please check instruction how to "
                       "reset Admin password.");
     break;
-  case STICK20_PASSWORD_KIND_UPDATE:
+    case PasswordKind::UPDATE:
     // FIXME add firmware counter
     retryCount = 99;
     ui->retryCount->hide();
@@ -105,7 +102,7 @@ void DialogChangePassword::InitData(void) {
   int minimumPasswordLengthAdmin = 8;
   QString text = ui->label_additional_information->text();
   text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
-  if (PasswordKind == STICK20_PASSWORD_KIND_UPDATE) {
+  if (kind == PasswordKind::UPDATE) {
     text += QString("<i>") + tr("Once the firmware password is forgotten the Nitrokey can't be "
                                 "updated or reset. Don't lose your firmware password, please.") +
             QString("</i>");
@@ -114,35 +111,32 @@ void DialogChangePassword::InitData(void) {
 
   this->UpdatePasswordRetry();
 
-  switch (PasswordKind) {
-  case STICK20_PASSWORD_KIND_USER:
-  case STICK10_PASSWORD_KIND_USER:
-    this->setWindowTitle(tr("Set User PIN"));
-    ui->label_2->setText(tr("Current User PIN:"));
-    ui->label_3->setText(tr("New User PIN:"));
-    ui->label_4->setText(tr("New User PIN:"));
-    break;
-  case STICK20_PASSWORD_KIND_ADMIN:
-  case STICK10_PASSWORD_KIND_ADMIN:
-    this->setWindowTitle(tr("Set Admin PIN"));
-    ui->label_2->setText(tr("Current Admin PIN:"));
-    ui->label_3->setText(tr("New Admin PIN:"));
-    ui->label_4->setText(tr("New Admin PIN:"));
-    break;
-  case STICK20_PASSWORD_KIND_RESET_USER:
-  case STICK10_PASSWORD_KIND_RESET_USER:
-    this->setWindowTitle(tr("Reset User PIN"));
-    ui->label_2->setText(tr("Admin PIN:"));
-    ui->label_3->setText(tr("New User PIN:"));
-    ui->label_4->setText(tr("New User PIN:"));
-    break;
-  case STICK20_PASSWORD_KIND_UPDATE:
-    this->setWindowTitle(tr("Change Firmware Password"));
-    ui->label_2->setText(tr("Current Firmware Password:"));
-    ui->label_3->setText(tr("New Firmware Password:"));
-    ui->label_4->setText(tr("New Firmware Password:"));
-    ui->checkBox->setText(tr("Show password"));
-    break;
+  switch (kind) {
+    case PasswordKind::USER:
+      this->setWindowTitle(tr("Set User PIN"));
+      ui->label_2->setText(tr("Current User PIN:"));
+      ui->label_3->setText(tr("New User PIN:"));
+      ui->label_4->setText(tr("New User PIN:"));
+      break;
+    case PasswordKind::ADMIN:
+      this->setWindowTitle(tr("Set Admin PIN"));
+      ui->label_2->setText(tr("Current Admin PIN:"));
+      ui->label_3->setText(tr("New Admin PIN:"));
+      ui->label_4->setText(tr("New Admin PIN:"));
+      break;
+    case PasswordKind::RESET_USER:
+      this->setWindowTitle(tr("Reset User PIN"));
+      ui->label_2->setText(tr("Admin PIN:"));
+      ui->label_3->setText(tr("New User PIN:"));
+      ui->label_4->setText(tr("New User PIN:"));
+      break;
+    case PasswordKind::UPDATE:
+      this->setWindowTitle(tr("Change Firmware Password"));
+      ui->label_2->setText(tr("Current Firmware Password:"));
+      ui->label_3->setText(tr("New Firmware Password:"));
+      ui->label_4->setText(tr("New Firmware Password:"));
+      ui->checkBox->setText(tr("Show password"));
+      break;
   }
 }
 
@@ -152,37 +146,24 @@ void DialogChangePassword::moveWindowToCenter() {// center the password window
       QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), desktop->availableGeometry()));
 }
 
-int DialogChangePassword::CheckResponse(bool NoStopFlag) {
-//  Stick20ResponseTask ResponseTask(this, cryptostick, NULL);
-//  if (FALSE == NoStopFlag) {
-//    ResponseTask.NoStopWhenStatusOK();
-//  }
-//  ResponseTask.GetResponse();
-//  return (ResponseTask.ResultValue);
-  //TODO implement waiting for results
-}
-
 bool DialogChangePassword::_changePassword(void) {
   QByteArray PasswordString, PasswordStringNew;
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
   PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
 
   try {
-    switch (PasswordKind) {
-      case STICK20_PASSWORD_KIND_USER:
+    switch (kind) {
+      case PasswordKind::USER:
         nm::instance()->change_user_PIN(PasswordString.constData(), PasswordStringNew.constData());
         break;
-      case STICK20_PASSWORD_KIND_ADMIN:
+      case PasswordKind::ADMIN:
         nm::instance()->change_admin_PIN(PasswordString.constData(), PasswordStringNew.constData());
         break;
-      case STICK20_PASSWORD_KIND_UPDATE:
+      case PasswordKind::UPDATE:
         nm::instance()->change_update_password(PasswordString.constData(), PasswordStringNew.constData());
         break;
-      case STICK20_PASSWORD_KIND_RESET_USER:
+      case PasswordKind::RESET_USER:
         nm::instance()->unlock_user_password(PasswordString.constData(), PasswordStringNew.constData());
-        break;
-      default:
-        throw std::runtime_error("Not supported");
         break;
     }
     csApplet()->messageBox(tr("New password is set"));
@@ -197,54 +178,6 @@ bool DialogChangePassword::_changePassword(void) {
 
   return false;
 }
-
-
-bool DialogChangePassword::SendNewPassword(void) {
-  return _changePassword();
-}
-
-//
-//// FIXME code doubles SendNewPassword
-//bool DialogChangePassword::ResetUserPassword(void) {
-//  QByteArray PasswordString, PasswordStringNewUser;
-//  PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-//  PasswordStringNewUser = ui->lineEdit_NewPW_1->text().toLatin1();
-//
-//  try{
-//    nm::instance()->unlock_user_password(PasswordString.constData(),
-//                                         PasswordStringNewUser.constData());
-////    csApplet()->messageBox(tr("User PIN successfully unblocked"));
-//    csApplet()->messageBox(tr("New User password is set"));
-//    return true;
-//  }
-//  catch (CommandFailedException &e){
-//    if(!e.reason_wrong_password()){
-//      csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
-//      throw;
-//      return false;
-//    }
-//    csApplet()->warningBox(tr("Current Admin password is not correct. Please retry."));
-//  }
-//  return false;
-//}
-//
-//bool DialogChangePassword::Stick20ChangeUpdatePassword(void) {
-//  QByteArray PasswordString = ui->lineEdit_OldPW->text().toLatin1();
-//  QByteArray PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
-//  try{
-//    nm::instance()->change_update_password(PasswordString.constData(), PasswordStringNew.constData());
-//    csApplet()->warningBox(tr("Password has been changed with success!"));
-//    return true;
-//  }
-//  catch (CommandFailedException &e){
-//    if(!e.reason_wrong_password()){
-//      csApplet()->warningBox(tr("There was a problem during communicating with device. Please retry."));
-//      throw;
-//      return false;
-//    }
-//  }
-//  return false;
-//}
 
 void DialogChangePassword::accept() {
   // Check the length of the old password
@@ -292,25 +225,6 @@ void DialogChangePassword::accept() {
     return;
   }
 
-//  bool success = false;
-  // Send password to Stick 2.0
-//  switch (PasswordKind) {
-//  case STICK20_PASSWORD_KIND_USER:
-//  case STICK20_PASSWORD_KIND_ADMIN:
-//  case STICK10_PASSWORD_KIND_USER:
-//  case STICK10_PASSWORD_KIND_ADMIN:
-//    success = SendNewPassword();
-//    break;
-//  case STICK20_PASSWORD_KIND_RESET_USER:
-//  case STICK10_PASSWORD_KIND_RESET_USER:
-//    success = ResetUserPassword();
-//    break;
-//  case STICK20_PASSWORD_KIND_UPDATE:
-//    success = Stick20ChangeUpdatePassword();
-//    break;
-//  default:
-//    break;
-//  }
   bool success = _changePassword();
 
   if (success) {
