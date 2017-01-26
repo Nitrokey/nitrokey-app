@@ -44,7 +44,7 @@ public:
 
     int getMajorFirmwareVersion();
     int getMinorFirmwareVersion();
-    int getPasswordRetryCount();
+    int getAdminPasswordRetryCount();
     int getUserPasswordRetryCount();
     std::string getCardSerial();
     std::string getTOTPSlotName(const int i);

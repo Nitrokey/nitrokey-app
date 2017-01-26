@@ -36,7 +36,7 @@ int libada::getMinorFirmwareVersion() {
   return nm::instance()->get_minor_firmware_version();
 }
 
-int libada::getPasswordRetryCount() {
+int libada::getAdminPasswordRetryCount() {
   if (nm::instance()->is_connected())
     return nm::instance()->get_admin_retry_count();
   return 99;

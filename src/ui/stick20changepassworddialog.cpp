@@ -58,7 +58,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
     break;
     case PasswordKind::ADMIN:
     case PasswordKind::RESET_USER:
-    retryCount = libada::i()->getPasswordRetryCount();
+    retryCount = libada::i()->getAdminPasswordRetryCount();
     noTrialsLeft = tr("Unfortunately you have no more trials left. Please check instruction how to "
                       "reset Admin password.");
     break;
@@ -179,10 +179,9 @@ bool DialogChangePassword::_changePassword(void) {
 
 void DialogChangePassword::accept() {
   // Check the length of the old password
+  QString OutputText;
   if (minimumPasswordLength > ui->lineEdit_OldPW->text().toLatin1().length()) {
     clearFields();
-    QString OutputText;
-
     OutputText = tr("The minimum length of the old password is ") +
                  QString("%1").arg(minimumPasswordLength) + tr(" chars");
 
@@ -201,8 +200,6 @@ void DialogChangePassword::accept() {
   // obsolete since input field max length is set
   if (STICK20_PASSOWRD_LEN < ui->lineEdit_NewPW_1->text().toLatin1().length()) {
     clearFields();
-    QString OutputText;
-
     OutputText = tr("The maximum length of a password is ") +
                  QString("%1").arg(STICK20_PASSOWRD_LEN) + tr(" chars");
 
@@ -213,8 +210,6 @@ void DialogChangePassword::accept() {
   // Check the new length of password - min
   if (minimumPasswordLength > ui->lineEdit_NewPW_1->text().toLatin1().length()) {
     clearFields();
-    QString OutputText;
-
     OutputText = tr("The minimum length of a password is ") +
                  QString("%1").arg(minimumPasswordLength) + tr(" chars");
 
@@ -223,7 +218,6 @@ void DialogChangePassword::accept() {
   }
 
   bool success = _changePassword();
-
   if (success) {
     done(true);
     return;

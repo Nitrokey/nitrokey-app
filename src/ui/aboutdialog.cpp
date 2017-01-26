@@ -305,7 +305,7 @@ void Worker::fetch_device_data() {
     return;
   }
 
-  devdata.passwordRetryCount = libada::i()->getPasswordRetryCount();
+  devdata.passwordRetryCount = libada::i()->getAdminPasswordRetryCount();
   devdata.userPasswordRetryCount = libada::i()->getUserPasswordRetryCount();
   devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
   devdata.minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
