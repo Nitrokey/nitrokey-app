@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include "src/core/ThreadWorker.h"
 #include "mainwindow.h"
 //#include "mcvs-wrapper.h"
 //#include "nitrokey-applet.h"
@@ -70,6 +70,8 @@ int main(int argc, char *argv[]) {
     qputenv("QT_QPA_PLATFORMTHEME", "generic");
   }
 #endif
+
+  qRegisterMetaType<QMap<QString, QVariant>>();
 
   QApplication a(argc, argv);
   StartUpParameter_tst StartupInfo_st;
@@ -186,6 +188,8 @@ int main(int argc, char *argv[]) {
   }
 
   a.setQuitOnLastWindowClosed(false);
+
+
 
   MainWindow w;
   return a.exec();
