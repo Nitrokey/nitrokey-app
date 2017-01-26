@@ -172,32 +172,49 @@ bool DialogChangePassword::_changePassword(void) {
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
   PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
 
-  try {
-    switch (kind) {
-      case PasswordKind::USER:
-        nm::instance()->change_user_PIN(PasswordString.constData(), PasswordStringNew.constData());
-        break;
-      case PasswordKind::ADMIN:
-        nm::instance()->change_admin_PIN(PasswordString.constData(), PasswordStringNew.constData());
-        break;
-      case PasswordKind::UPDATE:
-        nm::instance()->change_update_password(PasswordString.constData(), PasswordStringNew.constData());
-        break;
-      case PasswordKind::RESET_USER:
-        nm::instance()->unlock_user_password(PasswordString.constData(), PasswordStringNew.constData());
-        break;
-    }
-    csApplet()->messageBox(tr("New password is set"));
-    return true;
-  }
-  catch (CommandFailedException &e){
-    if(!e.reason_wrong_password())
-      throw;
-    csApplet()->warningBox(tr("Current password is not correct. Please retry."));
-    return false;
-  }
+    bool result = false;
+  PasswordKind k = kind;
+  ThreadWorker *tw = new ThreadWorker(
+      [k, PasswordString, PasswordStringNew]() -> Data {
+        Data data;
+        try {
+          switch (k) {
+            case PasswordKind::USER:
+              nm::instance()->change_user_PIN(PasswordString.constData(), PasswordStringNew.constData());
+              break;
+            case PasswordKind::ADMIN:
+              nm::instance()->change_admin_PIN(PasswordString.constData(), PasswordStringNew.constData());
+              break;
+            case PasswordKind::UPDATE:
+              nm::instance()->change_update_password(PasswordString.constData(), PasswordStringNew.constData());
+              break;
+            case PasswordKind::RESET_USER:
+              nm::instance()->unlock_user_password(PasswordString.constData(), PasswordStringNew.constData());
+              break;
+          }
+          data["result"] = true;
+        }
+        catch (CommandFailedException &e){
+          if(!e.reason_wrong_password()){
+            data["err"] = e.last_command_status;
+//            emit this->error(e.last_command_status);
+          }
+          data["result"] = false;
+        }
+        return data;
+      },
+      [this, &result](Data data){
+        result = data["result"].toBool();
+        if (!result)
+          csApplet()->warningBox(tr("Current password is not correct. Please retry."));
+        else{
+          csApplet()->messageBox(tr("New password is set"));
+        }
+        this->UpdatePasswordRetry();
+        this->clearFields();
+      }, this);
 
-  return false;
+  return result;
 }
 
 void DialogChangePassword::accept() {
@@ -245,8 +262,7 @@ void DialogChangePassword::accept() {
     done(true);
     return;
   }
-  this->UpdatePasswordRetry();
-  this->clearFields();
+
 }
 
 void DialogChangePassword::on_checkBox_clicked(bool checked) {
