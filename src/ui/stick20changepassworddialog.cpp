@@ -167,12 +167,11 @@ void DialogChangePassword::moveWindowToCenter() {// center the password window
       QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), desktop->availableGeometry()));
 }
 
-bool DialogChangePassword::_changePassword(void) {
+void DialogChangePassword::_changePassword(void) {
   QByteArray PasswordString, PasswordStringNew;
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
   PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
 
-    bool result = false;
   PasswordKind k = kind;
   ThreadWorker *tw = new ThreadWorker(
       [k, PasswordString, PasswordStringNew]() -> Data {
@@ -203,18 +202,18 @@ bool DialogChangePassword::_changePassword(void) {
         }
         return data;
       },
-      [this, &result](Data data){
-        result = data["result"].toBool();
-        if (!result)
+      [this](Data data){
+        bool result = data["result"].toBool();
+        if (!result){
           csApplet()->warningBox(tr("Current password is not correct. Please retry."));
+          this->UpdatePasswordRetry();
+          this->clearFields();
+        }
         else{
           csApplet()->messageBox(tr("New password is set"));
+          done(true);
         }
-        this->UpdatePasswordRetry();
-        this->clearFields();
       }, this);
-
-  return result;
 }
 
 void DialogChangePassword::accept() {
@@ -257,12 +256,7 @@ void DialogChangePassword::accept() {
     return;
   }
 
-  bool success = _changePassword();
-  if (success) {
-    done(true);
-    return;
-  }
-
+  _changePassword();
 }
 
 void DialogChangePassword::on_checkBox_clicked(bool checked) {

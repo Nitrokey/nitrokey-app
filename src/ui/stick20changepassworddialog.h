@@ -53,7 +53,7 @@ private slots:
 private:
   PasswordKind kind;
   Ui::DialogChangePassword *ui;
-  bool _changePassword();
+  void _changePassword();
   void accept(void);
   void UpdatePasswordRetry(void);
   void clearFields();

@@ -113,6 +113,8 @@ private:
     QAction *Stick20ActionClearNewSDCardFound;
     QAction *Stick20ActionLockStickHardware;
     QAction *Stick20ActionResetUserPassword;
+
+  void destroyThread();
 };
 
 

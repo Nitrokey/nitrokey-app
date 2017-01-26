@@ -29,8 +29,8 @@ Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
 }
 
 Tray::~Tray() {
+  destroyThread();
 }
-
 
 
 /*
@@ -312,8 +312,7 @@ void Tray::generatePasswordMenu() {
   trayMenu->addSeparator();
 
   if (thread_tray_populateOTP!= nullptr){
-    thread_tray_populateOTP->quit();
-    thread_tray_populateOTP->wait();
+    destroyThread();
   }
   thread_tray_populateOTP = std::make_shared<QThread>();
   tray_Worker *worker = new tray_Worker;
@@ -327,6 +326,11 @@ void Tray::generatePasswordMenu() {
   connect(worker, SIGNAL(progress(int)), this, SLOT(showOTPProgressInTray(int)));
 
   thread_tray_populateOTP->start();
+}
+
+void Tray::destroyThread() {
+  thread_tray_populateOTP->quit();
+  thread_tray_populateOTP->wait();
 }
 
 #include "mainwindow.h"
