@@ -22,7 +22,6 @@
 #include "stick20responsedialog.h"
 #include "ui_stick20changepassworddialog.h"
 #include "libada.h"
-#include "src/utils/bool_values.h"
 #include "libnitrokey/include/NitrokeyManager.h"
 using nm = nitrokey::NitrokeyManager;
 
@@ -64,7 +63,6 @@ void DialogChangePassword::UpdatePasswordRetry() {
                       "reset Admin password.");
     break;
     case PasswordKind::UPDATE:
-    // FIXME add firmware counter
     retryCount = 99;
     ui->retryCount->hide();
     ui->retryCountLabel->hide();
@@ -200,8 +198,7 @@ void DialogChangePassword::accept() {
   }
 
   // Check the new length of password - max
-  // obsolete since input field max length is set, but should be checked
-  // nevertheless in case STICK20_PASSOWRD_LEN would be changed to lower value
+  // obsolete since input field max length is set
   if (STICK20_PASSOWRD_LEN < ui->lineEdit_NewPW_1->text().toLatin1().length()) {
     clearFields();
     QString OutputText;
