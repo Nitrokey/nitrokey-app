@@ -184,6 +184,11 @@ IF(NOT WIN32)
   )
 
   install(FILES
+   ${CMAKE_SOURCE_DIR}/po/fr/nitrokey-app.mo
+   DESTINATION share/locale/fr/LC_MESSAGES
+  )
+
+  install(FILES
     ${CMAKE_SOURCE_DIR}/images/info.png
     ${CMAKE_SOURCE_DIR}/images/quit.png
     ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
@@ -286,7 +291,9 @@ LIST(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
     "/usr/lib/udev/rules.d"
     "/usr/share/locale"
     "/usr/share/locale/de_DE"
+    "/usr/share/locale/fr"
     "/usr/share/locale/de_DE/LC_MESSAGES"
+    "/usr/share/locale/fr/LC_MESSAGES"
     "/usr/share/icons"
     "/usr/share/icons/hicolor"
     "/usr/share/icons/hicolor/16x16"
