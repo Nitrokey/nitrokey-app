@@ -1014,7 +1014,7 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   ui->PWS_EditPassword->setText("");
   ui->PWS_EditLoginName->setText("");
   ui->PWS_progressBar->show();
-  connect(this, SIGNAL(PWS_progress()), ui->PWS_progressBar, SLOT(setValue(int)));
+  connect(this, SIGNAL(PWS_progress(int)), ui->PWS_progressBar, SLOT(setValue(int)));
 
   ThreadWorker *tw = new ThreadWorker(
     [index, this]() -> Data {
