@@ -122,6 +122,7 @@ public slots:
     void PWS_unlocked();
     void PWS_slot_saved();
     void DeviceLocked();
+    void PWS_progress(int p);
 
 private slots:
   void generateComboBoxEntrys();

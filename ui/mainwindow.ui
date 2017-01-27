@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -1210,6 +1210,13 @@
            <widget class="QPushButton" name="PWS_ButtonEnable">
             <property name="text">
              <string>Unlock password safe</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="PWS_progressBar">
+            <property name="value">
+             <number>24</number>
             </property>
            </widget>
           </item>

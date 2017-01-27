@@ -982,46 +982,68 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
   }
 
   const int slot_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
-  if (libada::i()->getPWSSlotStatus(slot_number)) // Is slot active?
+  if (!libada::i()->getPWSSlotStatus(slot_number)) // Is slot active?
   {
-    try{
-      libada::i()->erasePWSSlot(slot_number);
-
-      ui->PWS_EditSlotName->setText("");
-      ui->PWS_EditPassword->setText("");
-      ui->PWS_EditLoginName->setText("");
-      ui->PWS_ComboBoxSelectSlot->setItemText(
-          slot_number, QString("Slot ").append(QString::number(slot_number + 1)));
-      csApplet()->messageBox(tr("Slot has been erased successfully."));
-    }
-    catch (CommandFailedException &e){
-      csApplet()->warningBox(tr("Can't clear slot."));
-    }
-  } else
-      csApplet()->messageBox(tr("Slot is erased already."));
-
-//  tray.regenerateMenu();
-  //FIXME emit tray regenerate menu signal
-  emit PWS_slot_saved();
-}
-
-void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
-  QString OutputText;
-
-  if (!PWS_Access) {
-    return;
+    csApplet()->messageBox(tr("Slot is erased already."));
   }
 
-  // Slot already used ?
-  if (libada::i()->getPWSSlotStatus(index)) {
-    ui->PWS_EditSlotName->setText(QString::fromStdString(libada::i()->getPWSSlotName(index)));
-    ui->PWS_EditPassword->setText(QString::fromStdString(nm::instance()->get_password_safe_slot_password(index)));
-    ui->PWS_EditLoginName->setText(QString::fromStdString(nm::instance()->get_password_safe_slot_login(index)));
-  } else {
+  try{
+    libada::i()->erasePWSSlot(slot_number);
+
     ui->PWS_EditSlotName->setText("");
     ui->PWS_EditPassword->setText("");
     ui->PWS_EditLoginName->setText("");
+    ui->PWS_ComboBoxSelectSlot->setItemText(
+        slot_number, QString("Slot ").append(QString::number(slot_number + 1)));
+    csApplet()->messageBox(tr("Slot has been erased successfully."));
+    emit PWS_slot_saved();
   }
+  catch (CommandFailedException &e){
+    csApplet()->warningBox(tr("Can't clear slot."));
+  }
+}
+
+#include "src/core/ThreadWorker.h"
+void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
+  if (!PWS_Access) {
+    return;
+  }
+  ui->PWS_ComboBoxSelectSlot->setEnabled(false);
+
+  ui->PWS_EditSlotName->setText("");
+  ui->PWS_EditPassword->setText("");
+  ui->PWS_EditLoginName->setText("");
+  ui->PWS_progressBar->show();
+  connect(this, SIGNAL(PWS_progress()), ui->PWS_progressBar, SLOT(setValue(int)));
+
+  ThreadWorker *tw = new ThreadWorker(
+    [index, this]() -> Data {
+      Data data;
+        data["slot_filled"] = libada::i()->getPWSSlotStatus(index);
+        emit PWS_progress(100*1/4);
+        if (data["slot_filled"].toBool()) {
+          data["name"] = QString::fromStdString(libada::i()->getPWSSlotName(index));
+          emit PWS_progress(100*2/4);
+          data["pass"] = QString::fromStdString(nm::instance()->get_password_safe_slot_password(index));
+          emit PWS_progress(100*3/4);
+          data["login"] = QString::fromStdString(nm::instance()->get_password_safe_slot_login(index));
+        }
+        emit PWS_progress(100*4/4);
+        return data;
+    },
+    [this](Data data){
+      if (data["slot_filled"].toBool()) {
+        ui->PWS_EditSlotName->setText(data["name"].toString());
+        ui->PWS_EditPassword->setText(data["pass"].toString());
+        ui->PWS_EditLoginName->setText(data["login"].toString());
+      }
+      ui->PWS_ComboBoxSelectSlot->setEnabled(true);
+        QTimer::singleShot(2000, [this](){
+            ui->PWS_progressBar->hide();
+        });
+
+    }, this);
+
 }
 
 void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked) {
