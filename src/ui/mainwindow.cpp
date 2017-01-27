@@ -588,6 +588,7 @@ void MainWindow::startStick20ActionChangeUpdatePIN() {
 
 void MainWindow::startStick20ActionChangeUserPIN() {
   DialogChangePassword dialog(this, PasswordKind::USER);
+  connect(&dialog, SIGNAL(UserPinLocked()), &tray, SLOT(regenerateMenu()));
   dialog.InitData();
   dialog.exec();
 }

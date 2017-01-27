@@ -98,6 +98,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
         ui->retryCountLabel->setStyleSheet(cssRed);
         csApplet()->warningBox(noTrialsLeft);
         done(true);
+        emit UserPinLocked();
       }
     }, this);
 }

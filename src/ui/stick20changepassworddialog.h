@@ -44,7 +44,8 @@ class DialogChangePassword : public QDialog {
     void InitData(void);
     virtual int exec() override;
 //
-//  signals:
+  signals:
+    void UserPinLocked();
 //    void error(int errcode);
 
 private slots:
