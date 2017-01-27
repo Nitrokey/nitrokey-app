@@ -192,7 +192,9 @@ int main(int argc, char *argv[]) {
 
 
   MainWindow w;
-  return a.exec();
+  const auto retcode = a.exec();
+  qDebug() << "normal exit";
+  return retcode;
 }
 
 StartUpParameter_tst &
