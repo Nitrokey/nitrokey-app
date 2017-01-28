@@ -933,10 +933,9 @@ void MainWindow::SetupPasswordSafeConfig(void) {
 
   // Get active password slots
   if (PWS_Access) {
-//    ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("<Select Password Safe slot>")));
-
     // Setup combobox
     ui->PWS_ComboBoxSelectSlot->clear();
+    ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("<Select Password Safe slot>")));
     for (i = 0; i < PWS_SLOT_COUNT; i++) {
       if (libada::i()->getPWSSlotStatus(i)) {
         ui->PWS_ComboBoxSelectSlot->addItem(
@@ -978,7 +977,8 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
       return;
   }
 
-  const int slot_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
+  const auto item_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
+  const int slot_number = item_number - 1;
   if (!libada::i()->getPWSSlotStatus(slot_number)) // Is slot active?
   {
     csApplet()->messageBox(tr("Slot is erased already."));
@@ -991,7 +991,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
     ui->PWS_EditPassword->setText("");
     ui->PWS_EditLoginName->setText("");
     ui->PWS_ComboBoxSelectSlot->setItemText(
-        slot_number, QString("Slot ").append(QString::number(slot_number + 1)));
+        item_number, QString("Slot ").append(QString::number(slot_number + 1)));
     csApplet()->messageBox(tr("Slot has been erased successfully."));
     emit PWS_slot_saved();
   }
@@ -1002,14 +1002,18 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
 
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
+  ui->PWS_EditSlotName->setText("");
+  ui->PWS_EditPassword->setText("");
+  ui->PWS_EditLoginName->setText("");
+
+  if (index == 0) return; //do not update for dummy slot
+  index--;
+
   if (!PWS_Access) {
     return;
   }
   ui->PWS_ComboBoxSelectSlot->setEnabled(false);
 
-  ui->PWS_EditSlotName->setText("");
-  ui->PWS_EditPassword->setText("");
-  ui->PWS_EditLoginName->setText("");
   ui->PWS_progressBar->show();
   connect(this, SIGNAL(PWS_progress(int)), ui->PWS_progressBar, SLOT(setValue(int)));
 
@@ -1049,7 +1053,8 @@ void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked) {
 
 void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
 
-  int slot_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
+  const auto item_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
+  int slot_number = item_number - 1;
   if(ui->PWS_EditSlotName->text().isEmpty()){
     csApplet()->warningBox(tr("Please enter a slotname."));
     return;
@@ -1064,8 +1069,15 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
        ui->PWS_EditSlotName->text().toUtf8().constData(),
        ui->PWS_EditLoginName->text().toUtf8().constData(),
        ui->PWS_EditPassword->text().toUtf8().constData());
-    csApplet()->messageBox(tr("Slot successfully written."));
     emit PWS_slot_saved();
+    auto item_name = QString(tr("Slot "))
+        .append(QString::number(item_number))
+        .append(QString(" [")
+                    .append(ui->PWS_EditSlotName->text())
+                    .append(QString("]")));
+    ui->PWS_ComboBoxSelectSlot->setItemText(
+        item_number, item_name);
+    csApplet()->messageBox(tr("Slot successfully written."));
   }
   catch (CommandFailedException &e){
     csApplet()->messageBox(tr("Can't save slot. %1").arg(e.last_command_status));
