@@ -10,29 +10,31 @@
 #define CRYPTOSTICK_APP_BRAND "Nitrokey App"
 QString getBrand();
 
-class CryptostickApplet {
+class AppMessageBox {
   public:
   void messageBox(const QString msg);
   void warningBox(const QString msg);
   bool yesOrNoBox(const QString msg, bool default_val);
   bool detailedYesOrNoBox(const QString msg, const QString detailed_text, bool default_val);
-    static CryptostickApplet* instance(){
-        QMutexLocker locker(&mutex);
-        static CryptostickApplet applet;
-        return &applet;
-    }
+  static AppMessageBox* instance(){
+    //C++11 static initialization is thread safe
+    //In Visual Studio supported since 2015 hence mutex
+      QMutexLocker locker(&mutex);
+      static AppMessageBox applet;
+      return &applet;
+  }
 private:
-    CryptostickApplet() :_parent(Q_NULLPTR) {}
+    AppMessageBox() :_parent(Q_NULLPTR) {}
     static QMutex mutex;
 public:
     void setParent(QWidget *parent) {
-        CryptostickApplet::_parent = parent;
+        _parent = parent;
     }
 
 private:
     QWidget *_parent;
 };
 
-CryptostickApplet *csApplet();
+AppMessageBox *csApplet();
 
 #endif /* CRYPTOSTICK_APPLET_H */

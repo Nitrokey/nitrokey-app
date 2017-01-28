@@ -180,7 +180,6 @@ int main(int argc, char *argv[]) {
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
 //  MainWindow w(&StartupInfo_st);
-//    csApplet()->setParent(&w);
 
   {
     QDateTime local(QDateTime::currentDateTime());
@@ -190,8 +189,8 @@ int main(int argc, char *argv[]) {
   a.setQuitOnLastWindowClosed(false);
 
 
-
   MainWindow w;
+  csApplet()->setParent(&w);
   const auto retcode = a.exec();
   qDebug() << "normal exit";
   return retcode;
