@@ -21,7 +21,7 @@
 #ifndef HOTPSLOT_H
 #define HOTPSLOT_H
 
-#include <stdint.h>
+#include <cstdint>
 
 static const int SECRET_LENGTH = 40;
 static const int SECRET_LENGTH_BASE32 = SECRET_LENGTH / 10 * 16;
