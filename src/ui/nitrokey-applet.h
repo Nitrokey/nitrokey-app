@@ -33,6 +33,7 @@ public:
 
 private:
     QWidget *_parent;
+    void moveToCenter(QWidget *widget);
 };
 
 AppMessageBox *csApplet();

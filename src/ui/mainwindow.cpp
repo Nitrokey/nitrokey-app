@@ -122,6 +122,10 @@ MainWindow::MainWindow(QWidget *parent)
       new utf8FieldLengthValidator(PWS_LOGINNAME_LENGTH, ui->PWS_EditLoginName));
   ui->PWS_EditSlotName->setValidator(
       new utf8FieldLengthValidator(PWS_SLOTNAME_LENGTH, ui->PWS_EditSlotName));
+
+  this->adjustSize();
+  this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
+
 }
 
 void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){

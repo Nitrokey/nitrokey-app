@@ -16,12 +16,20 @@ AppMessageBox *csApplet(){
 void AppMessageBox::warningBox(const QString msg) {
   QMessageBox *msgbox = new QMessageBox(
       QMessageBox::Warning, getBrand(), msg, QMessageBox::Ok, _parent);
+  moveToCenter(msgbox);
   msgbox->exec();
+}
+
+#include <QDesktopWidget>
+void AppMessageBox::moveToCenter(QWidget *widget) {
+  widget->adjustSize();
+  widget->move(QApplication::desktop()->screen()->rect().center() - widget->rect().center());
 }
 
 void AppMessageBox::messageBox(const QString msg) {
   QMessageBox *msgbox = new QMessageBox(
       QMessageBox::Information, getBrand(), msg, QMessageBox::Ok, _parent);
+  moveToCenter(msgbox);
   msgbox->exec();
 }
 
@@ -49,6 +57,8 @@ bool AppMessageBox::detailedYesOrNoBox(const QString msg, const QString detailed
 
   layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
   msgBox->setDefaultButton(default_val ? QMessageBox::Yes : QMessageBox::No);
+
+  moveToCenter(msgBox);
   bool b = msgBox->exec() == QMessageBox::Yes;
   return b;
 }
