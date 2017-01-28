@@ -88,11 +88,12 @@ MainWindow::MainWindow(QWidget *parent)
       tray(this, true, true, &storage),
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
-  PWS_Access = false;
   nitrokey::NitrokeyManager::instance()->connect();
+  PWS_Access = libada::i()->isPasswordSafeUnlocked();
 
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(PWS_unlocked()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(PWS_unlocked()), this, SLOT(SetupPasswordSafeConfig()));
   connect(this, SIGNAL(PWS_slot_saved()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(DeviceLocked()), &tray, SLOT(regenerateMenu()));
   connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
@@ -927,19 +928,15 @@ void MainWindow::checkTextEdited() {
 
 void MainWindow::SetupPasswordSafeConfig(void) {
   int i;
-
   QString Slotname;
-
   ui->PWS_ComboBoxSelectSlot->clear();
-  PWS_Access = false;
 
   // Get active password slots
-  const auto no_err = false; //TODO ERR_NO_ERROR == ret;
-  if (libada::i()->isPasswordSafeUnlocked()) {
-    PWS_Access = true;
-    emit PWS_unlocked();
+  if (PWS_Access) {
+//    ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("<Select Password Safe slot>")));
 
     // Setup combobox
+    ui->PWS_ComboBoxSelectSlot->clear();
     for (i = 0; i < PWS_SLOT_COUNT; i++) {
       if (libada::i()->getPWSSlotStatus(i)) {
         ui->PWS_ComboBoxSelectSlot->addItem(
@@ -957,7 +954,7 @@ void MainWindow::SetupPasswordSafeConfig(void) {
     ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("Unlock password safe")));
   }
 
-  (true == PWS_Access ? ui->PWS_ButtonEnable->hide() : ui->PWS_ButtonEnable->show());
+  PWS_Access ? ui->PWS_ButtonEnable->hide() : ui->PWS_ButtonEnable->show();
   ui->PWS_ButtonSaveSlot->setEnabled(PWS_Access);
   ui->PWS_ButtonClearSlot->setEnabled(PWS_Access);
   ui->PWS_ComboBoxSelectSlot->setEnabled(PWS_Access);
@@ -1115,7 +1112,9 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       } else if (e.last_command_status == 0xa){ // FIXME move status code to exception class
         //generate keys if not generated
         try{
+          csApplet()->warningBox(tr("AES keys not initialized. Please provide Admin PIN."));
           nm::instance()->build_aes_key(auth_admin.getPassword().c_str());
+          csApplet()->warningBox(tr("Keys generated. Please unlock Password Safe again."));
         } catch (CommandFailedException &e){
           if (e.reason_wrong_password())
             csApplet()->warningBox(tr("Wrong admin password."));
