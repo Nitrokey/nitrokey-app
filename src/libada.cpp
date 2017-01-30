@@ -147,18 +147,6 @@ int libada::getStorageSDCardSizeGB() {
   return 42;
 }
 
-int libada::setUserPIN() {
-  return 0;
-}
-
-int libada::setAdminPIN() {
-  return 0;
-}
-
-int libada::setStorageUpdatePassword() {
-  return 0;
-}
-
 bool libada::isDeviceConnected() const throw() {
   auto conn = nm::instance()->is_connected();
   return conn;
@@ -215,13 +203,12 @@ void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword)
 }
 
 bool libada::is_nkpro_07_rtm1() {
-  //TODO
-  return true;
+  return nm::instance()->get_connected_device_model() == nitrokey::DeviceModel::PRO
+      && getMinorFirmwareVersion() == 7;
 }
 
 bool libada::is_secret320_supported() {
-  //TODO
-  return false;
+  return nm::instance()->is_authorization_command_supported();
 }
 
 int libada::getTOTPCode(int i, const char *string) {
@@ -238,4 +225,25 @@ int libada::eraseHOTPSlot(const int i, const char *string) {
 
 int libada::eraseTOTPSlot(const int i, const char *string) {
   return nm::instance()->erase_totp_slot(i, string);
+}
+
+#include <QDateTime>
+bool libada::is_time_synchronized() {
+  auto time = QDateTime::currentDateTimeUtc().toTime_t();
+  try{
+    nm::instance()->get_time(time);
+    return true;
+  }
+  catch( CommandFailedException &e){
+    if (e.last_command_status != 6) //FIXME timestamp warning
+      throw;
+    return false;
+  }
+  return false;
+}
+
+bool libada::set_current_time() {
+  auto time = QDateTime::currentDateTimeUtc().toTime_t();
+  nm::instance()->set_time(time);
+  return true;
 }

@@ -75,9 +75,8 @@ public:
 
   int getStorageSDCardSizeGB();
 
-    int setUserPIN();
-    int setAdminPIN();
-    int setStorageUpdatePassword();
+    bool is_time_synchronized();
+    bool set_current_time();
 
     bool isDeviceConnected()  const throw();
     bool isDeviceInitialized();

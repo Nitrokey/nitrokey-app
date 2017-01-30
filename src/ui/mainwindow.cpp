@@ -1132,7 +1132,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       return;
     }
     catch (CommandFailedException &e){
-      //emit pw safe not available if not available
+      //emit pw safe not available when not available
   //    cryptostick->passwordSafeAvailable = FALSE;
   //    UnlockPasswordSafeAction->setEnabled(false);
   //    csApplet()->warningBox(tr("Password safe is not supported by this device."));
@@ -1177,67 +1177,38 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     const auto status = nm::instance()->get_status();
     QString tempPassword;
 
-    if(status.enable_user_password != 0){
+    if(status.enable_user_password){
         if(!auth_user.authenticate()){
-            return 0; //TODO throw
+          csApplet()->messageBox(tr("User not authenticated"));
+          return 0;
         }
         tempPassword = auth_user.getTempPassword();
     }
-  //TODO authentication here
-  if (slotNumber>=0x20){
+  bool isTOTP = slotNumber >= 0x20;
+  if (isTOTP){
       //FIXME set correct time on stick
+    if (!libada::i()->is_time_synchronized()) {
+      bool user_wants_time_reset = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync")
+                                                                  + " - " + tr("Reset Nitrokey's time?"),
+                  tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+                             "sync.\nYour computer may be configured with a wrong time "
+                             "or\nyour Nitrokey may have been attacked. If an attacker "
+                             "or\nmalware could have used your Nitrokey you should reset the "
+                             "secrets of your configured One Time Passwords. If your "
+                             "computer's time is wrong, please configure it correctly and "
+                             "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+                  false);
+      if (user_wants_time_reset){
+          if(libada::i()->set_current_time()){
+            csApplet()->messageBox(tr("Time reset!"));
+          }
+      }
+    }
     return libada::i()->getTOTPCode(slotNumber - 0x20, tempPassword.toLatin1().constData());
   } else {
     return libada::i()->getHOTPCode(slotNumber - 0x10, tempPassword.toLatin1().constData());
   }
   return 0;
-
-//  if (is_OTP_PIN_protected && ok == QDialog::Accepted && !cryptostick->validUserPassword) {
-//      csApplet()->warningBox(tr("Invalid password!"));
-//    return 1;
-//  }
-//
-//  // Start the config dialog
-//  // is it TOTP?
-//  if (slotNumber >= 0x20)
-//    cryptostick->TOTPSlots[slotNumber - 0x20]->interval = lastInterval;
-//
-//  lastTOTPTime = QDateTime::currentDateTime().toTime_t();
-//  ret = cryptostick->setTime(TOTP_CHECK_TIME);
-//
-//  // if time is out of sync on the device
-//  if (ret == -2) {
-//    bool answer;
-//    answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
-//                                            tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-//                                                       "sync.\nYour computer may be configured with a wrong time "
-//                                                       "or\nyour Nitrokey may have been attacked. If an attacker "
-//                                                       "or\nmalware could have used your Nitrokey you should reset the "
-//                                                       "secrets of your configured One Time Passwords. If your "
-//                                                       "computer's time is wrong, please configure it correctly and "
-//                                                       "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-//                                            false);
-//
-//    if (answer) {
-//      resetTime();
-//      QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-//      Sleep::msleep(1000);
-//      QApplication::restoreOverrideCursor();
-//      generateAllConfigs();
-//        csApplet()->messageBox(tr("Time reset!"));
-//    } else
-//      return 1;
-//  }
-//
-//  ret = cryptostick->getCode(slotNumber, lastTOTPTime / lastInterval, lastTOTPTime, lastInterval, result);
-//  if(ret!=0){
-//      //show error message
-//      csApplet()->warningBox(
-//        tr("Detected some communication problems with the device.")
-//                  +QString(" ")+tr("Cannot get OTP code.")
-//      );
-//      return ret;
-//  }
 }
 
 
