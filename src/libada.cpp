@@ -57,6 +57,14 @@ std::string libada::getCardSerial() {
 #include "libnitrokey/include/CommandFailedException.h"
 #include "hotpslot.h"
 
+void libada::on_FactoryReset(){
+  cache_PWS_name.clear();
+  status_PWS.clear();
+  cache_HOTP_name.clear();
+  cache_TOTP_name.clear();
+}
+
+
 void libada::on_PWS_save(int slot_no){
   cache_PWS_name.remove(slot_no);
   status_PWS.clear();

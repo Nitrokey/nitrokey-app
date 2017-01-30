@@ -92,6 +92,9 @@ MainWindow::MainWindow(QWidget *parent)
   PWS_Access = libada::i()->isPasswordSafeUnlocked();
 
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
+
   connect(this, SIGNAL(PWS_unlocked()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(PWS_unlocked()), this, SLOT(SetupPasswordSafeConfig()));
   connect(this, SIGNAL(PWS_slot_saved(int)), &tray, SLOT(regenerateMenu()));
@@ -1283,45 +1286,23 @@ void MainWindow::on_counterEdit_editingFinished() {
   }
 }
 
-char *MainWindow::getFactoryResetMessage(int retCode) {
-  switch (retCode) {
-//  case CMD_STATUS_OK:
-//    return strdup("Factory reset was successful.");
-//    break;
-//  case CMD_STATUS_WRONG_PASSWORD:
-//    return strdup("Wrong Pin. Please try again.");
-//    break;
-  default:
-    return strdup("Unknown error.");
-    break;
-  }
-}
-
 int MainWindow::factoryReset() {
-//  int ret;
-//  bool ok;
-//
-//  do {
-//    PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-//                     PinDialog::ADMIN_PIN);
-//    ok = dialog.exec();
-//    char password[LOCAL_PASSWORD_SIZE];
-//    dialog.getPassword(password);
-//    if (QDialog::Accepted == ok) {
-//      ret = cryptostick->factoryReset(password);
-//        csApplet()->messageBox(tr(getFactoryResetMessage(ret)));
-//      memset(password, 0, strlen(password));
-//    }
-//  } while (QDialog::Accepted == ok && CMD_STATUS_WRONG_PASSWORD == ret);
-//  // Disable pwd safe menu entries
-//  int i;
-//
-//  for (i = 0; i <= 15; i++)
-//    cryptostick->passwordSafeStatus[i] = false;
-//
-//  // Fetch configs from device
-//  generateAllConfigs();
-  return 0;
+  while (true){
+    const std::string &password = auth_admin.getPassword();
+    if (password.empty())
+      return 0;
+    try{
+      nm::instance()->factory_reset(password.c_str());
+      csApplet()->messageBox("Factory reset was successful.");
+      emit FactoryReset();
+      return 1;
+    }
+    catch (CommandFailedException &e){
+      if(!e.reason_wrong_password())
+        throw;
+      csApplet()->messageBox("Wrong Pin. Please try again.");
+    }
+  }
 }
 
 void MainWindow::on_radioButton_2_toggled(bool checked) {

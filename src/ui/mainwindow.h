@@ -106,7 +106,7 @@ public slots:
   void startAboutDialog();
   void startConfiguration();
   void PWS_Clicked_EnablePWSAccess();
-  char *getFactoryResetMessage(int retCode);
+
   int factoryReset();
   void getTOTPDialog(int slot);
   void getHOTPDialog(int slot);
@@ -122,6 +122,7 @@ public slots:
     void PWS_unlocked();
     void PWS_slot_saved(int slot_no);
     void DeviceLocked();
+    void FactoryReset();
     void PWS_progress(int p);
     void OTP_slot_write(int slot_no, bool isHOTP);
 
