@@ -91,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
   nitrokey::NitrokeyManager::instance()->connect();
   PWS_Access = libada::i()->isPasswordSafeUnlocked();
 
+
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));

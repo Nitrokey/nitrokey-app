@@ -62,17 +62,17 @@ protected:
   void closeEvent(QCloseEvent *event);
 
 private:
-    Q_DISABLE_COPY(MainWindow);
+  Q_DISABLE_COPY(MainWindow);
 
-    Authentication auth_admin;
-    Authentication auth_user;
-    StorageActions storage;
-    Tray tray;
-    Clipboard clipboard;
+  Authentication auth_admin;
+  Authentication auth_user;
+  StorageActions storage;
+  Tray tray;
+  Clipboard clipboard;
 
-    bool validate_secret(const char *secret) const;
-    void initialTimeReset(int ret);
-    QMutex check_connection_mutex;
+  bool validate_secret(const char *secret) const;
+  void initialTimeReset(int ret);
+  QMutex check_connection_mutex;
   QString nkpro_user_PIN;
 
   void InitState();
@@ -118,16 +118,17 @@ public slots:
   void startLockDeviceAction();
   void updateProgressBar(int i);
 
-  signals:
-    void PWS_unlocked();
-    void PWS_slot_saved(int slot_no);
-    void DeviceLocked();
-    void FactoryReset();
-    void PWS_progress(int p);
-    void OTP_slot_write(int slot_no, bool isHOTP);
+signals:
+  void PWS_unlocked();
+  void PWS_slot_saved(int slot_no);
+  void DeviceLocked();
+  void FactoryReset();
+  void PWS_progress(int p);
+  void OTP_slot_write(int slot_no, bool isHOTP);
 
 private slots:
   void generateComboBoxEntrys();
+  void on_enableUserPasswordCheckBox_clicked(bool checked);
 
   void resizeMin();
   void checkConnection();
@@ -174,7 +175,6 @@ private slots:
 
 
 public:
-  void on_enableUserPasswordCheckBox_clicked(bool checked);
   void generateOTPConfig(OTPSlot *slot) const;
   int get_supported_secret_length_base32() const;
   int get_supported_secret_length_hex() const;
