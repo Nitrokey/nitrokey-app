@@ -1186,9 +1186,10 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
     }
   bool isTOTP = slotNumber >= 0x20;
   if (isTOTP){
-      //FIXME set correct time on stick
-    if (!libada::i()->is_time_synchronized()) {
-      bool user_wants_time_reset = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync")
+    //run only once before first TOTP request
+    static bool time_synchronized = libada::i()->is_time_synchronized();
+    if (!time_synchronized) {
+       bool user_wants_time_reset = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync")
                                                                   + " - " + tr("Reset Nitrokey's time?"),
                   tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
                              "sync.\nYour computer may be configured with a wrong time "
@@ -1201,6 +1202,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
       if (user_wants_time_reset){
           if(libada::i()->set_current_time()){
             csApplet()->messageBox(tr("Time reset!"));
+            time_synchronized = true;
           }
       }
     }
