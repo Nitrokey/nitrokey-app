@@ -107,6 +107,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
+  ui->PWS_progressBar->hide();
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
 
   QTimer *timer = new QTimer(this);
