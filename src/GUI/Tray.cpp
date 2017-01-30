@@ -337,7 +337,8 @@ void Tray::destroyThread() {
 void Tray::populateOTPPasswordMenu() {
   for (int i=0; i < TOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getTOTPSlotName(i);
-    if (!slotName.empty()){
+    bool slotProgrammed = libada::i()->isTOTPSlotProgrammed(i);
+    if (slotProgrammed){
       trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
                                        this, [=](){
               //FIXME change in final code to static_cast
@@ -348,7 +349,8 @@ void Tray::populateOTPPasswordMenu() {
 
   for (int i=0; i<HOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getHOTPSlotName(i);
-    if (!slotName.empty()){
+    bool slotProgrammed = libada::i()->isHOTPSlotProgrammed(i);
+    if (slotProgrammed){
       trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
                                        this, [=](){
               //FIXME change in final code to static_cast

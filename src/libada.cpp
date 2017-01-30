@@ -91,7 +91,7 @@ std::string libada::getTOTPSlotName(const int i) {
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed())
       throw;
-    cache_TOTP_name.insert(i, new std::string("(empty)"));
+    cache_TOTP_name.insert(i, new std::string(""));
   }
   return *cache_TOTP_name[i];
 }
@@ -109,7 +109,7 @@ std::string libada::getHOTPSlotName(const int i) {
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed())
       throw;
-    cache_HOTP_name.insert(i, new std::string("(empty)"));
+    cache_HOTP_name.insert(i, new std::string(""));
   }
   return *cache_HOTP_name[i];
 }
@@ -178,11 +178,11 @@ bool libada::isPasswordSafeUnlocked() {
 }
 
 bool libada::isTOTPSlotProgrammed(const int i) {
-  return getTOTPSlotName(i).find("empty") == std::string::npos; //FIXME
+  return !getTOTPSlotName(i).empty();
 }
 
 bool libada::isHOTPSlotProgrammed(const int i) {
-  return getHOTPSlotName(i).find("empty") == std::string::npos; //FIXME
+  return !getHOTPSlotName(i).empty();
 }
 
 void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword) {
