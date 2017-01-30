@@ -53,71 +53,82 @@ std::string libada::getCardSerial() {
     return nm::instance()->get_serial_number();
 }
 
-#include <QCache>
 #include <QtCore/QMutex>
 #include "libnitrokey/include/CommandFailedException.h"
 #include "hotpslot.h"
 
+void libada::on_PWS_save(int slot_no){
+  cache_PWS_name.remove(slot_no);
+  status_PWS.clear();
+}
+
+void libada::on_OTP_save(int slot_no, bool isHOTP){
+  if(isHOTP){
+    cache_HOTP_name.remove(slot_no);
+  } else {
+    cache_TOTP_name.remove(slot_no);
+  }
+}
+
 std::string libada::getTOTPSlotName(const int i) {
   static QMutex mut;
   QMutexLocker locker(&mut);
-  static QCache<int, std::string> cache;
-  if (cache.contains(i)){
-    return *cache[i];
+  if (cache_TOTP_name.contains(i)){
+    return *cache_TOTP_name[i];
   }
   try{
     const auto slot_name = nm::instance()->get_totp_slot_name(i);
-    cache.insert(i, new std::string(slot_name));
+    cache_TOTP_name.insert(i, new std::string(slot_name));
   }
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed())
       throw;
-    cache.insert(i, new std::string("(empty)"));
+    cache_TOTP_name.insert(i, new std::string("(empty)"));
   }
-  return *cache[i];
+  return *cache_TOTP_name[i];
 }
 
 std::string libada::getHOTPSlotName(const int i) {
   static QMutex mut;
   QMutexLocker locker(&mut);
-  static QCache<int, std::string> cache;
-  if (cache.contains(i)){
-    return *cache[i];
+  if (cache_HOTP_name.contains(i)){
+    return *cache_HOTP_name[i];
   }
   try{
     const auto slot_name = nm::instance()->get_hotp_slot_name(i);
-    cache.insert(i, new std::string(slot_name));
+    cache_HOTP_name.insert(i, new std::string(slot_name));
   }
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed())
       throw;
-    cache.insert(i, new std::string("(empty)"));
+    cache_HOTP_name.insert(i, new std::string("(empty)"));
   }
-  return *cache[i];
+  return *cache_HOTP_name[i];
 }
 
 std::string libada::getPWSSlotName(const int i) {
   static QMutex mut;
   QMutexLocker locker(&mut);
-  static QCache<int, std::string> cache;
-  if (cache.contains(i)){
-    return *cache[i];
+  if (cache_PWS_name.contains(i)){
+    return *cache_PWS_name[i];
   }
   try{
     const auto slot_name = nm::instance()->get_password_safe_slot_name(i);
-    cache.insert(i, new std::string(slot_name));
+    cache_PWS_name.insert(i, new std::string(slot_name));
   }
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed()) //FIXME correct reason
       throw;
-    cache.insert(i, new std::string("(empty)"));
+    cache_PWS_name.insert(i, new std::string("(empty)"));
   }
-  return *cache[i];
+  return *cache_PWS_name[i];
 }
 
 bool libada::getPWSSlotStatus(const int i) {
-  static auto status = nm::instance()->get_password_safe_slot_status();
-  return status[i];
+  if (status_PWS.empty()){
+    status_PWS = nm::instance()->get_password_safe_slot_status();
+  }
+  return status_PWS[i];
 }
 
 void libada::erasePWSSlot(const int i) {
@@ -192,9 +203,7 @@ void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword)
                                 otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
                                 otpconf.tokenID, tempPassword.toLatin1().constData());
       break;
-
   }
-//  nm::write_HOTP_slot()
 }
 
 bool libada::is_nkpro_07_rtm1() {

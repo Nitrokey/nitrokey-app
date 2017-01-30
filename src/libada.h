@@ -33,9 +33,23 @@
 
 #define MAX_HIDDEN_VOLUME_PASSOWORD_SIZE 20
 
-class libada {
+#include <QObject>
+#include <QCache>
+
+class libada : public QObject {
+    Q_OBJECT
+    Q_DISABLE_COPY(libada)
   private:
     static std::shared_ptr <libada> _instance;
+    QCache<int, std::string> cache_TOTP_name;
+    QCache<int, std::string> cache_HOTP_name;
+    QCache<int, std::string> cache_PWS_name;
+    std::vector <uint8_t> status_PWS;
+
+
+public slots:
+      void on_OTP_save(int slot_no, bool isHOTP);
+      void on_PWS_save(int slot_no);
 
 public:
     explicit libada();

@@ -61,6 +61,7 @@ SET(moc_headers
     src/GUI/Authentication.h
     src/GUI/StorageActions.h
     src/core/ThreadWorker.h
+        src/libada.h
 )
 
 

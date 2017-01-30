@@ -94,9 +94,12 @@ MainWindow::MainWindow(QWidget *parent)
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(PWS_unlocked()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(PWS_unlocked()), this, SLOT(SetupPasswordSafeConfig()));
-  connect(this, SIGNAL(PWS_slot_saved()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(PWS_slot_saved(int)), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(OTP_slot_write(int, bool)), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(DeviceLocked()), &tray, SLOT(regenerateMenu()));
   connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
+  connect(this, SIGNAL(OTP_slot_write(int, bool)), libada::i().get(), SLOT(on_OTP_save(int, bool)));
+  connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
@@ -357,9 +360,13 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   base32_decode(data, decoded, sizeof(decoded));
 
   secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH).toHex(); //FIXME check
+  qDebug() << secretFromGUI.constData();
   memset(slot->secret, 0, sizeof(slot->secret));
   toCopy = std::min(sizeof(slot->secret), (const size_t &) secretFromGUI.length());
   memcpy(slot->secret, secretFromGUI.constData(), toCopy);
+  if (!libada::i()->is_secret320_supported() && sizeof(slot->secret) > 40){
+    slot->secret[40] = 0; //TODO clear rest of the secret
+  }
 
   QByteArray slotNameFromGUI = QByteArray(this->ui->nameEdit->text().toLatin1());
   memset(slot->slotName, 0, sizeof(slot->slotName));
@@ -379,7 +386,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   toCopy = std::min(8ul, (const unsigned long &) muiFromGUI.length());
   memcpy(slot->tokenID + 4, muiFromGUI.constData(), toCopy);
 
-  slot->tokenID[12] = (uint8_t) (this->ui->keyboardComboBox->currentIndex() & 0xFF);
+//  slot->tokenID[12] = (uint8_t) (this->ui->keyboardComboBox->currentIndex() & 0xFF);
 
   slot->config = 0;
   if (ui->digits8radioButton->isChecked())
@@ -501,6 +508,9 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
 }
 
 void MainWindow::displayCurrentSlotConfig() {
+  ui->slotComboBox->setEnabled(false);
+  ui->slotComboBox->repaint();
+
   uint8_t slotNo = ui->slotComboBox->currentIndex();
 
   if (slotNo == 255)
@@ -517,6 +527,7 @@ void MainWindow::displayCurrentSlotConfig() {
     slotNo -= HOTP_SlotCount;
     displayCurrentTotpSlotConfig(slotNo);
   }
+  ui->slotComboBox->setEnabled(true);
 }
 
 void MainWindow::displayCurrentGeneralConfig() {
@@ -655,10 +666,12 @@ void MainWindow::on_writeButton_clicked() {
     if (!validate_secret(otp.secret)) {
       return;
     }
+  qDebug() << otp.secret;
     if(auth_admin.authenticate()){
       try{
         libada::i()->writeToOTPSlot(otp, auth_admin.getTempPassword());
         csApplet()->messageBox(tr("Configuration successfully written."));
+        emit OTP_slot_write(slotNo, isHOTP);
       }
       catch (CommandFailedException &e){
         csApplet()->warningBox(tr("Error writing configuration!"));
@@ -669,7 +682,6 @@ void MainWindow::on_writeButton_clicked() {
 //    QApplication::restoreOverrideCursor();
 
     generateAllConfigs();
-    displayCurrentSlotConfig();
 }
 
 bool MainWindow::validate_secret(const char *secret) const {
@@ -872,6 +884,7 @@ void MainWindow::on_eraseButton_clicked() {
   } else {
     res = libada::i()->eraseTOTPSlot(slotNo, auth_admin.getTempPassword().toLatin1().data());
   }
+  emit OTP_slot_write(slotNo, isHOTP);
     csApplet()->messageBox(tr("Slot has been erased successfully."));
 
     //TODO remove values from OTP name cache
@@ -997,7 +1010,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
     ui->PWS_ComboBoxSelectSlot->setItemText(
         item_number, QString("Slot ").append(QString::number(slot_number + 1)));
     csApplet()->messageBox(tr("Slot has been erased successfully."));
-    emit PWS_slot_saved();
+    emit PWS_slot_saved(slot_number);
   }
   catch (CommandFailedException &e){
     csApplet()->warningBox(tr("Can't clear slot."));
@@ -1073,7 +1086,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
        ui->PWS_EditSlotName->text().toUtf8().constData(),
        ui->PWS_EditLoginName->text().toUtf8().constData(),
        ui->PWS_EditPassword->text().toUtf8().constData());
-    emit PWS_slot_saved();
+    emit PWS_slot_saved(slot_number);
     auto item_name = QString(tr("Slot "))
         .append(QString::number(item_number))
         .append(QString(" [")

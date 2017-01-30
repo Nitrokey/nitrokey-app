@@ -120,9 +120,10 @@ public slots:
 
   signals:
     void PWS_unlocked();
-    void PWS_slot_saved();
+    void PWS_slot_saved(int slot_no);
     void DeviceLocked();
     void PWS_progress(int p);
+    void OTP_slot_write(int slot_no, bool isHOTP);
 
 private slots:
   void generateComboBoxEntrys();

@@ -40,7 +40,7 @@ public:
     OTPType type;
     uint8_t slotNumber;
     char slotName[15];
-    char secret[SECRET_LENGTH];
+    char secret[SECRET_LENGTH_HEX+1] = {};
     union {
         uint8_t counter[8];
         uint64_t interval;
