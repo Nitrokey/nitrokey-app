@@ -105,6 +105,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
   connect(this, SIGNAL(DeviceDisconnected()), this, SLOT(on_DeviceDisconnected()));
   connect(this, SIGNAL(DeviceDisconnected()), libada::i().get(), SLOT(on_DeviceDisconnect()));
+  connect(this, SIGNAL(DeviceConnected()), this, SLOT(on_DeviceConnected()));
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
@@ -1297,4 +1298,39 @@ void MainWindow::on_DeviceDisconnected() {
     this->close();
     csApplet()->messageBox(tr("Closing window due to device disconnection"));
   }
+}
+
+#include "src/core/ThreadWorker.h"
+void MainWindow::on_DeviceConnected() {
+//TODO show warnings for storage (test)
+
+ThreadWorker *tw = new ThreadWorker(
+    []() -> Data {
+      Data data;
+      auto storageDeviceConnected = libada::i()->isStorageDeviceConnected();
+      data["storage_connected"] = storageDeviceConnected;
+      if (storageDeviceConnected){
+        auto s = nm::instance()->get_status_storage();
+        data["initiated"] = s.StickKeysNotInitiated;
+        data["initiated_ask"] = false; //FIXME select proper variable s.NewSDCardFound_u8
+        data["erased"] = s.SDFillWithRandomChars_u8;
+        data["erased_ask"] = false; //FIXME s.NewSDCardFound_u8
+      }
+      return data;
+    },
+    [this](Data data) {
+      if(!data["storage_connected"].toBool()) return;
+
+      if (!data["initiated"].toBool()) {
+        if (!data["initiated_ask"].toBool())
+          csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
+                                        "device\" option from context menu."));
+      }
+      if (data["initiated"].toBool() && !data["erased"].toBool()) {
+        if (!data["erased_ask"].toBool())
+          csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
+                                        "storage with random data\""));
+      }
+      }, this);
+
 }
