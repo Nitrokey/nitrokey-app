@@ -1,12 +1,5 @@
-//
-// Created by sz on 09.01.17.
-//
-
 #include <libnitrokey/include/NitrokeyManager.h>
 #include "libada.h"
-
-//#include <mutex>
-//std::mutex mex_dev_com;
 
 
 std::shared_ptr <libada> libada::_instance = nullptr;
@@ -20,13 +13,9 @@ std::shared_ptr<libada> libada::i() {
   return _instance;
 }
 
-libada::libada() {
+libada::libada() {}
 
-}
-
-libada::~libada() {
-
-}
+libada::~libada() {}
 
 int libada::getMajorFirmwareVersion() {
   return 0; //FIXME get real version

@@ -9,6 +9,7 @@
 #include <QVariant>
 #include <QMap>
 
+
 /***
  * declaring data transporting type
  * alias cannot be used inside slots/signals for
