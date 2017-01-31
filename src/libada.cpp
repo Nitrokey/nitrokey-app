@@ -243,3 +243,11 @@ bool libada::set_current_time() {
   nm::instance()->set_time(time);
   return true;
 }
+
+void libada::on_DeviceDisconnect() {
+  //TODO imp perf compare serial numbers to not clear cache if it is the same device
+  cache_TOTP_name.clear();
+  cache_HOTP_name.clear();
+  cache_PWS_name.clear();
+  status_PWS.clear();
+}

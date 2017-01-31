@@ -51,6 +51,7 @@ public slots:
       void on_OTP_save(int slot_no, bool isHOTP);
       void on_PWS_save(int slot_no);
       void on_FactoryReset();
+      void on_DeviceDisconnect();
 
 public:
     explicit libada();

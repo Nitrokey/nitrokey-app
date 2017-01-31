@@ -103,6 +103,8 @@ MainWindow::MainWindow(QWidget *parent)
   connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
   connect(this, SIGNAL(OTP_slot_write(int, bool)), libada::i().get(), SLOT(on_OTP_save(int, bool)));
   connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
+  connect(this, SIGNAL(DeviceDisconnected()), this, SLOT(on_DeviceDisconnected()));
+  connect(this, SIGNAL(DeviceDisconnected()), libada::i().get(), SLOT(on_DeviceDisconnect()));
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
@@ -1328,5 +1330,12 @@ void MainWindow::updateProgressBar(int i) {
     QTimer::singleShot(1000, [&](){
       ui->progressBar->hide();
     });
+  }
+}
+
+void MainWindow::on_DeviceDisconnected() {
+  if(this->isVisible()){
+    this->close();
+    csApplet()->messageBox(tr("Closing window due to device disconnection"));
   }
 }

@@ -298,6 +298,7 @@ void AboutDialog::on_ButtonStickStatus_clicked() {
 #include "libnitrokey/include/NitrokeyManager.h"
 using nm = nitrokey::NitrokeyManager;
 
+#include "libnitrokey/include/DeviceCommunicationExceptions.h"
 void Worker::fetch_device_data() {
   QMutexLocker lock(&mutex);
   if (!libada::i()->isDeviceConnected()) {

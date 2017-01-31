@@ -119,6 +119,8 @@ public slots:
   void updateProgressBar(int i);
 
 signals:
+  void DeviceConnected();
+  void DeviceDisconnected();
   void PWS_unlocked();
   void PWS_slot_saved(int slot_no);
   void DeviceLocked();
@@ -127,6 +129,7 @@ signals:
   void OTP_slot_write(int slot_no, bool isHOTP);
 
 private slots:
+  void on_DeviceDisconnected();
   void generateComboBoxEntrys();
   void on_enableUserPasswordCheckBox_clicked(bool checked);
 
