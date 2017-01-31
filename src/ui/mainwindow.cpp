@@ -163,65 +163,42 @@ void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
 }
 
 
+enum class ConnectionState{
+  disconnected, connected,
+};
 
 void MainWindow::checkConnection() {
+  using cs = ConnectionState;
   QMutexLocker locker(&check_connection_mutex);
 
-  static int DeviceOffline = TRUE;
-  int ret = 0;
-//  currentTime = QDateTime::currentDateTime().toTime_t();
+  static ConnectionState state = cs::disconnected;
+  bool deviceConnected = libada::i()->isDeviceConnected();
 
-  int result = libada::i()->isDeviceConnected()? 0 : -1;
-  if (DeviceOffline == TRUE)
-    result = 1;
-
-  if (result == 0) { //connected
-    if (!libada::i()->isStorageDeviceConnected()) {
-      ui->statusBar->showMessage(tr("Nitrokey Pro connected"));
-//        translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
-    } else
-      ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
-
-    DeviceOffline = FALSE;
-
-  } else if (result == -1) { //disconnected
-    ui->statusBar->showMessage(tr("Nitrokey disconnected"));
-    if (FALSE == DeviceOffline) // To avoid the continuous reseting of
-                                // the menu
-    {
+  if (deviceConnected){
+    if(state == cs::disconnected){
+      state = cs::connected;
+      nitrokey::NitrokeyManager::instance()->connect();
+      //on connection
+      emit DeviceConnected();
+      auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
+                                    tr("Nitrokey Storage connected") :
+                                    tr("Nitrokey Pro connected");
+      ui->statusBar->showMessage(connected_device_model);
+      tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
       tray.regenerateMenu();
-      DeviceOffline = TRUE;
-      tray.showTrayMessage(tr("Nitrokey disconnected"), "", INFORMATION, TRAY_MSG_TIMEOUT);
     }
-
-  } else if (result == 1) { // recreate the settings and menus
-    DeviceOffline = FALSE;
-    if (!libada::i()->isStorageDeviceConnected()) {
-      ui->statusBar->showMessage(tr("Nitrokey connected"));
-      tray.showTrayMessage(tr("Nitrokey connected"), "Nitrokey Pro", INFORMATION, TRAY_MSG_TIMEOUT);
-//        translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
-    } else {
-      ui->statusBar->showMessage(tr("Nitrokey Storage connected"));
-      tray.showTrayMessage(tr("Nitrokey connected"), "Nitrokey Storage", INFORMATION, TRAY_MSG_TIMEOUT);
+  } else { //device not connected
+    if(state == cs::connected){
+      state = cs::disconnected;
+      //on disconnection
+      emit DeviceDisconnected();
+      ui->statusBar->showMessage(tr("Nitrokey disconnected"));
+      tray.showTrayMessage(tr("Nitrokey disconnected"));
+      tray.regenerateMenu();
     }
-    tray.regenerateMenu();
+    nitrokey::NitrokeyManager::instance()->connect();
   }
 
-//  if (TRUE == Stick20_ConfigurationChanged && libada::i()->isStorageDeviceConnected()) {
-//
-//    UpdateDynamicMenuEntrys();
-//
-//    if (TRUE == StickNotInitated) {
-//      if (FALSE == StickNotInitated_DontAsk)
-//          csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-//                                            "device\" option from context menu."));
-//    }
-//    if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
-//      if (FALSE == SdCardNotErased_DontAsk)
-//          csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-//                                            "storage with random data\""));
-//    }
-//  }
 }
 
 void MainWindow::initialTimeReset(int ret) {
