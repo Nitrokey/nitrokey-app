@@ -202,17 +202,7 @@ void MainWindow::checkConnection() {
 }
 
 void MainWindow::initialTimeReset(int ret) {
-  //TODO do it only on TOTP code access
-
-//  if (set_initial_time == FALSE) {
-//        ret = cryptostick->setTime(TOTP_CHECK_TIME);
-//        set_initial_time = TRUE;
-//      } else {
-//        ret = 0;
-//      }
-//
-//  bool answer;
-//
+  //TODO check is it needed on app start
 //  if (ret == -2) {
 //        answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
 //                                                tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
@@ -224,15 +214,7 @@ void MainWindow::initialTimeReset(int ret) {
 //                                                           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
 //                                                false);
 //        if (answer) {
-//          resetTime();
-//          QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-//          Sleep::msleep(1000);
-//          QGuiApplication::restoreOverrideCursor();
-//          generateAllConfigs();
-//
 //            csApplet()->messageBox(tr("Time reset!"));
-//        }
-//      }
 }
 
 MainWindow::~MainWindow() {
