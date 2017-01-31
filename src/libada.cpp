@@ -154,16 +154,22 @@ bool libada::isPasswordSafeAvailable() {
   return true;
 }
 
+#include <QDebug>
+#include "libnitrokey/include/DeviceCommunicationExceptions.h"
 bool libada::isPasswordSafeUnlocked() {
   try{
     nm::instance()->get_password_safe_slot_status();
     return true;
   }
   catch (CommandFailedException &e){
-    if (e.last_command_status == 5) //FIXME magic number change to not authorized
+    qDebug() << e.what();
+    if (e.reason_not_authorized())
       return false;
-    //FIXME handle not connected device
     throw;
+  }
+  catch (DeviceCommunicationException &e){
+    qDebug() << e.what();
+    return false;
   }
 }
 
