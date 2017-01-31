@@ -204,7 +204,7 @@ bool libada::is_nkpro_07_rtm1() {
 }
 
 bool libada::is_secret320_supported() {
-  return nm::instance()->is_authorization_command_supported();
+  return nm::instance()->is_authorization_command_supported(); //FIXME use proper function
 }
 
 int libada::getTOTPCode(int i, const char *string) {
@@ -231,7 +231,7 @@ bool libada::is_time_synchronized() {
     return true;
   }
   catch( CommandFailedException &e){
-    if (e.last_command_status != 6) //FIXME timestamp warning
+    if (!e.reason_timestamp_warning())
       throw;
     return false;
   }
