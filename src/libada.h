@@ -74,7 +74,7 @@ public:
     bool getPWSSlotStatus(const int i);
     void erasePWSSlot(const int i);
 
-  int getStorageSDCardSizeGB();
+    int getStorageSDCardSizeGB();
 
     bool is_time_synchronized();
     bool set_current_time();
@@ -88,8 +88,7 @@ public:
     bool isHOTPSlotProgrammed(const int i);
     void writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword);
 
-
-      bool is_nkpro_07_rtm1();
+    bool is_nkpro_07_rtm1();
     bool is_secret320_supported();
 
 };
