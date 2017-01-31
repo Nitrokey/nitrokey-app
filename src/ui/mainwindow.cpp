@@ -91,7 +91,6 @@ MainWindow::MainWindow(QWidget *parent)
   nitrokey::NitrokeyManager::instance()->connect();
   PWS_Access = libada::i()->isPasswordSafeUnlocked();
 
-
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
@@ -114,7 +113,7 @@ MainWindow::MainWindow(QWidget *parent)
   QTimer *timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
   timer->start(2000);
-
+  QTimer::singleShot(500, this, SLOT(checkConnection()));
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 

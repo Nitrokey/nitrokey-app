@@ -173,6 +173,7 @@ bool libada::isPasswordSafeUnlocked() {
   catch (CommandFailedException &e){
     if (e.last_command_status == 5) //FIXME magic number change to not authorized
       return false;
+    //FIXME handle not connected device
     throw;
   }
 }
