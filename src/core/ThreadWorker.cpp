@@ -2,6 +2,7 @@
 
 #include <QMutexLocker>
 #include <QDebug>
+#include "libnitrokey/include/DeviceCommunicationExceptions.h"
 
 
 ThreadWorkerNS::Worker::Worker(QObject *parent, const std::function<Data()> &datafunc) :
@@ -10,9 +11,19 @@ ThreadWorkerNS::Worker::Worker(QObject *parent, const std::function<Data()> &dat
 
 void ThreadWorkerNS::Worker::fetch_data() {
   QMutexLocker lock(&mutex);
-  auto data = datafunc();
+  try{
+    auto data = datafunc();
+    emit finished(data);
+  }
+  catch (DeviceCommunicationException &e){
+    //FIXME to log
+    qDebug() << e.what();
+  }
+  catch (std::exception &e){
+    //FIXME other (to log)
+    qDebug() << e.what();
+  }
   emit finished();
-  emit finished(data);
 }
 
 ThreadWorker::ThreadWorker(const std::function<Data()> &datafunc, const std::function<void(Data)> &usefunc,
