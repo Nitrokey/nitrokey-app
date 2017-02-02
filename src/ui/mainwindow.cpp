@@ -1279,6 +1279,7 @@ void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
 }
 
 void MainWindow::startLockDeviceAction() {
+  nm::instance()->lock_device();
   PWS_Access = false;
   tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
   emit DeviceLocked();

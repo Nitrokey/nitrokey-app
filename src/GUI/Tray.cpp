@@ -454,14 +454,12 @@ void Tray::generateMenuForStorageDevice() {
 
 //    if (FALSE == SdCardNotErased) {
     if (status.SDFillWithRandomChars_u8) { //filled randomly
-//      if (!status.VolumeActiceFlag_st.encrypted)
-      if (!status.ReadWriteFlagCryptedVolume_u8)
+      if (!status.VolumeActiceFlag_st.encrypted)
         trayMenu->addAction(Stick20ActionEnableCryptedVolume);
       else
         trayMenu->addAction(Stick20ActionDisableCryptedVolume);
 
-//      if (!status.VolumeActiceFlag_st.hidden)
-      if (!status.ReadWriteFlagHiddenVolume_u8)
+      if (!status.VolumeActiceFlag_st.hidden)
         trayMenu->addAction(Stick20ActionEnableHiddenVolume);
       else
         trayMenu->addAction(Stick20ActionDisableHiddenVolume);
