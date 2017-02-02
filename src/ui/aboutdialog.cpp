@@ -54,7 +54,8 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->firmwareLabel->setDisabled(true);
   ui->serialEdit->setDisabled(true);
 
-  ui->VersionLabel->setText(tr(GUI_VERSION));
+  auto string = QString(GUI_VERSION);
+  ui->VersionLabel->setText(string);
 
   ui->ButtonStickStatus->hide();
 

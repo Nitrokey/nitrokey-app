@@ -4,7 +4,7 @@ cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
 
 PROJECT(NitrokeyApp)
-SET(PROJECT_VERSION "0.7.0")
+SET(PROJECT_VERSION "1.0-alpha")
 OPTION(ADD_ASAN "Additional debug checks" 0)
 #SET(ADD_ASAN 1)
 
@@ -27,6 +27,16 @@ ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
 FIND_PACKAGE(Qt5Core)
 FIND_PACKAGE(Qt5Gui)
 FIND_PACKAGE(Qt5Widgets)
+
+
+execute_process(
+        COMMAND git describe --abbrev=4 HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE GIT_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+add_definitions(-DGIT_VERSION="${GIT_VERSION}")
+add_definitions(-DGUI_VERSION="${PROJECT_VERSION}")
 
 
 # Directory structure

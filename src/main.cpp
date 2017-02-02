@@ -49,6 +49,7 @@ void initialize_startup_info(StartUpParameter_tst &StartupInfo_st);
 void HelpInfos(void) {
   puts("Nitrokey App "
   GUI_VERSION
+  GIT_VERSION
            "\n\n"
        "-h, --help        display this help and exit\n"
        "-a, --admin       enable extra administrativefunctions\n"
@@ -165,6 +166,7 @@ int main(int argc, char *argv[]) {
      msgBox.setText( QObject::tr("Can't start more than one instance of the application.") );
      msgBox.setIcon( QMessageBox::Critical );
      msgBox.exec(); exit(0); } else { */
+  qDebug() <<  "Nitrokey App " GUI_VERSION " (git: " GIT_VERSION ")";
   qDebug() << "Application started successfully.";
   // }
 
