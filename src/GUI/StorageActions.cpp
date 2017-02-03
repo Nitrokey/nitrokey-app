@@ -119,9 +119,17 @@ void StorageActions::startStick20EnableHiddenVolume() {
     auto s = dialog.getPassword();
 
     auto m = nitrokey::NitrokeyManager::instance();
-    m->unlock_hidden_volume(s.data());
-    HiddenVolumeActive = true;
-    emit storageStatusChanged();
+    try {
+      m->unlock_hidden_volume(s.data());
+      HiddenVolumeActive = true;
+      emit storageStatusChanged();
+    }
+    catch (CommandFailedException &e){
+      if(!e.reason_wrong_password())
+        throw;
+      csApplet()->warningBox(tr("Wrong password")); //FIXME use existing translation
+    }
+
   }
 }
 
