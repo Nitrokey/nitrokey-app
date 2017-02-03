@@ -373,17 +373,18 @@ void AboutDialog::update_device_slots(bool connected) {
       ui->not_erased_sd_label->hide();
     }
 
-    if (worker.devdata.storage.volume_active.plain_RW) {
+    auto read_write_active = worker.devdata.storage.volume_active.plain_RW == 0;
+    if (read_write_active) {
       ui->unencrypted_volume_label->setText(tr("READ/WRITE"));
     } else {
       ui->unencrypted_volume_label->setText(tr("READ ONLY"));
     }
 
-    if (worker.devdata.storage.volume_active.hidden_RW) { //FIXME check correctness (.hidden not working?)
+    if (worker.devdata.storage.volume_active.hidden) { //FIXME check correctness (.hidden not working?)
       ui->hidden_volume_label->setText(tr("Active"));
     } else {
       ui->hidden_volume_label->setText(tr("Not active"));
-      if (worker.devdata.storage.volume_active.encrypted_RW) { //FIXME check correctness (as above)
+      if (worker.devdata.storage.volume_active.encrypted) { //FIXME check correctness (as above)
         ui->encrypted_volume_label->setText(tr("Active"));
       } else {
         ui->encrypted_volume_label->setText(tr("Not active"));

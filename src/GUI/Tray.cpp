@@ -481,14 +481,13 @@ void Tray::generateMenuForStorageDevice() {
     trayMenuSubConfigure->addSeparator();
 
     // Storage actions
-    if (!status.ReadWriteFlagUncryptedVolume_u8)
-      trayMenuSubConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume); // Set
-      // RW
-      // active
+    auto read_write_active = status.ReadWriteFlagUncryptedVolume_u8 == 0;
+    if (read_write_active)
+      // Set readonly active
+      trayMenuSubConfigure->addAction(Stick20ActionSetReadonlyUncryptedVolume);
     else
-      trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume); // Set
-    // readonly
-    // active
+      // Set RW active
+      trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);
 
 //    if (FALSE == SdCardNotErased)
     if (status.SDFillWithRandomChars_u8)
