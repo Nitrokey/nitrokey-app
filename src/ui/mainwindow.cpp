@@ -181,21 +181,12 @@ void MainWindow::checkConnection() {
       nitrokey::NitrokeyManager::instance()->connect();
       //on connection
       emit DeviceConnected();
-      auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
-                                    tr("Nitrokey Storage connected") :
-                                    tr("Nitrokey Pro connected");
-      ui->statusBar->showMessage(connected_device_model);
-      tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
-      tray.regenerateMenu();
     }
   } else { //device not connected
     if(state == cs::connected){
       state = cs::disconnected;
       //on disconnection
       emit DeviceDisconnected();
-      ui->statusBar->showMessage(tr("Nitrokey disconnected"));
-      tray.showTrayMessage(tr("Nitrokey disconnected"));
-      tray.regenerateMenu();
     }
     nitrokey::NitrokeyManager::instance()->connect();
   }
@@ -432,12 +423,18 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   //TODO implement reading slot data in libnitrokey
   //TODO move reading to separate thread
 
-  if (libada::i()->isTOTPSlotProgrammed(slotNo)) {
-    auto p = nm::instance()->get_TOTP_slot_data(slotNo);
-    updateSlotConfig(p, ui);
-    int interval = p.slot_counter;
-    if (interval < 1) interval = 30;
-    ui->intervalSpinBox->setValue(interval);
+  try{
+    if (libada::i()->isTOTPSlotProgrammed(slotNo)) {
+      auto p = nm::instance()->get_TOTP_slot_data(slotNo);
+      updateSlotConfig(p, ui);
+      int interval = p.slot_counter;
+      if (interval < 1) interval = 30;
+      ui->intervalSpinBox->setValue(interval);
+    }
+  }
+  catch (DeviceSendingFailure &e){
+    emit DeviceDisconnected();
+    return;
   }
 
 }
@@ -1295,6 +1292,10 @@ void MainWindow::updateProgressBar(int i) {
 }
 
 void MainWindow::on_DeviceDisconnected() {
+  ui->statusBar->showMessage(tr("Nitrokey disconnected"));
+  tray.showTrayMessage(tr("Nitrokey disconnected"));
+  tray.regenerateMenu();
+
   if(this->isVisible()){
     this->close();
     csApplet()->messageBox(tr("Closing window due to device disconnection"));
@@ -1303,8 +1304,14 @@ void MainWindow::on_DeviceDisconnected() {
 
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_DeviceConnected() {
-//TODO show warnings for storage (test)
+  auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
+                                tr("Nitrokey Storage connected") :
+                                tr("Nitrokey Pro connected");
+  ui->statusBar->showMessage(connected_device_model);
+  tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
+  tray.regenerateMenu();
 
+//TODO show warnings for storage (test)
 ThreadWorker *tw = new ThreadWorker(
     []() -> Data {
       Data data;
