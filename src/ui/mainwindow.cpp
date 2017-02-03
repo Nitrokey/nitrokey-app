@@ -1312,7 +1312,7 @@ ThreadWorker *tw = new ThreadWorker(
       data["storage_connected"] = storageDeviceConnected;
       if (storageDeviceConnected){
         auto s = nm::instance()->get_status_storage();
-        data["initiated"] = s.StickKeysNotInitiated;
+        data["initiated"] = !s.StickKeysNotInitiated;
         data["initiated_ask"] = false; //FIXME select proper variable s.NewSDCardFound_u8
         data["erased"] = s.SDFillWithRandomChars_u8;
         data["erased_ask"] = false; //FIXME s.NewSDCardFound_u8
