@@ -966,6 +966,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
   if (!libada::i()->getPWSSlotStatus(slot_number)) // Is slot active?
   {
     csApplet()->messageBox(tr("Slot is erased already."));
+    return;
   }
 
   try{
