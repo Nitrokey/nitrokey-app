@@ -67,6 +67,7 @@ void libada::on_OTP_save(int slot_no, bool isHOTP){
   }
 }
 
+#include <QDebug>
 std::string libada::getTOTPSlotName(const int i) {
   static QMutex mut;
   QMutexLocker locker(&mut);
@@ -81,6 +82,11 @@ std::string libada::getTOTPSlotName(const int i) {
     if (!e.reason_slot_not_programmed())
       throw;
     cache_TOTP_name.insert(i, new std::string(""));
+  }
+  catch (DeviceCommunicationException &e){
+    //FIXME log!
+//    emit DeviceDisconnected();
+    qDebug() << __PRETTY_FUNCTION__ << "DeviceCommunicationException";
   }
   return *cache_TOTP_name[i];
 }
