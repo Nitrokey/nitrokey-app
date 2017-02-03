@@ -129,6 +129,7 @@ signals:
   void OTP_slot_write(int slot_no, bool isHOTP);
 
 private slots:
+  void on_KeepDeviceOnline();
   void on_DeviceConnected();
   void on_DeviceDisconnected();
   void generateComboBoxEntrys();

@@ -118,6 +118,10 @@ MainWindow::MainWindow(QWidget *parent)
   timer->start(2000);
   QTimer::singleShot(500, this, SLOT(checkConnection()));
 
+  QTimer *keepDeviceOnlineTimer = new QTimer(this);
+  connect(keepDeviceOnlineTimer, SIGNAL(timeout()), this, SLOT(on_KeepDeviceOnline()));
+  keepDeviceOnlineTimer->start(60*1000);
+
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
   ui->deleteUserPasswordCheckBox->setEnabled(false);
@@ -1348,4 +1352,14 @@ ThreadWorker *tw = new ThreadWorker(
       }
       }, this);
 
+}
+
+void MainWindow::on_KeepDeviceOnline() {
+  qDebug() << "Keeping device online";
+  try{
+    nm::instance()->get_status();
+  }
+  catch (DeviceCommunicationException &e){
+    emit DeviceDisconnected();
+  }
 }
