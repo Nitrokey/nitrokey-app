@@ -1316,6 +1316,8 @@ void MainWindow::on_DeviceConnected() {
   tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
   tray.regenerateMenu();
 
+  //TODO synchronize time with the device
+
 //TODO show warnings for storage (test)
 ThreadWorker *tw = new ThreadWorker(
     []() -> Data {
