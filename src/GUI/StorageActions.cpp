@@ -88,7 +88,7 @@ void StorageActions::startStick20DisableCryptedVolume() {
 
     local_sync();
     auto m = nitrokey::NitrokeyManager::instance();
-    m->lock_device();
+    m->lock_encrypted_volume();
     CryptedVolumeActive = false;
     emit storageStatusChanged();
   }
@@ -141,9 +141,8 @@ void StorageActions::startStick20DisableHiddenVolume() {
     return;
 
   local_sync();
-//  stick20SendCommand(STICK20_CMD_DISABLE_HIDDEN_CRYPTED_PARI, password);
   auto m = nitrokey::NitrokeyManager::instance();
-  m->lock_device(); //FIXME disable volume instead of locking the device
+  m->lock_hidden_volume();
   HiddenVolumeActive = false;
   emit storageStatusChanged();
 }
