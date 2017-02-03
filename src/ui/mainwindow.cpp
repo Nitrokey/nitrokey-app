@@ -952,13 +952,17 @@ void MainWindow::SetupPasswordSafeConfig(void) {
 }
 
 void MainWindow::on_PWS_ButtonClearSlot_clicked() {
+  const auto item_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
+  const int slot_number = item_number - 1;
+  if (slot_number<0){
+    return;
+  }
+
   bool answer = csApplet()->yesOrNoBox(tr("WARNING: Are you sure you want to erase the slot?"), false);
   if (!answer){
       return;
   }
 
-  const auto item_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
-  const int slot_number = item_number - 1;
   if (!libada::i()->getPWSSlotStatus(slot_number)) // Is slot active?
   {
     csApplet()->messageBox(tr("Slot is erased already."));
