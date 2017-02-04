@@ -115,6 +115,9 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
 
 void Tray::generateMenu(bool init) {
   {
+    static QMutex mtx;
+    QMutexLocker locker(&mtx);
+
     if (NULL == trayMenu)
       trayMenu = std::make_shared<QMenu>();//new QMenu();
     else
