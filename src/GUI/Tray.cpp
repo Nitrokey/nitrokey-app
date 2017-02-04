@@ -513,7 +513,7 @@ void Tray::generateMenuForStorageDevice() {
       trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu(tr("Special Configure"));
       trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars);
 
-      if (TRUE == status.SDFillWithRandomChars_u8)
+      if (status.NewSDCardFound_u8 && !status.SDFillWithRandomChars_u8)
         trayMenuSubSpecialConfigure->addAction(Stick20ActionClearNewSDCardFound);
     }
 
