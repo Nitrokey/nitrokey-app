@@ -41,8 +41,10 @@ public slots:
   void startStick20DebugAction();
   void startStick20ClearNewSdCardFound();
   void startStick20SetupHiddenVolume();
+
 signals:
   void storageStatusChanged();
+  void FactoryReset();
 
 };
 

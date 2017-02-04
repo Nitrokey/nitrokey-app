@@ -89,7 +89,11 @@ MainWindow::MainWindow(QWidget *parent)
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
 
+
+  //TODO make connections in objects instead of accumulating them here
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
+  connect(&storage, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
+  connect(&storage, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
   connect(this, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
 

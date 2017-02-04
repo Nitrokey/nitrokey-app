@@ -226,7 +226,10 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
       auto s = dialog.getPassword();
 
       auto m = nitrokey::NitrokeyManager::instance();
+      m->lock_device(); //lock device to reset its state
       m->build_aes_key(s.data());
+      emit FactoryReset();
+
       if (fillSDWithRandomChars != 0) {
         m->fill_SD_card_with_random_data(s.data());
       }
