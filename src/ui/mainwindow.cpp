@@ -88,7 +88,6 @@ MainWindow::MainWindow(QWidget *parent)
       tray(this, true, true, &storage),
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
-  nitrokey::NitrokeyManager::instance()->connect();
 
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
@@ -99,6 +98,8 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(PWS_slot_saved(int)), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(OTP_slot_write(int, bool)), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(DeviceLocked()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(DeviceLocked()), &storage, SLOT(on_StorageStatusChanged()));
+  connect(this, SIGNAL(DeviceConnected()), &storage, SLOT(on_StorageStatusChanged()));
   connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
   connect(this, SIGNAL(OTP_slot_write(int, bool)), libada::i().get(), SLOT(on_OTP_save(int, bool)));
   connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));

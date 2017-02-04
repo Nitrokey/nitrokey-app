@@ -351,5 +351,12 @@ void StorageActions::startStick20SetupHiddenVolume() {
 
 StorageActions::StorageActions(QObject *parent, Authentication *auth_admin, Authentication *auth_user) : QObject(
     parent), auth_admin(auth_admin), auth_user(auth_user) {
+  connect(this, SIGNAL(storageStatusChanged()), this, SLOT(on_StorageStatusChanged()));
+}
 
+void StorageActions::on_StorageStatusChanged() {
+  auto m = nitrokey::NitrokeyManager::instance();
+  auto s = m->get_status_storage();
+  CryptedVolumeActive = s.VolumeActiceFlag_st.encrypted;
+  HiddenVolumeActive = s.VolumeActiceFlag_st.hidden;
 }

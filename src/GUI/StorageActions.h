@@ -26,6 +26,8 @@ private:
   bool StickNotInitated_DontAsk;
   bool Stick20ScSdCardOnline;
 
+private slots:
+  void on_StorageStatusChanged();
 
 public:
   StorageActions(QObject *parent, Authentication *auth_admin, Authentication *auth_user);
