@@ -253,7 +253,6 @@ void StorageActions::startStick20FillSDCardWithRandomChars() {
 }
 
 void StorageActions::startStick20ClearNewSdCardFound() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
   PinDialog dialog(PinDialog::ADMIN_PIN);
 
@@ -269,9 +268,7 @@ void StorageActions::startStick20ClearNewSdCardFound() {
 
 void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
   bool ret;
-
   PinDialog dialog(PinDialog::USER_PIN);
-
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
@@ -284,11 +281,8 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
 }
 
 void StorageActions::startStick20SetReadWriteUncryptedVolume() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
   bool ret;
-
   PinDialog dialog(PinDialog::USER_PIN);
-
   ret = dialog.exec();
 
   if (QDialog::Accepted == ret) {
