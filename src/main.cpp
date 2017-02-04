@@ -67,14 +67,7 @@ int main(int argc, char *argv[]) {
   QTranslator qtTranslator;
   configureBasicTranslator(a, qtTranslator);
 
-  if(parser.isSet("language-list")){
-    QDir langDir(":/i18n/");
-    auto list = langDir.entryList();
-    for (auto &&translationFile : list) {
-      qDebug() << translationFile.remove("nitrokey_").remove(".qm");
-    }
-    return 0;
-  }
+
 
   QSettings settings;
   const auto language_key = "main/language";
@@ -187,7 +180,7 @@ void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator) 
   qtTranslator.load("qt_" + QLocale::system().name());
 #else
   qtTranslator.load("qt_" + QLocale::system().name(),
-                    location(QLibraryInfo::TranslationsPath));
+                    QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 #endif
   a.installTranslator(&qtTranslator);
 }
@@ -216,11 +209,20 @@ void configureParser(const QApplication &a, QCommandLineParser &parser) {
           QCoreApplication::translate("main", "List available languages")},
       {{"l", "language"},
           QCoreApplication::translate("main",
-                                      "Load translation file with name i18n/nitrokey_xxx "
-                                      "and store this choice in settings file (use --debug for more details)"),
+                                      "Load translation file with given name"
+                                      "and store this choice in settings file."),
           QCoreApplication::translate("main", "directory")},
   });
 
   parser.process(a);
+
+  if(parser.isSet("language-list")){
+    QDir langDir(":/i18n/");
+    auto list = langDir.entryList();
+    for (auto &&translationFile : list) {
+      qDebug() << translationFile.remove("nitrokey_").remove(".qm");
+    }
+    exit(0);
+  }
 }
 
