@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "src/core/ThreadWorker.h"
 #include "mainwindow.h"
 //#include "mcvs-wrapper.h"
 //#include "nitrokey-applet.h"
@@ -28,35 +27,23 @@
 #include <QFileInfo>
 #include <QDebug>
 //#include <QSharedMemory>
-//#include <src/ui/mainwindow.h>
 #include "src/version.h"
-
 #include "src/utils/bool_values.h"
-
-#ifdef Q_OS_LINUX
-//#include <libintl.h>
-//#include <locale.h>
-//#define _(String) gettext(String)
-#endif //Q_OS_LINUX
 
 enum {DEBUG_STATUS_NO_DEBUGGING = 0, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
 
 
 void configureParser(const QApplication &a, QCommandLineParser &parser);
-
 void configureApplicationName();
-
 void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator);
+void issue_43_workaround();
+
+void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
+                         QTranslator &myappTranslator);
 
 int main(int argc, char *argv[]) {
-// workaround for issue https://github.com/Nitrokey/nitrokey-app/issues/43
-#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
-  if (qgetenv("QT_QPA_PLATFORMTHEME") == "appmenu-qt5") {
-    qputenv("QT_QPA_PLATFORMTHEME", "generic");
-  }
-#endif
-
   qRegisterMetaType<QMap<QString, QVariant>>();
+  issue_43_workaround();
 
   QApplication a(argc, argv);
   configureApplicationName();
@@ -66,7 +53,6 @@ int main(int argc, char *argv[]) {
   // initialize i18n
   QTranslator qtTranslator;
   configureBasicTranslator(a, qtTranslator);
-
 
 
   QSettings settings;
@@ -81,55 +67,8 @@ int main(int argc, char *argv[]) {
   }
 
   QTranslator myappTranslator;
-  bool success = false;
+  configureTranslator(a, parser, settings_language, myappTranslator);
 
-#if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC)
-  QLocale loc = QLocale::system();
-  QString lang = QLocale::languageToString(loc.language());
-  if(parser.isSet("debug")) {
-    qDebug() << loc << lang << loc.name();
-  }
-  if(!parser.isSet("language") && settings_language.isEmpty()){
-    success = myappTranslator.load(QLocale::system(), // locale
-                                 "",                // file name
-                                 "nitrokey_",       // prefix
-                                 ":/i18n/",         // folder
-                                 ".qm");            // suffix
-  }
-
-  if(!success){
-    auto translation_paths = {
-        QString("/i18n/nitrokey_%1.qm").arg(settings_language),
-        QString("/i18n/nitrokey_%1.qm").arg(QLocale::system().name()),
-        QString("/i18n/nitrokey_%1.qm").arg(lang.toLower()),
-        QString("/i18n/nitrokey_%1.qm").arg("en"),
-    };
-
-    for (auto path : translation_paths ){
-      for(auto p : {QString(':'), QString('.')}){
-        auto path2 = p + path;
-        success = myappTranslator.load(path2);
-        QFileInfo fileInfo(path2);
-        if(parser.isSet("debug")){
-          qDebug() << path2 << success << fileInfo.exists();
-        }
-        if (success) break;
-      }
-      if (success) break;
-    }
-  }
-#else
-  success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
-#endif
-
-  if (success){
-    a.installTranslator(&myappTranslator);
-  }
-#ifdef Q_OS_LINUX
-//  setlocale(LC_ALL, "");
-//  bindtextdomain("nitrokey-app", "/usr/share/locale");
-//  textdomain("nitrokey-app");
-#endif
 
   // Check for multiple instances
   // GUID from http://www.guidgenerator.com/online-guid-generator.aspx
@@ -156,7 +95,6 @@ int main(int argc, char *argv[]) {
 
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
-//  MainWindow w(&StartupInfo_st);
 
   {
     QDateTime local(QDateTime::currentDateTime());
@@ -173,6 +111,64 @@ int main(int argc, char *argv[]) {
   const auto retcode = a.exec();
   qDebug() << "normal exit";
   return retcode;
+}
+
+void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
+                         QTranslator &myappTranslator) {
+  bool success = false;
+
+#if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC)
+  QLocale loc = QLocale::system();
+  QString lang = QLocale::languageToString(loc.language());
+  if (parser.isSet("debug")) {
+    qDebug() << loc << lang << loc.name();
+  }
+  if (!parser.isSet("language") && settings_language.isEmpty()) {
+    success = myappTranslator.load(QLocale::system(), // locale
+                                   "",                // file name
+                                   "nitrokey_",       // prefix
+                                   ":/i18n/",         // folder
+                                   ".qm");            // suffix
+  }
+
+  if (!success) {
+    auto translation_paths = {
+        QString("/i18n/nitrokey_%1.qm").arg(settings_language),
+        QString("/i18n/nitrokey_%1.qm").arg(QLocale::system().name()),
+        QString("/i18n/nitrokey_%1.qm").arg(lang.toLower()),
+        QString("/i18n/nitrokey_%1.qm").arg("en"),
+    };
+
+    for (auto path : translation_paths) {
+      for (auto p : {QString(':'), QString('.')}) {
+        auto path2 = p + path;
+        success = myappTranslator.load(path2);
+        QFileInfo fileInfo(path2);
+        if (parser.isSet("debug")) {
+          qDebug() << path2 << success << fileInfo.exists();
+        }
+        if (success) break;
+      }
+      if (success) break;
+    }
+  }
+#else
+  success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
+#endif
+
+  if (success) {
+    a.installTranslator(&myappTranslator);
+  }
+}
+
+void issue_43_workaround() {
+// workaround for issue https://github.com/Nitrokey/nitrokey-app/issues/43
+#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
+  if (qgetenv("QT_QPA_PLATFORMTHEME") == "appmenu-qt5") {
+    qputenv("QT_QPA_PLATFORMTHEME", "generic");
+  }
+#endif
+
 }
 
 void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator) {
