@@ -18,13 +18,6 @@ private:
   Authentication * auth_user;
   bool CryptedVolumeActive = false;
   bool HiddenVolumeActive = false;
-  bool NormalVolumeRWActive;
-  bool HiddenVolumeAccessable;
-  bool StickNotInitated;
-  bool SdCardNotErased;
-  bool SdCardNotErased_DontAsk;
-  bool StickNotInitated_DontAsk;
-  bool Stick20ScSdCardOnline;
 
 private slots:
   void on_StorageStatusChanged();

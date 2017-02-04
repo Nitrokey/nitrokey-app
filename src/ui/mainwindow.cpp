@@ -77,7 +77,7 @@ void MainWindow::InitState() {
 //  StickNotInitated_DontAsk = FALSE;
 
   PWS_Access = false;
-  PWS_CreatePWSize = 12;
+  PWS_CreatePWSize = 12; //FIXME move to constants
 }
 
 //MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
@@ -1322,6 +1322,7 @@ void MainWindow::on_DeviceConnected() {
   ui->statusBar->showMessage(connected_device_model);
   tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
   tray.regenerateMenu();
+
 
   //TODO synchronize time with the device
 
