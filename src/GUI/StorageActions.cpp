@@ -327,10 +327,6 @@ void StorageActions::startStick20SetupHiddenVolume() {
   }
 
 //FIXME this should be called from HVDialog
-  HVDialog.SdCardHighWatermark_Read_Min = 0;
-  HVDialog.SdCardHighWatermark_Read_Max = 100;
-  HVDialog.SdCardHighWatermark_Write_Min = 0;
-  HVDialog.SdCardHighWatermark_Write_Max = 100;
 //  ret = cryptostick->getHighwaterMarkFromSdCard(
 //      &HVDialog.SdCardHighWatermark_Write_Min, &HVDialog.SdCardHighWatermark_Write_Max,
 //      &HVDialog.SdCardHighWatermark_Read_Min, &HVDialog.SdCardHighWatermark_Read_Max);

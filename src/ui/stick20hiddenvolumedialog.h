@@ -31,7 +31,7 @@ typedef struct {
     unsigned char SlotNr_u8;
     unsigned char StartBlockPercent_u8;
     unsigned char EndBlockPercent_u8;
-    unsigned char HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE + 1];
+    unsigned char HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE + 1] = {};
 } HiddenVolumeSetup_tst;
 
 class stick20HiddenVolumeDialog : public QDialog {
