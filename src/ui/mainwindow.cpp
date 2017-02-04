@@ -89,7 +89,6 @@ MainWindow::MainWindow(QWidget *parent)
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
   nitrokey::NitrokeyManager::instance()->connect();
-  PWS_Access = libada::i()->isPasswordSafeUnlocked();
 
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
@@ -1313,6 +1312,9 @@ void MainWindow::on_DeviceDisconnected() {
 
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_DeviceConnected() {
+  //TODO share device state to improve performance
+  PWS_Access = libada::i()->isPasswordSafeUnlocked();
+
   auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
                                 tr("Nitrokey Storage connected") :
                                 tr("Nitrokey Pro connected");
