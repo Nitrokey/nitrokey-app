@@ -42,6 +42,12 @@
 enum {DEBUG_STATUS_NO_DEBUGGING = 0, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
 
 
+void configureParser(const QApplication &a, QCommandLineParser &parser);
+
+void configureApplicationName();
+
+void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator);
+
 int main(int argc, char *argv[]) {
 // workaround for issue https://github.com/Nitrokey/nitrokey-app/issues/43
 #if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
@@ -53,48 +59,13 @@ int main(int argc, char *argv[]) {
   qRegisterMetaType<QMap<QString, QVariant>>();
 
   QApplication a(argc, argv);
-
-  QCoreApplication::setOrganizationName("Nitrokey");
-  QCoreApplication::setOrganizationDomain("nitrokey.com");
-  QCoreApplication::setApplicationName("Nitrokey App");
-  QCoreApplication::setApplicationVersion(GUI_VERSION "~" GIT_VERSION);
-
-
-
-
+  configureApplicationName();
   QCommandLineParser parser;
-  parser.setApplicationDescription(
-      QCoreApplication::translate("main", "Manage your Nitrokey sticks"));
-  parser.addHelpOption();
-  parser.addVersionOption();
-
-  parser.addOptions({
-      {{"d", "debug"},
-          QCoreApplication::translate("main", "Enable debug options")},
-      {{"a", "admin"},
-          QCoreApplication::translate("main", "Enable extra administrative functions")},
-      {"lock-hardware",
-          QCoreApplication::translate("main", "Show hardware lock action in tray menu")},
-      {"language-list",
-          QCoreApplication::translate("main", "List available languages")},
-      {{"l", "language"},
-          QCoreApplication::translate("main",
-                                      "Load translation file with name i18n/nitrokey_xxx "
-                                      "and store this choice in settings file (use --debug for more details)"),
-          QCoreApplication::translate("main", "directory")},
-  });
-
-  parser.process(a);
+  configureParser(a, parser);
 
   // initialize i18n
   QTranslator qtTranslator;
-#if defined(Q_WS_WIN)
-  qtTranslator.load("qt_" + QLocale::system().name());
-#else
-  qtTranslator.load("qt_" + QLocale::system().name(),
-                    QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-#endif
-  a.installTranslator(&qtTranslator);
+  configureBasicTranslator(a, qtTranslator);
 
   if(parser.isSet("language-list")){
     QDir langDir(":/i18n/");
@@ -209,5 +180,47 @@ int main(int argc, char *argv[]) {
   const auto retcode = a.exec();
   qDebug() << "normal exit";
   return retcode;
+}
+
+void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator) {
+#if defined(Q_WS_WIN)
+  qtTranslator.load("qt_" + QLocale::system().name());
+#else
+  qtTranslator.load("qt_" + QLocale::system().name(),
+                    location(QLibraryInfo::TranslationsPath));
+#endif
+  a.installTranslator(&qtTranslator);
+}
+
+void configureApplicationName() {
+  QCoreApplication::setOrganizationName("Nitrokey");
+  QCoreApplication::setOrganizationDomain("nitrokey.com");
+  QCoreApplication::setApplicationName("Nitrokey App");
+  QCoreApplication::setApplicationVersion(GUI_VERSION "~" GIT_VERSION);
+}
+
+void configureParser(const QApplication &a, QCommandLineParser &parser) {
+  parser.setApplicationDescription(
+      QCoreApplication::translate("main", "Manage your Nitrokey sticks"));
+  parser.addHelpOption();
+  parser.addVersionOption();
+
+  parser.addOptions({
+      {{"d", "debug"},
+          QCoreApplication::translate("main", "Enable debug options")},
+      {{"a", "admin"},
+          QCoreApplication::translate("main", "Enable extra administrative functions")},
+      {"lock-hardware",
+          QCoreApplication::translate("main", "Show hardware lock action in tray menu")},
+      {"language-list",
+          QCoreApplication::translate("main", "List available languages")},
+      {{"l", "language"},
+          QCoreApplication::translate("main",
+                                      "Load translation file with name i18n/nitrokey_xxx "
+                                      "and store this choice in settings file (use --debug for more details)"),
+          QCoreApplication::translate("main", "directory")},
+  });
+
+  parser.process(a);
 }
 
