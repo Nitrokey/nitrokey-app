@@ -96,8 +96,10 @@ int main(int argc, char *argv[]) {
           QCoreApplication::translate("main", "Enable debug options")},
       {{"a", "admin"},
           QCoreApplication::translate("main", "Enable extra administrative functions")},
-      {{"lh", "lock-hardware"},
+      {"lock-hardware",
           QCoreApplication::translate("main", "Show hardware lock action in tray menu")},
+      {"language-list",
+          QCoreApplication::translate("main", "List available languages")},
       {{"l", "language"},
           QCoreApplication::translate("main",
                                       "Load translation file with name i18n/nitrokey_xxx "
@@ -129,6 +131,14 @@ int main(int argc, char *argv[]) {
 #endif
   a.installTranslator(&qtTranslator);
 
+  if(parser.isSet("language-list")){
+    QDir langDir(":/i18n/");
+    auto list = langDir.entryList();
+    for (auto &&translationFile : list) {
+      qDebug() << translationFile.remove("nitrokey_").remove(".qm");
+    }
+    return 0;
+  }
 
   QSettings settings;
   const auto language_key = "main/language";
