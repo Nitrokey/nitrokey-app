@@ -64,6 +64,7 @@ void HelpInfos(void) {
        "\n");
 }
 
+#include "src/version.h"
 int main(int argc, char *argv[]) {
 // workaround for issue https://github.com/Nitrokey/nitrokey-app/issues/43
 #if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
@@ -75,9 +76,47 @@ int main(int argc, char *argv[]) {
   qRegisterMetaType<QMap<QString, QVariant>>();
 
   QApplication a(argc, argv);
-  StartUpParameter_tst StartupInfo_st;
-  initialize_startup_info(StartupInfo_st);
-  qDebug() << "Command line arguments disabled";
+
+  QCoreApplication::setOrganizationName("Nitrokey");
+  QCoreApplication::setOrganizationDomain("nitrokey.com");
+  QCoreApplication::setApplicationName("Nitrokey App");
+  QCoreApplication::setApplicationVersion(GUI_VERSION "~" GIT_VERSION);
+
+
+
+
+  QCommandLineParser parser;
+  parser.setApplicationDescription(
+      QCoreApplication::translate("main", "Manage your Nitrokey sticks"));
+  parser.addHelpOption();
+  parser.addVersionOption();
+
+  parser.addOptions({
+      {{"d", "debug"},
+          QCoreApplication::translate("main", "Enable debug options")},
+      {{"a", "admin"},
+          QCoreApplication::translate("main", "Enable extra administrative functions")},
+      {{"lh", "lock-hardware"},
+          QCoreApplication::translate("main", "Show hardware lock action in tray menu")},
+      {{"l", "language"},
+          QCoreApplication::translate("main",
+                                      "Load translation file with name i18n/nitrokey_xxx "
+                                      "and store this choice in settings file (use --debug for more details)"),
+          QCoreApplication::translate("main", "directory")},
+  });
+
+  parser.process(a);
+
+  const QStringList args = parser.positionalArguments();
+  // source is args.at(0), destination is args.at(1)
+  bool debug = parser.isSet("debug");
+  QString targetDir = parser.value("language");
+
+
+
+//  StartUpParameter_tst StartupInfo_st;
+//  initialize_startup_info(StartupInfo_st);
+//  qDebug() << "Command line arguments disabled";
 //  parseCommandLine(argc, argv, StartupInfo_st);
 
   // initialize i18n
@@ -90,18 +129,15 @@ int main(int argc, char *argv[]) {
 #endif
   a.installTranslator(&qtTranslator);
 
-  QCoreApplication::setOrganizationName("Nitrokey");
-  QCoreApplication::setOrganizationDomain("nitrokey.com");
-  QCoreApplication::setApplicationName("Nitrokey App");
 
   QSettings settings;
   const auto language_key = "main/language";
-  if (StartupInfo_st.language_set){
-    qDebug() << "Setting default language to " << StartupInfo_st.language_string;
-    settings.setValue(language_key, StartupInfo_st.language_string);
+  if (parser.isSet("language")){
+    qDebug() << "Setting default language to " << parser.value("language");
+    settings.setValue(language_key, parser.value("language"));
   }
   QString settings_language = settings.value(language_key).toString();
-  if(StartupInfo_st.FlagDebug) {
+  if(parser.isSet("debug")) {
     qDebug() << settings_language << settings.fileName();
   }
 
@@ -111,10 +147,10 @@ int main(int argc, char *argv[]) {
 #if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC)
   QLocale loc = QLocale::system();
   QString lang = QLocale::languageToString(loc.language());
-  if(StartupInfo_st.FlagDebug) {
+  if(parser.isSet("debug")) {
     qDebug() << loc << lang << loc.name();
   }
-  if(!StartupInfo_st.language_set && settings_language.isEmpty()){
+  if(!parser.isSet("language") && settings_language.isEmpty()){
     success = myappTranslator.load(QLocale::system(), // locale
                                  "",                // file name
                                  "nitrokey_",       // prefix
@@ -135,7 +171,7 @@ int main(int argc, char *argv[]) {
         auto path2 = p + path;
         success = myappTranslator.load(path2);
         QFileInfo fileInfo(path2);
-        if(StartupInfo_st.FlagDebug){
+        if(parser.isSet("debug")){
           qDebug() << path2 << success << fileInfo.exists();
         }
         if (success) break;
@@ -267,22 +303,3 @@ void initialize_startup_info(StartUpParameter_tst &StartupInfo_st) {
   StartupInfo_st.language_set = FALSE;
   StartupInfo_st.language_string = "";
 }
-
-//extern "C" char *GetTimeStampForLog(void);
-//
-//char *GetTimeStampForLog(void) {
-//  static QDateTime LastTimeStamp(QDateTime::currentDateTime());
-//
-//  QDateTime ActualTimeStamp(QDateTime::currentDateTime());
-//
-//  static char DateString[40];
-//
-//  if (ActualTimeStamp.toTime_t() != LastTimeStamp.toTime_t()) {
-//    LastTimeStamp = ActualTimeStamp;
-//    STRCPY(DateString, sizeof(DateString) - 1,
-//           LastTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toLatin1());
-//  } else
-//    DateString[0] = 0;
-//
-//  return (DateString);
-//}
