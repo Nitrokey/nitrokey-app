@@ -194,7 +194,7 @@ void configureApplicationName() {
 
 void configureParser(const QApplication &a, QCommandLineParser &parser) {
   parser.setApplicationDescription(
-      QCoreApplication::translate("main", "Manage your Nitrokey sticks"));
+      QCoreApplication::translate("main", "Nitrokey App - Manage your Nitrokey sticks"));
   parser.addHelpOption();
   parser.addVersionOption();
 
