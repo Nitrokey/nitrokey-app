@@ -41,6 +41,8 @@ void issue_43_workaround();
 void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
                          QTranslator &myappTranslator);
 
+void configureRandomGenerator();
+
 int main(int argc, char *argv[]) {
   qRegisterMetaType<QMap<QString, QVariant>>();
   issue_43_workaround();
@@ -96,10 +98,7 @@ int main(int argc, char *argv[]) {
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
 
-  {
-    QDateTime local(QDateTime::currentDateTime());
-    qsrand(static_cast<uint> (local.currentMSecsSinceEpoch() % 2000000000));
-  }
+  configureRandomGenerator();
 
   a.setQuitOnLastWindowClosed(false);
 
@@ -112,6 +111,11 @@ int main(int argc, char *argv[]) {
   qDebug() << "normal exit";
   return retcode;
 }
+
+void configureRandomGenerator() {
+    QDateTime local(QDateTime::currentDateTime());
+    qsrand(static_cast<uint> (local.currentMSecsSinceEpoch() % 2000000000));
+  }
 
 void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
                          QTranslator &myappTranslator) {
