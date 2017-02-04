@@ -41,30 +41,7 @@
 
 enum {DEBUG_STATUS_NO_DEBUGGING = 0, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
 
-StartUpParameter_tst &
-parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st);
 
-void initialize_startup_info(StartUpParameter_tst &StartupInfo_st);
-
-void HelpInfos(void) {
-  puts("Nitrokey App "
-  GUI_VERSION
-  GIT_VERSION
-           "\n\n"
-       "-h, --help        display this help and exit\n"
-       "-a, --admin       enable extra administrativefunctions\n"
-       "-d, --debug       enable debug options\n"
-       "--debugAll       enable extensive debug options\n"
-       "--lock-hardware   enable hardware lock option\n"
-       /* Disable password matrix printf ("--PWM Enable PIN entry via matrix\n"); */
-       "--cmd ...         start a command line session\n"
-       "--language ...    load translation file with name i18n/nitrokey_xxx and store this choice "
-           "in settings file (use --debug for more details)\n"
-       "                  Use --language with empty parameter to clear the choice"
-       "\n");
-}
-
-#include "src/version.h"
 int main(int argc, char *argv[]) {
 // workaround for issue https://github.com/Nitrokey/nitrokey-app/issues/43
 #if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
@@ -109,18 +86,6 @@ int main(int argc, char *argv[]) {
 
   parser.process(a);
 
-  const QStringList args = parser.positionalArguments();
-  // source is args.at(0), destination is args.at(1)
-  bool debug = parser.isSet("debug");
-  QString targetDir = parser.value("language");
-
-
-
-//  StartUpParameter_tst StartupInfo_st;
-//  initialize_startup_info(StartupInfo_st);
-//  qDebug() << "Command line arguments disabled";
-//  parseCommandLine(argc, argv, StartupInfo_st);
-
   // initialize i18n
   QTranslator qtTranslator;
 #if defined(Q_WS_WIN)
@@ -148,7 +113,7 @@ int main(int argc, char *argv[]) {
   }
   QString settings_language = settings.value(language_key).toString();
   if(parser.isSet("debug")) {
-    qDebug() << settings_language << settings.fileName();
+    qDebug() << "Language saved in settings: " << settings_language << settings.fileName();
   }
 
   QTranslator myappTranslator;
@@ -246,70 +211,3 @@ int main(int argc, char *argv[]) {
   return retcode;
 }
 
-StartUpParameter_tst &
-parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st) {
-  //TODO rewrite with QCommandLineParser (does not support qt4)
-  initialize_startup_info(StartupInfo_st);
-
-  int i;
-  char *p;
-
-  // Check for commandline parameter
-  for (i = 2; i <= argc; i++) {
-    p = argv[i - 1];
-    if ((0 == strcmp(p, "--help")) || (0 == strcmp(p, "-h"))) {
-      HelpInfos();
-      exit(0);
-    }
-
-    if ((0 == strcmp(p, "--debug")) || (0 == strcmp(p, "-d"))) {
-      StartupInfo_st.FlagDebug = DEBUG_STATUS_LOCAL_DEBUG;
-    }
-    if (0 == strcmp(p, "--debugAll")) {
-      StartupInfo_st.FlagDebug = DEBUG_STATUS_DEBUG_ALL;
-    }
-
-    if ((0 == strcmp(p, "--admin")) || (0 == strcmp(p, "-a"))) {
-      StartupInfo_st.ExtendedConfigActive = TRUE;
-    }
-    /* Disable password matrix if (0 == strcmp (p,"--PWM")) { StartupInfo_st.PasswordMatrix = TRUE;
-     * } */
-    if (0 == strcmp(p, "--lock-hardware"))
-      StartupInfo_st.LockHardware = TRUE;
-
-    if (0 == strcmp(p, "--cmd")) {
-      StartupInfo_st.Cmd = TRUE;
-      i++;
-      if (i > argc) {
-        fprintf(stderr, "ERROR: Can't get command\n");
-        fflush(stderr);
-        exit(1);
-      } else {
-        p = argv[i - 1];
-        StartupInfo_st.CmdLine = p;
-      }
-    }
-    if (0 == strcmp(p, "--language")) {
-      StartupInfo_st.language_set = TRUE;
-      i++;
-      if (i > argc) {
-        StartupInfo_st.language_string = "";
-      } else {
-        p = argv[i - 1];
-        StartupInfo_st.language_string = p;
-      }
-    }
-  }
-  return StartupInfo_st;
-}
-
-void initialize_startup_info(StartUpParameter_tst &StartupInfo_st) {
-  StartupInfo_st.ExtendedConfigActive = FALSE;
-//  StartupInfo_st.FlagDebug = DEBUG_STATUS_NO_DEBUGGING;
-  StartupInfo_st.FlagDebug = DEBUG_STATUS_DEBUG_ALL;
-  StartupInfo_st.PasswordMatrix = FALSE;
-  StartupInfo_st.LockHardware = FALSE;
-  StartupInfo_st.Cmd = FALSE;
-  StartupInfo_st.language_set = FALSE;
-  StartupInfo_st.language_string = "";
-}
