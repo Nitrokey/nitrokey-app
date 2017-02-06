@@ -55,8 +55,8 @@ int main(int argc, char *argv[]) {
     return 0;
 
   // initialize i18n
-  QTranslator qtTranslator;
-  configureBasicTranslator(a, qtTranslator);
+//  QTranslator qtTranslator;
+//  configureBasicTranslator(a, qtTranslator);
 
 
   QSettings settings;
