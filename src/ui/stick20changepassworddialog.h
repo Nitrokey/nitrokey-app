@@ -55,7 +55,7 @@ private:
   PasswordKind kind;
   Ui::DialogChangePassword *ui;
   void _changePassword();
-  void accept(void);
+  void accept(void) override;
   void UpdatePasswordRetry(void);
   void clearFields();
   void UI_deviceNotInitialized() const;
