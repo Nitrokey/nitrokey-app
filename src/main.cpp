@@ -145,13 +145,17 @@ void configureTranslator(const QApplication &a, const QCommandLineParser &parser
         QString("/i18n/nitrokey_%1.qm").arg("en"),
     };
 
+    if (parser.isSet("debug")) {
+      qDebug() << "Loading translation files";
+    }
     for (auto path : translation_paths) {
       for (auto p : {QString(':'), QString('.')}) {
         auto path2 = p + path;
         success = myappTranslator.load(path2);
         QFileInfo fileInfo(path2);
         if (parser.isSet("debug")) {
-          qDebug() << path2 << success << fileInfo.exists();
+          qDebug() << path2 << " - file loaded successfully: " <<success
+                   << ", file exists on disk: "<< fileInfo.exists();
         }
         if (success) break;
       }
