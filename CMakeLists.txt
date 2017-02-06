@@ -43,7 +43,6 @@ add_definitions(-DGUI_VERSION="${PROJECT_VERSION}")
 # Directory structure
 
 SET(ROOTDIR ${CMAKE_CURRENT_SOURCE_DIR})
-SET(LIBDIR ${ROOTDIR}/libnitrokey)
 SET(UIDIR ${ROOTDIR}/ui)
 SET(SRCDIR ${ROOTDIR}/src)
 SET(SRCUIDIR ${SRCDIR}/ui)
@@ -52,14 +51,9 @@ SET(UTILSDIR ${SRCDIR}/utils)
 # Moc files
 SET(moc_headers
     ${SRCUIDIR}/aboutdialog.h
-    ${UTILSDIR}/base32.h
-    ${SRCUIDIR}/nitrokey-applet.h
-    ${SRCDIR}/hotpslot.h
     ${SRCUIDIR}/mainwindow.h
-    ${SRCDIR}/mcvs-wrapper.h
     ${SRCUIDIR}/pindialog.h
 #    ${SRCUIDIR}/securitydialog.h
-    ${UTILSDIR}/sleep.h
     ${SRCUIDIR}/stick20changepassworddialog.h
     ${SRCUIDIR}/stick20debugdialog.h
     ${SRCUIDIR}/stick20hiddenvolumedialog.h
@@ -107,34 +101,25 @@ QT5_WRAP_CPP(moc_output ${moc_headers})
 QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
 
 
-#FIND_PACKAGE(PkgConfig REQUIRED)
-
 IF (WIN32)
 ELSEIF(APPLE)
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
 
-#    SET(EXTRA_LIBS ${EXTRA_LIBS} pthread ${LIBUSB_LIBRARIES} )
     IF(ADD_ASAN)
         SET(EXTRA_LIBS ${EXTRA_LIBS} asan )
     ENDIF()
-    SET(EXTRA_LIBS ${EXTRA_LIBS} nitrokey )
 
     INCLUDE_DIRECTORIES(
-      ${CMAKE_CURRENT_SOURCE_DIR}
-      ${CMAKE_CURRENT_BINARY_DIR}
       ${SRCDIR}
       ${UTILSDIR}
       ${SRCUIDIR}
       ${PROJECT_SOURCE_DIR}
       ${QT_INCLUDE_DIR}
-      ${LIBUSB_INCLUDE_DIRS}
     )
 
     LINK_DIRECTORIES(
       ${QT_LIBRARY_DIR}
-      ${LIBUSB_LIBRARY_DIRS}
-      "libnitrokey/build/"
     )
 
 ENDIF () # WIN32
@@ -162,15 +147,11 @@ SET(nitrokey_app_sources
 #        src/GUI/PasswordSafe.cpp src/GUI/PasswordSafe.h
         src/core/ThreadWorker.cpp src/core/ThreadWorker.h)
 
+#INSTALL
+
 # Freedesktop files
 IF(NOT WIN32)
   install(DIRECTORY
-      #      ${CMAKE_SOURCE_DIR}/data/icons/16x16
-      #      ${CMAKE_SOURCE_DIR}/data/icons/22x22
-      #      ${CMAKE_SOURCE_DIR}/data/icons/24x24
-      #      ${CMAKE_SOURCE_DIR}/data/icons/32x32
-      #      ${CMAKE_SOURCE_DIR}/data/icons/48x48
-      #      ${CMAKE_SOURCE_DIR}/data/icons/128x128
     ${CMAKE_SOURCE_DIR}/data/icons/
     DESTINATION share/icons
   )
