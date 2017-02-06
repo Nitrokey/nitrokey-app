@@ -5,7 +5,6 @@ PROJECT(NitrokeyApp CXX)
 SET(PROJECT_VERSION "1.0-alpha")
 set(CMAKE_CXX_STANDARD 14)
 
-OPTION(LIBNITROKEY_STATIC "Link with libnitrokey statically" TRUE)
 OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
 
 IF (NOT CMAKE_BUILD_TYPE)
