@@ -106,6 +106,11 @@ SET(qrc_files
     resources.qrc
 )
 
+# create translation files to include into resource file
+# remember to add new translations files there
+find_package(Qt5LinguistTools)
+file(GLOB i18n_files "i18n/*.ts")
+qt5_create_translation(i18n_resources ${i18n_files})
 
 # preprocess ui files
 QT5_WRAP_UI(ui_output ${ui_files})
@@ -214,6 +219,7 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${nitrokey_app_sources}
   ${moc_output}
   ${ui_output}
+  ${i18n_resources}
   ${resources_ouput}
 )
 
