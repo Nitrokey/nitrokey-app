@@ -1018,6 +1018,7 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
         if (data["slot_filled"].toBool()) {
           data["name"] = QString::fromStdString(libada::i()->getPWSSlotName(index));
           emit PWS_progress(100*2/4);
+          //FIXME use secure way
           data["pass"] = QString::fromStdString(nm::instance()->get_password_safe_slot_password(index));
           emit PWS_progress(100*3/4);
           data["login"] = QString::fromStdString(nm::instance()->get_password_safe_slot_login(index));

@@ -318,7 +318,7 @@ void Tray::generatePasswordMenu() {
     destroyThread();
   }
   thread_tray_populateOTP = std::make_shared<QThread>();
-  tray_Worker *worker = new tray_Worker;
+  tray_Worker *worker = new tray_Worker; //FIXME leak
   worker->moveToThread(thread_tray_populateOTP.get());
 //  connect(&tray_populateOTP, &QThread::finished, worker, &QObject::deleteLater); //FIXME test!
   connect(thread_tray_populateOTP.get(), SIGNAL(started()), worker, SLOT(doWork()));

@@ -30,7 +30,7 @@ ThreadWorker::ThreadWorker(const std::function<Data()> &datafunc, const std::fun
                            QObject *parent) :
     QObject(parent),
     worker(new ThreadWorkerNS::Worker(nullptr, datafunc)),
-    worker_thread(new QThread()),
+    worker_thread(new QThread()), //FIXME leak
     usefunc(usefunc) {
 
   connect(worker, SIGNAL(finished()), this, SLOT(worker_finished()), Qt::QueuedConnection);
