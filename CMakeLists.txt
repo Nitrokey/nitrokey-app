@@ -3,8 +3,9 @@ cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
 
-PROJECT(NitrokeyApp)
+PROJECT(NitrokeyApp CXX)
 SET(PROJECT_VERSION "1.0-alpha")
+set(CMAKE_CXX_STANDARD 11)
 OPTION(ADD_ASAN "Additional debug checks" FALSE)
 
 IF (NOT CMAKE_BUILD_TYPE)
