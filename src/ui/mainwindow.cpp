@@ -999,7 +999,7 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   ui->PWS_EditPassword->setText("");
   ui->PWS_EditLoginName->setText("");
 
-  if (index == 0) return; //do not update for dummy slot
+  if (index <= 0) return; //do not update for dummy slot
   index--;
 
   if (!PWS_Access) {
