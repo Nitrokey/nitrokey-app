@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
      msgBox.setText( QObject::tr("Can't start more than one instance of the application.") );
      msgBox.setIcon( QMessageBox::Critical );
      msgBox.exec(); exit(0); } else { */
-  qDebug() <<  "Nitrokey App " GUI_VERSION " (git: " GIT_VERSION ")";
+  qDebug() <<  "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
   qDebug() << "Application started successfully.";
   // }
 
@@ -189,7 +189,7 @@ void configureApplicationName() {
   QCoreApplication::setOrganizationName("Nitrokey");
   QCoreApplication::setOrganizationDomain("nitrokey.com");
   QCoreApplication::setApplicationName("Nitrokey App");
-  QCoreApplication::setApplicationVersion(GUI_VERSION "~" GIT_VERSION);
+  QCoreApplication::setApplicationVersion(GUI_VERSION);
 }
 
 void configureParser(const QApplication &a, QCommandLineParser &parser) {
@@ -201,6 +201,8 @@ void configureParser(const QApplication &a, QCommandLineParser &parser) {
   parser.addOptions({
       {{"d", "debug"},
           QCoreApplication::translate("main", "Enable debug options")},
+      {"version-more",
+          QCoreApplication::translate("main", "Show additional information about binary")},
       {{"a", "admin"},
           QCoreApplication::translate("main", "Enable extra administrative functions")},
       {"lock-hardware",
@@ -222,6 +224,12 @@ void configureParser(const QApplication &a, QCommandLineParser &parser) {
     for (auto &&translationFile : list) {
       qDebug() << translationFile.remove("nitrokey_").remove(".qm");
     }
+    exit(0);
+  }
+
+  if(parser.isSet("version-more")){
+    qDebug() << CMAKE_BUILD_TYPE << GUI_VERSION << GIT_VERSION;
+    qDebug() << CMAKE_CXX_COMPILER << CMAKE_CXX_FLAGS;
     exit(0);
   }
 }
