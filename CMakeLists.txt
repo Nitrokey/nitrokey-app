@@ -1,27 +1,39 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules/")
-
 PROJECT(NitrokeyApp CXX)
 SET(PROJECT_VERSION "1.0-alpha")
-set(CMAKE_CXX_STANDARD 11)
-OPTION(ADD_ASAN "Additional debug checks" FALSE)
+set(CMAKE_CXX_STANDARD 14)
+
+OPTION(LIBNITROKEY_STATIC "Link with libnitrokey statically" TRUE)
+OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
 
 IF (NOT CMAKE_BUILD_TYPE)
-  SET(CMAKE_BUILD_TYPE Debug)
+    set(CMAKE_BUILD_TYPE RelWithDebInfo)
 ENDIF()
-MESSAGE("Build type: ${CMAKE_BUILD_TYPE}")
-IF(ADD_ASAN)
-    ADD_DEFINITIONS(-fsanitize=address -fno-omit-frame-pointer)
-#    ADD_DEFINITIONS(-fsanitize=thread -fno-omit-frame-pointer -fPIE -pie -g)
+MESSAGE("${PROJECT_NAME}: Build type: ${CMAKE_BUILD_TYPE}")
+
+IF(UNIX)
+    OPTION(ADD_ASAN "Use ASAN to show memory issues" FALSE)
+    IF(ADD_ASAN)
+        ADD_DEFINITIONS(-fsanitize=address -fno-omit-frame-pointer)
+        #    ADD_DEFINITIONS(-fsanitize=thread -fno-omit-frame-pointer -fPIE -pie -g)
+    ENDIF()
 ENDIF()
+
 
 #add CMake build info
 ADD_DEFINITIONS(-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
-ADD_DEFINITIONS(-DCMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER_ID}, ${CMAKE_CXX_COMPILER}")
+ADD_DEFINITIONS(-DCMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER_ID}, ${CMAKE_CXX_COMPILER}, built on: ${CMAKE_SYSTEM} ")
 ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
 
+add_subdirectory (libnitrokey)
+
+IF(LIBNITROKEY_STATIC)
+    SET(NK_LIB nitrokey-static)
+ELSE()
+    SET(NK_LIB nitrokey)
+ENDIF()
 
 # QT configuration
 FIND_PACKAGE(Qt5Core)
@@ -30,13 +42,18 @@ FIND_PACKAGE(Qt5Widgets)
 
 
 # add git version info
+IF(ADD_GIT_INFO)
 execute_process(
         COMMAND git describe --abbrev=4 HEAD
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE GIT_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-add_definitions(-DGIT_VERSION="${GIT_VERSION}")
+    add_definitions(-DGIT_VERSION="${GIT_VERSION}")
+ELSE()
+    add_definitions(-DGIT_VERSION="")
+ENDIF()
+
 add_definitions(-DGUI_VERSION="${PROJECT_VERSION}")
 
 
@@ -201,18 +218,22 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${resources_ouput}
 )
 
-set_property(TARGET nitrokey-app PROPERTY CXX_STANDARD 14)
-
 INSTALL(TARGETS nitrokey-app DESTINATION bin)
 
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${QT_LIBRARIES}
-  ${LIBUSB_LIBRARIES}
   ${EXTRA_LIBS}
+  ${NK_LIB}
   ${platform_specific_libs}
 )
 
 qt5_use_modules( nitrokey-app Core Gui Widgets)
+
+
+
+
+
+
 
 # Packaging
 SET(CPACK_GENERATOR
