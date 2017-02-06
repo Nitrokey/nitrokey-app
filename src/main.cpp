@@ -33,7 +33,7 @@
 enum {DEBUG_STATUS_NO_DEBUGGING = 0, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
 
 
-void configureParser(const QApplication &a, QCommandLineParser &parser);
+bool configureParser(const QApplication &a, QCommandLineParser &parser);
 void configureApplicationName();
 void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator);
 void issue_43_workaround();
@@ -50,7 +50,9 @@ int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
   configureApplicationName();
   QCommandLineParser parser;
-  configureParser(a, parser);
+  auto shouldQuit = configureParser(a, parser);
+  if(shouldQuit)
+    return 0;
 
   // initialize i18n
   QTranslator qtTranslator;
@@ -192,7 +194,7 @@ void configureApplicationName() {
   QCoreApplication::setApplicationVersion(GUI_VERSION);
 }
 
-void configureParser(const QApplication &a, QCommandLineParser &parser) {
+bool configureParser(const QApplication &a, QCommandLineParser &parser) {
   parser.setApplicationDescription(
       QCoreApplication::translate("main", "Nitrokey App - Manage your Nitrokey sticks"));
   parser.addHelpOption();
@@ -224,13 +226,14 @@ void configureParser(const QApplication &a, QCommandLineParser &parser) {
     for (auto &&translationFile : list) {
       qDebug() << translationFile.remove("nitrokey_").remove(".qm");
     }
-    exit(0);
+    return true;
   }
 
   if(parser.isSet("version-more")){
     qDebug() << CMAKE_BUILD_TYPE << GUI_VERSION << GIT_VERSION;
     qDebug() << CMAKE_CXX_COMPILER << CMAKE_CXX_FLAGS;
-    exit(0);
+    return true;
   }
+  return false;
 }
 
