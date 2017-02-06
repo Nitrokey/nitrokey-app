@@ -2,13 +2,13 @@ Source: nitrokey-app
 Section: universe/utils
 Priority: optional
 Maintainer: Jan Suhr <jan@nitrokey.com>
-Build-Depends: debhelper (>= 9), qtchooser, libqt5core5a, libqt5dbus5, libqt5gui5, libqt5widgets5, libqt5xml5, qt5-qmake, qtbase5-dev-tools, qtbase5-dev, libusb-1.0-0-dev, libgtk2.0-dev, libappindicator-dev, libnotify-dev
+Build-Depends: debhelper (>= 9), qtchooser, libqt5core5a, libqt5dbus5, libqt5gui5, libqt5widgets5, libqt5xml5, qt5-qmake, qtbase5-dev-tools, qtbase5-dev, libhidapi-dev
 Standards-Version: 3.9.7
 Homepage: https://www.nitrokey.com
 
 Package: nitrokey-app
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5dbus5, libqt5gui5, libqt5widgets5, libqt5xml5, libusb-1.0-0, libappindicator1, libnotify4
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5dbus5, libqt5gui5, libqt5widgets5, libqt5xml5, libhidapi-libusb0
 Description: Nitrokey App for usage with Nitro Key Pro
  The Nitrokey App is required for Nitrokey Pro and Nitrokey Storage.
  It offers Google Authenticator compatible One-Time-Passwords and

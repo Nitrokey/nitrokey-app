@@ -259,7 +259,7 @@ SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
 
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libappindicator1, libnotify4, libqt5widgets5, libqt5gui5, libqt5core5a")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5, libqt5gui5, libqt5core5a, libhidapi-libusb0")
 SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/debian/postinst")
 
 
