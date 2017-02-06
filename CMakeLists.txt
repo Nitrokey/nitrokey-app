@@ -219,7 +219,7 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${nitrokey_app_sources}
   ${moc_output}
   ${ui_output}
-  ${i18n_resources}
+#  ${i18n_resources}
   ${resources_ouput}
 )
 
