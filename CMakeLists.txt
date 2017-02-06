@@ -14,9 +14,14 @@ MESSAGE("${PROJECT_NAME}: Build type: ${CMAKE_BUILD_TYPE}")
 
 IF(UNIX)
     OPTION(ADD_ASAN "Use ASAN to show memory issues" FALSE)
+    OPTION(ADD_TSAN "Use TSAN to show thread issues" FALSE)
     IF(ADD_ASAN)
+        SET(EXTRA_LIBS ${EXTRA_LIBS} asan )
         ADD_DEFINITIONS(-fsanitize=address -fno-omit-frame-pointer)
-        #    ADD_DEFINITIONS(-fsanitize=thread -fno-omit-frame-pointer -fPIE -pie -g)
+    ENDIF()
+    IF(ADD_TSAN)
+        SET(EXTRA_LIBS ${EXTRA_LIBS} tsan )
+        ADD_DEFINITIONS(-fsanitize=thread -fno-omit-frame-pointer -fPIE -pie -g)
     ENDIF()
 ENDIF()
 
@@ -127,10 +132,6 @@ ELSEIF(APPLE)
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
 
-    IF(ADD_ASAN)
-        SET(EXTRA_LIBS ${EXTRA_LIBS} asan )
-    ENDIF()
-
     INCLUDE_DIRECTORIES(
       ${SRCDIR}
       ${UTILSDIR}
@@ -233,8 +234,6 @@ TARGET_LINK_LIBRARIES(nitrokey-app
 )
 
 qt5_use_modules( nitrokey-app Core Gui Widgets)
-
-
 
 
 
