@@ -201,11 +201,6 @@ IF(NOT WIN32)
   )
 
   install(FILES
-   ${CMAKE_SOURCE_DIR}/po/de_DE/nitrokey-app.mo
-   DESTINATION share/locale/de_DE/LC_MESSAGES
-  )
-
-  install(FILES
     ${CMAKE_SOURCE_DIR}/images/info.png
     ${CMAKE_SOURCE_DIR}/images/quit.png
     ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
