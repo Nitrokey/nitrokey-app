@@ -61,6 +61,9 @@ ENDIF()
 add_definitions(-DGUI_VERSION="${PROJECT_VERSION}")
 
 
+# for out of source build
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 # Directory structure
 
 SET(ROOTDIR ${CMAKE_CURRENT_SOURCE_DIR})
