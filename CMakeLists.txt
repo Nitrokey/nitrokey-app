@@ -82,7 +82,7 @@ SET(qrc_files
     resources.qrc
 )
 # resources files
-QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
+QT5_ADD_RESOURCES(resources_output ${qrc_files})
 
 # create translation files to include into resource file
 # remember to add new translations files there
@@ -171,7 +171,7 @@ ENDIF () # NOT WIN32
 ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${nitrokey_app_sources}
   ${i18n_resources}
-  ${resources_ouput}
+  ${resources_output}
 )
 
 INSTALL(TARGETS nitrokey-app DESTINATION bin)
