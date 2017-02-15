@@ -72,47 +72,17 @@ SET(SRCDIR ${ROOTDIR}/src)
 SET(SRCUIDIR ${SRCDIR}/ui)
 SET(UTILSDIR ${SRCDIR}/utils)
 
-# Moc files
-SET(moc_headers
-    ${SRCUIDIR}/aboutdialog.h
-    ${SRCUIDIR}/mainwindow.h
-    ${SRCUIDIR}/pindialog.h
-#    ${SRCUIDIR}/securitydialog.h
-    ${SRCUIDIR}/stick20changepassworddialog.h
-    ${SRCUIDIR}/stick20debugdialog.h
-    ${SRCUIDIR}/stick20hiddenvolumedialog.h
-    ${SRCUIDIR}/stick20lockfirmwaredialog.h
-    ${SRCUIDIR}/stick20responsedialog.h
-    ${SRCUIDIR}/stick20-response-task.h
-    ${SRCUIDIR}/stick20updatedialog.h
-    ${SRCDIR}/GUI/Tray.h
-    src/GUI/Clipboard.h
-    src/GUI/Authentication.h
-    src/GUI/StorageActions.h
-    src/core/ThreadWorker.h
-    src/libada.h
-)
 
-
-# Ui files
-SET(ui_files
-    ${UIDIR}/aboutdialog.ui
-    ${UIDIR}/mainwindow.ui
-    ${UIDIR}/pindialog.ui
-#    ${UIDIR}/securitydialog.ui
-    ${UIDIR}/stick20changepassworddialog.ui
-    ${UIDIR}/stick20debugdialog.ui
-    ${UIDIR}/stick20hiddenvolumedialog.ui
-    ${UIDIR}/stick20lockfirmwaredialog.ui
-    ${UIDIR}/stick20responsedialog.ui
-    ${UIDIR}/stick20updatedialog.ui
-)
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
 
 
 # Resource files
 SET(qrc_files
     resources.qrc
 )
+# resources files
+QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
 
 # create translation files to include into resource file
 # remember to add new translations files there
@@ -120,34 +90,18 @@ find_package(Qt5LinguistTools)
 file(GLOB i18n_files "i18n/*.ts")
 qt5_create_translation(i18n_resources ${i18n_files})
 
-# preprocess ui files
-QT5_WRAP_UI(ui_output ${ui_files})
-
-# meta object compliation(moc)
-QT5_WRAP_CPP(moc_output ${moc_headers})
-
-# resources files
-QT5_ADD_RESOURCES(resources_ouput ${qrc_files})
-
 
 IF (WIN32)
 ELSEIF(APPLE)
 ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
-
-    INCLUDE_DIRECTORIES(
-      ${SRCDIR}
-      ${UTILSDIR}
-      ${SRCUIDIR}
-      ${PROJECT_SOURCE_DIR}
-      ${QT_INCLUDE_DIR}
-    )
-
-    LINK_DIRECTORIES(
-      ${QT_LIBRARY_DIR}
-    )
-
 ENDIF () # WIN32
+
+INCLUDE_DIRECTORIES(
+  ${SRCDIR}
+  ${UTILSDIR}
+  ${SRCUIDIR}
+)
 
 # c/cpp sources
 SET(nitrokey_app_sources
@@ -216,22 +170,18 @@ ENDIF () # NOT WIN32
 
 ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${nitrokey_app_sources}
-  ${moc_output}
-  ${ui_output}
-#  ${i18n_resources}
+  ${i18n_resources}
   ${resources_ouput}
 )
 
 INSTALL(TARGETS nitrokey-app DESTINATION bin)
 
 TARGET_LINK_LIBRARIES(nitrokey-app
-  ${QT_LIBRARIES}
   ${EXTRA_LIBS}
   ${NK_LIB}
-  ${platform_specific_libs}
+#  ${platform_specific_libs}
+  Qt5::Widgets Qt5::Core Qt5::Gui
 )
-
-qt5_use_modules( nitrokey-app Core Gui Widgets)
 
 
 
