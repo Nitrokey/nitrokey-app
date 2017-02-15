@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-CONFIG   += qt c++14
+CONFIG   += qt c++14 console
 QT       += core gui
 
 target.path = /usr/local/bin
@@ -45,10 +45,13 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCUIDIR}/securitydialog.cpp \
             $${SRCUIDIR}/nitrokey-applet.cpp \
             $${SRCDIR}/core/SecureString.cpp \
+            $${SRCDIR}/core/ThreadWorker.cpp \
             $${SRCDIR}/GUI/Tray.cpp \
             $${SRCDIR}/GUI/Clipboard.cpp \
             $${SRCDIR}/GUI/Authentication.cpp \
-            $${SRCDIR}/libada.cpp
+            $${SRCDIR}/GUI/StorageActions.cpp \
+            $${SRCDIR}/libada.cpp \
+            libnitrokey/hidapi/windows/hid.c
 
 
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
@@ -69,10 +72,15 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCDIR}/mcvs-wrapper.h \
             $${SRCUIDIR}/nitrokey-applet.h \
             $${SRCDIR}/core/SecureString.h \
+            $${SRCDIR}/core/ThreadWorker.h \
             $${SRCDIR}/GUI/Clipboard.h \
             $${SRCDIR}/GUI/Authentication.h \
             $${SRCDIR}/libada.h \
-            $${SRCDIR}/GUI/Tray.h
+            $${SRCDIR}/GUI/Tray.h \
+            $${SRCDIR}/GUI/StorageActions.h \
+            libnitrokey/hidapi/hidapi/hidapi.h
+
+INCLUDEPATH += libnitrokey/hidapi/hidapi/
 
 win32 {
 }
@@ -105,7 +113,7 @@ INCLUDEPATH +=  $${SRCDIR} \
                 $${GUIDIR}
 
 win32{
-    LIBS= -lsetupapi
+    LIBS= -lsetupapi -lhid
     RC_FILE=appico.rc
 }
 
@@ -119,7 +127,7 @@ unix:!macx{
     LIBS  = -lrt -lpthread
 }
 
-LIBS += -lnitrokey -L libnitrokey/build -L/home/sz/work/nitrokey-app/libnitrokey/build
+LIBS += -lnitrokey-static -Llibnitrokey/build -Llibnitrokey
 
 OTHER_FILES +=
 
