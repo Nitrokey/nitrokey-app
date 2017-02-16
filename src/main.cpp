@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
 
 
   MainWindow w;
-  csApplet()->setParent(&w);
+//  csApplet()->setParent(&w);
   //TODO add global exception catch for logging?
   //or use std::terminate
   const auto retcode = a.exec();
