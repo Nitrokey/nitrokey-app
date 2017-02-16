@@ -229,7 +229,7 @@ void Tray::initActionsForStick20() {
           SLOT(startStick20ExportFirmwareToFile()));
 
   QSignalMapper *signalMapper_startStick20DestroyCryptedVolume =
-      new QSignalMapper(main_window); // FIXME memory leak
+      new QSignalMapper(main_window);
 
   Stick20ActionDestroyCryptedVolume = new QAction(tr("&Destroy encrypted data"), main_window);
   signalMapper_startStick20DestroyCryptedVolume->setMapping(Stick20ActionDestroyCryptedVolume, 0);
