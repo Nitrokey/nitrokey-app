@@ -16,6 +16,8 @@ AppMessageBox *csApplet(){
 void AppMessageBox::warningBox(const QString msg) {
   QMessageBox *msgbox = new QMessageBox(
       QMessageBox::Warning, getBrand(), msg, QMessageBox::Ok, _parent);
+  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
+  msgbox->setModal( false );
   moveToCenter(msgbox);
   msgbox->exec();
 }
@@ -29,6 +31,8 @@ void AppMessageBox::moveToCenter(QWidget *widget) {
 void AppMessageBox::messageBox(const QString msg) {
   QMessageBox *msgbox = new QMessageBox(
       QMessageBox::Information, getBrand(), msg, QMessageBox::Ok, _parent);
+  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
+  msgbox->setModal( false );
   moveToCenter(msgbox);
   msgbox->exec();
 }
