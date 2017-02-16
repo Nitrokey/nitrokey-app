@@ -101,6 +101,10 @@ INCLUDEPATH +=  $${SRCDIR} \
                 $${GUIDIR}
 
 
+unix{
+    LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
+}
+
 win32 {
     INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
     SOURCES += $${ROOTDIR}/libnitrokey/hidapi/windows/hid.c
@@ -121,8 +125,10 @@ unix:!macx{
     LIBS += -lhidapi-libusb
 }
 
-LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
-
+win32{
+    LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
+    LIBS += -lhidapi-libusb
+}
 
 OTHER_FILES +=
 
