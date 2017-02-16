@@ -75,8 +75,6 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
 
 
 
-macx{
-}
 
 unix:!macx{
     SOURCES += $${SRCDIR}/systemutils.cpp
@@ -102,27 +100,29 @@ INCLUDEPATH +=  $${SRCDIR} \
                 $${COREDIR} \
                 $${GUIDIR}
 
+
 win32 {
-    INCLUDEPATH += libnitrokey/hidapi/hidapi/
-    SOURCES += libnitrokey/hidapi/windows/hid.c
+    INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
+    SOURCES += $${ROOTDIR}/libnitrokey/hidapi/windows/hid.c
     LIBS= -lsetupapi -lhid
     RC_FILE=appico.rc
 }
 
+
 macx{
+    INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
+    SOURCES += $${ROOTDIR}/libnitrokey/hidapi/mac/hid.c
     LIBS=-framework IOKit -framework CoreFoundation
     ICON= images/CS_icon.icns
     QMAKE_INFO_PLIST = Info.plist
 }
 
 unix:!macx{
-    LIBS  = -lrt -lpthread
-}
-!win32{
     LIBS += -lhidapi-libusb
 }
 
-LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build -L$${ROOTDIR}/libnitrokey
+LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
+
 
 OTHER_FILES +=
 
