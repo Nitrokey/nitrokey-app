@@ -283,9 +283,16 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
   if (QDialog::Accepted == ret) {
     const auto pass = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_only(pass.data());
-//    pass.safe_clear(); //TODO
-    emit storageStatusChanged();
+    try{
+      m->set_unencrypted_read_only(pass.data());
+  //    pass.safe_clear(); //TODO
+      emit storageStatusChanged();
+      csApplet()->messageBox(tr("Unencrypted volume set read-only")); //FIXME use existing translation
+    }
+    catch(CommandFailedException &e){
+      //FIXME handle errors
+      throw;
+    }
   }
 }
 
