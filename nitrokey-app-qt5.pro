@@ -104,14 +104,17 @@ INCLUDEPATH +=  $${SRCDIR} \
 unix{
     LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
 }
+unix:!macx{
+    LIBS += -lhidapi-libusb
+}
 
 win32 {
     INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
     SOURCES += $${ROOTDIR}/libnitrokey/hidapi/windows/hid.c
     LIBS= -lsetupapi -lhid
+    LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
     RC_FILE=appico.rc
 }
-
 
 macx{
     INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
@@ -121,14 +124,6 @@ macx{
     QMAKE_INFO_PLIST = Info.plist
 }
 
-unix:!macx{
-    LIBS += -lhidapi-libusb
-}
-
-win32{
-    LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
-    LIBS += -lhidapi-libusb
-}
 
 OTHER_FILES +=
 
