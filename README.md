@@ -157,8 +157,8 @@ popd
 ```
 
 
-old (for reference):
-Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
+Old (for reference) - based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
+
 1. `sudo apt-get install bison cmake flex intltool libtool scons`
 2. `git clone https://github.com/mxe/mxe.git`
 3. `cd mxe && make qt5`
