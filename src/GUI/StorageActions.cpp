@@ -123,6 +123,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
       m->unlock_hidden_volume(s.data());
       HiddenVolumeActive = true;
       emit storageStatusChanged();
+      csApplet()->messageBox(tr("Hidden volume enabled")); //FIXME use existing translation
     }
     catch (CommandFailedException &e){
       if(!e.reason_wrong_password())
@@ -145,6 +146,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
   m->lock_hidden_volume();
   HiddenVolumeActive = false;
   emit storageStatusChanged();
+  csApplet()->messageBox(tr("Hidden volume locked")); //FIXME use existing translation
 }
 
 void StorageActions::startLockDeviceAction() {
@@ -165,7 +167,7 @@ void StorageActions::startLockDeviceAction() {
   HiddenVolumeActive = false;
   CryptedVolumeActive = false;
   emit storageStatusChanged();
-
+  csApplet()->messageBox(tr("Device locked")); //FIXME use existing translation
 }
 
 #include "stick20updatedialog.h"
@@ -205,9 +207,16 @@ void StorageActions::startStick20ExportFirmwareToFile() {
   if (QDialog::Accepted == ret) {
     auto s = dialog.getPassword();
 
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->export_firmware(s.data());
-    //TODO UI add confirmation
+    try{
+      auto m = nitrokey::NitrokeyManager::instance();
+      m->export_firmware(s.data());
+      //TODO UI add confirmation
+      csApplet()->messageBox(tr("Firmware exported")); //FIXME use existing translation
+    }
+    catch (CommandFailedException &e){
+      //FIXME handle errors
+      throw;
+    }
   }
 }
 
@@ -337,8 +346,18 @@ void StorageActions::startStick20SetupHiddenVolume() {
     const auto d = HVDialog.HV_Setup_st;
     auto p = std::string( reinterpret_cast< char const* >(d.HiddenVolumePassword_au8));
     auto m = nitrokey::NitrokeyManager::instance();
-    m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
-                            d.EndBlockPercent_u8, p.data());
+
+    //TODO add try catch / threaded worker
+    try {
+      m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
+                              d.EndBlockPercent_u8, p.data());
+      csApplet()->messageBox("Hidden volume created"); //FIXME find proper translation
+    }
+    catch (CommandFailedException &e){
+      //TODO handle errors
+      throw;
+    }
+
   }
 }
 
