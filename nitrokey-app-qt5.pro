@@ -1,8 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2014-07-06T17:56:57
-#
-#-------------------------------------------------
 
 CONFIG   += qt c++14 console
 QT       += core gui
@@ -21,7 +16,7 @@ TARGET = nitrokey-app
 TEMPLATE = app
 
 ROOTDIR=$$PWD
-UIDIR=$${ROOTDIR}/ui
+UIDIR=$${ROOTDIR}/src/ui
 SRCDIR=$${ROOTDIR}/src
 SRCUIDIR=$${SRCDIR}/ui
 UTILSDIR=$${SRCDIR}/utils
@@ -51,7 +46,6 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCDIR}/GUI/Authentication.cpp \
             $${SRCDIR}/GUI/StorageActions.cpp \
             $${SRCDIR}/libada.cpp \
-            libnitrokey/hidapi/windows/hid.c
 
 
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
@@ -78,12 +72,8 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCDIR}/libada.h \
             $${SRCDIR}/GUI/Tray.h \
             $${SRCDIR}/GUI/StorageActions.h \
-            libnitrokey/hidapi/hidapi/hidapi.h
 
-INCLUDEPATH += libnitrokey/hidapi/hidapi/
 
-win32 {
-}
 
 macx{
 }
@@ -112,7 +102,9 @@ INCLUDEPATH +=  $${SRCDIR} \
                 $${COREDIR} \
                 $${GUIDIR}
 
-win32{
+win32 {
+    INCLUDEPATH += libnitrokey/hidapi/hidapi/
+    SOURCES += libnitrokey/hidapi/windows/hid.c
     LIBS= -lsetupapi -lhid
     RC_FILE=appico.rc
 }
@@ -126,8 +118,11 @@ macx{
 unix:!macx{
     LIBS  = -lrt -lpthread
 }
+!win32{
+    LIBS += -lhidapi-libusb
+}
 
-LIBS += -lnitrokey-static -Llibnitrokey/build -Llibnitrokey
+LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build -L$${ROOTDIR}/libnitrokey
 
 OTHER_FILES +=
 

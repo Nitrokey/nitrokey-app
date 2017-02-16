@@ -75,14 +75,13 @@ SET(UTILSDIR ${SRCDIR}/utils)
 
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
-
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 # Resource files
 SET(qrc_files
     resources.qrc
 )
-# resources files
-QT5_ADD_RESOURCES(resources_output ${qrc_files})
 
 # create translation files to include into resource file
 # remember to add new translations files there
@@ -98,6 +97,7 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
 ENDIF () # WIN32
 
 INCLUDE_DIRECTORIES(
+  ${UIDIR}
   ${SRCDIR}
   ${UTILSDIR}
   ${SRCUIDIR}
@@ -171,7 +171,7 @@ ENDIF () # NOT WIN32
 ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
   ${nitrokey_app_sources}
   ${i18n_resources}
-  ${resources_output}
+        ${qrc_files}
 )
 
 INSTALL(TARGETS nitrokey-app DESTINATION bin)
