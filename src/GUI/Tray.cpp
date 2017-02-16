@@ -290,17 +290,28 @@ void Tray::initActionsForStick20() {
 std::shared_ptr<QThread> thread_tray_populateOTP;
 
 void tray_Worker::doWork() {
-  const auto total = TOTP_SLOT_COUNT+HOTP_SLOT_COUNT+1;
+  const auto total = TOTP_SLOT_COUNT+HOTP_SLOT_COUNT+PWS_SLOT_COUNT+1;
+  int p = 0;
   //populate OTP name cache
   for (int i=0; i < TOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getTOTPSlotName(i);
-    emit progress(i * 100 / total);
+    emit progress(++p * 100 / total);
   }
 
   for (int i=0; i<HOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getHOTPSlotName(i);
-    emit progress((TOTP_SLOT_COUNT + i) * 100 / total);
+    emit progress(++p * 100 / total);
   }
+
+  //TODO test load PWS slots
+  if(libada::i()->isPasswordSafeUnlocked()){
+    for (int i=0; i<PWS_SLOT_COUNT; i++){
+      if(libada::i()->getPWSSlotStatus(i))
+        auto slotName = libada::i()->getPWSSlotName(i);
+      emit progress(++p * 100 / total);
+    }
+  }
+
   emit progress(100);
   emit resultReady();
 }
