@@ -129,9 +129,36 @@ make -j4 package
 ```
 This will result in two packages: `.deb` and `.rpm`. 
 
-#### Cross Compiling with QT5 for Windows on Ubuntu Linux
-Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
+#### Cross Compiling with QT5 for Windows on Ubuntu Linux (using MXE)
 
+new:
+
+```
+# MXE gcc6, x32:
+#remove MXE_PLUGIN_DIRS for GCC 5.4.0
+git clone https://github.com/mxe/mxe.git && pushd mxe
+make MXE_TARGETS=i686-w64-mingw32.static.posix MXE_PLUGIN_DIRS=plugins/gcc6  qtbase # takes about 1 hour first time
+popd
+
+#should download nitrokey-app and libnitrokey and hidapi (own clone with applied windows patch)
+git clone https://github.com/szszszsz/nitrokey-app --recursive --init
+pushd nitrokey-app/libnitrokey/build
+ln -s ../../../mxe/usr/bin/
+./bin/i686-w64-mingw32.static.posix-cmake ..
+make -j
+popd
+
+mkdir nitrokey-app/build/
+pushd nitrokey-app/build/
+ln -s ../mxe/usr/bin/
+./bin/i686-w64-mingw32.static.posix-qmake ..
+PATH=$PATH:./bin make -j
+popd
+```
+
+
+old (for reference):
+Based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
 1. `sudo apt-get install bison cmake flex intltool libtool scons`
 2. `git clone https://github.com/mxe/mxe.git`
 3. `cd mxe && make qt5`
