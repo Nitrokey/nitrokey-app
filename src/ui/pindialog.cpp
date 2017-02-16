@@ -44,14 +44,16 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent)
       label = tr("Admin PIN:");
       break;
     case FIRMWARE_PIN:
-        title = tr("Enter Firmware Password");
-        label = tr("Enter Firmware Password:");
+      title = tr("Enter Firmware Password");
+      label = tr("Enter Firmware Password:");
+      ui->status->setVisible(false);
       break;
     case OTHER:
         break;
-      case HIDDEN_VOLUME:
+    case HIDDEN_VOLUME:
       title = tr("Enter password for hidden volume");
       label = tr("Enter password for hidden volume:");
+      ui->status->setVisible(false);
       break;
   }
 
@@ -140,6 +142,7 @@ void PinDialog::updateTryCounter() {
   case USER_PIN:
     triesLeft = worker.devdata.retry_user_count;
     break;
+  case HIDDEN_VOLUME:
   case FIRMWARE_PIN:
   case OTHER:
     // Hide tries left field
