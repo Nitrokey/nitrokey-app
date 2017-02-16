@@ -348,6 +348,8 @@ StorageActions::StorageActions(QObject *parent, Authentication *auth_admin, Auth
 }
 
 void StorageActions::on_StorageStatusChanged() {
+  if (!libada::i()->isStorageDeviceConnected())
+    return;
   auto m = nitrokey::NitrokeyManager::instance();
   auto s = m->get_status_storage();
   CryptedVolumeActive = s.VolumeActiceFlag_st.encrypted;
