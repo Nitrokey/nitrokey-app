@@ -35,7 +35,6 @@ Tray::~Tray() {
 
 /*
  * Create the tray menu.
- * In all other systems we use Qt's tray
  */
 void Tray::createIndicator() {
   trayIcon = new QSystemTrayIcon(this);
@@ -118,8 +117,8 @@ void Tray::generateMenu(bool init) {
     static QMutex mtx;
     QMutexLocker locker(&mtx);
 
-    if (NULL == trayMenu)
-      trayMenu = std::make_shared<QMenu>();//new QMenu();
+    if (nullptr == trayMenu)
+      trayMenu = std::make_shared<QMenu>();
     else
       trayMenu->clear(); // Clear old menu
 
@@ -547,27 +546,7 @@ void Tray::generateMenuForStorageDevice() {
 }
 
 int Tray::UpdateDynamicMenuEntrys(void) {
-//  auto m = nitrokey::NitrokeyManager::instance();
-//  if (!m->is_connected()) return FALSE;
-//  auto s = m->get_status_storage();
-//
-//  NormalVolumeRWActive =
-//      s.ReadWriteFlagUncryptedVolume_u8 ? FALSE : TRUE;
-//
-//  CryptedVolumeActive =
-//      s.VolumeActiceFlag_st.encrypted ? TRUE : FALSE;
-//
-//  HiddenVolumeActive =
-//      s.VolumeActiceFlag_st.hidden ? TRUE : FALSE;
-//
-//  StickNotInitated = s.StickKeysNotInitiated ? TRUE : FALSE;
-//
-//  SdCardNotErased = s.SDFillWithRandomChars_u8 ? TRUE : FALSE;
-//
-//  Stick20ScSdCardOnline = TRUE;
-
   generateMenu(false);
-
   return (TRUE);
 }
 
