@@ -237,13 +237,7 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
           .arg(HighWatermarkMin)
           .arg(HighWatermarkMax));
 
-  // Set valid input range
-  //  ui->StartBlockSpin->setMaximum(HighWatermarkMax - 1);
-  //  ui->StartBlockSpin->setMinimum(HighWatermarkMin);
   ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
-
-  //  ui->EndBlockSpin->setMaximum(HighWatermarkMax);
-  //  ui->EndBlockSpin->setMinimum(HighWatermarkMin + 1);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
   ui->l_sd_size->setText(tr("Storage capacity: %1GB").arg(sd_size_GB));
   ui->l_rounding_info->setText(ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100)));
@@ -254,6 +248,10 @@ static double i_start_MB = 0;
 static double i_end_MB = 0;
 static double current_min = 0;
 static double current_max = 100;
+static double current_step = 1;
+
+#include <atomic>
+static std::atomic_bool cancel_BlockSpin_event_propagation(false);
 
 void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
   static const uint8_t sd_size_GB = libada::i()->getStorageSDCardSizeGB();
@@ -289,34 +287,39 @@ void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
     break;
   }
 
+  cancel_BlockSpin_event_propagation = true;
+  
   char current = text.data()[0].toLatin1();
-
   switch (current) {
-  case 'M':
-    current_min = HighWatermarkMin * sd_size_MB / 100.;
-    current_max = HighWatermarkMax * sd_size_MB / 100.;
-    set_spins_min_max(current_min, current_max, sd_size_MB/100.);
-    ui->StartBlockSpin->setValue(i_start_MB);
-    ui->EndBlockSpin->setValue(i_end_MB);
-    break;
-  case 'G':
-    current_min = HighWatermarkMin * sd_size_GB / 100.;
-    current_max = HighWatermarkMax * sd_size_GB / 100.;
-    set_spins_min_max(current_min, current_max, sd_size_GB/100.);
-    ui->StartBlockSpin->setValue(i_start_MB / 1024.0);
-    ui->EndBlockSpin->setValue(i_end_MB / 1024.0);
-    break;
-  case '%':
-    current_min = HighWatermarkMin;
-    current_max = HighWatermarkMax;
-    set_spins_min_max(current_min, current_max, 1);
-    ui->StartBlockSpin->setValue(100.0 * i_start_MB / sd_size_MB);
-    ui->EndBlockSpin->setValue(100.0 * i_end_MB / sd_size_MB);
-    break;
-  default:
-    break;
+    case 'M':
+      current_min = HighWatermarkMin * sd_size_MB / 100.;
+      current_max = HighWatermarkMax * sd_size_MB / 100.;
+      current_step = sd_size_MB/100.;
+      set_spins_min_max(current_min, current_max, current_step);
+      ui->StartBlockSpin->setValue(i_start_MB);
+      ui->EndBlockSpin->setValue(i_end_MB);
+      break;
+    case 'G':
+      current_min = HighWatermarkMin * sd_size_GB / 100.;
+      current_max = HighWatermarkMax * sd_size_GB / 100.;
+      current_step = sd_size_GB/100.;
+      set_spins_min_max(current_min, current_max, current_step);
+      ui->StartBlockSpin->setValue(i_start_MB / 1024.0);
+      ui->EndBlockSpin->setValue(i_end_MB / 1024.0);
+      break;
+    case '%':
+      current_min = HighWatermarkMin;
+      current_max = HighWatermarkMax;
+      current_step = 1;
+      set_spins_min_max(current_min, current_max, current_step);
+      ui->StartBlockSpin->setValue(100.0 * i_start_MB / sd_size_MB);
+      ui->EndBlockSpin->setValue(100.0 * i_end_MB / sd_size_MB);
+      break;
+    default:
+      break;
   }
 
+  cancel_BlockSpin_event_propagation = false;
   last = current;
 }
 
@@ -328,11 +331,29 @@ void stick20HiddenVolumeDialog::set_spins_min_max(const double min, const double
 }
 
 void stick20HiddenVolumeDialog::on_EndBlockSpin_valueChanged(double i){
-  ui->StartBlockSpin->setMaximum(std::min(i, current_max));
+  if (cancel_BlockSpin_event_propagation) return;
+  cancel_BlockSpin_event_propagation = true;
+  auto start_val = ui->StartBlockSpin->value();
+  auto current_val = ui->EndBlockSpin->value();
+  if(current_val < start_val || current_val - start_val < current_step){
+    ui->EndBlockSpin->setValue(start_val + current_step);
+  } else if(current_val > current_max){
+    ui->EndBlockSpin->setValue(current_max);
+  }
+  cancel_BlockSpin_event_propagation = false;
 }
 
 void stick20HiddenVolumeDialog::on_StartBlockSpin_valueChanged(double i){
-  ui->EndBlockSpin->setMinimum(std::max(i, current_min));
+  if (cancel_BlockSpin_event_propagation) return;
+  cancel_BlockSpin_event_propagation = true;
+  auto end_val = ui->EndBlockSpin->value();
+  auto current_val = ui->StartBlockSpin->value();
+  if(current_val > end_val || end_val - current_val < current_step){
+    ui->StartBlockSpin->setValue(end_val - current_step);
+  } else if(current_val < current_min){
+    ui->StartBlockSpin->setValue(current_min);
+  }
+  cancel_BlockSpin_event_propagation = false;
 }
 
 void stick20HiddenVolumeDialog::on_rd_MB_clicked() { on_rd_unit_clicked("MB"); }
