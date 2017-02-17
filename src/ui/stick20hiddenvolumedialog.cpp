@@ -43,6 +43,7 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
   ui->HVPasswordEdit_2->setText("");
 
   ui->HVPasswordEdit->setFocus();
+  ui->HV_settings_groupBox->setEnabled(false);
 
 ThreadWorker *tw = new ThreadWorker(
     []() -> Data {
@@ -57,10 +58,11 @@ ThreadWorker *tw = new ThreadWorker(
     [this](Data data){
       HighWatermarkMin = (uint8_t) data["min"].toInt();
       HighWatermarkMax = (uint8_t) data["max"].toInt();
-      sd_size_GB = data["size"].toInt();;
+      sd_size_GB = data["size"].toInt();
       setHighWaterMarkText();
       on_rd_percent_clicked();
       ui->rd_percent->setChecked(true);
+      ui->HV_settings_groupBox->setEnabled(true);
     }, this);
 }
 
@@ -243,18 +245,9 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
   ui->l_rounding_info->setText(ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100)));
 }
 
-static char last = '%';
-static double i_start_MB = 0;
-static double i_end_MB = 0;
-static double current_min = 0;
-static double current_max = 100;
-static double current_step = 1;
 
-#include <atomic>
-static std::atomic_bool cancel_BlockSpin_event_propagation(false);
 
 void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
-  static const uint8_t sd_size_GB = libada::i()->getStorageSDCardSizeGB();
   const size_t sd_size_MB = sd_size_GB * 1024u;
 
   double current_block_start = ui->StartBlockSpin->value();
@@ -288,7 +281,7 @@ void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
   }
 
   cancel_BlockSpin_event_propagation = true;
-  
+
   char current = text.data()[0].toLatin1();
   switch (current) {
     case 'M':

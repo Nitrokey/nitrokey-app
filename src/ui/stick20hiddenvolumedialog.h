@@ -23,6 +23,7 @@
 #include <QDialog>
 #include <QAbstractButton>
 #include "libada.h"
+#include <atomic>
 
 namespace Ui {
 class stick20HiddenVolumeDialog;
@@ -69,6 +70,14 @@ private:
   Ui::stick20HiddenVolumeDialog *ui;
 
   void set_spins_min_max(const double min, const double max, const double step);
+  char last = '%';
+  double i_start_MB = 0;
+  double i_end_MB = 0;
+  double current_min = 0;
+  double current_max = 100;
+  double current_step = 1;
+
+  std::atomic_bool cancel_BlockSpin_event_propagation {false};
 
 };
 
