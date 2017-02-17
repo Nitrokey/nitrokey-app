@@ -32,19 +32,8 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::stick20HiddenVolumeDialog) {
   ui->setupUi(this);
 
-  HV_Setup_st.SlotNr_u8 = 0;
-  HV_Setup_st.StartBlockPercent_u8 = 70;
-  HV_Setup_st.EndBlockPercent_u8 = 90;
-  HV_Setup_st.HiddenVolumePassword_au8[0] = 0;
-
   ui->comboBox->setCurrentIndex(HV_Setup_st.SlotNr_u8);
-
-  //  ui->StartBlockSpin->setMaximum(89);
-  //  ui->StartBlockSpin->setMinimum(10);
   ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
-
-  //  ui->EndBlockSpin->setMaximum(90);
-  //  ui->EndBlockSpin->setMinimum(11);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
 
   ui->HVPasswordEdit->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
@@ -54,8 +43,6 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
   ui->HVPasswordEdit_2->setText("");
 
   ui->HVPasswordEdit->setFocus();
-
-  on_HVPasswordEdit_textChanged("");
 
 ThreadWorker *tw = new ThreadWorker(
     []() -> Data {

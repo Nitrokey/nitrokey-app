@@ -28,9 +28,9 @@ namespace Ui {
 class stick20HiddenVolumeDialog;
 }
 typedef struct {
-    unsigned char SlotNr_u8;
-    unsigned char StartBlockPercent_u8;
-    unsigned char EndBlockPercent_u8;
+    unsigned char SlotNr_u8 = 0;
+    unsigned char StartBlockPercent_u8 = 70;
+    unsigned char EndBlockPercent_u8 = 90;
     unsigned char HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE + 1] = {};
 } HiddenVolumeSetup_tst;
 
