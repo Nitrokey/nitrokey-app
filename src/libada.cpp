@@ -138,7 +138,7 @@ void libada::erasePWSSlot(const int i) {
   nm::instance()->erase_password_safe_slot(i);
 }
 
-int libada::getStorageSDCardSizeGB() {
+uint8_t libada::getStorageSDCardSizeGB() {
   return nm::instance()->get_SD_card_size();
 }
 

@@ -74,7 +74,7 @@ public:
     bool getPWSSlotStatus(const int i);
     void erasePWSSlot(const int i);
 
-    int getStorageSDCardSizeGB();
+    uint8_t getStorageSDCardSizeGB();
 
     bool is_time_synchronized();
     bool set_current_time();

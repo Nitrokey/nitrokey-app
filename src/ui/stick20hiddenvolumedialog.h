@@ -62,9 +62,14 @@ private slots:
   void on_rd_percent_clicked();
   void on_rd_MB_clicked();
   void on_rd_GB_clicked();
+  void on_StartBlockSpin_valueChanged(double i);
+  void on_EndBlockSpin_valueChanged(double i);
 
 private:
   Ui::stick20HiddenVolumeDialog *ui;
+
+  void set_spins_min_max(const double min, const double max, const double step);
+
 };
 
 #endif // STICK20HIDDENVOLUMEDIALOG_H

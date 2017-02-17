@@ -57,10 +57,6 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
 
   on_HVPasswordEdit_textChanged("");
 
-  on_rd_percent_clicked();
-  ui->rd_percent->setChecked(true);
-
-
 ThreadWorker *tw = new ThreadWorker(
     []() -> Data {
       Data data;
@@ -76,6 +72,8 @@ ThreadWorker *tw = new ThreadWorker(
       HighWatermarkMax = (uint8_t) data["max"].toInt();
       sd_size_GB = data["size"].toInt();;
       setHighWaterMarkText();
+      on_rd_percent_clicked();
+      ui->rd_percent->setChecked(true);
     }, this);
 }
 
@@ -267,9 +265,12 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
 static char last = '%';
 static double i_start_MB = 0;
 static double i_end_MB = 0;
+static double current_min = 0;
+static double current_max = 100;
 
 void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
-  size_t sd_size_MB = libada::i()->getStorageSDCardSizeGB() * 1024;
+  static const uint8_t sd_size_GB = libada::i()->getStorageSDCardSizeGB();
+  const size_t sd_size_MB = sd_size_GB * 1024u;
 
   double current_block_start = ui->StartBlockSpin->value();
   double current_block_end = ui->EndBlockSpin->value();
@@ -301,18 +302,27 @@ void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
     break;
   }
 
-  char current = (int)text.data()[0].toLatin1();
+  char current = text.data()[0].toLatin1();
 
   switch (current) {
   case 'M':
+    current_min = HighWatermarkMin * sd_size_MB / 100.;
+    current_max = HighWatermarkMax * sd_size_MB / 100.;
+    set_spins_min_max(current_min, current_max, sd_size_MB/100.);
     ui->StartBlockSpin->setValue(i_start_MB);
     ui->EndBlockSpin->setValue(i_end_MB);
     break;
   case 'G':
+    current_min = HighWatermarkMin * sd_size_GB / 100.;
+    current_max = HighWatermarkMax * sd_size_GB / 100.;
+    set_spins_min_max(current_min, current_max, sd_size_GB/100.);
     ui->StartBlockSpin->setValue(i_start_MB / 1024.0);
     ui->EndBlockSpin->setValue(i_end_MB / 1024.0);
     break;
   case '%':
+    current_min = HighWatermarkMin;
+    current_max = HighWatermarkMax;
+    set_spins_min_max(current_min, current_max, 1);
     ui->StartBlockSpin->setValue(100.0 * i_start_MB / sd_size_MB);
     ui->EndBlockSpin->setValue(100.0 * i_end_MB / sd_size_MB);
     break;
@@ -321,6 +331,21 @@ void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
   }
 
   last = current;
+}
+
+void stick20HiddenVolumeDialog::set_spins_min_max(const double min, const double max, const double step) {
+  ui->StartBlockSpin->setSingleStep(step);
+  ui->StartBlockSpin->setRange(min,max);
+  ui->EndBlockSpin->setSingleStep(step);
+  ui->EndBlockSpin->setRange(min,max);
+}
+
+void stick20HiddenVolumeDialog::on_EndBlockSpin_valueChanged(double i){
+  ui->StartBlockSpin->setMaximum(std::min(i, current_max));
+}
+
+void stick20HiddenVolumeDialog::on_StartBlockSpin_valueChanged(double i){
+  ui->EndBlockSpin->setMinimum(std::max(i, current_min));
 }
 
 void stick20HiddenVolumeDialog::on_rd_MB_clicked() { on_rd_unit_clicked("MB"); }
