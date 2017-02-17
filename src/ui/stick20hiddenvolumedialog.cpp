@@ -17,6 +17,8 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <src/core/ThreadWorker.h>
+#include <libnitrokey/include/NitrokeyManager.h>
 #include "stick20hiddenvolumedialog.h"
 #include "math.h"
 #include "mcvs-wrapper.h"
@@ -29,11 +31,6 @@
 stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::stick20HiddenVolumeDialog) {
   ui->setupUi(this);
-
-  SdCardHighWatermark_Read_Min = 0;
-  SdCardHighWatermark_Read_Max = 100;
-  SdCardHighWatermark_Write_Min = 0;
-  SdCardHighWatermark_Write_Max = 100;
 
   HV_Setup_st.SlotNr_u8 = 0;
   HV_Setup_st.StartBlockPercent_u8 = 70;
@@ -62,8 +59,24 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
 
   on_rd_percent_clicked();
   ui->rd_percent->setChecked(true);
-  //gethighwater
-  setHighWaterMarkText();
+
+
+ThreadWorker *tw = new ThreadWorker(
+    []() -> Data {
+      Data data;
+      auto m = nitrokey::NitrokeyManager::instance();
+      auto p = m->get_SD_usage_data();
+      data["min"] = p.first;
+      data["max"] = p.second;
+      data["size"] = libada::i()->getStorageSDCardSizeGB();
+      return data;
+    },
+    [this](Data data){
+      HighWatermarkMin = (uint8_t) data["min"].toInt();
+      HighWatermarkMax = (uint8_t) data["max"].toInt();
+      sd_size_GB = data["size"].toInt();;
+      setHighWaterMarkText();
+    }, this);
 }
 
 stick20HiddenVolumeDialog::~stick20HiddenVolumeDialog() { delete ui; }
@@ -224,9 +237,6 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
 }
 
 void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
-  HighWatermarkMin = SdCardHighWatermark_Write_Min;
-  HighWatermarkMax = SdCardHighWatermark_Write_Max;
-
   if (5 > HighWatermarkMin) // Set lower limit
   {
     HighWatermarkMin = 10;
@@ -250,7 +260,6 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
   //  ui->EndBlockSpin->setMaximum(HighWatermarkMax);
   //  ui->EndBlockSpin->setMinimum(HighWatermarkMin + 1);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
-  int sd_size_GB = libada::i()->getStorageSDCardSizeGB();
   ui->l_sd_size->setText(tr("Storage capacity: %1GB").arg(sd_size_GB));
   ui->l_rounding_info->setText(ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100)));
 }

@@ -35,23 +35,22 @@ typedef struct {
 } HiddenVolumeSetup_tst;
 
 class stick20HiddenVolumeDialog : public QDialog {
-  Q_OBJECT public : explicit stick20HiddenVolumeDialog(QWidget *parent = 0);
+  Q_OBJECT
+public :
+  explicit stick20HiddenVolumeDialog(QWidget *parent = 0);
   ~stick20HiddenVolumeDialog();
+  HiddenVolumeSetup_tst HV_Setup_st;
 
+private:
   int GetCharsetSpace(unsigned char *Password, size_t size);
   double GetEntropy(unsigned char *Password, size_t size);
 
-  uint8_t SdCardHighWatermark_Read_Min;
-  uint8_t SdCardHighWatermark_Read_Max;
-  uint8_t SdCardHighWatermark_Write_Min;
-  uint8_t SdCardHighWatermark_Write_Max;
-
   uint8_t HighWatermarkMin;
   uint8_t HighWatermarkMax;
+  int sd_size_GB;
 
   void setHighWaterMarkText(void);
   void on_rd_unit_clicked(QString text);
-  HiddenVolumeSetup_tst HV_Setup_st;
 
 private slots:
   void on_ShowPasswordCheckBox_toggled(bool checked);

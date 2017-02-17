@@ -139,7 +139,7 @@ void libada::erasePWSSlot(const int i) {
 }
 
 int libada::getStorageSDCardSizeGB() {
-  return 42;
+  return nm::instance()->get_SD_card_size();
 }
 
 bool libada::isDeviceConnected() const throw() {
