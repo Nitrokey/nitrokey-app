@@ -307,8 +307,7 @@ void Worker::fetch_device_data() {
     return;
   }
 
-  devdata.passwordRetryCount = libada::i()->getAdminPasswordRetryCount();
-  devdata.userPasswordRetryCount = libada::i()->getUserPasswordRetryCount();
+
   devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
   devdata.minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
   devdata.storage.active = libada::i()->isStorageDeviceConnected();
@@ -325,6 +324,11 @@ void Worker::fetch_device_data() {
     devdata.storage.sdcard.is_new = st.NewSDCardFound_u8;
     devdata.storage.sdcard.filled_with_random = st.SDFillWithRandomChars_u8;
     devdata.storage.sdcard.id = st.ActiveSD_CardID_u32;
+    devdata.passwordRetryCount = st.AdminPwRetryCount;
+    devdata.userPasswordRetryCount = st.UserPwRetryCount;
+  } else {
+    devdata.passwordRetryCount = libada::i()->getAdminPasswordRetryCount();
+    devdata.userPasswordRetryCount = libada::i()->getUserPasswordRetryCount();
   }
   devdata.cardSerial = libada::i()->getCardSerial();
 
