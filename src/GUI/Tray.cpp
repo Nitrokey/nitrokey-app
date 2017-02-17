@@ -480,6 +480,7 @@ void Tray::generateMenuForStorageDevice() {
         trayMenu->addAction(Stick20ActionDisableHiddenVolume);
     }
 
+    //FIXME run in separate thread
     const auto PasswordSafeEnabled = libada::i()->isPasswordSafeUnlocked();
     if (FALSE != (status.VolumeActiceFlag_st.hidden || status.VolumeActiceFlag_st.encrypted || PasswordSafeEnabled))
       trayMenu->addAction(LockDeviceAction);

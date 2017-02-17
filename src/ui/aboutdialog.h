@@ -43,6 +43,8 @@ namespace AboutDialogUI{
             } sdcard;
             bool keys_initiated;
             uint8_t filled_with_random;
+            bool firmware_locked;
+            uint32_t smartcard_id;
           } storage;
         } devdata;
     public slots:
@@ -76,6 +78,8 @@ private:
   std::shared_ptr<Ui::AboutDialog> ui;
   AboutDialogUI::Worker worker;
   QThread worker_thread;
+
+  void fixWindowGeometry();
 };
 
 #endif // ABOUTDIALOG_H

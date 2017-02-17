@@ -21,8 +21,10 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
-#include "stick20responsedialog.h"
 #include "libada.h"
+#include "libnitrokey/include/NitrokeyManager.h"
+#include "libnitrokey/include/DeviceCommunicationExceptions.h"
+using nm = nitrokey::NitrokeyManager;
 
 using namespace AboutDialogUI;
 
@@ -58,20 +60,21 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->VersionLabel->setText(string);
 
   ui->ButtonStickStatus->hide();
+  hideWarning();
+  ui->not_erased_sd_label->hide();
+  ui->newsd_label->hide();
 
   if (libada::i()->isDeviceConnected()) {
     if (libada::i()->isStorageDeviceConnected()) {
       showStick20Configuration();
     } else {
       showStick10Configuration();
-      ui->ButtonStickStatus->hide();
     }
   } else {
     showNoStickFound();
   }
 
-  this->adjustSize();
-  this->updateGeometry();
+  fixWindowGeometry();
 }
 
 AboutDialog::~AboutDialog() {
@@ -82,86 +85,10 @@ AboutDialog::~AboutDialog() {
 void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
 
 void AboutDialog::showStick20Configuration(void) {
-  QString OutputText;
-  bool ErrorFlag;
-  ErrorFlag = FALSE;
-
   showPasswordCounters();
   showStick20Menu();
 
-//  auto storageInfoData = libada::i()->getStorageInfoData();
-
-//  if (0 == HID_Stick20Configuration_st.ActiveSD_CardID_u32) {
-//    OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
-//    ErrorFlag = TRUE;
-//  }
-//
-//  if (0 == HID_Stick20Configuration_st.ActiveSmartCardID_u32) {
-//    ui->serialEdit->setText("-");
-//    OutputText.append(QString(tr("\nSmartcard is not accessible\n\n")));
-//    ErrorFlag = TRUE;
-//  }
-//
-//  if (TRUE == ErrorFlag) {
-//    ui->DeviceStatusLabel->setText(OutputText);
-//    return;
-//  }
-//
-//  if (99 == HID_Stick20Configuration_st.UserPwRetryCount) {
-//    OutputText.append(QString(tr("No connection\nPlease retry")));
-//    ui->DeviceStatusLabel->setText(OutputText);
-//    return;
-//  }
-//
-//  if (TRUE == HID_Stick20Configuration_st.StickKeysNotInitiated) {
-//    showWarning();
-//  } else {
-//    hideWarning();
-//  }
-//
-//  if (TRUE == HID_Stick20Configuration_st.FirmwareLocked_u8) {
-//    // OutputText.append (QString (tr ("      *** Firmware is locked ***
-//    // ")).append ("\n"));
-//  }
-//
-//  if (0 != (HID_Stick20Configuration_st.NewSDCardFound_u8 & 0x01)) {
-//    ui->newsd_label->show();
-//  } else {
-//    ui->newsd_label->hide();
-//  }
-//
-//  if (0 == (HID_Stick20Configuration_st.SDFillWithRandomChars_u8 & 0x01)) {
-//    ui->not_erased_sd_label->show();
-//  } else {
-//    ui->not_erased_sd_label->hide();
-//  }
-//
-//  if (READ_WRITE_ACTIVE == HID_Stick20Configuration_st.ReadWriteFlagUncryptedVolume_u8) {
-//    ui->sd_id_label->setText(tr("READ/WRITE"));
-//  } else {
-//    ui->sd_id_label->setText(tr("READ ONLY"));
-//  }
-//
-//  if (0 != (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_HIDDEN_VOLUME_BIT_PLACE))) {
-//    ui->hidden_volume_label->setText(tr("Active"));
-//  } else {
-//    ui->hidden_volume_label->setText(tr("Not active"));
-//    if (0 !=
-//        (HID_Stick20Configuration_st.VolumeActiceFlag_u8 & (1 << SD_CRYPTED_VOLUME_BIT_PLACE))) {
-//      ui->encrypted_volume_label->setText(tr("Active"));
-//    } else {
-//      ui->encrypted_volume_label->setText(tr("Not active"));
-//    }
-//  }
-
-//  ui->sd_id_label->setText(
-//      QString("0x").append(QString::number(HID_Stick20Configuration_st.ActiveSD_CardID_u32, 16)));
-
-//  ui->DeviceStatusLabel->setText(OutputText);
-
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+  fixWindowGeometry();
 }
 
 /*******************************************************************************
@@ -180,28 +107,27 @@ void AboutDialog::showStick20Configuration(void) {
 void AboutDialog::showStick10Configuration(void) {
   showPasswordCounters();
   hideStick20Menu();
+  fixWindowGeometry();
+}
 
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+void AboutDialog::fixWindowGeometry() {
+  resize(0, 0);
+  adjustSize();
+  updateGeometry();
 }
 
 void AboutDialog::hideWarning(void) {
   ui->label_12->hide();
   ui->label_13->hide();
   ui->warning_sign->hide();
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+  fixWindowGeometry();
 }
 
 void AboutDialog::showWarning(void) {
   ui->label_12->show();
   ui->label_13->show();
   ui->warning_sign->show();
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+  fixWindowGeometry();
 }
 
 void AboutDialog::hideStick20Menu(void) {
@@ -211,18 +137,8 @@ void AboutDialog::hideStick20Menu(void) {
   ui->not_erased_sd_label->hide();
   ui->newsd_label->hide();
   ui->static_storage_info->hide();
-  /*
-  ui->label_8->hide();
-  ui->label_9->hide();
-  ui->label_10->hide();
-  ui->label_11->hide();
-  ui->sd_id_label->hide();
-  ui->unencrypted_volume_label->hide();
-  ui->encrypted_volume_label->hide();
-  */
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+
+  fixWindowGeometry();
 }
 
 void AboutDialog::showStick20Menu(void) {
@@ -231,16 +147,6 @@ void AboutDialog::showStick20Menu(void) {
   ui->unencrypted_volume_label->show();
   ui->encrypted_volume_label->show();
   ui->static_storage_info->show();
-  /*
-  ui->label_8->show();
-  ui->label_9->show();
-  ui->label_10->show();
-  ui->label_11->show();
-  ui->sd_id_label->show();
-  this->resize(0,0);
-  this->adjustSize ();
-  this->updateGeometry();
-  */
 }
 
 void AboutDialog::hidePasswordCounters(void) {
@@ -249,9 +155,7 @@ void AboutDialog::hidePasswordCounters(void) {
   ui->admin_retry_label->hide();
   ui->label1->hide();
   ui->label2->hide();
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+  fixWindowGeometry();
 }
 
 void AboutDialog::showPasswordCounters(void) {
@@ -260,9 +164,7 @@ void AboutDialog::showPasswordCounters(void) {
   ui->admin_retry_label->show();
   ui->label1->show();
   ui->label2->show();
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+  fixWindowGeometry();
 }
 /*******************************************************************************
 
@@ -288,18 +190,12 @@ void AboutDialog::showNoStickFound(void) {
 
   ui->firmwareLabel->setText("-");
   ui->serialEdit->setText("-");
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+  fixWindowGeometry();
 }
 
 void AboutDialog::on_ButtonStickStatus_clicked() {
 }
 
-#include "libnitrokey/include/NitrokeyManager.h"
-using nm = nitrokey::NitrokeyManager;
-
-#include "libnitrokey/include/DeviceCommunicationExceptions.h"
 void Worker::fetch_device_data() {
   QMutexLocker lock(&mutex);
   if (!libada::i()->isDeviceConnected()) {
@@ -324,6 +220,8 @@ void Worker::fetch_device_data() {
     devdata.storage.sdcard.is_new = st.NewSDCardFound_u8;
     devdata.storage.sdcard.filled_with_random = st.SDFillWithRandomChars_u8;
     devdata.storage.sdcard.id = st.ActiveSD_CardID_u32;
+    devdata.storage.smartcard_id = st.ActiveSmartCardID_u32;
+    devdata.storage.firmware_locked = st.FirmwareLocked_u8;
     devdata.passwordRetryCount = st.AdminPwRetryCount;
     devdata.userPasswordRetryCount = st.UserPwRetryCount;
   } else {
@@ -343,15 +241,16 @@ void AboutDialog::update_device_slots(bool connected) {
   }
 
   QMutexLocker lock(&worker.mutex);
+
+  QString OutputText;
+  bool ErrorFlag = false;
+
   ui->admin_retry_label->setText(QString::number(worker.devdata.passwordRetryCount));
   ui->user_retry_label->setText(QString::number(worker.devdata.userPasswordRetryCount));
 
   if (worker.devdata.storage.active) {
     QString capacity_text = QString(tr("%1 GB")).arg(worker.devdata.storage.sdcard.size_GB);
     ui->l_storage_capacity->setText(capacity_text);
-//    ui->hidden_volume_label->setText(worker.devdata.storage.volume_active.hidden ? "active" : "not active");
-//    ui->unencrypted_volume_label->setText(worker.devdata.storage.volume_active.hidden ? "active" : "not active");
-//    ui->encrypted_volume_label->setText(worker.devdata.storage.volume_active.hidden ? "active" : "not active");
 
 
     if (!worker.devdata.storage.keys_initiated) {
@@ -360,45 +259,28 @@ void AboutDialog::update_device_slots(bool connected) {
       hideWarning();
     }
 
-//    if (worker.devdata.storage.firmware_locked) {
-      // OutputText.append (QString (tr ("      *** Firmware is locked ***
-      // ")).append ("\n"));
-//    }
-
-    if (worker.devdata.storage.sdcard.is_new) {
-      ui->newsd_label->show();
-    } else {
-      ui->newsd_label->hide();
+    if (worker.devdata.storage.firmware_locked) {
+      OutputText.append(QString(tr("      *** Firmware is locked ***")).append("\n"));
+      ErrorFlag = true;
     }
 
-    if (!worker.devdata.storage.filled_with_random) {
-      ui->not_erased_sd_label->show();
-    } else {
-      ui->not_erased_sd_label->hide();
-    }
+    ui->newsd_label->setVisible(worker.devdata.storage.sdcard.is_new);
+    ui->not_erased_sd_label->setVisible(!worker.devdata.storage.filled_with_random);
 
-    auto read_write_active = worker.devdata.storage.volume_active.plain_RW == 0;
-    if (read_write_active) {
-      ui->unencrypted_volume_label->setText(tr("READ/WRITE"));
-    } else {
-      ui->unencrypted_volume_label->setText(tr("READ ONLY"));
-    }
+    auto read_write_active = worker.devdata.storage.volume_active.plain_RW == 0; //FIXME correct variable naming in lib
+    ui->unencrypted_volume_label->setText(read_write_active ? tr("READ/WRITE") : tr("READ ONLY"));
 
-    if (worker.devdata.storage.volume_active.hidden) { //FIXME check correctness (.hidden not working?)
+    if (worker.devdata.storage.volume_active.hidden) {
       ui->hidden_volume_label->setText(tr("Active"));
     } else {
       ui->hidden_volume_label->setText(tr("Not active"));
-      if (worker.devdata.storage.volume_active.encrypted) { //FIXME check correctness (as above)
-        ui->encrypted_volume_label->setText(tr("Active"));
-      } else {
-        ui->encrypted_volume_label->setText(tr("Not active"));
-      }
+      ui->encrypted_volume_label->setText(
+          worker.devdata.storage.volume_active.encrypted ? tr("Active") : tr("Not active"));
     }
 
     ui->sd_id_label->setText(
         QString("0x").append(QString::number(worker.devdata.storage.sdcard.id, 16)));
 
-//    ui->DeviceStatusLabel->setText(OutputText);
   }
   ui->firmwareLabel->setText(QString::number(worker.devdata.majorFirmwareVersion)
                                  .append(".")
@@ -406,12 +288,31 @@ void AboutDialog::update_device_slots(bool connected) {
 
   ui->serialEdit->setText(QString::fromStdString(worker.devdata.cardSerial).trimmed());
 
+  if (0 == worker.devdata.storage.sdcard.id) {
+    OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
+    ErrorFlag = true;
+  }
+
+  if (0 == worker.devdata.storage.smartcard_id) {
+    ui->serialEdit->setText("-");
+    OutputText.append(QString(tr("\nSmartcard is not accessible\n\n")));
+    ErrorFlag = true;
+  }
+
+  if (99 == worker.devdata.userPasswordRetryCount) {
+    OutputText.append(QString(tr("No connection\nPlease retry")));
+    ErrorFlag = true;
+  }
+
+  if (ErrorFlag) {
+    ui->DeviceStatusLabel->setText(OutputText);
+  }
+
   ui->admin_retry_label->setEnabled(true);
   ui->user_retry_label->setEnabled(true);
   ui->l_storage_capacity->setEnabled(true);
   ui->firmwareLabel->setEnabled(true);
   ui->serialEdit->setEnabled(true);
-  this->resize(0, 0);
-  this->adjustSize();
-  this->updateGeometry();
+  
+  fixWindowGeometry();
 }
