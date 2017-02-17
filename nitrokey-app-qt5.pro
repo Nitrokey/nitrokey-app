@@ -128,7 +128,7 @@ macx{
 OTHER_FILES +=
 
 RESOURCES += \
-    resources.qrc
+    $${ROOTDIR}/resources.qrc
 
 TRANSLATIONS += i18n/nitrokey_de_DE.ts \
                 i18n/nitrokey_arabic.ts
