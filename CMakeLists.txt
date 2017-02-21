@@ -175,11 +175,24 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
         ${qrc_files}
 )
 
-INSTALL(TARGETS nitrokey-app DESTINATION bin)
+ADD_EXECUTABLE(nitrokey-app.debug ${GUI_TYPE}
+  ${nitrokey_app_sources}
+  ${i18n_resources}
+        ${qrc_files}
+)
+
+INSTALL(TARGETS nitrokey-app nitrokey-app.debug DESTINATION bin)
 
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${EXTRA_LIBS}
   ${NK_LIB}
+#  ${platform_specific_libs}
+  Qt5::Widgets Qt5::Core Qt5::Gui
+)
+
+TARGET_LINK_LIBRARIES(nitrokey-app.debug
+  ${EXTRA_LIBS}
+  ${NK_LIB}-log
 #  ${platform_specific_libs}
   Qt5::Widgets Qt5::Core Qt5::Gui
 )
