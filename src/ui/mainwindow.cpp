@@ -311,7 +311,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   QByteArray secretFromGUI = this->ui->secretEdit->text().toLatin1();
 
   uint8_t encoded[128] = {};
-  uint8_t decoded[2*SECRET_LENGTH] = {};
+  uint8_t decoded[2*SECRET_LENGTH+1] = {};
   uint8_t data[128] = {};
 
   memset(encoded, 'A', sizeof(encoded));
@@ -321,7 +321,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   memcpy(encoded, secretFromGUI.constData(), toCopy);
 
   //TODO use separate base32 encoding class
-  base32_clean(encoded, sizeof(data), data);
+  base32_clean(encoded, sizeof(encoded), data);
   base32_decode(data, decoded, sizeof(decoded));
 
   secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH).toHex(); //FIXME check

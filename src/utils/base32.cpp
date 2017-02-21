@@ -114,7 +114,7 @@ int base32_encode(const uint8_t *data, int length, uint8_t *result, int bufSize)
 int base32_clean(const uint8_t *data, int length, uint8_t *result) {
   int i = 0, j = 0;
 
-  while (i <= length) {
+  while (i < length) {
     if (data[i] >= 'A' && data[i] <= 'Z') {
       result[j] = data[i];
       i++;
