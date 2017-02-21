@@ -85,10 +85,11 @@ SET(qrc_files
 
 # create translation files to include into resource file
 # remember to add new translations files there
+ADD_SUBDIRECTORY(i18n)
 find_package(Qt5LinguistTools)
 file(GLOB i18n_files "i18n/*.ts")
-qt5_create_translation(i18n_resources ${i18n_files})
-
+qt5_create_translation(i18n_resources ${FILES_TO_TRANSLATE} ${i18n_files})
+qt5_add_translation(TRANSLATION_QM ${i18n_files})
 
 IF (WIN32)
 ELSEIF(APPLE)
