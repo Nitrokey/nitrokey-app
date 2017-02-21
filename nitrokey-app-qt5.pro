@@ -106,6 +106,7 @@ unix:!macx{
     LIBS += -lhidapi-libusb
 }
 
+# TODO make second binary - debug - linked with libnitrokey-log
 win32 {
     INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
     SOURCES += $${ROOTDIR}/libnitrokey/hidapi/windows/hid.c
