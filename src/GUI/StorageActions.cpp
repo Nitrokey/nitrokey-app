@@ -256,8 +256,18 @@ void StorageActions::startStick20FillSDCardWithRandomChars() {
   if (QDialog::Accepted == ret) {
     auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
-    m->fill_SD_card_with_random_data(s.data());
-    emit storageStatusChanged();
+    try{
+      m->fill_SD_card_with_random_data(s.data());
+    }
+    catch (LongOperationInProgressException &l){
+      //expected
+      emit storageStatusChanged();
+    }
+    catch (CommandFailedException &e){
+      if(!e.reason_wrong_password()) throw;
+      csApplet()->warningBox("Wrong password"); //FIXME use proper UI string for translation
+    }
+
   }
 }
 
@@ -373,7 +383,12 @@ void StorageActions::on_StorageStatusChanged() {
   if (!libada::i()->isStorageDeviceConnected())
     return;
   auto m = nitrokey::NitrokeyManager::instance();
-  auto s = m->get_status_storage();
-  CryptedVolumeActive = s.VolumeActiceFlag_st.encrypted;
-  HiddenVolumeActive = s.VolumeActiceFlag_st.hidden;
+  try{
+    auto s = m->get_status_storage();
+    CryptedVolumeActive = s.VolumeActiceFlag_st.encrypted;
+    HiddenVolumeActive = s.VolumeActiceFlag_st.hidden;
+  }
+  catch (LongOperationInProgressException &e){
+    //TODO
+  }
 }

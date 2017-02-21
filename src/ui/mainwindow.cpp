@@ -104,6 +104,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(DeviceLocked()), &storage, SLOT(on_StorageStatusChanged()));
   connect(this, SIGNAL(DeviceConnected()), &storage, SLOT(on_StorageStatusChanged()));
   connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
+  connect(this, SIGNAL(OperationInProgress(int)), &tray, SLOT(updateOperationInProgressBar(int)));
   connect(this, SIGNAL(OTP_slot_write(int, bool)), libada::i().get(), SLOT(on_OTP_save(int, bool)));
   connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
   connect(this, SIGNAL(DeviceDisconnected()), this, SLOT(on_DeviceDisconnected()));
@@ -172,7 +173,7 @@ void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
 
 
 enum class ConnectionState{
-  disconnected, connected,
+  disconnected, connected, long_operation
 };
 
 void MainWindow::checkConnection() {
@@ -186,6 +187,21 @@ void MainWindow::checkConnection() {
     if(state == cs::disconnected){
       state = cs::connected;
       nitrokey::NitrokeyManager::instance()->connect();
+
+      if(libada::i()->isStorageDeviceConnected()){
+        try {
+          libada::i()->isPasswordSafeUnlocked();
+          long_operation_in_progress = false;
+        }
+        catch (LongOperationInProgressException &e){
+//          state = cs::long_operation;
+          long_operation_in_progress = true;
+          emit OperationInProgress(e.progress_bar_value);
+          return;
+        }
+
+      }
+
       //on connection
       emit DeviceConnected();
     }
@@ -1289,7 +1305,13 @@ void MainWindow::on_DeviceDisconnected() {
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_DeviceConnected() {
   //TODO share device state to improve performance
-  PWS_Access = libada::i()->isPasswordSafeUnlocked();
+  try{
+    PWS_Access = libada::i()->isPasswordSafeUnlocked();
+  }
+  catch (LongOperationInProgressException &e){
+    long_operation_in_progress = true;
+    return;
+  }
 
   auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
                                 tr("Nitrokey Storage connected") :
@@ -1299,7 +1321,11 @@ void MainWindow::on_DeviceConnected() {
   tray.regenerateMenu();
 
 
-  //TODO synchronize time with the device
+  //TODO FIXME synchronize time with the device
+  if (!libada::i()->is_time_synchronized()){
+//    libada::i()->synchronize_time();
+    qDebug() << "Time needs to be synchronized!";
+  }
 
 //TODO show warnings for storage (test)
 ThreadWorker *tw = new ThreadWorker(
@@ -1340,5 +1366,8 @@ void MainWindow::on_KeepDeviceOnline() {
   }
   catch (DeviceCommunicationException &e){
     emit DeviceDisconnected();
+  }
+  catch (LongOperationInProgressException &e){
+    emit OperationInProgress(e.progress_bar_value);
   }
 }

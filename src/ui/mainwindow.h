@@ -126,6 +126,7 @@ signals:
   void DeviceLocked();
   void FactoryReset();
   void PWS_progress(int p);
+  void OperationInProgress(int p);
   void OTP_slot_write(int slot_no, bool isHOTP);
 
 private slots:
@@ -184,6 +185,7 @@ public:
   int get_supported_secret_length_base32() const;
   int get_supported_secret_length_hex() const;
 
+  bool long_operation_in_progress;
 };
 
 class utf8FieldLengthValidator : public QValidator {

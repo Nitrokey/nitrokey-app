@@ -427,7 +427,18 @@ using nm = nitrokey::NitrokeyManager;
 void Tray::generateMenuForStorageDevice() {
   int AddSeperator = FALSE;
   {
-    auto status = nm::instance()->get_status_storage();
+    nitrokey::proto::stick20::DeviceConfigurationResponsePacket::ResponsePayload status;
+
+    try {
+      status = nm::instance()->get_status_storage();
+    }
+    catch (LongOperationInProgressException &e){
+      //FIXME set some flag about operation being in progress ?
+      //ADD tray item with progress
+      //send signal to mainwindow (storage should send it)
+      return;
+    }
+
 
 
     if (status.ActiveSD_CardID_u32 == 0) // Is Stick 2.0 online (SD + SC
@@ -576,6 +587,17 @@ void Tray::showOTPProgressInTray(int i) {
     trayMenuPasswdSubMenu->setTitle(s +" ("+ QString::number(i) + "%)");
   else
     trayMenuPasswdSubMenu->setTitle(s);
+}
+
+void Tray::updateOperationInProgressBar(int p) {
+  static QAction * a = nullptr;
+  if (trayMenu == nullptr) {
+    generateMenu(true);
+    a = new QAction("prog", this);
+    trayMenu->addAction(a);
+  }
+  if (a!=nullptr)
+    a->setText(QString("aa {}").arg(p));
 }
 
 

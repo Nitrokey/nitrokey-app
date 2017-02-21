@@ -42,6 +42,7 @@ public:
                          int timeout = TRAY_MSG_TIMEOUT);
   public slots:
     void regenerateMenu();
+    void updateOperationInProgressBar(int p);
 
   signals:
     void progress(int i);
