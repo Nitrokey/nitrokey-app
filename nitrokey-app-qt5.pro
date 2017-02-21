@@ -59,7 +59,6 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCUIDIR}/pindialog.h \
             $${SRCDIR}/hotpslot.h \
             $${SRCDIR}/systemutils.h \
-            $${UTILSDIR}/base32.h \
             $${SRCUIDIR}/aboutdialog.h \
             $${SRCUIDIR}/securitydialog.h \
             $${SRCDIR}/mcvs-wrapper.h \
