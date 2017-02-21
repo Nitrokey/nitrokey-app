@@ -210,7 +210,7 @@ bool libada::is_nkpro_07_rtm1() {
 }
 
 bool libada::is_secret320_supported() {
-  return nm::instance()->is_authorization_command_supported(); //FIXME use proper function
+  return nm::instance()->is_320_OTP_secret_supported();
 }
 
 int libada::getTOTPCode(int i, const char *string) {

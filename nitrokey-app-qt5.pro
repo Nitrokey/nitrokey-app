@@ -35,7 +35,6 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCUIDIR}/stick20debugdialog.cpp \
             $${SRCUIDIR}/stick20changepassworddialog.cpp \
             $${SRCUIDIR}/pindialog.cpp \
-            $${UTILSDIR}/base32.cpp \
             $${SRCUIDIR}/aboutdialog.cpp \
             $${SRCUIDIR}/securitydialog.cpp \
             $${SRCUIDIR}/nitrokey-applet.cpp \

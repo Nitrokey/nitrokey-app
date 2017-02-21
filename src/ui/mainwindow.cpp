@@ -21,7 +21,6 @@
 
 #include "mainwindow.h"
 #include "aboutdialog.h"
-#include "base32.h"
 #include "pindialog.h"
 #include "sleep.h"
 #include "stick20debugdialog.h"
@@ -305,34 +304,24 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
 //  }
 }
 
-
+#include <cppcodec/base32_default_rfc4648.hpp>
+#include <cppcodec/hex_upper.hpp>
 void MainWindow::generateOTPConfig(OTPSlot *slot) const {
-  //TODO to rewrite
-  QByteArray secretFromGUI = this->ui->secretEdit->text().toLatin1();
+  using hex = cppcodec::hex_upper;
+  auto secretFromGUI = this->ui->secretEdit->text().toStdString();
 
-  uint8_t encoded[128] = {};
-  uint8_t decoded[2*SECRET_LENGTH+1] = {};
-  uint8_t data[128] = {};
+  auto secret_raw = base32::decode(secretFromGUI);
+  auto secret_hex = hex::encode(secret_raw);
 
-  memset(encoded, 'A', sizeof(encoded));
-  memset(data, 'A', sizeof(data));
-  size_t toCopy;
-  toCopy = std::min(sizeof(encoded), (const size_t &) secretFromGUI.length());
-  memcpy(encoded, secretFromGUI.constData(), toCopy);
-
-  //TODO use separate base32 encoding class
-  base32_clean(encoded, sizeof(encoded), data);
-  base32_decode(data, decoded, sizeof(decoded));
-
-  secretFromGUI = QByteArray((char *)decoded, SECRET_LENGTH).toHex(); //FIXME check
-  qDebug() << secretFromGUI.constData();
-  memset(slot->secret, 0, sizeof(slot->secret));
-  toCopy = std::min(sizeof(slot->secret), (const size_t &) secretFromGUI.length());
-  memcpy(slot->secret, secretFromGUI.constData(), toCopy);
-  if (!libada::i()->is_secret320_supported() && sizeof(slot->secret) > 40){
-    slot->secret[40] = 0; //TODO clear rest of the secret
+  qDebug() << secret_hex.c_str();
+  size_t toCopy = std::min(sizeof(slot->secret), (const size_t &) secret_hex.length());
+  if (!libada::i()->is_secret320_supported() && toCopy > 40){
+    toCopy = 40;
   }
+  memset(slot->secret, 0, sizeof(slot->secret));
+  std::copy(secret_hex.begin(), secret_hex.begin()+toCopy, slot->secret);
 
+  //TODO to rewrite
   QByteArray slotNameFromGUI = QByteArray(this->ui->nameEdit->text().toLatin1());
   memset(slot->slotName, 0, sizeof(slot->slotName));
   toCopy = std::min(sizeof(slot->slotName), (const size_t &) slotNameFromGUI.length());
@@ -676,32 +665,18 @@ void MainWindow::on_slotComboBox_currentIndexChanged(int) {
 }
 
 void MainWindow::on_hexRadioButton_toggled(bool checked) {
-  //TODO move conversion logic to separate class
   if (!checked) {
     return;
   }
   ui->secretEdit->setMaxLength(get_supported_secret_length_hex());
 
-  QByteArray secret;
-  uint8_t encoded[SECRET_LENGTH_BASE32] = {};
-  uint8_t data[SECRET_LENGTH_BASE32] = {};
-  uint8_t decoded[SECRET_LENGTH] = {};
 
-  secret = ui->secretEdit->text().toLatin1();
+  auto secret = ui->secretEdit->text().toLatin1().toStdString();
   if (secret.size() != 0) {
-    const size_t encoded_size = std::min(sizeof(encoded), (size_t) secret.length());
-    memset(encoded, 'A', sizeof(encoded));
-    memcpy(encoded, secret.constData(), encoded_size);
-
-    base32_clean(encoded, sizeof(encoded), data);
-    const size_t decoded_size = sizeof(decoded);
-    base32_decode(data, decoded, decoded_size);
-
-    secret = QByteArray((char *) decoded, decoded_size).toHex();
-
-    auto secret_str = QString(secret);
-    ui->secretEdit->setText(secret_str);
-    clipboard.copyToClipboard(secret_str);
+    auto secret_raw = base32::decode(secret);
+    auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
+    ui->secretEdit->setText(secret_hex);
+    clipboard.copyToClipboard(secret_hex);
   }
 }
 
@@ -720,19 +695,14 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
     return;
   }
 
-  QByteArray secret;
-  uint8_t encoded[SECRET_LENGTH_BASE32+1] = {}; //+1 for \0
-  uint8_t decoded[SECRET_LENGTH] = {};
+  
+  auto secret_hex = ui->secretEdit->text().toStdString();
+  if (secret_hex.size() != 0) {
+    auto secret_raw = cppcodec::hex_upper::decode(secret_hex);
+    auto secret_base32 = QString::fromStdString(base32::encode(secret_raw));
 
-  secret = QByteArray::fromHex(ui->secretEdit->text().toLatin1());
-  if (secret.size() != 0) {
-    const size_t decoded_size = std::min(sizeof(decoded), (size_t) secret.length());
-    memcpy(decoded, secret.constData(), decoded_size);
-    base32_encode(decoded, decoded_size, encoded, sizeof(encoded));
-
-    auto secret_str = QString((char *) encoded);
-    ui->secretEdit->setText(secret_str);
-    clipboard.copyToClipboard(secret_str);
+    ui->secretEdit->setText(secret_base32);
+    clipboard.copyToClipboard(secret_base32);
   }
   ui->secretEdit->setMaxLength(get_supported_secret_length_base32());
 }

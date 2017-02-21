@@ -101,12 +101,12 @@ INCLUDE_DIRECTORIES(
   ${SRCDIR}
   ${UTILSDIR}
   ${SRCUIDIR}
+    cppcodec
 )
 
 # c/cpp sources
 SET(nitrokey_app_sources
     ${SRCUIDIR}/aboutdialog.cpp
-    ${UTILSDIR}/base32.cpp
     ${SRCUIDIR}/nitrokey-applet.cpp
     ${SRCDIR}/hotpslot.cpp
     ${SRCDIR}/main.cpp
