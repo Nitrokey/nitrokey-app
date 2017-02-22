@@ -62,7 +62,6 @@ private:
   QMutex check_connection_mutex;
   QString nkpro_user_PIN;
 
-  void InitState();
   void startDebug();
   QTimer *keepDeviceOnlineTimer;
 

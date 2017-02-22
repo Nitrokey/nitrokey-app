@@ -56,14 +56,6 @@
 using nm = nitrokey::NitrokeyManager;
 
 
-/*******************************************************************************
- Local defines
-*******************************************************************************/
-
-
-void MainWindow::InitState() {
-}
-
 //MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
