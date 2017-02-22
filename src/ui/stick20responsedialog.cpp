@@ -49,8 +49,7 @@ Stick20ResponseDialog::Stick20ResponseDialog(QWidget *parent)
 //  pollStick20Timer->start(100);
 
   this->layout()->setSizeConstraint(QLayout::SetFixedSize);
-  ProgressMovie = new QMovie(":/images/progressWheel2.gif");
-
+  ProgressMovie = std::make_shared<QMovie>(":/images/progressWheel2.gif");
 }
 
 void Stick20ResponseDialog::center_window() {
@@ -86,7 +85,7 @@ void Stick20ResponseDialog::set_window_type(Type type, bool no_debug, QString te
       SceneSize.setHeight(60);
       SceneSize.setWidth(60);
       ProgressMovie->setScaledSize(SceneSize);
-      ui->LabelProgressWheel->setMovie(ProgressMovie);
+      ui->LabelProgressWheel->setMovie(ProgressMovie.get());
       ProgressMovie->start();
     }
   } else {

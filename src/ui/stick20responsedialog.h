@@ -23,6 +23,7 @@
 //#include "stick20-response-task.h"
 #include <QDialog>
 #include <QTimer>
+#include <memory>
 
 
 namespace Ui {
@@ -45,7 +46,7 @@ public slots:
 
 private:
   Ui::Stick20ResponseDialog *ui;
-  QMovie *ProgressMovie;
+  std::shared_ptr<QMovie> ProgressMovie;
   bool initialized = false;
   void init_long_operation();
   void checkStick20StatusDialog();
