@@ -62,8 +62,6 @@ using nm = nitrokey::NitrokeyManager;
 
 
 void MainWindow::InitState() {
-  PWS_Access = false;
-  PWS_CreatePWSize = 12; //FIXME move to constants
 }
 
 //MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
@@ -1173,23 +1171,15 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
 void MainWindow::on_PWS_ButtonCreatePW_clicked() {
   //FIXME generate in separate class
   int n;
-  int PasswordCharSpaceLen;
-  char RandomPassword[30];
-  const char *PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
-  QString Text;
+  const QString PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
+  QString generated_password(20, 0);
 
-  PasswordCharSpaceLen = strlen(PasswordCharSpace);
-
-  PWS_CreatePWSize = 20 + 1; //+1 for termination
   for (int i = 0; i < PWS_CreatePWSize; i++) {
     n = qrand();
-    n = n % PasswordCharSpaceLen;
-    RandomPassword[i] = PasswordCharSpace[n];
+    n = n % PasswordCharSpace.length();
+    generated_password[i] = PasswordCharSpace[n];
   }
-  RandomPassword[PWS_CreatePWSize-1] = 0;
-
-  Text = RandomPassword;
-  ui->PWS_EditPassword->setText(Text.toLocal8Bit());
+  ui->PWS_EditPassword->setText(generated_password.toLocal8Bit());
 }
 
 void MainWindow::on_PWS_ButtonEnable_clicked() { PWS_Clicked_EnablePWSAccess(); }

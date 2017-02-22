@@ -71,8 +71,8 @@ private:
   const unsigned char HOTP_SlotCount;
   const unsigned char TOTP_SlotCount;
 
-  bool PWS_Access;
-  int PWS_CreatePWSize;
+  bool PWS_Access = false;
+  const int PWS_CreatePWSize = 20;
 
   bool set_initial_time;
 
