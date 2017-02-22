@@ -30,6 +30,7 @@
 #include "GUI/Tray.h"
 #include "GUI/Clipboard.h"
 #include "GUI/Authentication.h"
+#include "stick20responsedialog.h"
 
 
 namespace Ui {
@@ -93,7 +94,7 @@ public slots:
   void startConfiguration();
   void PWS_Clicked_EnablePWSAccess();
 
-  int factoryReset();
+  int factoryResetAction();
   void getTOTPDialog(int slot);
   void getHOTPDialog(int slot);
   void PWS_ExceClickedSlot(int Slot);
@@ -103,6 +104,7 @@ public slots:
   void startResetUserPassword();
   void startLockDeviceAction();
   void updateProgressBar(int i);
+  void show_progress_window();
 
 signals:
   void DeviceConnected();
@@ -172,6 +174,7 @@ public:
   int get_supported_secret_length_hex() const;
 
   bool long_operation_in_progress;
+  std::shared_ptr<Stick20ResponseDialog> progress_window;
 };
 
 class utf8FieldLengthValidator : public QValidator {

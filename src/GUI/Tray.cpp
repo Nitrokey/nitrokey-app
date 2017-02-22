@@ -161,7 +161,7 @@ void Tray::initActionsForStick10() {
   connect(configureAction, SIGNAL(triggered()), main_window, SLOT(startConfiguration()));
 
   resetAction = new QAction(tr("&Factory reset"), main_window);
-  connect(resetAction, SIGNAL(triggered()), main_window, SLOT(factoryReset()));
+  connect(resetAction, SIGNAL(triggered()), main_window, SLOT(factoryResetAction()));
 
   Stick10ActionChangeUserPIN = new QAction(tr("&Change User PIN"), main_window);
   connect(Stick10ActionChangeUserPIN, SIGNAL(triggered()), main_window,
@@ -593,16 +593,19 @@ void Tray::showOTPProgressInTray(int i) {
 }
 
 void Tray::updateOperationInProgressBar(int p) {
-  static QAction * a = nullptr;
+  auto te = QString(tr("Long operation in progress: %1 %")).arg(p);
+  static auto a = std::make_shared<QAction>("", nullptr);
+  connect(a.get(), SIGNAL(triggered()), main_window, SLOT(show_progress_window()));
   if (trayMenu == nullptr) {
     generateMenu(true);
-    a = new QAction("prog", this);
-    trayMenu->addAction(a);
   }
-  if (a!=nullptr)
-    a->setText(QString("aa {}").arg(p));
+  static bool done = false;
+  if (!done){
+    this->showTrayMessage(te);
+    trayMenu->addAction(a.get());
+    done = true;
+  }
+  a->setText(te);
+  trayIcon->setContextMenu(trayMenu.get());
 }
-
-
-
 

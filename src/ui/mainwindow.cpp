@@ -75,6 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
 
+  progress_window = std::make_shared<Stick20ResponseDialog>();
 
   //TODO make connections in objects instead of accumulating them here
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
@@ -92,6 +93,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(DeviceConnected()), &storage, SLOT(on_StorageStatusChanged()));
   connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
   connect(this, SIGNAL(OperationInProgress(int)), &tray, SLOT(updateOperationInProgressBar(int)));
+  connect(this, SIGNAL(OperationInProgress(int)), progress_window.get(), SLOT(updateOperationInProgressBar(int)));
   connect(this, SIGNAL(OTP_slot_write(int, bool)), libada::i().get(), SLOT(on_OTP_save(int, bool)));
   connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
   connect(this, SIGNAL(DeviceDisconnected()), this, SLOT(on_DeviceDisconnected()));
@@ -1206,7 +1208,7 @@ void MainWindow::on_counterEdit_editingFinished() {
   }
 }
 
-int MainWindow::factoryReset() {
+int MainWindow::factoryResetAction() {
   while (true){
     const std::string &password = auth_admin.getPassword();
     if (password.empty())
@@ -1350,11 +1352,26 @@ void MainWindow::on_KeepDeviceOnline() {
   qDebug() << "Keeping device online";
   try{
     nm::instance()->get_status();
+    if (long_operation_in_progress) {
+      long_operation_in_progress = false;
+      keepDeviceOnlineTimer->setInterval(30*1000);
+      emit OperationInProgress(100);
+      emit FactoryReset();
+    }
   }
   catch (DeviceCommunicationException &e){
     emit DeviceDisconnected();
   }
   catch (LongOperationInProgressException &e){
+    long_operation_in_progress = true;
     emit OperationInProgress(e.progress_bar_value);
+    keepDeviceOnlineTimer->setInterval(10*1000);
   }
+}
+
+void MainWindow::show_progress_window() {
+  progress_window->show();
+  progress_window->setFocus();
+  progress_window->raise();
+  QApplication::setActiveWindow(progress_window.get());
 }
