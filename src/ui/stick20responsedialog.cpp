@@ -71,15 +71,15 @@ void Stick20ResponseDialog::set_window_type(Type type, bool no_debug, QString te
     setWindowFlags(Qt::Window);
   }
 
-  ui->OutputText->setVisible(!no_debug);
-  ui->OutputText->setText("");
+  if (no_debug) // Resize the dialog when debugging is inactive
+  {
+    ui->OutputText->hide();
+    ui->OutputText->setText("");
 
-  ui->LabelProgressWheel->setVisible(type == Type::wheel && no_debug);
-  ui->label->setVisible(type == Type::wheel);
-  ui->progressBar->setVisible(type == Type::progress_bar && no_debug);
-  ui->HeaderText->setVisible(!no_debug);
+    ui->LabelProgressWheel->setVisible(type == Type::wheel && no_debug);
+    ui->label->setVisible(type == Type::wheel);
+    ui->progressBar->setVisible(type == Type::progress_bar && no_debug);
 
-  if (no_debug) {
     // Start progress wheel
     if (type == Type::wheel) {
       QSize SceneSize;
@@ -89,6 +89,9 @@ void Stick20ResponseDialog::set_window_type(Type type, bool no_debug, QString te
       ui->LabelProgressWheel->setMovie(ProgressMovie);
       ProgressMovie->start();
     }
+  } else {
+    ui->HeaderText->show();
+    ui->progressBar->hide();
   }
   current_type = type;
   this->show();
