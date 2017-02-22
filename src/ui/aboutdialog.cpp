@@ -203,9 +203,17 @@ void Worker::fetch_device_data() {
     return;
   }
 
+  try{
+    devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
+    devdata.minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
+  }
+  catch (LongOperationInProgressException &e){
+    devdata.storage.long_operation.status = true;
+    devdata.storage.long_operation.progress = e.progress_bar_value;
+    emit finished(true);
+    return;
+  }
 
-  devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
-  devdata.minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
   devdata.storage.active = libada::i()->isStorageDeviceConnected();
   if (devdata.storage.active ) {
     devdata.storage.sdcard.size_GB = libada::i()->getStorageSDCardSizeGB();
@@ -244,6 +252,14 @@ void AboutDialog::update_device_slots(bool connected) {
 
   QString OutputText;
   bool ErrorFlag = false;
+
+  if (worker.devdata.storage.long_operation.status){
+    showNoStickFound();
+    OutputText.append(QString(tr("      *** Clearing data in progress ***")).append("\n"));
+    ui->DeviceStatusLabel->setText(OutputText);
+    fixWindowGeometry();
+    return;
+  }
 
   ui->admin_retry_label->setText(QString::number(worker.devdata.passwordRetryCount));
   ui->user_retry_label->setText(QString::number(worker.devdata.userPasswordRetryCount));

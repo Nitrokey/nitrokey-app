@@ -45,6 +45,10 @@ namespace AboutDialogUI{
             uint8_t filled_with_random;
             bool firmware_locked;
             uint32_t smartcard_id;
+            struct {
+              bool status = false;
+              int progress = 0;
+            } long_operation;
           } storage;
         } devdata;
     public slots:
