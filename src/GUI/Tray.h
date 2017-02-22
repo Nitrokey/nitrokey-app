@@ -57,7 +57,7 @@ private slots:
 private:
     Q_DISABLE_COPY(Tray);
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
-    void generateMenu(bool init=false);
+    void generateMenu(bool init=false, std::function<void(QMenu *)> run_before = [](QMenu*){});
     void generateMenuForStorageDevice();
     void generatePasswordMenu();
     void generateMenuForProDevice();

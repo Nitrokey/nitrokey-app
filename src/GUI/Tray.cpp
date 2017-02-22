@@ -112,7 +112,7 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
 }
 
 
-void Tray::generateMenu(bool init) {
+  void Tray::generateMenu(bool init, std::function<void(QMenu *)> run_before) {
   {
     static QMutex mtx;
     QMutexLocker locker(&mtx);
@@ -121,6 +121,8 @@ void Tray::generateMenu(bool init) {
       trayMenu = std::make_shared<QMenu>();
     else
       trayMenu->clear(); // Clear old menu
+
+    run_before(trayMenu.get());
 
     if (!init){
       // Setup the new menu
