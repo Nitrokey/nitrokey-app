@@ -83,12 +83,13 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
     on_rd_percent_clicked();
     ui->rd_percent->setChecked(true);
 
-    if (8 > strlen(ui->HVPasswordEdit->text().toLatin1().data())) {
+    auto password_byte_array = ui->HVPasswordEdit->text().toLatin1();
+    if (8 > strlen(password_byte_array.constData())) {
         csApplet()->warningBox(tr("Your password is too short. Use at least 8 characters."));
       return;
     }
 
-    if (ui->HVPasswordEdit->text().toLatin1() != ui->HVPasswordEdit_2->text().toLatin1()) {
+    if (ui->HVPasswordEdit->text() != ui->HVPasswordEdit_2->text()) {
         csApplet()->warningBox(tr("The passwords are not identical"));
       return;
     }
@@ -111,8 +112,8 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
       return;
     }
 
-    auto p = ui->HVPasswordEdit->text().toLatin1().constData(); //FIXME use proper copy
-    strncpy((char *) HV_Setup_st.HiddenVolumePassword_au8, p, ui->HVPasswordEdit->text().toLatin1().length());
+    auto p = password_byte_array.constData(); //FIXME use proper copy
+    strncpy((char *) HV_Setup_st.HiddenVolumePassword_au8, p, password_byte_array.length());
     HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
     done(true);
   } else if (button == (QAbstractButton *) ui->buttonBox->button(QDialogButtonBox::Cancel)) {
@@ -203,7 +204,8 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
   QString labels[] = {tr("Very Weak"), tr("Weak"), tr("Medium"), tr("Strong"), tr("Very Strong")};
 
   Len = arg1.length();
-  Entropy = GetEntropy((unsigned char *)arg1.toLatin1().data(), Len);
+  auto byteArray = arg1.toLatin1();
+  Entropy = GetEntropy((unsigned char *) byteArray.data(), Len);
 
   if (Entropy < 0) {
     Entropy = 0;
