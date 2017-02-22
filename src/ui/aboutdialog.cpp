@@ -213,6 +213,11 @@ void Worker::fetch_device_data() {
     emit finished(true);
     return;
   }
+  catch (DeviceSendingFailure &e){
+    devdata.comm_error = true;
+    emit finished(true);
+    return;
+  }
 
   devdata.storage.active = libada::i()->isStorageDeviceConnected();
   if (devdata.storage.active ) {
@@ -254,8 +259,15 @@ void AboutDialog::update_device_slots(bool connected) {
   bool ErrorFlag = false;
 
   if (worker.devdata.storage.long_operation.status){
-    showNoStickFound();
     OutputText.append(QString(tr("      *** Clearing data in progress ***")).append("\n"));
+  }
+
+  if (worker.devdata.comm_error) {
+    OutputText.append(QString(tr("      *** Communication error ***")).append("\n"));
+  }
+
+  if (worker.devdata.comm_error || worker.devdata.storage.long_operation.status){
+    showNoStickFound();
     ui->DeviceStatusLabel->setText(OutputText);
     fixWindowGeometry();
     return;

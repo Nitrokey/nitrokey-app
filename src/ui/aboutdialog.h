@@ -50,6 +50,7 @@ namespace AboutDialogUI{
               int progress = 0;
             } long_operation;
           } storage;
+          bool comm_error = false;
         } devdata;
     public slots:
         void fetch_device_data();
