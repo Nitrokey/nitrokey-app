@@ -593,7 +593,7 @@ void Tray::showOTPProgressInTray(int i) {
 }
 
 void Tray::updateOperationInProgressBar(int p) {
-  auto te = QString(tr("Long operation in progress: %1 %")).arg(p);
+  auto te = QString(tr("Long operation in progress: %1%")).arg(p);
   static auto a = std::make_shared<QAction>("", nullptr);
   connect(a.get(), SIGNAL(triggered()), main_window, SLOT(show_progress_window()));
   if (trayMenu == nullptr) {

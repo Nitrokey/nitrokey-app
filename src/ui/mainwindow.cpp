@@ -749,6 +749,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
       return;
     }
   try{
+    auto password_byte_array = auth_admin.getTempPassword().toLatin1();
     nm::instance()->write_config(
         ui->numLockComboBox->currentIndex() - 1,
         ui->capsLockComboBox->currentIndex() - 1,
@@ -756,7 +757,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
         ui->enableUserPasswordCheckBox->isChecked(),
         ui->deleteUserPasswordCheckBox->isChecked() &&
         ui->enableUserPasswordCheckBox->isChecked(),
-        auth_admin.getTempPassword().toLatin1().data()
+        password_byte_array.constData()
     );
     csApplet()->messageBox(tr("Configuration successfully written."));
   }
@@ -825,10 +826,11 @@ void MainWindow::on_eraseButton_clicked() {
         return;
     };
     int res;
+  auto password_array = auth_admin.getTempPassword().toLatin1();
   if (isHOTP) {
-    res = libada::i()->eraseHOTPSlot(slotNo, auth_admin.getTempPassword().toLatin1().data());
+    res = libada::i()->eraseHOTPSlot(slotNo, password_array.constData());
   } else {
-    res = libada::i()->eraseTOTPSlot(slotNo, auth_admin.getTempPassword().toLatin1().data());
+    res = libada::i()->eraseTOTPSlot(slotNo, password_array.constData());
   }
   emit OTP_slot_write(slotNo, isHOTP);
     csApplet()->messageBox(tr("Slot has been erased successfully."));
@@ -1134,6 +1136,7 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
         tempPassword = auth_user.getTempPassword();
     }
   bool isTOTP = slotNumber >= 0x20;
+  auto temp_password_byte_array = tempPassword.toLatin1();
   if (isTOTP){
     //run only once before first TOTP request
     static bool time_synchronized = libada::i()->is_time_synchronized();
@@ -1155,9 +1158,9 @@ int MainWindow::getNextCode(uint8_t slotNumber) {
           }
       }
     }
-    return libada::i()->getTOTPCode(slotNumber - 0x20, tempPassword.toLatin1().constData());
+    return libada::i()->getTOTPCode(slotNumber - 0x20, temp_password_byte_array.constData());
   } else {
-    return libada::i()->getHOTPCode(slotNumber - 0x10, tempPassword.toLatin1().constData());
+    return libada::i()->getHOTPCode(slotNumber - 0x10, temp_password_byte_array.constData());
   }
   return 0;
 }
