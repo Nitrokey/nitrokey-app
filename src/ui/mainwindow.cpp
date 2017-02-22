@@ -1363,9 +1363,11 @@ void MainWindow::on_KeepDeviceOnline() {
     emit DeviceDisconnected();
   }
   catch (LongOperationInProgressException &e){
-    long_operation_in_progress = true;
+    if(!long_operation_in_progress){
+      long_operation_in_progress = true;
+      keepDeviceOnlineTimer->setInterval(10*1000);
+    }
     emit OperationInProgress(e.progress_bar_value);
-    keepDeviceOnlineTimer->setInterval(10*1000);
   }
 }
 
