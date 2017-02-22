@@ -22,17 +22,11 @@
 #include "mainwindow.h"
 #include "aboutdialog.h"
 #include "pindialog.h"
-#include "sleep.h"
 #include "stick20debugdialog.h"
-#include "string.h"
 #include "ui_mainwindow.h"
-#include <stdio.h>
-#include <string.h>
 
-#include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
 #include "securitydialog.h"
-#include "stick20-response-task.h"
 #include "stick20changepassworddialog.h"
 #include "stick20hiddenvolumedialog.h"
 #include "stick20lockfirmwaredialog.h"
@@ -48,15 +42,11 @@
 
 #include "src/core/SecureString.h"
 
-
 #include <QString>
-#include <libnitrokey/include/NitrokeyManager.h>
-#include <libnitrokey/include/stick10_commands.h>
 
 using nm = nitrokey::NitrokeyManager;
 
 
-//MainWindow::MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
        clipboard(this), auth_admin(this, Authentication::Type::ADMIN),
