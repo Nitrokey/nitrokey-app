@@ -21,7 +21,7 @@
 #ifndef SLEEP_H
 #define SLEEP_H
 
-#include <qthread.h>
+#include <QThread>
 
 class Sleep : public QThread {
 public:
