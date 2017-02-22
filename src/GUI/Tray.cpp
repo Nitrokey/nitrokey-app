@@ -539,6 +539,8 @@ void Tray::generateMenuForStorageDevice() {
 
       if (status.NewSDCardFound_u8 && !status.SDFillWithRandomChars_u8)
         trayMenuSubSpecialConfigure->addAction(Stick20ActionClearNewSDCardFound);
+
+      trayMenuSubSpecialConfigure->addAction(resetAction);
     }
 
     // Enable "reset user PIN" ?
