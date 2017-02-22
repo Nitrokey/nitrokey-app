@@ -63,7 +63,7 @@ private:
 
   void InitState();
   void startDebug();
-
+  QTimer *keepDeviceOnlineTimer;
 
   Ui::MainWindow *ui;
 

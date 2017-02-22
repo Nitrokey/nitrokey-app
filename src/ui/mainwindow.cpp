@@ -109,9 +109,9 @@ MainWindow::MainWindow(QWidget *parent)
   timer->start(2000);
   QTimer::singleShot(500, this, SLOT(checkConnection()));
 
-  QTimer *keepDeviceOnlineTimer = new QTimer(this);
+  keepDeviceOnlineTimer = new QTimer(this);
   connect(keepDeviceOnlineTimer, SIGNAL(timeout()), this, SLOT(on_KeepDeviceOnline()));
-  keepDeviceOnlineTimer->start(60*1000);
+  keepDeviceOnlineTimer->start(30*1000);
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
