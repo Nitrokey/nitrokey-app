@@ -62,19 +62,6 @@ using nm = nitrokey::NitrokeyManager;
 
 
 void MainWindow::InitState() {
-//  Stick20ScSdCardOnline = FALSE;
-//  CryptedVolumeActive = FALSE;
-//  HiddenVolumeActive = FALSE;
-//  NormalVolumeRWActive = FALSE;
-//  HiddenVolumeAccessable = FALSE;
-//  StickNotInitated = FALSE;
-//  SdCardNotErased = FALSE;
-//  LockHardware = FALSE;
-//  PasswordSafeEnabled = FALSE;
-//
-//  SdCardNotErased_DontAsk = FALSE;
-//  StickNotInitated_DontAsk = FALSE;
-
   PWS_Access = false;
   PWS_CreatePWSize = 12; //FIXME move to constants
 }

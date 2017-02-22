@@ -22,7 +22,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//#include <QSystemTrayIcon>
 #include <QValidator>
 #include <QMutex>
 #include <climits>
@@ -39,22 +38,9 @@ class MainWindow;
 
 class Tray;
 
-typedef struct {
-  int FlagDebug;
-  int ExtendedConfigActive;
-  int PasswordMatrix;
-  int LockHardware;
-  int Cmd;
-  const char *CmdLine;
-  bool language_set;
-  const char *language_string;
-} StartUpParameter_tst;
-
-
 class MainWindow : public QMainWindow {
   Q_OBJECT
 public :
-//    explicit MainWindow(StartUpParameter_tst *StartupInfo_st, QWidget *parent = 0);
     explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
 

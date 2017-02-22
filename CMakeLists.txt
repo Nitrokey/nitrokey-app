@@ -120,7 +120,6 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20hiddenvolumedialog.cpp
     ${SRCUIDIR}/stick20lockfirmwaredialog.cpp
     ${SRCUIDIR}/stick20responsedialog.cpp
-    ${SRCUIDIR}/stick20-response-task.cpp
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${platform_specific_sources}
         src/libada.cpp src/libada.h src/utils/bool_values.h src/GUI/Tray.cpp src/GUI/Tray.h src/GUI/Clipboard.cpp src/GUI/Clipboard.h src/GUI/Authentication.cpp src/GUI/Authentication.h src/core/ScopedGuard.h src/version.h src/GUI/StorageActions.cpp src/GUI/StorageActions.h
