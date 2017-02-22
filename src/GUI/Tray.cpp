@@ -345,6 +345,7 @@ void Tray::generatePasswordMenu() {
 }
 
 void Tray::destroyThread() {
+  if (thread_tray_populateOTP == nullptr) return;
   thread_tray_populateOTP->quit();
   thread_tray_populateOTP->wait();
 }
