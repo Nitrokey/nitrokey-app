@@ -75,7 +75,7 @@ private:
     QSystemTrayIcon *trayIcon;
     std::shared_ptr<QMenu> trayMenu;
     QMenu *trayMenuSubConfigure;
-    QMenu *trayMenuPasswdSubMenu;
+    std::shared_ptr<QMenu> trayMenuPasswdSubMenu;
 //    QMenu *trayMenuTOTPSubMenu;
 //    QMenu *trayMenuHOTPSubMenu;
     QMenu *trayMenuSubSpecialConfigure;

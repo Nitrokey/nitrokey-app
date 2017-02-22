@@ -319,12 +319,9 @@ void tray_Worker::doWork() {
 }
 
 void Tray::generatePasswordMenu() {
-  if (trayMenuPasswdSubMenu != nullptr) {
-    delete trayMenuPasswdSubMenu;
-  }
-  trayMenuPasswdSubMenu = new QMenu(tr("Passwords")); //TODO make shared pointer
+  trayMenuPasswdSubMenu = std::make_shared<QMenu>(tr("Passwords")); //TODO make shared pointer
 
-  trayMenu->addMenu(trayMenuPasswdSubMenu);
+  trayMenu->addMenu(trayMenuPasswdSubMenu.get());
   trayMenu->addSeparator();
 
   if (thread_tray_populateOTP!= nullptr){
