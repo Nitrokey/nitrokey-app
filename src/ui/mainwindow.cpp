@@ -1180,7 +1180,7 @@ void MainWindow::on_PWS_ButtonCreatePW_clicked() {
 
   PasswordCharSpaceLen = strlen(PasswordCharSpace);
 
-  PWS_CreatePWSize = 20;
+  PWS_CreatePWSize = 20 + 1; //+1 for termination
   for (int i = 0; i < PWS_CreatePWSize; i++) {
     n = qrand();
     n = n % PasswordCharSpaceLen;
