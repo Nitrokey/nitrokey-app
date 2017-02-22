@@ -18,6 +18,7 @@ private:
   Authentication * auth_user;
   bool CryptedVolumeActive = false;
   bool HiddenVolumeActive = false;
+  void _execute_SD_clearing(const std::string &s);
 
 private slots:
   void on_StorageStatusChanged();

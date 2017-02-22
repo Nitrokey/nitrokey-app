@@ -17,6 +17,7 @@
 #include <src/ui/stick20hiddenvolumedialog.h>
 
 #define LOCAL_PASSWORD_SIZE 40
+#include <memory>
 
 
 void unmountEncryptedVolumes() {
@@ -240,10 +241,26 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
       emit FactoryReset();
 
       if (fillSDWithRandomChars != 0) {
-        m->fill_SD_card_with_random_data(s.data());
+        _execute_SD_clearing(s);
       }
-//      refreshStick20StatusData();
     }
+  }
+}
+
+void StorageActions::_execute_SD_clearing(const std::string &s) {
+  auto m = nitrokey::NitrokeyManager::instance();
+
+  try{
+    m->fill_SD_card_with_random_data(s.data());
+  }
+  catch (LongOperationInProgressException &l){
+    //expected
+    emit storageStatusChanged();
+    emit longOperationStarted();
+  }
+  catch (CommandFailedException &e){
+    if(!e.reason_wrong_password()) throw;
+    csApplet()->warningBox("Wrong password"); //FIXME use proper UI string for translation
   }
 }
 
@@ -256,19 +273,7 @@ void StorageActions::startStick20FillSDCardWithRandomChars() {
   if (QDialog::Accepted == ret) {
     auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
-    try{
-      m->fill_SD_card_with_random_data(s.data());
-    }
-    catch (LongOperationInProgressException &l){
-      //expected
-      emit storageStatusChanged();
-      emit longOperationStarted();
-    }
-    catch (CommandFailedException &e){
-      if(!e.reason_wrong_password()) throw;
-      csApplet()->warningBox("Wrong password"); //FIXME use proper UI string for translation
-    }
-
+    _execute_SD_clearing(s);
   }
 }
 
