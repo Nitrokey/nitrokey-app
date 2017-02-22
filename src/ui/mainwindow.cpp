@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow),
        clipboard(this), auth_admin(this, Authentication::Type::ADMIN),
       auth_user(this, Authentication::Type::USER), storage(this, &auth_admin, &auth_user),
-      tray(this, true, true, &storage),
+      tray(this, false, true, &storage),
       HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
 
