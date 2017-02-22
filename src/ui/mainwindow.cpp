@@ -1356,7 +1356,7 @@ void MainWindow::on_KeepDeviceOnline() {
       long_operation_in_progress = false;
       keepDeviceOnlineTimer->setInterval(30*1000);
       emit OperationInProgress(100);
-      emit FactoryReset();
+      startLockDeviceAction();
     }
   }
   catch (DeviceCommunicationException &e){
