@@ -234,6 +234,11 @@ void Stick20ResponseDialog::checkStick20StatusDialog(void) {
 void Stick20ResponseDialog::updateOperationInProgressBar(int p) {
   init_long_operation();
   ui->progressBar->setValue(p);
+  if(p==100){
+    QTimer::singleShot(3*1000, [this](){
+      this->hide();
+    });
+  }
 }
 
 void Stick20ResponseDialog::init_long_operation() {
