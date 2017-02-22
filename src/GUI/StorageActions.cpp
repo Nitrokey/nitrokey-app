@@ -262,6 +262,7 @@ void StorageActions::startStick20FillSDCardWithRandomChars() {
     catch (LongOperationInProgressException &l){
       //expected
       emit storageStatusChanged();
+      emit longOperationStarted();
     }
     catch (CommandFailedException &e){
       if(!e.reason_wrong_password()) throw;

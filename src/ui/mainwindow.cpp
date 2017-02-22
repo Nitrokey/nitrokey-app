@@ -61,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
   connect(&storage, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(&storage, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
+  connect(&storage, SIGNAL(longOperationStarted()), this, SLOT(on_KeepDeviceOnline()));
   connect(this, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
 
