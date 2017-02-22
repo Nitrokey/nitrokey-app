@@ -1,11 +1,9 @@
 #include <QApplication>
 #include <QGridLayout>
 #include <QMessageBox>
-#include <QSpacerItem>
 #include <QtGui>
 
 #include "nitrokey-applet.h"
-
 
 QMutex AppMessageBox::mutex;
 
@@ -16,10 +14,13 @@ AppMessageBox *csApplet(){
 void AppMessageBox::warningBox(const QString msg) {
   QMessageBox *msgbox = new QMessageBox(
       QMessageBox::Warning, getBrand(), msg, QMessageBox::Ok, _parent);
-//  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
+  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
   msgbox->setModal( false );
   moveToCenter(msgbox);
   msgbox->exec();
+//  msgbox->open();
+//  msgbox->repaint();
+//  msgbox->show();
 }
 
 #include <QDesktopWidget>
@@ -31,10 +32,13 @@ void AppMessageBox::moveToCenter(QWidget *widget) {
 void AppMessageBox::messageBox(const QString msg) {
   QMessageBox *msgbox = new QMessageBox(
       QMessageBox::Information, getBrand(), msg, QMessageBox::Ok, _parent);
-//  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
+  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
   msgbox->setModal( false );
   moveToCenter(msgbox);
   msgbox->exec();
+//  msgbox->open();
+//  msgbox->repaint();
+//  msgbox->show();
 }
 
 bool AppMessageBox::yesOrNoBox(const QString msg, bool default_val) {
