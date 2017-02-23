@@ -1293,13 +1293,7 @@ void MainWindow::on_DeviceConnected() {
   tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
   tray.regenerateMenu();
 
-
-  //TODO FIXME synchronize time with the device
   initialTimeReset();
-//  if (!libada::i()->is_time_synchronized()){
-////    libada::i()->synchronize_time();
-//    qDebug() << "Time needs to be synchronized!";
-//  }
 
 //TODO show warnings for storage (test)
 ThreadWorker *tw = new ThreadWorker(
