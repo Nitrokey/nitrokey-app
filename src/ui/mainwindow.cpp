@@ -985,9 +985,13 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
           data["name"] = QString::fromStdString(libada::i()->getPWSSlotName(index));
           emit PWS_progress(100*2/4);
           //FIXME use secure way
-          data["pass"] = QString::fromStdString(nm::instance()->get_password_safe_slot_password(index));
+          auto pass_cstr = nm::instance()->get_password_safe_slot_password(index);
+          data["pass"] = QString::fromStdString(pass_cstr);
+          free((void *) pass_cstr);
           emit PWS_progress(100*3/4);
-          data["login"] = QString::fromStdString(nm::instance()->get_password_safe_slot_login(index));
+          auto login_cstr = nm::instance()->get_password_safe_slot_login(index);
+          data["login"] = QString::fromStdString(login_cstr);
+          free((void *) login_cstr);
         }
         emit PWS_progress(100*4/4);
         return data;
@@ -1106,6 +1110,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
   //TODO check assumptions - slot is not empty and PWS is active
   auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
   clipboard.copyToClipboard(slot_password);
+  free((void *) slot_password);
   QString password_safe_slot_info =
     QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
   QString title = QString("Password has been copied to clipboard");

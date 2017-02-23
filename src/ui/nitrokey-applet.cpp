@@ -66,6 +66,7 @@ bool AppMessageBox::detailedYesOrNoBox(const QString msg, const QString detailed
   layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
   msgBox->setDefaultButton(default_val ? QMessageBox::Yes : QMessageBox::No);
 
+  msgBox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
   moveToCenter(msgBox);
   bool b = msgBox->exec() == QMessageBox::Yes;
   return b;

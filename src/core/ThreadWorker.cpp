@@ -29,8 +29,8 @@ void ThreadWorkerNS::Worker::fetch_data() {
 ThreadWorker::ThreadWorker(const std::function<Data()> &datafunc, const std::function<void(Data)> &usefunc,
                            QObject *parent) :
     QObject(parent),
-    worker(new ThreadWorkerNS::Worker(nullptr, datafunc)),
-    worker_thread(new QThread()), //FIXME leak
+    worker(new ThreadWorkerNS::Worker(this, datafunc)),
+    worker_thread(new QThread(this)),
     usefunc(usefunc) {
 
   connect(worker, SIGNAL(finished()), this, SLOT(worker_finished()), Qt::QueuedConnection);
@@ -47,6 +47,7 @@ ThreadWorker::~ThreadWorker() {
 
 void ThreadWorker::worker_finished() {
   qDebug() << "worker finished";
+  stop_thread();
 }
 
 void ThreadWorker::use_data(QMap<QString, QVariant> data) {
@@ -55,6 +56,7 @@ void ThreadWorker::use_data(QMap<QString, QVariant> data) {
 }
 
 void ThreadWorker::stop_thread() {
+  if (worker_thread == nullptr) return;
   worker_thread->quit();
   worker_thread->wait();
 }

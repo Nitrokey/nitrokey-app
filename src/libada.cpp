@@ -77,6 +77,7 @@ std::string libada::getTOTPSlotName(const int i) {
   try{
     const auto slot_name = nm::instance()->get_totp_slot_name(i);
     cache_TOTP_name.insert(i, new std::string(slot_name));
+    free((void *) slot_name);
   }
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed())
@@ -100,6 +101,7 @@ std::string libada::getHOTPSlotName(const int i) {
   try{
     const auto slot_name = nm::instance()->get_hotp_slot_name(i);
     cache_HOTP_name.insert(i, new std::string(slot_name));
+    free((void *) slot_name);
   }
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed())
@@ -118,6 +120,7 @@ std::string libada::getPWSSlotName(const int i) {
   try{
     const auto slot_name = nm::instance()->get_password_safe_slot_name(i);
     cache_PWS_name.insert(i, new std::string(slot_name));
+    free((void *) slot_name);
   }
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed()) //FIXME correct reason
