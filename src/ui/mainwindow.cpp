@@ -186,20 +186,28 @@ void MainWindow::checkConnection() {
 
 }
 
-void MainWindow::initialTimeReset(int ret) {
-  //TODO check is it needed on app start
-//  if (ret == -2) {
-//        answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
-//                                                tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-//                                                           "sync. Your computer may be configured with a wrong time or "
-//                                                           "your Nitrokey may have been attacked. If an attacker or "
-//                                                           "malware could have used your Nitrokey you should reset the "
-//                                                           "secrets of your configured One Time Passwords. If your "
-//                                                           "computer's time is wrong, please configure it correctly and "
-//                                                           "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-//                                                false);
-//        if (answer) {
-//            csApplet()->messageBox(tr("Time reset!"));
+void MainWindow::initialTimeReset() {
+  if (!libada::i()->isDeviceConnected()) {
+    return;
+  }
+
+  if (!libada::i()->is_time_synchronized()) {
+    bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
+      tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+                 "sync. Your computer may be configured with a wrong time or "
+                 "your Nitrokey may have been attacked. If an attacker or "
+                 "malware could have used your Nitrokey you should reset the "
+                 "secrets of your configured One Time Passwords. If your "
+                 "computer's time is wrong, please configure it correctly and "
+                 "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+      false);
+    if (answer) {
+      auto res = libada::i()->set_current_time();
+      if (res) {
+        csApplet()->messageBox(tr("Time reset!"));
+      }
+    }
+  }
 }
 
 MainWindow::~MainWindow() {
@@ -1287,10 +1295,11 @@ void MainWindow::on_DeviceConnected() {
 
 
   //TODO FIXME synchronize time with the device
-  if (!libada::i()->is_time_synchronized()){
-//    libada::i()->synchronize_time();
-    qDebug() << "Time needs to be synchronized!";
-  }
+  initialTimeReset();
+//  if (!libada::i()->is_time_synchronized()){
+////    libada::i()->synchronize_time();
+//    qDebug() << "Time needs to be synchronized!";
+//  }
 
 //TODO show warnings for storage (test)
 ThreadWorker *tw = new ThreadWorker(
