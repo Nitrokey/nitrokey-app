@@ -21,7 +21,7 @@ IF(UNIX)
     ENDIF()
     IF(ADD_TSAN)
         SET(EXTRA_LIBS ${EXTRA_LIBS} tsan )
-        ADD_DEFINITIONS(-fsanitize=thread -fno-omit-frame-pointer -fPIE -pie -g)
+        ADD_DEFINITIONS(-fsanitize=thread -fno-omit-frame-pointer  -g) #use with clang
     ENDIF()
 ENDIF()
 
