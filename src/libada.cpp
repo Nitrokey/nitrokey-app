@@ -22,24 +22,43 @@ int libada::getMajorFirmwareVersion() {
 }
 
 int libada::getMinorFirmwareVersion() {
-  return nm::instance()->get_minor_firmware_version();
-}
-
-int libada::getAdminPasswordRetryCount() {
-  if (nm::instance()->is_connected())
-    return nm::instance()->get_admin_retry_count();
+  try{
+    return nm::instance()->get_minor_firmware_version();
+  }
+  catch (DeviceCommunicationException &e){
+  }
   return 99;
 }
 
+int libada::getAdminPasswordRetryCount() {
+  try{
+    if (nm::instance()->is_connected())
+      return nm::instance()->get_admin_retry_count();
+  }
+  catch (DeviceCommunicationException &e){
+  }
+  return 99;
+
+}
+
 int libada::getUserPasswordRetryCount() {
-  if (nm::instance()->is_connected()){
-    return nm::instance()->get_user_retry_count();
+  try{
+    if (nm::instance()->is_connected()){
+      return nm::instance()->get_user_retry_count();
+    }
+  }
+  catch (DeviceCommunicationException &e){
   }
   return 99;
 }
 
 std::string libada::getCardSerial() {
+  try {
     return nm::instance()->get_serial_number();
+  }
+  catch (DeviceCommunicationException &e){
+  }
+  return "--error--";
 }
 
 #include <QtCore/QMutex>
@@ -85,9 +104,10 @@ std::string libada::getTOTPSlotName(const int i) {
     cache_TOTP_name.insert(i, new std::string(""));
   }
   catch (DeviceCommunicationException &e){
-    //FIXME log!
+    //TODO log!
 //    emit DeviceDisconnected();
     qDebug() << __PRETTY_FUNCTION__ << "DeviceCommunicationException";
+    cache_TOTP_name.insert(i, new std::string("--error--"));
   }
   return *cache_TOTP_name[i];
 }
@@ -108,6 +128,10 @@ std::string libada::getHOTPSlotName(const int i) {
       throw;
     cache_HOTP_name.insert(i, new std::string(""));
   }
+  catch(DeviceCommunicationException &e){
+//    cache_HOTP_name.insert(i, new std::string(""));
+    cache_HOTP_name.insert(i, new std::string("--error--"));
+  }
   return *cache_HOTP_name[i];
 }
 
@@ -123,16 +147,25 @@ std::string libada::getPWSSlotName(const int i) {
     free((void *) slot_name);
   }
   catch (CommandFailedException &e){
-    if (!e.reason_slot_not_programmed()) //FIXME correct reason
+    if (!e.reason_slot_not_programmed()) //FIXME set correct reason for PWS
       throw;
     cache_PWS_name.insert(i, new std::string("(empty)"));
+  }
+  catch(DeviceCommunicationException &e){
+//    cache_HOTP_name.insert(i, new std::string(""));
+    cache_HOTP_name.insert(i, new std::string("--error--"));
   }
   return *cache_PWS_name[i];
 }
 
 bool libada::getPWSSlotStatus(const int i) {
-  if (status_PWS.empty()){
-    status_PWS = nm::instance()->get_password_safe_slot_status();
+  try{
+    if (status_PWS.empty()){
+      status_PWS = nm::instance()->get_password_safe_slot_status();
+    }
+  }
+  catch (DeviceCommunicationException &e){
+    return false;
   }
   return status_PWS[i];
 }

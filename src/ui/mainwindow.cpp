@@ -761,40 +761,50 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 }
 
 void MainWindow::getHOTPDialog(int slot) {
-  auto OTPcode = getNextCode(0x10 + slot);
-  clipboard.copyToClipboard(QString::number(OTPcode));
+  try{
+    auto OTPcode = getNextCode(0x10 + slot);
+    clipboard.copyToClipboard(QString::number(OTPcode));
 
-  if (libada::i()->getHOTPSlotName(slot).empty())
-    tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
-                    tr("One-time password has been copied to clipboard."), INFORMATION,
-                    TRAY_MSG_TIMEOUT);
-  else
-    tray.showTrayMessage(QString(tr("HOTP slot "))
-                        .append(QString::number(slot + 1, 10))
-                        .append(" [")
-                        .append(QString::fromStdString(libada::i()->getHOTPSlotName(slot)))
-                        .append("]"),
-                    tr("One-time password has been copied to clipboard."), INFORMATION,
-                    TRAY_MSG_TIMEOUT);
-}
-
-void MainWindow::getTOTPDialog(int slot) {
-  //FIXME check time and allow user to synchronize
-  auto OTPcode = getNextCode(0x20 + slot);
-  clipboard.copyToClipboard(QString::number(OTPcode));
-
-    if (libada::i()->getTOTPSlotName(slot).empty())
-        tray.showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
+    if (libada::i()->getHOTPSlotName(slot).empty())
+      tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
                       tr("One-time password has been copied to clipboard."), INFORMATION,
                       TRAY_MSG_TIMEOUT);
     else
-      tray.showTrayMessage(QString(tr("TOTP slot "))
+      tray.showTrayMessage(QString(tr("HOTP slot "))
                           .append(QString::number(slot + 1, 10))
                           .append(" [")
-                          .append(QString::fromStdString(libada::i()->getTOTPSlotName(slot)))
+                          .append(QString::fromStdString(libada::i()->getHOTPSlotName(slot)))
                           .append("]"),
                       tr("One-time password has been copied to clipboard."), INFORMATION,
                       TRAY_MSG_TIMEOUT);
+  }
+  catch(DeviceCommunicationException &e){
+    tray.showTrayMessage(QString(tr("Communication error"))); //TODO remove
+  }
+}
+
+void MainWindow::getTOTPDialog(int slot) {
+  try{
+    auto OTPcode = getNextCode(0x20 + slot);
+    clipboard.copyToClipboard(QString::number(OTPcode));
+
+    if (libada::i()->getTOTPSlotName(slot).empty())
+      tray.showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
+                           tr("One-time password has been copied to clipboard."), INFORMATION,
+                           TRAY_MSG_TIMEOUT);
+    else
+      tray.showTrayMessage(QString(tr("TOTP slot "))
+                               .append(QString::number(slot + 1, 10))
+                               .append(" [")
+                               .append(QString::fromStdString(libada::i()->getTOTPSlotName(slot)))
+                               .append("]"),
+                           tr("One-time password has been copied to clipboard."), INFORMATION,
+                           TRAY_MSG_TIMEOUT);
+  }
+  catch(DeviceCommunicationException &e){
+    tray.showTrayMessage(QString(tr("Communication error"))); //TODO remove
+  }
+
 }
 
 void MainWindow::on_eraseButton_clicked() {
@@ -1070,13 +1080,16 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       auto user_password = auth_user.getPassword();
       if(user_password.empty()) return;
       nm::instance()->enable_password_safe(user_password.c_str());
-      csApplet()->warningBox(tr("Password safe unlocked"));
+      csApplet()->messageBox(tr("Password safe unlocked"));
       PWS_Access = true;
       emit PWS_unlocked();
       return;
     }
+    catch (DeviceCommunicationException &e){
+      csApplet()->warningBox(tr("Communication error"));
+    }
     catch (CommandFailedException &e){
-      //emit pw safe not available when not available
+      //TODO emit pw safe not available when not available
   //    cryptostick->passwordSafeAvailable = FALSE;
   //    UnlockPasswordSafeAction->setEnabled(false);
   //    csApplet()->warningBox(tr("Password safe is not supported by this device."));
@@ -1090,7 +1103,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
         try{
           csApplet()->warningBox(tr("AES keys not initialized. Please provide Admin PIN."));
           nm::instance()->build_aes_key(auth_admin.getPassword().c_str());
-          csApplet()->warningBox(tr("Keys generated. Please unlock Password Safe again."));
+          csApplet()->messageBox(tr("Keys generated. Please unlock Password Safe again."));
         } catch (CommandFailedException &e){
           if (e.reason_wrong_password())
             csApplet()->warningBox(tr("Wrong admin password."));
@@ -1107,14 +1120,18 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
 }
 
 void MainWindow::PWS_ExceClickedSlot(int Slot) {
-  //TODO check assumptions - slot is not empty and PWS is active
-  auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
-  clipboard.copyToClipboard(slot_password);
-  free((void *) slot_password);
-  QString password_safe_slot_info =
-    QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
-  QString title = QString("Password has been copied to clipboard");
-  tray.showTrayMessage(title, password_safe_slot_info);
+  try {
+    auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
+    clipboard.copyToClipboard(slot_password);
+    free((void *) slot_password);
+    QString password_safe_slot_info =
+        QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
+    QString title = QString("Password has been copied to clipboard");
+    tray.showTrayMessage(title, password_safe_slot_info);
+  }
+  catch(DeviceCommunicationException){
+    tray.showTrayMessage(QString(tr("Communication error"))); //TODO remove
+  }
 }
 
 #include "GUI/Authentication.h"

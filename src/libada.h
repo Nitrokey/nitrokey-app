@@ -91,6 +91,7 @@ public:
     bool is_nkpro_07_rtm1();
     bool is_secret320_supported();
 
+    bool communication_issues_flag = false;
 };
 
 

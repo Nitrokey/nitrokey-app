@@ -397,4 +397,7 @@ void StorageActions::on_StorageStatusChanged() {
   catch (LongOperationInProgressException &e){
     //TODO
   }
+  catch (DeviceCommunicationException &e){
+    //TODO
+  }
 }
