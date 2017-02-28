@@ -45,6 +45,7 @@
 #include <QString>
 
 using nm = nitrokey::NitrokeyManager;
+static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -786,7 +787,7 @@ void MainWindow::getHOTPDialog(int slot) {
                       TRAY_MSG_TIMEOUT);
   }
   catch(DeviceCommunicationException &e){
-    tray.showTrayMessage(QString(tr("Communication error"))); //TODO remove
+    tray.showTrayMessage(communication_error_message);
   }
 }
 
@@ -809,7 +810,7 @@ void MainWindow::getTOTPDialog(int slot) {
                            TRAY_MSG_TIMEOUT);
   }
   catch(DeviceCommunicationException &e){
-    tray.showTrayMessage(QString(tr("Communication error"))); //TODO remove
+    tray.showTrayMessage(communication_error_message);
   }
 
 }
@@ -1063,6 +1064,9 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
   catch (CommandFailedException &e){
     csApplet()->messageBox(tr("Can't save slot. %1").arg(e.last_command_status));
   }
+  catch (DeviceCommunicationException &e){
+    csApplet()->messageBox(tr("Can't save slot. %1").arg(communication_error_message));
+  }
 
 //  cryptostick->passwordSafeStatus[Slot] = TRUE;
 //  STRCPY((char *)cryptostick->passwordSafeSlotNames[Slot],
@@ -1093,7 +1097,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       return;
     }
     catch (DeviceCommunicationException &e){
-      csApplet()->warningBox(tr("Communication error"));
+      csApplet()->warningBox(communication_error_message);
     }
     catch (CommandFailedException &e){
       //TODO emit pw safe not available when not available
@@ -1137,7 +1141,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
     tray.showTrayMessage(title, password_safe_slot_info);
   }
   catch(DeviceCommunicationException){
-    tray.showTrayMessage(QString(tr("Communication error"))); //TODO remove
+    tray.showTrayMessage(communication_error_message);
   }
 }
 
