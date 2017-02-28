@@ -74,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(DeviceLocked()), &storage, SLOT(on_StorageStatusChanged()));
   connect(this, SIGNAL(DeviceConnected()), &storage, SLOT(on_StorageStatusChanged()));
   connect(&tray, SIGNAL(progress(int)), this, SLOT(updateProgressBar(int)));
+  connect(this, SIGNAL(ShortOperationBegins(QString)), progress_window.get(), SLOT(on_ShortOperationBegins(QString)));
+  connect(this, SIGNAL(ShortOperationEnds()), progress_window.get(), SLOT(on_ShortOperationEnds()));
   connect(this, SIGNAL(OperationInProgress(int)), &tray, SLOT(updateOperationInProgressBar(int)));
   connect(this, SIGNAL(OperationInProgress(int)), progress_window.get(), SLOT(updateOperationInProgressBar(int)));
   connect(this, SIGNAL(OTP_slot_write(int, bool)), libada::i().get(), SLOT(on_OTP_save(int, bool)));
@@ -1279,17 +1281,21 @@ void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
 }
 
 void MainWindow::startLockDeviceAction() {
+  emit ShortOperationBegins(tr("Locking device"));
   if(libada::i()->isStorageDeviceConnected()){
     auto lockDeviceAction = storage.startLockDeviceAction();
     if(lockDeviceAction){
       PWS_Access = false;
+      tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
     }
+    emit ShortOperationEnds();
     return;
   }
   PWS_Access = false;
   nm::instance()->lock_device();
   tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
   emit DeviceLocked();
+  emit ShortOperationEnds();
 }
 
 void MainWindow::updateProgressBar(int i) {

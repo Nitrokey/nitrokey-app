@@ -115,6 +115,8 @@ signals:
   void FactoryReset();
   void PWS_progress(int p);
   void OperationInProgress(int p);
+  void ShortOperationBegins(QString msg);
+  void ShortOperationEnds();
   void OTP_slot_write(int slot_no, bool isHOTP);
 
 private slots:

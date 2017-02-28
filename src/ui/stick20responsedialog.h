@@ -43,6 +43,8 @@ public :
 
 public slots:
   void updateOperationInProgressBar(int p);
+  void on_ShortOperationBegins(QString msg);
+  void on_ShortOperationEnds();
 
 private:
   Ui::Stick20ResponseDialog *ui;

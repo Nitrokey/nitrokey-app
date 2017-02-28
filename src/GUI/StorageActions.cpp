@@ -168,7 +168,6 @@ bool StorageActions::startLockDeviceAction() {
   HiddenVolumeActive = false;
   CryptedVolumeActive = false;
   emit storageStatusChanged();
-  csApplet()->messageBox(tr("Device locked")); //FIXME use existing translation
   return true;
 }
 

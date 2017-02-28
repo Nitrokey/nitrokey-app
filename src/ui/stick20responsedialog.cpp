@@ -247,3 +247,12 @@ void Stick20ResponseDialog::init_long_operation() {
 
   set_window_type(Type::progress_bar, true, description_string);
 }
+
+void Stick20ResponseDialog::on_ShortOperationBegins(QString msg) {
+  set_window_type(Type::wheel, true, msg);
+  this->show();
+}
+
+void Stick20ResponseDialog::on_ShortOperationEnds() {
+  this->hide();
+}
