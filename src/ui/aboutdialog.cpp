@@ -206,43 +206,39 @@ void Worker::fetch_device_data() {
   try{
     devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
     devdata.minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
+
+    devdata.storage.active = libada::i()->isStorageDeviceConnected();
+    if (devdata.storage.active ) {
+      devdata.storage.sdcard.size_GB = libada::i()->getStorageSDCardSizeGB();
+      auto st = nm::instance()->get_status_storage(); //FIXME use libada?
+      devdata.storage.volume_active.plain = st.VolumeActiceFlag_st.unencrypted;
+      devdata.storage.volume_active.encrypted = st.VolumeActiceFlag_st.encrypted;
+      devdata.storage.volume_active.hidden = st.VolumeActiceFlag_st.hidden;
+      devdata.storage.volume_active.plain_RW = st.ReadWriteFlagUncryptedVolume_u8;
+      devdata.storage.volume_active.encrypted_RW = st.ReadWriteFlagCryptedVolume_u8;
+      devdata.storage.volume_active.hidden_RW = st.ReadWriteFlagHiddenVolume_u8;
+      devdata.storage.keys_initiated = !st.StickKeysNotInitiated;
+      devdata.storage.sdcard.is_new = st.NewSDCardFound_u8;
+      devdata.storage.sdcard.filled_with_random = st.SDFillWithRandomChars_u8;
+      devdata.storage.sdcard.id = st.ActiveSD_CardID_u32;
+      devdata.storage.smartcard_id = st.ActiveSmartCardID_u32;
+      devdata.storage.firmware_locked = st.FirmwareLocked_u8;
+      devdata.passwordRetryCount = st.AdminPwRetryCount;
+      devdata.userPasswordRetryCount = st.UserPwRetryCount;
+    } else {
+      devdata.passwordRetryCount = libada::i()->getAdminPasswordRetryCount();
+      devdata.userPasswordRetryCount = libada::i()->getUserPasswordRetryCount();
+    }
+    devdata.cardSerial = libada::i()->getCardSerial();
+
   }
   catch (LongOperationInProgressException &e){
     devdata.storage.long_operation.status = true;
     devdata.storage.long_operation.progress = e.progress_bar_value;
-    emit finished(true);
-    return;
   }
   catch (DeviceSendingFailure &e){
     devdata.comm_error = true;
-    emit finished(true);
-    return;
   }
-
-  devdata.storage.active = libada::i()->isStorageDeviceConnected();
-  if (devdata.storage.active ) {
-    devdata.storage.sdcard.size_GB = libada::i()->getStorageSDCardSizeGB();
-    auto st = nm::instance()->get_status_storage(); //FIXME use libada?
-    devdata.storage.volume_active.plain = st.VolumeActiceFlag_st.unencrypted;
-    devdata.storage.volume_active.encrypted = st.VolumeActiceFlag_st.encrypted;
-    devdata.storage.volume_active.hidden = st.VolumeActiceFlag_st.hidden;
-    devdata.storage.volume_active.plain_RW = st.ReadWriteFlagUncryptedVolume_u8;
-    devdata.storage.volume_active.encrypted_RW = st.ReadWriteFlagCryptedVolume_u8;
-    devdata.storage.volume_active.hidden_RW = st.ReadWriteFlagHiddenVolume_u8;
-    devdata.storage.keys_initiated = !st.StickKeysNotInitiated;
-    devdata.storage.sdcard.is_new = st.NewSDCardFound_u8;
-    devdata.storage.sdcard.filled_with_random = st.SDFillWithRandomChars_u8;
-    devdata.storage.sdcard.id = st.ActiveSD_CardID_u32;
-    devdata.storage.smartcard_id = st.ActiveSmartCardID_u32;
-    devdata.storage.firmware_locked = st.FirmwareLocked_u8;
-    devdata.passwordRetryCount = st.AdminPwRetryCount;
-    devdata.userPasswordRetryCount = st.UserPwRetryCount;
-  } else {
-    devdata.passwordRetryCount = libada::i()->getAdminPasswordRetryCount();
-    devdata.userPasswordRetryCount = libada::i()->getUserPasswordRetryCount();
-  }
-  devdata.cardSerial = libada::i()->getCardSerial();
-
   emit finished(true);
 }
 
