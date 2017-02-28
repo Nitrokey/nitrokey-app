@@ -29,13 +29,14 @@ void ThreadWorkerNS::Worker::fetch_data() {
 ThreadWorker::ThreadWorker(const std::function<Data()> &datafunc, const std::function<void(Data)> &usefunc,
                            QObject *parent) :
     QObject(parent),
-    worker(new ThreadWorkerNS::Worker(nullptr, datafunc)), //FIXME check would this leak
     worker_thread(new QThread(this)),
     usefunc(usefunc) {
 
-  connect(worker, SIGNAL(finished()), this, SLOT(worker_finished()), Qt::QueuedConnection);
-  connect(worker_thread, SIGNAL(started()), worker, SLOT(fetch_data()), Qt::QueuedConnection);
-  connect(worker, SIGNAL(finished(QMap<QString, QVariant>)),
+  worker = std::make_shared<ThreadWorkerNS::Worker>(nullptr, datafunc);
+
+  connect(worker.get(), SIGNAL(finished()), this, SLOT(worker_finished()), Qt::QueuedConnection);
+  connect(worker_thread, SIGNAL(started()), worker.get(), SLOT(fetch_data()), Qt::QueuedConnection);
+  connect(worker.get(), SIGNAL(finished(QMap<QString, QVariant>)),
           this, SLOT(use_data(QMap<QString, QVariant>)), Qt::QueuedConnection);
   worker->moveToThread(worker_thread);
   worker_thread->start();

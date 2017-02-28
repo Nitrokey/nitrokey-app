@@ -8,6 +8,7 @@
 #include <QMutex>
 #include <QVariant>
 #include <QMap>
+#include <memory>
 
 
 /***
@@ -67,7 +68,7 @@ private slots:
   void use_data(QMap<QString, QVariant> data);
 
 private:
-  Worker *worker;
+  std::shared_ptr<ThreadWorkerNS::Worker> worker;
   QThread *worker_thread;
   std::function<void(Data)> usefunc;
   QMutex mutex;
