@@ -416,6 +416,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
 
   try{
     if (libada::i()->isTOTPSlotProgrammed(slotNo)) {
+      //FIXME use separate thread
       auto p = nm::instance()->get_TOTP_slot_data(slotNo);
       updateSlotConfig(p, ui);
       int interval = p.slot_counter;
@@ -423,7 +424,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
       ui->intervalSpinBox->setValue(interval);
     }
   }
-  catch (DeviceSendingFailure &e){
+  catch (DeviceCommunicationException &e){
     emit DeviceDisconnected();
     return;
   }
@@ -453,11 +454,17 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->ttEdit->setText("01");
   ui->counterEdit->setText(QString::number(0));
 
-  if (libada::i()->isHOTPSlotProgrammed(slotNo)) {
-    //FIXME use separate thread
-    auto p = nm::instance()->get_HOTP_slot_data(slotNo);
-    updateSlotConfig(p, ui);
-    ui->counterEdit->setText(QString::number(p.slot_counter));
+  try {
+    if (libada::i()->isHOTPSlotProgrammed(slotNo)) {
+      //FIXME use separate thread
+      auto p = nm::instance()->get_HOTP_slot_data(slotNo);
+      updateSlotConfig(p, ui);
+      ui->counterEdit->setText(QString::number(p.slot_counter));
+    }
+  }
+  catch (DeviceCommunicationException &e){
+    emit DeviceDisconnected();
+    return;
   }
 }
 
