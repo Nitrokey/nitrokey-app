@@ -73,6 +73,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
     local_sync();
     const auto s = dialog.getPassword();
     auto m = nitrokey::NitrokeyManager::instance();
+    //FIXME handle wrong password
     m->unlock_encrypted_volume(s.data());
     CryptedVolumeActive = true;
     emit storageStatusChanged();
