@@ -308,7 +308,6 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   auto secret_raw = base32::decode(secretFromGUI);
   auto secret_hex = hex::encode(secret_raw);
 
-  qDebug() << secret_hex.c_str();
   size_t toCopy = std::min(sizeof(slot->secret), (const size_t &) secret_hex.length());
   if (!libada::i()->is_secret320_supported() && toCopy > 40){
     toCopy = 40;
@@ -628,7 +627,6 @@ void MainWindow::on_writeButton_clicked() {
     if (!validate_secret(otp.secret)) {
       return;
     }
-  qDebug() << otp.secret;
     if(auth_admin.authenticate()){
       try{
         libada::i()->writeToOTPSlot(otp, auth_admin.getTempPassword());
@@ -760,7 +758,6 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
   }
   catch (CommandFailedException &e){
     csApplet()->warningBox(tr("Error writing configuration!"));
-    qDebug() << "should throw?";
   }
 
 //      translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
@@ -1368,7 +1365,6 @@ ThreadWorker *tw = new ThreadWorker(
 }
 
 void MainWindow::on_KeepDeviceOnline() {
-  qDebug() << "Keeping device online";
   try{
     nm::instance()->get_status();
     //if long operation in progress jump to catch,
