@@ -406,7 +406,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
 
   ui->ompEdit->setText("NK");
   ui->ttEdit->setText("01");
-  static std::string cardSerial = nm::instance()->get_serial_number();
+  std::string cardSerial = libada::i()->get_serial_number();
   ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
   ui->intervalSpinBox->setValue(30);
 
@@ -447,7 +447,7 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->nameEdit->setText(QString::fromStdString(libada::i()->getHOTPSlotName(slotNo)));
 
   ui->base32RadioButton->setChecked(true);
-  static std::string cardSerial = nm::instance()->get_serial_number();
+  std::string cardSerial = libada::i()->get_serial_number();
   ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
   ui->ompEdit->setText("NK");
   ui->ttEdit->setText("01");

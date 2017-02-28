@@ -112,6 +112,18 @@ std::string libada::getTOTPSlotName(const int i) {
   return *cache_TOTP_name[i];
 }
 
+
+std::string libada::get_serial_number(){
+  if(cardSerial_cached.empty())
+    try{
+      cardSerial_cached = nm::instance()->get_serial_number();
+    }
+  catch (DeviceCommunicationException &e){
+
+  }
+  return cardSerial_cached;
+}
+
 std::string libada::getHOTPSlotName(const int i) {
   static QMutex mut;
   QMutexLocker locker(&mut);
@@ -296,4 +308,5 @@ void libada::on_DeviceDisconnect() {
   cache_HOTP_name.clear();
   cache_PWS_name.clear();
   status_PWS.clear();
+  cardSerial_cached.clear();
 }

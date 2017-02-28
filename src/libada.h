@@ -45,6 +45,7 @@ class libada : public QObject {
     QCache<int, std::string> cache_HOTP_name;
     QCache<int, std::string> cache_PWS_name;
     std::vector <uint8_t> status_PWS;
+    std::string cardSerial_cached;
 
 
 public slots:
@@ -90,6 +91,9 @@ public:
 
     bool is_nkpro_07_rtm1();
     bool is_secret320_supported();
+
+  std::string get_serial_number();
+
 };
 
 
