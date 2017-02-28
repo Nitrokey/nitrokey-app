@@ -1353,6 +1353,8 @@ void MainWindow::on_KeepDeviceOnline() {
   qDebug() << "Keeping device online";
   try{
     nm::instance()->get_status();
+    //if long operation in progress jump to catch,
+    // clear the flag otherwise
     if (long_operation_in_progress) {
       long_operation_in_progress = false;
       keepDeviceOnlineTimer->setInterval(30*1000);
