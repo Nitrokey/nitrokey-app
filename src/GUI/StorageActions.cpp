@@ -150,7 +150,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
   csApplet()->messageBox(tr("Hidden volume locked")); //FIXME use existing translation
 }
 
-void StorageActions::startLockDeviceAction() {
+bool StorageActions::startLockDeviceAction() {
   bool answer;
 
   if ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive)) {
@@ -158,7 +158,7 @@ void StorageActions::startLockDeviceAction() {
                                            "proceed?\nTo avoid data loss, please unmount the partitions before "
                                            "proceeding."), true);
     if (!answer) {
-      return;
+      return false;
     }
     local_sync();
   }
@@ -169,6 +169,7 @@ void StorageActions::startLockDeviceAction() {
   CryptedVolumeActive = false;
   emit storageStatusChanged();
   csApplet()->messageBox(tr("Device locked")); //FIXME use existing translation
+  return true;
 }
 
 #include "stick20updatedialog.h"

@@ -1279,8 +1279,15 @@ void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
 }
 
 void MainWindow::startLockDeviceAction() {
-  nm::instance()->lock_device();
+  if(libada::i()->isStorageDeviceConnected()){
+    auto lockDeviceAction = storage.startLockDeviceAction();
+    if(lockDeviceAction){
+      PWS_Access = false;
+    }
+    return;
+  }
   PWS_Access = false;
+  nm::instance()->lock_device();
   tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
   emit DeviceLocked();
 }

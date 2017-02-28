@@ -33,7 +33,7 @@ public slots:
   void startStick20DisableCryptedVolume();
   void startStick20EnableHiddenVolume();
   void startStick20DisableHiddenVolume();
-  void startLockDeviceAction();
+  bool startLockDeviceAction();
   void startStick20SetReadOnlyUncryptedVolume();
   void startStick20SetReadWriteUncryptedVolume();
   void startStick20LockStickHardware();
