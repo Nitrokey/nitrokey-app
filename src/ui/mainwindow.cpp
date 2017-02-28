@@ -485,7 +485,7 @@ void MainWindow::displayCurrentSlotConfig() {
 }
 
 void MainWindow::displayCurrentGeneralConfig() {
-  auto status = nm::instance()->get_status();
+  auto status = libada::i()->get_status();
 
   ui->numLockComboBox->setCurrentIndex(status.numlock<2?status.numlock+1:0);
   ui->capsLockComboBox->setCurrentIndex(status.capslock<2?status.capslock+1:0);
@@ -724,7 +724,7 @@ void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
   ui->deleteUserPasswordCheckBox->setEnabled(checked);
   if(checked){
     //TODO run status request in separate thread or cache result
-    uint8_t delete_user_password = nm::instance()->get_status().delete_user_password;
+    uint8_t delete_user_password = libada::i()->get_status().delete_user_password;
     ui->deleteUserPasswordCheckBox->setChecked(delete_user_password);
   }
 }

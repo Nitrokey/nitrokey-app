@@ -36,6 +36,8 @@
 #include <QObject>
 #include <QCache>
 
+#include "libnitrokey/include/stick10_commands.h"
+
 class libada : public QObject {
     Q_OBJECT
     Q_DISABLE_COPY(libada)
@@ -94,6 +96,7 @@ public:
 
   std::string get_serial_number();
 
+  nitrokey::proto::stick10::GetStatus::ResponsePayload get_status();
 };
 
 

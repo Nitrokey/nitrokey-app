@@ -112,6 +112,14 @@ std::string libada::getTOTPSlotName(const int i) {
   return *cache_TOTP_name[i];
 }
 
+nitrokey::proto::stick10::GetStatus::ResponsePayload libada::get_status(){
+  try{
+    return nm::instance()->get_status();
+  }
+  catch (DeviceCommunicationException &e){
+    return nitrokey::proto::stick10::GetStatus::ResponsePayload();
+  }
+}
 
 std::string libada::get_serial_number(){
   if(cardSerial_cached.empty())
