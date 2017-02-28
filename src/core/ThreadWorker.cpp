@@ -29,7 +29,7 @@ void ThreadWorkerNS::Worker::fetch_data() {
 ThreadWorker::ThreadWorker(const std::function<Data()> &datafunc, const std::function<void(Data)> &usefunc,
                            QObject *parent) :
     QObject(parent),
-    worker(new ThreadWorkerNS::Worker(this, datafunc)),
+    worker(new ThreadWorkerNS::Worker(nullptr, datafunc)), //FIXME check would this leak
     worker_thread(new QThread(this)),
     usefunc(usefunc) {
 
