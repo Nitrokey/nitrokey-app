@@ -152,7 +152,7 @@ void MainWindow::checkConnection() {
   QMutexLocker locker(&check_connection_mutex);
 
   static ConnectionState state = cs::disconnected;
-  bool deviceConnected = libada::i()->isDeviceConnected();
+  bool deviceConnected = libada::i()->isDeviceConnected() && !libada::i()->have_communication_issues_occurred();
 
   if (deviceConnected){
     if(state == cs::disconnected){

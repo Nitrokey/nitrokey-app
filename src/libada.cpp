@@ -112,6 +112,14 @@ std::string libada::getTOTPSlotName(const int i) {
   return *cache_TOTP_name[i];
 }
 
+bool libada::have_communication_issues_occurred(){
+  if(DeviceCommunicationException::has_occurred()){
+    DeviceCommunicationException::reset_occurred_flag();
+    return true;
+  }
+  return false;
+}
+
 nitrokey::proto::stick10::GetStatus::ResponsePayload libada::get_status(){
   try{
     return nm::instance()->get_status();
