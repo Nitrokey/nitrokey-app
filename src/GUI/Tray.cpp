@@ -433,9 +433,10 @@ void Tray::generateMenuForStorageDevice() {
       status = nm::instance()->get_status_storage();
     }
     catch (LongOperationInProgressException &e){
-      //FIXME set some flag about operation being in progress ?
-      //ADD tray item with progress
-      //send signal to mainwindow (storage should send it)
+      return;
+    }
+    catch (DeviceCommunicationException &e){
+      //TODO add info to tray about the error?
       return;
     }
 
