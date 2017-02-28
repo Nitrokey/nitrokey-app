@@ -1332,18 +1332,25 @@ void MainWindow::on_DeviceConnected() {
 ThreadWorker *tw = new ThreadWorker(
     []() -> Data {
       Data data;
-      auto storageDeviceConnected = libada::i()->isStorageDeviceConnected();
-      data["storage_connected"] = storageDeviceConnected;
-      if (storageDeviceConnected){
-        auto s = nm::instance()->get_status_storage();
-        data["initiated"] = !s.StickKeysNotInitiated;
-        data["initiated_ask"] = !false; //FIXME select proper variable s.NewSDCardFound_u8
-        data["erased"] = !s.NewSDCardFound_u8;
-        data["erased_ask"] = !s.SDFillWithRandomChars_u8; //FIXME s.NewSDCardFound_u8
+      data["error"] = false;
+      try{
+        auto storageDeviceConnected = libada::i()->isStorageDeviceConnected();
+        data["storage_connected"] = storageDeviceConnected;
+        if (storageDeviceConnected){
+          auto s = nm::instance()->get_status_storage();
+          data["initiated"] = !s.StickKeysNotInitiated;
+          data["initiated_ask"] = !false; //FIXME select proper variable s.NewSDCardFound_u8
+          data["erased"] = !s.NewSDCardFound_u8;
+          data["erased_ask"] = !s.SDFillWithRandomChars_u8; //FIXME s.NewSDCardFound_u8
+        }
+      }
+      catch(DeviceCommunicationException &e){
+        data["error"] = true;
       }
       return data;
     },
     [this](Data data) {
+      if(data["error"].toBool()) return;
       if(!data["storage_connected"].toBool()) return;
 
       if (!data["initiated"].toBool()) {
