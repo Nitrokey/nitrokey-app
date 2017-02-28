@@ -420,7 +420,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
       //FIXME use separate thread
       auto p = nm::instance()->get_TOTP_slot_data(slotNo);
       updateSlotConfig(p, ui);
-      int interval = p.slot_counter;
+      uint64_t interval = p.slot_counter;
       if (interval < 1) interval = 30;
       ui->intervalSpinBox->setValue(interval);
     }
