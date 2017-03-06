@@ -71,7 +71,6 @@ void StorageActions::startStick20EnableCryptedVolume() {
   const auto user_wants_to_proceed = QDialog::Accepted == dialog.exec();
   if (user_wants_to_proceed) {
     startProgressFunc(tr("Enabling encrypted volume")); //FIXME use existing translation
-    local_sync();
     const auto s = dialog.getPassword();
 
     ThreadWorker *tw = new ThreadWorker(
@@ -80,6 +79,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
       data["error"] = 0;
 
       try{
+        local_sync();
         auto m = nitrokey::NitrokeyManager::instance();
         m->unlock_encrypted_volume(s.data());
         data["success"] = true;
@@ -125,13 +125,12 @@ void StorageActions::startStick20DisableCryptedVolume() {
 
     startProgressFunc(tr("Disabling encrypted volume")); //FIXME use existing translation
 
-    local_sync();
-
     ThreadWorker *tw = new ThreadWorker(
     []() -> Data {
       Data data;
 
       try{
+        local_sync();
         auto m = nitrokey::NitrokeyManager::instance();
         m->lock_encrypted_volume();
         data["success"] = true;
@@ -182,7 +181,6 @@ void StorageActions::startStick20EnableHiddenVolume() {
 
   startProgressFunc(tr("Enabling hidden volume")); //FIXME use existing translation
 
-  local_sync();
   auto s = dialog.getPassword();
 
   ThreadWorker *tw = new ThreadWorker(
@@ -191,6 +189,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
 
     auto m = nitrokey::NitrokeyManager::instance();
     try {
+      local_sync();
       m->unlock_hidden_volume(s.data());
       data["success"] = true;
     }
@@ -233,7 +232,6 @@ void StorageActions::startStick20DisableHiddenVolume() {
   if (!user_wants_to_proceed)
     return;
 
-  local_sync();
   startProgressFunc(tr("Disabling hidden volume")); //FIXME use existing translation
 
 
@@ -242,6 +240,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
         Data data;
 
         try{
+          local_sync();
           auto m = nitrokey::NitrokeyManager::instance();
           m->lock_hidden_volume();
           data["success"] = true;
