@@ -49,7 +49,7 @@ void local_sync() {
   // manual says sync waits until it's done, but they
   // are not guaranteeing will this save data integrity anyway,
   // additional sleep should help
-  OwnSleep::sleep(2);
+  OwnSleep::sleep(1);
   // unmount does sync on its own additionally (if successful)
   unmountEncryptedVolumes();
 }
