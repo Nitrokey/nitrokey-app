@@ -124,10 +124,36 @@ void StorageActions::startStick20DisableCryptedVolume() {
       return;
 
     local_sync();
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->lock_encrypted_volume();
-    CryptedVolumeActive = false;
-    emit storageStatusChanged();
+
+    ThreadWorker *tw = new ThreadWorker(
+    []() -> Data {
+      Data data;
+
+      try{
+        auto m = nitrokey::NitrokeyManager::instance();
+        m->lock_encrypted_volume();
+        data["success"] = true;
+      }
+      catch (CommandFailedException &e){
+        data["error"] = e.last_command_status;
+      }
+      catch (DeviceCommunicationException &e){
+        data["error"] = -1;
+        data["comm_error"] = true;
+      }
+
+      return data;
+    },
+    [this](Data data){
+      if(data["success"].toBool()) {
+        CryptedVolumeActive = false;
+        emit storageStatusChanged();
+      }
+       else {
+        csApplet()->warningBox(tr("Could not lock encrypted volume.") + " "
+                               + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
+      }
+    }, this);
   }
 }
 
