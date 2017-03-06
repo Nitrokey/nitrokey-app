@@ -220,18 +220,46 @@ void StorageActions::startStick20EnableHiddenVolume() {
 }
 
 void StorageActions::startStick20DisableHiddenVolume() {
-  bool answer =
+  const bool user_wants_to_proceed =
       csApplet()->yesOrNoBox(tr("This activity locks your hidden volume. Do you want to proceed?\nTo "
                                     "avoid data loss, please unmount the partitions before proceeding."), true);
-  if (!answer)
+  if (!user_wants_to_proceed)
     return;
 
   local_sync();
-  auto m = nitrokey::NitrokeyManager::instance();
-  m->lock_hidden_volume();
-  HiddenVolumeActive = false;
-  emit storageStatusChanged();
-  csApplet()->messageBox(tr("Hidden volume locked")); //FIXME use existing translation
+
+
+  ThreadWorker *tw = new ThreadWorker(
+      []() -> Data {
+        Data data;
+
+        try{
+          auto m = nitrokey::NitrokeyManager::instance();
+          m->lock_hidden_volume();
+          data["success"] = true;
+        }
+        catch (CommandFailedException &e){
+          data["error"] = e.last_command_status;
+        }
+        catch (DeviceCommunicationException &e){
+          data["error"] = -1;
+          data["comm_error"] = true;
+        }
+
+        return data;
+      },
+      [this](Data data){
+        if(data["success"].toBool()) {
+          HiddenVolumeActive = false;
+          emit storageStatusChanged();
+          csApplet()->messageBox(tr("Hidden volume locked")); //FIXME use existing translation
+        }
+        else {
+          csApplet()->warningBox(tr("Could not lock hidden volume.") + " "
+                                 + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
+        }
+      }, this);
+
 }
 
 bool StorageActions::startLockDeviceAction() {
