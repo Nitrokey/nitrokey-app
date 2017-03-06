@@ -270,7 +270,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
 
 }
 
-bool StorageActions::startLockDeviceAction() {
+void StorageActions::startLockDeviceAction() {
   bool answer;
 
   if ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive)) {
@@ -278,17 +278,45 @@ bool StorageActions::startLockDeviceAction() {
                                            "proceed?\nTo avoid data loss, please unmount the partitions before "
                                            "proceeding."), true);
     if (!answer) {
-      return false;
+      return;
     }
-    local_sync();
   }
 
-  auto m = nitrokey::NitrokeyManager::instance();
-  m->lock_device();
-  HiddenVolumeActive = false;
-  CryptedVolumeActive = false;
-  emit storageStatusChanged();
-  return true;
+  startProgressFunc(tr("Locking device")); //FIXME use existing translation
+
+
+  ThreadWorker *tw = new ThreadWorker(
+    []() -> Data {
+      Data data;
+      try {
+        local_sync();
+        auto m = nitrokey::NitrokeyManager::instance();
+        m->lock_device();
+        data["success"] = true;
+      }
+      catch (CommandFailedException &e){
+        data["error"] = e.last_command_status;
+      }
+      catch (DeviceCommunicationException &e){
+        data["error"] = -1;
+        data["comm_error"] = true;
+      }
+      return data;
+    },
+    [this](Data data){
+      if(data["success"].toBool()) {
+        HiddenVolumeActive = false;
+        CryptedVolumeActive = false;
+        emit storageStatusChanged();
+      }
+      else {
+        csApplet()->warningBox(tr("Could not lock device.") + " "
+                               + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
+      }
+
+      end_progress_function();
+    }, this);
+
 }
 
 #include "stick20updatedialog.h"
@@ -302,6 +330,9 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
   if (QDialog::Accepted != ret) {
     return;
   }
+
+  csApplet()->messageBox(tr("Functionality not implemented in current version")); //FIXME use existing translation
+  return;
 
   PinDialog dialog(PinDialog::FIRMWARE_PIN);
   ret = dialog.exec();

@@ -1281,20 +1281,16 @@ void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
                                                     "application will keep your user PIN in memory. "
                                                     "Do you want to continue?"), false);
     ui->enableUserPasswordCheckBox->setChecked(answer);
+    //TODO save choice in APP's configuration
   }
 }
 
 void MainWindow::startLockDeviceAction() {
-  emit ShortOperationBegins(tr("Locking device"));
   if(libada::i()->isStorageDeviceConnected()){
-    auto lockDeviceAction = storage.startLockDeviceAction();
-    if(lockDeviceAction){
-      PWS_Access = false;
-      tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
-    }
-    emit ShortOperationEnds();
+    storage.startLockDeviceAction();
     return;
   }
+  emit ShortOperationBegins(tr("Locking device"));
   PWS_Access = false;
   nm::instance()->lock_device();
   tray.showTrayMessage("Nitrokey App", tr("Device has been locked"), INFORMATION, TRAY_MSG_TIMEOUT);
