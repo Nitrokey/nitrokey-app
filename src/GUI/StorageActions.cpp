@@ -56,7 +56,6 @@ void local_sync() {
 
 
 void StorageActions::startStick20EnableCryptedVolume() {
-  bool ret;
   bool answer;
 
   if (TRUE == HiddenVolumeActive) {
@@ -68,9 +67,9 @@ void StorageActions::startStick20EnableCryptedVolume() {
   }
 
   PinDialog dialog(PinDialog::USER_PIN, nullptr);
-  ret = dialog.exec();
 
-  if (QDialog::Accepted == ret) {
+  const auto user_wants_to_proceed = QDialog::Accepted == dialog.exec();
+  if (user_wants_to_proceed) {
     local_sync();
     const auto s = dialog.getPassword();
 
@@ -117,10 +116,10 @@ void StorageActions::startStick20EnableCryptedVolume() {
 
 void StorageActions::startStick20DisableCryptedVolume() {
   if (TRUE == CryptedVolumeActive) {
-    bool answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
+    const bool user_wants_to_proceed = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
                                                 "proceed?\nTo avoid data loss, please unmount the partitions before "
                                                 "proceeding."), false);
-    if (false == answer)
+    if (!user_wants_to_proceed)
       return;
 
     local_sync();
