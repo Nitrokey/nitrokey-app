@@ -58,7 +58,9 @@ MainWindow::MainWindow(QWidget *parent)
 
   progress_window = std::make_shared<Stick20ResponseDialog>();
   storage.set_start_progress_window( [this](QString msg){ emit ShortOperationBegins(msg); });
-  storage.set_end_progress_window([this](){ emit ShortOperationEnds(); });
+  storage.set_end_progress_window([this](){ emit ShortOperationEnds();
+    tray.showTrayMessage(tr("Short operation ended <TODO>"));
+  });
 
   //TODO make connections in objects instead of accumulating them here
   connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
