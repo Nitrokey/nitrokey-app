@@ -157,43 +157,66 @@ void StorageActions::startStick20DisableCryptedVolume() {
 }
 
 void StorageActions::startStick20EnableHiddenVolume() {
-  bool ret;
-  bool answer;
-
-  if (FALSE == CryptedVolumeActive) {
+  if (!CryptedVolumeActive) {
     csApplet()->warningBox(tr("Please enable the encrypted volume first."));
     return;
   }
 
-  answer =
+  const bool user_wants_to_proceed =
       csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
                                     "proceed?\nTo avoid data loss, please unmount the partitions before "
                                     "proceeding."), true);
-  if (!answer)
+  if (!user_wants_to_proceed)
     return;
 
   PinDialog dialog(PinDialog::HIDDEN_VOLUME, nullptr);
-  ret = dialog.exec();
+  const auto user_gives_password = dialog.exec() == QDialog::Accepted ;
 
-  if (QDialog::Accepted == ret) {
-    local_sync();
-    // password[0] = 'P';
-    auto s = dialog.getPassword();
+  if (!user_gives_password) {
+    return;
+  }
+
+  local_sync();
+  auto s = dialog.getPassword();
+
+  ThreadWorker *tw = new ThreadWorker(
+  [s]() -> Data { //FIXME transport throuugh shared_ptr or secure string
+    Data data;
 
     auto m = nitrokey::NitrokeyManager::instance();
     try {
       m->unlock_hidden_volume(s.data());
+      data["success"] = true;
+    }
+    catch (CommandFailedException &e){
+      data["error"] = e.last_command_status;
+      if (e.reason_wrong_password()){
+        data["wrong_password"] = true;
+      }
+    }
+    catch (DeviceCommunicationException &e){
+      data["error"] = -1;
+      data["comm_error"] = true;
+    }
+
+    return data;
+  },
+  [this](Data data){
+
+    if(data["success"].toBool()){
       HiddenVolumeActive = true;
       emit storageStatusChanged();
       csApplet()->messageBox(tr("Hidden volume enabled")); //FIXME use existing translation
-    }
-    catch (CommandFailedException &e){
-      if(!e.reason_wrong_password())
-        throw;
-      csApplet()->warningBox(tr("Wrong password")); //FIXME use existing translation
-    }
+    } else if (data["wrong_password"].toBool()){
+      csApplet()->warningBox(tr("Could not enable hidden volume.") + " " //FIXME use existing translation
+                             + tr("Wrong password."));
 
-  }
+    } else {
+      csApplet()->warningBox(tr("Could not enable hidden volume.") + " "
+                             + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
+    }
+  }, this);
+
 }
 
 void StorageActions::startStick20DisableHiddenVolume() {
