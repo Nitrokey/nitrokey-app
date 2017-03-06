@@ -18,6 +18,7 @@
 
 #define LOCAL_PASSWORD_SIZE 40
 #include <memory>
+#include <src/core/ThreadWorker.h>
 
 
 void unmountEncryptedVolumes() {
@@ -72,11 +73,45 @@ void StorageActions::startStick20EnableCryptedVolume() {
   if (QDialog::Accepted == ret) {
     local_sync();
     const auto s = dialog.getPassword();
-    auto m = nitrokey::NitrokeyManager::instance();
-    //FIXME handle wrong password
-    m->unlock_encrypted_volume(s.data());
-    CryptedVolumeActive = true;
-    emit storageStatusChanged();
+
+    ThreadWorker *tw = new ThreadWorker(
+    [s]() -> Data { // FIXME make s shared_ptr to delete after use //or secure string
+      Data data;
+      data["error"] = 0;
+
+      try{
+        auto m = nitrokey::NitrokeyManager::instance();
+        m->unlock_encrypted_volume(s.data());
+        data["success"] = true;
+      }
+      catch (CommandFailedException &e){
+        data["error"] = e.last_command_status;
+        if (e.reason_wrong_password()){
+          data["wrong_password"] = true;
+        }
+      }
+      catch (DeviceCommunicationException &e){
+        data["error"] = -1;
+        data["comm_error"] = true;
+      }
+
+      return data;
+    },
+    [this](Data data){
+      if(data["success"].toBool()){
+        CryptedVolumeActive = true;
+        emit storageStatusChanged();
+      } else if (data["wrong_password"].toBool()){
+        csApplet()->warningBox(tr("Could not enable encrypted volume.") + " " //FIXME use existing translation
+                               + tr("Wrong password."));
+
+      } else {
+        csApplet()->warningBox(tr("Could not enable encrypted volume.") + " "
+                               + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
+      }
+
+    }, this);
+
   }
 }
 
