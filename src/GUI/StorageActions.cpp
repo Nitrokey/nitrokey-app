@@ -70,6 +70,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
 
   const auto user_wants_to_proceed = QDialog::Accepted == dialog.exec();
   if (user_wants_to_proceed) {
+    startProgressFunc(tr("Enabling encrypted volume")); //FIXME use existing translation
     local_sync();
     const auto s = dialog.getPassword();
 
@@ -108,7 +109,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
         csApplet()->warningBox(tr("Could not enable encrypted volume.") + " "
                                + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
       }
-
+      end_progress_function();
     }, this);
 
   }
@@ -121,6 +122,8 @@ void StorageActions::startStick20DisableCryptedVolume() {
                                                 "proceeding."), false);
     if (!user_wants_to_proceed)
       return;
+
+    startProgressFunc(tr("Disabling encrypted volume")); //FIXME use existing translation
 
     local_sync();
 
@@ -152,6 +155,7 @@ void StorageActions::startStick20DisableCryptedVolume() {
         csApplet()->warningBox(tr("Could not lock encrypted volume.") + " "
                                + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
       }
+      end_progress_function();
     }, this);
   }
 }
@@ -175,6 +179,8 @@ void StorageActions::startStick20EnableHiddenVolume() {
   if (!user_gives_password) {
     return;
   }
+
+  startProgressFunc(tr("Enabling hidden volume")); //FIXME use existing translation
 
   local_sync();
   auto s = dialog.getPassword();
@@ -215,6 +221,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
       csApplet()->warningBox(tr("Could not enable hidden volume.") + " "
                              + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
     }
+    end_progress_function();
   }, this);
 
 }
@@ -227,6 +234,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
     return;
 
   local_sync();
+  startProgressFunc(tr("Disabling hidden volume")); //FIXME use existing translation
 
 
   ThreadWorker *tw = new ThreadWorker(
@@ -258,6 +266,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
           csApplet()->warningBox(tr("Could not lock hidden volume.") + " "
                                  + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
         }
+        end_progress_function();
       }, this);
 
 }
@@ -512,4 +521,12 @@ void StorageActions::on_StorageStatusChanged() {
   catch (DeviceCommunicationException &e){
     //TODO
   }
+}
+
+void StorageActions::set_start_progress_window(std::function<void(QString)> _startProgressFunc) {
+  startProgressFunc = _startProgressFunc;
+}
+
+void StorageActions::set_end_progress_window(std::function<void()> _end_progress_function) {
+  end_progress_function = _end_progress_function;
 }

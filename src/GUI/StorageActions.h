@@ -7,6 +7,7 @@
 #include <QObject>
 #include "src/GUI/Authentication.h"
 #include "src/ui/nitrokey-applet.h"
+#include <functional>
 
 class StorageActions: public QObject {
 Q_OBJECT
@@ -19,12 +20,16 @@ private:
   bool CryptedVolumeActive = false;
   bool HiddenVolumeActive = false;
   void _execute_SD_clearing(const std::string &s);
+  std::function<void(QString)> startProgressFunc;
+  std::function<void()> end_progress_function;
 
 private slots:
   void on_StorageStatusChanged();
 
 public:
   StorageActions(QObject *parent, Authentication *auth_admin, Authentication *auth_user);
+  void set_start_progress_window(std::function<void(QString)> _startProgressFunc);
+  void set_end_progress_window(std::function<void()> _end_progress_function);
 
 public slots:
   void startStick20DestroyCryptedVolume(int fillSDWithRandomChars);
