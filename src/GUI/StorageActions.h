@@ -23,7 +23,9 @@ private:
   std::function<void(QString)> startProgressFunc;
   std::function<void()> end_progress_function;
   std::function<void(QString)> show_message_function;
-
+  void runAndHandleErrorsInUI(QString successMessage, QString operationFailureMessage,
+                              std::function<void(void)> codeToRunInDeviceThread,
+                              std::function<void(void)> onSuccessInGuiThread);
 private slots:
   void on_StorageStatusChanged();
 
@@ -54,6 +56,7 @@ signals:
   void storageStatusChanged();
   void longOperationStarted();
   void FactoryReset();
+
 
 
 };

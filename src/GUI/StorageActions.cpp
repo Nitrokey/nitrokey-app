@@ -487,6 +487,30 @@ void StorageActions::startStick20FillSDCardWithRandomChars() {
   }
 }
 
+void StorageActions::runAndHandleErrorsInUI(QString successMessage, QString operationFailureMessage,
+                                            std::function<void(void)> codeToRunInDeviceThread,
+                                            std::function<void(void)> onSuccessInGuiThread) {
+  try{
+    codeToRunInDeviceThread();
+    onSuccessInGuiThread();
+    show_message_function(successMessage);
+  }
+  catch (CommandFailedException &e){
+    if (e.reason_wrong_password()){
+      csApplet()->warningBox(operationFailureMessage + " " //FIXME use existing translation
+                             + tr("Wrong password."));
+    } else {
+      csApplet()->warningBox(operationFailureMessage + " "
+                             + tr("Status code: %1").arg(e.last_command_status)); //FIXME use existing translation
+    }
+  }
+  catch (DeviceCommunicationException &e){
+    csApplet()->warningBox(operationFailureMessage + " " +
+                           tr("Communication issue.")); //FIXME use existing translation
+  }
+}
+
+
 void StorageActions::startStick20ClearNewSdCardFound() {
   PinDialog dialog(PinDialog::ADMIN_PIN);
 
@@ -496,23 +520,13 @@ void StorageActions::startStick20ClearNewSdCardFound() {
   }
 
   auto s = dialog.getPassword();
-  try{
+  auto operationFailureMessage = tr("Flag cannot be cleared."); //FIXME use existing translation
+  auto operationSuccessMessage = tr("Flag cleared.");
+
+  runAndHandleErrorsInUI(QString(), operationFailureMessage, [s]() { //FIXME use secure string
     auto m = nitrokey::NitrokeyManager::instance();
     m->clear_new_sd_card_warning(s.data());
-  }
-  catch (CommandFailedException &e){
-    if (e.reason_wrong_password()){
-      csApplet()->warningBox(tr("Flag cannot be cleared.") + " " //FIXME use existing translation
-                             + tr("Wrong password."));
-    } else {
-      csApplet()->warningBox(tr("Flag cannot be cleared.") + " "
-                             + tr("Status code: %1").arg(e.last_command_status)); //FIXME use existing translation
-    }
-  }
-  catch (DeviceCommunicationException &e){
-    csApplet()->warningBox(tr("Flag cannot be cleared.") + " " +
-                               tr("Communication issue.")); //FIXME use existing translation
-  }
+  }, []() {});
 }
 
 
@@ -524,26 +538,17 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
     return;
   }
 
+  auto operationFailureMessage = tr("Cannot set unencrypted volume read-only"); //FIXME use existing translation
+  auto operationSuccessMessage = tr("Unencrypted volume set read-only"); //FIXME use existing translation
   auto s = dialog.getPassword();
-  try{
+
+  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
     auto m = nitrokey::NitrokeyManager::instance();
     m->set_unencrypted_read_only(s.data()); //FIXME use secure string
+  }, [this]() {
     emit storageStatusChanged();
-    csApplet()->messageBox(tr("Unencrypted volume set read-only")); //FIXME use existing translation
-  }
-  catch (CommandFailedException &e){
-    if (e.reason_wrong_password()){
-      csApplet()->warningBox(tr("Cannot set unencrypted volume read-only") + " " //FIXME use existing translation
-                             + tr("Wrong password."));
-    } else {
-      csApplet()->warningBox(tr("Cannot set unencrypted volume read-only") + " "
-                             + tr("Status code: %1").arg(e.last_command_status)); //FIXME use existing translation
-    }
-  }
-  catch (DeviceCommunicationException &e){
-    csApplet()->warningBox(tr("Cannot set unencrypted volume read-only") + " " +
-                           tr("Communication issue.")); //FIXME use existing translation
-  }
+  });
+
 }
 
 void StorageActions::startStick20SetReadWriteUncryptedVolume() {
