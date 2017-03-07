@@ -370,7 +370,14 @@ void StorageActions::startStick20ExportFirmwareToFile() {
     }
     catch (CommandFailedException &e){
       //FIXME handle errors
-      throw;
+      if (e.reason_wrong_password()){
+        csApplet()->warningBox(tr("Could not export firmware.") + " " //FIXME use existing translation
+                               + tr("Wrong password."));
+      }
+      else {
+        csApplet()->warningBox(tr("Could not export firmware.") + " "
+                               + tr("Status code: %1").arg(e.last_command_status)); //FIXME use existing translation
+      }
     }
   }
 }
