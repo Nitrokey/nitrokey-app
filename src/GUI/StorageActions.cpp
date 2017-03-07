@@ -325,22 +325,20 @@ void StorageActions::startLockDeviceAction(bool ask_for_confirmation) {
 #include "stick20updatedialog.h"
 
 void StorageActions::startStick20EnableFirmwareUpdate() {
-  bool ret;
-
-  UpdateDialog dialogUpdate(nullptr);
-
-  ret = dialogUpdate.exec();
-  if (QDialog::Accepted != ret) {
-    return;
-  }
-
   csApplet()->messageBox(tr("Functionality not implemented in current version")); //FIXME use existing translation
   return;
 
-  PinDialog dialog(PinDialog::FIRMWARE_PIN);
-  ret = dialog.exec();
+  UpdateDialog dialogUpdate(nullptr);
 
-  if (QDialog::Accepted == ret) {
+  bool user_wants_to_proceed = dialogUpdate.exec() == QDialog::Accepted;
+  if (!user_wants_to_proceed) {
+    return;
+  }
+
+  PinDialog dialog(PinDialog::FIRMWARE_PIN);
+  user_wants_to_proceed = dialog.exec();
+
+  if (QDialog::Accepted == user_wants_to_proceed) {
     // FIXME unmount all volumes and sync
     //TODO get password
 //    dialog.getPassword((char *)password);
