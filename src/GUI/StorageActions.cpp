@@ -479,12 +479,9 @@ void StorageActions::_execute_SD_clearing(const std::string &s) {
 }
 
 void StorageActions::startStick20FillSDCardWithRandomChars() {
-  bool ret;
   PinDialog dialog(PinDialog::ADMIN_PIN);
-
-  ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
+  bool user_provided_PIN = QDialog::Accepted == dialog.exec();
+  if (user_provided_PIN) {
     auto s = dialog.getPassword();
     _execute_SD_clearing(s);
   }
