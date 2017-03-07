@@ -490,7 +490,9 @@ void StorageActions::startStick20FillSDCardWithRandomChars() {
 void StorageActions::runAndHandleErrorsInUI(QString successMessage, QString operationFailureMessage,
                                             std::function<void(void)> codeToRunInDeviceThread,
                                             std::function<void(void)> onSuccessInGuiThread) {
+//  startProgressFunc(successMessage); //TODO enable after moving blocking code to separate thread
   try{
+    //TODO run in separate thread
     codeToRunInDeviceThread();
     onSuccessInGuiThread();
     show_message_function(successMessage);
@@ -508,6 +510,7 @@ void StorageActions::runAndHandleErrorsInUI(QString successMessage, QString oper
     csApplet()->warningBox(operationFailureMessage + " " +
                            tr("Communication issue.")); //FIXME use existing translation
   }
+//  end_progress_function();
 }
 
 
