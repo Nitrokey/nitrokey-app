@@ -486,43 +486,66 @@ void StorageActions::startStick20FillSDCardWithRandomChars() {
 
   if (QDialog::Accepted == ret) {
     auto s = dialog.getPassword();
-    auto m = nitrokey::NitrokeyManager::instance();
     _execute_SD_clearing(s);
   }
 }
 
 void StorageActions::startStick20ClearNewSdCardFound() {
-  bool ret;
   PinDialog dialog(PinDialog::ADMIN_PIN);
 
-  ret = dialog.exec();
+  bool user_provided_pin = QDialog::Accepted == dialog.exec();
+  if (!user_provided_pin) {
+    return;
+  }
 
-  if (QDialog::Accepted == ret) {
-    auto s = dialog.getPassword();
+  auto s = dialog.getPassword();
+  try{
     auto m = nitrokey::NitrokeyManager::instance();
     m->clear_new_sd_card_warning(s.data());
+  }
+  catch (CommandFailedException &e){
+    if (e.reason_wrong_password()){
+      csApplet()->warningBox(tr("Flag cannot be cleared.") + " " //FIXME use existing translation
+                             + tr("Wrong password."));
+    } else {
+      csApplet()->warningBox(tr("Flag cannot be cleared.") + " "
+                             + tr("Status code: %1").arg(e.last_command_status)); //FIXME use existing translation
+    }
+  }
+  catch (DeviceCommunicationException &e){
+    csApplet()->warningBox(tr("Flag cannot be cleared.") + " " +
+                               tr("Communication issue.")); //FIXME use existing translation
   }
 }
 
 
 void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
-  bool ret;
   PinDialog dialog(PinDialog::USER_PIN);
-  ret = dialog.exec();
 
-  if (QDialog::Accepted == ret) {
-    const auto pass = dialog.getPassword();
+  bool user_provided_pin = QDialog::Accepted == dialog.exec();
+  if (!user_provided_pin) {
+    return;
+  }
+
+  auto s = dialog.getPassword();
+  try{
     auto m = nitrokey::NitrokeyManager::instance();
-    try{
-      m->set_unencrypted_read_only(pass.data());
-  //    pass.safe_clear(); //TODO
-      emit storageStatusChanged();
-      csApplet()->messageBox(tr("Unencrypted volume set read-only")); //FIXME use existing translation
+    m->set_unencrypted_read_only(s.data()); //FIXME use secure string
+    emit storageStatusChanged();
+    csApplet()->messageBox(tr("Unencrypted volume set read-only")); //FIXME use existing translation
+  }
+  catch (CommandFailedException &e){
+    if (e.reason_wrong_password()){
+      csApplet()->warningBox(tr("Cannot set unencrypted volume read-only") + " " //FIXME use existing translation
+                             + tr("Wrong password."));
+    } else {
+      csApplet()->warningBox(tr("Cannot set unencrypted volume read-only") + " "
+                             + tr("Status code: %1").arg(e.last_command_status)); //FIXME use existing translation
     }
-    catch(CommandFailedException &e){
-      //FIXME handle errors
-      throw;
-    }
+  }
+  catch (DeviceCommunicationException &e){
+    csApplet()->warningBox(tr("Cannot set unencrypted volume read-only") + " " +
+                           tr("Communication issue.")); //FIXME use existing translation
   }
 }
 
