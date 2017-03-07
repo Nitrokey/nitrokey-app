@@ -381,46 +381,101 @@ void StorageActions::startStick20ExportFirmwareToFile() {
 }
 
 void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
-  int ret;
+  bool user_entered_PIN;
   bool answer;
 
   answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
                                          "hidden volumes, and password safe! Continue?"), false);
   if (answer) {
     PinDialog dialog(PinDialog::ADMIN_PIN);
-
-    ret = dialog.exec();
-
-    if (QDialog::Accepted == ret) {
-      auto s = dialog.getPassword();
-
-      auto m = nitrokey::NitrokeyManager::instance();
-      m->lock_device(); //lock device to reset its state
-      m->build_aes_key(s.data());
-      emit FactoryReset();
-
-      if (fillSDWithRandomChars != 0) {
-        _execute_SD_clearing(s);
-      }
+    user_entered_PIN = QDialog::Accepted == dialog.exec();
+    if (!user_entered_PIN) {
+      return;
     }
+    auto s = dialog.getPassword();
+
+    startProgressFunc(tr("Generating new AES keys")); //FIXME use existing translation
+
+    ThreadWorker *tw = new ThreadWorker(
+    [s]() -> Data { //FIXME use secure string
+      Data data;
+      try{
+        auto m = nitrokey::NitrokeyManager::instance();
+        m->lock_device(); //lock device to reset its state
+        m->build_aes_key(s.data());
+        data["success"] = true;
+      }
+      catch (CommandFailedException &e){
+        data["error"] = e.last_command_status;
+        if (e.reason_wrong_password()){
+          data["wrong_password"] = true;
+        }
+      }
+      catch (DeviceCommunicationException &e){
+        data["error"] = -1;
+        data["comm_error"] = true;
+      }
+      return data;
+    },
+    [this, fillSDWithRandomChars, s](Data data){ // FIXME use secure string
+      if(data["success"].toBool()) {
+        emit FactoryReset();
+        show_message_function(tr("New AES keys generated")); //FIXME use existing translation
+        if (fillSDWithRandomChars != 0) {
+          _execute_SD_clearing(s);
+        }
+      } else if (data["wrong_password"].toBool()){
+        csApplet()->warningBox(tr("Keys could not be generated.") + " " //FIXME use existing translation
+                               + tr("Wrong password."));
+
+      } else {
+        csApplet()->warningBox(tr("Keys could not be generated.") + " "
+                               + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
+      }
+      end_progress_function();
+    }, this);
   }
 }
 
 void StorageActions::_execute_SD_clearing(const std::string &s) {
-  auto m = nitrokey::NitrokeyManager::instance();
+//does not need long operation indicator
+  ThreadWorker *tw = new ThreadWorker(
+    [s]() -> Data { //FIXME use secure string
+      Data data;
+      try{
+        auto m = nitrokey::NitrokeyManager::instance();
+        m->fill_SD_card_with_random_data(s.data());
+      }
+      catch (LongOperationInProgressException &l){
+        //expected
+        data["success"] = true;
+      }
+      catch (CommandFailedException &e){
+        data["error"] = e.last_command_status;
+        if (e.reason_wrong_password()){
+          data["wrong_password"] = true;
+        }
+      }
+      catch (DeviceCommunicationException &e){
+        data["error"] = -1;
+        data["comm_error"] = true;
+      }
 
-  try{
-    m->fill_SD_card_with_random_data(s.data());
-  }
-  catch (LongOperationInProgressException &l){
-    //expected
-    emit storageStatusChanged();
-    emit longOperationStarted();
-  }
-  catch (CommandFailedException &e){
-    if(!e.reason_wrong_password()) throw;
-    csApplet()->warningBox("Wrong password"); //FIXME use proper UI string for translation
-  }
+      return data;
+    },
+    [this](Data data){
+      if(data["success"].toBool()) {
+        emit storageStatusChanged();
+        emit longOperationStarted();
+      } else if (data["wrong_password"].toBool()){
+        csApplet()->warningBox(tr("Could not clear SD card.") + " " //FIXME use existing translation
+                               + tr("Wrong password."));
+
+      } else {
+        csApplet()->warningBox(tr("Could not clear SD card.") + " "
+                               + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
+      }
+    }, this);
 }
 
 void StorageActions::startStick20FillSDCardWithRandomChars() {
