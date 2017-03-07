@@ -68,6 +68,7 @@ void Stick20ResponseDialog::set_window_type(Type type, bool no_debug, QString te
     ui->HeaderText->hide();
   } else if (type == Type::progress_bar){
     setWindowFlags(Qt::Window);
+    ui->HeaderText->show();
   }
 
   if (no_debug) // Resize the dialog when debugging is inactive
