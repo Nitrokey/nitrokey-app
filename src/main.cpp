@@ -109,8 +109,18 @@ int main(int argc, char *argv[]) {
 //  csApplet()->setParent(&w);
   //TODO add global exception catch for logging?
   //or use std::terminate
-  const auto retcode = a.exec();
+  int retcode;
+#ifdef _NDEBUG
+  try{
+    retcode = a.exec();
+  }
+  catch (std::exception &e){
+    csApplet()->warningBox(QApplication::tr("Critical error encountered. Please restart application.\nMessage: ") + e.what());
+  }
+#else
+  retcode = a.exec();
   qDebug() << "normal exit";
+#endif
   return retcode;
 }
 
