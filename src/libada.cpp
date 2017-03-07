@@ -154,6 +154,9 @@ std::string libada::getHOTPSlotName(const int i) {
     cache_HOTP_name.insert(i, new std::string(slot_name));
     free((void *) slot_name);
   }
+  catch (LongOperationInProgressException &e){
+    cache_HOTP_name.insert(i, new std::string(""));
+  }
   catch (CommandFailedException &e){
     if (!e.reason_slot_not_programmed())
       throw;
