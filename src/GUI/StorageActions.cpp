@@ -352,32 +352,18 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
 
 
 void StorageActions::startStick20ExportFirmwareToFile() {
-  bool ret;
-
   PinDialog dialog(PinDialog::ADMIN_PIN);
-  ret = dialog.exec();
-
-  if (QDialog::Accepted == ret) {
-    auto s = dialog.getPassword();
-
-    try{
-      auto m = nitrokey::NitrokeyManager::instance();
-      m->export_firmware(s.data());
-      //TODO UI add confirmation
-      csApplet()->messageBox(tr("Firmware exported")); //FIXME use existing translation
-    }
-    catch (CommandFailedException &e){
-      //FIXME handle errors
-      if (e.reason_wrong_password()){
-        csApplet()->warningBox(tr("Could not export firmware.") + " " //FIXME use existing translation
-                               + tr("Wrong password."));
-      }
-      else {
-        csApplet()->warningBox(tr("Could not export firmware.") + " "
-                               + tr("Status code: %1").arg(e.last_command_status)); //FIXME use existing translation
-      }
-    }
+  bool user_provided_PIN = QDialog::Accepted == dialog.exec();
+  if (!user_provided_PIN) {
+    return;
   }
+  auto s = dialog.getPassword(); //FIXME use secure string
+
+  //FIXME use existing translation
+  runAndHandleErrorsInUI(tr("Firmware exported"), tr("Could not export firmware."), [s](){
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->export_firmware(s.data());
+  }, [](){});
 }
 
 void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars) {
