@@ -28,7 +28,7 @@ private slots:
 
 public:
   StorageActions(QObject *parent, Authentication *auth_admin, Authentication *auth_user);
-  void set_start_progress_window(std::function<void(QString)> _startProgressFunc);
+  void set_start_progress_window(std::function<void(QString)> _start_progress_function);
   void set_end_progress_window(std::function<void()> _end_progress_function);
 
 public slots:

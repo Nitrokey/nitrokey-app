@@ -553,8 +553,8 @@ void StorageActions::on_StorageStatusChanged() {
   }
 }
 
-void StorageActions::set_start_progress_window(std::function<void(QString)> _startProgressFunc) {
-  startProgressFunc = _startProgressFunc;
+void StorageActions::set_start_progress_window(std::function<void(QString)> _start_progress_function) {
+  startProgressFunc = _start_progress_function;
 }
 
 void StorageActions::set_end_progress_window(std::function<void()> _end_progress_function) {
