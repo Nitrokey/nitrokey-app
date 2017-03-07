@@ -573,22 +573,20 @@ void StorageActions::startStick20SetReadWriteUncryptedVolume() {
 }
 
 void StorageActions::startStick20LockStickHardware() {
-  uint8_t password[LOCAL_PASSWORD_SIZE];
-  bool ret;
-  stick20LockFirmwareDialog dialog(nullptr);
+  csApplet()->messageBox(tr("Functionality not implemented in current version")); //FIXME use existing translation
+  return;
 
-  ret = dialog.exec();
-  if (QDialog::Accepted == ret) {
-    PinDialog dialog(PinDialog::ADMIN_PIN);
+  stick20LockFirmwareDialog firmwareDialog(nullptr);
+  bool user_wants_to_proceed = QDialog::Accepted == firmwareDialog.exec();
+  if (user_wants_to_proceed) {
+    PinDialog pinDialog(PinDialog::ADMIN_PIN);
 
-    ret = dialog.exec();
-
-    if (QDialog::Accepted == ret) {
-      const auto pass = dialog.getPassword();
-      auto m = nitrokey::NitrokeyManager::instance();
-//    pass.safe_clear(); //TODO
-// TODO     stick20SendCommand(STICK20_CMD_SEND_LOCK_STICK_HARDWARE, password);
+    bool user_provided_PIN = pinDialog.exec() == QDialog::Accepted;
+    if (!user_provided_PIN) {
+      return;
     }
+    const auto pass = pinDialog.getPassword();
+// TODO     stick20SendCommand(STICK20_CMD_SEND_LOCK_STICK_HARDWARE, password);
   }
 }
 
