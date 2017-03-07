@@ -552,17 +552,24 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
 }
 
 void StorageActions::startStick20SetReadWriteUncryptedVolume() {
-  bool ret;
   PinDialog dialog(PinDialog::USER_PIN);
-  ret = dialog.exec();
 
-  if (QDialog::Accepted == ret) {
-    const auto pass = dialog.getPassword();
-    auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_write(pass.data());
-//    pass.safe_clear(); //TODO
-    emit storageStatusChanged();
+  bool user_provided_pin = QDialog::Accepted == dialog.exec();
+  if (!user_provided_pin) {
+    return;
   }
+
+  auto operationFailureMessage = tr("Cannot set unencrypted volume read-write"); //FIXME use existing translation
+  auto operationSuccessMessage = tr("Unencrypted volume set read-write"); //FIXME use existing translation
+  auto s = dialog.getPassword();
+
+  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->set_unencrypted_read_write(s.data()); //FIXME use secure string
+  }, [this]() {
+    emit storageStatusChanged();
+  });
+
 }
 
 void StorageActions::startStick20LockStickHardware() {
