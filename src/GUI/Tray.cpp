@@ -387,6 +387,7 @@ void Tray::populateOTPPasswordMenu() {
   if (trayMenuPasswdSubMenu->actions().empty()) {
     trayMenuPasswdSubMenu->hide();
     trayMenuPasswdSubMenu->setEnabled(false);
+    trayMenuPasswdSubMenu->setTitle( trayMenuPasswdSubMenu->title() + " " + tr("(empty)") );
   }
 }
 
