@@ -1284,9 +1284,9 @@ void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
   }
 }
 
-void MainWindow::startLockDeviceAction() {
+void MainWindow::startLockDeviceAction(bool ask_for_confirmation) {
   if(libada::i()->isStorageDeviceConnected()){
-    storage.startLockDeviceAction();
+    storage.startLockDeviceAction(ask_for_confirmation);
     return;
   }
   emit ShortOperationBegins(tr("Locking device"));
@@ -1385,7 +1385,7 @@ void MainWindow::on_KeepDeviceOnline() {
       long_operation_in_progress = false;
       keepDeviceOnlineTimer->setInterval(30*1000);
       emit OperationInProgress(100);
-      startLockDeviceAction();
+      startLockDeviceAction(false);
     }
   }
   catch (DeviceCommunicationException &e){

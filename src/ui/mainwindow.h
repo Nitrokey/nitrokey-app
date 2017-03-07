@@ -102,7 +102,7 @@ public slots:
   void startStick20ActionChangeAdminPIN();
   void startStick20ActionChangeUpdatePIN();
   void startResetUserPassword();
-  void startLockDeviceAction();
+  void startLockDeviceAction(bool ask_for_confirmation = true);
   void updateProgressBar(int i);
   void show_progress_window();
 

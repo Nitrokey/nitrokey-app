@@ -272,14 +272,14 @@ void StorageActions::startStick20DisableHiddenVolume() {
 
 }
 
-void StorageActions::startLockDeviceAction() {
-  bool answer;
+void StorageActions::startLockDeviceAction(bool ask_for_confirmation) {
+  bool user_wants_to_proceed;
 
-  if ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive)) {
-    answer = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
+  if (ask_for_confirmation && (TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive)) {
+    user_wants_to_proceed = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
                                            "proceed?\nTo avoid data loss, please unmount the partitions before "
                                            "proceeding."), true);
-    if (!answer) {
+    if (!user_wants_to_proceed) {
       return;
     }
   }
