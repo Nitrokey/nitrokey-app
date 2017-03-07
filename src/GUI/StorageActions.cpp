@@ -101,6 +101,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
       if(data["success"].toBool()){
         CryptedVolumeActive = true;
         emit storageStatusChanged();
+        show_message_function(tr("Encrypted volume enabled"));
       } else if (data["wrong_password"].toBool()){
         csApplet()->warningBox(tr("Could not enable encrypted volume.") + " " //FIXME use existing translation
                                + tr("Wrong password."));
@@ -149,6 +150,7 @@ void StorageActions::startStick20DisableCryptedVolume() {
       if(data["success"].toBool()) {
         CryptedVolumeActive = false;
         emit storageStatusChanged();
+        show_message_function(tr("Encrypted volume disabled"));
       }
        else {
         csApplet()->warningBox(tr("Could not lock encrypted volume.") + " "
@@ -211,7 +213,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
     if(data["success"].toBool()){
       HiddenVolumeActive = true;
       emit storageStatusChanged();
-      csApplet()->messageBox(tr("Hidden volume enabled")); //FIXME use existing translation
+      show_message_function(tr("Hidden volume enabled"));//FIXME use existing translation
     } else if (data["wrong_password"].toBool()){
       csApplet()->warningBox(tr("Could not enable hidden volume.") + " " //FIXME use existing translation
                              + tr("Wrong password."));
@@ -259,7 +261,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
         if(data["success"].toBool()) {
           HiddenVolumeActive = false;
           emit storageStatusChanged();
-          csApplet()->messageBox(tr("Hidden volume locked")); //FIXME use existing translation
+          show_message_function(tr("Hidden volume disabled")); //FIXME use existing translation
         }
         else {
           csApplet()->warningBox(tr("Could not lock hidden volume.") + " "
@@ -308,6 +310,7 @@ void StorageActions::startLockDeviceAction() {
         HiddenVolumeActive = false;
         CryptedVolumeActive = false;
         emit storageStatusChanged();
+        show_message_function(tr("Device locked")); //FIXME use existing translation
       }
       else {
         csApplet()->warningBox(tr("Could not lock device.") + " "
@@ -559,4 +562,8 @@ void StorageActions::set_start_progress_window(std::function<void(QString)> _sta
 
 void StorageActions::set_end_progress_window(std::function<void()> _end_progress_function) {
   end_progress_function = _end_progress_function;
+}
+
+void StorageActions::set_show_message(std::function<void(QString)> _show_message) {
+  show_message_function = _show_message;
 }

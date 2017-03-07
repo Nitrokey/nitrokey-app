@@ -22,6 +22,7 @@ private:
   void _execute_SD_clearing(const std::string &s);
   std::function<void(QString)> startProgressFunc;
   std::function<void()> end_progress_function;
+  std::function<void(QString)> show_message_function;
 
 private slots:
   void on_StorageStatusChanged();
@@ -30,6 +31,7 @@ public:
   StorageActions(QObject *parent, Authentication *auth_admin, Authentication *auth_user);
   void set_start_progress_window(std::function<void(QString)> _start_progress_function);
   void set_end_progress_window(std::function<void()> _end_progress_function);
+  void set_show_message(std::function<void(QString)> _show_message);
 
 public slots:
   void startStick20DestroyCryptedVolume(int fillSDWithRandomChars);
@@ -52,6 +54,7 @@ signals:
   void storageStatusChanged();
   void longOperationStarted();
   void FactoryReset();
+
 
 };
 
