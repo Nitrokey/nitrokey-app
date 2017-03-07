@@ -1112,7 +1112,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       if(e.reason_wrong_password()){
         //show message if wrong password
         csApplet()->warningBox(tr("Wrong user password."));
-      } else if (e.last_command_status == 0xa){ // FIXME move status code to exception class
+      } else if (e.reason_AES_not_initialized()){
         //generate keys if not generated
         try{
           csApplet()->warningBox(tr("AES keys not initialized. Please provide Admin PIN."));
