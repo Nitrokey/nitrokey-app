@@ -590,9 +590,6 @@ void StorageActions::startStick20LockStickHardware() {
   }
 }
 
-void StorageActions::startStick20DebugAction() {
-}
-
 void StorageActions::startStick20SetupHiddenVolume() {
   bool ret;
   stick20HiddenVolumeDialog HVDialog(nullptr);

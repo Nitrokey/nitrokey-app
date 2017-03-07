@@ -260,8 +260,8 @@ void Tray::initActionsForStick20() {
   connect(Stick20ActionSetReadWriteUncryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20SetReadWriteUncryptedVolume()));
 
-  Stick20ActionDebugAction = new QAction(tr("&Debug"), main_window);
-  connect(Stick20ActionDebugAction, SIGNAL(triggered()), storageActions, SLOT(startStick20DebugAction()));
+//  Stick20ActionDebugAction = new QAction(tr("&Debug"), main_window);
+//  connect(Stick20ActionDebugAction, SIGNAL(triggered()), storageActions, SLOT(startStick20DebugAction()));
 
   Stick20ActionSetupHiddenVolume = new QAction(tr("&Setup hidden volume"), main_window);
   connect(Stick20ActionSetupHiddenVolume, SIGNAL(triggered()), storageActions,

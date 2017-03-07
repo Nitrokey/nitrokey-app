@@ -48,7 +48,7 @@ public slots:
   void startStick20LockStickHardware();
   void startStick20EnableFirmwareUpdate();
   void startStick20ExportFirmwareToFile();
-  void startStick20DebugAction();
+
   void startStick20ClearNewSdCardFound();
   void startStick20SetupHiddenVolume();
 
