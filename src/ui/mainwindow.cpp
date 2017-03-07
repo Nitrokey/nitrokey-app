@@ -1094,7 +1094,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       auto user_password = auth_user.getPassword();
       if(user_password.empty()) return;
       nm::instance()->enable_password_safe(user_password.c_str());
-      csApplet()->messageBox(tr("Password safe unlocked"));
+      tray.showTrayMessage(tr("Password safe unlocked"));
       PWS_Access = true;
       emit PWS_unlocked();
       return;
