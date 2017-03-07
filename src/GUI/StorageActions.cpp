@@ -325,9 +325,6 @@ void StorageActions::startLockDeviceAction(bool ask_for_confirmation) {
 #include "stick20updatedialog.h"
 
 void StorageActions::startStick20EnableFirmwareUpdate() {
-  csApplet()->messageBox(tr("Functionality not implemented in current version")); //FIXME use existing translation
-  return;
-
   UpdateDialog dialogUpdate(nullptr);
 
   bool user_wants_to_proceed = dialogUpdate.exec() == QDialog::Accepted;
@@ -336,18 +333,21 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
   }
 
   PinDialog dialog(PinDialog::FIRMWARE_PIN);
-  user_wants_to_proceed = dialog.exec();
+  user_wants_to_proceed = QDialog::Accepted == dialog.exec();
 
-  if (QDialog::Accepted == user_wants_to_proceed) {
-    // FIXME unmount all volumes and sync
-    //TODO get password
-//    dialog.getPassword((char *)password);
-
-    //TODO add firmware update logic
-//    stick20SendCommand(STICK20_CMD_ENABLE_FIRMWARE_UPDATE, password);
-//    auto m = nitrokey::NitrokeyManager::instance();
-//    m->enable_firmware_update();
+  if (!user_wants_to_proceed) {
+    return;
   }
+  auto s = dialog.getPassword();
+
+  auto successMessage = tr("Device set in update mode");
+  auto failureMessage = tr("Device could not be set in update mode.");
+  runAndHandleErrorsInUI(successMessage, failureMessage,
+     [s](){ //FIXME use secure string
+         local_sync();
+         auto m = nitrokey::NitrokeyManager::instance();
+         m->enable_firmware_update(s.data());
+       },[](){});
 }
 
 
