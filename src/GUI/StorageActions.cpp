@@ -591,7 +591,6 @@ void StorageActions::startStick20LockStickHardware() {
 }
 
 void StorageActions::startStick20SetupHiddenVolume() {
-  bool ret;
   stick20HiddenVolumeDialog HVDialog(nullptr);
 
   if (FALSE == CryptedVolumeActive) {
@@ -599,26 +598,22 @@ void StorageActions::startStick20SetupHiddenVolume() {
     return;
   }
 
+  auto operationSuccessMessage = tr("Hidden volume created");
+  auto operationFailureMessage = tr("Hidden volume could not be created."); //FIXME use existing translation
 
-  ret = HVDialog.exec();
-
-  if (true == ret) {
-    const auto d = HVDialog.HV_Setup_st;
-    auto p = std::string( reinterpret_cast< char const* >(d.HiddenVolumePassword_au8));
-    auto m = nitrokey::NitrokeyManager::instance();
-
-    //TODO add try catch / threaded worker
-    try {
-      m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
-                              d.EndBlockPercent_u8, p.data());
-      csApplet()->messageBox("Hidden volume created"); //FIXME find proper translation
-    }
-    catch (CommandFailedException &e){
-      //TODO handle errors
-      throw;
-    }
-
+  bool user_wants_to_proceed = HVDialog.exec() == QDialog::Accepted;
+  if (!user_wants_to_proceed) {
+    return;
   }
+  const auto d = HVDialog.HV_Setup_st; //FIXME clear securely struct
+  auto p = std::string( reinterpret_cast< char const* >(d.HiddenVolumePassword_au8));
+
+  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [d, p](){ //FIXME use secure string
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
+                            d.EndBlockPercent_u8, p.data());
+  }, [](){});
+
 }
 
 StorageActions::StorageActions(QObject *parent, Authentication *auth_admin, Authentication *auth_user) : QObject(
