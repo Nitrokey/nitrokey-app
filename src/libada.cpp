@@ -185,13 +185,11 @@ bool libada::isPasswordSafeUnlocked() {
     return true;
   }
   catch (CommandFailedException &e){
-    qDebug() << e.what();
     if (e.reason_not_authorized())
       return false;
     throw;
   }
   catch (DeviceCommunicationException &e){
-    qDebug() << e.what();
     return false;
   }
 }
@@ -300,9 +298,6 @@ std::string NameCache::getName(const int i) {
     cache.insert(i, new std::string(""));
   }
   catch (DeviceCommunicationException &e){
-    //TODO log!
-//    emit DeviceDisconnected();
-    qDebug() << __PRETTY_FUNCTION__ << "DeviceCommunicationException";
     cache.insert(i, new std::string("--error--"));
   }
   return *cache[i];
