@@ -81,7 +81,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
       try{
         local_sync();
         auto m = nitrokey::NitrokeyManager::instance();
-        m->unlock_encrypted_volume(s.data());
+        m->unlock_encrypted_volume(s.c_str());
         data["success"] = true;
       }
       catch (CommandFailedException &e){
@@ -192,7 +192,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
     auto m = nitrokey::NitrokeyManager::instance();
     try {
       local_sync();
-      m->unlock_hidden_volume(s.data());
+      m->unlock_hidden_volume(s.c_str());
       data["success"] = true;
     }
     catch (CommandFailedException &e){
@@ -346,7 +346,7 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
      [s](){ //FIXME use secure string
          local_sync();
          auto m = nitrokey::NitrokeyManager::instance();
-         m->enable_firmware_update(s.data());
+         m->enable_firmware_update(s.c_str());
        },[](){});
 }
 
@@ -362,7 +362,7 @@ void StorageActions::startStick20ExportFirmwareToFile() {
   //FIXME use existing translation
   runAndHandleErrorsInUI(tr("Firmware exported"), tr("Could not export firmware."), [s](){
     auto m = nitrokey::NitrokeyManager::instance();
-    m->export_firmware(s.data());
+    m->export_firmware(s.c_str());
   }, [](){});
 }
 
@@ -388,7 +388,7 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
       try{
         auto m = nitrokey::NitrokeyManager::instance();
         m->lock_device(); //lock device to reset its state
-        m->build_aes_key(s.data());
+        m->build_aes_key(s.c_str());
         data["success"] = true;
       }
       catch (CommandFailedException &e){
@@ -430,7 +430,7 @@ void StorageActions::_execute_SD_clearing(const std::string &s) {
       Data data;
       try{
         auto m = nitrokey::NitrokeyManager::instance();
-        m->fill_SD_card_with_random_data(s.data());
+        m->fill_SD_card_with_random_data(s.c_str());
       }
       catch (LongOperationInProgressException &l){
         //expected
@@ -514,7 +514,7 @@ void StorageActions::startStick20ClearNewSdCardFound() {
 
   runAndHandleErrorsInUI(QString(), operationFailureMessage, [s]() { //FIXME use secure string
     auto m = nitrokey::NitrokeyManager::instance();
-    m->clear_new_sd_card_warning(s.data());
+    m->clear_new_sd_card_warning(s.c_str());
   }, []() {});
 }
 
@@ -533,7 +533,7 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
 
   runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
     auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_only(s.data()); //FIXME use secure string
+    m->set_unencrypted_read_only(s.c_str()); //FIXME use secure string
   }, [this]() {
     emit storageStatusChanged();
   });
@@ -554,7 +554,7 @@ void StorageActions::startStick20SetReadWriteUncryptedVolume() {
 
   runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
     auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_write(s.data()); //FIXME use secure string
+    m->set_unencrypted_read_write(s.c_str()); //FIXME use secure string
   }, [this]() {
     emit storageStatusChanged();
   });
@@ -600,7 +600,7 @@ void StorageActions::startStick20SetupHiddenVolume() {
   runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [d, p](){ //FIXME use secure string
     auto m = nitrokey::NitrokeyManager::instance();
     m->create_hidden_volume(d.SlotNr_u8, d.StartBlockPercent_u8,
-                            d.EndBlockPercent_u8, p.data());
+                            d.EndBlockPercent_u8, p.c_str());
   }, [](){});
 
 }

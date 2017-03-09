@@ -177,6 +177,8 @@ public:
 
   bool long_operation_in_progress;
   std::shared_ptr<Stick20ResponseDialog> progress_window;
+
+  void PWS_set_controls_enabled(bool enabled) const;
 };
 
 class utf8FieldLengthValidator : public QValidator {

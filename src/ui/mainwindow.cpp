@@ -92,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
+  PWS_set_controls_enabled(false);
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
   ui->PWS_progressBar->hide();
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
@@ -1033,6 +1034,16 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
 
     }, this);
 
+}
+
+void MainWindow::PWS_set_controls_enabled(bool enabled) const {
+  ui->PWS_EditSlotName->setEnabled(enabled);
+  ui->PWS_EditPassword->setEnabled(enabled);
+  ui->PWS_EditLoginName->setEnabled(enabled);
+  ui->PWS_ButtonClearSlot->setEnabled(enabled);
+  ui->PWS_ButtonSaveSlot->setEnabled(enabled);
+  ui->PWS_ButtonCreatePW->setEnabled(enabled);
+  ui->PWS_CheckBoxHideSecret->setEnabled(enabled);
 }
 
 void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked) {
