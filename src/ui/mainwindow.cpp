@@ -86,6 +86,8 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(DeviceDisconnected()), this, SLOT(on_DeviceDisconnected()));
   connect(this, SIGNAL(DeviceDisconnected()), libada::i().get(), SLOT(on_DeviceDisconnect()));
   connect(this, SIGNAL(DeviceConnected()), this, SLOT(on_DeviceConnected()));
+  connect(this, SIGNAL(DeviceConnected()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(DeviceDisconnected()), &tray, SLOT(regenerateMenu()));
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
@@ -1310,7 +1312,6 @@ void MainWindow::updateProgressBar(int i) {
 void MainWindow::on_DeviceDisconnected() {
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
   tray.showTrayMessage(tr("Nitrokey disconnected"));
-  tray.regenerateMenu();
 
   if(this->isVisible()){
     this->close();
@@ -1334,7 +1335,6 @@ void MainWindow::on_DeviceConnected() {
                                 tr("Nitrokey Pro connected");
   ui->statusBar->showMessage(connected_device_model);
   tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
-  tray.regenerateMenu();
 
   initialTimeReset();
 
