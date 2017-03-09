@@ -1,6 +1,6 @@
 [submodule "libnitrokey"]
 	path = libnitrokey
-	url = git@github.com:szszszsz/libnitrokey.git
+	url = https://github.com/Nitrokey/libnitrokey.git
 [submodule "cppcodec"]
 	path = cppcodec
 	url = https://github.com/tplgy/cppcodec.git
