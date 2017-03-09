@@ -71,6 +71,8 @@ MainWindow::MainWindow(QWidget *parent)
 
   connect(this, SIGNAL(PWS_unlocked()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(PWS_unlocked()), this, SLOT(SetupPasswordSafeConfig()));
+  connect(this, SIGNAL(DeviceLocked()), this, SLOT(SetupPasswordSafeConfig()));
+  connect(&storage, SIGNAL(storageStatusChanged()), this, SLOT(SetupPasswordSafeConfig()));
   connect(this, SIGNAL(PWS_slot_saved(int)), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
 
@@ -909,6 +911,15 @@ void MainWindow::SetupPasswordSafeConfig(void) {
   int i;
   QString Slotname;
   ui->PWS_ComboBoxSelectSlot->clear();
+  PWS_set_controls_enabled(PWS_Access);
+
+  try{
+    PWS_Access = libada::i()->isPasswordSafeUnlocked();
+  }
+  catch (LongOperationInProgressException &e){
+    long_operation_in_progress = true;
+    return;
+  }
 
   // Get active password slots
   if (PWS_Access) {
@@ -932,15 +943,8 @@ void MainWindow::SetupPasswordSafeConfig(void) {
     ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("Unlock password safe")));
   }
 
-  ui->PWS_ButtonEnable->setVisible(!PWS_Access);
-  ui->PWS_ButtonSaveSlot->setEnabled(PWS_Access);
-  ui->PWS_ButtonClearSlot->setEnabled(PWS_Access);
   ui->PWS_ComboBoxSelectSlot->setEnabled(PWS_Access);
-  ui->PWS_EditSlotName->setEnabled(PWS_Access);
-  ui->PWS_EditLoginName->setEnabled(PWS_Access);
-  ui->PWS_EditPassword->setEnabled(PWS_Access);
-  ui->PWS_CheckBoxHideSecret->setEnabled(PWS_Access);
-  ui->PWS_ButtonCreatePW->setEnabled(PWS_Access);
+  ui->PWS_ButtonEnable->setVisible(!PWS_Access);
 
   ui->PWS_EditSlotName->setMaxLength(PWS_SLOTNAME_LENGTH);
   ui->PWS_EditPassword->setMaxLength(PWS_PASSWORD_LENGTH);
@@ -987,9 +991,6 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   auto dummy_slot = index <= 0;
-  ui->PWS_EditSlotName->setText("");
-  ui->PWS_EditPassword->setText("");
-  ui->PWS_EditLoginName->setText("");
 
   PWS_set_controls_enabled(!dummy_slot);
 
@@ -1040,13 +1041,17 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
 }
 
 void MainWindow::PWS_set_controls_enabled(bool enabled) const {
+  ui->PWS_EditSlotName->setText("");
+  ui->PWS_EditLoginName->setText("");
+  ui->PWS_EditPassword->setText("");
   ui->PWS_EditSlotName->setEnabled(enabled);
-  ui->PWS_EditPassword->setEnabled(enabled);
   ui->PWS_EditLoginName->setEnabled(enabled);
-  ui->PWS_ButtonClearSlot->setEnabled(enabled);
+  ui->PWS_EditPassword->setEnabled(enabled);
   ui->PWS_ButtonSaveSlot->setEnabled(enabled);
-  ui->PWS_ButtonCreatePW->setEnabled(enabled);
+  ui->PWS_ButtonClearSlot->setEnabled(enabled);
   ui->PWS_CheckBoxHideSecret->setEnabled(enabled);
+  ui->PWS_ButtonCreatePW->setEnabled(enabled);
+
 }
 
 void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked) {
@@ -1304,6 +1309,7 @@ void MainWindow::on_enableUserPasswordCheckBox_clicked(bool checked) {
 
 void MainWindow::startLockDeviceAction(bool ask_for_confirmation) {
   if(libada::i()->isStorageDeviceConnected()){
+    PWS_Access = false;
     storage.startLockDeviceAction(ask_for_confirmation);
     return;
   }
