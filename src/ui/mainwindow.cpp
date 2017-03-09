@@ -1059,9 +1059,10 @@ void MainWindow::on_PWS_CheckBoxHideSecret_toggled(bool checked) {
 }
 
 void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
-
   const auto item_number = ui->PWS_ComboBoxSelectSlot->currentIndex();
   int slot_number = item_number - 1;
+  if(slot_number<0) return;
+
   if(ui->PWS_EditSlotName->text().isEmpty()){
     csApplet()->warningBox(tr("Please enter a slotname."));
     return;
