@@ -95,6 +95,7 @@ void libada::on_OTP_save(int slot_no, bool isHOTP){
   } else {
     cache_TOTP_name.remove(slot_no);
   }
+  emit regenerateMenu();
 }
 
 #include <QDebug>

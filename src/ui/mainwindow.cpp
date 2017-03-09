@@ -72,7 +72,10 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(PWS_unlocked()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(PWS_unlocked()), this, SLOT(SetupPasswordSafeConfig()));
   connect(this, SIGNAL(PWS_slot_saved(int)), &tray, SLOT(regenerateMenu()));
-  connect(this, SIGNAL(OTP_slot_write(int, bool)), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
+
+  connect(this, SIGNAL(OTP_slot_write(int, bool)), libada::i().get(), SLOT(on_OTP_save(int, bool)));
+  connect(libada::i().get(), SIGNAL(regenerateMenu()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(DeviceLocked()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(DeviceLocked()), &storage, SLOT(on_StorageStatusChanged()));
   connect(this, SIGNAL(DeviceConnected()), &storage, SLOT(on_StorageStatusChanged()));
@@ -81,8 +84,6 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this, SIGNAL(ShortOperationEnds()), progress_window.get(), SLOT(on_ShortOperationEnds()));
   connect(this, SIGNAL(OperationInProgress(int)), &tray, SLOT(updateOperationInProgressBar(int)));
   connect(this, SIGNAL(OperationInProgress(int)), progress_window.get(), SLOT(updateOperationInProgressBar(int)));
-  connect(this, SIGNAL(OTP_slot_write(int, bool)), libada::i().get(), SLOT(on_OTP_save(int, bool)));
-  connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
   connect(this, SIGNAL(DeviceDisconnected()), this, SLOT(on_DeviceDisconnected()));
   connect(this, SIGNAL(DeviceDisconnected()), libada::i().get(), SLOT(on_DeviceDisconnect()));
   connect(this, SIGNAL(DeviceConnected()), this, SLOT(on_DeviceConnected()));

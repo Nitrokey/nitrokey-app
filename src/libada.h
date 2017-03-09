@@ -76,6 +76,9 @@ public slots:
       void on_FactoryReset();
       void on_DeviceDisconnect();
 
+signals:
+  void regenerateMenu();
+
 public:
     explicit libada();
     ~libada();
