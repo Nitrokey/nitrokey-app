@@ -14,9 +14,13 @@ namespace Ui {
     class Tray;
 }
 
+#include <QMutex>
 class tray_Worker : public QObject
 {
 Q_OBJECT
+
+public:
+    QMutex mtx;
 
 public slots:
     void doWork();
@@ -116,6 +120,8 @@ private:
     QAction *Stick20ActionResetUserPassword;
 
   void destroyThread();
+
+  tray_Worker *worker;
 };
 
 

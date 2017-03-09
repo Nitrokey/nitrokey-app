@@ -14,7 +14,7 @@ TODO
 
 Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
            StorageActions *actions) :
-    QObject(_parent), trayMenuPasswdSubMenu(nullptr), trayMenu(nullptr) {
+    QObject(_parent), trayMenuPasswdSubMenu(nullptr), trayMenu(nullptr), worker(nullptr) {
   main_window = _parent;
   storageActions = actions;
   debug_mode = _debug_mode;
@@ -291,10 +291,13 @@ void Tray::initActionsForStick20() {
 std::shared_ptr<QThread> thread_tray_populateOTP;
 
 void tray_Worker::doWork() {
+  QMutexLocker mutexLocker(&mtx);
   auto passwordSafeUnlocked = libada::i()->isPasswordSafeUnlocked();
   const auto total = TOTP_SLOT_COUNT+HOTP_SLOT_COUNT+
       (passwordSafeUnlocked?PWS_SLOT_COUNT:0)+1;
   int p = 0;
+  emit progress(0);
+
   //populate OTP name cache
   for (int i=0; i < TOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getTOTPSlotName(i);
@@ -328,7 +331,7 @@ void Tray::generatePasswordMenu() {
     destroyThread();
   }
   thread_tray_populateOTP = std::make_shared<QThread>();
-  tray_Worker *worker = new tray_Worker;
+  worker = new tray_Worker;
   worker->moveToThread(thread_tray_populateOTP.get());
   connect(thread_tray_populateOTP.get(), &QThread::finished, worker, &QObject::deleteLater);
   connect(thread_tray_populateOTP.get(), SIGNAL(started()), worker, SLOT(doWork()));
@@ -349,6 +352,9 @@ void Tray::destroyThread() {
 
 #include "mainwindow.h"
 void Tray::populateOTPPasswordMenu() {
+  //should not run before worker is done
+  QMutexLocker mutexLocker(&worker->mtx);
+
   for (int i=0; i < TOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getTOTPSlotName(i);
     bool slotProgrammed = libada::i()->isTOTPSlotProgrammed(i);
