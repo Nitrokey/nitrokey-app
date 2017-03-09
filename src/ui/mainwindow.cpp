@@ -932,7 +932,7 @@ void MainWindow::SetupPasswordSafeConfig(void) {
     ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("Unlock password safe")));
   }
 
-  PWS_Access ? ui->PWS_ButtonEnable->hide() : ui->PWS_ButtonEnable->show();
+  ui->PWS_ButtonEnable->setVisible(!PWS_Access);
   ui->PWS_ButtonSaveSlot->setEnabled(PWS_Access);
   ui->PWS_ButtonClearSlot->setEnabled(PWS_Access);
   ui->PWS_ComboBoxSelectSlot->setEnabled(PWS_Access);
@@ -986,11 +986,14 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
 
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
+  auto dummy_slot = index <= 0;
   ui->PWS_EditSlotName->setText("");
   ui->PWS_EditPassword->setText("");
   ui->PWS_EditLoginName->setText("");
 
-  if (index <= 0) return; //do not update for dummy slot
+  PWS_set_controls_enabled(!dummy_slot);
+
+  if (dummy_slot) return; //do not update for dummy slot
   index--;
 
   if (!PWS_Access) {
