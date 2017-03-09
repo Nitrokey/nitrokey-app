@@ -38,14 +38,34 @@
 
 #include "libnitrokey/include/stick10_commands.h"
 
+#include <functional>
+#include <QMutex>
+
+class NameCache {
+private:
+  std::function<const char*(int)> getter;
+  QCache<int, std::string> cache;
+  QMutex mut;
+public:
+  NameCache(){};
+  NameCache(const std::function<const char *(int)> &getter);
+  ~NameCache();
+
+  void setGetter(const std::function<const char *(int)> &getter);
+  std::string getName(const int i);
+  void remove(const int slot_no);
+  void clear();
+};
+
 class libada : public QObject {
     Q_OBJECT
     Q_DISABLE_COPY(libada)
   private:
     static std::shared_ptr <libada> _instance;
-    QCache<int, std::string> cache_TOTP_name;
-    QCache<int, std::string> cache_HOTP_name;
-    QCache<int, std::string> cache_PWS_name;
+    NameCache cache_TOTP_name;
+    NameCache cache_HOTP_name;
+    NameCache cache_PWS_name;
+
     std::vector <uint8_t> status_PWS;
     std::string cardSerial_cached;
 

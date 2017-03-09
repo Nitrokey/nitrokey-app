@@ -13,7 +13,18 @@ std::shared_ptr<libada> libada::i() {
   return _instance;
 }
 
-libada::libada() {}
+libada::libada() {
+  cache_TOTP_name.setGetter([](const int i) -> const char *{
+    return nm::instance()->get_totp_slot_name(i);
+  });
+  cache_HOTP_name.setGetter([](const int i) -> const char *{
+    return nm::instance()->get_hotp_slot_name(i);
+  });
+  cache_PWS_name.setGetter([](const int i) -> const char *{
+    return nm::instance()->get_password_safe_slot_name(i);
+  });
+
+}
 
 libada::~libada() {}
 
@@ -88,31 +99,7 @@ void libada::on_OTP_save(int slot_no, bool isHOTP){
 
 #include <QDebug>
 std::string libada::getTOTPSlotName(const int i) {
-  static QMutex mut;
-  QMutexLocker locker(&mut);
-  if (cache_TOTP_name.contains(i)){
-    return *cache_TOTP_name[i];
-  }
-  try{
-    const auto slot_name = nm::instance()->get_totp_slot_name(i);
-    cache_TOTP_name.insert(i, new std::string(slot_name));
-    free((void *) slot_name);
-  }
-  catch (LongOperationInProgressException &e){
-    cache_TOTP_name.insert(i, new std::string(""));
-  }
-  catch (CommandFailedException &e){
-    if (!e.reason_slot_not_programmed())
-      throw;
-    cache_TOTP_name.insert(i, new std::string(""));
-  }
-  catch (DeviceCommunicationException &e){
-    //TODO log!
-//    emit DeviceDisconnected();
-    qDebug() << __PRETTY_FUNCTION__ << "DeviceCommunicationException";
-    cache_TOTP_name.insert(i, new std::string("--error--"));
-  }
-  return *cache_TOTP_name[i];
+  return cache_TOTP_name.getName(i);
 }
 
 bool libada::have_communication_issues_occurred(){
@@ -144,52 +131,11 @@ std::string libada::get_serial_number(){
 }
 
 std::string libada::getHOTPSlotName(const int i) {
-  static QMutex mut;
-  QMutexLocker locker(&mut);
-  if (cache_HOTP_name.contains(i)){
-    return *cache_HOTP_name[i];
-  }
-  try{
-    const auto slot_name = nm::instance()->get_hotp_slot_name(i);
-    cache_HOTP_name.insert(i, new std::string(slot_name));
-    free((void *) slot_name);
-  }
-  catch (LongOperationInProgressException &e){
-    cache_HOTP_name.insert(i, new std::string(""));
-  }
-  catch (CommandFailedException &e){
-    if (!e.reason_slot_not_programmed())
-      throw;
-    cache_HOTP_name.insert(i, new std::string(""));
-  }
-  catch(DeviceCommunicationException &e){
-//    cache_HOTP_name.insert(i, new std::string(""));
-    cache_HOTP_name.insert(i, new std::string("--error--"));
-  }
-  return *cache_HOTP_name[i];
+  return cache_HOTP_name.getName(i);
 }
 
 std::string libada::getPWSSlotName(const int i) {
-  static QMutex mut;
-  QMutexLocker locker(&mut);
-  if (cache_PWS_name.contains(i)){
-    return *cache_PWS_name[i];
-  }
-  try{
-    const auto slot_name = nm::instance()->get_password_safe_slot_name(i);
-    cache_PWS_name.insert(i, new std::string(slot_name));
-    free((void *) slot_name);
-  }
-  catch (CommandFailedException &e){
-    if (!e.reason_slot_not_programmed()) //FIXME set correct reason for PWS
-      throw;
-    cache_PWS_name.insert(i, new std::string("(empty)"));
-  }
-  catch(DeviceCommunicationException &e){
-//    cache_HOTP_name.insert(i, new std::string(""));
-    cache_HOTP_name.insert(i, new std::string("--error--"));
-  }
-  return *cache_PWS_name[i];
+  return cache_PWS_name.getName(i);
 }
 
 bool libada::getPWSSlotStatus(const int i) {
@@ -332,3 +278,53 @@ void libada::on_DeviceDisconnect() {
   status_PWS.clear();
   cardSerial_cached.clear();
 }
+
+
+std::string NameCache::getName(const int i) {
+  QMutexLocker locker(&mut);
+  if (cache.contains(i)){
+    return *cache[i];
+  }
+  try{
+    const auto slot_name = getter(i);
+    cache.insert(i, new std::string(slot_name));
+    free((void *) slot_name);
+  }
+  catch (LongOperationInProgressException &e){
+    cache.insert(i, new std::string(""));
+  }
+  catch (CommandFailedException &e){
+    if (!e.reason_slot_not_programmed())
+      throw;
+    cache.insert(i, new std::string(""));
+  }
+  catch (DeviceCommunicationException &e){
+    //TODO log!
+//    emit DeviceDisconnected();
+    qDebug() << __PRETTY_FUNCTION__ << "DeviceCommunicationException";
+    cache.insert(i, new std::string("--error--"));
+  }
+  return *cache[i];
+}
+
+void NameCache::remove(const int slot_no) {
+  QMutexLocker locker(&mut);
+  cache.remove(slot_no);
+}
+
+void NameCache::clear() {
+  QMutexLocker locker(&mut);
+  cache.clear();
+}
+
+NameCache::NameCache(const std::function<const char *(int)> &getter) : getter(
+    getter) {}
+
+void NameCache::setGetter(const std::function<const char *(int)> &getter) {
+  NameCache::getter = getter;
+}
+
+NameCache::~NameCache() {
+  clear();
+}
+
