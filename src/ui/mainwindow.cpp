@@ -609,6 +609,7 @@ void MainWindow::storage_check_symlink(){
 void MainWindow::on_writeButton_clicked() {
   uint8_t slotNo = (uint8_t) ui->slotComboBox->currentIndex();
   const auto isHOTP = slotNo > TOTP_SlotCount;
+  slotNo = isHOTP? slotNo - TOTP_SlotCount -1:slotNo;
 
 
   if (ui->nameEdit->text().isEmpty()) {
