@@ -40,6 +40,10 @@ class MainWindow;
 
 class Tray;
 
+enum class ConnectionState{
+  disconnected, connected, long_operation
+};
+
 class MainWindow : public QMainWindow {
   Q_OBJECT
 public :
@@ -179,6 +183,8 @@ public:
   std::shared_ptr<Stick20ResponseDialog> progress_window;
 
   void PWS_set_controls_enabled(bool enabled) const;
+
+  ConnectionState connectionState = ConnectionState::disconnected;
 };
 
 class utf8FieldLengthValidator : public QValidator {

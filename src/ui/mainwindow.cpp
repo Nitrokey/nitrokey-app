@@ -153,21 +153,24 @@ void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
     }
 }
 
-
-enum class ConnectionState{
-  disconnected, connected, long_operation
-};
-
 void MainWindow::checkConnection() {
   using cs = ConnectionState;
   QMutexLocker locker(&check_connection_mutex);
 
-  static ConnectionState state = cs::disconnected;
   bool deviceConnected = libada::i()->isDeviceConnected() && !libada::i()->have_communication_issues_occurred();
 
+  static int connection_trials = 0;
+  if(!deviceConnected && nm::instance()->could_current_device_be_enumerated()){
+    connection_trials++;
+    if(connection_trials%5==0){
+      //FIXME use existing translation
+      csApplet()->warningBox(tr("Device is detected but could not be connected. Please reinsert it."));
+    }
+  }
+
   if (deviceConnected){
-    if(state == cs::disconnected){
-      state = cs::connected;
+    if(connectionState == cs::disconnected){
+      connectionState = cs::connected;
       nitrokey::NitrokeyManager::instance()->connect();
 
       if(libada::i()->isStorageDeviceConnected()){
@@ -176,20 +179,18 @@ void MainWindow::checkConnection() {
           long_operation_in_progress = false;
         }
         catch (LongOperationInProgressException &e){
-//          state = cs::long_operation;
           long_operation_in_progress = true;
           emit OperationInProgress(e.progress_bar_value);
           return;
         }
-
       }
 
       //on connection
       emit DeviceConnected();
     }
   } else { //device not connected
-    if(state == cs::connected){
-      state = cs::disconnected;
+    if(connectionState == cs::connected){
+      connectionState = cs::disconnected;
       //on disconnection
       emit DeviceDisconnected();
     }
@@ -1412,7 +1413,9 @@ void MainWindow::on_KeepDeviceOnline() {
     }
   }
   catch (DeviceCommunicationException &e){
-    emit DeviceDisconnected();
+    if(connectionState != ConnectionState::disconnected){
+      emit DeviceDisconnected();
+    }
   }
   catch (LongOperationInProgressException &e){
     if(!long_operation_in_progress){
