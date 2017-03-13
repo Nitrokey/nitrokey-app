@@ -1,55 +1,78 @@
 #include <QApplication>
 #include <QGridLayout>
 #include <QMessageBox>
-#include <QSpacerItem>
 #include <QtGui>
 
 #include "nitrokey-applet.h"
 
+QMutex AppMessageBox::mutex;
 
-QMutex CryptostickApplet::mutex;
-
-CryptostickApplet *csApplet(){
-    return CryptostickApplet::instance();
+AppMessageBox *csApplet(){
+    return AppMessageBox::instance();
 }
 
-void CryptostickApplet::warningBox(const QString msg) {
-  QMessageBox::warning(_parent, getBrand(), msg, QMessageBox::Ok);
+void AppMessageBox::warningBox(const QString msg) {
+  QMessageBox *msgbox = new QMessageBox(
+      QMessageBox::Warning, getBrand(), msg, QMessageBox::Ok, _parent);
+//  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
+  msgbox->setModal( false );
+  moveToCenter(msgbox);
+  msgbox->exec();
+//  msgbox->open();
+//  msgbox->repaint();
+//  msgbox->show();
 }
 
-void CryptostickApplet::messageBox(const QString msg) {
-    const QString brand = getBrand();
-  QMessageBox::information(_parent,  brand, msg, QMessageBox::Ok);
+#include <QDesktopWidget>
+void AppMessageBox::moveToCenter(QWidget *widget) {
+  widget->adjustSize();
+  widget->move(QApplication::desktop()->screen()->rect().center() - widget->rect().center());
 }
 
-bool CryptostickApplet::yesOrNoBox(const QString msg, bool default_val) {
+void AppMessageBox::messageBox(const QString msg) {
+  QMessageBox *msgbox = new QMessageBox(
+      QMessageBox::Information, getBrand(), msg, QMessageBox::Ok, _parent);
+//  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
+  msgbox->setModal( false );
+  moveToCenter(msgbox);
+  msgbox->exec();
+//  msgbox->open();
+//  msgbox->repaint();
+//  msgbox->show();
+}
+
+bool AppMessageBox::yesOrNoBox(const QString msg, bool default_val) {
   QMessageBox::StandardButton default_btn = default_val ? QMessageBox::Yes : QMessageBox::No;
 
+  auto buttons = QMessageBox::Yes | QMessageBox::No;
   bool b =
       QMessageBox::question(_parent, getBrand(), msg,
-                            QMessageBox::Yes | QMessageBox::No, default_btn) == QMessageBox::Yes;
+                            buttons, default_btn) == QMessageBox::Yes;
+  //TODO make on heap
   return b;
 }
 
-bool CryptostickApplet::detailedYesOrNoBox(const QString msg, const QString detailed_text, bool default_val) {
-  QMessageBox msgBox (QMessageBox::Question, getBrand(), msg, QMessageBox::Yes | QMessageBox::No,
+bool AppMessageBox::detailedYesOrNoBox(const QString msg, const QString detailed_text, bool default_val) {
+  QMessageBox *msgBox = new QMessageBox(QMessageBox::Question, getBrand(), msg, QMessageBox::Yes | QMessageBox::No,
                       _parent);
 
-  msgBox.setDetailedText(detailed_text);
+  msgBox->setDetailedText(detailed_text);
   // Turns out the layout box in the QMessageBox is a grid
   // You can force the resize using a spacer this way:
   QSpacerItem *horizontalSpacer =
       new QSpacerItem(400, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-  QGridLayout *layout = (QGridLayout *)msgBox.layout();
+  QGridLayout *layout = (QGridLayout *)msgBox->layout();
 
   layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-  msgBox.setDefaultButton(default_val ? QMessageBox::Yes : QMessageBox::No);
-  bool b = msgBox.exec() == QMessageBox::Yes;
+  msgBox->setDefaultButton(default_val ? QMessageBox::Yes : QMessageBox::No);
+
+//  msgBox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
+  moveToCenter(msgBox);
+  bool b = msgBox->exec() == QMessageBox::Yes;
   return b;
 }
 
 QString getBrand() {
-  const QString string = QString::fromUtf8(CRYPTOSTICK_APP_BRAND);
-  return string;
+  return QStringLiteral(CRYPTOSTICK_APP_BRAND);
 }
 

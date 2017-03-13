@@ -1,18 +1,68 @@
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
-#include "device.h"
 #include <QDialog>
+#include <QMutex>
+#include <QThread>
+#include <memory>
+#include "src/utils/bool_values.h"
 
-#define GUI_VERSION "0.6.3"
-
+#include "src/version.h"
 
 namespace Ui {
 class AboutDialog;
 }
 
+namespace AboutDialogUI{
+    class Worker : public QObject
+    {
+    Q_OBJECT
+    public:
+        QMutex mutex;
+        struct {
+            int majorFirmwareVersion;
+            int minorFirmwareVersion;
+            std::string cardSerial;
+            int passwordRetryCount;
+            int userPasswordRetryCount;
+          struct {
+            bool active;
+            struct {
+                bool plain;
+                bool encrypted;
+                bool hidden;
+                bool plain_RW;
+              bool encrypted_RW;
+              bool hidden_RW;
+            } volume_active;
+            struct{
+              int size_GB = 0;
+              bool is_new;
+              bool filled_with_random;
+              uint32_t id;
+            } sdcard;
+            bool keys_initiated;
+            uint8_t filled_with_random;
+            bool firmware_locked;
+            uint32_t smartcard_id;
+            struct {
+              bool status = false;
+              int progress = 0;
+            } long_operation;
+          } storage;
+          bool comm_error = false;
+        } devdata;
+    public slots:
+        void fetch_device_data();
+    signals:
+        void finished(bool connected);
+    };
+}
+
 class AboutDialog : public QDialog {
-  Q_OBJECT public : explicit AboutDialog(Device *global_cryptostick, QWidget *parent = 0);
+  Q_OBJECT
+  public :
+  explicit AboutDialog(QWidget *parent = 0);
   ~AboutDialog();
   void showStick20Configuration(void);
   void showStick10Configuration(void);
@@ -23,15 +73,18 @@ class AboutDialog : public QDialog {
   void showPasswordCounters(void);
   void hideWarning(void);
   void showWarning(void);
-  Device *cryptostick;
 
 private slots:
   void on_ButtonOK_clicked();
-
   void on_ButtonStickStatus_clicked();
+  void update_device_slots(bool connected);
 
 private:
-  Ui::AboutDialog *ui;
+  std::shared_ptr<Ui::AboutDialog> ui;
+  AboutDialogUI::Worker worker;
+  QThread worker_thread;
+
+  void fixWindowGeometry();
 };
 
 #endif // ABOUTDIALOG_H

@@ -22,45 +22,56 @@
 #define PINDIALOG_H
 
 #include <QDialog>
-
-#include "device.h"
+#include <QObject>
+#include <QtCore/QThread>
 #include "ui_pindialog.h"
+#include <memory>
 
 namespace Ui {
 class PinDialog;
 }
 
+namespace PinDialogUI{
+    class Worker : public QObject
+    {
+    Q_OBJECT
+    public:
+        struct {
+            int retry_user_count;
+            int retry_admin_count;
+        } devdata;
+    public slots:
+        void fetch_device_data();
+    signals:
+        void finished();
+    };
+}
+
 class PinDialog : public QDialog {
-  Q_OBJECT public : enum Usage { PLAIN, PREFIXED };
-  enum PinType { USER_PIN, ADMIN_PIN, FIRMWARE_PIN, OTHER };
-
-  unsigned char password[50];
-  Device *cryptostick;
-
-  explicit PinDialog(const QString &title, const QString &label, Device *cryptostick, Usage usage,
-                     PinType pinType, bool ShowMatrix = FALSE, QWidget *parent = NULL);
+  Q_OBJECT
+public :
+    enum PinType { USER_PIN, ADMIN_PIN, HIDDEN_VOLUME, FIRMWARE_PIN, OTHER };
+    explicit PinDialog(PinType pinType, QWidget *parent = nullptr);
   ~PinDialog();
 
-  // void init(char *text,int RetryCount);
   void getPassword(char *text);
   void getPassword(QString &pin);
-
-  virtual int exec();
+  std::string getPassword();
+  virtual int exec() override;
 
 private slots:
   void on_checkBox_toggled(bool checked);
-
-  void on_checkBox_PasswordMatrix_toggled(bool checked);
-
   void onOkButtonClicked();
+    void updateTryCounter();
 
 private:
-  Ui::PinDialog *ui;
+    Q_DISABLE_COPY(PinDialog);
+    std::shared_ptr<Ui::PinDialog> ui;
+  PinDialogUI::Worker worker;
+  QThread worker_thread;
 
-  Usage _usage;
-  PinType _pinType;
+  const PinType _pinType;
 
-  void updateTryCounter();
   void clearBuffers();
   void UI_deviceNotInitialized() const;
 };

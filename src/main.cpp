@@ -16,121 +16,63 @@
  * You should have received a copy of the GNU General Public License
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "device.h"
 #include "mainwindow.h"
-#include "mcvs-wrapper.h"
-#include "nitrokey-applet.h"
-#include "splash.h"
-#include "stick20hid.h"
+//#include "mcvs-wrapper.h"
+//#include "nitrokey-applet.h"
+//#include "splash.h"
 #include <QApplication>
+#include <QTranslator>
+#include <QLibraryInfo>
+#include <QSettings>
+#include <QFileInfo>
 #include <QDebug>
-#include <QSharedMemory>
-#include <stdlib.h>
-#include <src/ui/aboutdialog.h>
+//#include <QSharedMemory>
+#include "src/version.h"
+#include "src/utils/bool_values.h"
 
-StartUpParameter_tst &
-parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st);
+enum {DEBUG_STATUS_NO_DEBUGGING = 0, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
 
-void HelpInfos(void) {
-  puts("Nitrokey App "
-  GUI_VERSION
-           "\n\n"
-       "-h, --help        display this help and exit\n"
-       "-a, --admin       enable extra administrativefunctions\n"
-       "-d, --debug       enable debug options\n"
-       "--debugAll       enable extensive debug options\n"
-       "--lock-hardware   enable hardware lock option\n"
-       /* Disable password matrix printf ("--PWM Enable PIN entry via matrix\n"); */
-       "--cmd ...         start a command line session\n"
-       "--language ...    load translation file with name i18n/nitrokey_xxx and store this choice "
-           "in settings file (use --debug for more details)\n"
-       "                  Use --language with empty parameter to clear the choice"
-       "\n");
-}
+
+bool configureParser(const QApplication &a, QCommandLineParser &parser);
+void configureApplicationName();
+void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator);
+void issue_43_workaround();
+
+void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
+                         QTranslator &myappTranslator);
+
+void configureRandomGenerator();
 
 int main(int argc, char *argv[]) {
-// workaround for issue https://github.com/Nitrokey/nitrokey-app/issues/43
-#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
-  if (qgetenv("QT_QPA_PLATFORMTHEME") == "appmenu-qt5") {
-    qputenv("QT_QPA_PLATFORMTHEME", "generic");
-  }
-#endif
+  qRegisterMetaType<QMap<QString, QVariant>>();
+  issue_43_workaround();
 
   QApplication a(argc, argv);
-  StartUpParameter_tst StartupInfo_st;
-  parseCommandLine(argc, argv, StartupInfo_st);
+  configureApplicationName();
+  QCommandLineParser parser;
+  auto shouldQuit = configureParser(a, parser);
+  if(shouldQuit)
+    return 0;
 
   // initialize i18n
-  QTranslator qtTranslator;
-#if defined(Q_WS_WIN)
-  qtTranslator.load("qt_" + QLocale::system().name());
-#else
-  qtTranslator.load("qt_" + QLocale::system().name(),
-                    QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-#endif
-  a.installTranslator(&qtTranslator);
+//  QTranslator qtTranslator;
+//  configureBasicTranslator(a, qtTranslator);
 
-  QCoreApplication::setOrganizationName("Nitrokey");
-  QCoreApplication::setOrganizationDomain("nitrokey.com");
-  QCoreApplication::setApplicationName("Nitrokey App");
 
   QSettings settings;
   const auto language_key = "main/language";
-  if (StartupInfo_st.language_set){
-    qDebug() << "Setting default language to " << StartupInfo_st.language_string;
-    settings.setValue(language_key, StartupInfo_st.language_string);
+  if (parser.isSet("language")){
+    qDebug() << "Setting default language to " << parser.value("language");
+    settings.setValue(language_key, parser.value("language"));
   }
   QString settings_language = settings.value(language_key).toString();
-  if(StartupInfo_st.FlagDebug) {
-    qDebug() << settings_language << settings.fileName();
+  if(parser.isSet("debug")) {
+    qDebug() << "Language saved in settings: " << settings_language << settings.fileName();
   }
 
   QTranslator myappTranslator;
-  bool success = false;
+  configureTranslator(a, parser, settings_language, myappTranslator);
 
-#if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC)
-  QLocale loc = QLocale::system();
-  QString lang = QLocale::languageToString(loc.language());
-  if(StartupInfo_st.FlagDebug) {
-    qDebug() << loc << lang << loc.name();
-  }
-  if(!StartupInfo_st.language_set && settings_language.isEmpty()){
-    success = myappTranslator.load(QLocale::system(), // locale
-                                 "",                // file name
-                                 "nitrokey_",       // prefix
-                                 ":/i18n/",         // folder
-                                 ".qm");            // suffix
-  }
-
-  if(!success){
-    auto translation_paths = {
-        QString("/i18n/nitrokey_%1.qm").arg(settings_language),
-        QString("/i18n/nitrokey_%1.qm").arg(QLocale::system().name()),
-        QString("/i18n/nitrokey_%1.qm").arg(lang.toLower()),
-        QString("/i18n/nitrokey_%1.qm").arg("en"),
-    };
-
-    for (auto path : translation_paths ){
-      for(auto p : {QString(':'), QString('.')}){
-        auto path2 = p + path;
-        success = myappTranslator.load(path2);
-        QFileInfo fileInfo(path2);
-        if(StartupInfo_st.FlagDebug){
-          qDebug() << path2 << success << fileInfo.exists();
-        }
-        if (success) break;
-      }
-      if (success) break;
-    }
-  }
-#else
-  success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
-#endif
-
-  if (success){
-    a.installTranslator(&myappTranslator);
-  }
 
   // Check for multiple instances
   // GUID from http://www.guidgenerator.com/online-guid-generator.aspx
@@ -142,6 +84,7 @@ int main(int argc, char *argv[]) {
      msgBox.setText( QObject::tr("Can't start more than one instance of the application.") );
      msgBox.setIcon( QMessageBox::Critical );
      msgBox.exec(); exit(0); } else { */
+  qDebug() <<  "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
   qDebug() << "Application started successfully.";
   // }
 
@@ -156,96 +99,155 @@ int main(int argc, char *argv[]) {
 
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
-  HID_Stick20Init();
 
-  MainWindow w(&StartupInfo_st);
-//    csApplet()->setParent(&w);
-
-  QDateTime local(QDateTime::currentDateTime());
-
-  qsrand(local.currentMSecsSinceEpoch() % 2000000000);
+  configureRandomGenerator();
 
   a.setQuitOnLastWindowClosed(false);
-  return a.exec();
+
+
+  MainWindow w;
+//  csApplet()->setParent(&w);
+  //TODO add global exception catch for logging?
+  //or use std::terminate
+  int retcode;
+#ifdef _NDEBUG
+  try{
+    retcode = a.exec();
+  }
+  catch (std::exception &e){
+    csApplet()->warningBox(QApplication::tr("Critical error encountered. Please restart application.\nMessage: ") + e.what());
+  }
+#else
+  retcode = a.exec();
+  qDebug() << "normal exit";
+#endif
+  return retcode;
 }
 
-StartUpParameter_tst &
-parseCommandLine(int argc, char *const *argv, StartUpParameter_tst &StartupInfo_st) {
-  //TODO rewrite with QCommandLineParser (does not support qt4)
-  StartupInfo_st.ExtendedConfigActive = FALSE;
-  StartupInfo_st.FlagDebug = DEBUG_STATUS_NO_DEBUGGING;
-  StartupInfo_st.PasswordMatrix = FALSE;
-  StartupInfo_st.LockHardware = FALSE;
-  StartupInfo_st.Cmd = FALSE;
-  StartupInfo_st.language_set = FALSE;
+void configureRandomGenerator() {
+    QDateTime local(QDateTime::currentDateTime());
+    qsrand(static_cast<uint> (local.currentMSecsSinceEpoch() % 2000000000));
+  }
 
-  int i;
-  char *p;
+void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
+                         QTranslator &myappTranslator) {
+  bool success = false;
 
-  // Check for commandline parameter
-  for (i = 2; i <= argc; i++) {
-    p = argv[i - 1];
-    if ((0 == strcmp(p, "--help")) || (0 == strcmp(p, "-h"))) {
-      HelpInfos();
-      exit(0);
+#if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC)
+  QLocale loc = QLocale::system();
+  QString lang = QLocale::languageToString(loc.language());
+  if (parser.isSet("debug")) {
+    qDebug() << loc << lang << loc.name();
+  }
+  if (!parser.isSet("language") && settings_language.isEmpty()) {
+    success = myappTranslator.load(QLocale::system(), // locale
+                                   "",                // file name
+                                   "nitrokey_",       // prefix
+                                   ":/i18n/",         // folder
+                                   ".qm");            // suffix
+  }
+
+  if (!success) {
+    auto translation_paths = {
+        QString("/i18n/nitrokey_%1.qm").arg(settings_language),
+        QString("/i18n/nitrokey_%1.qm").arg(QLocale::system().name()),
+        QString("/i18n/nitrokey_%1.qm").arg(lang.toLower()),
+        QString("/i18n/nitrokey_%1.qm").arg("en"),
+    };
+
+    if (parser.isSet("debug")) {
+      qDebug() << "Loading translation files";
     }
-
-    if ((0 == strcmp(p, "--debug")) || (0 == strcmp(p, "-d"))) {
-      StartupInfo_st.FlagDebug = DEBUG_STATUS_LOCAL_DEBUG;
-    }
-    if (0 == strcmp(p, "--debugAll")) {
-      StartupInfo_st.FlagDebug = DEBUG_STATUS_DEBUG_ALL;
-    }
-
-    if ((0 == strcmp(p, "--admin")) || (0 == strcmp(p, "-a"))) {
-      StartupInfo_st.ExtendedConfigActive = TRUE;
-    }
-    /* Disable password matrix if (0 == strcmp (p,"--PWM")) { StartupInfo_st.PasswordMatrix = TRUE;
-     * } */
-    if (0 == strcmp(p, "--lock-hardware"))
-      StartupInfo_st.LockHardware = TRUE;
-
-    if (0 == strcmp(p, "--cmd")) {
-      StartupInfo_st.Cmd = TRUE;
-      i++;
-      if (i > argc) {
-        fprintf(stderr, "ERROR: Can't get command\n");
-        fflush(stderr);
-        exit(1);
-      } else {
-        p = argv[i - 1];
-        StartupInfo_st.CmdLine = p;
+    for (auto path : translation_paths) {
+      for (auto p : {QString(':'), QString('.')}) {
+        auto path2 = p + path;
+        success = myappTranslator.load(path2);
+        QFileInfo fileInfo(path2);
+        if (parser.isSet("debug")) {
+          qDebug() << path2 << " - file loaded successfully: " <<success
+                   << ", file exists on disk: "<< fileInfo.exists();
+        }
+        if (success) break;
       }
-    }
-    if (0 == strcmp(p, "--language")) {
-      StartupInfo_st.language_set = TRUE;
-      i++;
-      if (i > argc) {
-        StartupInfo_st.language_string = "";
-      } else {
-        p = argv[i - 1];
-        StartupInfo_st.language_string = p;
-      }
+      if (success) break;
     }
   }
-  return StartupInfo_st;
+#else
+  success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
+#endif
+
+  if (success) {
+    a.installTranslator(&myappTranslator);
+  }
 }
 
-extern "C" char *GetTimeStampForLog(void);
+void issue_43_workaround() {
+// workaround for issue https://github.com/Nitrokey/nitrokey-app/issues/43
+#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
+  if (qgetenv("QT_QPA_PLATFORMTHEME") == "appmenu-qt5") {
+    qputenv("QT_QPA_PLATFORMTHEME", "generic");
+  }
+#endif
 
-char *GetTimeStampForLog(void) {
-  static QDateTime LastTimeStamp(QDateTime::currentDateTime());
-
-  QDateTime ActualTimeStamp(QDateTime::currentDateTime());
-
-  static char DateString[40];
-
-  if (ActualTimeStamp.toTime_t() != LastTimeStamp.toTime_t()) {
-    LastTimeStamp = ActualTimeStamp;
-    STRCPY(DateString, sizeof(DateString) - 1,
-           LastTimeStamp.toString("dd.MM.yyyy hh:mm:ss").toLatin1());
-  } else
-    DateString[0] = 0;
-
-  return (DateString);
 }
+
+void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator) {
+#if defined(Q_WS_WIN)
+  qtTranslator.load("qt_" + QLocale::system().name());
+#else
+  qtTranslator.load("qt_" + QLocale::system().name(),
+                    QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+#endif
+  a.installTranslator(&qtTranslator);
+}
+
+void configureApplicationName() {
+  QCoreApplication::setOrganizationName("Nitrokey");
+  QCoreApplication::setOrganizationDomain("nitrokey.com");
+  QCoreApplication::setApplicationName("Nitrokey App");
+  QCoreApplication::setApplicationVersion(GUI_VERSION);
+}
+
+bool configureParser(const QApplication &a, QCommandLineParser &parser) {
+  parser.setApplicationDescription(
+      QCoreApplication::translate("main", "Nitrokey App - Manage your Nitrokey sticks"));
+  parser.addHelpOption();
+  parser.addVersionOption();
+
+  parser.addOptions({
+      {{"d", "debug"},
+          QCoreApplication::translate("main", "Enable debug options")},
+      {"version-more",
+          QCoreApplication::translate("main", "Show additional information about binary")},
+      {{"a", "admin"},
+          QCoreApplication::translate("main", "Enable extra administrative functions")},
+      {"lock-hardware",
+          QCoreApplication::translate("main", "Show hardware lock action in tray menu")},
+      {"language-list",
+          QCoreApplication::translate("main", "List available languages")},
+      {{"l", "language"},
+          QCoreApplication::translate("main",
+                                      "Load translation file with given name"
+                                      "and store this choice in settings file."),
+          QCoreApplication::translate("main", "directory")},
+  });
+
+  parser.process(a);
+
+  if(parser.isSet("language-list")){
+    QDir langDir(":/i18n/");
+    auto list = langDir.entryList();
+    for (auto &&translationFile : list) {
+      qDebug() << translationFile.remove("nitrokey_").remove(".qm");
+    }
+    return true;
+  }
+
+  if(parser.isSet("version-more")){
+    qDebug() << CMAKE_BUILD_TYPE << GUI_VERSION << GIT_VERSION;
+    qDebug() << CMAKE_CXX_COMPILER << CMAKE_CXX_FLAGS;
+    return true;
+  }
+  return false;
+}
+

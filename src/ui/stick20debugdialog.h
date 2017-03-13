@@ -20,7 +20,6 @@
 #ifndef DEBUGDIALOG_H
 #define DEBUGDIALOG_H
 
-#include "device.h"
 #include <QDialog>
 
 namespace Ui {
@@ -34,8 +33,6 @@ class DebugDialog : public QDialog {
   QString DebugText;
 
   void updateText(void);
-
-  Device *cryptostick;
 
 private slots:
   void UpdateDebugText();

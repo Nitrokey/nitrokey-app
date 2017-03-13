@@ -20,47 +20,43 @@
 #ifndef STICK20RESPONSEDIALOG_H
 #define STICK20RESPONSEDIALOG_H
 
-#include "device.h"
-#include "response.h"
-#include "stick20-response-task.h"
+//#include "stick20-response-task.h"
 #include <QDialog>
 #include <QTimer>
+#include <memory>
 
-#define STICK20_DEBUG_TEXT_LEN 600000
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-extern char DebugText_GUI[STICK20_DEBUG_TEXT_LEN];
-extern int DebugTextlen_GUI;
-extern int DebugingActive;
-extern int DebugingStick20PoolingActive;
-
-void DebugAppendTextGui(const char *Text);
-#ifdef __cplusplus
-} // extern "C"
-#endif
 
 namespace Ui {
 class Stick20ResponseDialog;
 }
 
 class Stick20ResponseDialog : public QDialog {
-  Q_OBJECT public : Stick20ResponseTask *Stick20Task;
+  Q_OBJECT
 
-  explicit Stick20ResponseDialog(QWidget *parent = 0, Stick20ResponseTask *Stick20TaskPointer = 0);
+public :
+  explicit Stick20ResponseDialog(QWidget *parent = 0);
   ~Stick20ResponseDialog();
 
-  void checkStick20StatusDebug(Response *stick20Response, int Status);
-  void showStick20Configuration(int Status);
+  enum class Type{
+    none, wheel, progress_bar
+  };
 
-  QTimer *pollStick20Timer;
+public slots:
+  void updateOperationInProgressBar(int p);
+  void on_ShortOperationBegins(QString msg);
+  void on_ShortOperationEnds();
 
 private:
   Ui::Stick20ResponseDialog *ui;
-
-private slots:
+  std::shared_ptr<QMovie> ProgressMovie;
+  bool initialized = false;
+  void init_long_operation();
   void checkStick20StatusDialog();
+  void set_window_type(Type type, bool no_debug, QString text);
+
+  void center_window();
+
+  Type current_type = Type::none;
 };
 
 #endif // STICK20RESPONSEDIALOG_H

@@ -17,49 +17,53 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <src/core/ThreadWorker.h>
+#include <libnitrokey/include/NitrokeyManager.h>
 #include "stick20hiddenvolumedialog.h"
-#include "device.h"
 #include "math.h"
 #include "mcvs-wrapper.h"
 #include "nitrokey-applet.h"
 #include "ui_stick20hiddenvolumedialog.h"
+#include "src/utils/bool_values.h"
+
+
 
 stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::stick20HiddenVolumeDialog) {
   ui->setupUi(this);
 
-  SdCardHighWatermark_Read_Min = 0;
-  SdCardHighWatermark_Read_Max = 0;
-  SdCardHighWatermark_Write_Min = 0;
-  SdCardHighWatermark_Write_Max = 0;
-
-  HV_Setup_st.SlotNr_u8 = 0;
-  HV_Setup_st.StartBlockPercent_u8 = 70;
-  HV_Setup_st.EndBlockPercent_u8 = 90;
-  HV_Setup_st.HiddenVolumePassword_au8[0] = 0;
-
   ui->comboBox->setCurrentIndex(HV_Setup_st.SlotNr_u8);
-
-  //  ui->StartBlockSpin->setMaximum(89);
-  //  ui->StartBlockSpin->setMinimum(10);
   ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
-
-  //  ui->EndBlockSpin->setMaximum(90);
-  //  ui->EndBlockSpin->setMinimum(11);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
 
   ui->HVPasswordEdit->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-  ui->HVPasswordEdit->setText(QString((char *)HV_Setup_st.HiddenVolumePassword_au8));
+  ui->HVPasswordEdit->setText("");
 
   ui->HVPasswordEdit_2->setMaxLength(MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
-  ui->HVPasswordEdit_2->setText(QString((char *)HV_Setup_st.HiddenVolumePassword_au8));
+  ui->HVPasswordEdit_2->setText("");
 
   ui->HVPasswordEdit->setFocus();
+  ui->HV_settings_groupBox->setEnabled(false);
 
-  on_HVPasswordEdit_textChanged("");
-
-  on_rd_percent_clicked();
-  ui->rd_percent->setChecked(true);
+ThreadWorker *tw = new ThreadWorker(
+    []() -> Data {
+      Data data;
+      auto m = nitrokey::NitrokeyManager::instance();
+      auto p = m->get_SD_usage_data();
+      data["min"] = p.first;
+      data["max"] = p.second;
+      data["size"] = libada::i()->getStorageSDCardSizeGB();
+      return data;
+    },
+    [this](Data data){
+      HighWatermarkMin = (uint8_t) data["min"].toInt();
+      HighWatermarkMax = (uint8_t) data["max"].toInt();
+      sd_size_GB = data["size"].toInt();
+      setHighWaterMarkText();
+      on_rd_percent_clicked();
+      ui->rd_percent->setChecked(true);
+      ui->HV_settings_groupBox->setEnabled(true);
+    }, this);
 }
 
 stick20HiddenVolumeDialog::~stick20HiddenVolumeDialog() { delete ui; }
@@ -75,16 +79,17 @@ void stick20HiddenVolumeDialog::on_ShowPasswordCheckBox_toggled(bool checked) {
 }
 
 void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
-  if (button == ui->buttonBox->button(QDialogButtonBox::Ok)) {
+  if (button == (QAbstractButton *) ui->buttonBox->button(QDialogButtonBox::Ok)) {
     on_rd_percent_clicked();
     ui->rd_percent->setChecked(true);
 
-    if (8 > strlen(ui->HVPasswordEdit->text().toLatin1().data())) {
+    auto password_byte_array = ui->HVPasswordEdit->text().toLatin1();
+    if (8 > strlen(password_byte_array.constData())) {
         csApplet()->warningBox(tr("Your password is too short. Use at least 8 characters."));
       return;
     }
 
-    if (ui->HVPasswordEdit->text().toLatin1() != ui->HVPasswordEdit_2->text().toLatin1()) {
+    if (ui->HVPasswordEdit->text() != ui->HVPasswordEdit_2->text()) {
         csApplet()->warningBox(tr("The passwords are not identical"));
       return;
     }
@@ -107,14 +112,11 @@ void stick20HiddenVolumeDialog::on_buttonBox_clicked(QAbstractButton *button) {
       return;
     }
 
-    STRNCPY((char *)HV_Setup_st.HiddenVolumePassword_au8,
-            sizeof(HV_Setup_st.HiddenVolumePassword_au8), ui->HVPasswordEdit->text().toLatin1(),
-            MAX_HIDDEN_VOLUME_PASSOWORD_SIZE);
+    auto p = password_byte_array.constData(); //FIXME use proper copy
+    strncpy((char *) HV_Setup_st.HiddenVolumePassword_au8, p, password_byte_array.length());
     HV_Setup_st.HiddenVolumePassword_au8[MAX_HIDDEN_VOLUME_PASSOWORD_SIZE] = 0;
     done(true);
-  }
-
-  if (button == ui->buttonBox->button(QDialogButtonBox::Cancel)) {
+  } else if (button == (QAbstractButton *) ui->buttonBox->button(QDialogButtonBox::Cancel)) {
     done(false);
   }
 }
@@ -202,7 +204,8 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
   QString labels[] = {tr("Very Weak"), tr("Weak"), tr("Medium"), tr("Strong"), tr("Very Strong")};
 
   Len = arg1.length();
-  Entropy = GetEntropy((unsigned char *)arg1.toLatin1().data(), Len);
+  auto byteArray = arg1.toLatin1();
+  Entropy = GetEntropy((unsigned char *) byteArray.data(), Len);
 
   if (Entropy < 0) {
     Entropy = 0;
@@ -223,9 +226,6 @@ void stick20HiddenVolumeDialog::on_HVPasswordEdit_textChanged(const QString &arg
 }
 
 void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
-  HighWatermarkMin = SdCardHighWatermark_Write_Min;
-  HighWatermarkMax = SdCardHighWatermark_Write_Max;
-
   if (5 > HighWatermarkMin) // Set lower limit
   {
     HighWatermarkMin = 10;
@@ -241,25 +241,16 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
           .arg(HighWatermarkMin)
           .arg(HighWatermarkMax));
 
-  // Set valid input range
-  //  ui->StartBlockSpin->setMaximum(HighWatermarkMax - 1);
-  //  ui->StartBlockSpin->setMinimum(HighWatermarkMin);
   ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
-
-  //  ui->EndBlockSpin->setMaximum(HighWatermarkMax);
-  //  ui->EndBlockSpin->setMinimum(HighWatermarkMin + 1);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
-  int sd_size_GB = Stick20ProductionInfos_st.SD_Card_Size_u8;
   ui->l_sd_size->setText(tr("Storage capacity: %1GB").arg(sd_size_GB));
   ui->l_rounding_info->setText(ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100)));
 }
 
-static char last = '%';
-static double i_start_MB = 0;
-static double i_end_MB = 0;
+
 
 void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
-  size_t sd_size_MB = Stick20ProductionInfos_st.SD_Card_Size_u8 * 1024;
+  const size_t sd_size_MB = sd_size_GB * 1024u;
 
   double current_block_start = ui->StartBlockSpin->value();
   double current_block_end = ui->EndBlockSpin->value();
@@ -291,26 +282,73 @@ void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
     break;
   }
 
-  char current = (int)text.data()[0].toLatin1();
+  cancel_BlockSpin_event_propagation = true;
 
+  char current = text.data()[0].toLatin1();
   switch (current) {
-  case 'M':
-    ui->StartBlockSpin->setValue(i_start_MB);
-    ui->EndBlockSpin->setValue(i_end_MB);
-    break;
-  case 'G':
-    ui->StartBlockSpin->setValue(i_start_MB / 1024.0);
-    ui->EndBlockSpin->setValue(i_end_MB / 1024.0);
-    break;
-  case '%':
-    ui->StartBlockSpin->setValue(100.0 * i_start_MB / sd_size_MB);
-    ui->EndBlockSpin->setValue(100.0 * i_end_MB / sd_size_MB);
-    break;
-  default:
-    break;
+    case 'M':
+      current_min = HighWatermarkMin * sd_size_MB / 100.;
+      current_max = HighWatermarkMax * sd_size_MB / 100.;
+      current_step = sd_size_MB/100.;
+      set_spins_min_max(current_min, current_max, current_step);
+      ui->StartBlockSpin->setValue(i_start_MB);
+      ui->EndBlockSpin->setValue(i_end_MB);
+      break;
+    case 'G':
+      current_min = HighWatermarkMin * sd_size_GB / 100.;
+      current_max = HighWatermarkMax * sd_size_GB / 100.;
+      current_step = sd_size_GB/100.;
+      set_spins_min_max(current_min, current_max, current_step);
+      ui->StartBlockSpin->setValue(i_start_MB / 1024.0);
+      ui->EndBlockSpin->setValue(i_end_MB / 1024.0);
+      break;
+    case '%':
+      current_min = HighWatermarkMin;
+      current_max = HighWatermarkMax;
+      current_step = 1;
+      set_spins_min_max(current_min, current_max, current_step);
+      ui->StartBlockSpin->setValue(100.0 * i_start_MB / sd_size_MB);
+      ui->EndBlockSpin->setValue(100.0 * i_end_MB / sd_size_MB);
+      break;
+    default:
+      break;
   }
 
+  cancel_BlockSpin_event_propagation = false;
   last = current;
+}
+
+void stick20HiddenVolumeDialog::set_spins_min_max(const double min, const double max, const double step) {
+  ui->StartBlockSpin->setSingleStep(step);
+  ui->StartBlockSpin->setRange(min,max);
+  ui->EndBlockSpin->setSingleStep(step);
+  ui->EndBlockSpin->setRange(min,max);
+}
+
+void stick20HiddenVolumeDialog::on_EndBlockSpin_valueChanged(double i){
+  if (cancel_BlockSpin_event_propagation) return;
+  cancel_BlockSpin_event_propagation = true;
+  auto start_val = ui->StartBlockSpin->value();
+  auto current_val = ui->EndBlockSpin->value();
+  if(current_val < start_val || current_val - start_val < current_step){
+    ui->EndBlockSpin->setValue(start_val + current_step);
+  } else if(current_val > current_max){
+    ui->EndBlockSpin->setValue(current_max);
+  }
+  cancel_BlockSpin_event_propagation = false;
+}
+
+void stick20HiddenVolumeDialog::on_StartBlockSpin_valueChanged(double i){
+  if (cancel_BlockSpin_event_propagation) return;
+  cancel_BlockSpin_event_propagation = true;
+  auto end_val = ui->EndBlockSpin->value();
+  auto current_val = ui->StartBlockSpin->value();
+  if(current_val > end_val || end_val - current_val < current_step){
+    ui->StartBlockSpin->setValue(end_val - current_step);
+  } else if(current_val < current_min){
+    ui->StartBlockSpin->setValue(current_min);
+  }
+  cancel_BlockSpin_event_propagation = false;
 }
 
 void stick20HiddenVolumeDialog::on_rd_MB_clicked() { on_rd_unit_clicked("MB"); }

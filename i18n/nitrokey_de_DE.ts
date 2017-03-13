@@ -106,7 +106,7 @@ Initialisieren Sie die Schlüssel.</translation>
 SD card is not accessible
 
 </source>
-        <translation>
+        <translation type="vanished">
 Kann nicht auf SD-Karte zugreifen
 
 </translation>
@@ -116,7 +116,7 @@ Kann nicht auf SD-Karte zugreifen
 Smartcard is not accessible
 
 </source>
-        <translation>
+        <translation type="vanished">
 Kann nicht auf Chipkarte zugreifen
 
 </translation>
@@ -124,7 +124,7 @@ Kann nicht auf Chipkarte zugreifen
     <message>
         <source>No connection
 Please retry</source>
-        <translation>Keine Verbindung
+        <translation type="vanished">Keine Verbindung
 Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
@@ -158,6 +158,13 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>%1 GB</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Authentication</name>
+    <message>
+        <source>Wrong PIN. Please try again.</source>
+        <translation type="unfinished">Falsche PIN. Bitte wiederholen.</translation>
     </message>
 </context>
 <context>
@@ -279,7 +286,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>There was a problem during communicating with device. Please retry.</source>
-        <translation>Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
+        <translation type="vanished">Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>Current password is not correct. Please retry.</source>
@@ -287,7 +294,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>New password is not correct. Please retry.</source>
-        <translation>Neues Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
+        <translation type="vanished">Neues Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>New password is set</source>
@@ -295,43 +302,43 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Wrong password.</source>
-        <translation>Falsches Passwort.</translation>
+        <translation type="vanished">Falsches Passwort.</translation>
     </message>
     <message>
         <source>Couldn&apos;t change %1 password</source>
-        <translation>Konnte %1 Passwort nicht ändern</translation>
+        <translation type="vanished">Konnte %1 Passwort nicht ändern</translation>
     </message>
     <message>
         <source>Current Admin password is not correct. Please retry.</source>
-        <translation>Aktuelles Admin-Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
+        <translation type="vanished">Aktuelles Admin-Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>There was a problem during communicating with device or new password is not correct. Please retry.</source>
-        <translation>Bei der Gerätekommunikation ist ein Fehler aufgetreten oder das neue Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
+        <translation type="vanished">Bei der Gerätekommunikation ist ein Fehler aufgetreten oder das neue Passwort ist falsch. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>New User password is set</source>
-        <translation>Neue Benutzer-PIN wurde gesetzt</translation>
+        <translation type="vanished">Neue Benutzer-PIN wurde gesetzt</translation>
     </message>
     <message>
         <source>Wrong Admin PIN.</source>
-        <translation>Falsche Administrator-PIN.</translation>
+        <translation type="vanished">Falsche Administrator-PIN.</translation>
     </message>
     <message>
         <source>Couldn&apos;t unblock the user PIN. Error: %1</source>
-        <translation>Benutzer-PIN konnte nicht freigeschaltet werden. Fehler: %1</translation>
+        <translation type="vanished">Benutzer-PIN konnte nicht freigeschaltet werden. Fehler: %1</translation>
     </message>
     <message>
         <source>User PIN successfully unblocked</source>
-        <translation>Benutzer-PIN erfolgreich freigeschaltet</translation>
+        <translation type="vanished">Benutzer-PIN erfolgreich freigeschaltet</translation>
     </message>
     <message>
         <source>Wrong password or there was a communication problem with the device.</source>
-        <translation>Falsches Passwort oder Kommunikationsproblem mit dem Gerät.</translation>
+        <translation type="vanished">Falsches Passwort oder Kommunikationsproblem mit dem Gerät.</translation>
     </message>
     <message>
         <source>Password has been changed with success!</source>
-        <translation>Passwort wurde erfolgreich gesetzt!</translation>
+        <translation type="vanished">Passwort wurde erfolgreich gesetzt!</translation>
     </message>
     <message>
         <source>The minimum length of the old password is </source>
@@ -343,7 +350,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>The new password entrys are not the same</source>
-        <translation>Die neuen Passwörter sind nicht identisch</translation>
+        <translation type="vanished">Die neuen Passwörter sind nicht identisch</translation>
     </message>
     <message>
         <source>The maximum length of a password is </source>
@@ -357,56 +364,60 @@ Bitte versuchen Sie es erneut</translation>
         <source>Device is not yet initialized. Please try again later.</source>
         <translation>Gerät ist noch nicht initialisiert. Bitte versuchen Sie es später erneut.</translation>
     </message>
+    <message>
+        <source>The new password entries are not the same</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HOTPDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation type="vanished">Dialog</translation>
     </message>
     <message>
         <source>Your HOTP:</source>
-        <translation>Ihr HOTP:</translation>
+        <translation type="vanished">Ihr HOTP:</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Schließen</translation>
+        <translation type="vanished">Schließen</translation>
     </message>
     <message>
         <source>Get next</source>
-        <translation>Nächster</translation>
+        <translation type="vanished">Nächster</translation>
     </message>
     <message>
         <source>TOTP interval:</source>
-        <translation>TOTP Intervall:</translation>
+        <translation type="vanished">TOTP Intervall:</translation>
     </message>
     <message>
         <source>Valid</source>
-        <translation>Gültig</translation>
+        <translation type="vanished">Gültig</translation>
     </message>
     <message>
         <source>HOTP copied to clipboard</source>
-        <translation>HOTP wurde in die Zwischenablage kopiert</translation>
+        <translation type="vanished">HOTP wurde in die Zwischenablage kopiert</translation>
     </message>
     <message>
         <source>Next HOTP</source>
-        <translation>Nächster HOTP</translation>
+        <translation type="vanished">Nächster HOTP</translation>
     </message>
     <message>
         <source>Your TOTP:</source>
-        <translation>Ihr TOTP:</translation>
+        <translation type="vanished">Ihr TOTP:</translation>
     </message>
     <message>
         <source>Generate TOTP</source>
-        <translation>Generiere TOTP</translation>
+        <translation type="vanished">Generiere TOTP</translation>
     </message>
     <message>
         <source>TOTP copied to clipboard</source>
-        <translation>TOTP wurde in die Zwischenablage kopiert</translation>
+        <translation type="vanished">TOTP wurde in die Zwischenablage kopiert</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>Ungültig</translation>
+        <translation type="vanished">Ungültig</translation>
     </message>
 </context>
 <context>
@@ -585,7 +596,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Keyboard layout (DISABLED FEATURE):</source>
-        <translation>Tastaturlayout (FUNKTION DEAKTIVIERT)</translation>
+        <translation type="vanished">Tastaturlayout (FUNKTION DEAKTIVIERT)</translation>
     </message>
     <message>
         <source>MUI:</source>
@@ -597,22 +608,6 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>OMP:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>QWERTY</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>QWERTZ</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>AZERTY</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>DVORAK</source>
         <translation></translation>
     </message>
     <message>
@@ -681,7 +676,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>&amp;OTP</source>
-        <translation>&amp;Einmalpasswörter</translation>
+        <translation type="vanished">&amp;Einmalpasswörter</translation>
     </message>
     <message>
         <source>Slot name:</source>
@@ -689,15 +684,15 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>&amp;Factory reset</source>
-        <translation>&amp;Zurücksetzen in Auslieferungszustand</translation>
+        <translation type="vanished">&amp;Zurücksetzen in Auslieferungszustand</translation>
     </message>
     <message>
         <source>&amp;Change User PIN</source>
-        <translation>&amp;Benutzer-PIN ändern</translation>
+        <translation type="vanished">&amp;Benutzer-PIN ändern</translation>
     </message>
     <message>
         <source>&amp;Change Admin PIN</source>
-        <translation>&amp;Administrator-PIN ändern</translation>
+        <translation type="vanished">&amp;Administrator-PIN ändern</translation>
     </message>
     <message>
         <source>Static password 0</source>
@@ -725,107 +720,99 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>&amp;Debug</source>
-        <translation>&amp;Fehlersuche</translation>
+        <translation type="vanished">&amp;Fehlersuche</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>&amp;Beenden</translation>
+        <translation type="vanished">&amp;Beenden</translation>
     </message>
     <message>
         <source>&amp;About Nitrokey</source>
-        <translation>&amp;Über Nitrokey</translation>
+        <translation type="vanished">&amp;Über Nitrokey</translation>
     </message>
     <message>
         <source>&amp;OTP and Password safe</source>
-        <translation>&amp;Einmalpasswörter und Passwort-Safe</translation>
-    </message>
-    <message>
-        <source>&amp;SecPassword</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Stick 20 Setup</source>
-        <translation></translation>
+        <translation type="vanished">&amp;Einmalpasswörter und Passwort-Safe</translation>
     </message>
     <message>
         <source>&amp;Unlock encrypted volume</source>
-        <translation>&amp;Verschlüsseltes Volumen entsperren</translation>
+        <translation type="vanished">&amp;Verschlüsseltes Volumen entsperren</translation>
     </message>
     <message>
         <source>&amp;Lock encrypted volume</source>
-        <translation>&amp;Verschlüsseltes Volumen sperren</translation>
+        <translation type="vanished">&amp;Verschlüsseltes Volumen sperren</translation>
     </message>
     <message>
         <source>&amp;Unlock hidden volume</source>
-        <translation>&amp;Verstecktes Volumen freischalten</translation>
+        <translation type="vanished">&amp;Verstecktes Volumen freischalten</translation>
     </message>
     <message>
         <source>&amp;Lock hidden volume</source>
-        <translation>&amp;Verstecktes Volumen sperren</translation>
+        <translation type="vanished">&amp;Verstecktes Volumen sperren</translation>
     </message>
     <message>
         <source>&amp;Enable firmware update</source>
-        <translation>&amp;Firmware-Aktualisierung aktivieren</translation>
+        <translation type="vanished">&amp;Firmware-Aktualisierung aktivieren</translation>
     </message>
     <message>
         <source>&amp;Export firmware to file</source>
-        <translation>&amp;Firmware als Datei exportieren</translation>
+        <translation type="vanished">&amp;Firmware als Datei exportieren</translation>
     </message>
     <message>
         <source>&amp;Destroy encrypted data</source>
-        <translation>&amp;Verschlüsselte Daten zerstören</translation>
+        <translation type="vanished">&amp;Verschlüsselte Daten zerstören</translation>
     </message>
     <message>
         <source>&amp;Initialize storage with random data</source>
-        <translation>&amp;Speicher mit Zufallsdaten initialisieren</translation>
+        <translation type="vanished">&amp;Speicher mit Zufallsdaten initialisieren</translation>
     </message>
     <message>
         <source>&amp;Get stick status</source>
-        <translation>&amp;Gerätestatus</translation>
+        <translation type="vanished">&amp;Gerätestatus</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-only</source>
-        <translation>&amp;Unverschlüsseltes Volumen auf nur-Lesen setzen</translation>
+        <translation type="vanished">&amp;Unverschlüsseltes Volumen auf nur-Lesen setzen</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-write</source>
-        <translation>&amp;Unverschlüsseltes Volumen auf Lesen/Schreiben setzen</translation>
+        <translation type="vanished">&amp;Unverschlüsseltes Volumen auf Lesen/Schreiben setzen</translation>
     </message>
     <message>
         <source>&amp;Setup hidden volume</source>
-        <translation>&amp;Verstecktes Volumen einrichten</translation>
+        <translation type="vanished">&amp;Verstecktes Volumen einrichten</translation>
     </message>
     <message>
         <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
-        <translation>&amp;Warnung &apos;Speicher mit Zufallsdaten initialisieren&quot; deaktivieren</translation>
+        <translation type="vanished">&amp;Warnung &apos;Speicher mit Zufallsdaten initialisieren&quot; deaktivieren</translation>
     </message>
     <message>
         <source>&amp;Setup password matrix</source>
-        <translation>&amp;Passwortmatrix einrichten</translation>
+        <translation type="vanished">&amp;Passwortmatrix einrichten</translation>
     </message>
     <message>
         <source>&amp;Lock stick hardware</source>
-        <translation>&amp;Hardware sperren</translation>
+        <translation type="vanished">&amp;Hardware sperren</translation>
     </message>
     <message>
         <source>&amp;Lock Device</source>
-        <translation>&amp;Gerät sperren</translation>
+        <translation type="vanished">&amp;Gerät sperren</translation>
     </message>
     <message>
         <source>Smartcard or SD card are not ready</source>
-        <translation>Chipkarte oder Speicher sind nicht bereit</translation>
+        <translation type="vanished">Chipkarte oder Speicher sind nicht bereit</translation>
     </message>
     <message>
         <source>Passwords</source>
-        <translation>Passwörter</translation>
+        <translation type="vanished">Passwörter</translation>
     </message>
     <message>
         <source>Configure</source>
-        <translation>Konfigurieren</translation>
+        <translation type="vanished">Konfigurieren</translation>
     </message>
     <message>
         <source>Special Configure</source>
-        <translation>Spezial konfigurieren</translation>
+        <translation type="vanished">Spezial konfigurieren</translation>
     </message>
     <message>
         <source>TOTP length:</source>
@@ -833,15 +820,15 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Admin PIN:</source>
-        <translation>Administrator-PIN:</translation>
+        <translation type="vanished">Administrator-PIN:</translation>
     </message>
     <message>
         <source>Wrong Pin. Please try again.</source>
-        <translation>Falsche PIN. Bitte versuchen Sie es erneut.</translation>
+        <translation type="vanished">Falsche PIN. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>Enter admin PIN</source>
-        <translation>Administrator-PIN eingeben</translation>
+        <translation type="vanished">Administrator-PIN eingeben</translation>
     </message>
     <message>
         <source>Warning: Encrypted volume is not secure,
@@ -851,79 +838,79 @@ Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
     </message>
     <message>
         <source>&amp;Change Firmware Password</source>
-        <translation>&amp;Firmware Passwort ändern</translation>
+        <translation type="vanished">&amp;Firmware Passwort ändern</translation>
     </message>
     <message>
         <source>&amp;Reset User PIN</source>
-        <translation>&amp;Benutzer-PIN zurücksetzen</translation>
+        <translation type="vanished">&amp;Benutzer-PIN zurücksetzen</translation>
     </message>
     <message>
         <source>AES key generated</source>
-        <translation>AES-Schlüssel wurde generiert</translation>
+        <translation type="vanished">AES-Schlüssel wurde generiert</translation>
     </message>
     <message>
         <source>This activity locks your hidden volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>Diese Aktivität verriegelt Ihr verstecktes Volumen. Wollen Sie fortsetzen?
+        <translation type="vanished">Diese Aktivität verriegelt Ihr verstecktes Volumen. Wollen Sie fortsetzen?
 Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aushängen.</translation>
     </message>
     <message>
         <source>User pin dialog</source>
-        <translation>Benutzer-PIN Dialog</translation>
+        <translation type="vanished">Benutzer-PIN Dialog</translation>
     </message>
     <message>
         <source>Enter user PIN:</source>
-        <translation>Benutzer-PIN eingeben:</translation>
+        <translation type="vanished">Benutzer-PIN eingeben:</translation>
     </message>
     <message>
         <source>This activity locks your encrypted volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>Diese Aktivität verriegelt Ihr verschlüsseltes Volumen. Wollen Sie fortsetzen?
+        <translation type="vanished">Diese Aktivität verriegelt Ihr verschlüsseltes Volumen. Wollen Sie fortsetzen?
 Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aushängen.</translation>
     </message>
     <message>
         <source>Please enable the encrypted volume first.</source>
-        <translation>Bitte aktivieren Sie zuerst das verschlüsselte Volumen.</translation>
+        <translation type="vanished">Bitte aktivieren Sie zuerst das verschlüsselte Volumen.</translation>
     </message>
     <message>
         <source>Enter password for hidden volume</source>
-        <translation>Passwort für verstecktes Volumen eingeben</translation>
+        <translation type="vanished">Passwort für verstecktes Volumen eingeben</translation>
     </message>
     <message>
         <source>Enter password for hidden volume:</source>
-        <translation>Passwort für verstecktes Volumen:</translation>
+        <translation type="vanished">Passwort für verstecktes Volumen:</translation>
     </message>
     <message>
         <source>Enter admin PIN:</source>
-        <translation>Administrator-PIN eingeben:</translation>
+        <translation type="vanished">Administrator-PIN eingeben:</translation>
     </message>
     <message>
         <source>WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?</source>
-        <translation>WARNUNG: Die Generierung eines neuen AES-Schlüssels wird die verschlüsselten Volumen, versteckten Volumen und den Passwort-Safe zerstören! Fortfahren?</translation>
+        <translation type="vanished">WARNUNG: Die Generierung eines neuen AES-Schlüssels wird die verschlüsselten Volumen, versteckten Volumen und den Passwort-Safe zerstören! Fortfahren?</translation>
     </message>
     <message>
         <source>Admin Pin:</source>
-        <translation>Administrator-PIN:</translation>
+        <translation type="vanished">Administrator-PIN:</translation>
     </message>
     <message>
         <source>Enter user PIN</source>
-        <translation>Benutzer-PIN eingeben:</translation>
+        <translation type="vanished">Benutzer-PIN eingeben:</translation>
     </message>
     <message>
         <source>User PIN:</source>
-        <translation>Benutzer-PIN:</translation>
+        <translation type="vanished">Benutzer-PIN:</translation>
     </message>
     <message>
         <source>The selected lines must be greater then greatest password length</source>
-        <translation>Die ausgewählten Zeilen müssen größer sein als die maximale Passwortlänge</translation>
+        <translation type="vanished">Die ausgewählten Zeilen müssen größer sein als die maximale Passwortlänge</translation>
     </message>
     <message>
         <source>Not implemented</source>
-        <translation>Nicht implementiert</translation>
+        <translation type="vanished">Nicht implementiert</translation>
     </message>
     <message>
         <source>Stick20Dialog: Wrong combobox value! </source>
-        <translation>Nitrokey Storage Dialog: Falscher Combobox-Wert! </translation>
+        <translation type="vanished">Nitrokey Storage Dialog: Falscher Combobox-Wert! </translation>
     </message>
     <message>
         <source>Warning: The encrypted Volume is not formatted.
@@ -941,7 +928,7 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     </message>
     <message>
         <source>The name of the slot must not be empty.</source>
-        <translation>Der Name des Eintrags darf nicht leer sein.</translation>
+        <translation type="vanished">Der Name des Eintrags darf nicht leer sein.</translation>
     </message>
     <message>
         <source>Error writing configuration!</source>
@@ -993,11 +980,11 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     </message>
     <message>
         <source>Active (debug mode)</source>
-        <translation>aktiv (Fehlersuchmodus)</translation>
+        <translation type="vanished">aktiv (Fehlersuchmodus)</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>aktiv</translation>
+        <translation type="vanished">aktiv</translation>
     </message>
     <message>
         <source>Time is out-of-sync</source>
@@ -1009,7 +996,7 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
 The time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
 
 Reset Nitrokey&apos;s time?</source>
-        <translation>WARNUNG!
+        <translation type="vanished">WARNUNG!
 
 Die Zeit Ihres Computers und des Nitrokey sind nicht synchron. Ihr Computer könnte mit einer falschen Zeit konfiguriert sein oder Ihr Nitrokey wurde angegriffen. Falls ein Angreifer oder Schadsoftware auf Ihren Nitrokey zugegriffen haben könnte, sollten Sie die Geheimnissse der konfigurierten Einmalpasswörter ändern. Falls die Zeit Ihres Computers falsch ist, sollten Sie diese korrigieren und anschließend die Zeit ihres Nitrokey zurücksetzen.
 
@@ -1039,11 +1026,11 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Nitrokey not connected</source>
-        <translation>Nitrokey ist nicht verbunden</translation>
+        <translation type="vanished">Nitrokey ist nicht verbunden</translation>
     </message>
     <message>
         <source>&amp;Initialize device</source>
-        <translation>&amp;Gerät initialisieren</translation>
+        <translation type="vanished">&amp;Gerät initialisieren</translation>
     </message>
     <message>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
@@ -1051,11 +1038,11 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Counter value not copied - Nitrokey Storage handles HOTP counter values up to 7 digits. Setting counter value to 0. Please retry.</source>
-        <translation>Zähler nicht kopiert - Nitrokey Storage kann mit bis zu 7-stelligen HOTP-Zählern umgehen. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
+        <translation type="vanished">Zähler nicht kopiert - Nitrokey Storage kann mit bis zu 7-stelligen HOTP-Zählern umgehen. Setze Zähler auf 0. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>Enter card admin PIN</source>
-        <translation>Administrator-PIN eingeben</translation>
+        <translation type="vanished">Administrator-PIN eingeben</translation>
     </message>
     <message>
         <source>Wrong PIN. Please try again.</source>
@@ -1063,11 +1050,11 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Wrong password</source>
-        <translation>Falsches Passwort</translation>
+        <translation type="vanished">Falsches Passwort</translation>
     </message>
     <message>
         <source>Unable to create AES key</source>
-        <translation>Konnte keinen AES-Schlüssel erzeugen</translation>
+        <translation type="vanished">Konnte keinen AES-Schlüssel erzeugen</translation>
     </message>
     <message>
         <source>Device has been locked</source>
@@ -1075,37 +1062,37 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Enter Firmware Password</source>
-        <translation>Geben Sie das Firmware-Passwort ein</translation>
+        <translation type="vanished">Geben Sie das Firmware-Passwort ein</translation>
     </message>
     <message>
         <source>Enter Firmware Password:</source>
-        <translation>Geben Sie das Firmware-Passwort ein:</translation>
+        <translation type="vanished">Geben Sie das Firmware-Passwort ein:</translation>
     </message>
     <message>
         <source>There was an error during communicating with device. Please try again.</source>
-        <translation>Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
+        <translation type="vanished">Bei der Gerätekommunikation ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>This command fills the encrypted volumes with random data and will destroy all encrypted volumes!
 It requires more than 1 hour for 32GB. Do you want to continue?</source>
-        <translation>Dieser Befehl füllt das verschlüsselte Volumen mit Zufallswerten und zerstört alle verschlüsselten Volumen!
+        <translation type="vanished">Dieser Befehl füllt das verschlüsselte Volumen mit Zufallswerten und zerstört alle verschlüsselten Volumen!
 Für 32 GB dauert es mehr als 1 Stunde. Wollen Sie fortsetzen?</translation>
     </message>
     <message>
         <source>Either the password is not correct or the command execution resulted in an error. Please try again.</source>
-        <translation>Entweder ist das Passwort falsch oder bei der Ausführung trat ein Fehler auf. Bitte versuchen Sie es erneut.</translation>
+        <translation type="vanished">Entweder ist das Passwort falsch oder bei der Ausführung trat ein Fehler auf. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
         <source>(debug) Response: </source>
-        <translation>(Fehlersuche) Antwort: </translation>
+        <translation type="vanished">(Fehlersuche) Antwort: </translation>
     </message>
     <message>
         <source>Can&apos;t save slot.</source>
-        <translation>Eintrag konnte nicht gespeichert werden.</translation>
+        <translation type="vanished">Eintrag konnte nicht gespeichert werden.</translation>
     </message>
     <message>
         <source>Unable to create new AES key</source>
-        <translation>Neuer AES-Schlüssel konnte nicht erzeugt werden</translation>
+        <translation type="vanished">Neuer AES-Schlüssel konnte nicht erzeugt werden</translation>
     </message>
     <message>
         <source>Can&apos;t unlock password safe.</source>
@@ -1113,11 +1100,11 @@ Für 32 GB dauert es mehr als 1 Stunde. Wollen Sie fortsetzen?</translation>
     </message>
     <message>
         <source>Password Safe unlocked successfully.</source>
-        <translation>Passwort-Safe wurde erfolgreich freigeschaltet.</translation>
+        <translation type="vanished">Passwort-Safe wurde erfolgreich freigeschaltet.</translation>
     </message>
     <message>
         <source>Password safe is not supported by this device.</source>
-        <translation>Passwort-Safe wird durch dieses Gerät nicht unterstützt.</translation>
+        <translation type="vanished">Passwort-Safe wird durch dieses Gerät nicht unterstützt.</translation>
     </message>
     <message>
         <source>Wrong user password.</source>
@@ -1125,7 +1112,7 @@ Für 32 GB dauert es mehr als 1 Stunde. Wollen Sie fortsetzen?</translation>
     </message>
     <message>
         <source>Pasword safe: Can&apos;t get password</source>
-        <translation>Passwort-Safe: Konnte Passwort nicht lesen</translation>
+        <translation type="vanished">Passwort-Safe: Konnte Passwort nicht lesen</translation>
     </message>
     <message>
         <source>Password safe [%1]</source>
@@ -1133,7 +1120,7 @@ Für 32 GB dauert es mehr als 1 Stunde. Wollen Sie fortsetzen?</translation>
     </message>
     <message>
         <source>Enter card user PIN</source>
-        <translation>Benutzer-PIN eingeben</translation>
+        <translation type="vanished">Benutzer-PIN eingeben</translation>
     </message>
     <message>
         <source>WARNING!
@@ -1152,7 +1139,7 @@ Zeit des Nitrokey zurücksetzen?</translation>
     </message>
     <message>
         <source>Invalid password!</source>
-        <translation>Ungültiges Passwort!</translation>
+        <translation type="vanished">Ungültiges Passwort!</translation>
     </message>
     <message>
         <source>Counter must be a value between 0 and %1</source>
@@ -1212,70 +1199,54 @@ Falls das Problem erneut auftritt:
     </message>
     <message>
         <source>Detected some communication problems with the device.</source>
-        <translation>Es wurde ein Kommunikationsproblem mit dem Gerät festgestellt.</translation>
+        <translation type="vanished">Es wurde ein Kommunikationsproblem mit dem Gerät festgestellt.</translation>
     </message>
     <message>
         <source>Cannot get OTP code.</source>
-        <translation>Einmalpasswort konnte nicht erhalten werden.</translation>
+        <translation type="vanished">Einmalpasswort konnte nicht erhalten werden.</translation>
+    </message>
+    <message>
+        <source>&lt;Select Password Safe slot&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password safe unlocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AES keys not initialized. Please provide Admin PIN.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keys generated. Please unlock Password Safe again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong admin password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User not authenticated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Nitrokey&apos;s time?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Closing window due to device disconnection</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>7</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>8</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>9</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Send data</source>
-        <translation>Sende Daten</translation>
+        <translation type="vanished">Sende Daten</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>Schließen</translation>
+        <translation type="vanished">Schließen</translation>
     </message>
 </context>
 <context>
@@ -1298,106 +1269,98 @@ Falls das Problem erneut auftritt:
     </message>
     <message>
         <source>Your PIN is too long! Use not more than 30 characters.</source>
-        <translation>Die eingegebene PIN ist zu lang. Verwenden Sie nicht mehr als 30 Zeichen.</translation>
+        <translation type="vanished">Die eingegebene PIN ist zu lang. Verwenden Sie nicht mehr als 30 Zeichen.</translation>
     </message>
     <message>
         <source>Your PIN is too short. Use at least 6 characters.</source>
-        <translation>Die eingegebene PIN ist zu kurz. Verwenden Sie mindestens 6 Zeichen.</translation>
+        <translation type="vanished">Die eingegebene PIN ist zu kurz. Verwenden Sie mindestens 6 Zeichen.</translation>
     </message>
     <message>
         <source>Warning: Default PIN is used.
 Please change the PIN.</source>
-        <translation>Warnung: Die Standard-PIN wird verwendet.
+        <translation type="vanished">Warnung: Die Standard-PIN wird verwendet.
 Bitte ändern Sie die PIN.</translation>
     </message>
     <message>
         <source>Device is not yet initialized. Please try again later.</source>
-        <translation>Gerät ist noch nicht initialisiert. Bitte versuchen Sie es später erneut.</translation>
+        <translation type="vanished">Gerät ist noch nicht initialisiert. Bitte versuchen Sie es später erneut.</translation>
     </message>
 </context>
 <context>
     <name>PasswordSafeDialog</name>
     <message>
         <source>Password safe</source>
-        <translation>Passwort-Safe</translation>
+        <translation type="vanished">Passwort-Safe</translation>
     </message>
     <message>
         <source>Send password</source>
-        <translation>Passwort senden</translation>
+        <translation type="vanished">Passwort senden</translation>
     </message>
     <message>
         <source>Send loginname</source>
-        <translation>Loginnamen senden</translation>
+        <translation type="vanished">Loginnamen senden</translation>
     </message>
     <message>
         <source>Send PW tab LN</source>
-        <translation>Passwort - Tabulator - Login senden</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation></translation>
+        <translation type="vanished">Passwort - Tabulator - Login senden</translation>
     </message>
     <message>
         <source> Cut &amp;&amp; paste</source>
-        <translation>Kopieren und einfügen</translation>
+        <translation type="vanished">Kopieren und einfügen</translation>
     </message>
     <message>
         <source> via Keyboard</source>
-        <translation>mittels Tastatur</translation>
+        <translation type="vanished">mittels Tastatur</translation>
     </message>
     <message>
         <source>Password Safe Slot </source>
-        <translation>Passwort-Safe Eintrag</translation>
+        <translation type="vanished">Passwort-Safe Eintrag</translation>
     </message>
     <message>
         <source> clicked.
 Press &lt;Button&gt; to copy value to clipboard</source>
-        <translation> Geklickt.
+        <translation type="vanished"> Geklickt.
 Drücke &lt;Button&gt; um Wert in Zwischenablage zu kopieren</translation>
     </message>
     <message>
         <source>Can&apos;t send password chars via HID</source>
-        <translation>Kann Passwort-Zeichen nicht mittels HID senden</translation>
+        <translation type="vanished">Kann Passwort-Zeichen nicht mittels HID senden</translation>
     </message>
     <message>
         <source>Can&apos;t get password</source>
-        <translation>Passwort nicht erhalten</translation>
+        <translation type="vanished">Passwort nicht erhalten</translation>
     </message>
     <message>
         <source>Can&apos;t send loginname via keyboard</source>
-        <translation>Konnte Loginnamen nicht mittels Tastatur senden</translation>
+        <translation type="vanished">Konnte Loginnamen nicht mittels Tastatur senden</translation>
     </message>
     <message>
         <source>Can&apos;t send CR via keyboard</source>
-        <translation>Konnte CR nicht mittels Tastatur senden</translation>
+        <translation type="vanished">Konnte CR nicht mittels Tastatur senden</translation>
     </message>
     <message>
         <source>Can&apos;t send password via keyboard</source>
-        <translation>Konnte Passwort nicht mittels Tastatur senden</translation>
+        <translation type="vanished">Konnte Passwort nicht mittels Tastatur senden</translation>
     </message>
     <message>
         <source>Can&apos;t send loginname chars via HID</source>
-        <translation>Konnte Loginnamen-Zeichen nicht mittels HID senden</translation>
+        <translation type="vanished">Konnte Loginnamen-Zeichen nicht mittels HID senden</translation>
     </message>
     <message>
         <source>PW Safe Slot </source>
-        <translation>Passwort-Safe Eintrag</translation>
+        <translation type="vanished">Passwort-Safe Eintrag</translation>
     </message>
     <message>
         <source> clicked.
 Press &lt;Button&gt; and set cursor to the input dialog.
 The value is send in </source>
-        <translation> Geklickt.
+        <translation type="vanished"> Geklickt.
 Drücken Sie &lt;Button&gt; und setzen Sie den Cursor in die Eingabemaske.
 Der Wert wird gesendet in </translation>
     </message>
     <message>
         <source> seconds</source>
-        <translation>Sekunden</translation>
+        <translation type="vanished">Sekunden</translation>
     </message>
 </context>
 <context>
@@ -1416,7 +1379,7 @@ Der Wert wird gesendet in </translation>
     </message>
     <message>
         <source>Use password matrix</source>
-        <translation>Passwortmatrix verwenden</translation>
+        <translation type="vanished">Passwortmatrix verwenden</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -1452,53 +1415,77 @@ Bitte ändern Sie die PIN.</translation>
         <source>Device is not yet initialized. Please try again later.</source>
         <translation>Gerät ist noch nicht initialisiert. Bitte versuchen Sie es später erneut.</translation>
     </message>
+    <message>
+        <source>Enter user PIN</source>
+        <translation type="unfinished">Benutzer-PIN eingeben:</translation>
+    </message>
+    <message>
+        <source>User PIN:</source>
+        <translation type="unfinished">Benutzer-PIN:</translation>
+    </message>
+    <message>
+        <source>Enter admin PIN</source>
+        <translation type="unfinished">Administrator-PIN eingeben</translation>
+    </message>
+    <message>
+        <source>Admin PIN:</source>
+        <translation type="unfinished">Administrator-PIN:</translation>
+    </message>
+    <message>
+        <source>Enter Firmware Password</source>
+        <translation type="unfinished">Geben Sie das Firmware-Passwort ein</translation>
+    </message>
+    <message>
+        <source>Enter Firmware Password:</source>
+        <translation type="unfinished">Geben Sie das Firmware-Passwort ein:</translation>
+    </message>
+    <message>
+        <source>Enter password for hidden volume</source>
+        <translation type="unfinished">Passwort für verstecktes Volumen eingeben</translation>
+    </message>
+    <message>
+        <source>Enter password for hidden volume:</source>
+        <translation type="unfinished">Passwort für verstecktes Volumen:</translation>
+    </message>
 </context>
 <context>
     <name>Stick20Dialog</name>
     <message>
         <source>Stick 2.0</source>
-        <translation>Nitrokey Storage</translation>
+        <translation type="vanished">Nitrokey Storage</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Stick 2.0 command&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Nitrokey Storage Befehl&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Nitrokey Storage Befehl&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Administrator-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Administrator-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>PIN</source>
-        <translation>PIN</translation>
+        <translation type="vanished">PIN</translation>
     </message>
     <message>
         <source>Show PIN</source>
-        <translation>PIN anzeigen</translation>
+        <translation type="vanished">PIN anzeigen</translation>
     </message>
     <message>
         <source>Use matrix</source>
-        <translation>Matrix verwenden</translation>
+        <translation type="vanished">Matrix verwenden</translation>
     </message>
 </context>
 <context>
     <name>Stick20InfoDialog</name>
     <message>
         <source>Device status</source>
-        <translation>Gerätestatus</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation></translation>
+        <translation type="vanished">Gerätestatus</translation>
     </message>
     <message>
         <source>Nitrokey Storage status
 
 </source>
-        <translation>Status des Nitrokey Storage
+        <translation type="vanished">Status des Nitrokey Storage
 
 </translation>
     </message>
@@ -1526,119 +1513,250 @@ Bitte ändern Sie die PIN.</translation>
     <name>Stick20ResponseTask</name>
     <message>
         <source>Wrong password</source>
-        <translation>Falsches Passwort</translation>
+        <translation type="vanished">Falsches Passwort</translation>
     </message>
     <message>
         <source>Encrypted volume unlocked successfully</source>
-        <translation>Verschlüsseltes Volumen wurde erfolgreich entsperrt</translation>
+        <translation type="vanished">Verschlüsseltes Volumen wurde erfolgreich entsperrt</translation>
     </message>
     <message>
         <source>Encrypted volume locked successfully</source>
-        <translation>Verschlüsseltes Volumen wurde erfolgreich gesperrt</translation>
+        <translation type="vanished">Verschlüsseltes Volumen wurde erfolgreich gesperrt</translation>
     </message>
     <message>
         <source>Hidden volume unlocked successfully</source>
-        <translation>Verstecktes Volumen wurde erfolgreich entsperrt</translation>
+        <translation type="vanished">Verstecktes Volumen wurde erfolgreich entsperrt</translation>
     </message>
     <message>
         <source>Hidden volume locked successfully</source>
-        <translation>Verstecktes Volumen wurde erfolgreich gesperrt</translation>
+        <translation type="vanished">Verstecktes Volumen wurde erfolgreich gesperrt</translation>
     </message>
     <message>
         <source>Hidden volume setup successfully</source>
-        <translation>Verstecktes Volumen wurde erfolgreich eingerichtet</translation>
+        <translation type="vanished">Verstecktes Volumen wurde erfolgreich eingerichtet</translation>
     </message>
     <message>
         <source>Cleartext volume is in readonly mode</source>
-        <translation>Klartext-Volumen ist im Nur-Lese-Modus</translation>
+        <translation type="vanished">Klartext-Volumen ist im Nur-Lese-Modus</translation>
     </message>
     <message>
         <source>Cleartext volume is in readwrite mode</source>
-        <translation>Klartext-Volumen ist im Lese-Schreib-Modus</translation>
+        <translation type="vanished">Klartext-Volumen ist im Lese-Schreib-Modus</translation>
     </message>
     <message>
         <source>Warning disabled</source>
-        <translation>Warnung deaktiviert</translation>
+        <translation type="vanished">Warnung deaktiviert</translation>
     </message>
     <message>
         <source>Firmware is locked</source>
-        <translation>Firmware ist gesperrt</translation>
+        <translation type="vanished">Firmware ist gesperrt</translation>
     </message>
     <message>
         <source>Firmware exported successfully</source>
-        <translation>Firmware wurde erfolgreich exportiert</translation>
+        <translation type="vanished">Firmware wurde erfolgreich exportiert</translation>
     </message>
     <message>
         <source>New keys generated successfully</source>
-        <translation>Neue Schlüssel wurden erfolgreich generiert</translation>
+        <translation type="vanished">Neue Schlüssel wurden erfolgreich generiert</translation>
     </message>
     <message>
         <source>Storage successfully initialized with random data</source>
-        <translation>Der Speicher wurde erfolgreich mit Zufallsdaten initialisiert. Um die Initialisierung abzuschließen, entfernen Sie das Gerät und verbinden Sie es bitte erneut.</translation>
+        <translation type="vanished">Der Speicher wurde erfolgreich mit Zufallsdaten initialisiert. Um die Initialisierung abzuschließen, entfernen Sie das Gerät und verbinden Sie es bitte erneut.</translation>
     </message>
     <message>
         <source>Can&apos;t enable hidden volume</source>
-        <translation>Verstecktes Volumen konnte nicht aktiviert werden</translation>
+        <translation type="vanished">Verstecktes Volumen konnte nicht aktiviert werden</translation>
     </message>
     <message>
         <source>Please enable the encrypted volume first.</source>
-        <translation>Bitte aktivieren Sie zuerst das verschlüsselte Volumen.</translation>
+        <translation type="vanished">Bitte aktivieren Sie zuerst das verschlüsselte Volumen.</translation>
     </message>
     <message>
         <source>Encrypted volume was not enabled, please enable the encrypted volume</source>
-        <translation>Verschlüsseltes Volumen war nicht aktiv. Bitte aktivieren Sie das verschlüsselte Volumen</translation>
+        <translation type="vanished">Verschlüsseltes Volumen war nicht aktiv. Bitte aktivieren Sie das verschlüsselte Volumen</translation>
     </message>
     <message>
         <source>Smartcard error, please retry the command</source>
-        <translation>Chipkarten-Fehler. Bitte versuchen Sie den Befehl erneut</translation>
+        <translation type="vanished">Chipkarten-Fehler. Bitte versuchen Sie den Befehl erneut</translation>
     </message>
     <message>
         <source>Security bit of the device is activated.
 Firmware update is not possible.</source>
-        <translation>Sicherheits-Bit des Geräts ist aktiviert.
+        <translation type="vanished">Sicherheits-Bit des Geräts ist aktiviert.
 Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     </message>
 </context>
 <context>
     <name>Stick20Setup</name>
     <message>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Stick 2.0 setup</source>
-        <translation>Nitrokey Storage konfigurieren</translation>
+        <translation type="vanished">Nitrokey Storage konfigurieren</translation>
     </message>
     <message>
         <source>Change admin PIN</source>
-        <translation>Ändere Administrator-PIN</translation>
+        <translation type="vanished">Ändere Administrator-PIN</translation>
     </message>
     <message>
         <source>Change password</source>
-        <translation>Ändere Passwort</translation>
+        <translation type="vanished">Ändere Passwort</translation>
     </message>
     <message>
         <source>Change matrix input</source>
-        <translation>Ändere Matrix-Eingabe</translation>
+        <translation type="vanished">Ändere Matrix-Eingabe</translation>
     </message>
     <message>
         <source>Setup hidden volume</source>
-        <translation>Versteckte Volumen einrichten</translation>
+        <translation type="vanished">Versteckte Volumen einrichten</translation>
     </message>
     <message>
         <source>The selected lines must be greater then greatest password length</source>
-        <translation>Die ausgewählten Zeilen müssen größer als die maximale Passwortlänge sein</translation>
+        <translation type="vanished">Die ausgewählten Zeilen müssen größer als die maximale Passwortlänge sein</translation>
     </message>
     <message>
         <source>Build a new base key for the hidden volume? all data get lost</source>
-        <translation>Einen neuen Basisschlüssel für die versteckten Volumen erzeugen? Alle Daten werden dabei gelöscht</translation>
+        <translation type="vanished">Einen neuen Basisschlüssel für die versteckten Volumen erzeugen? Alle Daten werden dabei gelöscht</translation>
     </message>
 </context>
 <context>
     <name>Stick20Window</name>
     <message>
         <source>MainWindow</source>
-        <translation>Hauptfenster</translation>
+        <translation type="vanished">Hauptfenster</translation>
+    </message>
+</context>
+<context>
+    <name>Tray</name>
+    <message>
+        <source>Active (debug mode)</source>
+        <translation type="unfinished">aktiv (Fehlersuchmodus)</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished">aktiv</translation>
+    </message>
+    <message>
+        <source>Nitrokey not connected</source>
+        <translation type="unfinished">Nitrokey ist nicht verbunden</translation>
+    </message>
+    <message>
+        <source>Unlock password safe</source>
+        <translation type="unfinished">Passwort-Safe entsperren</translation>
+    </message>
+    <message>
+        <source>&amp;OTP</source>
+        <translation type="unfinished">&amp;Einmalpasswörter</translation>
+    </message>
+    <message>
+        <source>&amp;Factory reset</source>
+        <translation type="unfinished">&amp;Zurücksetzen in Auslieferungszustand</translation>
+    </message>
+    <message>
+        <source>&amp;Change User PIN</source>
+        <translation type="unfinished">&amp;Benutzer-PIN ändern</translation>
+    </message>
+    <message>
+        <source>&amp;Change Admin PIN</source>
+        <translation type="unfinished">&amp;Administrator-PIN ändern</translation>
+    </message>
+    <message>
+        <source>&amp;Debug</source>
+        <translation type="unfinished">&amp;Fehlersuche</translation>
+    </message>
+    <message>
+        <source>&amp;Quit</source>
+        <translation type="unfinished">&amp;Beenden</translation>
+    </message>
+    <message>
+        <source>&amp;About Nitrokey</source>
+        <translation type="unfinished">&amp;Über Nitrokey</translation>
+    </message>
+    <message>
+        <source>&amp;OTP and Password safe</source>
+        <translation type="unfinished">&amp;Einmalpasswörter und Passwort-Safe</translation>
+    </message>
+    <message>
+        <source>&amp;Unlock encrypted volume</source>
+        <translation type="unfinished">&amp;Verschlüsseltes Volumen entsperren</translation>
+    </message>
+    <message>
+        <source>&amp;Lock encrypted volume</source>
+        <translation type="unfinished">&amp;Verschlüsseltes Volumen sperren</translation>
+    </message>
+    <message>
+        <source>&amp;Unlock hidden volume</source>
+        <translation type="unfinished">&amp;Verstecktes Volumen freischalten</translation>
+    </message>
+    <message>
+        <source>&amp;Lock hidden volume</source>
+        <translation type="unfinished">&amp;Verstecktes Volumen sperren</translation>
+    </message>
+    <message>
+        <source>&amp;Change Firmware Password</source>
+        <translation type="unfinished">&amp;Firmware Passwort ändern</translation>
+    </message>
+    <message>
+        <source>&amp;Enable firmware update</source>
+        <translation type="unfinished">&amp;Firmware-Aktualisierung aktivieren</translation>
+    </message>
+    <message>
+        <source>&amp;Export firmware to file</source>
+        <translation type="unfinished">&amp;Firmware als Datei exportieren</translation>
+    </message>
+    <message>
+        <source>&amp;Destroy encrypted data</source>
+        <translation type="unfinished">&amp;Verschlüsselte Daten zerstören</translation>
+    </message>
+    <message>
+        <source>&amp;Initialize device</source>
+        <translation type="unfinished">&amp;Gerät initialisieren</translation>
+    </message>
+    <message>
+        <source>&amp;Initialize storage with random data</source>
+        <translation type="unfinished">&amp;Speicher mit Zufallsdaten initialisieren</translation>
+    </message>
+    <message>
+        <source>&amp;Set unencrypted volume read-only</source>
+        <translation type="unfinished">&amp;Unverschlüsseltes Volumen auf nur-Lesen setzen</translation>
+    </message>
+    <message>
+        <source>&amp;Set unencrypted volume read-write</source>
+        <translation type="unfinished">&amp;Unverschlüsseltes Volumen auf Lesen/Schreiben setzen</translation>
+    </message>
+    <message>
+        <source>&amp;Setup hidden volume</source>
+        <translation type="unfinished">&amp;Verstecktes Volumen einrichten</translation>
+    </message>
+    <message>
+        <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
+        <translation type="unfinished">&amp;Warnung &apos;Speicher mit Zufallsdaten initialisieren&quot; deaktivieren</translation>
+    </message>
+    <message>
+        <source>&amp;Lock stick hardware</source>
+        <translation type="unfinished">&amp;Hardware sperren</translation>
+    </message>
+    <message>
+        <source>&amp;Reset User PIN</source>
+        <translation type="unfinished">&amp;Benutzer-PIN zurücksetzen</translation>
+    </message>
+    <message>
+        <source>&amp;Lock Device</source>
+        <translation type="unfinished">&amp;Gerät sperren</translation>
+    </message>
+    <message>
+        <source>Smartcard or SD card are not ready</source>
+        <translation type="unfinished">Chipkarte oder Speicher sind nicht bereit</translation>
+    </message>
+    <message>
+        <source>Passwords</source>
+        <translation type="unfinished">Passwörter</translation>
+    </message>
+    <message>
+        <source>Configure</source>
+        <translation type="unfinished">Konfigurieren</translation>
+    </message>
+    <message>
+        <source>Special Configure</source>
+        <translation type="unfinished">Spezial konfigurieren</translation>
     </message>
 </context>
 <context>
@@ -1650,6 +1768,41 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wenn Sie mit &amp;quot;OK&amp;quot; bestätigen wird der Nitrokey &lt;br/&gt;in den Firmware-Aktualisierungs-Modus versetzt. Dies lässt sich nicht rückgängig machen!&lt;br/&gt;Bitte lesen Sie die &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Dokumentation &lt;/span&gt;&lt;/a&gt;um die &lt;br/&gt;Firmware zu aktualisieren.&lt;/p&gt;&lt;p&gt;Mit Firmware-Aktualisierungs-Modus fortfahren?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Nitrokey App - Manage your Nitrokey sticks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable debug options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show additional information about binary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable extra administrative functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show hardware lock action in tray menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List available languages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load translation file with given nameand store this choice in settings file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

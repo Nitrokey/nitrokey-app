@@ -18,30 +18,51 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "device.h"
 #include "mcvs-wrapper.h"
-
 #include "pindialog.h"
-#include "ui_passworddialog.h"
-
 #include "nitrokey-applet.h"
-#include "stick20matrixpassworddialog.h"
+#include "libada.h"
+#include "src/utils/bool_values.h"
 
 #define LOCAL_PASSWORD_SIZE 40 // Todo make define global
 
-PinDialog::PinDialog(const QString &title, const QString &label, Device *cryptostick, Usage usage,
-                     PinType pinType, bool ShowMatrix, QWidget *parent)
-    : cryptostick(cryptostick), _usage(usage), _pinType(pinType), QDialog(parent),
-      ui(new Ui::PinDialog) {
+PinDialog::PinDialog(PinType pinType, QWidget *parent)
+    : _pinType(pinType), QDialog(parent)
+{
+  ui = std::make_shared<Ui::PinDialog>();
   ui->setupUi(this);
 
-  connect(ui->okButton, SIGNAL(clicked()), this, SLOT(onOkButtonClicked()));
-
-  // Setup pwd-matrix
-  ui->checkBox_PasswordMatrix->setCheckState(Qt::Unchecked);
-  if (FALSE == ShowMatrix) {
-    ui->checkBox_PasswordMatrix->hide();
+  ui->status->setText(tr("Tries left: %1").arg("..."));
+  QString title, label;
+  switch (pinType){
+    case USER_PIN:
+      title = tr("Enter user PIN");
+      label = tr("User PIN:");
+      break;
+    case ADMIN_PIN:
+      title = tr("Enter admin PIN");
+      label = tr("Admin PIN:");
+      break;
+    case FIRMWARE_PIN:
+      title = tr("Enter Firmware Password");
+      label = tr("Enter Firmware Password:");
+      ui->status->setVisible(false);
+      break;
+    case OTHER:
+        break;
+    case HIDDEN_VOLUME:
+      title = tr("Enter password for hidden volume");
+      label = tr("Enter password for hidden volume:");
+      ui->status->setVisible(false);
+      break;
   }
+
+  connect(&worker_thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
+  connect(&worker, SIGNAL(finished()), this, SLOT(updateTryCounter()));
+  worker.moveToThread(&worker_thread);
+  worker_thread.start();
+
+  connect(ui->okButton, SIGNAL(clicked()), this, SLOT(onOkButtonClicked()));
 
   // Setup title and label
   this->setWindowTitle(title);
@@ -51,26 +72,13 @@ PinDialog::PinDialog(const QString &title, const QString &label, Device *cryptos
                                                     // other occurences
 
   // ui->status->setVisible(false);
-  updateTryCounter();
 
   ui->lineEdit->setFocus();
 }
 
-PinDialog::~PinDialog() { delete ui; }
-
-/*
-   void PinDialog::init(char *text,int RetryCount) { char text1[20];
-
-   text1[0] = 0; if (-1 != RetryCount) { SNPRINTF (text1,sizeof (text1)," (Tries
-   left: %d)",RetryCount); } ui->label->setText(tr(text)+tr(text1)); } */
-
-void PinDialog::getPassword(char *text) {
-  STRCPY(text, LOCAL_PASSWORD_SIZE, (char *)password);
-  clearBuffers();
-  /*
-     if (FALSE == ui->checkBox_PasswordMatrix->isChecked()) { STRCPY
-     (&text[1],LOCAL_PASSWORD_SIZE-1,ui->lineEdit->text().toLatin1()); } else {
-     STRCPY (text,LOCAL_PASSWORD_SIZE,(char*)password); } */
+PinDialog::~PinDialog() {
+  worker_thread.quit();
+  worker_thread.wait();
 }
 
 void PinDialog::getPassword(QString &pin) {
@@ -78,86 +86,45 @@ void PinDialog::getPassword(QString &pin) {
   clearBuffers();
 }
 
+std::string PinDialog::getPassword() {
+  std::string pin = ui->lineEdit->text().toStdString();
+  clearBuffers();
+  return pin;
+}
+
 void PinDialog::on_checkBox_toggled(bool checked) {
   ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }
 
-void PinDialog::on_checkBox_PasswordMatrix_toggled(bool checked) {
-  ui->lineEdit->setDisabled(checked);
-}
 
 void PinDialog::onOkButtonClicked() {
   int n;
 
-  QByteArray passwordString;
+  // Check the password length
+  auto passwordString = ui->lineEdit->text().toLatin1();
+  n = passwordString.size();
+  if (30 <= n) // FIXME use constants/defines!
+  {
+      csApplet()->warningBox(tr("Your PIN is too long! Use not more than 30 characters."));
+    ui->lineEdit->clear();
+    return;
+  }
+  if (6 > n) {
+      csApplet()->warningBox(tr("Your PIN is too short. Use at least 6 characters."));
+    ui->lineEdit->clear();
+    return;
+  }
 
-  // Initialize password
-  memset(password, 0, 50);
-
-  if (false == ui->checkBox_PasswordMatrix->isChecked()) {
-    // Send normal password
-    if (PREFIXED == _usage) {
-      password[0] = 'P';
-    }
-
-    // Check the password length
-    passwordString = ui->lineEdit->text().toLatin1();
-    n = passwordString.size();
-    if (30 <= n) // FIXME use constants/defines!
-    {
-        csApplet()->warningBox(tr("Your PIN is too long! Use not more than 30 characters."));
-      ui->lineEdit->clear();
-      return;
-    }
-    if (6 > n) {
-        csApplet()->warningBox(tr("Your PIN is too short. Use at least 6 characters."));
-      ui->lineEdit->clear();
-      return;
-    }
-
-    // Check for default pin
-    if ((0 == strcmp(passwordString, "123456")) || (0 == strcmp(passwordString, "12345678"))) {
-        csApplet()->warningBox(tr("Warning: Default PIN is used.\nPlease change the PIN."));
-    }
-
-    if (PREFIXED == _usage) {
-      memcpy(&password[1], passwordString.data(), n);
-    } else {
-      memcpy(password, passwordString.data(), n);
-    }
-  } else {
-    if (NULL != cryptostick) {
-      // Get matrix password
-      MatrixPasswordDialog dialog(this);
-
-      dialog.setModal(TRUE);
-
-      dialog.cryptostick = cryptostick;
-      dialog.PasswordLen = 19;
-      dialog.SetupInterfaceFlag = false;
-
-      dialog.InitSecurePasswordDialog();
-
-      if (false == dialog.exec()) {
-        done(FALSE);
-        return;
-      }
-
-      // Copy the matrix password
-      if (PREFIXED == _usage) {
-        password[0] = 'M'; // For matrix password
-        dialog.CopyMatrixPassword((char *)&password[1], 49);
-      } else {
-        dialog.CopyMatrixPassword((char *)password, 50);
-      }
-    }
+  // Check for default pin
+  if (passwordString == "123456" || passwordString == "12345678") {
+      csApplet()->warningBox(tr("Warning: Default PIN is used.\nPlease change the PIN."));
   }
 
   done(Accepted);
 }
 
 int PinDialog::exec() {
-  if (!cryptostick->isInitialized()) {
+  if (!libada::i()->isDeviceInitialized()) {
         UI_deviceNotInitialized();
         done(Rejected);
         return QDialog::Rejected;
@@ -170,13 +137,12 @@ void PinDialog::updateTryCounter() {
 
   switch (_pinType) {
   case ADMIN_PIN:
-    cryptostick->getPasswordRetryCount();
-    triesLeft = HID_Stick20Configuration_st.AdminPwRetryCount;
+    triesLeft = worker.devdata.retry_admin_count;
     break;
   case USER_PIN:
-    cryptostick->getUserPasswordRetryCount();
-    triesLeft = HID_Stick20Configuration_st.UserPwRetryCount;
+    triesLeft = worker.devdata.retry_user_count;
     break;
+  case HIDDEN_VOLUME:
   case FIRMWARE_PIN:
   case OTHER:
     // Hide tries left field
@@ -184,14 +150,25 @@ void PinDialog::updateTryCounter() {
     break;
   }
 
-
   // Update 'tries-left' field
   ui->status->setText(tr("Tries left: %1").arg(triesLeft));
 }
 
-void PinDialog::UI_deviceNotInitialized() const { csApplet()->warningBox(tr("Device is not yet initialized. Please try again later.")); }
+void PinDialog::UI_deviceNotInitialized() const {
+  csApplet()->warningBox(tr("Device is not yet initialized. Please try again later."));
+}
 
 void PinDialog::clearBuffers() {
-  memset(password, 0, 50);
+  //FIXME securely delete string in UI
+  //FIXME make sure compiler will not ignore this
   ui->lineEdit->clear();
+  ui->lineEdit->setText(ui->lineEdit->placeholderText());
 }
+
+//TODO get only the one interesting counter
+void PinDialogUI::Worker::fetch_device_data() {
+  devdata.retry_admin_count = libada::i()->getAdminPasswordRetryCount();
+  devdata.retry_user_count = libada::i()->getUserPasswordRetryCount();
+  emit finished();
+}
+
