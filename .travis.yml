@@ -5,22 +5,26 @@ os:
   - linux
 #  - osx
 
-sudo: true
+sudo: true #for beineri qt551
 dist: trusty
 
 before_install:
   - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r-test
   - sudo apt-get -qq update
   - sudo apt-get -qq install qt55base
-  - sudo apt-get install -y build-essential cmake libusb-1.0-0 libusb-1.0-0-dev mesa-common-dev libgl1-mesa-dev
+  - sudo apt-get install -y cmake libhidapi-dev g++-5 clang-3.8
 
 compiler:
   - g++
   - clang++
 
 script:
-  - source /opt/qt55/bin/qt55-env.sh
-  - if [ "$builder" == "qmake" ]; then /opt/qt55/bin/qmake && make ; fi
+  - if [ "TRAVIS_OS_NAME" == "linux" ]; then source /opt/qt55/bin/qt55-env.sh ; fi
+  - if [ "TRAVIS_OS_NAME" == "linux" ]; then export QMAKE=/opt/qt55/bin/qmake; fi
+  - if [ "TRAVIS_OS_NAME" == "osx" ]; then export QMAKE=qmake; fi
+  - if [ "$builder" == "qmake" ]; then cd libnitrokey/build/ && cmake .. && make ; fi
+  - if [ "$builder" == "qmake" ]; then ${QMAKE} && make ; fi
   - if [ "$builder" == "cmake" ]; then cmake . && make VERBOSE=1; fi
 
 env:
@@ -31,3 +35,13 @@ matrix:
   exclude:
     - compiler: clang++
       env: builder=qmake
+  include:
+    - os: osx
+      osx_image: xcode7.3 #default
+      before_install:
+    - os: osx
+      osx_image: xcode6.4
+      before_install:
+    - os: osx
+      osx_image: xcode8.2
+      before_install:
