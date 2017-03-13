@@ -1,5 +1,5 @@
 
-CONFIG   += qt c++14 console
+CONFIG   += qt c++14
 QT       += core gui
 
 target.path = /usr/local/bin
