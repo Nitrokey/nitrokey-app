@@ -36,10 +36,23 @@ public:
     };
 
     OTPSlot();
+    ~OTPSlot(){
+      volatile char* p;
+      p = slotName;
+      for (int i = 0; i < sizeof(slotName); ++i) {
+        p[i] = 0;
+      }
+      p = secret;
+      for (int i = 0; i < sizeof(secret); ++i) {
+        p[i] = 0;
+      }
+      slotNumber = 0;
+      type = OTPType::UNKNOWN;
+    }
 
     OTPType type;
     uint8_t slotNumber;
-    char slotName[15];
+    char slotName[15+1] = {};
     char secret[SECRET_LENGTH_HEX+1] = {};
     union {
         uint8_t counter[8];
@@ -53,7 +66,7 @@ public:
             bool useTokenID :1;
         } config_st;
     };
-    char tokenID[13];
+    char tokenID[13+1] = {};
     bool isProgrammed;
 };
 
