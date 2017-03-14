@@ -1,4 +1,4 @@
-language: generic
+language: cpp
 
 notifications:
     email: false
@@ -17,8 +17,8 @@ before_install:
   - sudo apt-get -qq install ${AF} cmake libhidapi-dev g++-5 g++-6 clang-3.8
 
 cache:
-#  - apt
   - ccache
+  - apt
 
 
 script:
@@ -47,16 +47,16 @@ matrix:
     - os: osx
       osx_image: xcode7.3 #default
       before_install:
-      env: builder=cmake
+      env: builder=cmake PATH="/usr/local/opt/qt5/bin:$PATH
     - os: osx
       osx_image: xcode7.3 #default
       before_install:
-      env: builder=qmake
+      env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH
     - os: osx
       osx_image: xcode6.4
       before_install:
-      env: builder=qmake
+      env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH
     - os: osx
       osx_image: xcode8.2
       before_install:
-      env: builder=qmake
+      env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH
