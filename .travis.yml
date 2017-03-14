@@ -16,7 +16,7 @@ before_install:
   - sudo apt-get -qq install ${AF} cmake libhidapi-dev g++-5 clang-3.8
 
 cache:
-  - apt
+#  - apt
   - ccache
 
 
@@ -37,7 +37,7 @@ env:
     - builder=cmake CXX=g++-5 CC=gcc-5
     - builder=qmake CXX=g++-5 CC=gcc-5
   global:
-    - AF=-yq --no-install-suggests --no-install-recommends --force-yes
+    - AF="-yq --no-install-suggests --no-install-recommends --force-yes"
 
 matrix:
   exclude:
