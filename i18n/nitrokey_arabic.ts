@@ -174,6 +174,25 @@ Please retry</source>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>      *** Clearing data in progress ***</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>      *** Communication error ***</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>      *** Firmware is locked ***</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Authentication</name>
+    <message>
+        <source>Wrong PIN. Please try again.</source>
+        <translation type="unfinished">كلمة سر خطأ. يرجى إعادة المحاولة</translation>
+    </message>
 </context>
 <context>
     <name>DebugDialog</name>
@@ -294,7 +313,7 @@ Please retry</source>
     </message>
     <message>
         <source>There was a problem during communicating with device. Please retry.</source>
-        <translation>هناك مشكلة في الإتصال بالجهاز. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">هناك مشكلة في الإتصال بالجهاز. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>Current password is not correct. Please retry.</source>
@@ -302,7 +321,7 @@ Please retry</source>
     </message>
     <message>
         <source>New password is not correct. Please retry.</source>
-        <translation>الرقم السري الجديد غير صحيح. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">الرقم السري الجديد غير صحيح. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>New password is set</source>
@@ -310,43 +329,43 @@ Please retry</source>
     </message>
     <message>
         <source>Wrong password.</source>
-        <translation>الرقم السري خاطئ</translation>
+        <translation type="vanished">الرقم السري خاطئ</translation>
     </message>
     <message>
         <source>Couldn&apos;t change %1 password</source>
-        <translation>لم يمكن تغيير %1 الرقم السري</translation>
+        <translation type="vanished">لم يمكن تغيير %1 الرقم السري</translation>
     </message>
     <message>
         <source>Current Admin password is not correct. Please retry.</source>
-        <translation>الرقم السري الحالي للمستخدم المدير غير صحيح. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">الرقم السري الحالي للمستخدم المدير غير صحيح. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>There was a problem during communicating with device or new password is not correct. Please retry.</source>
-        <translation>هناك مشكلة في الإتصال بالجهاز أو كلمة السر الجديدة غير صحيحة. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">هناك مشكلة في الإتصال بالجهاز أو كلمة السر الجديدة غير صحيحة. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>New User password is set</source>
-        <translation>تم تهيئة الرقم السري الجديد للمستخدم</translation>
+        <translation type="vanished">تم تهيئة الرقم السري الجديد للمستخدم</translation>
     </message>
     <message>
         <source>Wrong Admin PIN.</source>
-        <translation>الرقم السري خاطئ للمدير</translation>
+        <translation type="vanished">الرقم السري خاطئ للمدير</translation>
     </message>
     <message>
         <source>Couldn&apos;t unblock the user PIN. Error: %1</source>
-        <translation>لم يمكن حظر كلمة سر المستخدم. خطأ %1</translation>
+        <translation type="vanished">لم يمكن حظر كلمة سر المستخدم. خطأ %1</translation>
     </message>
     <message>
         <source>User PIN successfully unblocked</source>
-        <translation>الرقم السري للمستخدم أزيل الحظر عنه بنجاح</translation>
+        <translation type="vanished">الرقم السري للمستخدم أزيل الحظر عنه بنجاح</translation>
     </message>
     <message>
         <source>Wrong password or there was a communication problem with the device.</source>
-        <translation>هناك مشكلة في الإتصال بالجهاز أو كلمة السر الجديدة للفيرم وير غير صحيحة. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">هناك مشكلة في الإتصال بالجهاز أو كلمة السر الجديدة للفيرم وير غير صحيحة. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>Password has been changed with success!</source>
-        <translation>تم تغيير كلمة سر الفيرم وير بنجاح</translation>
+        <translation type="vanished">تم تغيير كلمة سر الفيرم وير بنجاح</translation>
     </message>
     <message>
         <source>The minimum length of the old password is </source>
@@ -358,7 +377,7 @@ Please retry</source>
     </message>
     <message>
         <source>The new password entrys are not the same</source>
-        <translation>مدخلات كلمة السر الجديدة غير متطابقة</translation>
+        <translation type="vanished">مدخلات كلمة السر الجديدة غير متطابقة</translation>
     </message>
     <message>
         <source>The maximum length of a password is </source>
@@ -380,56 +399,60 @@ Please retry</source>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The new password entries are not the same</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HOTPDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>محاورة</translation>
+        <translation type="vanished">محاورة</translation>
     </message>
     <message>
         <source>Your HOTP:</source>
-        <translation>HOTP التابعة لك</translation>
+        <translation type="vanished">HOTP التابعة لك</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>أغلق</translation>
+        <translation type="vanished">أغلق</translation>
     </message>
     <message>
         <source>Get next</source>
-        <translation>احصل على التالي</translation>
+        <translation type="vanished">احصل على التالي</translation>
     </message>
     <message>
         <source>TOTP interval:</source>
-        <translation>مدى TOTP</translation>
+        <translation type="vanished">مدى TOTP</translation>
     </message>
     <message>
         <source>Valid</source>
-        <translation>مسموح/صالح</translation>
+        <translation type="vanished">مسموح/صالح</translation>
     </message>
     <message>
         <source>HOTP copied to clipboard</source>
-        <translation>نسخت للحافظة - كلمة السر لمرة واحدة طويلة الأمد-</translation>
+        <translation type="vanished">نسخت للحافظة - كلمة السر لمرة واحدة طويلة الأمد-</translation>
     </message>
     <message>
         <source>Next HOTP</source>
-        <translation>كلمة السر لمرة واحدة طويلة الأمد - التالية</translation>
+        <translation type="vanished">كلمة السر لمرة واحدة طويلة الأمد - التالية</translation>
     </message>
     <message>
         <source>Your TOTP:</source>
-        <translation>كلمة السر لمرة واحدة قصيرة الأمد- التابعة لك</translation>
+        <translation type="vanished">كلمة السر لمرة واحدة قصيرة الأمد- التابعة لك</translation>
     </message>
     <message>
         <source>Generate TOTP</source>
-        <translation>أنتج كلمة السر لمرة واحدة قصيرة الأمد</translation>
+        <translation type="vanished">أنتج كلمة السر لمرة واحدة قصيرة الأمد</translation>
     </message>
     <message>
         <source>TOTP copied to clipboard</source>
-        <translation>كلمة السر لمرة واحدة قصيرة الأمد نسخت للحافظة</translation>
+        <translation type="vanished">كلمة السر لمرة واحدة قصيرة الأمد نسخت للحافظة</translation>
     </message>
     <message>
         <source>Invalid</source>
-        <translation>غير صالح</translation>
+        <translation type="vanished">غير صالح</translation>
     </message>
 </context>
 <context>
@@ -588,7 +611,7 @@ Please retry</source>
     </message>
     <message>
         <source>Keyboard layout (DISABLED FEATURE):</source>
-        <translation>نسق لوحة المفاتيح (ميزة معطلة)</translation>
+        <translation type="vanished">نسق لوحة المفاتيح (ميزة معطلة)</translation>
     </message>
     <message>
         <source>MUI:</source>
@@ -604,19 +627,19 @@ Please retry</source>
     </message>
     <message>
         <source>QWERTY</source>
-        <translation>QWERTY</translation>
+        <translation type="vanished">QWERTY</translation>
     </message>
     <message>
         <source>QWERTZ</source>
-        <translation>QWERTZ</translation>
+        <translation type="vanished">QWERTZ</translation>
     </message>
     <message>
         <source>AZERTY</source>
-        <translation>AZERTY</translation>
+        <translation type="vanished">AZERTY</translation>
     </message>
     <message>
         <source>DVORAK</source>
-        <translation>DVORAK</translation>
+        <translation type="vanished">DVORAK</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -732,107 +755,95 @@ Please retry</source>
     </message>
     <message>
         <source>&amp;OTP</source>
-        <translation>&amp;OTP</translation>
+        <translation type="vanished">&amp;OTP</translation>
     </message>
     <message>
         <source>&amp;Factory reset</source>
-        <translation>&amp;تهيئة المصنع</translation>
+        <translation type="vanished">&amp;تهيئة المصنع</translation>
     </message>
     <message>
         <source>&amp;Change User PIN</source>
-        <translation>&amp;غير كلمة سر المستخدم</translation>
+        <translation type="vanished">&amp;غير كلمة سر المستخدم</translation>
     </message>
     <message>
         <source>&amp;Change Admin PIN</source>
-        <translation>&amp;غير كلمة سر المدير</translation>
+        <translation type="vanished">&amp;غير كلمة سر المدير</translation>
     </message>
     <message>
         <source>&amp;Debug</source>
-        <translation>&amp;صحح</translation>
+        <translation type="vanished">&amp;صحح</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>&amp;أخرج</translation>
+        <translation type="vanished">&amp;أخرج</translation>
     </message>
     <message>
         <source>&amp;About Nitrokey</source>
-        <translation>&amp;حول نتروكي</translation>
-    </message>
-    <message>
-        <source>&amp;OTP and Password safe</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">&amp;حول نتروكي</translation>
     </message>
     <message>
         <source>&amp;SecPassword</source>
-        <translation>&amp;كلمة سر</translation>
-    </message>
-    <message>
-        <source>&amp;Stick 20 Setup</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">&amp;كلمة سر</translation>
     </message>
     <message>
         <source>&amp;Unlock encrypted volume</source>
-        <translation>&amp;افتح الجزء المشفر</translation>
+        <translation type="vanished">&amp;افتح الجزء المشفر</translation>
     </message>
     <message>
         <source>&amp;Lock encrypted volume</source>
-        <translation>&amp;أغلق الجزء المشفر</translation>
+        <translation type="vanished">&amp;أغلق الجزء المشفر</translation>
     </message>
     <message>
         <source>&amp;Unlock hidden volume</source>
-        <translation>&amp;افتح الجزء المخفي</translation>
-    </message>
-    <message>
-        <source>&amp;Lock hidden volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">&amp;افتح الجزء المخفي</translation>
     </message>
     <message>
         <source>&amp;Enable firmware update</source>
-        <translation>&amp;فعل تحديث الفيرم وير</translation>
+        <translation type="vanished">&amp;فعل تحديث الفيرم وير</translation>
     </message>
     <message>
         <source>&amp;Export firmware to file</source>
-        <translation>&amp;صدر الفيرم وير لملف</translation>
+        <translation type="vanished">&amp;صدر الفيرم وير لملف</translation>
     </message>
     <message>
         <source>&amp;Destroy encrypted data</source>
-        <translation>&amp;دمر بيانات الجزء المشفر</translation>
+        <translation type="vanished">&amp;دمر بيانات الجزء المشفر</translation>
     </message>
     <message>
         <source>&amp;Initialize storage with random data</source>
-        <translation>&amp;أسس الذاكرة ببيانات عشوائية</translation>
+        <translation type="vanished">&amp;أسس الذاكرة ببيانات عشوائية</translation>
     </message>
     <message>
         <source>&amp;Get stick status</source>
-        <translation>&amp;احصل على حالة ذاكرة الفلاش</translation>
+        <translation type="vanished">&amp;احصل على حالة ذاكرة الفلاش</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-only</source>
-        <translation>&amp;اجعل الجزء غير المشفر للقراءة فقط</translation>
+        <translation type="vanished">&amp;اجعل الجزء غير المشفر للقراءة فقط</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-write</source>
-        <translation>&amp;اجعل الجزء غير المشفر للقراءة والكتابة</translation>
+        <translation type="vanished">&amp;اجعل الجزء غير المشفر للقراءة والكتابة</translation>
     </message>
     <message>
         <source>&amp;Setup hidden volume</source>
-        <translation>&amp;هيء الجزء المخفي</translation>
+        <translation type="vanished">&amp;هيء الجزء المخفي</translation>
     </message>
     <message>
         <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
-        <translation>&amp;عطل رسالة تحذير &quot;أسس الذاكرة ببيانات عشوائية&quot;</translation>
+        <translation type="vanished">&amp;عطل رسالة تحذير &quot;أسس الذاكرة ببيانات عشوائية&quot;</translation>
     </message>
     <message>
         <source>&amp;Setup password matrix</source>
-        <translation>&amp;هيء مصفوفة كلمة السر</translation>
+        <translation type="vanished">&amp;هيء مصفوفة كلمة السر</translation>
     </message>
     <message>
         <source>&amp;Lock stick hardware</source>
-        <translation>&amp;أقفل عتاد الفلاش</translation>
+        <translation type="vanished">&amp;أقفل عتاد الفلاش</translation>
     </message>
     <message>
         <source>&amp;Change Firmware Password</source>
-        <translation>&amp;غير كلمة سر الفيرم وير</translation>
+        <translation type="vanished">&amp;غير كلمة سر الفيرم وير</translation>
     </message>
     <message>
         <source>Warning: Encrypted volume is not secure,
@@ -842,31 +853,31 @@ Select &quot;Initialize device&quot; option from context menu.</source>
     </message>
     <message>
         <source>&amp;Initialize device</source>
-        <translation>&amp;أسس الجهاز</translation>
+        <translation type="vanished">&amp;أسس الجهاز</translation>
     </message>
     <message>
         <source>&amp;Reset User PIN</source>
-        <translation>&amp;أعد تهيئة كلمة سر المسخدم</translation>
+        <translation type="vanished">&amp;أعد تهيئة كلمة سر المسخدم</translation>
     </message>
     <message>
         <source>&amp;Lock Device</source>
-        <translation>&amp;أغلق الجهاز</translation>
+        <translation type="vanished">&amp;أغلق الجهاز</translation>
     </message>
     <message>
         <source>Smartcard or SD card are not ready</source>
-        <translation>الإس دي أو الكرت الذكي غير جاهز</translation>
+        <translation type="vanished">الإس دي أو الكرت الذكي غير جاهز</translation>
     </message>
     <message>
         <source>Passwords</source>
-        <translation>كلمات السر</translation>
+        <translation type="vanished">كلمات السر</translation>
     </message>
     <message>
         <source>Configure</source>
-        <translation>تهيئة</translation>
+        <translation type="vanished">تهيئة</translation>
     </message>
     <message>
         <source>Special Configure</source>
-        <translation>تهيئة خاصة</translation>
+        <translation type="vanished">تهيئة خاصة</translation>
     </message>
     <message>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
@@ -875,7 +886,7 @@ Select &quot;Initialize device&quot; option from context menu.</source>
     </message>
     <message>
         <source>Counter value not copied - Nitrokey Storage handles HOTP counter values up to 7 digits. Setting counter value to 0. Please retry.</source>
-        <translation>قيمة العداد لم تنسخ - نتروكي يتعامل مع عداد HTOP لغاية 6 أرقام. ضبط قيمة العداد لصفر. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">قيمة العداد لم تنسخ - نتروكي يتعامل مع عداد HTOP لغاية 6 أرقام. ضبط قيمة العداد لصفر. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>TOTP length:</source>
@@ -883,55 +894,51 @@ Select &quot;Initialize device&quot; option from context menu.</source>
     </message>
     <message>
         <source>Enter card admin PIN</source>
-        <translation>أدخل كلمة السر للمدير</translation>
+        <translation type="vanished">أدخل كلمة السر للمدير</translation>
     </message>
     <message>
         <source>Admin PIN:</source>
-        <translation>الرقم السري المدير</translation>
+        <translation type="vanished">الرقم السري المدير</translation>
     </message>
     <message>
         <source>Wrong PIN. Please try again.</source>
         <translation>كلمة سر خطأ. يرجى إعادة المحاولة</translation>
     </message>
     <message>
-        <source>Enter admin PIN</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>AES key generated</source>
-        <translation>مولد مفتاح AES</translation>
+        <translation type="vanished">مولد مفتاح AES</translation>
     </message>
     <message>
         <source>This activity locks your hidden volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>هذا العمل يغلق الجزء المخفي. هل تريد الاستمرار؟
+        <translation type="vanished">هذا العمل يغلق الجزء المخفي. هل تريد الاستمرار؟
 لتجنب فقدان البيانات، يرجى تنزيل الأجزاء المحملة قبل الاستمرار</translation>
     </message>
     <message>
         <source>User pin dialog</source>
-        <translation>شاشة الرقم السري للمستخدم</translation>
+        <translation type="vanished">شاشة الرقم السري للمستخدم</translation>
     </message>
     <message>
         <source>Enter user PIN:</source>
-        <translation>أدخل الرقم السري المستخدم</translation>
+        <translation type="vanished">أدخل الرقم السري المستخدم</translation>
     </message>
     <message>
         <source>This activity locks your encrypted volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>هذا الإجراء يغلق الجزء المشفر. هل تريد الاستمرار؟
+        <translation type="vanished">هذا الإجراء يغلق الجزء المشفر. هل تريد الاستمرار؟
 لتجنب فقدان البيانات، يرجى تنزيل الجهاز قبل الاستمرار</translation>
     </message>
     <message>
         <source>Please enable the encrypted volume first.</source>
-        <translation>يرجى تفعيل الجزء المشفر أولا</translation>
+        <translation type="vanished">يرجى تفعيل الجزء المشفر أولا</translation>
     </message>
     <message>
         <source>Enter password for hidden volume</source>
-        <translation>أدخل كلمة سر الجزء المخفي</translation>
+        <translation type="vanished">أدخل كلمة سر الجزء المخفي</translation>
     </message>
     <message>
         <source>Enter password for hidden volume:</source>
-        <translation>أدخل كلمة سر الجزء المخفي:</translation>
+        <translation type="vanished">أدخل كلمة سر الجزء المخفي:</translation>
     </message>
     <message>
         <source>Device has been locked</source>
@@ -939,35 +946,35 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>Enter Firmware Password</source>
-        <translation>أدخل كلمة السر للفيرم وير</translation>
+        <translation type="vanished">أدخل كلمة السر للفيرم وير</translation>
     </message>
     <message>
         <source>Enter Firmware Password:</source>
-        <translation>أدخل كلمة السر للفيرم وير:</translation>
+        <translation type="vanished">أدخل كلمة السر للفيرم وير:</translation>
     </message>
     <message>
         <source>Enter admin PIN:</source>
-        <translation>أدخل كلمة السر للمدير:</translation>
+        <translation type="vanished">أدخل كلمة السر للمدير:</translation>
     </message>
     <message>
         <source>WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?</source>
-        <translation>تحذير: توليد مفاتيح AES الجديدة سوف يدمر الجزء المشفر، الجزء المخفي، وخزانة كلمات السر. هل ترغب في الاستمرار؟</translation>
+        <translation type="vanished">تحذير: توليد مفاتيح AES الجديدة سوف يدمر الجزء المشفر، الجزء المخفي، وخزانة كلمات السر. هل ترغب في الاستمرار؟</translation>
     </message>
     <message>
         <source>Admin Pin:</source>
-        <translation>كلمة سر المدير:</translation>
+        <translation type="vanished">كلمة سر المدير:</translation>
     </message>
     <message>
         <source>Enter user PIN</source>
-        <translation>كلمة سر المستخدم:</translation>
+        <translation type="vanished">كلمة سر المستخدم:</translation>
     </message>
     <message>
         <source>User PIN:</source>
-        <translation>كلمة سر المستخدم:</translation>
+        <translation type="vanished">كلمة سر المستخدم:</translation>
     </message>
     <message>
         <source>The selected lines must be greater then greatest password length</source>
-        <translation>الأسطر المختارة يجب أن تكون أكبر من الطول الأقصى لكلمة السر</translation>
+        <translation type="vanished">الأسطر المختارة يجب أن تكون أكبر من الطول الأقصى لكلمة السر</translation>
     </message>
     <message>
         <source>Counter must be a value between 0 and %1</source>
@@ -979,11 +986,11 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>Not implemented</source>
-        <translation>لم يطبق</translation>
+        <translation type="vanished">لم يطبق</translation>
     </message>
     <message>
         <source>Stick20Dialog: Wrong combobox value! </source>
-        <translation>Stick20Dialog: قيمة خاطئة من القائمة المنسدلة! </translation>
+        <translation type="vanished">Stick20Dialog: قيمة خاطئة من القائمة المنسدلة! </translation>
     </message>
     <message>
         <source>Warning: The encrypted Volume is not formatted.
@@ -1001,7 +1008,7 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>The name of the slot must not be empty.</source>
-        <translation>اسم الموضع ينبغي ألا يكون فارغا</translation>
+        <translation type="vanished">اسم الموضع ينبغي ألا يكون فارغا</translation>
     </message>
     <message>
         <source>Error writing configuration!</source>
@@ -1053,11 +1060,11 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>Active (debug mode)</source>
-        <translation>نشط (وضع التصحيح)</translation>
+        <translation type="vanished">نشط (وضع التصحيح)</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>نشط</translation>
+        <translation type="vanished">نشط</translation>
     </message>
     <message>
         <source>Time is out-of-sync</source>
@@ -1099,41 +1106,41 @@ Select &quot;Initialize storage with random data&quot;</source>
     </message>
     <message>
         <source>Nitrokey not connected</source>
-        <translation>نتروكي غير متصل</translation>
+        <translation type="vanished">نتروكي غير متصل</translation>
     </message>
     <message>
         <source>Wrong password</source>
-        <translation>كلمة سر خطأ</translation>
+        <translation type="vanished">كلمة سر خطأ</translation>
     </message>
     <message>
         <source>Unable to create AES key</source>
-        <translation>لا يمكن إنشاء مفتاح AES</translation>
+        <translation type="vanished">لا يمكن إنشاء مفتاح AES</translation>
     </message>
     <message>
         <source>There was an error during communicating with device. Please try again.</source>
-        <translation>هناك خطأ حدث أثناء التواصل مع الجهاز. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">هناك خطأ حدث أثناء التواصل مع الجهاز. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>This command fills the encrypted volumes with random data and will destroy all encrypted volumes!
 It requires more than 1 hour for 32GB. Do you want to continue?</source>
-        <translation>هذا الأمر يملأ الجزء المشفر بالبيانات العشوائية وسوف يدمر كل الأجزاء المشفرة!
+        <translation type="vanished">هذا الأمر يملأ الجزء المشفر بالبيانات العشوائية وسوف يدمر كل الأجزاء المشفرة!
 تتطلب العملية ما يزيد على الساعة ل 32 جيجابايت. هل تريد الاستمرار؟</translation>
     </message>
     <message>
         <source>Either the password is not correct or the command execution resulted in an error. Please try again.</source>
-        <translation>إما أن كلمة السر غير صحيحة أو أن تنفيذ الأمر نتج عنه خطأ. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">إما أن كلمة السر غير صحيحة أو أن تنفيذ الأمر نتج عنه خطأ. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>(debug) Response: </source>
-        <translation>(وضع التصحيح) الرد: </translation>
+        <translation type="vanished">(وضع التصحيح) الرد: </translation>
     </message>
     <message>
         <source>Can&apos;t save slot.</source>
-        <translation>لم يمكن حفظ الموضع</translation>
+        <translation type="vanished">لم يمكن حفظ الموضع</translation>
     </message>
     <message>
         <source>Unable to create new AES key</source>
-        <translation>لم يمكن إنشاء مفتاح جديد ل AES</translation>
+        <translation type="vanished">لم يمكن إنشاء مفتاح جديد ل AES</translation>
     </message>
     <message>
         <source>Can&apos;t unlock password safe.</source>
@@ -1141,11 +1148,11 @@ It requires more than 1 hour for 32GB. Do you want to continue?</source>
     </message>
     <message>
         <source>Password Safe unlocked successfully.</source>
-        <translation>تم فتح خزانة كلمات السر بنجاح</translation>
+        <translation type="vanished">تم فتح خزانة كلمات السر بنجاح</translation>
     </message>
     <message>
         <source>Password safe is not supported by this device.</source>
-        <translation>خزانة كلمات السر غير مدعومة على هذا الجهاز</translation>
+        <translation type="vanished">خزانة كلمات السر غير مدعومة على هذا الجهاز</translation>
     </message>
     <message>
         <source>Wrong user password.</source>
@@ -1153,7 +1160,7 @@ It requires more than 1 hour for 32GB. Do you want to continue?</source>
     </message>
     <message>
         <source>Pasword safe: Can&apos;t get password</source>
-        <translation>خزانة كلمات السر: لم يمكن الحصول على كلمة سر</translation>
+        <translation type="vanished">خزانة كلمات السر: لم يمكن الحصول على كلمة سر</translation>
     </message>
     <message>
         <source>Password safe [%1]</source>
@@ -1161,11 +1168,11 @@ It requires more than 1 hour for 32GB. Do you want to continue?</source>
     </message>
     <message>
         <source>Wrong Pin. Please try again.</source>
-        <translation>رقم سري خاطئ. يرجى إعادة المحاولة</translation>
+        <translation type="vanished">رقم سري خاطئ. يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>Enter card user PIN</source>
-        <translation>أدخل كلمة سر المستخدم</translation>
+        <translation type="vanished">أدخل كلمة سر المستخدم</translation>
     </message>
     <message>
         <source>WARNING!
@@ -1187,7 +1194,7 @@ Reset Nitrokey&apos;s time?</source>
     </message>
     <message>
         <source>Invalid password!</source>
-        <translation>كلمة سر غير صحيحة!</translation>
+        <translation type="vanished">كلمة سر غير صحيحة!</translation>
     </message>
     <message>
         <source>Protect OTP by user PIN (will be requested on first use each session)</source>
@@ -1239,11 +1246,11 @@ If problem will occur again please:
     </message>
     <message>
         <source>Detected some communication problems with the device.</source>
-        <translation>تم اكتشاف مشكلة في التوصيل مع الجهاز</translation>
+        <translation type="vanished">تم اكتشاف مشكلة في التوصيل مع الجهاز</translation>
     </message>
     <message>
         <source>Cannot get OTP code.</source>
-        <translation>لم يمكن الحصول على رمز كلمة السر لمرة واحدة</translation>
+        <translation type="vanished">لم يمكن الحصول على رمز كلمة السر لمرة واحدة</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -1269,64 +1276,104 @@ If problem will occur again please:
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Password Safe fields support UTF8 data. It means that you can use your national characters here. Please remember however that non-English characters could take more space (up to 4 characters). The counters next to each field are to inform how much more standard English characters can given field accept.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Device is detected but could not be connected. Please reinsert it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;Select Password Safe slot&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password safe unlocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AES keys not initialized. Please provide Admin PIN.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keys generated. Please unlock Password Safe again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong admin password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User not authenticated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset Nitrokey&apos;s time?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locking device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Closing window due to device disconnection</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>شاشة حوار</translation>
+        <translation type="vanished">شاشة حوار</translation>
     </message>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="vanished">0</translation>
     </message>
     <message>
         <source>1</source>
-        <translation>1</translation>
+        <translation type="vanished">1</translation>
     </message>
     <message>
         <source>2</source>
-        <translation>2</translation>
+        <translation type="vanished">2</translation>
     </message>
     <message>
         <source>3</source>
-        <translation>3</translation>
+        <translation type="vanished">3</translation>
     </message>
     <message>
         <source>4</source>
-        <translation>4</translation>
+        <translation type="vanished">4</translation>
     </message>
     <message>
         <source>5</source>
-        <translation>5</translation>
+        <translation type="vanished">5</translation>
     </message>
     <message>
         <source>6</source>
-        <translation>6</translation>
+        <translation type="vanished">6</translation>
     </message>
     <message>
         <source>7</source>
-        <translation>7</translation>
+        <translation type="vanished">7</translation>
     </message>
     <message>
         <source>8</source>
-        <translation>8</translation>
+        <translation type="vanished">8</translation>
     </message>
     <message>
         <source>9</source>
-        <translation>9</translation>
+        <translation type="vanished">9</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation type="unfinished">TextLabel</translation>
+        <translation type="obsolete">TextLabel</translation>
     </message>
     <message>
         <source>Send data</source>
-        <translation>أرسل البيانات</translation>
+        <translation type="vanished">أرسل البيانات</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>خروج</translation>
+        <translation type="vanished">خروج</translation>
     </message>
 </context>
 <context>
@@ -1349,59 +1396,59 @@ If problem will occur again please:
     </message>
     <message>
         <source>Your PIN is too long! Use not more than 30 characters.</source>
-        <translation>كلمة السر طويلة كثيرا! استخدم كلمة لا تزيد عن 30 حرفا</translation>
+        <translation type="vanished">كلمة السر طويلة كثيرا! استخدم كلمة لا تزيد عن 30 حرفا</translation>
     </message>
     <message>
         <source>Your PIN is too short. Use at least 6 characters.</source>
-        <translation>كلمة السر قصيرة كثيرا. استخدم كلمة لا تقل عن 8 أحرف</translation>
+        <translation type="vanished">كلمة السر قصيرة كثيرا. استخدم كلمة لا تقل عن 8 أحرف</translation>
     </message>
     <message>
         <source>Warning: Default PIN is used.
 Please change the PIN.</source>
-        <translation>تحذير: لقد استخدمت كلمة السر الافتراضية. يرجى تغيير كلمة السر</translation>
+        <translation type="vanished">تحذير: لقد استخدمت كلمة السر الافتراضية. يرجى تغيير كلمة السر</translation>
     </message>
     <message>
         <source>Device is not yet initialized. Please try again later.</source>
-        <translation>الجهاز لم يتم تأسيسه بعد. يرجى إعادة المحاولة لاحقا</translation>
+        <translation type="vanished">الجهاز لم يتم تأسيسه بعد. يرجى إعادة المحاولة لاحقا</translation>
     </message>
 </context>
 <context>
     <name>PasswordSafeDialog</name>
     <message>
         <source>Password safe</source>
-        <translation>خزانة كلمة السر</translation>
+        <translation type="vanished">خزانة كلمة السر</translation>
     </message>
     <message>
         <source>Send password</source>
-        <translation>أرسل كلمة السر</translation>
+        <translation type="vanished">أرسل كلمة السر</translation>
     </message>
     <message>
         <source>Send loginname</source>
-        <translation>أرسل اسم الدخول</translation>
+        <translation type="vanished">أرسل اسم الدخول</translation>
     </message>
     <message>
         <source>Send PW tab LN</source>
-        <translation>Send PW tab LN</translation>
+        <translation type="vanished">Send PW tab LN</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>نعم</translation>
+        <translation type="vanished">نعم</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation>TextLabel</translation>
+        <translation type="vanished">TextLabel</translation>
     </message>
     <message>
         <source> Cut &amp;&amp; paste</source>
-        <translation>  قص &amp;&amp; لزق</translation>
+        <translation type="vanished">  قص &amp;&amp; لزق</translation>
     </message>
     <message>
         <source> via Keyboard</source>
-        <translation> عبر لوحة المفاتيح</translation>
+        <translation type="vanished"> عبر لوحة المفاتيح</translation>
     </message>
     <message>
         <source>Password Safe Slot </source>
-        <translation>موضع خزانة كلمات السر </translation>
+        <translation type="vanished">موضع خزانة كلمات السر </translation>
     </message>
     <message>
         <source> clicked.
@@ -1411,31 +1458,31 @@ Press &lt;Button&gt; to copy value to clipboard&lt;/Button&gt;</source>
     </message>
     <message>
         <source>Can&apos;t send password chars via HID</source>
-        <translation>لم يمكن إرسال كلمة السر عبر HID</translation>
+        <translation type="vanished">لم يمكن إرسال كلمة السر عبر HID</translation>
     </message>
     <message>
         <source>Can&apos;t get password</source>
-        <translation>لم يمكن الحصول على كلمة السر</translation>
+        <translation type="vanished">لم يمكن الحصول على كلمة السر</translation>
     </message>
     <message>
         <source>Can&apos;t send loginname via keyboard</source>
-        <translation>لم يمكن إرسال اسم المستخدم عبر لوحة المفاتيح</translation>
+        <translation type="vanished">لم يمكن إرسال اسم المستخدم عبر لوحة المفاتيح</translation>
     </message>
     <message>
         <source>Can&apos;t send CR via keyboard</source>
-        <translation>لم يمكن إرسال CR عبر لوحة المفاتيح</translation>
+        <translation type="vanished">لم يمكن إرسال CR عبر لوحة المفاتيح</translation>
     </message>
     <message>
         <source>Can&apos;t send password via keyboard</source>
-        <translation>لم يمكن إرسال كلمة السرعبر لوحة المفاتيح</translation>
+        <translation type="vanished">لم يمكن إرسال كلمة السرعبر لوحة المفاتيح</translation>
     </message>
     <message>
         <source>Can&apos;t send loginname chars via HID</source>
-        <translation>لم يمكن إرسال اسم المستخدم عبر HID</translation>
+        <translation type="vanished">لم يمكن إرسال اسم المستخدم عبر HID</translation>
     </message>
     <message>
         <source>PW Safe Slot </source>
-        <translation>موضع خزانة كلمة السر </translation>
+        <translation type="vanished">موضع خزانة كلمة السر </translation>
     </message>
     <message>
         <source> clicked.
@@ -1447,18 +1494,7 @@ The value is send in &lt;/Button&gt;</source>
     </message>
     <message>
         <source> seconds</source>
-        <translation> ثواني</translation>
-    </message>
-    <message>
-        <source> clicked.
-Press &lt;Button&gt; to copy value to clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> clicked.
-Press &lt;Button&gt; and set cursor to the input dialog.
-The value is send in </source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished"> ثواني</translation>
     </message>
 </context>
 <context>
@@ -1477,7 +1513,7 @@ The value is send in </source>
     </message>
     <message>
         <source>Use password matrix</source>
-        <translation>استخدم مصفوفة كلمات السر</translation>
+        <translation type="vanished">استخدم مصفوفة كلمات السر</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -1513,12 +1549,56 @@ Please change the PIN.</source>
         <source>Device is not yet initialized. Please try again later.</source>
         <translation>الجهاز لم يتم تأسيسه بعد. يرجى إعادة المحاولة</translation>
     </message>
+    <message>
+        <source>Enter user PIN</source>
+        <translation type="unfinished">كلمة سر المستخدم:</translation>
+    </message>
+    <message>
+        <source>User PIN:</source>
+        <translation type="unfinished">كلمة سر المستخدم:</translation>
+    </message>
+    <message>
+        <source>Enter admin PIN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Admin PIN:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter Firmware Password</source>
+        <translation type="unfinished">أدخل كلمة السر للفيرم وير</translation>
+    </message>
+    <message>
+        <source>Enter Firmware Password:</source>
+        <translation type="unfinished">أدخل كلمة السر للفيرم وير:</translation>
+    </message>
+    <message>
+        <source>Enter password for hidden volume</source>
+        <translation type="unfinished">أدخل كلمة سر الجزء المخفي</translation>
+    </message>
+    <message>
+        <source>Enter password for hidden volume:</source>
+        <translation type="unfinished">أدخل كلمة سر الجزء المخفي:</translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <source>Critical error encountered. Please restart application.
+Message: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Communication error. Please reinsert the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Stick20Dialog</name>
     <message>
         <source>Stick 2.0</source>
-        <translation>Stick 2.0</translation>
+        <translation type="vanished">Stick 2.0</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head /&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Stick 2.0 command&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -1530,44 +1610,36 @@ Please change the PIN.</source>
     </message>
     <message>
         <source>PIN</source>
-        <translation>رمز/كلمة سر</translation>
+        <translation type="vanished">رمز/كلمة سر</translation>
     </message>
     <message>
         <source>Show PIN</source>
-        <translation>أظهر الرمز/كلمة سر</translation>
+        <translation type="vanished">أظهر الرمز/كلمة سر</translation>
     </message>
     <message>
         <source>Use matrix</source>
-        <translation>استخدم مصفوفة</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Stick 2.0 command&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">استخدم مصفوفة</translation>
     </message>
 </context>
 <context>
     <name>Stick20InfoDialog</name>
     <message>
         <source>Device status</source>
-        <translation>حالة الجهاز</translation>
+        <translation type="vanished">حالة الجهاز</translation>
     </message>
     <message>
         <source>TextLabel</source>
-        <translation>TextLabel</translation>
+        <translation type="vanished">TextLabel</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
     <message>
         <source>Nitrokey Storage status
 
 </source>
-        <translation>حالة نتروكي ستوريج
+        <translation type="vanished">حالة نتروكي ستوريج
 
 </translation>
     </message>
@@ -1595,76 +1667,76 @@ Please change the PIN.</source>
     <name>Stick20ResponseTask</name>
     <message>
         <source>Wrong password</source>
-        <translation>كلمة سر خاطئة</translation>
+        <translation type="vanished">كلمة سر خاطئة</translation>
     </message>
     <message>
         <source>Encrypted volume unlocked successfully</source>
-        <translation>الجزء المشفر تم فتحه بنجاح</translation>
+        <translation type="vanished">الجزء المشفر تم فتحه بنجاح</translation>
     </message>
     <message>
         <source>Encrypted volume locked successfully</source>
-        <translation>الجزء المشفر تم غلقه بنجاح</translation>
+        <translation type="vanished">الجزء المشفر تم غلقه بنجاح</translation>
     </message>
     <message>
         <source>Hidden volume unlocked successfully</source>
-        <translation>الجزء المخفي تم فتحه بنجاح</translation>
+        <translation type="vanished">الجزء المخفي تم فتحه بنجاح</translation>
     </message>
     <message>
         <source>Hidden volume locked successfully</source>
-        <translation>الجزء المخفي تم غلقه بنجاح</translation>
+        <translation type="vanished">الجزء المخفي تم غلقه بنجاح</translation>
     </message>
     <message>
         <source>Hidden volume setup successfully</source>
-        <translation>الجزء المخفي تم تهيئته بنجاح</translation>
+        <translation type="vanished">الجزء المخفي تم تهيئته بنجاح</translation>
     </message>
     <message>
         <source>Cleartext volume is in readonly mode</source>
-        <translation>الجزء غير المشفر في وضع القراءة فقط</translation>
+        <translation type="vanished">الجزء غير المشفر في وضع القراءة فقط</translation>
     </message>
     <message>
         <source>Cleartext volume is in readwrite mode</source>
-        <translation>الجزء غير المشفر في وضع القراءة والكتابة</translation>
+        <translation type="vanished">الجزء غير المشفر في وضع القراءة والكتابة</translation>
     </message>
     <message>
         <source>Warning disabled</source>
-        <translation>التحذيرات معطلة</translation>
+        <translation type="vanished">التحذيرات معطلة</translation>
     </message>
     <message>
         <source>Firmware is locked</source>
-        <translation>الفيرم وير مغلق</translation>
+        <translation type="vanished">الفيرم وير مغلق</translation>
     </message>
     <message>
         <source>Firmware exported successfully</source>
-        <translation>تم تصدير الفيرم وير بنجاح</translation>
+        <translation type="vanished">تم تصدير الفيرم وير بنجاح</translation>
     </message>
     <message>
         <source>New keys generated successfully</source>
-        <translation>المفاتيح الجديدة ولدت بنجاح</translation>
+        <translation type="vanished">المفاتيح الجديدة ولدت بنجاح</translation>
     </message>
     <message>
         <source>Storage successfully initialized with random data</source>
-        <translation>تم تأسيس نتروكي ستوريج ببيانات عشوائية. يرجى إخراج الجهاز وإدخالة مرة أخرى لإكمال عملية التأسيس</translation>
+        <translation type="vanished">تم تأسيس نتروكي ستوريج ببيانات عشوائية. يرجى إخراج الجهاز وإدخالة مرة أخرى لإكمال عملية التأسيس</translation>
     </message>
     <message>
         <source>Can&apos;t enable hidden volume</source>
-        <translation>لم يمكن تفعيل الجزء المخفي</translation>
+        <translation type="vanished">لم يمكن تفعيل الجزء المخفي</translation>
     </message>
     <message>
         <source>Please enable the encrypted volume first.</source>
-        <translation>يرجى تفعيل الجزء المشفر أولا</translation>
+        <translation type="vanished">يرجى تفعيل الجزء المشفر أولا</translation>
     </message>
     <message>
         <source>Encrypted volume was not enabled, please enable the encrypted volume</source>
-        <translation>الجزء المشفر غير مفعل، يرجى تفعيل الجزء المشفر</translation>
+        <translation type="vanished">الجزء المشفر غير مفعل، يرجى تفعيل الجزء المشفر</translation>
     </message>
     <message>
         <source>Smartcard error, please retry the command</source>
-        <translation>خطأ في سمارت كارد، يرجى إعادة المحاولة</translation>
+        <translation type="vanished">خطأ في سمارت كارد، يرجى إعادة المحاولة</translation>
     </message>
     <message>
         <source>Security bit of the device is activated.
 Firmware update is not possible.</source>
-        <translation>تم تفعيل خيار الأمان على الجهاز
+        <translation type="vanished">تم تفعيل خيار الأمان على الجهاز
 لا يمكن تحديث الفيرم وير</translation>
     </message>
 </context>
@@ -1672,41 +1744,336 @@ Firmware update is not possible.</source>
     <name>Stick20Setup</name>
     <message>
         <source>Dialog</source>
-        <translation>شاشة</translation>
+        <translation type="vanished">شاشة</translation>
     </message>
     <message>
         <source>Stick 2.0 setup</source>
-        <translation>Stick 2.0 تهيئة</translation>
+        <translation type="vanished">Stick 2.0 تهيئة</translation>
     </message>
     <message>
         <source>Change admin PIN</source>
-        <translation>غير الرمز السري للمدير</translation>
-    </message>
-    <message>
-        <source>Change password</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">غير الرمز السري للمدير</translation>
     </message>
     <message>
         <source>Change matrix input</source>
-        <translation>غير مدخلات المصفوفة</translation>
+        <translation type="vanished">غير مدخلات المصفوفة</translation>
     </message>
     <message>
         <source>Setup hidden volume</source>
-        <translation>هيء الجزء المخفي</translation>
+        <translation type="vanished">هيء الجزء المخفي</translation>
     </message>
     <message>
         <source>The selected lines must be greater then greatest password length</source>
-        <translation>الأسطر المختارة لابد تكون أكبر من أطول كلمة سر</translation>
+        <translation type="vanished">الأسطر المختارة لابد تكون أكبر من أطول كلمة سر</translation>
     </message>
     <message>
         <source>Build a new base key for the hidden volume? all data get lost</source>
-        <translation>هل تريد بناء قاعدة جديدة لمفاتيح الجزء المخفي؟ سوف تفقد كل البيانات</translation>
+        <translation type="vanished">هل تريد بناء قاعدة جديدة لمفاتيح الجزء المخفي؟ سوف تفقد كل البيانات</translation>
     </message>
 </context>
 <context>
-    <name>Stick20Window</name>
+    <name>StorageActions</name>
     <message>
-        <source>MainWindow</source>
+        <source>This activity locks your hidden volume. Do you want to proceed?
+To avoid data loss, please unmount the partitions before proceeding.</source>
+        <translation type="unfinished">هذا العمل يغلق الجزء المخفي. هل تريد الاستمرار؟
+لتجنب فقدان البيانات، يرجى تنزيل الأجزاء المحملة قبل الاستمرار</translation>
+    </message>
+    <message>
+        <source>Enabling encrypted volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encrypted volume enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not enable encrypted volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password.</source>
+        <translation type="unfinished">الرقم السري خاطئ</translation>
+    </message>
+    <message>
+        <source>Status code: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This activity locks your encrypted volume. Do you want to proceed?
+To avoid data loss, please unmount the partitions before proceeding.</source>
+        <translation type="unfinished">هذا الإجراء يغلق الجزء المشفر. هل تريد الاستمرار؟
+لتجنب فقدان البيانات، يرجى تنزيل الجهاز قبل الاستمرار</translation>
+    </message>
+    <message>
+        <source>Disabling encrypted volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encrypted volume disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not lock encrypted volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enable the encrypted volume first.</source>
+        <translation type="unfinished">يرجى تفعيل الجزء المشفر أولا</translation>
+    </message>
+    <message>
+        <source>Enabling hidden volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not enable hidden volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disabling hidden volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not lock hidden volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locking device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not lock device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device set in update mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device could not be set in update mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Firmware exported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not export firmware.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?</source>
+        <translation type="unfinished">تحذير: توليد مفاتيح AES الجديدة سوف يدمر الجزء المشفر، الجزء المخفي، وخزانة كلمات السر. هل ترغب في الاستمرار؟</translation>
+    </message>
+    <message>
+        <source>Generating new AES keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New AES keys generated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keys could not be generated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not clear SD card.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Communication issue.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag cannot be cleared.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag cleared.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot set unencrypted volume read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unencrypted volume set read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot set unencrypted volume read-write</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unencrypted volume set read-write</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Functionality not implemented in current version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume could not be created.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Tray</name>
+    <message>
+        <source>Active (debug mode)</source>
+        <translation type="unfinished">نشط (وضع التصحيح)</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation type="unfinished">نشط</translation>
+    </message>
+    <message>
+        <source>Nitrokey not connected</source>
+        <translation type="unfinished">نتروكي غير متصل</translation>
+    </message>
+    <message>
+        <source>Unlock password safe</source>
+        <translation type="unfinished">افتح خزانة كلمات السر</translation>
+    </message>
+    <message>
+        <source>&amp;OTP</source>
+        <translation type="unfinished">&amp;OTP</translation>
+    </message>
+    <message>
+        <source>&amp;Factory reset</source>
+        <translation type="unfinished">&amp;تهيئة المصنع</translation>
+    </message>
+    <message>
+        <source>&amp;Change User PIN</source>
+        <translation type="unfinished">&amp;غير كلمة سر المستخدم</translation>
+    </message>
+    <message>
+        <source>&amp;Change Admin PIN</source>
+        <translation type="unfinished">&amp;غير كلمة سر المدير</translation>
+    </message>
+    <message>
+        <source>&amp;Debug</source>
+        <translation type="unfinished">&amp;صحح</translation>
+    </message>
+    <message>
+        <source>&amp;Quit</source>
+        <translation type="unfinished">&amp;أخرج</translation>
+    </message>
+    <message>
+        <source>&amp;About Nitrokey</source>
+        <translation type="unfinished">&amp;حول نتروكي</translation>
+    </message>
+    <message>
+        <source>&amp;OTP and Password safe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Unlock encrypted volume</source>
+        <translation type="unfinished">&amp;افتح الجزء المشفر</translation>
+    </message>
+    <message>
+        <source>&amp;Lock encrypted volume</source>
+        <translation type="unfinished">&amp;أغلق الجزء المشفر</translation>
+    </message>
+    <message>
+        <source>&amp;Unlock hidden volume</source>
+        <translation type="unfinished">&amp;افتح الجزء المخفي</translation>
+    </message>
+    <message>
+        <source>&amp;Lock hidden volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Change Firmware Password</source>
+        <translation type="unfinished">&amp;غير كلمة سر الفيرم وير</translation>
+    </message>
+    <message>
+        <source>&amp;Enable firmware update</source>
+        <translation type="unfinished">&amp;فعل تحديث الفيرم وير</translation>
+    </message>
+    <message>
+        <source>&amp;Export firmware to file</source>
+        <translation type="unfinished">&amp;صدر الفيرم وير لملف</translation>
+    </message>
+    <message>
+        <source>&amp;Destroy encrypted data</source>
+        <translation type="unfinished">&amp;دمر بيانات الجزء المشفر</translation>
+    </message>
+    <message>
+        <source>&amp;Initialize device</source>
+        <translation type="unfinished">&amp;أسس الجهاز</translation>
+    </message>
+    <message>
+        <source>&amp;Initialize storage with random data</source>
+        <translation type="unfinished">&amp;أسس الذاكرة ببيانات عشوائية</translation>
+    </message>
+    <message>
+        <source>&amp;Set unencrypted volume read-only</source>
+        <translation type="unfinished">&amp;اجعل الجزء غير المشفر للقراءة فقط</translation>
+    </message>
+    <message>
+        <source>&amp;Set unencrypted volume read-write</source>
+        <translation type="unfinished">&amp;اجعل الجزء غير المشفر للقراءة والكتابة</translation>
+    </message>
+    <message>
+        <source>&amp;Setup hidden volume</source>
+        <translation type="unfinished">&amp;هيء الجزء المخفي</translation>
+    </message>
+    <message>
+        <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
+        <translation type="unfinished">&amp;عطل رسالة تحذير &quot;أسس الذاكرة ببيانات عشوائية&quot;</translation>
+    </message>
+    <message>
+        <source>&amp;Lock stick hardware</source>
+        <translation type="unfinished">&amp;أقفل عتاد الفلاش</translation>
+    </message>
+    <message>
+        <source>&amp;Reset User PIN</source>
+        <translation type="unfinished">&amp;أعد تهيئة كلمة سر المسخدم</translation>
+    </message>
+    <message>
+        <source>&amp;Lock Device</source>
+        <translation type="unfinished">&amp;أغلق الجهاز</translation>
+    </message>
+    <message>
+        <source>Smartcard or SD card are not ready</source>
+        <translation type="unfinished">الإس دي أو الكرت الذكي غير جاهز</translation>
+    </message>
+    <message>
+        <source>Passwords</source>
+        <translation type="unfinished">كلمات السر</translation>
+    </message>
+    <message>
+        <source>(empty)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure</source>
+        <translation type="unfinished">تهيئة</translation>
+    </message>
+    <message>
+        <source>Special Configure</source>
+        <translation type="unfinished">تهيئة خاصة</translation>
+    </message>
+    <message>
+        <source>Long operation in progress: %1%</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1722,6 +2089,41 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Nitrokey App - Manage your Nitrokey sticks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable debug options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show additional information about binary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable extra administrative functions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show hardware lock action in tray menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List available languages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load translation file with given nameand store this choice in settings file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

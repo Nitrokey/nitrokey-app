@@ -106,7 +106,7 @@ Initialisieren Sie die Schlüssel.</translation>
 SD card is not accessible
 
 </source>
-        <translation type="vanished">
+        <translation>
 Kann nicht auf SD-Karte zugreifen
 
 </translation>
@@ -116,7 +116,7 @@ Kann nicht auf SD-Karte zugreifen
 Smartcard is not accessible
 
 </source>
-        <translation type="vanished">
+        <translation>
 Kann nicht auf Chipkarte zugreifen
 
 </translation>
@@ -124,7 +124,7 @@ Kann nicht auf Chipkarte zugreifen
     <message>
         <source>No connection
 Please retry</source>
-        <translation type="vanished">Keine Verbindung
+        <translation>Keine Verbindung
 Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
@@ -158,6 +158,18 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>%1 GB</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>      *** Clearing data in progress ***</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>      *** Communication error ***</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>      *** Firmware is locked ***</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -996,7 +1008,7 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
 The time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
 
 Reset Nitrokey&apos;s time?</source>
-        <translation type="vanished">WARNUNG!
+        <translation>WARNUNG!
 
 Die Zeit Ihres Computers und des Nitrokey sind nicht synchron. Ihr Computer könnte mit einer falschen Zeit konfiguriert sein oder Ihr Nitrokey wurde angegriffen. Falls ein Angreifer oder Schadsoftware auf Ihren Nitrokey zugegriffen haben könnte, sollten Sie die Geheimnissse der konfigurierten Einmalpasswörter ändern. Falls die Zeit Ihres Computers falsch ist, sollten Sie diese korrigieren und anschließend die Zeit ihres Nitrokey zurücksetzen.
 
@@ -1237,6 +1249,14 @@ Falls das Problem erneut auftritt:
         <source>Closing window due to device disconnection</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Device is detected but could not be connected. Please reinsert it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locking device</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
@@ -1449,6 +1469,18 @@ Bitte ändern Sie die PIN.</translation>
     </message>
 </context>
 <context>
+    <name>QApplication</name>
+    <message>
+        <source>Critical error encountered. Please restart application.
+Message: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Communication error. Please reinsert the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Stick20Dialog</name>
     <message>
         <source>Stick 2.0</source>
@@ -1625,6 +1657,169 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     </message>
 </context>
 <context>
+    <name>StorageActions</name>
+    <message>
+        <source>This activity locks your hidden volume. Do you want to proceed?
+To avoid data loss, please unmount the partitions before proceeding.</source>
+        <translation type="unfinished">Diese Aktivität verriegelt Ihr verstecktes Volumen. Wollen Sie fortsetzen?
+Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aushängen.</translation>
+    </message>
+    <message>
+        <source>Enabling encrypted volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encrypted volume enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not enable encrypted volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrong password.</source>
+        <translation type="unfinished">Falsches Passwort.</translation>
+    </message>
+    <message>
+        <source>Status code: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This activity locks your encrypted volume. Do you want to proceed?
+To avoid data loss, please unmount the partitions before proceeding.</source>
+        <translation type="unfinished">Diese Aktivität verriegelt Ihr verschlüsseltes Volumen. Wollen Sie fortsetzen?
+Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aushängen.</translation>
+    </message>
+    <message>
+        <source>Disabling encrypted volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encrypted volume disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not lock encrypted volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enable the encrypted volume first.</source>
+        <translation type="unfinished">Bitte aktivieren Sie zuerst das verschlüsselte Volumen.</translation>
+    </message>
+    <message>
+        <source>Enabling hidden volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not enable hidden volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disabling hidden volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not lock hidden volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locking device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not lock device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device set in update mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device could not be set in update mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Firmware exported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not export firmware.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?</source>
+        <translation type="unfinished">WARNUNG: Die Generierung eines neuen AES-Schlüssels wird die verschlüsselten Volumen, versteckten Volumen und den Passwort-Safe zerstören! Fortfahren?</translation>
+    </message>
+    <message>
+        <source>Generating new AES keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New AES keys generated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keys could not be generated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not clear SD card.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Communication issue.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag cannot be cleared.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag cleared.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot set unencrypted volume read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unencrypted volume set read-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot set unencrypted volume read-write</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unencrypted volume set read-write</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Functionality not implemented in current version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume could not be created.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Tray</name>
     <message>
         <source>Active (debug mode)</source>
@@ -1757,6 +1952,14 @@ Die Aktualisierung der Firmware ist daher nicht möglich.</translation>
     <message>
         <source>Special Configure</source>
         <translation type="unfinished">Spezial konfigurieren</translation>
+    </message>
+    <message>
+        <source>(empty)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Long operation in progress: %1%</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
