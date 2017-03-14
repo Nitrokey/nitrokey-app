@@ -15,12 +15,17 @@ before_install:
   - sudo apt-get -qq install qt56base  qt56tools # qttools5-dev
   - sudo apt-get install -y cmake libhidapi-dev g++-5 clang-3.8
 
+cache:
+  - apt
+  - ccache
+
 
 script:
   - echo "${TRAVIS_OS_NAME}" 
   - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then source /opt/qt56/bin/qt56-env.sh ; fi
   - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then export QMAKE=/opt/qt56/bin/qmake; fi
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then export QMAKE=qmake; fi
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew update; brew install ccache; brew install qt5; brew install cmake; export CMAKE_PREFIX_PATH=/usr/local/lib/cmake; fi
   - if [ "$builder" == "qmake" ]; then pushd libnitrokey/build/ && cmake .. && make; popd ; fi
   - if [ "$builder" == "qmake" ]; then ${QMAKE} && make ; fi
   - if [ "$builder" == "cmake" ]; then cmake . && make VERBOSE=1; fi
