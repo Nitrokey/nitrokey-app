@@ -1,6 +1,13 @@
 
-CONFIG   += qt c++14 console
+CONFIG   += qt 
 QT       += core gui
+
+win32 {
+CONFIG += c++14
+}
+unix {
+QMAKE_CXXFLAGS += -std=c++14
+}
 
 target.path = /usr/local/bin
 desktop.path = /usr/share/applications
