@@ -108,6 +108,7 @@ unix:!macx{
 # TODO make second binary - debug - linked with libnitrokey-log
 win32 {
     INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
+    #TODO add hidapi sources to libnitrokey instead
     SOURCES += $${ROOTDIR}/libnitrokey/hidapi/windows/hid.c
     LIBS= -lsetupapi -lhid
     LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
@@ -116,6 +117,7 @@ win32 {
 
 macx{
     INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
+    #TODO add hidapi sources to libnitrokey instead
     SOURCES += $${ROOTDIR}/libnitrokey/hidapi/mac/hid.c
     LIBS+=-framework IOKit -framework CoreFoundation
     ICON= images/CS_icon.icns
