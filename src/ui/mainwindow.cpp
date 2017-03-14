@@ -686,10 +686,16 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
 
   auto secret = ui->secretEdit->text().toLatin1().toStdString();
   if (secret.size() != 0) {
-    auto secret_raw = base32::decode(secret);
-    auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
-    ui->secretEdit->setText(secret_hex);
-    clipboard.copyToClipboard(secret_hex);
+    try{
+      auto secret_raw = base32::decode(secret);
+      auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
+      ui->secretEdit->setText(secret_hex);
+      clipboard.copyToClipboard(secret_hex);
+    }
+    catch (const cppcodec::parse_error &e) {
+      ui->secretEdit->setText("");
+      csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it."));
+    }
   }
 }
 
@@ -711,11 +717,16 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
   
   auto secret_hex = ui->secretEdit->text().toStdString();
   if (secret_hex.size() != 0) {
-    auto secret_raw = cppcodec::hex_upper::decode(secret_hex);
-    auto secret_base32 = QString::fromStdString(base32::encode(secret_raw));
-
-    ui->secretEdit->setText(secret_base32);
-    clipboard.copyToClipboard(secret_base32);
+    try{
+      auto secret_raw = cppcodec::hex_upper::decode(secret_hex);
+      auto secret_base32 = QString::fromStdString(base32::encode(secret_raw));
+      ui->secretEdit->setText(secret_base32);
+      clipboard.copyToClipboard(secret_base32);
+    }
+    catch (const cppcodec::parse_error &e) {
+      ui->secretEdit->setText("");
+      csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it."));
+    }
   }
   ui->secretEdit->setMaxLength(get_supported_secret_length_base32());
 }
