@@ -25,16 +25,17 @@ script:
   - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then source /opt/qt56/bin/qt56-env.sh ; fi
   - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then export QMAKE=/opt/qt56/bin/qmake; fi
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then export QMAKE=qmake; fi
-  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew update; brew install ccache; brew install qt5; brew install cmake; export CMAKE_PREFIX_PATH=/usr/local/lib/cmake; fi
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew update; brew install ccache; brew install qt5; brew unlink cmake; brew install cmake; export CMAKE_PREFIX_PATH=/usr/local/lib/cmake; fi
   - if [ "$builder" == "qmake" ]; then pushd libnitrokey/build/ && cmake .. && make; popd ; fi
   - if [ "$builder" == "qmake" ]; then ${QMAKE} && make ; fi
   - if [ "$builder" == "cmake" ]; then cmake . && make VERBOSE=1; fi
 
 env:
-  - builder=cmake CXX=clang++-3.8 CC=clang-3.8
-  - builder=qmake CXX=clang++-3.8 CC=clang-3.8
-  - builder=cmake CXX=g++-5 CC=gcc-5
-  - builder=qmake CXX=g++-5 CC=gcc-5
+  matrix:
+    - builder=cmake CXX=clang++-3.8 CC=clang-3.8
+    - builder=qmake CXX=clang++-3.8 CC=clang-3.8
+    - builder=cmake CXX=g++-5 CC=gcc-5
+    - builder=qmake CXX=g++-5 CC=gcc-5
   global:
     - AF=-yq --no-install-suggests --no-install-recommends --force-yes
 
