@@ -28,7 +28,7 @@ script:
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then export QMAKE=qmake; fi
   - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew update; brew install ccache; brew install qt5; brew unlink cmake; brew install cmake; export CMAKE_PREFIX_PATH=/usr/local/lib/cmake; fi
   - if [ "$builder" == "qmake" ]; then pushd libnitrokey/build/ && cmake .. && make; popd ; fi
-  - if [ "$builder" == "qmake" ]; then ${QMAKE} && make ; fi
+  - if [ "$builder" == "qmake" ]; then ${QMAKE} && make CXX=${CXX} CC=${CC} ; fi
   - if [ "$builder" == "cmake" ]; then cmake . && make VERBOSE=1; fi
 
 env:
