@@ -1,4 +1,4 @@
-language: cpp
+language: generic
 
 notifications:
     email: false
