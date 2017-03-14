@@ -17,9 +17,10 @@ before_install:
 
 
 script:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then source /opt/qt55/bin/qt55-env.sh ; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then export QMAKE=/opt/qt55/bin/qmake; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export QMAKE=qmake; fi
+  - echo "${TRAVIS_OS_NAME}" 
+  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then source /opt/qt55/bin/qt55-env.sh ; fi
+  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then export QMAKE=/opt/qt55/bin/qmake; fi
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then export QMAKE=qmake; fi
   - if [ "$builder" == "qmake" ]; then pushd libnitrokey/build/ && cmake .. && make; popd ; fi
   - if [ "$builder" == "qmake" ]; then ${QMAKE} && make ; fi
   - if [ "$builder" == "cmake" ]; then cmake . && make VERBOSE=1; fi
