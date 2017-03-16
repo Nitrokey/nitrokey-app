@@ -1,14 +1,14 @@
 Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app) [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
 ============
-Nitrokey App runs under Windows, Linux and Mac OS. It has been created with Qt Creator and Qt 5 and MinGW 4.4. Lately developed under Ubuntu 16.04 with Qt5.5.
+Nitrokey App runs under Windows, Linux and Mac OS. Lately developed under Ubuntu 16.10 with Qt5.6.
 
 The implementation is compatible to the Google Authenticator application which can be used for testing purposes. See [google-authenticator](http://google-authenticator.googlecode.com/git/libpam/totp.html)
 
-Using the application under Linux also requires root privileges, or configuration of device privileges in udev (due to USB communication). Udev configuration is installed automatically with application (either with package or after `make install`).
+Using the application under Linux requires configuration of device privileges in udev (due to USB communication). The configuration is installed automatically with application (either with package or after `make install`). Without it application cannot communicate unless run with root privileges.
 
-Known issue: tray icon under Debian Jessy
+Known issue: tray icon under Debian Jessie
 ----------------
-Under Debian Jessy application's tray icon might be unavailable. There were reports it can be fixed with updating Qt libraries to 5.4.2 version and up. The packages are available in experimental branch. For more details please refer to: https://github.com/Nitrokey/nitrokey-app/issues/86
+Under Debian Jessie application's tray icon might be unavailable. There were reports it can be fixed with updating Qt libraries to 5.4.2 version and up. The packages are available in experimental branch. For more details please refer to: https://github.com/Nitrokey/nitrokey-app/issues/86
 
 Installation and downloads
 -------------------------
@@ -17,26 +17,17 @@ Ready to use packages and install instructions are available on main site in dow
 Compilation
 ===========
 
-To compile the Nitrokey App under Linux install the package `libusb-1.0.0-dev` and QT Creator (optionally). In case it would not work out-of-the-box you may need to add to the .pro file:
-```
-QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
-QMAKE_CFLAGS= -I/usr/include/libusb-1.0
-```
-
-Note: In case `libusb-1.0.0-dev` is not available to install please check other name: `libusb-1.0-0-dev` (the difference is the `-` char between zeroes).
-
-
 
 Compiling on Ubuntu Linux
 -------------------------
-Prerequisites for building on Ubuntu:
-libusb-1.0.0-dev
-libgtk2.0-dev
-libappindicator-dev
-libnotify-dev
+Prerequisites for building on Ubuntu 16.10:
+- libusb-1.0.0-dev # libusb library
+- cmake # for compiling libnitrokey
+- qt5-default # QT5.6 library
+
 
 ```
-sudo apt-get install libusb-1.0.0-dev libgtk2.0-dev libappindicator-dev libnotify-dev
+sudo apt-get install libusb-1.0.0-dev cmake qt5-default
 ```
 
 #### Getting the Nitrokey Sources
@@ -46,7 +37,7 @@ Clone the Nitrokey repository into your $HOME git folder.
 ```
 cd $HOME
 mkdir git && cd git
-git clone https://github.com/Nitrokey/nitrokey-app.git
+git clone https://github.com/Nitrokey/nitrokey-app.git --recursive
 ```
 
 #### QT5
@@ -91,6 +82,7 @@ sudo make install
 ```
 
 #### Using qmake:
+Please compile earlier libnitrokey (following instructions from its readme). QMake will search static libnitrokey library in `libnitrokey/build` directory.
 ```
 qmake
 make -j4
@@ -105,6 +97,20 @@ qmake ..
 make -j4 && make install
 ```
 
+
+
+#### Issues  with libusb
+
+To compile the Nitrokey App under Linux install the package `libusb-1.0.0-dev` and QT Creator (optionally). In case it would not work out-of-the-box you may need to add to the .pro file:
+```
+QMAKE_CXXFLAGS= -I/usr/include/libusb-1.0
+QMAKE_CFLAGS= -I/usr/include/libusb-1.0
+```
+
+Note: In case `libusb-1.0.0-dev` is not available to install please check other name: `libusb-1.0-0-dev` (the difference is the `-` char between zeroes).
+
+
+### Debian Packages
 #### Building Debian Packages
 
 Execute the following in directory "nitrokey-app":
@@ -118,7 +124,7 @@ Cleanup with:
  fakeroot make -f debian/rules clean
  ```
 
-Requirements: fakeroot, debhelper, hardening-wrapper, qt5-default, gtk2.0, libusb-1.0-0-dev, libappindicator-dev, libnotify-dev.
+Requirements: fakeroot, debhelper, hardening-wrapper, qt5-default, libusb-1.0-0-dev, cmake. 
 
 #### Building RPM and Debian Packages (alternative)
 CMake can generate RPM packages using CPack. It can also generate `.deb` package using other method than presented in previous section. To create both packages please execute the following in directory "nitrokey-app":
@@ -131,17 +137,19 @@ This will result in two packages: `.deb` and `.rpm`.
 
 #### Cross Compiling with QT5 for Windows on Ubuntu Linux (using MXE)
 
-new:
+Please run following commands:
 
 ```
-# MXE gcc6, x32:
-#remove MXE_PLUGIN_DIRS for GCC 5.4.0
+# install dependencies for compilation
+sudo apt-get install bison cmake flex intltool libtool scons
+# MXE GCC6, x32
+#remove MXE_PLUGIN_DIRS switch to use GCC 5.4.0 instead of GCC 6
 git clone https://github.com/mxe/mxe.git && pushd mxe
 make MXE_TARGETS=i686-w64-mingw32.static.posix MXE_PLUGIN_DIRS=plugins/gcc6  qtbase # takes about 1 hour first time
 popd
 
-#should download nitrokey-app and libnitrokey and hidapi (own clone with applied windows patch)
-git clone https://github.com/szszszsz/nitrokey-app --recursive --init
+#following should download nitrokey-app and libnitrokey with hidapi (own clone with applied OS-specific patches)
+git clone https://github.com/Nitrokey/nitrokey-app.git --recursive 
 pushd nitrokey-app/libnitrokey/build
 ln -s ../../../mxe/usr/bin/
 ./bin/i686-w64-mingw32.static.posix-cmake ..
@@ -157,7 +165,7 @@ popd
 ```
 
 
-Old (for reference) - based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
+Old description (for reference) - based on [this](https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target):
 
 1. `sudo apt-get install bison cmake flex intltool libtool scons`
 2. `git clone https://github.com/mxe/mxe.git`
@@ -169,8 +177,8 @@ Old (for reference) - based on [this](https://stackoverflow.com/questions/109346
 8. optional: use upx to compress the executable
 
 
-#### Compiling for MAC OS
-1. Use Qt to compile the Nitrokey App
+#### Compiling and creating a package for MAC OS
+1. Use Qt (qmake) to compile the Nitrokey App
 2. Navigate to `<build_dir>/<app_name>/Contents`
 3. Create a .dmg file: go to the build directory and use
      
@@ -191,17 +199,13 @@ Note that the Nitrokey App's graphical interface is based on a QT system tray wi
 Internals
 ---------
 All configuration data including OTP secrets are stored in clear text in the flash of Nitrokey's microcontroller. This is not tamper resistant and may only be used for low to medium security requirements.
+Password Safe is encrypted using 256 bit AES key to which access is protected with SIM card.
 
-By default the OTP serial number is OpenPGP Card's serial number. It can be changed within the GUI. The USB device serial number is set to the card's serial number when the device powers up.
+By default the OTP serial number (OTP Token) is OpenPGP Card's serial number. It can be changed within the GUI for each entry. The USB device serial number is set to the card's serial number when the device powers up.
 
-Keyboard Layout: The user will input the token ID values as he wants them displayed, then the gui will translate them to keycodes of the selected layout. The keycodes will be stored on the device, along with a number saying which layout was used, this number is important when the GUI application reads the conifg back from the device (to translate the keycodes back into characters).
+(disabled feature) Keyboard Layout: The user will input the token ID values as he wants them displayed, then the gui will translate them to keycodes of the selected layout. The keycodes will be stored on the device, along with a number saying which layout was used, this number is important when the GUI application reads the conifg back from the device (to translate the keycodes back into characters).
 
 The report protocol is described [here](https://github.com/Nitrokey/nitrokey-pro-firmware/blob/master/src/inc/report_protocol.h) for Pro and [here](https://github.com/Nitrokey/nitrokey-storage-firmware/blob/master/src/OTP/report_protocol.h) for Storage.
 The HID reports are set to 64 bytes. The "output report" is what you get from the device. When you send a report (command), the first byte sets the command type, then you have 59 bytes for your data, and the last 4 bytes are the CRC32 of the whole report.
 
-On the GUI side, you can find examples of sending commands and receiving responses [here](https://github.com/Nitrokey/nitrokey-app/blob/master/src/device.cpp)
-
-First you create an object of class Command, for that you need a number for the command type, a buffer of data you want to send and the length of that buffer. Then you just use Device::sendCommand(Command *cmd), the CRC32 will be calculated automatically.
-To get a response, you just create a new object of class Response and do Response::getResponse(Device *device) and then you can analyze contents of the response object, already divided into fields ([see here](https://github.com/Nitrokey/nitrokey-app/blob/master/src/response.h)).
-
-
+On the GUI side, please check documentation of [libnitrokey](https://github.com/Nitrokey/libnitrokey) project.
