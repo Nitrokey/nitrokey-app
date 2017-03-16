@@ -320,7 +320,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   auto secret_raw = base32::decode(secretFromGUI);
   auto secret_hex = hex::encode(secret_raw);
 
-  size_t toCopy = std::min(sizeof(slot->secret), (const size_t &) secret_hex.length());
+  size_t toCopy = std::min(sizeof(slot->secret)-1, (const size_t &) secret_hex.length());
   if (!libada::i()->is_secret320_supported() && toCopy > 40){
     toCopy = 40;
   }
@@ -330,10 +330,10 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   //TODO to rewrite
   QByteArray slotNameFromGUI = QByteArray(this->ui->nameEdit->text().toLatin1());
   memset(slot->slotName, 0, sizeof(slot->slotName));
-  toCopy = std::min(sizeof(slot->slotName), (const size_t &) slotNameFromGUI.length());
+  toCopy = std::min(sizeof(slot->slotName)-1, (const size_t &) slotNameFromGUI.length());
   memcpy(slot->slotName, slotNameFromGUI.constData(), toCopy);
 
-  memset(slot->tokenID, 32, sizeof(slot->tokenID));
+  memset(slot->tokenID, 0, sizeof(slot->tokenID));
   QByteArray ompFromGUI = (this->ui->ompEdit->text().toLatin1());
   toCopy = std::min(2ul, (const unsigned long &) ompFromGUI.length());
   memcpy(slot->tokenID, ompFromGUI.constData(), toCopy);
@@ -383,9 +383,9 @@ void MainWindow::generateAllConfigs() {
 }
 
 void updateSlotConfig(const nitrokey::ReadSlot::ResponsePayload &p, Ui::MainWindow* ui)  {
-  ui->ompEdit->setText(QString((char *) p.slot_token_fields.omp));
-  ui->ttEdit->setText(QString((char *) p.slot_token_fields.tt));
-  ui->muiEdit->setText(QString((char *) p.slot_token_fields.mui));
+  ui->ompEdit->setText(QString((char *) p.slot_token_fields.omp).trimmed());
+  ui->ttEdit->setText(QString((char *) p.slot_token_fields.tt).trimmed());
+  ui->muiEdit->setText(QString((char *) p.slot_token_fields.mui).trimmed());
 
   if (p.use_8_digits)
     ui->digits8radioButton->setChecked(true);
@@ -686,10 +686,16 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
 
   auto secret = ui->secretEdit->text().toLatin1().toStdString();
   if (secret.size() != 0) {
-    auto secret_raw = base32::decode(secret);
-    auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
-    ui->secretEdit->setText(secret_hex);
-    clipboard.copyToClipboard(secret_hex);
+    try{
+      auto secret_raw = base32::decode(secret);
+      auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
+      ui->secretEdit->setText(secret_hex);
+      clipboard.copyToClipboard(secret_hex);
+    }
+    catch (const cppcodec::parse_error &e) {
+      ui->secretEdit->setText("");
+      csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it."));
+    }
   }
 }
 
@@ -711,11 +717,16 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
   
   auto secret_hex = ui->secretEdit->text().toStdString();
   if (secret_hex.size() != 0) {
-    auto secret_raw = cppcodec::hex_upper::decode(secret_hex);
-    auto secret_base32 = QString::fromStdString(base32::encode(secret_raw));
-
-    ui->secretEdit->setText(secret_base32);
-    clipboard.copyToClipboard(secret_base32);
+    try{
+      auto secret_raw = cppcodec::hex_upper::decode(secret_hex);
+      auto secret_base32 = QString::fromStdString(base32::encode(secret_raw));
+      ui->secretEdit->setText(secret_base32);
+      clipboard.copyToClipboard(secret_base32);
+    }
+    catch (const cppcodec::parse_error &e) {
+      ui->secretEdit->setText("");
+      csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it."));
+    }
   }
   ui->secretEdit->setMaxLength(get_supported_secret_length_base32());
 }
@@ -737,6 +748,9 @@ void MainWindow::on_tokenIDCheckBox_toggled(bool checked) {
   ui->ompEdit->setEnabled(checked);
   ui->ttEdit->setEnabled(checked);
   ui->muiEdit->setEnabled(checked);
+  ui->ompEdit->setText(ui->ompEdit->text().trimmed());
+  ui->ttEdit->setText(ui->ttEdit->text().trimmed());
+  ui->muiEdit->setText(ui->muiEdit->text().trimmed());
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
