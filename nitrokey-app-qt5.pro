@@ -1,5 +1,5 @@
 
-CONFIG   += qt c++14 console
+CONFIG   += qt c++14
 QT       += core gui
 
 target.path = /usr/local/bin
@@ -29,7 +29,6 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCDIR}/hotpslot.cpp \
             $${SRCUIDIR}/stick20updatedialog.cpp \
             $${SRCUIDIR}/stick20responsedialog.cpp \
-            $${SRCUIDIR}/stick20-response-task.cpp \
             $${SRCUIDIR}/stick20lockfirmwaredialog.cpp \
             $${SRCUIDIR}/stick20hiddenvolumedialog.cpp \
             $${SRCUIDIR}/stick20debugdialog.cpp \
@@ -50,7 +49,6 @@ SOURCES +=  $${SRCDIR}/main.cpp\
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCUIDIR}/stick20updatedialog.h \
             $${SRCUIDIR}/stick20responsedialog.h \
-            $${SRCUIDIR}/stick20-response-task.h \
             $${SRCUIDIR}/stick20lockfirmwaredialog.h \
             $${SRCUIDIR}/stick20hiddenvolumedialog.h \
             $${SRCUIDIR}/stick20debugdialog.h \
@@ -96,6 +94,7 @@ INCLUDEPATH +=  $${SRCDIR} \
                 $${SRCUIDIR} \
                 $${UTILSDIR} \
                 $${COREDIR} \
+		$${ROOTDIR}/cppcodec \
                 $${GUIDIR}
 
 
@@ -109,6 +108,7 @@ unix:!macx{
 # TODO make second binary - debug - linked with libnitrokey-log
 win32 {
     INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
+    #TODO add hidapi sources to libnitrokey instead
     SOURCES += $${ROOTDIR}/libnitrokey/hidapi/windows/hid.c
     LIBS= -lsetupapi -lhid
     LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
@@ -117,8 +117,9 @@ win32 {
 
 macx{
     INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
+    #TODO add hidapi sources to libnitrokey instead
     SOURCES += $${ROOTDIR}/libnitrokey/hidapi/mac/hid.c
-    LIBS=-framework IOKit -framework CoreFoundation
+    LIBS+=-framework IOKit -framework CoreFoundation
     ICON= images/CS_icon.icns
     QMAKE_INFO_PLIST = Info.plist
 }

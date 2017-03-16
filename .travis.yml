@@ -1,33 +1,63 @@
+language: generic
+
 notifications:
     email: false
-language: c++
 os:
   - linux
-#  - osx
 
-sudo: true
+sudo: true #for beineri qt561
 dist: trusty
 
 before_install:
-  - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
+  - sudo add-apt-repository --yes ppa:beineri/opt-qt562-trusty
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   - sudo apt-get -qq update
-  - sudo apt-get -qq install qt55base
-  - sudo apt-get install -y build-essential cmake libusb-1.0-0 libusb-1.0-0-dev mesa-common-dev libgl1-mesa-dev
+  - sudo apt-get -qq install ${AF} qt56base  qt56tools # qttools5-dev
+  - sudo apt-get -qq install ${AF} cmake libhidapi-dev ${COMP}
+  - sudo apt-get -qq remove gcc-4.8 g++-4.8 --purge
 
-compiler:
-  - g++
-  - clang++
+cache:
+  - ccache
+  - apt
+
 
 script:
-  - source /opt/qt55/bin/qt55-env.sh
-  - if [ "$builder" == "qmake" ]; then /opt/qt55/bin/qmake && make ; fi
+  - echo "${TRAVIS_OS_NAME}" 
+  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then source /opt/qt56/bin/qt56-env.sh ; fi
+  - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then export QMAKE=/opt/qt56/bin/qmake; fi
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then export QMAKE=qmake; fi
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew update; brew install ccache; brew install qt5; brew unlink cmake; brew install cmake; export ; fi
+  - if [ "$builder" == "qmake" ]; then pushd libnitrokey/build/ && cmake .. && make; popd ; fi
+  - if [ "$builder" == "qmake" -a "${TRAVIS_OS_NAME}" == "osx" ]; then ${QMAKE} && make ; fi
+  - if [ "$builder" == "qmake" -a "${TRAVIS_OS_NAME}" == "linux" ]; then ${QMAKE} && make CXX=${CXX} CC=${CC} LINK=${CXX} ; fi
   - if [ "$builder" == "cmake" ]; then cmake . && make VERBOSE=1; fi
 
 env:
-  - builder=cmake
-  - builder=qmake
+  matrix:
+    - builder=cmake CXX=clang++-3.8 CC=clang-3.8 COMP="clang-3.8 g++-5"
+    - builder=qmake CXX=clang++-3.8 CC=clang-3.8 COMP="clang-3.8 g++-5"
+    - builder=cmake CXX=g++-5 CC=gcc-5 COMP=g++-5
+    - builder=qmake CXX=g++-5 CC=gcc-5 COMP=g++-5
+    - builder=qmake CXX=g++-6 CC=gcc-6 COMP=g++-6
+  global:
+    - AF="-yq --no-install-suggests --no-install-recommends --force-yes"
 
 matrix:
   exclude:
-    - compiler: clang++
-      env: builder=qmake
+  include:
+    - os: osx
+      osx_image: xcode7.3 #default
+      before_install:
+      env: builder=cmake PATH="/usr/local/opt/qt5/bin:$PATH" CMAKE_PREFIX_PATH=/usr/local/lib/cmake MACOS_DEPLOYMENT_TARGET=10.9
+    - os: osx
+      osx_image: xcode7.3 #default
+      before_install:
+      env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH" CMAKE_PREFIX_PATH=/usr/local/lib/cmake MACOS_DEPLOYMENT_TARGET=10.9
+    - os: osx
+      osx_image: xcode6.4
+      before_install:
+      env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH" CMAKE_PREFIX_PATH=/usr/local/lib/cmake MACOS_DEPLOYMENT_TARGET=10.9
+    - os: osx
+      osx_image: xcode8.2
+      before_install:
+      env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH" CMAKE_PREFIX_PATH=/usr/local/lib/cmake MACOS_DEPLOYMENT_TARGET=10.9
