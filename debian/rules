@@ -40,7 +40,7 @@ binary: nitrokey-app
 	install -m644 data/nitrokey-app.desktop debian/nitrokey-app/usr/share/applications/nitrokey-app.desktop
 	install -m644 data/icons/hicolor/48x48/apps/nitrokey-app.png debian/nitrokey-app/usr/share/pixmaps/nitrokey-app.png
 	install -m644 data/nitrokey-app-small.xpm debian/nitrokey-app/usr/share/pixmaps/nitrokey-app-small.xpm
-	install -m644 data/40-nitrokey.rules debian/nitrokey-app/lib/udev/rules.d/40-nitrokey.rules
+	install -m644 data/41-nitrokey.rules debian/nitrokey-app/lib/udev/rules.d/41-nitrokey.rules
 	install -m644 data/bash-autocomplete/nitrokey-app debian/nitrokey-app/usr/share/bash-completion/completions/nitrokey-app
 
 	dh_installdocs

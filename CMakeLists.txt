@@ -149,7 +149,7 @@ IF(NOT WIN32)
 
   # Install Nitrokey udev rules
   install(FILES
-   ${CMAKE_SOURCE_DIR}/data/40-nitrokey.rules
+   ${CMAKE_SOURCE_DIR}/data/41-nitrokey.rules
    DESTINATION lib/udev/rules.d
   )
 
