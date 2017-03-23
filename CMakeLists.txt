@@ -82,6 +82,7 @@ set(CMAKE_AUTORCC ON)
 SET(qrc_files
     resources.qrc
 )
+qt5_add_resources(RESOURCE_ADDED ${qrc_files})
 
 # create translation files to include into resource file
 # remember to add new translations files there
