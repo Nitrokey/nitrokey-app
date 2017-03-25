@@ -1,4 +1,7 @@
 
+
+message("CONFIG: $${CONFIG}")
+
 CONFIG   += qt c++14
 QT       += core gui
 
@@ -97,9 +100,16 @@ INCLUDEPATH +=  $${SRCDIR} \
 		$${ROOTDIR}/cppcodec \
                 $${GUIDIR}
 
+LIBNITROKEY= -lnitrokey-static
+enable_log {
+    message("enable_log : enabled")
+    LIBNITROKEY= -lnitrokey-static-log
+    CONFIG += console
+}
+
 
 unix{
-    LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
+    LIBS += $${LIBNITROKEY} -L$${ROOTDIR}/libnitrokey/build
 }
 unix:!macx{
     LIBS += -lhidapi-libusb
@@ -111,7 +121,7 @@ win32 {
     #TODO add hidapi sources to libnitrokey instead
     SOURCES += $${ROOTDIR}/libnitrokey/hidapi/windows/hid.c
     LIBS= -lsetupapi -lhid
-    LIBS += -lnitrokey-static -L$${ROOTDIR}/libnitrokey/build
+    LIBS += $${LIBNITROKEY} -L$${ROOTDIR}/libnitrokey/build
     RC_FILE=appico.rc
 }
 
