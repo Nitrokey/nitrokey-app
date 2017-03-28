@@ -175,7 +175,7 @@ void MainWindow::checkConnection() {
 
       if(libada::i()->isStorageDeviceConnected()){
         try {
-          libada::i()->isPasswordSafeUnlocked();
+          libada::i()->get_status();
           long_operation_in_progress = false;
         }
         catch (LongOperationInProgressException &e){
@@ -929,33 +929,36 @@ void MainWindow::SetupPasswordSafeConfig(void) {
   PWS_set_controls_enabled(PWS_Access);
 
   try{
+    libada::i()->get_status(); //WORKAROUND for crashing Storage v0.45
     PWS_Access = libada::i()->isPasswordSafeUnlocked();
+    PWS_set_controls_enabled(PWS_Access);
+
+    // Get active password slots
+    if (PWS_Access) {
+      // Setup combobox
+      ui->PWS_ComboBoxSelectSlot->clear();
+      ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("<Select Password Safe slot>")));
+      for (i = 0; i < PWS_SLOT_COUNT; i++) {
+        if (libada::i()->getPWSSlotStatus(i)) {
+          ui->PWS_ComboBoxSelectSlot->addItem(
+              QString(tr("Slot "))
+                  .append(QString::number(i + 1, 10))
+                  .append(QString(" [")
+                              .append(QString::fromStdString(libada::i()->getPWSSlotName(i)))
+                              .append(QString("]"))));
+        } else {
+          ui->PWS_ComboBoxSelectSlot->addItem(
+              QString(tr("Slot ")).append(QString::number(i + 1, 10)));
+        }
+      }
+    } else {
+      ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("Unlock password safe")));
+    }
+
   }
   catch (LongOperationInProgressException &e){
     long_operation_in_progress = true;
     return;
-  }
-
-  // Get active password slots
-  if (PWS_Access) {
-    // Setup combobox
-    ui->PWS_ComboBoxSelectSlot->clear();
-    ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("<Select Password Safe slot>")));
-    for (i = 0; i < PWS_SLOT_COUNT; i++) {
-      if (libada::i()->getPWSSlotStatus(i)) {
-        ui->PWS_ComboBoxSelectSlot->addItem(
-            QString(tr("Slot "))
-                .append(QString::number(i + 1, 10))
-                .append(QString(" [")
-                            .append(QString::fromStdString(libada::i()->getPWSSlotName(i)))
-                            .append(QString("]"))));
-      } else {
-        ui->PWS_ComboBoxSelectSlot->addItem(
-            QString(tr("Slot ")).append(QString::number(i + 1, 10)));
-      }
-    }
-  } else {
-    ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("Unlock password safe")));
   }
 
   ui->PWS_ComboBoxSelectSlot->setEnabled(PWS_Access);
