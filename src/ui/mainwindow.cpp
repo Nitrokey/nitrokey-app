@@ -1034,10 +1034,12 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
           //FIXME use secure way
           auto pass_cstr = nm::instance()->get_password_safe_slot_password(index);
           data["pass"] = QString::fromStdString(pass_cstr);
+          //TODO clear C strings before freeing
           free((void *) pass_cstr);
           emit PWS_progress(100*3/4);
           auto login_cstr = nm::instance()->get_password_safe_slot_login(index);
           data["login"] = QString::fromStdString(login_cstr);
+          //TODO clear C strings before freeing
           free((void *) login_cstr);
         }
         emit PWS_progress(100*4/4);
