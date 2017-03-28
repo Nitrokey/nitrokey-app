@@ -184,6 +184,9 @@ bool libada::isPasswordSafeUnlocked() {
     nm::instance()->get_password_safe_slot_status();
     return true;
   }
+  catch (const LongOperationInProgressException &e){
+   return false;
+  }
   catch (CommandFailedException &e){
     if (e.reason_not_authorized())
       return false;
@@ -254,6 +257,9 @@ bool libada::is_time_synchronized() {
   try{
     nm::instance()->get_time(time);
     return true;
+  }
+  catch (const LongOperationInProgressException &e){
+    return false;
   }
   catch( CommandFailedException &e){
     if (!e.reason_timestamp_warning())
