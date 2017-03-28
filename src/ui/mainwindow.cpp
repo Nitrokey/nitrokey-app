@@ -1278,16 +1278,21 @@ int MainWindow::factoryResetAction() {
       return 0;
     try{
       nm::instance()->factory_reset(password.c_str());
-      csApplet()->messageBox("Factory reset was successful.");
-      emit FactoryReset();
-      return 1;
+    }
+    catch (InvalidCRCReceived &e) {
+      //We are expecting this exception due to bug in Storage stick firmware, v0.45, with CRC set to "0" in response
     }
     catch (CommandFailedException &e){
       if(!e.reason_wrong_password())
         throw;
       csApplet()->messageBox("Wrong Pin. Please try again.");
+      continue;
     }
+    csApplet()->messageBox("Factory reset was successful.");
+    emit FactoryReset();
+    return 1;
   }
+  return 0;
 }
 
 void MainWindow::on_radioButton_2_toggled(bool checked) {
