@@ -37,8 +37,12 @@ class DialogChangePassword : public QDialog {
   Q_OBJECT
   public :
   // FIXME extract constant to global config
-    const static int minimumPasswordLength = 6;
-    explicit DialogChangePassword(QWidget *parent, PasswordKind _kind);
+    const static int minimumPasswordLengthUser = 6;
+    const static int minimumPasswordLengthAdmin = 8;
+    const static int minimumPasswordLengthFirmware = 6;
+    int minimumPasswordLength = {};
+
+  explicit DialogChangePassword(QWidget *parent, PasswordKind _kind);
     ~DialogChangePassword();
 
     void InitData(void);
