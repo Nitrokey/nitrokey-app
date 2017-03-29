@@ -185,6 +185,8 @@ public:
   void PWS_set_controls_enabled(bool enabled) const;
 
   ConnectionState connectionState = ConnectionState::disconnected;
+
+  void set_commands_delay(int delay_in_ms);
 };
 
 class utf8FieldLengthValidator : public QValidator {

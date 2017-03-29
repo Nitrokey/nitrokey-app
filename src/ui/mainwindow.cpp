@@ -1456,3 +1456,7 @@ void MainWindow::show_progress_window() {
   progress_window->raise();
   QApplication::setActiveWindow(progress_window.get());
 }
+
+void MainWindow::set_commands_delay(int delay_in_ms) {
+  nm::instance()->set_default_commands_delay(delay_in_ms);
+}
