@@ -9,6 +9,7 @@ using nm = nitrokey::NitrokeyManager;
 std::shared_ptr<libada> libada::i() {
   if (_instance == nullptr){
     _instance = std::make_shared<libada>();
+    nm::instance()->set_loglevel(nitrokey::Loglevel::DEBUG_L2);
   }
   return _instance;
 }
