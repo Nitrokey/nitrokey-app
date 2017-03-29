@@ -436,17 +436,20 @@ void Tray::generateMenuForStorageDevice() {
   {
     nitrokey::proto::stick20::DeviceConfigurationResponsePacket::ResponsePayload status;
 
-    try {
-      status = nm::instance()->get_status_storage();
-    }
-    catch (LongOperationInProgressException &e){
-      return;
-    }
-    catch (DeviceCommunicationException &e){
-      //TODO add info to tray about the error?
-      return;
-    }
 
+    for (int i=0; i < 3; i++){
+      try {
+        status = nm::instance()->get_status_storage();
+        if(status.ActiveSD_CardID_u32 != 0) break;
+      }
+      catch (LongOperationInProgressException &e){
+        return;
+      }
+      catch (DeviceCommunicationException &e){
+        //TODO add info to tray about the error?
+        return;
+      }
+    }
 
 
     if (status.ActiveSD_CardID_u32 == 0) // Is Stick 2.0 online (SD + SC
