@@ -48,12 +48,16 @@ using nm = nitrokey::NitrokeyManager;
 static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
 
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow),
-       clipboard(this), auth_admin(this, Authentication::Type::ADMIN),
-      auth_user(this, Authentication::Type::USER), storage(this, &auth_admin, &auth_user),
-      tray(this, false, true, &storage),
-      HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
+MainWindow::MainWindow(QWidget *parent):
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    clipboard(this),
+    auth_admin(this, Authentication::Type::ADMIN),
+    auth_user(this, Authentication::Type::USER),
+    storage(this, &auth_admin, &auth_user),
+    tray(this, false, true, &storage),
+    HOTP_SlotCount(HOTP_SLOT_COUNT),
+    TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
 
   progress_window = std::make_shared<Stick20ResponseDialog>();

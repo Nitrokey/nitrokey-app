@@ -56,8 +56,8 @@ private slots:
   void on_checkBox_clicked(bool checked);
 
 private:
-  PasswordKind kind;
   Ui::DialogChangePassword *ui;
+  PasswordKind kind;
   void _changePassword();
   void accept(void) override;
   void UpdatePasswordRetry(void);
