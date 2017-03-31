@@ -818,7 +818,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 void MainWindow::getHOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x10 + slot);
-    clipboard.copyToClipboard(QString::number(OTPcode));
+    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
 
     if (libada::i()->getHOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -841,7 +841,7 @@ void MainWindow::getHOTPDialog(int slot) {
 void MainWindow::getTOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x20 + slot);
-    clipboard.copyToClipboard(QString::number(OTPcode));
+    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
 
     if (libada::i()->getTOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -1214,7 +1214,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
 }
 
 #include "GUI/Authentication.h"
-int MainWindow::getNextCode(uint8_t slotNumber) {
+std::string MainWindow::getNextCode(uint8_t slotNumber) {
     const auto status = nm::instance()->get_status();
     QString tempPassword;
 

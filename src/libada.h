@@ -91,8 +91,8 @@ public:
     std::string getCardSerial();
     std::string getTOTPSlotName(const int i);
     std::string getHOTPSlotName(const int i);
-    int getTOTPCode(int i, const char *string);
-    int getHOTPCode(int i, const char *string);
+    std::string getTOTPCode(int slot_number, const char *user_temporary_password);
+    std::string getHOTPCode(int slot_number, const char *user_temporary_password);
     int eraseHOTPSlot(const int i, const char *string);
     int eraseTOTPSlot(const int i, const char *string);
 

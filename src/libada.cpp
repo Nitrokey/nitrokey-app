@@ -235,12 +235,12 @@ bool libada::is_secret320_supported() {
   return nm::instance()->is_320_OTP_secret_supported();
 }
 
-int libada::getTOTPCode(int i, const char *string) {
-  return nm::instance()->get_TOTP_code(i, string);
+std::string libada::getTOTPCode(int slot_number, const char *user_temporary_password) {
+  return nm::instance()->get_TOTP_code(slot_number, user_temporary_password);
 }
 
-int libada::getHOTPCode(int i, const char *string) {
-  return nm::instance()->get_HOTP_code(i, string);
+std::string libada::getHOTPCode(int slot_number, const char *user_temporary_password) {
+  return nm::instance()->get_HOTP_code(slot_number, user_temporary_password);
 }
 
 int libada::eraseHOTPSlot(const int i, const char *string) {

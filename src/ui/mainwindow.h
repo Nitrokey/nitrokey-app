@@ -83,7 +83,7 @@ private:
   QString DebugText;
 
   int ExecStickCmd(const char *Cmdline_);
-  int getNextCode(uint8_t slotNumber);
+  std::string getNextCode(uint8_t slotNumber);
 
   void generateHOTPConfig(OTPSlot *slot);
   void generateTOTPConfig(OTPSlot *slot);
