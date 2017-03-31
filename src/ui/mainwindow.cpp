@@ -404,9 +404,9 @@ void MainWindow::generateAllConfigs() {
 }
 
 void updateSlotConfig(const nitrokey::ReadSlot::ResponsePayload &p, Ui::MainWindow* ui)  {
-  ui->ompEdit->setText(QString((char *) p.slot_token_fields.omp).trimmed());
-  ui->ttEdit->setText(QString((char *) p.slot_token_fields.tt).trimmed());
-  ui->muiEdit->setText(QString((char *) p.slot_token_fields.mui).trimmed());
+  ui->ompEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.omp)).trimmed());
+  ui->ttEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.tt)).trimmed());
+  ui->muiEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.mui)).trimmed());
 
   if (p.use_8_digits)
     ui->digits8radioButton->setChecked(true);
@@ -877,12 +877,11 @@ void MainWindow::on_eraseButton_clicked() {
         csApplet()->messageBox(tr("Command execution failed. Please try again."));
         return;
     };
-    int res;
   auto password_array = auth_admin.getTempPassword().toLatin1();
   if (isHOTP) {
-    res = libada::i()->eraseHOTPSlot(slotNo, password_array.constData());
+    libada::i()->eraseHOTPSlot(slotNo, password_array.constData());
   } else {
-    res = libada::i()->eraseTOTPSlot(slotNo, password_array.constData());
+    libada::i()->eraseTOTPSlot(slotNo, password_array.constData());
   }
   emit OTP_slot_write(slotNo, isHOTP);
     csApplet()->messageBox(tr("Slot has been erased successfully."));
@@ -1044,7 +1043,7 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   ui->PWS_progressBar->show();
   connect(this, SIGNAL(PWS_progress(int)), ui->PWS_progressBar, SLOT(setValue(int)));
 
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     [index, this]() -> Data {
       Data data;
         data["slot_filled"] = libada::i()->getPWSSlotStatus(index);
@@ -1056,12 +1055,12 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
           auto pass_cstr = nm::instance()->get_password_safe_slot_password(index);
           data["pass"] = QString::fromStdString(pass_cstr);
           //TODO clear C strings before freeing
-          free((void *) pass_cstr);
+          free(reinterpret_cast<void*>(const_cast<char*>(pass_cstr)));
           emit PWS_progress(100*3/4);
           auto login_cstr = nm::instance()->get_password_safe_slot_login(index);
           data["login"] = QString::fromStdString(login_cstr);
           //TODO clear C strings before freeing
-          free((void *) login_cstr);
+          free(reinterpret_cast<void*>(const_cast<char*>(login_cstr)));
         }
         emit PWS_progress(100*4/4);
         return data;
@@ -1201,7 +1200,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
   try {
     auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
     clipboard.copyToClipboard(slot_password);
-    free((void *) slot_password);
+    free(reinterpret_cast<void*>(const_cast<char*>(slot_password)));
     QString password_safe_slot_info =
         QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
     QString title = QString("Password has been copied to clipboard");
@@ -1407,7 +1406,7 @@ void MainWindow::on_DeviceConnected() {
   initialTimeReset();
 
 //TODO show warnings for storage (test)
-ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     []() -> Data {
       Data data;
       data["error"] = false;

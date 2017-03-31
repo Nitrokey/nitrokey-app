@@ -73,7 +73,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
 
   PasswordKind k = kind;
   ui->retryCount->setText("...");
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     [k]() -> Data {
       Data data;
       switch (k) {
@@ -181,7 +181,7 @@ void DialogChangePassword::_changePassword(void) {
   PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
 
   PasswordKind k = kind;
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
       [k, PasswordString, PasswordStringNew]() -> Data {
         Data data;
         try {

@@ -14,7 +14,11 @@ TODO
 
 Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
            StorageActions *actions) :
-    QObject(_parent), trayMenuPasswdSubMenu(nullptr), trayMenu(nullptr), worker(nullptr) {
+    QObject(_parent),
+    trayMenu(nullptr),
+    trayMenuPasswdSubMenu(nullptr),
+    worker(nullptr)
+{
   main_window = _parent;
   storageActions = actions;
   debug_mode = _debug_mode;
