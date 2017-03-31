@@ -187,6 +187,8 @@ public:
   ConnectionState connectionState = ConnectionState::disconnected;
 
   void set_commands_delay(int delay_in_ms);
+
+  void first_run();
 };
 
 class utf8FieldLengthValidator : public QValidator {

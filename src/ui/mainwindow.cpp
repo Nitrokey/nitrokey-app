@@ -126,6 +126,23 @@ MainWindow::MainWindow(QWidget *parent)
   this->adjustSize();
   this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
+
+  first_run();
+}
+
+void MainWindow::first_run(){
+  QSettings settings;
+  const auto first_run_key = "main/first_run";
+  auto first_run = settings.value(first_run_key, true).toBool();
+  if (!first_run) return;
+  settings.setValue(first_run_key, false);
+
+  auto msg = tr("Welcome to Nitrokey App!\n"
+                    "Application starts minimized to system tray dock. In case you could not found it there please search Nitrokey Support forum for help."
+                    "https://support.nitrokey.com/");
+  csApplet()->messageBox(msg);
+
+  //TODO insert call to First run configuration wizard here
 }
 
 void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
