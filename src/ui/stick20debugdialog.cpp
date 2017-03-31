@@ -142,7 +142,7 @@ DebugDialog::~DebugDialog() {
 *******************************************************************************/
 
 void DebugDialog::UpdateDebugText() {
-  static int nCallCounter = 0;
+//  static int nCallCounter = 0;
 
 //  if (TRUE == DebugingStick20PoolingActive) {
     // Send request

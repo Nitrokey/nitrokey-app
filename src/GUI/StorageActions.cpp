@@ -73,7 +73,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
     startProgressFunc(tr("Enabling encrypted volume")); //FIXME use existing translation
     const auto s = dialog.getPassword();
 
-    ThreadWorker *tw = new ThreadWorker(
+    new ThreadWorker(
     [s]() -> Data { // FIXME make s shared_ptr to delete after use //or secure string
       Data data;
       data["error"] = 0;
@@ -128,7 +128,7 @@ void StorageActions::startStick20DisableCryptedVolume() {
 
     startProgressFunc(tr("Disabling encrypted volume")); //FIXME use existing translation
 
-    ThreadWorker *tw = new ThreadWorker(
+    new ThreadWorker(
     []() -> Data {
       Data data;
 
@@ -187,7 +187,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
 
   auto s = dialog.getPassword();
 
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
   [s]() -> Data { //FIXME transport throuugh shared_ptr or secure string
     Data data;
 
@@ -241,7 +241,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
   startProgressFunc(tr("Disabling hidden volume")); //FIXME use existing translation
 
 
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
       []() -> Data {
         Data data;
 
@@ -279,7 +279,7 @@ void StorageActions::startStick20DisableHiddenVolume() {
 void StorageActions::startLockDeviceAction(bool ask_for_confirmation) {
   bool user_wants_to_proceed;
 
-  if (ask_for_confirmation && (TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive)) {
+  if ((ask_for_confirmation) && ((TRUE == CryptedVolumeActive) || (TRUE == HiddenVolumeActive))) {
     user_wants_to_proceed = csApplet()->yesOrNoBox(tr("This activity locks your encrypted volume. Do you want to "
                                            "proceed?\nTo avoid data loss, please unmount the partitions before "
                                            "proceeding."), true);
@@ -291,7 +291,7 @@ void StorageActions::startLockDeviceAction(bool ask_for_confirmation) {
   startProgressFunc(tr("Locking device")); //FIXME use existing translation
 
 
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     []() -> Data {
       Data data;
       try {
@@ -386,7 +386,7 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
 
     startProgressFunc(tr("Generating new AES keys")); //FIXME use existing translation
 
-    ThreadWorker *tw = new ThreadWorker(
+    new ThreadWorker(
     [s]() -> Data { //FIXME use secure string
       Data data;
       try{
@@ -429,7 +429,7 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
 
 void StorageActions::_execute_SD_clearing(const std::string &s) {
 //does not need long operation indicator
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     [s]() -> Data { //FIXME use secure string
       Data data;
       try{

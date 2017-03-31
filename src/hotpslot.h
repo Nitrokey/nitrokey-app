@@ -39,11 +39,11 @@ public:
     ~OTPSlot(){
       volatile char* p;
       p = slotName;
-      for (int i = 0; i < sizeof(slotName); ++i) {
+      for (uint64_t i = 0; i < sizeof(slotName); ++i) {
         p[i] = 0;
       }
       p = secret;
-      for (int i = 0; i < sizeof(secret); ++i) {
+      for (uint64_t i = 0; i < sizeof(secret); ++i) {
         p[i] = 0;
       }
       slotNumber = 0;

@@ -26,8 +26,11 @@
 #include "src/core/ThreadWorker.h"
 using nm = nitrokey::NitrokeyManager;
 
-DialogChangePassword::DialogChangePassword(QWidget *parent, PasswordKind _kind)
-    : QDialog(parent), ui(new Ui::DialogChangePassword), kind(_kind) {
+DialogChangePassword::DialogChangePassword(QWidget *parent, PasswordKind _kind):
+    QDialog(parent),
+    ui(new Ui::DialogChangePassword),
+    kind(_kind)
+{
   ui->setupUi(this);
 
   ui->lineEdit_OldPW->setEchoMode(QLineEdit::Password);
@@ -50,7 +53,6 @@ DialogChangePassword::~DialogChangePassword() { delete ui; }
 
 void DialogChangePassword::UpdatePasswordRetry() {
   QString noTrialsLeft;
-  int retryCount = 99;
   // update password retry values
 
   switch (kind) {
@@ -71,7 +73,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
 
   PasswordKind k = kind;
   ui->retryCount->setText("...");
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     [k]() -> Data {
       Data data;
       switch (k) {
@@ -179,7 +181,7 @@ void DialogChangePassword::_changePassword(void) {
   PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
 
   PasswordKind k = kind;
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
       [k, PasswordString, PasswordStringNew]() -> Data {
         Data data;
         try {

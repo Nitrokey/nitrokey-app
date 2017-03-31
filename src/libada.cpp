@@ -207,17 +207,16 @@ bool libada::isHOTPSlotProgrammed(const int i) {
 }
 
 void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword) {
-  bool res;
   const auto byteArray = tempPassword.toLatin1();
   switch(otpconf.type){
     case OTPSlot::OTPType::HOTP: {
-      res = nm::instance()->write_HOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
+      nm::instance()->write_HOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
         otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
       otpconf.tokenID, byteArray.constData());
     }
       break;
     case OTPSlot::OTPType::TOTP:
-      res = nm::instance()->write_TOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
+      nm::instance()->write_TOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
                                 otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
                                 otpconf.tokenID, byteArray.constData());
       break;
@@ -294,7 +293,7 @@ std::string NameCache::getName(const int i) {
   try{
     const auto slot_name = getter(i);
     cache.insert(i, new std::string(slot_name));
-    free((void *) slot_name);
+    free(reinterpret_cast<void*>(const_cast<char*>(slot_name)));
   }
   catch (LongOperationInProgressException &e){
     cache.insert(i, new std::string(""));

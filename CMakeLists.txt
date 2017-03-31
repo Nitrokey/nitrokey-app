@@ -31,6 +31,14 @@ ADD_DEFINITIONS(-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 ADD_DEFINITIONS(-DCMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER_ID}, ${CMAKE_CXX_COMPILER}, built on: ${CMAKE_SYSTEM} ")
 ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
 
+OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" ON)
+if (NOT MSVC)
+    add_compile_options(-Wall -Wno-unused-function -Wcast-qual -Woverloaded-virtual)
+    if (ERROR_ON_WARNING)
+        add_compile_options(-Werror)
+    endif()
+endif()
+
 add_subdirectory (libnitrokey)
 
 IF(LIBNITROKEY_STATIC)
@@ -198,8 +206,6 @@ TARGET_LINK_LIBRARIES(nitrokey-app.debug
 #  ${platform_specific_libs}
   Qt5::Widgets Qt5::Core Qt5::Gui
 )
-
-
 
 
 
