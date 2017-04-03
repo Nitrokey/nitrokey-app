@@ -103,8 +103,8 @@ void AboutDialog::on_btn_3rdparty_clicked(){
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
       QTextStream stream(&file);
       if (!line.isEmpty()) line += "\n\n";
-      auto a = 80;
-      line += filename.leftJustified(a/2, '=').rightJustified(80, '=') + "\n\n\n";
+      auto a = 60;
+      line += filename.leftJustified(a/2, '=').rightJustified(a, '=') + "\n\n\n";
       line += stream.readAll() + "\n";
     }
     file.close();
