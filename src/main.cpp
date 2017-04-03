@@ -101,11 +101,16 @@ int main(int argc, char *argv[]) {
 
 
   configureRandomGenerator();
-
   a.setQuitOnLastWindowClosed(false);
 
 
+
   MainWindow w;
+  if (parser.isSet("delay")){
+    auto delay_in_ms = parser.value("delay").toInt();
+    w.set_commands_delay(delay_in_ms);
+  }
+
 //  csApplet()->setParent(&w);
   //TODO add global exception catch for logging?
   //or use std::terminate
@@ -217,6 +222,9 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
   parser.addOptions({
       {{"d", "debug"},
           QCoreApplication::translate("main", "Enable debug options")},
+      {{"s", "delay"},
+          QCoreApplication::translate("main", "Set delay between commands sent to device (in ms)"),
+          "20" },
       {"version-more",
           QCoreApplication::translate("main", "Show additional information about binary")},
       {{"a", "admin"},
@@ -229,8 +237,8 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
           QCoreApplication::translate("main",
                                       "Load translation file with given name"
                                       "and store this choice in settings file."),
-          QCoreApplication::translate("main", "directory")},
-  });
+          "en"},
+});
 
   parser.process(a);
 

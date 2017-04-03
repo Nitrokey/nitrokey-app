@@ -23,7 +23,7 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset>
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <property name="autoFillBackground">
@@ -621,6 +621,13 @@ Select Init keys.</string>
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="btn_3rdparty">
+       <property name="text">
+        <string>Licenses and 3rd-party components</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="ButtonStickStatus">
        <property name="enabled">
         <bool>true</bool>
@@ -647,8 +654,6 @@ Select Init keys.</string>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

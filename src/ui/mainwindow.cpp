@@ -48,12 +48,16 @@ using nm = nitrokey::NitrokeyManager;
 static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
 
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow),
-       clipboard(this), auth_admin(this, Authentication::Type::ADMIN),
-      auth_user(this, Authentication::Type::USER), storage(this, &auth_admin, &auth_user),
-      tray(this, false, true, &storage),
-      HOTP_SlotCount(HOTP_SLOT_COUNT), TOTP_SlotCount(TOTP_SLOT_COUNT)
+MainWindow::MainWindow(QWidget *parent):
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    clipboard(this),
+    auth_admin(this, Authentication::Type::ADMIN),
+    auth_user(this, Authentication::Type::USER),
+    storage(this, &auth_admin, &auth_user),
+    tray(this, false, true, &storage),
+    HOTP_SlotCount(HOTP_SLOT_COUNT),
+    TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
 
   progress_window = std::make_shared<Stick20ResponseDialog>();
@@ -126,6 +130,23 @@ MainWindow::MainWindow(QWidget *parent)
   this->adjustSize();
   this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
+
+  first_run();
+}
+
+void MainWindow::first_run(){
+  QSettings settings;
+  const auto first_run_key = "main/first_run";
+  auto first_run = settings.value(first_run_key, true).toBool();
+  if (!first_run) return;
+  settings.setValue(first_run_key, false);
+
+  auto msg = tr("Welcome to Nitrokey App!\n"
+                    "Application starts minimized to system tray dock. In case you could not found it there please search Nitrokey Support forum for help: "
+                    "https://support.nitrokey.com/ .");
+  csApplet()->messageBox(msg);
+
+  //TODO insert call to First run configuration wizard here
 }
 
 void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
@@ -175,7 +196,7 @@ void MainWindow::checkConnection() {
 
       if(libada::i()->isStorageDeviceConnected()){
         try {
-          libada::i()->isPasswordSafeUnlocked();
+          libada::i()->get_status();
           long_operation_in_progress = false;
         }
         catch (LongOperationInProgressException &e){
@@ -383,9 +404,9 @@ void MainWindow::generateAllConfigs() {
 }
 
 void updateSlotConfig(const nitrokey::ReadSlot::ResponsePayload &p, Ui::MainWindow* ui)  {
-  ui->ompEdit->setText(QString((char *) p.slot_token_fields.omp).trimmed());
-  ui->ttEdit->setText(QString((char *) p.slot_token_fields.tt).trimmed());
-  ui->muiEdit->setText(QString((char *) p.slot_token_fields.mui).trimmed());
+  ui->ompEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.omp)).trimmed());
+  ui->ttEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.tt)).trimmed());
+  ui->muiEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.mui)).trimmed());
 
   if (p.use_8_digits)
     ui->digits8radioButton->setChecked(true);
@@ -407,6 +428,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->intervalLabel->show();
   ui->intervalSpinBox->show();
   ui->checkBox->setEnabled(false);
+  ui->secretEdit->clear();
   ui->secretEdit->setPlaceholderText("********************************");
 
   ui->nameEdit->setText(QString::fromStdString(libada::i()->getTOTPSlotName(slotNo)));
@@ -455,6 +477,7 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->intervalLabel->hide();
   ui->intervalSpinBox->hide();
   ui->checkBox->setEnabled(false);
+  ui->secretEdit->clear();
   ui->secretEdit->setPlaceholderText("********************************");
 
   ui->nameEdit->setText(QString::fromStdString(libada::i()->getHOTPSlotName(slotNo)));
@@ -637,7 +660,7 @@ void MainWindow::on_writeButton_clicked() {
     } else {
         generateTOTPConfig(&otp);
     }
-    if (!validate_secret(otp.secret)) {
+    if (!this->ui->secretEdit->text().isEmpty() && !validate_secret(otp.secret)) {
       return;
     }
     if(auth_admin.authenticate()){
@@ -795,7 +818,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 void MainWindow::getHOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x10 + slot);
-    clipboard.copyToClipboard(QString::number(OTPcode));
+    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
 
     if (libada::i()->getHOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -818,7 +841,7 @@ void MainWindow::getHOTPDialog(int slot) {
 void MainWindow::getTOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x20 + slot);
-    clipboard.copyToClipboard(QString::number(OTPcode));
+    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
 
     if (libada::i()->getTOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -856,12 +879,11 @@ void MainWindow::on_eraseButton_clicked() {
         csApplet()->messageBox(tr("Command execution failed. Please try again."));
         return;
     };
-    int res;
   auto password_array = auth_admin.getTempPassword().toLatin1();
   if (isHOTP) {
-    res = libada::i()->eraseHOTPSlot(slotNo, password_array.constData());
+    libada::i()->eraseHOTPSlot(slotNo, password_array.constData());
   } else {
-    res = libada::i()->eraseTOTPSlot(slotNo, password_array.constData());
+    libada::i()->eraseTOTPSlot(slotNo, password_array.constData());
   }
   emit OTP_slot_write(slotNo, isHOTP);
     csApplet()->messageBox(tr("Slot has been erased successfully."));
@@ -929,33 +951,36 @@ void MainWindow::SetupPasswordSafeConfig(void) {
   PWS_set_controls_enabled(PWS_Access);
 
   try{
+    libada::i()->get_status(); //WORKAROUND for crashing Storage v0.45
     PWS_Access = libada::i()->isPasswordSafeUnlocked();
+    PWS_set_controls_enabled(PWS_Access);
+
+    // Get active password slots
+    if (PWS_Access) {
+      // Setup combobox
+      ui->PWS_ComboBoxSelectSlot->clear();
+      ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("<Select Password Safe slot>")));
+      for (i = 0; i < PWS_SLOT_COUNT; i++) {
+        if (libada::i()->getPWSSlotStatus(i)) {
+          ui->PWS_ComboBoxSelectSlot->addItem(
+              QString(tr("Slot "))
+                  .append(QString::number(i + 1, 10))
+                  .append(QString(" [")
+                              .append(QString::fromStdString(libada::i()->getPWSSlotName(i)))
+                              .append(QString("]"))));
+        } else {
+          ui->PWS_ComboBoxSelectSlot->addItem(
+              QString(tr("Slot ")).append(QString::number(i + 1, 10)));
+        }
+      }
+    } else {
+      ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("Unlock password safe")));
+    }
+
   }
   catch (LongOperationInProgressException &e){
     long_operation_in_progress = true;
     return;
-  }
-
-  // Get active password slots
-  if (PWS_Access) {
-    // Setup combobox
-    ui->PWS_ComboBoxSelectSlot->clear();
-    ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("<Select Password Safe slot>")));
-    for (i = 0; i < PWS_SLOT_COUNT; i++) {
-      if (libada::i()->getPWSSlotStatus(i)) {
-        ui->PWS_ComboBoxSelectSlot->addItem(
-            QString(tr("Slot "))
-                .append(QString::number(i + 1, 10))
-                .append(QString(" [")
-                            .append(QString::fromStdString(libada::i()->getPWSSlotName(i)))
-                            .append(QString("]"))));
-      } else {
-        ui->PWS_ComboBoxSelectSlot->addItem(
-            QString(tr("Slot ")).append(QString::number(i + 1, 10)));
-      }
-    }
-  } else {
-    ui->PWS_ComboBoxSelectSlot->addItem(QString(tr("Unlock password safe")));
   }
 
   ui->PWS_ComboBoxSelectSlot->setEnabled(PWS_Access);
@@ -1020,7 +1045,7 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   ui->PWS_progressBar->show();
   connect(this, SIGNAL(PWS_progress(int)), ui->PWS_progressBar, SLOT(setValue(int)));
 
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     [index, this]() -> Data {
       Data data;
         data["slot_filled"] = libada::i()->getPWSSlotStatus(index);
@@ -1031,11 +1056,13 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
           //FIXME use secure way
           auto pass_cstr = nm::instance()->get_password_safe_slot_password(index);
           data["pass"] = QString::fromStdString(pass_cstr);
-          free((void *) pass_cstr);
+          //TODO clear C strings before freeing
+          free(reinterpret_cast<void*>(const_cast<char*>(pass_cstr)));
           emit PWS_progress(100*3/4);
           auto login_cstr = nm::instance()->get_password_safe_slot_login(index);
           data["login"] = QString::fromStdString(login_cstr);
-          free((void *) login_cstr);
+          //TODO clear C strings before freeing
+          free(reinterpret_cast<void*>(const_cast<char*>(login_cstr)));
         }
         emit PWS_progress(100*4/4);
         return data;
@@ -1175,7 +1202,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
   try {
     auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
     clipboard.copyToClipboard(slot_password);
-    free((void *) slot_password);
+    free(reinterpret_cast<void*>(const_cast<char*>(slot_password)));
     QString password_safe_slot_info =
         QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
     QString title = QString("Password has been copied to clipboard");
@@ -1187,7 +1214,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
 }
 
 #include "GUI/Authentication.h"
-int MainWindow::getNextCode(uint8_t slotNumber) {
+std::string MainWindow::getNextCode(uint8_t slotNumber) {
     const auto status = nm::instance()->get_status();
     QString tempPassword;
 
@@ -1273,16 +1300,21 @@ int MainWindow::factoryResetAction() {
       return 0;
     try{
       nm::instance()->factory_reset(password.c_str());
-      csApplet()->messageBox("Factory reset was successful.");
-      emit FactoryReset();
-      return 1;
+    }
+    catch (InvalidCRCReceived &e) {
+      //We are expecting this exception due to bug in Storage stick firmware, v0.45, with CRC set to "0" in response
     }
     catch (CommandFailedException &e){
       if(!e.reason_wrong_password())
         throw;
       csApplet()->messageBox("Wrong Pin. Please try again.");
+      continue;
     }
+    csApplet()->messageBox("Factory reset was successful.");
+    emit FactoryReset();
+    return 1;
   }
+  return 0;
 }
 
 void MainWindow::on_radioButton_2_toggled(bool checked) {
@@ -1376,7 +1408,7 @@ void MainWindow::on_DeviceConnected() {
   initialTimeReset();
 
 //TODO show warnings for storage (test)
-ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     []() -> Data {
       Data data;
       data["error"] = false;
@@ -1445,4 +1477,8 @@ void MainWindow::show_progress_window() {
   progress_window->setFocus();
   progress_window->raise();
   QApplication::setActiveWindow(progress_window.get());
+}
+
+void MainWindow::set_commands_delay(int delay_in_ms) {
+  nm::instance()->set_default_commands_delay(delay_in_ms);
 }

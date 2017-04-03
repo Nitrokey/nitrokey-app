@@ -122,6 +122,9 @@ private:
   void destroyThread();
 
   tray_Worker *worker;
+  QSignalMapper *mapper_TOTP;
+  QSignalMapper *mapper_HOTP;
+  QSignalMapper *mapper_PWS;
 };
 
 

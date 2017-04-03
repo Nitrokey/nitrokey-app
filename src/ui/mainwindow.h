@@ -56,24 +56,23 @@ protected:
 private:
   Q_DISABLE_COPY(MainWindow);
 
+  Ui::MainWindow *ui;
+  Clipboard clipboard;
   Authentication auth_admin;
   Authentication auth_user;
   StorageActions storage;
   Tray tray;
-  Clipboard clipboard;
+  const unsigned char HOTP_SlotCount;
+  const unsigned char TOTP_SlotCount;
+
 
   bool validate_secret(const char *secret) const;
   void initialTimeReset();
   QMutex check_connection_mutex;
   QString nkpro_user_PIN;
-
   void startDebug();
   QTimer *keepDeviceOnlineTimer;
 
-  Ui::MainWindow *ui;
-
-  const unsigned char HOTP_SlotCount;
-  const unsigned char TOTP_SlotCount;
 
   bool PWS_Access = false;
   const int PWS_CreatePWSize = 20;
@@ -84,7 +83,7 @@ private:
   QString DebugText;
 
   int ExecStickCmd(const char *Cmdline_);
-  int getNextCode(uint8_t slotNumber);
+  std::string getNextCode(uint8_t slotNumber);
 
   void generateHOTPConfig(OTPSlot *slot);
   void generateTOTPConfig(OTPSlot *slot);
@@ -185,6 +184,10 @@ public:
   void PWS_set_controls_enabled(bool enabled) const;
 
   ConnectionState connectionState = ConnectionState::disconnected;
+
+  void set_commands_delay(int delay_in_ms);
+
+  void first_run();
 };
 
 class utf8FieldLengthValidator : public QValidator {

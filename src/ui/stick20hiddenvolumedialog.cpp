@@ -45,7 +45,7 @@ stick20HiddenVolumeDialog::stick20HiddenVolumeDialog(QWidget *parent)
   ui->HVPasswordEdit->setFocus();
   ui->HV_settings_groupBox->setEnabled(false);
 
-ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     []() -> Data {
       Data data;
       auto m = nitrokey::NitrokeyManager::instance();

@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
 PROJECT(NitrokeyApp CXX)
-SET(PROJECT_VERSION "1.0-alpha")
+SET(PROJECT_VERSION "1.0-beta.2")
 set(CMAKE_CXX_STANDARD 14)
 
 OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
@@ -30,6 +30,14 @@ ENDIF()
 ADD_DEFINITIONS(-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 ADD_DEFINITIONS(-DCMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER_ID}, ${CMAKE_CXX_COMPILER}, built on: ${CMAKE_SYSTEM} ")
 ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
+
+OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" ON)
+if (NOT MSVC)
+    add_compile_options(-Wall -Wno-unused-function -Wcast-qual -Woverloaded-virtual)
+    if (ERROR_ON_WARNING)
+        add_compile_options(-Werror)
+    endif()
+endif()
 
 add_subdirectory (libnitrokey)
 
@@ -105,7 +113,7 @@ INCLUDE_DIRECTORIES(
   ${SRCDIR}
   ${UTILSDIR}
   ${SRCUIDIR}
-    cppcodec
+    3rdparty/cppcodec
 )
 
 # c/cpp sources
@@ -126,7 +134,9 @@ SET(nitrokey_app_sources
     ${SRCUIDIR}/stick20updatedialog.cpp
     ${platform_specific_sources}
         src/libada.cpp src/libada.h src/utils/bool_values.h src/GUI/Tray.cpp src/GUI/Tray.h src/GUI/Clipboard.cpp src/GUI/Clipboard.h src/GUI/Authentication.cpp src/GUI/Authentication.h src/core/ScopedGuard.h src/version.h src/GUI/StorageActions.cpp src/GUI/StorageActions.h
-#        src/GUI/PasswordSafe.cpp src/GUI/PasswordSafe.h
+        src/ui/licensedialog.cpp
+
+        #        src/GUI/PasswordSafe.cpp src/GUI/PasswordSafe.h
         src/core/ThreadWorker.cpp src/core/ThreadWorker.h)
 
 #INSTALL
@@ -198,8 +208,6 @@ TARGET_LINK_LIBRARIES(nitrokey-app.debug
 #  ${platform_specific_libs}
   Qt5::Widgets Qt5::Core Qt5::Gui
 )
-
-
 
 
 

@@ -9,6 +9,7 @@ using nm = nitrokey::NitrokeyManager;
 std::shared_ptr<libada> libada::i() {
   if (_instance == nullptr){
     _instance = std::make_shared<libada>();
+    nm::instance()->set_loglevel(nitrokey::Loglevel::DEBUG_L2);
   }
   return _instance;
 }
@@ -184,6 +185,9 @@ bool libada::isPasswordSafeUnlocked() {
     nm::instance()->get_password_safe_slot_status();
     return true;
   }
+  catch (const LongOperationInProgressException &e){
+   return false;
+  }
   catch (CommandFailedException &e){
     if (e.reason_not_authorized())
       return false;
@@ -203,17 +207,16 @@ bool libada::isHOTPSlotProgrammed(const int i) {
 }
 
 void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword) {
-  bool res;
   const auto byteArray = tempPassword.toLatin1();
   switch(otpconf.type){
     case OTPSlot::OTPType::HOTP: {
-      res = nm::instance()->write_HOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
+      nm::instance()->write_HOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
         otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
       otpconf.tokenID, byteArray.constData());
     }
       break;
     case OTPSlot::OTPType::TOTP:
-      res = nm::instance()->write_TOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
+      nm::instance()->write_TOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
                                 otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
                                 otpconf.tokenID, byteArray.constData());
       break;
@@ -232,12 +235,12 @@ bool libada::is_secret320_supported() {
   return nm::instance()->is_320_OTP_secret_supported();
 }
 
-int libada::getTOTPCode(int i, const char *string) {
-  return nm::instance()->get_TOTP_code(i, string);
+std::string libada::getTOTPCode(int slot_number, const char *user_temporary_password) {
+  return nm::instance()->get_TOTP_code(slot_number, user_temporary_password);
 }
 
-int libada::getHOTPCode(int i, const char *string) {
-  return nm::instance()->get_HOTP_code(i, string);
+std::string libada::getHOTPCode(int slot_number, const char *user_temporary_password) {
+  return nm::instance()->get_HOTP_code(slot_number, user_temporary_password);
 }
 
 int libada::eraseHOTPSlot(const int i, const char *string) {
@@ -254,6 +257,9 @@ bool libada::is_time_synchronized() {
   try{
     nm::instance()->get_time(time);
     return true;
+  }
+  catch (const LongOperationInProgressException &e){
+    return false;
   }
   catch( CommandFailedException &e){
     if (!e.reason_timestamp_warning())
@@ -287,7 +293,7 @@ std::string NameCache::getName(const int i) {
   try{
     const auto slot_name = getter(i);
     cache.insert(i, new std::string(slot_name));
-    free((void *) slot_name);
+    free(reinterpret_cast<void*>(const_cast<char*>(slot_name)));
   }
   catch (LongOperationInProgressException &e){
     cache.insert(i, new std::string(""));

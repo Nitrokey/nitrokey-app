@@ -14,7 +14,11 @@ TODO
 
 Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
            StorageActions *actions) :
-    QObject(_parent), trayMenuPasswdSubMenu(nullptr), trayMenu(nullptr), worker(nullptr) {
+    QObject(_parent),
+    trayMenu(nullptr),
+    trayMenuPasswdSubMenu(nullptr),
+    worker(nullptr)
+{
   main_window = _parent;
   storageActions = actions;
   debug_mode = _debug_mode;
@@ -26,6 +30,13 @@ Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
   initCommonActions();
 
   generateMenu(true);
+
+  mapper_TOTP = new QSignalMapper(this);
+  mapper_HOTP = new QSignalMapper(this);
+  mapper_PWS = new QSignalMapper(this);
+  connect(mapper_TOTP, SIGNAL(mapped(int)), main_window, SLOT(getTOTPDialog(int)));
+  connect(mapper_HOTP, SIGNAL(mapped(int)), main_window, SLOT(getHOTPDialog(int)));
+  connect(mapper_PWS, SIGNAL(mapped(int)), main_window, SLOT(PWS_ExceClickedSlot(int)));
 }
 
 Tray::~Tray() {
@@ -355,15 +366,14 @@ void Tray::populateOTPPasswordMenu() {
   //should not run before worker is done
   QMutexLocker mutexLocker(&worker->mtx);
 
+
   for (int i=0; i < TOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getTOTPSlotName(i);
     bool slotProgrammed = libada::i()->isTOTPSlotProgrammed(i);
     if (slotProgrammed){
-      trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
-                                       this, [=](){
-              //FIXME change in final code to static_cast
-              dynamic_cast<MainWindow *>(main_window)->getTOTPDialog(i);
-          } );
+      auto action = trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName));
+      connect(action, SIGNAL(triggered()), mapper_TOTP, SLOT(map()));
+      mapper_TOTP->setMapping(action, i) ;
     }
   }
 
@@ -371,25 +381,23 @@ void Tray::populateOTPPasswordMenu() {
     auto slotName = libada::i()->getHOTPSlotName(i);
     bool slotProgrammed = libada::i()->isHOTPSlotProgrammed(i);
     if (slotProgrammed){
-      trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName),
-                                       this, [=](){
-              //FIXME change in final code to static_cast
-              dynamic_cast<MainWindow *>(main_window)->getHOTPDialog(i);
-          } );
+      auto action = trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName));
+      connect(action, SIGNAL(triggered()), mapper_HOTP, SLOT(map()));
+      mapper_HOTP->setMapping(action, i) ;
     }
   }
 
   if (TRUE == libada::i()->isPasswordSafeUnlocked()) {
     for (int i = 0; i < PWS_SLOT_COUNT; i++) {
       if (libada::i()->getPWSSlotStatus(i)) {
-        trayMenuPasswdSubMenu->addAction(QString::fromStdString(libada::i()->getPWSSlotName(i)),
-                                         this, [=]() {
-                //FIXME change in final code to static_cast
-                dynamic_cast<MainWindow *>(main_window)->PWS_ExceClickedSlot(i);
-            });
+        auto slotName = libada::i()->getPWSSlotName(i);
+        auto action = trayMenuPasswdSubMenu->addAction(QString::fromStdString(slotName));
+        connect(action, SIGNAL(triggered()), mapper_PWS, SLOT(map()));
+        mapper_PWS->setMapping(action, i) ;
       }
     }
   }
+
   if (trayMenuPasswdSubMenu->actions().empty()) {
     trayMenuPasswdSubMenu->hide();
     trayMenuPasswdSubMenu->setEnabled(false);
@@ -436,17 +444,20 @@ void Tray::generateMenuForStorageDevice() {
   {
     nitrokey::proto::stick20::DeviceConfigurationResponsePacket::ResponsePayload status;
 
-    try {
-      status = nm::instance()->get_status_storage();
-    }
-    catch (LongOperationInProgressException &e){
-      return;
-    }
-    catch (DeviceCommunicationException &e){
-      //TODO add info to tray about the error?
-      return;
-    }
 
+    for (int i=0; i < 3; i++){
+      try {
+        status = nm::instance()->get_status_storage();
+        if(status.ActiveSD_CardID_u32 != 0) break;
+      }
+      catch (LongOperationInProgressException &e){
+        return;
+      }
+      catch (DeviceCommunicationException &e){
+        //TODO add info to tray about the error?
+        return;
+      }
+    }
 
 
     if (status.ActiveSD_CardID_u32 == 0) // Is Stick 2.0 online (SD + SC

@@ -26,8 +26,11 @@
 #include "src/core/ThreadWorker.h"
 using nm = nitrokey::NitrokeyManager;
 
-DialogChangePassword::DialogChangePassword(QWidget *parent, PasswordKind _kind)
-    : QDialog(parent), ui(new Ui::DialogChangePassword), kind(_kind) {
+DialogChangePassword::DialogChangePassword(QWidget *parent, PasswordKind _kind):
+    QDialog(parent),
+    ui(new Ui::DialogChangePassword),
+    kind(_kind)
+{
   ui->setupUi(this);
 
   ui->lineEdit_OldPW->setEchoMode(QLineEdit::Password);
@@ -50,7 +53,6 @@ DialogChangePassword::~DialogChangePassword() { delete ui; }
 
 void DialogChangePassword::UpdatePasswordRetry() {
   QString noTrialsLeft;
-  int retryCount = 99;
   // update password retry values
 
   switch (kind) {
@@ -71,7 +73,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
 
   PasswordKind k = kind;
   ui->retryCount->setText("...");
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
     [k]() -> Data {
       Data data;
       switch (k) {
@@ -119,38 +121,30 @@ int DialogChangePassword::exec() {
 void DialogChangePassword::InitData(void) {
   moveWindowToCenter();
 
-  // replace %1 and %2 from text with proper values
-  //(min and max of password length)
-  int minimumPasswordLengthAdmin = 8;
-  QString text = ui->label_additional_information->text();
-  text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
-  if (kind == PasswordKind::UPDATE) {
-    text += QString("<i>") + tr("Once the firmware password is forgotten the Nitrokey can't be "
-                                "updated or reset. Don't lose your firmware password, please.") +
-            QString("</i>");
-  }
-  ui->label_additional_information->setText(text);
-
   this->UpdatePasswordRetry();
 
+  minimumPasswordLength = minimumPasswordLengthUser;
   switch (kind) {
     case PasswordKind::USER:
       this->setWindowTitle(tr("Set User PIN"));
       ui->label_2->setText(tr("Current User PIN:"));
       ui->label_3->setText(tr("New User PIN:"));
       ui->label_4->setText(tr("New User PIN:"));
+      minimumPasswordLength = minimumPasswordLengthUser;
       break;
     case PasswordKind::ADMIN:
       this->setWindowTitle(tr("Set Admin PIN"));
       ui->label_2->setText(tr("Current Admin PIN:"));
       ui->label_3->setText(tr("New Admin PIN:"));
       ui->label_4->setText(tr("New Admin PIN:"));
+      minimumPasswordLength = minimumPasswordLengthAdmin;
       break;
     case PasswordKind::RESET_USER:
       this->setWindowTitle(tr("Reset User PIN"));
       ui->label_2->setText(tr("Admin PIN:"));
       ui->label_3->setText(tr("New User PIN:"));
       ui->label_4->setText(tr("New User PIN:"));
+      minimumPasswordLength = minimumPasswordLengthUser;
       break;
     case PasswordKind::UPDATE:
       this->setWindowTitle(tr("Change Firmware Password"));
@@ -158,8 +152,21 @@ void DialogChangePassword::InitData(void) {
       ui->label_3->setText(tr("New Firmware Password:"));
       ui->label_4->setText(tr("New Firmware Password:"));
       ui->checkBox->setText(tr("Show password"));
+      minimumPasswordLength = minimumPasswordLengthFirmware;
       break;
   }
+
+  // replace %1 and %2 from text with proper values
+  //(min and max of password length)
+  QString text = ui->label_additional_information->text();
+  text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
+  if (kind == PasswordKind::UPDATE) {
+    text += QString("<i>") + tr("Once the firmware password is forgotten the Nitrokey can't be "
+                                    "updated or reset. Don't lose your firmware password, please.") +
+            QString("</i>");
+  }
+  ui->label_additional_information->setText(text);
+
 }
 
 void DialogChangePassword::moveWindowToCenter() {// center the password window
@@ -174,7 +181,7 @@ void DialogChangePassword::_changePassword(void) {
   PasswordStringNew = ui->lineEdit_NewPW_1->text().toLatin1();
 
   PasswordKind k = kind;
-  ThreadWorker *tw = new ThreadWorker(
+  new ThreadWorker(
       [k, PasswordString, PasswordStringNew]() -> Data {
         Data data;
         try {

@@ -37,8 +37,12 @@ class DialogChangePassword : public QDialog {
   Q_OBJECT
   public :
   // FIXME extract constant to global config
-    const static int minimumPasswordLength = 6;
-    explicit DialogChangePassword(QWidget *parent, PasswordKind _kind);
+    const static int minimumPasswordLengthUser = 6;
+    const static int minimumPasswordLengthAdmin = 8;
+    const static int minimumPasswordLengthFirmware = 6;
+    int minimumPasswordLength = {};
+
+  explicit DialogChangePassword(QWidget *parent, PasswordKind _kind);
     ~DialogChangePassword();
 
     void InitData(void);
@@ -52,8 +56,8 @@ private slots:
   void on_checkBox_clicked(bool checked);
 
 private:
-  PasswordKind kind;
   Ui::DialogChangePassword *ui;
+  PasswordKind kind;
   void _changePassword();
   void accept(void) override;
   void UpdatePasswordRetry(void);

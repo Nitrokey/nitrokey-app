@@ -84,6 +84,39 @@ AboutDialog::~AboutDialog() {
 
 void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
 
+#include <QFile>
+#include <QTextStream>
+#include <QWindow>
+#include <QTextEdit>
+#include "licensedialog.h"
+
+void AboutDialog::on_btn_3rdparty_clicked(){
+  QString line;
+  std::vector<QString> filenames {"General","Nitrokey-App",
+                                  "Qt-framework",
+                                  "libnitrokey","cppcodec"};
+  for (auto filename : filenames) {
+    QFile file(":license/" + filename);
+    if (!file.exists()) {
+      return;
+    }
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      QTextStream stream(&file);
+      if (!line.isEmpty()) line += "\n\n";
+      auto a = 60;
+      line += filename.leftJustified(a/2, '=').rightJustified(a, '=') + "\n\n\n";
+      line += stream.readAll() + "\n";
+    }
+    file.close();
+  }
+
+  LicenseDialog l;
+  l.setText(line);
+  l.setModal(true);
+  l.show();
+  l.exec();
+}
+
 void AboutDialog::showStick20Configuration(void) {
   showPasswordCounters();
   showStick20Menu();
