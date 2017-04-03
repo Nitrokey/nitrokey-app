@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
 PROJECT(NitrokeyApp CXX)
-SET(PROJECT_VERSION "1.0-alpha")
+SET(PROJECT_VERSION "1.0-beta.2")
 set(CMAKE_CXX_STANDARD 14)
 
 OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
