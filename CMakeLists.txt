@@ -113,7 +113,7 @@ INCLUDE_DIRECTORIES(
   ${SRCDIR}
   ${UTILSDIR}
   ${SRCUIDIR}
-    cppcodec
+    3rdparty/cppcodec
 )
 
 # c/cpp sources

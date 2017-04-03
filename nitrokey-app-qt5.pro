@@ -97,7 +97,7 @@ INCLUDEPATH +=  $${SRCDIR} \
                 $${SRCUIDIR} \
                 $${UTILSDIR} \
                 $${COREDIR} \
-		$${ROOTDIR}/cppcodec \
+		        $${ROOTDIR}/3rdparty/cppcodec \
                 $${GUIDIR}
 
 LIBNITROKEY= -lnitrokey-static
