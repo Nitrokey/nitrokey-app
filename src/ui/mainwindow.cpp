@@ -660,7 +660,7 @@ void MainWindow::on_writeButton_clicked() {
     } else {
         generateTOTPConfig(&otp);
     }
-    if (!validate_secret(otp.secret)) {
+    if (!this->ui->secretEdit->text().isEmpty() && !validate_secret(otp.secret)) {
       return;
     }
     if(auth_admin.authenticate()){
