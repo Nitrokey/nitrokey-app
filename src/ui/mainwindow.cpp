@@ -428,6 +428,7 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->intervalLabel->show();
   ui->intervalSpinBox->show();
   ui->checkBox->setEnabled(false);
+  ui->secretEdit->clear();
   ui->secretEdit->setPlaceholderText("********************************");
 
   ui->nameEdit->setText(QString::fromStdString(libada::i()->getTOTPSlotName(slotNo)));
@@ -476,6 +477,7 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->intervalLabel->hide();
   ui->intervalSpinBox->hide();
   ui->checkBox->setEnabled(false);
+  ui->secretEdit->clear();
   ui->secretEdit->setPlaceholderText("********************************");
 
   ui->nameEdit->setText(QString::fromStdString(libada::i()->getHOTPSlotName(slotNo)));
