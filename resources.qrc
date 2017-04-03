@@ -17,4 +17,11 @@
         <file alias="nitrokey_en.qm">i18n/nitrokey_en.qm</file>
         <file alias="nitrokey_arabic.qm">i18n/nitrokey_arabic.qm</file>
     </qresource>
+    <qresource prefix="/license">
+        <file alias="General">3RDPARTY</file>
+        <file alias="Nitrokey-App">LICENSE</file> <!-- GPLv3 -->
+        <file alias="Qt-framework">LICENSE</file> <!-- GPLv3 -->
+        <file alias="libnitrokey">libnitrokey/LICENSE</file> <!-- LGPLv3 -->
+        <file alias="cppcodec">3rdparty/cppcodec/LICENSE.txt</file> <!-- MIT -->
+    </qresource>
 </RCC>

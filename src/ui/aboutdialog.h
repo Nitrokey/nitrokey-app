@@ -78,6 +78,7 @@ private slots:
   void on_ButtonOK_clicked();
   void on_ButtonStickStatus_clicked();
   void update_device_slots(bool connected);
+  void on_btn_3rdparty_clicked();
 
 private:
   std::shared_ptr<Ui::AboutDialog> ui;
