@@ -47,6 +47,7 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCDIR}/GUI/Authentication.cpp \
             $${SRCDIR}/GUI/StorageActions.cpp \
             $${SRCDIR}/libada.cpp \
+    src/ui/licensedialog.cpp
 
 
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
@@ -71,6 +72,7 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCDIR}/libada.h \
             $${SRCDIR}/GUI/Tray.h \
             $${SRCDIR}/GUI/StorageActions.h \
+    src/ui/licensedialog.h
 
 
 
@@ -91,7 +93,8 @@ FORMS +=    $${UIDIR}/mainwindow.ui \
             $${UIDIR}/passworddialog.ui \
             $${UIDIR}/pindialog.ui \
             $${UIDIR}/aboutdialog.ui \
-            $${UIDIR}/securitydialog.ui
+            $${UIDIR}/securitydialog.ui \
+    src/ui/licensedialog.ui
 
 INCLUDEPATH +=  $${SRCDIR} \
                 $${SRCUIDIR} \

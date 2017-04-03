@@ -1,0 +1,4 @@
+This project uses the following components with proper licenses:
+- Qt Framework, GPLv3, https://www.qt.io
+- libnitrokey, LGPLv3, https://github.com/Nitrokey/libnitrokey, located in ./libnitrokey/
+- cppcodec, MIT, https://github.com/tplgy/cppcodec, located in ./3rdparty/cppcodec
