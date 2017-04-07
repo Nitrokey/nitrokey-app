@@ -31,13 +31,6 @@ ADD_DEFINITIONS(-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 ADD_DEFINITIONS(-DCMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER_ID}, ${CMAKE_CXX_COMPILER}, built on: ${CMAKE_SYSTEM} ")
 ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
 
-OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" ON)
-if (NOT MSVC)
-    add_compile_options(-Wall -Wno-unused-function -Wcast-qual -Woverloaded-virtual)
-    if (ERROR_ON_WARNING)
-        add_compile_options(-Werror)
-    endif()
-endif()
 
 add_subdirectory (libnitrokey)
 
@@ -192,6 +185,17 @@ ADD_EXECUTABLE(nitrokey-app.debug ${GUI_TYPE}
   ${i18n_resources}
         ${qrc_files}
 )
+
+OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" ON)
+if (NOT MSVC)
+    set(COMPILE_FLAGS "-Wall -Wno-unused-function -Wcast-qual -Woverloaded-virtual")
+    #    IF(NOT APPLE)
+    if (ERROR_ON_WARNING)
+        set(COMPILE_FLAGS "${COMPILE_FLAGS} -Werror")
+    endif()
+    SET_TARGET_PROPERTIES(nitrokey-app nitrokey-app.debug PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS} )
+    #    endif()
+endif()
 
 INSTALL(TARGETS nitrokey-app nitrokey-app.debug DESTINATION bin)
 
