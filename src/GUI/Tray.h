@@ -38,8 +38,11 @@ signals:
 class Tray : public QObject {
 Q_OBJECT
 
+
 public:
-    Tray(QObject * _parent, bool _debug_mode, bool _extended_config, StorageActions *actions);
+  void setAdmin_mode(bool _admin_mode);
+  void setDebug_mode(bool _debug_mode);
+  Tray(QObject * _parent, bool _debug_mode, bool _extended_config, StorageActions *actions);
     virtual ~Tray();
     void showTrayMessage(QString message);
     void showTrayMessage(const QString &title, const QString &msg, enum trayMessageType type = INFORMATION,
@@ -50,6 +53,7 @@ public:
 
   signals:
     void progress(int i);
+
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
