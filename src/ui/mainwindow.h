@@ -32,6 +32,7 @@
 #include "GUI/Clipboard.h"
 #include "GUI/Authentication.h"
 #include "stick20responsedialog.h"
+#include "stick20debugdialog.h"
 
 
 namespace Ui {
@@ -64,6 +65,7 @@ private:
   Tray tray;
   const unsigned char HOTP_SlotCount;
   const unsigned char TOTP_SlotCount;
+  DebugDialog *debug;
 
 
   bool validate_secret(const char *secret) const;
@@ -121,6 +123,7 @@ signals:
   void ShortOperationBegins(QString msg);
   void ShortOperationEnds();
   void OTP_slot_write(int slot_no, bool isHOTP);
+  void DebugData(QString msg);
 
 private slots:
   void on_KeepDeviceOnline();
@@ -188,6 +191,9 @@ public:
   void set_commands_delay(int delay_in_ms);
 
   void first_run();
+  void enable_admin_commands();
+  void set_debug_file(QString log_file_name);
+  void set_debug_window();
 };
 
 class utf8FieldLengthValidator : public QValidator {

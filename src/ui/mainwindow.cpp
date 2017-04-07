@@ -55,12 +55,15 @@ MainWindow::MainWindow(QWidget *parent):
     auth_admin(this, Authentication::Type::ADMIN),
     auth_user(this, Authentication::Type::USER),
     storage(this, &auth_admin, &auth_user),
-    tray(this, false, true, &storage),
+    tray(this, false, false, &storage),
     HOTP_SlotCount(HOTP_SLOT_COUNT),
     TOTP_SlotCount(TOTP_SLOT_COUNT)
 {
+  debug = new DebugDialog(this);
+  connect(this, SIGNAL(DebugData(QString)), debug, SLOT(on_DebugData(QString)));
 
   progress_window = std::make_shared<Stick20ResponseDialog>();
+  //TODO move from functors to signals
   storage.set_start_progress_window( [this](QString msg){ emit ShortOperationBegins(msg); });
   storage.set_end_progress_window([this](){ emit ShortOperationEnds(); });
   storage.set_show_message( [this](QString msg){ tray.showTrayMessage(msg); });
@@ -569,22 +572,9 @@ void MainWindow::resizeMin() { resize(minimumSizeHint()); }
 
 
 void MainWindow::startStickDebug() {
-  DebugDialog dialog(this);
-//  dialog.cryptostick = cryptostick;
-  dialog.updateText(); // Init data
-  dialog.exec();
+  debug->show();
+  debug->raise();
 }
-
-//void MainWindow::refreshStick20StatusData() {
-//  if (TRUE == libada::i()->isStorageDeviceConnected()) {
-//    // Get actual data from stick 20
-//    cryptostick->stick20GetStatusData();
-//    Stick20ResponseTask ResponseTask(this, cryptostick, trayIcon);
-//    ResponseTask.NoStopWhenStatusOK();
-//    ResponseTask.GetResponse();
-//    UpdateDynamicMenuEntrys(); // Use new data to update menu
-//  }
-//}
 
 void MainWindow::startAboutDialog() {
   AboutDialog dialog(this);
@@ -1481,4 +1471,35 @@ void MainWindow::show_progress_window() {
 
 void MainWindow::set_commands_delay(int delay_in_ms) {
   nm::instance()->set_default_commands_delay(delay_in_ms);
+}
+
+void MainWindow::enable_admin_commands() {
+  tray.setAdmin_mode(true);
+}
+
+void MainWindow::set_debug_file(QString log_file_name) {
+  nm::instance()->set_log_function( [log_file_name](std::string data){
+      static std::shared_ptr<QFile> log_file;
+      if(!log_file){
+        log_file = std::make_shared<QFile>(log_file_name);
+        if (!log_file->open(QIODevice::WriteOnly | QIODevice::Text)){
+          qDebug() << "Could not open " << log_file_name;
+          log_file = nullptr;
+        }
+      }
+      if(log_file) {
+        log_file->write(data.c_str());
+        log_file->flush();
+      }
+    }
+  );
+  LOGD(QSysInfo::prettyProductName().toStdString());
+}
+
+void MainWindow::set_debug_window() {
+  tray.setDebug_mode(true);
+  nm::instance()->set_log_function( [this](std::string data) {
+      emit DebugData(QString::fromStdString(data));
+  });
+  LOGD(QSysInfo::prettyProductName().toStdString());
 }

@@ -54,6 +54,11 @@ int main(int argc, char *argv[]) {
   if(shouldQuit)
     return 0;
 
+  auto debug_enabled = parser.isSet("debug");
+  if(debug_enabled) {
+    qDebug() << a.arguments();
+  }
+
   // initialize i18n
 //  QTranslator qtTranslator;
 //  configureBasicTranslator(a, qtTranslator);
@@ -66,7 +71,7 @@ int main(int argc, char *argv[]) {
     settings.setValue(language_key, parser.value("language"));
   }
   QString settings_language = settings.value(language_key).toString();
-  if(parser.isSet("debug")) {
+  if(debug_enabled) {
     qDebug() << "Language saved in settings: " << settings_language << settings.fileName();
   }
 
@@ -104,8 +109,17 @@ int main(int argc, char *argv[]) {
   a.setQuitOnLastWindowClosed(false);
 
 
-
   MainWindow w;
+  if (parser.isSet("admin")){
+    w.enable_admin_commands();
+  }
+  auto debug_file_option_name = "debug-file";
+  if (parser.isSet(debug_file_option_name) && !parser.value(debug_file_option_name).isEmpty()){
+    w.set_debug_file(parser.value(debug_file_option_name));
+  }
+  if (parser.isSet("debug-window")){
+    w.set_debug_window();
+  }
   if (parser.isSet("delay")){
     auto delay_in_ms = parser.value("delay").toInt();
     w.set_commands_delay(delay_in_ms);
@@ -120,7 +134,9 @@ int main(int argc, char *argv[]) {
     retcode = a.exec();
   }
   catch (std::exception &e){
-    csApplet()->warningBox(QApplication::tr("Critical error encountered. Please restart application.\nMessage: ") + e.what());
+    auto message = QApplication::tr("Critical error encountered. Please restart application.\nMessage: ") + e.what();
+    csApplet()->warningBox(message);
+    qDebug() << message;
   }
 #else
   retcode = a.exec();
