@@ -218,24 +218,30 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
       QCoreApplication::translate("main", "Nitrokey App - Manage your Nitrokey sticks"));
   parser.addHelpOption();
   parser.addVersionOption();
+  parser.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
 
+  //keep in sync with data/bash-autocomplete/nitrokey-app
   parser.addOptions({
       {{"d", "debug"},
-          QCoreApplication::translate("main", "Enable debug options")},
+          QCoreApplication::translate("main", "Enable debug messages")},
+      {{"df","debug-file"},
+          QCoreApplication::translate("main", "Save debug log to file with name <log-file-name> (experimental)"),
+          "log-file-name"},
+      {{"dw","debug-window"},
+          QCoreApplication::translate("main", "Save debug log to App's window (experimental)") },
       {{"s", "delay"},
-          QCoreApplication::translate("main", "Set delay between commands sent to device (in ms)"),
-          "20" },
+          QCoreApplication::translate("main", "Set delay between commands sent to device (in ms) to <delay>"), "delay" },
       {"version-more",
           QCoreApplication::translate("main", "Show additional information about binary")},
       {{"a", "admin"},
           QCoreApplication::translate("main", "Enable extra administrative functions")},
-      {"lock-hardware",
-          QCoreApplication::translate("main", "Show hardware lock action in tray menu")},
+//      {"lock-hardware", //TODO add functionality
+//          QCoreApplication::translate("main", "Show hardware lock action in tray menu")},
       {"language-list",
           QCoreApplication::translate("main", "List available languages")},
       {{"l", "language"},
           QCoreApplication::translate("main",
-                                      "Load translation file with given name"
+                                      "Load translation file with given name "
                                       "and store this choice in settings file."),
           "en"},
 });
