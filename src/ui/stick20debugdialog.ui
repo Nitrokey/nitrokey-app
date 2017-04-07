@@ -6,136 +6,57 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>672</width>
-    <height>657</height>
+    <width>793</width>
+    <height>789</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Debug Log</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
-  <widget class="QPlainTextEdit" name="TextGUI">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>651</width>
-     <height>281</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Courier New</family>
-    </font>
-   </property>
-   <property name="lineWrapMode">
-    <enum>QPlainTextEdit::NoWrap</enum>
-   </property>
-   <property name="readOnly">
-    <bool>true</bool>
-   </property>
-   <property name="plainText">
-    <string>Output GUI</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>620</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Update</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>620</y>
-     <width>201</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox">
-   <property name="geometry">
-    <rect>
-     <x>550</x>
-     <y>620</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Auto update</string>
-   </property>
-  </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>230</x>
-     <y>620</y>
-     <width>156</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QPlainTextEdit" name="TextStick">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>330</y>
-     <width>651</width>
-     <height>281</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Courier New</family>
-    </font>
-   </property>
-   <property name="lineWrapMode">
-    <enum>QPlainTextEdit::NoWrap</enum>
-   </property>
-   <property name="readOnly">
-    <bool>true</bool>
-   </property>
-   <property name="plainText">
-    <string>Device Output</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_OutputStick">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>310</y>
-     <width>141</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Device output logged via USB</string>
-   </property>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPlainTextEdit" name="TextGUI">
+       <property name="font">
+        <font>
+         <family>Courier New</family>
+        </font>
+       </property>
+       <property name="lineWrapMode">
+        <enum>QPlainTextEdit::NoWrap</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="plainText">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Debug log</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections>
   <connection>
