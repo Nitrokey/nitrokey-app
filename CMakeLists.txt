@@ -151,16 +151,36 @@ IF(NOT WIN32)
     DESTINATION share/pixmaps
   )
 
+  find_package(PkgConfig)
+
   # Install Nitrokey udev rules
+  set(PKG_GET_UDEV_DIR ${PKG_CONFIG_EXECUTABLE} --variable=udevdir udev)
+  execute_process(COMMAND ${PKG_GET_UDEV_DIR} RESULT_VARIABLE ERR OUTPUT_VARIABLE UDEV_MAIN_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+  IF(${ERR})
+      set(UDEV_MAIN_DIR "lib/udev/rules.d")
+  ELSE()
+      set(UDEV_MAIN_DIR "${UDEV_MAIN_DIR}/rules.d")
+  ENDIF()
+  string(REGEX REPLACE "^/" "" UDEV_MAIN_DIR "${UDEV_MAIN_DIR}")
+  message(STATUS "Setting udev rules dir to ${UDEV_MAIN_DIR}")
+
   install(FILES
    ${CMAKE_SOURCE_DIR}/data/41-nitrokey.rules
-   DESTINATION lib/udev/rules.d
+    DESTINATION ${UDEV_MAIN_DIR}
   )
 
   # Install autocompletion scripts
+  set(PKG_GET_BASH_COMPLETION ${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion)
+  execute_process(COMMAND ${PKG_GET_BASH_COMPLETION} RESULT_VARIABLE ERR OUTPUT_VARIABLE BASH_COMPLETION_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+  IF(${ERR})
+    set(BASH_COMPLETION_DIR "etc/bash_completion.d")
+  ENDIF()
+  string(REGEX REPLACE "^/" "" BASH_COMPLETION_DIR "${BASH_COMPLETION_DIR}")
+  message(STATUS "Setting bash-completion dir to ${BASH_COMPLETION_DIR}")
+
   install(FILES
    ${CMAKE_SOURCE_DIR}/data/bash-autocomplete/nitrokey-app
-    DESTINATION /etc/bash_completion.d
+    DESTINATION ${BASH_COMPLETION_DIR}
   )
 
   install(FILES
