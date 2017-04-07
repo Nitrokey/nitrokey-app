@@ -244,7 +244,10 @@ void stick20HiddenVolumeDialog::setHighWaterMarkText(void) {
   ui->StartBlockSpin->setValue(HV_Setup_st.StartBlockPercent_u8);
   ui->EndBlockSpin->setValue(HV_Setup_st.EndBlockPercent_u8);
   ui->l_sd_size->setText(tr("Storage capacity: %1GB").arg(sd_size_GB));
-  ui->l_rounding_info->setText(ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100)));
+  auto rounding_info = ui->l_rounding_info->text().arg((sd_size_GB * 1024 / 100));
+  ui->l_rounding_info->setText(rounding_info);
+  ui->StartBlockSpin->setAccessibleDescription(rounding_info);
+  ui->EndBlockSpin->setAccessibleDescription(rounding_info);
 }
 
 
@@ -264,6 +267,8 @@ void stick20HiddenVolumeDialog::on_rd_unit_clicked(QString text) {
   QString end = tr("End hidden volume at %1 of the encrypted storage:");
   ui->l_sd_start->setText(start.arg(text));
   ui->l_sd_end->setText(end.arg(text));
+  ui->StartBlockSpin->setAccessibleName(start.arg(text));
+  ui->EndBlockSpin->setAccessibleName(end.arg(text));
 
   switch (last) {
   case 'M':
@@ -326,6 +331,7 @@ void stick20HiddenVolumeDialog::set_spins_min_max(const double min, const double
 }
 
 void stick20HiddenVolumeDialog::on_EndBlockSpin_valueChanged(double i){
+  Q_UNUSED(i)
   if (cancel_BlockSpin_event_propagation) return;
   cancel_BlockSpin_event_propagation = true;
   auto start_val = ui->StartBlockSpin->value();
@@ -339,6 +345,7 @@ void stick20HiddenVolumeDialog::on_EndBlockSpin_valueChanged(double i){
 }
 
 void stick20HiddenVolumeDialog::on_StartBlockSpin_valueChanged(double i){
+  Q_UNUSED(i)
   if (cancel_BlockSpin_event_propagation) return;
   cancel_BlockSpin_event_propagation = true;
   auto end_val = ui->EndBlockSpin->value();

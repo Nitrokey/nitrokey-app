@@ -156,6 +156,10 @@ void DialogChangePassword::InitData(void) {
       break;
   }
 
+  ui->lineEdit_OldPW->setAccessibleName(ui->label_2->text());
+  ui->lineEdit_NewPW_1->setAccessibleName(ui->label_3->text());
+  ui->lineEdit_NewPW_2->setAccessibleName(ui->label_4->text());
+
   // replace %1 and %2 from text with proper values
   //(min and max of password length)
   QString text = ui->label_additional_information->text();
