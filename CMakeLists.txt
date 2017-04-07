@@ -160,7 +160,7 @@ IF(NOT WIN32)
   # Install autocompletion scripts
   install(FILES
    ${CMAKE_SOURCE_DIR}/data/bash-autocomplete/nitrokey-app
-    DESTINATION /etc/bash_completion.d
+    DESTINATION etc/bash_completion.d
   )
 
   install(FILES
