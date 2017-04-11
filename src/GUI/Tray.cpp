@@ -39,6 +39,10 @@ Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
   connect(mapper_PWS, SIGNAL(mapped(int)), main_window, SLOT(PWS_ExceClickedSlot(int)));
 }
 
+void Tray::setDebug_mode(bool _debug_mode) {
+  debug_mode = _debug_mode;
+}
+
 Tray::~Tray() {
   destroyThread();
 }
@@ -625,5 +629,9 @@ void Tray::updateOperationInProgressBar(int p) {
   }
   a->setText(te);
   trayIcon->setContextMenu(trayMenu.get());
+}
+
+void Tray::setAdmin_mode(bool _admin_mode) {
+  ExtendedConfigActive = _admin_mode;
 }
 

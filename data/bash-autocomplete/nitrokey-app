@@ -4,7 +4,7 @@ _nitrokey_app()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --version"
+    opts="--help --version --debug --debug-file --debug-window --delay --version-more --admin --language-list --language"
 
     if [[ ${cur} == -* ]] ; then
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )

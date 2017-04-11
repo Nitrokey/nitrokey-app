@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>430</width>
-    <height>574</height>
+    <height>575</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,7 @@
    <string>Setup hidden volume</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -56,7 +56,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../resources.qrc">:/images/warning.png</pixmap>
+           <pixmap resource="../../resources.qrc">:/images/warning.png</pixmap>
           </property>
          </widget>
         </item>
@@ -67,6 +67,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
           </property>
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -92,6 +95,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. You may want to copy some innocuous files to the encrypted data.&lt;br/&gt;2. Configure hidden volumes in this dialogue. &lt;br/&gt;3. Once you configured a hidden volume you must not use/write to the encryption volume anymore. Otherwise it may destroy the data in your hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -115,6 +121,12 @@
          </item>
          <item row="0" column="1">
           <widget class="QLineEdit" name="HVPasswordEdit">
+           <property name="accessibleName">
+            <string>Hidden volume password</string>
+           </property>
+           <property name="accessibleDescription">
+            <string>Please use shift+tab key shortcut for instructions</string>
+           </property>
            <property name="text">
             <string notr="true">12345678901234567890</string>
            </property>
@@ -137,6 +149,9 @@
           <widget class="QLineEdit" name="HVPasswordEdit_2">
            <property name="focusPolicy">
             <enum>Qt::StrongFocus</enum>
+           </property>
+           <property name="accessibleName">
+            <string>Hidden volume password (repeated)</string>
            </property>
            <property name="text">
             <string notr="true">12345678901234567890</string>
@@ -167,6 +182,9 @@
            </item>
            <item>
             <widget class="QProgressBar" name="password_strength_progressBar">
+             <property name="accessibleName">
+              <string>Password strength:</string>
+             </property>
              <property name="value">
               <number>42</number>
              </property>
@@ -281,6 +299,9 @@
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
              <widget class="QComboBox" name="comboBox">
+              <property name="accessibleDescription">
+               <string>Slot under which hidden volume information will be stored</string>
+              </property>
               <item>
                <property name="text">
                 <string>Hidden volume slot 1</string>
@@ -321,6 +342,9 @@
               <layout class="QHBoxLayout" name="horizontalLayout_5">
                <item>
                 <widget class="QLabel" name="l_sd_size">
+                 <property name="focusPolicy">
+                  <enum>Qt::StrongFocus</enum>
+                 </property>
                  <property name="text">
                   <string notr="true">Storage capacity: %1GB</string>
                  </property>
@@ -348,6 +372,12 @@
                </item>
                <item>
                 <widget class="QRadioButton" name="rd_percent">
+                 <property name="accessibleName">
+                  <string/>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Use this as hidden volume size unit</string>
+                 </property>
                  <property name="text">
                   <string>%</string>
                  </property>
@@ -355,6 +385,9 @@
                </item>
                <item>
                 <widget class="QRadioButton" name="rd_MB">
+                 <property name="accessibleDescription">
+                  <string>Use this as hidden volume size unit</string>
+                 </property>
                  <property name="text">
                   <string>MB</string>
                  </property>
@@ -362,6 +395,9 @@
                </item>
                <item>
                 <widget class="QRadioButton" name="rd_GB">
+                 <property name="accessibleDescription">
+                  <string>Use this as hidden volume size unit</string>
+                 </property>
                  <property name="text">
                   <string>GB</string>
                  </property>
@@ -399,6 +435,9 @@
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="accessibleName">
+                 <string/>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -465,7 +504,7 @@
                </size>
               </property>
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Size will be rounded down to integral percent of total storage size (%1MB)</string>
               </property>
              </widget>
             </item>
@@ -515,10 +554,13 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>l_top_instructions</tabstop>
+  <tabstop>l_instructions</tabstop>
   <tabstop>HVPasswordEdit</tabstop>
   <tabstop>HVPasswordEdit_2</tabstop>
   <tabstop>ShowPasswordCheckBox</tabstop>
   <tabstop>comboBox</tabstop>
+  <tabstop>l_sd_size</tabstop>
   <tabstop>rd_percent</tabstop>
   <tabstop>rd_MB</tabstop>
   <tabstop>rd_GB</tabstop>
@@ -526,7 +568,7 @@
   <tabstop>EndBlockSpin</tabstop>
  </tabstops>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

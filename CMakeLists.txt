@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
 PROJECT(NitrokeyApp CXX)
-SET(PROJECT_VERSION "1.0-beta.2")
+SET(PROJECT_VERSION "1.0-beta.3")
 set(CMAKE_CXX_STANDARD 14)
 
 OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
@@ -31,13 +31,6 @@ ADD_DEFINITIONS(-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 ADD_DEFINITIONS(-DCMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER_ID}, ${CMAKE_CXX_COMPILER}, built on: ${CMAKE_SYSTEM} ")
 ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
 
-OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" ON)
-if (NOT MSVC)
-    add_compile_options(-Wall -Wno-unused-function -Wcast-qual -Woverloaded-virtual)
-    if (ERROR_ON_WARNING)
-        add_compile_options(-Werror)
-    endif()
-endif()
 
 add_subdirectory (libnitrokey)
 
@@ -158,16 +151,36 @@ IF(NOT WIN32)
     DESTINATION share/pixmaps
   )
 
+  find_package(PkgConfig)
+
   # Install Nitrokey udev rules
+  set(PKG_GET_UDEV_DIR ${PKG_CONFIG_EXECUTABLE} --variable=udevdir udev)
+  execute_process(COMMAND ${PKG_GET_UDEV_DIR} RESULT_VARIABLE ERR OUTPUT_VARIABLE UDEV_MAIN_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+  IF(${ERR})
+      set(UDEV_MAIN_DIR "lib/udev/rules.d")
+  ELSE()
+      set(UDEV_MAIN_DIR "${UDEV_MAIN_DIR}/rules.d")
+  ENDIF()
+  string(REGEX REPLACE "^/" "" UDEV_MAIN_DIR "${UDEV_MAIN_DIR}")
+  message(STATUS "Setting udev rules dir to ${UDEV_MAIN_DIR}")
+
   install(FILES
    ${CMAKE_SOURCE_DIR}/data/41-nitrokey.rules
-   DESTINATION lib/udev/rules.d
+    DESTINATION ${UDEV_MAIN_DIR}
   )
 
   # Install autocompletion scripts
+  set(PKG_GET_BASH_COMPLETION ${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion)
+  execute_process(COMMAND ${PKG_GET_BASH_COMPLETION} RESULT_VARIABLE ERR OUTPUT_VARIABLE BASH_COMPLETION_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+  IF(${ERR})
+    set(BASH_COMPLETION_DIR "etc/bash_completion.d")
+  ENDIF()
+  string(REGEX REPLACE "^/" "" BASH_COMPLETION_DIR "${BASH_COMPLETION_DIR}")
+  message(STATUS "Setting bash-completion dir to ${BASH_COMPLETION_DIR}")
+
   install(FILES
    ${CMAKE_SOURCE_DIR}/data/bash-autocomplete/nitrokey-app
-    DESTINATION /etc/bash_completion.d
+    DESTINATION ${BASH_COMPLETION_DIR}
   )
 
   install(FILES
@@ -192,6 +205,17 @@ ADD_EXECUTABLE(nitrokey-app.debug ${GUI_TYPE}
   ${i18n_resources}
         ${qrc_files}
 )
+
+OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" ON)
+if (NOT MSVC)
+    set(COMPILE_FLAGS "-Wall -Wno-unused-function -Wcast-qual -Woverloaded-virtual")
+    #    IF(NOT APPLE)
+    if (ERROR_ON_WARNING)
+        set(COMPILE_FLAGS "${COMPILE_FLAGS} -Werror")
+    endif()
+    SET_TARGET_PROPERTIES(nitrokey-app nitrokey-app.debug PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS} )
+    #    endif()
+endif()
 
 INSTALL(TARGETS nitrokey-app nitrokey-app.debug DESTINATION bin)
 

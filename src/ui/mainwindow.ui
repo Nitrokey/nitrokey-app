@@ -20,7 +20,7 @@
    <string>Configuration</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <property name="autoFillBackground">
@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -94,6 +94,12 @@
             <layout class="QHBoxLayout" name="horizontalLayout_14">
              <item>
               <widget class="QRadioButton" name="radioButton_2">
+               <property name="accessibleName">
+                <string>Select slot type: TOTP</string>
+               </property>
+               <property name="accessibleDescription">
+                <string>(Recommendation: Use TOTP for web applications and HOTP for local applications)</string>
+               </property>
                <property name="text">
                 <string>TOTP</string>
                </property>
@@ -104,6 +110,12 @@
              </item>
              <item>
               <widget class="QRadioButton" name="radioButton">
+               <property name="accessibleName">
+                <string>Select slot type: HOTP</string>
+               </property>
+               <property name="accessibleDescription">
+                <string>(Recommendation: Use TOTP for web applications and HOTP for local applications)</string>
+               </property>
                <property name="text">
                 <string>HOTP</string>
                </property>
@@ -147,6 +159,9 @@
              </item>
              <item>
               <widget class="QComboBox" name="slotComboBox">
+               <property name="accessibleName">
+                <string>Select OTP slot number</string>
+               </property>
                <property name="currentIndex">
                 <number>0</number>
                </property>
@@ -198,6 +213,9 @@
              </item>
              <item>
               <widget class="QLineEdit" name="nameEdit">
+               <property name="accessibleName">
+                <string>Slot name</string>
+               </property>
                <property name="inputMask">
                 <string/>
                </property>
@@ -263,7 +281,13 @@
                <item>
                 <widget class="QLineEdit" name="secretEdit">
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>OTP secret key</string>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Note: 2nd factors aren't protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</string>
                  </property>
                  <property name="inputMask">
                   <string/>
@@ -331,7 +355,7 @@
                  <item>
                   <widget class="QPushButton" name="randomSecretButton">
                    <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;After generating a random secret, you would need to copy it into your application or service where you want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <string>After generating a random secret, you would need to copy it into your application or service where you want to login to.</string>
                    </property>
                    <property name="text">
                     <string>Generate random secret</string>
@@ -347,7 +371,10 @@
                <item>
                 <widget class="QRadioButton" name="base32RadioButton">
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Example: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Example: &quot;ZR3M5I...&quot;</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Secret input format: base32</string>
                  </property>
                  <property name="text">
                   <string>Base32</string>
@@ -363,7 +390,10 @@
                <item>
                 <widget class="QRadioButton" name="hexRadioButton">
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exampel: &amp;quot;0xA3911C05...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Secret input format: hex</string>
                  </property>
                  <property name="text">
                   <string>Hex</string>
@@ -452,6 +482,9 @@
                 <layout class="QHBoxLayout" name="horizontalLayout_7">
                  <item>
                   <widget class="QLineEdit" name="counterEdit">
+                   <property name="accessibleName">
+                    <string>HOTP moving factor seed</string>
+                   </property>
                    <property name="inputMask">
                     <string/>
                    </property>
@@ -465,6 +498,9 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="setToZeroButton">
+                   <property name="accessibleName">
+                    <string>Set HOTP counter to zero</string>
+                   </property>
                    <property name="text">
                     <string>Set to zero</string>
                    </property>
@@ -472,6 +508,9 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="setToRandomButton">
+                   <property name="accessibleName">
+                    <string>Set HOTP counter to random value</string>
+                   </property>
                    <property name="text">
                     <string>Set to random</string>
                    </property>
@@ -498,6 +537,9 @@
               <layout class="QHBoxLayout" name="horizontalLayout_8">
                <item>
                 <widget class="QRadioButton" name="digits6radioButton">
+                 <property name="accessibleName">
+                  <string>OTP code length: 6 digits</string>
+                 </property>
                  <property name="text">
                   <string>6 digits</string>
                  </property>
@@ -508,6 +550,9 @@
                </item>
                <item>
                 <widget class="QRadioButton" name="digits8radioButton">
+                 <property name="accessibleName">
+                  <string>OTP code length:  8 digits</string>
+                 </property>
                  <property name="text">
                   <string>8 digits</string>
                  </property>
@@ -532,6 +577,9 @@
               <layout class="QHBoxLayout" name="horizontalLayout_15">
                <item>
                 <widget class="QSpinBox" name="intervalSpinBox">
+                 <property name="accessibleName">
+                  <string>TOTP interval value</string>
+                 </property>
                  <property name="minimum">
                   <number>1</number>
                  </property>
@@ -635,6 +683,9 @@
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
+                 <property name="accessibleName">
+                  <string>OMP part of Token ID</string>
+                 </property>
                  <property name="inputMask">
                   <string/>
                  </property>
@@ -655,6 +706,9 @@
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
+                 <property name="accessibleName">
+                  <string>TT part of Token ID</string>
+                 </property>
                  <property name="inputMask">
                   <string/>
                  </property>
@@ -674,6 +728,9 @@
                 <widget class="QLineEdit" name="muiEdit">
                  <property name="enabled">
                   <bool>false</bool>
+                 </property>
+                 <property name="accessibleName">
+                  <string>MUI part of Token ID</string>
                  </property>
                  <property name="inputMask">
                   <string/>
@@ -828,7 +885,7 @@
               </font>
              </property>
              <property name="text">
-              <string>USB-Keyboard only</string>
+              <string>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</string>
              </property>
             </widget>
            </item>
@@ -863,6 +920,12 @@
               <layout class="QVBoxLayout" name="verticalLayout_22">
                <item>
                 <widget class="QComboBox" name="numLockComboBox">
+                 <property name="accessibleName">
+                  <string>Double press NumLock:</string>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</string>
+                 </property>
                  <item>
                   <property name="text">
                    <string>Do nothing</string>
@@ -882,6 +945,12 @@
                </item>
                <item>
                 <widget class="QComboBox" name="capsLockComboBox">
+                 <property name="accessibleName">
+                  <string>Double press CapsLock:</string>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</string>
+                 </property>
                  <item>
                   <property name="text">
                    <string>Do nothing</string>
@@ -901,6 +970,12 @@
                </item>
                <item>
                 <widget class="QComboBox" name="scrollLockComboBox">
+                 <property name="accessibleName">
+                  <string>Double press ScrollLock:</string>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</string>
+                 </property>
                  <item>
                   <property name="text">
                    <string>Do nothing</string>
@@ -1020,10 +1095,18 @@
            <item>
             <layout class="QGridLayout" name="gridLayout">
              <item row="3" column="1">
-              <widget class="QLineEdit" name="PWS_EditPassword"/>
+              <widget class="QLineEdit" name="PWS_EditPassword">
+               <property name="accessibleName">
+                <string>Password:</string>
+               </property>
+              </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QLineEdit" name="PWS_EditLoginName"/>
+              <widget class="QLineEdit" name="PWS_EditLoginName">
+               <property name="accessibleName">
+                <string>Login name:</string>
+               </property>
+              </widget>
              </item>
              <item row="3" column="0">
               <widget class="QLabel" name="label_19">
@@ -1033,7 +1116,11 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="PWS_EditSlotName"/>
+              <widget class="QLineEdit" name="PWS_EditSlotName">
+               <property name="accessibleName">
+                <string>Slot name:</string>
+               </property>
+              </widget>
              </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_18">
@@ -1044,6 +1131,9 @@
              </item>
              <item row="0" column="3">
               <widget class="QPushButton" name="PWS_ButtonClearSlot">
+               <property name="accessibleName">
+                <string>Erase Password Safe slot</string>
+               </property>
                <property name="text">
                 <string>Erase Slot</string>
                </property>
@@ -1058,6 +1148,9 @@
              </item>
              <item row="0" column="1">
               <widget class="QComboBox" name="PWS_ComboBoxSelectSlot">
+               <property name="accessibleName">
+                <string>Password Safe slot number</string>
+               </property>
                <property name="currentIndex">
                 <number>0</number>
                </property>
@@ -1070,6 +1163,9 @@
              </item>
              <item row="3" column="3">
               <widget class="QPushButton" name="PWS_ButtonCreatePW">
+               <property name="accessibleDescription">
+                <string/>
+               </property>
                <property name="text">
                 <string>Generate random password</string>
                </property>
@@ -1086,6 +1182,9 @@
               <widget class="QCheckBox" name="PWS_CheckBoxHideSecret">
                <property name="enabled">
                 <bool>true</bool>
+               </property>
+               <property name="accessibleName">
+                <string/>
                </property>
                <property name="text">
                 <string>Hide secret</string>
@@ -1139,6 +1238,9 @@
         </item>
         <item>
          <widget class="QLabel" name="l_utf8_info">
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Password Safe fields support UTF8 data. It means that you can use your national characters here. Please remember however that non-English characters could take more space (up to 4 characters). The counters next to each field are to inform how much more standard English characters can given field accept.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
@@ -1175,7 +1277,7 @@
           <item>
            <widget class="QPushButton" name="PWS_ButtonEnable">
             <property name="text">
-             <string>Unlock password safe</string>
+             <string>Unlock Password Safe</string>
             </property>
            </widget>
           </item>
@@ -1236,40 +1338,50 @@
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>tabWidget</tabstop>
+  <tabstop>radioButton_2</tabstop>
+  <tabstop>radioButton</tabstop>
   <tabstop>slotComboBox</tabstop>
   <tabstop>eraseButton</tabstop>
   <tabstop>nameEdit</tabstop>
+  <tabstop>base32RadioButton</tabstop>
+  <tabstop>hexRadioButton</tabstop>
   <tabstop>secretEdit</tabstop>
   <tabstop>checkBox</tabstop>
   <tabstop>randomSecretButton</tabstop>
-  <tabstop>base32RadioButton</tabstop>
-  <tabstop>hexRadioButton</tabstop>
+  <tabstop>enterCheckBox</tabstop>
   <tabstop>intervalSpinBox</tabstop>
   <tabstop>digits6radioButton</tabstop>
   <tabstop>digits8radioButton</tabstop>
+  <tabstop>counterEdit</tabstop>
   <tabstop>setToZeroButton</tabstop>
   <tabstop>setToRandomButton</tabstop>
   <tabstop>tokenIDCheckBox</tabstop>
   <tabstop>ompEdit</tabstop>
-  <tabstop>cancelButton</tabstop>
-  <tabstop>writeButton</tabstop>
+  <tabstop>ttEdit</tabstop>
+  <tabstop>muiEdit</tabstop>
   <tabstop>enableUserPasswordCheckBox</tabstop>
   <tabstop>deleteUserPasswordCheckBox</tabstop>
-  <tabstop>generalCancelButton</tabstop>
-  <tabstop>writeGeneralConfigButton</tabstop>
+  <tabstop>numLockComboBox</tabstop>
+  <tabstop>capsLockComboBox</tabstop>
+  <tabstop>scrollLockComboBox</tabstop>
+  <tabstop>PWS_ComboBoxSelectSlot</tabstop>
+  <tabstop>PWS_ButtonClearSlot</tabstop>
   <tabstop>PWS_EditSlotName</tabstop>
   <tabstop>PWS_EditLoginName</tabstop>
   <tabstop>PWS_EditPassword</tabstop>
-  <tabstop>PWS_ButtonClearSlot</tabstop>
-  <tabstop>PWS_ComboBoxSelectSlot</tabstop>
   <tabstop>PWS_ButtonCreatePW</tabstop>
   <tabstop>PWS_CheckBoxHideSecret</tabstop>
+  <tabstop>l_utf8_info</tabstop>
   <tabstop>PWS_ButtonEnable</tabstop>
   <tabstop>PWS_ButtonClose</tabstop>
   <tabstop>PWS_ButtonSaveSlot</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>generalCancelButton</tabstop>
+  <tabstop>writeButton</tabstop>
+  <tabstop>writeGeneralConfigButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections>
   <connection>

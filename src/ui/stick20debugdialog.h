@@ -30,19 +30,13 @@ class DebugDialog : public QDialog {
   Q_OBJECT public : explicit DebugDialog(QWidget *parent = 0);
   ~DebugDialog();
 
-  QString DebugText;
+  public slots:
+    void on_DebugData(QString message);
 
-  void updateText(void);
-
-private slots:
-  void UpdateDebugText();
-
-  void on_pushButton_clicked();
 
 private:
   Ui::DebugDialog *ui;
 
-  QTimer *RefreshTimer;
 };
 
 #endif // DEBUGDIALOG_H

@@ -68,6 +68,7 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
   // Setup title and label
   this->setWindowTitle(title);
   ui->label->setText(label);
+  ui->lineEdit->setAccessibleName(label);
   ui->lineEdit->setMaxLength(STICK20_PASSOWRD_LEN); // TODO change to
                                                     // UI_PASSWORD_LEN this and
                                                     // other occurences

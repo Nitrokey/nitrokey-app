@@ -23,7 +23,7 @@
    <string>About</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../../resources.qrc">
     <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
   </property>
   <property name="autoFillBackground">
@@ -60,6 +60,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_7">
         <item>
          <widget class="QLabel" name="label_7">
+          <property name="focusPolicy">
+           <enum>Qt::StrongFocus</enum>
+          </property>
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey Pro and Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
@@ -82,6 +85,9 @@
           </item>
           <item>
            <widget class="QLabel" name="label_6">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="text">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
@@ -123,6 +129,9 @@
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_3">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="text">
              <string>App version:</string>
             </property>
@@ -135,6 +144,9 @@
               <weight>75</weight>
               <bold>true</bold>
              </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
             </property>
             <property name="text">
              <string>TextLabel</string>
@@ -160,6 +172,9 @@
          <layout class="QFormLayout" name="formLayout_3">
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="text">
              <string>Firmware version:</string>
             </property>
@@ -172,6 +187,9 @@
               <weight>75</weight>
               <bold>true</bold>
              </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
             </property>
             <property name="text">
              <string>TextLabel</string>
@@ -197,6 +215,9 @@
          <layout class="QFormLayout" name="formLayout_4">
           <item row="0" column="0">
            <widget class="QLabel" name="label_5">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
             <property name="text">
              <string>Card serial number:</string>
             </property>
@@ -209,6 +230,9 @@
               <weight>75</weight>
               <bold>true</bold>
              </font>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
             </property>
             <property name="text">
              <string>TextLabel</string>
@@ -283,6 +307,9 @@
                  <bold>true</bold>
                 </font>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>SD ID:</string>
                </property>
@@ -290,6 +317,9 @@
              </item>
              <item row="0" column="1">
               <widget class="QLabel" name="sd_id_label">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -303,6 +333,9 @@
                  <bold>true</bold>
                 </font>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>Unencrypted volume:</string>
                </property>
@@ -310,6 +343,9 @@
              </item>
              <item row="1" column="1">
               <widget class="QLabel" name="unencrypted_volume_label">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -323,6 +359,9 @@
                  <bold>true</bold>
                 </font>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>Encrypted volume:</string>
                </property>
@@ -330,6 +369,9 @@
              </item>
              <item row="2" column="1">
               <widget class="QLabel" name="encrypted_volume_label">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -343,6 +385,9 @@
                  <bold>true</bold>
                 </font>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>Hidden Volume:</string>
                </property>
@@ -350,6 +395,9 @@
              </item>
              <item row="3" column="1">
               <widget class="QLabel" name="hidden_volume_label">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -362,6 +410,9 @@
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
                </property>
                <property name="text">
                 <string>Storage Capacity:</string>
@@ -383,6 +434,9 @@
              </item>
              <item row="5" column="1">
               <widget class="QLabel" name="l_storage_capacity">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string notr="true"/>
                </property>
@@ -407,6 +461,9 @@
             <layout class="QFormLayout" name="formLayout">
              <item row="1" column="0">
               <widget class="QLabel" name="label1">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>Admin:</string>
                </property>
@@ -414,6 +471,9 @@
              </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label2">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>User:</string>
                </property>
@@ -421,6 +481,9 @@
              </item>
              <item row="1" column="1">
               <widget class="QLabel" name="admin_retry_label">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -428,6 +491,9 @@
              </item>
              <item row="2" column="1">
               <widget class="QLabel" name="user_retry_label">
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string/>
                </property>
@@ -440,6 +506,9 @@
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::StrongFocus</enum>
                </property>
                <property name="text">
                 <string>Password retry counters:</string>
@@ -458,6 +527,9 @@
              <bold>true</bold>
             </font>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::StrongFocus</enum>
+           </property>
            <property name="text">
             <string>New SD card found</string>
            </property>
@@ -469,6 +541,9 @@
             <font>
              <italic>true</italic>
             </font>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::StrongFocus</enum>
            </property>
            <property name="text">
             <string>(Not erased with random data)</string>
@@ -502,6 +577,9 @@
                <bold>true</bold>
               </font>
              </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
              <property name="text">
               <string>&lt;span style=&quot;color:#c80636&quot;&gt;Warning&lt;/span&gt;</string>
              </property>
@@ -526,6 +604,9 @@
               <font>
                <italic>true</italic>
               </font>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
              </property>
              <property name="text">
               <string>Stick is not secure!
@@ -585,6 +666,9 @@ Select Init keys.</string>
       </item>
       <item>
        <widget class="QLabel" name="AboutLabel_2">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -654,6 +738,41 @@ Select Init keys.</string>
    </item>
   </layout>
  </widget>
- <resources/>
+ <tabstops>
+  <tabstop>label_7</tabstop>
+  <tabstop>label_6</tabstop>
+  <tabstop>label_3</tabstop>
+  <tabstop>VersionLabel</tabstop>
+  <tabstop>label_4</tabstop>
+  <tabstop>firmwareLabel</tabstop>
+  <tabstop>label_5</tabstop>
+  <tabstop>serialEdit</tabstop>
+  <tabstop>label_2</tabstop>
+  <tabstop>label1</tabstop>
+  <tabstop>admin_retry_label</tabstop>
+  <tabstop>label2</tabstop>
+  <tabstop>user_retry_label</tabstop>
+  <tabstop>label_8</tabstop>
+  <tabstop>sd_id_label</tabstop>
+  <tabstop>label_9</tabstop>
+  <tabstop>unencrypted_volume_label</tabstop>
+  <tabstop>label_10</tabstop>
+  <tabstop>encrypted_volume_label</tabstop>
+  <tabstop>label_11</tabstop>
+  <tabstop>hidden_volume_label</tabstop>
+  <tabstop>static_storage_info</tabstop>
+  <tabstop>l_storage_capacity</tabstop>
+  <tabstop>newsd_label</tabstop>
+  <tabstop>not_erased_sd_label</tabstop>
+  <tabstop>label_12</tabstop>
+  <tabstop>label_13</tabstop>
+  <tabstop>AboutLabel_2</tabstop>
+  <tabstop>btn_3rdparty</tabstop>
+  <tabstop>ButtonStickStatus</tabstop>
+  <tabstop>ButtonOK</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
