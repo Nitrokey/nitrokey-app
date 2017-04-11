@@ -144,9 +144,9 @@ void MainWindow::first_run(){
   if (!first_run) return;
   settings.setValue(first_run_key, false);
 
-  auto msg = tr("Welcome to Nitrokey App!\n"
-                    "Application starts minimized to system tray dock. In case you could not found it there please search Nitrokey Support forum for help: "
-                    "https://support.nitrokey.com/ .");
+  auto msg = tr(
+        "The Nitrokey App is available as an icon in the tray bar."
+  );
   csApplet()->messageBox(msg);
 
   //TODO insert call to First run configuration wizard here
