@@ -3,6 +3,7 @@ cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
 PROJECT(NitrokeyApp CXX)
 SET(PROJECT_VERSION "1.0-beta.2")
+SET(PROJECT_NAME "Nitrokey App")
 set(CMAKE_CXX_STANDARD 14)
 
 OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
@@ -101,12 +102,21 @@ ELSEIF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BS
     SET( platform_specific_sources ${SRCDIR}/systemutils.cpp)
 ENDIF () # WIN32
 
+
+
+
+set(FERVOR_APP_NAME ${PROJECT_NAME})
+set(FERVOR_APP_VERSION ${PROJECT_VERSION})
+add_subdirectory(3rdparty/fervor)
+
+
 INCLUDE_DIRECTORIES(
   ${UIDIR}
   ${SRCDIR}
   ${UTILSDIR}
   ${SRCUIDIR}
     3rdparty/cppcodec
+    3rdparty/fervor
 )
 
 # c/cpp sources
@@ -224,6 +234,7 @@ TARGET_LINK_LIBRARIES(nitrokey-app
   ${NK_LIB}
 #  ${platform_specific_libs}
   Qt5::Widgets Qt5::Core Qt5::Gui
+    Fervor
 )
 
 TARGET_LINK_LIBRARIES(nitrokey-app.debug
@@ -231,8 +242,8 @@ TARGET_LINK_LIBRARIES(nitrokey-app.debug
   ${NK_LIB}-log
 #  ${platform_specific_libs}
   Qt5::Widgets Qt5::Core Qt5::Gui
+    Fervor
 )
-
 
 
 # Packaging

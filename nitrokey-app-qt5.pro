@@ -17,6 +17,9 @@ sources.files = qss
 
 TARGET = nitrokey-app
 TEMPLATE = app
+VERSION = 1.0
+
+
 
 ROOTDIR=$$PWD
 UIDIR=$${ROOTDIR}/src/ui
@@ -146,3 +149,10 @@ RESOURCES += \
 TRANSLATIONS += i18n/nitrokey_de_DE.ts \
                 i18n/nitrokey_arabic.ts
                 i18n/nitrokey_en.ts
+
+
+
+# Fervor autoupdater
+!include("3rdparty/fervor/Fervor.pri") {
+	error("Unable to include Fervor autoupdater.")
+}

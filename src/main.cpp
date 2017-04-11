@@ -29,6 +29,8 @@
 //#include <QSharedMemory>
 #include "src/version.h"
 #include "src/utils/bool_values.h"
+#include "fvupdater.h"
+
 
 enum {DEBUG_STATUS_NO_DEBUGGING = 0, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
 
@@ -221,12 +223,19 @@ void configureBasicTranslator(const QApplication &a, QTranslator &qtTranslator) 
 #endif
   a.installTranslator(&qtTranslator);
 }
-
 void configureApplicationName() {
   QCoreApplication::setOrganizationName("Nitrokey");
   QCoreApplication::setOrganizationDomain("nitrokey.com");
   QCoreApplication::setApplicationName("Nitrokey App");
   QCoreApplication::setApplicationVersion(GUI_VERSION);
+  // Set this to your own appcast URL, of course
+  FvUpdater::sharedUpdater()->SetFeedURL("https://raw.github.com/pypt/fervor/master/sample/Appcast.xml");
+  // Check for updates silently -- this will not block the initialization of
+  // your application, just start a HTTP request and return immediately.
+  FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
+//  FvUpdater::sharedUpdater()->CheckForUpdatesNotSilent();
+  //TODO qca_securemessage.h void startVerify(const QByteArray &detachedSig = QByteArray());
+  // https://github.com/sladage/qca/blob/master/src/qca_securemessage.cpp
 }
 
 bool configureParser(const QApplication &a, QCommandLineParser &parser) {

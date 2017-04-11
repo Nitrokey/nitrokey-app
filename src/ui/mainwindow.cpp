@@ -1478,28 +1478,9 @@ void MainWindow::enable_admin_commands() {
 }
 
 void MainWindow::set_debug_file(QString log_file_name) {
-  nm::instance()->set_log_function( [log_file_name](std::string data){
-      static std::shared_ptr<QFile> log_file;
-      if(!log_file){
-        log_file = std::make_shared<QFile>(log_file_name);
-        if (!log_file->open(QIODevice::WriteOnly | QIODevice::Text)){
-          qDebug() << "Could not open " << log_file_name;
-          log_file = nullptr;
-        }
-      }
-      if(log_file) {
-        log_file->write(data.c_str());
-        log_file->flush();
-      }
-    }
-  );
-  LOGD(QSysInfo::prettyProductName().toStdString());
+
 }
 
 void MainWindow::set_debug_window() {
-  tray.setDebug_mode(true);
-  nm::instance()->set_log_function( [this](std::string data) {
-      emit DebugData(QString::fromStdString(data));
-  });
-  LOGD(QSysInfo::prettyProductName().toStdString());
+
 }
