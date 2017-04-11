@@ -89,8 +89,10 @@ int main(int argc, char *argv[]) {
      msgBox.setText( QObject::tr("Can't start more than one instance of the application.") );
      msgBox.setIcon( QMessageBox::Critical );
      msgBox.exec(); exit(0); } else { */
-  qDebug() <<  "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
-  qDebug() << "Application started successfully.";
+  if(debug_enabled) {
+    qDebug() << "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
+    qDebug() << "Application started successfully.";
+  }
   // }
 
   /*

@@ -255,6 +255,7 @@ void MainWindow::initialTimeReset() {
 }
 
 MainWindow::~MainWindow() {
+  nm::instance()->set_log_function([](std::string data){});
   delete ui;
 }
 
