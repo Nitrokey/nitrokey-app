@@ -120,6 +120,14 @@ int main(int argc, char *argv[]) {
   if (parser.isSet("debug-window")){
     w.set_debug_window();
   }
+  if(debug_enabled){
+    w.set_debug_mode();
+  }
+
+#ifdef __APPLE__
+  w.set_commands_delay(100);
+#endif
+
   if (parser.isSet("delay")){
     auto delay_in_ms = parser.value("delay").toInt();
     w.set_commands_delay(delay_in_ms);
