@@ -1018,6 +1018,16 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
   }
 }
 
+void clear_free_cstr(char *_cstr){
+  auto max_string_length = 30ul;
+  volatile char* cstr = _cstr;
+  for (size_t i = 0; i < max_string_length; ++i) {
+    if (cstr[i] == 0) break;
+    cstr[i] = ' ';
+  }
+  free((void *) _cstr);
+}
+
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
   auto dummy_slot = index <= 0;
@@ -1046,13 +1056,11 @@ void MainWindow::on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index) {
           //FIXME use secure way
           auto pass_cstr = nm::instance()->get_password_safe_slot_password(index);
           data["pass"] = QString::fromStdString(pass_cstr);
-          //TODO clear C strings before freeing
-          free(reinterpret_cast<void*>(const_cast<char*>(pass_cstr)));
+          clear_free_cstr(const_cast<char*>(pass_cstr));
           emit PWS_progress(100*3/4);
           auto login_cstr = nm::instance()->get_password_safe_slot_login(index);
           data["login"] = QString::fromStdString(login_cstr);
-          //TODO clear C strings before freeing
-          free(reinterpret_cast<void*>(const_cast<char*>(login_cstr)));
+          clear_free_cstr(const_cast<char*>(login_cstr));
         }
         emit PWS_progress(100*4/4);
         return data;
@@ -1192,7 +1200,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
   try {
     auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
     clipboard.copyToClipboard(slot_password);
-    free(reinterpret_cast<void*>(const_cast<char*>(slot_password)));
+    clear_free_cstr(const_cast<char*>(slot_password));
     QString password_safe_slot_info =
         QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
     QString title = QString("Password has been copied to clipboard");
