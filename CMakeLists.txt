@@ -317,6 +317,6 @@ LIST(APPEND CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION
     "/usr/share/icons/ubuntu-mono-light/apps/16"
     "/usr/share/applications"
     "/usr/share/pixmaps"
-)
+    )
 
-INCLUDE(CPack)
+  INCLUDE(CPack)
