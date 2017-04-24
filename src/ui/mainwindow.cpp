@@ -815,7 +815,8 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 void MainWindow::getHOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x10 + slot);
-    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
+      if (OTPcode.empty()) return;
+      clipboard.copyToClipboard(QString::fromStdString(OTPcode));
 
     if (libada::i()->getHOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -838,6 +839,7 @@ void MainWindow::getHOTPDialog(int slot) {
 void MainWindow::getTOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x20 + slot);
+      if (OTPcode.empty()) return;
     clipboard.copyToClipboard(QString::fromStdString(OTPcode));
 
     if (libada::i()->getTOTPSlotName(slot).empty())
@@ -1226,7 +1228,7 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
     if(status.enable_user_password){
         if(!auth_user.authenticate()){
           csApplet()->messageBox(tr("User not authenticated"));
-          return 0;
+          return "";
         }
         tempPassword = auth_user.getTempPassword();
     }
