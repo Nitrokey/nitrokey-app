@@ -47,7 +47,7 @@ ThreadWorker::~ThreadWorker() {
 }
 
 void ThreadWorker::worker_finished() {
-  qDebug() << "worker finished";
+//  qDebug() << "worker finished"; //FIXME to log
   stop_thread();
 }
 

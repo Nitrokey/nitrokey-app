@@ -89,8 +89,10 @@ int main(int argc, char *argv[]) {
      msgBox.setText( QObject::tr("Can't start more than one instance of the application.") );
      msgBox.setIcon( QMessageBox::Critical );
      msgBox.exec(); exit(0); } else { */
-  qDebug() <<  "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
-  qDebug() << "Application started successfully.";
+  if(debug_enabled) {
+    qDebug() << "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
+    qDebug() << "Application started successfully.";
+  }
   // }
 
   /*
@@ -120,6 +122,14 @@ int main(int argc, char *argv[]) {
   if (parser.isSet("debug-window")){
     w.set_debug_window();
   }
+  if(debug_enabled){
+    w.set_debug_mode();
+  }
+
+#ifdef __APPLE__
+  w.set_commands_delay(100);
+#endif
+
   if (parser.isSet("delay")){
     auto delay_in_ms = parser.value("delay").toInt();
     w.set_commands_delay(delay_in_ms);
