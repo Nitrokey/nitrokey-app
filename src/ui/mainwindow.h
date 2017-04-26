@@ -194,6 +194,11 @@ public:
   void enable_admin_commands();
   void set_debug_file(QString log_file_name);
   void set_debug_window();
+
+  void set_debug_mode();
+
+private:
+  bool debug_mode = false;
 };
 
 class utf8FieldLengthValidator : public QValidator {

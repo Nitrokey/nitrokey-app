@@ -186,6 +186,10 @@ Please retry</source>
         <source>      *** Firmware is locked ***</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Licenses and 3rd-party components</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Authentication</name>
@@ -198,27 +202,35 @@ Please retry</source>
     <name>DebugDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>الحوار</translation>
+        <translation type="vanished">الحوار</translation>
     </message>
     <message>
         <source>Output GUI</source>
-        <translation>الواجهة الرسومية للمخرج</translation>
+        <translation type="vanished">الواجهة الرسومية للمخرج</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>تحديث</translation>
+        <translation type="vanished">تحديث</translation>
     </message>
     <message>
         <source>Auto update</source>
-        <translation>تحديث تلقائي</translation>
+        <translation type="vanished">تحديث تلقائي</translation>
     </message>
     <message>
         <source>Device Output</source>
-        <translation>مخرج الجهاز</translation>
+        <translation type="vanished">مخرج الجهاز</translation>
     </message>
     <message>
         <source>Device output logged via USB</source>
-        <translation>سجل جهاز المخرج عبر منفذ يو إس بي</translation>
+        <translation type="vanished">سجل جهاز المخرج عبر منفذ يو إس بي</translation>
+    </message>
+    <message>
+        <source>Debug Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Debug log</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -456,6 +468,13 @@ Please retry</source>
     </message>
 </context>
 <context>
+    <name>LicenseDialog</name>
+    <message>
+        <source>License information (ESC to Exit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Configuration</source>
@@ -675,7 +694,7 @@ Please retry</source>
     </message>
     <message>
         <source>USB-Keyboard only</source>
-        <translation>لوحة مفاتيح لمنفذ USB</translation>
+        <translation type="vanished">لوحة مفاتيح لمنفذ USB</translation>
     </message>
     <message>
         <source>Double press NumLock:</source>
@@ -1261,18 +1280,6 @@ If problem will occur again please:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;After generating a random secret, you would need to copy it into your application or service where you want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Example: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exampel: &amp;quot;0xA3911C05...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Password Safe fields support UTF8 data. It means that you can use your national characters here. Please remember however that non-English characters could take more space (up to 4 characters). The counters next to each field are to inform how much more standard English characters can given field accept.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1314,6 +1321,114 @@ If problem will occur again please:
     </message>
     <message>
         <source>Closing window due to device disconnection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select slot type: TOTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select slot type: HOTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select OTP slot number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slot name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OTP secret key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: 2nd factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>After generating a random secret, you would need to copy it into your application or service where you want to login to.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Example: &quot;ZR3M5I...&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secret input format: base32</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secret input format: hex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HOTP moving factor seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set HOTP counter to zero</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set HOTP counter to random value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OTP code length: 6 digits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OTP code length:  8 digits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TOTP interval value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OMP part of Token ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TT part of Token ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MUI part of Token ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase Password Safe slot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password Safe slot number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock Password Safe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Nitrokey App is available as an icon in the tray bar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The secret string you have entered is invalid. Please reenter it.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1580,6 +1695,10 @@ Please change the PIN.</source>
     <message>
         <source>Enter password for hidden volume:</source>
         <translation type="unfinished">أدخل كلمة سر الجزء المخفي:</translation>
+    </message>
+    <message>
+        <source>Enter card PIN</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2099,10 +2218,6 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enable debug options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Show additional information about binary</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2111,19 +2226,27 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show hardware lock action in tray menu</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>List available languages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Load translation file with given nameand store this choice in settings file.</source>
+        <source>Enable debug messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>directory</source>
+        <source>Save debug log to file with name &lt;log-file-name&gt; (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save debug log to App&apos;s window (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set delay between commands sent to device (in ms) to &lt;delay&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load translation file with given name and store this choice in settings file.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2295,11 +2418,31 @@ is between %1 % and %2 % of the storage size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Hidden volume not positioned in unwritten space. Please set your volume between %1% and %2% of total SD card size.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hidden volume not positioned in unwritten space. Please set your volume between %1% and %2% of total SD card size.</source>
+        <source>Hidden volume password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please use shift+tab key shortcut for instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume password (repeated)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slot under which hidden volume information will be stored</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use this as hidden volume size unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size will be rounded down to integral percent of total storage size (%1MB)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

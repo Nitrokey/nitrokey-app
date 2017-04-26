@@ -193,28 +193,35 @@ void MainWindow::checkConnection() {
   }
 
   if (deviceConnected){
-    if(connectionState == cs::disconnected){
-      connectionState = cs::connected;
-      nitrokey::NitrokeyManager::instance()->connect();
+          if(connectionState == cs::disconnected){
+              connectionState = cs::connected;
+              if (debug_mode)
+                emit ShortOperationBegins("Connecting Device");
 
-      if(libada::i()->isStorageDeviceConnected()){
-        try {
-          libada::i()->get_status();
-          long_operation_in_progress = false;
-        }
-        catch (LongOperationInProgressException &e){
-          long_operation_in_progress = true;
-          emit OperationInProgress(e.progress_bar_value);
-          return;
-        }
-      }
+              QTimer::singleShot(3000, [this](){
+                  ShortOperationEnds();
+                  nitrokey::NitrokeyManager::instance()->connect();
 
-      //on connection
-      emit DeviceConnected();
-    }
+              if(libada::i()->isStorageDeviceConnected()){
+                  try {
+                      libada::i()->get_status();
+                      long_operation_in_progress = false;
+                  }
+                  catch (LongOperationInProgressException &e){
+                      long_operation_in_progress = true;
+                      emit OperationInProgress(e.progress_bar_value);
+                      return;
+                  }
+              }
+
+              //on connection
+                  emit DeviceConnected();
+              });
+          }
+
   } else { //device not connected
-    if(connectionState == cs::connected){
-      connectionState = cs::disconnected;
+      if(connectionState == cs::connected){
+          connectionState = cs::disconnected;
       //on disconnection
       emit DeviceDisconnected();
     }
@@ -248,6 +255,7 @@ void MainWindow::initialTimeReset() {
 }
 
 MainWindow::~MainWindow() {
+  nm::instance()->set_log_function([](std::string data){});
   delete ui;
 }
 
@@ -808,7 +816,8 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 void MainWindow::getHOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x10 + slot);
-    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
+      if (OTPcode.empty()) return;
+      clipboard.copyToClipboard(QString::fromStdString(OTPcode));
 
     if (libada::i()->getHOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -831,6 +840,7 @@ void MainWindow::getHOTPDialog(int slot) {
 void MainWindow::getTOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x20 + slot);
+      if (OTPcode.empty()) return;
     clipboard.copyToClipboard(QString::fromStdString(OTPcode));
 
     if (libada::i()->getTOTPSlotName(slot).empty())
@@ -1219,7 +1229,7 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
     if(status.enable_user_password){
         if(!auth_user.authenticate()){
           csApplet()->messageBox(tr("User not authenticated"));
-          return 0;
+          return "";
         }
         tempPassword = auth_user.getTempPassword();
     }
@@ -1377,6 +1387,7 @@ void MainWindow::updateProgressBar(int i) {
 }
 
 void MainWindow::on_DeviceDisconnected() {
+//  emit ShortOperationEnds(); //TODO enable and test
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
   tray.showTrayMessage(tr("Nitrokey disconnected"));
 
@@ -1388,9 +1399,12 @@ void MainWindow::on_DeviceDisconnected() {
 
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_DeviceConnected() {
+  if (debug_mode)
+    emit ShortOperationBegins(tr("Connecting device"));
+
   //TODO share device state to improve performance
   try{
-    PWS_Access = libada::i()->isPasswordSafeUnlocked();
+    libada::i()->get_status();
   }
   catch (LongOperationInProgressException &e){
     long_operation_in_progress = true;
@@ -1420,6 +1434,7 @@ void MainWindow::on_DeviceConnected() {
           data["erased"] = !s.NewSDCardFound_u8;
           data["erased_ask"] = !s.SDFillWithRandomChars_u8; //FIXME s.NewSDCardFound_u8
         }
+        data["PWS_Access"] = libada::i()->isPasswordSafeUnlocked();
       }
       catch(DeviceCommunicationException &e){
         data["error"] = true;
@@ -1427,6 +1442,7 @@ void MainWindow::on_DeviceConnected() {
       return data;
     },
     [this](Data data) {
+      PWS_Access = data["PWS_Access"].toBool();
       if(data["error"].toBool()) return;
       if(!data["storage_connected"].toBool()) return;
 
@@ -1440,6 +1456,7 @@ void MainWindow::on_DeviceConnected() {
           csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
                                         "storage with random data\""));
       }
+      emit ShortOperationEnds();
       }, this);
 
 }
@@ -1510,4 +1527,9 @@ void MainWindow::set_debug_window() {
       emit DebugData(QString::fromStdString(data));
   });
   LOGD(QSysInfo::prettyProductName().toStdString());
+}
+
+void MainWindow::set_debug_mode() {
+  tray.setDebug_mode(true);
+  debug_mode = true;
 }

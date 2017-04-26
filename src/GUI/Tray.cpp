@@ -72,7 +72,8 @@ void Tray::showTrayMessage(QString message) {
 
 void Tray::showTrayMessage(const QString &title, const QString &msg,
                                  enum trayMessageType type, int timeout) {
-  qDebug() << msg;
+  if(debug_mode)
+    qDebug() << msg;
   if (trayIcon->supportsMessages()) {
     switch (type) {
       case INFORMATION:
