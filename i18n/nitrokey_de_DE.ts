@@ -171,6 +171,10 @@ Bitte versuchen Sie es erneut</translation>
         <source>      *** Firmware is locked ***</source>
         <translation>      *** Firmware ist gesperrt ***</translation>
     </message>
+    <message>
+        <source>Licenses and 3rd-party components</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Authentication</name>
@@ -183,27 +187,35 @@ Bitte versuchen Sie es erneut</translation>
     <name>DebugDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation type="vanished">Dialog</translation>
     </message>
     <message>
         <source>Output GUI</source>
-        <translation>Ausgabe GUI</translation>
+        <translation type="vanished">Ausgabe GUI</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Aktualisierung</translation>
+        <translation type="vanished">Aktualisierung</translation>
     </message>
     <message>
         <source>Auto update</source>
-        <translation>Automatische Aktualisierung</translation>
+        <translation type="vanished">Automatische Aktualisierung</translation>
     </message>
     <message>
         <source>Device Output</source>
-        <translation>Geräteausgabe</translation>
+        <translation type="vanished">Geräteausgabe</translation>
     </message>
     <message>
         <source>Device output logged via USB</source>
-        <translation>Geräteausgabe mittels USB protokolliert</translation>
+        <translation type="vanished">Geräteausgabe mittels USB protokolliert</translation>
+    </message>
+    <message>
+        <source>Debug Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Debug log</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -433,6 +445,13 @@ Bitte versuchen Sie es erneut</translation>
     </message>
 </context>
 <context>
+    <name>LicenseDialog</name>
+    <message>
+        <source>License information (ESC to Exit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Configuration</source>
@@ -524,7 +543,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;After generating a random secret, you would need to copy it into your application or service where you want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nach der Generierung eines zufälligen Geheimnisses sollten Sie dieses in Ihre Anwendung oder Webdienst kopieren, an dem Sie sich anmelden möchten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nach der Generierung eines zufälligen Geheimnisses sollten Sie dieses in Ihre Anwendung oder Webdienst kopieren, an dem Sie sich anmelden möchten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Generate random secret</source>
@@ -540,7 +559,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Example: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beispiel: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beispiel: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Base32</source>
@@ -548,7 +567,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exampel: &amp;quot;0xA3911C05...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beispiel: &amp;quot;0xA3911C05...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Beispiel: &amp;quot;0xA3911C05...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Hex</source>
@@ -640,7 +659,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>USB-Keyboard only</source>
-        <translation>Nur für USB-Tastaturen</translation>
+        <translation type="vanished">Nur für USB-Tastaturen</translation>
     </message>
     <message>
         <source>Double press NumLock:</source>
@@ -1257,6 +1276,114 @@ Falls das Problem erneut auftritt:
         <source>Locking device</source>
         <translation>Sperre Gerät</translation>
     </message>
+    <message>
+        <source>Select slot type: TOTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select slot type: HOTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select OTP slot number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slot name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OTP secret key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: 2nd factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>After generating a random secret, you would need to copy it into your application or service where you want to login to.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Example: &quot;ZR3M5I...&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secret input format: base32</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secret input format: hex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HOTP moving factor seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set HOTP counter to zero</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set HOTP counter to random value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OTP code length: 6 digits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OTP code length:  8 digits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TOTP interval value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OMP part of Token ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TT part of Token ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MUI part of Token ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase Password Safe slot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password Safe slot number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock Password Safe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Nitrokey App is available as an icon in the tray bar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The secret string you have entered is invalid. Please reenter it.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
@@ -1466,6 +1593,10 @@ Bitte ändern Sie die PIN.</translation>
     <message>
         <source>Enter password for hidden volume:</source>
         <translation>Passwort für verstecktes Volumen:</translation>
+    </message>
+    <message>
+        <source>Enter card PIN</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1982,7 +2113,7 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     </message>
     <message>
         <source>Enable debug options</source>
-        <translation>Fehlersuchmodus aktivieren</translation>
+        <translation type="vanished">Fehlersuchmodus aktivieren</translation>
     </message>
     <message>
         <source>Show additional information about binary</source>
@@ -1994,7 +2125,7 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     </message>
     <message>
         <source>Show hardware lock action in tray menu</source>
-        <translation>Zeige Hardware-Sperre im Tray-Menü</translation>
+        <translation type="vanished">Zeige Hardware-Sperre im Tray-Menü</translation>
     </message>
     <message>
         <source>List available languages</source>
@@ -2002,11 +2133,31 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     </message>
     <message>
         <source>Load translation file with given nameand store this choice in settings file.</source>
-        <translation>Sprachdatei mit vorgegebenem Laden laden und Einstellung merken.</translation>
+        <translation type="vanished">Sprachdatei mit vorgegebenem Laden laden und Einstellung merken.</translation>
     </message>
     <message>
         <source>directory</source>
-        <translation>Verzeichnis</translation>
+        <translation type="vanished">Verzeichnis</translation>
+    </message>
+    <message>
+        <source>Enable debug messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save debug log to file with name &lt;log-file-name&gt; (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save debug log to App&apos;s window (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set delay between commands sent to device (in ms) to &lt;delay&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load translation file with given name and store this choice in settings file.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2108,7 +2259,7 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Größe wird auf ganzen Prozentsatz der gesamten Speichergröße abgerundet (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Die Größe wird auf ganzen Prozentsatz der gesamten Speichergröße abgerundet (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Password:</source>
@@ -2171,6 +2322,30 @@ steht für verschlüsselten Volumen zur Verfügung.</translation>
     <message>
         <source>End hidden volume at %1 of the encrypted storage:</source>
         <translation>Ende des versteckten Volumens bei %1 des verschlüsselten Speichers:</translation>
+    </message>
+    <message>
+        <source>Hidden volume password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please use shift+tab key shortcut for instructions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hidden volume password (repeated)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slot under which hidden volume information will be stored</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use this as hidden volume size unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size will be rounded down to integral percent of total storage size (%1MB)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
