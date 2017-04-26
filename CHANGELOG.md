@@ -1,5 +1,79 @@
 # Change Log
 
+## [v1.1](https://github.com/Nitrokey/nitrokey-app/tree/v1.1) (2017-05-15)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.0...v1.1)
+
+**Implemented enhancements:**
+
+- Sign using Apple's Binary Signing [\#16](https://github.com/Nitrokey/nitrokey-app/issues/16)
+
+**Fixed bugs:**
+
+- Log level set too verbose by default [\#244](https://github.com/Nitrokey/nitrokey-app/issues/244)
+- No device is detected on Windows [\#243](https://github.com/Nitrokey/nitrokey-app/issues/243)
+- Cannot get PIN-protected OTP code on NK Pro 0.8 [\#242](https://github.com/Nitrokey/nitrokey-app/issues/242)
+
+**Closed issues:**
+
+- Improper temporary password  [\#245](https://github.com/Nitrokey/nitrokey-app/issues/245)
+- Update translations [\#241](https://github.com/Nitrokey/nitrokey-app/issues/241)
+- Hidden volume is volatile - check on Mac [\#37](https://github.com/Nitrokey/nitrokey-app/issues/37)
+- Vector Icon [\#20](https://github.com/Nitrokey/nitrokey-app/issues/20)
+
+## [v1.0](https://github.com/Nitrokey/nitrokey-app/tree/v1.0) (2017-04-26)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.0-beta.3...v1.0)
+
+**Implemented enhancements:**
+
+- Nitrokey App should be more accessible to screen reader users [\#9](https://github.com/Nitrokey/nitrokey-app/issues/9)
+
+**Closed issues:**
+
+- 'Filling SD Card' box should not be always on top [\#182](https://github.com/Nitrokey/nitrokey-app/issues/182)
+- Handling of sensitive data in HID transactions [\#113](https://github.com/Nitrokey/nitrokey-app/issues/113)
+- Insecure Password handling [\#84](https://github.com/Nitrokey/nitrokey-app/issues/84)
+- Send debug messages to both file and debug window [\#73](https://github.com/Nitrokey/nitrokey-app/issues/73)
+
+## [v1.0-beta.3](https://github.com/Nitrokey/nitrokey-app/tree/v1.0-beta.3) (2017-04-11)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.0-beta.2...v1.0-beta.3)
+
+**Fixed bugs:**
+
+- NK Pro: Reset User PIN is not shown immediately in menu [\#108](https://github.com/Nitrokey/nitrokey-app/issues/108)
+
+**Closed issues:**
+
+- Warnings update from 0.6.3 [\#224](https://github.com/Nitrokey/nitrokey-app/issues/224)
+- automatic detection for bash\_completion directory [\#189](https://github.com/Nitrokey/nitrokey-app/issues/189)
+- NK Storage is not detected immediately after insertion [\#186](https://github.com/Nitrokey/nitrokey-app/issues/186)
+- Remove libappindicator support  [\#177](https://github.com/Nitrokey/nitrokey-app/issues/177)
+- Windows: About window's width is same as screen width [\#29](https://github.com/Nitrokey/nitrokey-app/issues/29)
+
+## [v1.0-beta.2](https://github.com/Nitrokey/nitrokey-app/tree/v1.0-beta.2) (2017-04-03)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.0-beta.1...v1.0-beta.2)
+
+**Implemented enhancements:**
+
+- UI: On first run show information about tray icon [\#111](https://github.com/Nitrokey/nitrokey-app/issues/111)
+
+**Fixed bugs:**
+
+- UI: OTP secret field not cleared after slot writing [\#237](https://github.com/Nitrokey/nitrokey-app/issues/237)
+- Invalid OTP code when 0's are first digit [\#236](https://github.com/Nitrokey/nitrokey-app/issues/236)
+- Invalid feedback on changing admin PIN [\#230](https://github.com/Nitrokey/nitrokey-app/issues/230)
+
+**Closed issues:**
+
+- Fix compilation warnings [\#235](https://github.com/Nitrokey/nitrokey-app/issues/235)
+- Not building on Ubuntu 16.04 [\#234](https://github.com/Nitrokey/nitrokey-app/issues/234)
+- Workaround for Storage crash [\#233](https://github.com/Nitrokey/nitrokey-app/issues/233)
+- App is very nonreactive [\#227](https://github.com/Nitrokey/nitrokey-app/issues/227)
+- Editing OTP slot is not working [\#209](https://github.com/Nitrokey/nitrokey-app/issues/209)
+- not whole sources are under GPLv3+ [\#191](https://github.com/Nitrokey/nitrokey-app/issues/191)
+
+## [v1.0-beta.1](https://github.com/Nitrokey/nitrokey-app/tree/v1.0-beta.1) (2017-03-20)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.6.3...v1.0-beta.1)
+
 ## [v0.6.3](https://github.com/Nitrokey/nitrokey-app/tree/v0.6.3) (2017-01-23)
 [Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v0.6.2...v0.6.3)
 
@@ -10,6 +84,7 @@
 
 **Merged pull requests:**
 
+- Bump version to 0.6.3 [\#220](https://github.com/Nitrokey/nitrokey-app/pull/220) ([szszszsz](https://github.com/szszszsz))
 - Disable support of new HID protocol for Storage [\#219](https://github.com/Nitrokey/nitrokey-app/pull/219) ([szszszsz](https://github.com/szszszsz))
 - Debian packaging rules changes [\#217](https://github.com/Nitrokey/nitrokey-app/pull/217) ([szszszsz](https://github.com/szszszsz))
 
