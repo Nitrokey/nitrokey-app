@@ -126,9 +126,7 @@ int main(int argc, char *argv[]) {
     w.set_debug_mode();
   }
 
-#ifdef __APPLE__
   w.set_commands_delay(100);
-#endif
 
   if (parser.isSet("delay")){
     auto delay_in_ms = parser.value("delay").toInt();
