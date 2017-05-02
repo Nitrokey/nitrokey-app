@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey Pro and Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cette application vous permet de configurer et utiliser vos Nitrokey Pro ou Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cette application vous permet de configurer et utiliser vos Nitrokey Pro et Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>i</source>
@@ -21,23 +21,23 @@
     </message>
     <message>
         <source>App version:</source>
-        <translation>Version de l&apos;application&amp;nbsp;:</translation>
+        <translation>Version de l'application :</translation>
     </message>
     <message>
         <source>Firmware version:</source>
-        <translation>Version du micrologiciel&amp;nbsp;:</translation>
+        <translation>Version du micrologiciel :</translation>
     </message>
     <message>
         <source>Card serial number:</source>
-        <translation>Numéro de série de la carte&amp;nbsp;:</translation>
+        <translation>Numéro de série de la carte :</translation>
     </message>
     <message>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Instructions et aide (en)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href="https://www.nitrokey.com/start"&gt;&lt;span style=" text-decoration: underline; color:#c80636;"&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href="https://www.nitrokey.com/start"&gt;&lt;span style=" text-decoration: underline; color:#c80636;"&gt;Guides et aide en ligne (anglais exclusivement)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Status</source>
@@ -45,17 +45,17 @@
     </message>
     <message>
         <source>Hidden Volume:</source>
-        <translation>Volume caché&amp;nbsp;:</translation>
+        <translation>Volume caché :</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;color:#c80636&quot;&gt;Warning&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;color:#c80636&quot;&gt;Attention&lt;/span&gt;</translation>
+        <source>&lt;span style="color:#c80636"&gt;Warning&lt;/span&gt;</source>
+        <translation>&lt;span style="color:#c80636"&gt;Attention&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Stick is not secure!
 Select Init keys.</source>
-        <translation>La clé USB n&apos;est pas sécurisée&amp;nbsp;!
-Sélectionner les clés d&apos;initialisation.</translation>
+        <translation>La clé USB n'est pas sécurisée !
+Sélectionner les clés d'initialisation.</translation>
     </message>
     <message>
         <source>New SD card found</source>
@@ -63,35 +63,35 @@ Sélectionner les clés d&apos;initialisation.</translation>
     </message>
     <message>
         <source>(Not erased with random data)</source>
-        <translation>(Non effacée avec des données aléatoires)</translation>
+        <translation>(N'a pas été effacée avec des données aléatoires)</translation>
     </message>
     <message>
         <source>SD ID:</source>
-        <translation>SD ID&amp;nbsp;:</translation>
+        <translation>SD ID :</translation>
     </message>
     <message>
         <source>Unencrypted volume:</source>
-        <translation>Volume non chiffré&amp;nbsp;:</translation>
+        <translation>Volume non chiffré :</translation>
     </message>
     <message>
         <source>Encrypted volume:</source>
-        <translation>Volume chiffré&amp;nbsp;:</translation>
+        <translation>Volume chiffré :</translation>
     </message>
     <message>
         <source>Password retry counters:</source>
-        <translation>Compteur d&apos;essai de PIN&amp;nbsp;:</translation>
+        <translation>Compteur d'essai de PIN :</translation>
     </message>
     <message>
         <source>Admin:</source>
-        <translation>Administrateur&amp;nbsp;:</translation>
+        <translation>Administrateur :</translation>
     </message>
     <message>
         <source>User:</source>
-        <translation>Utilisateur&amp;nbsp;:</translation>
+        <translation>Utilisateur :</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Ce logiciel est distribué sous &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;licence GNU General Public v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-size:10pt; font-style:italic;"&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=" font-size:10pt; font-style:italic;"&gt;This software is licensed under the &lt;/span&gt;&lt;a href="https://www.gnu.org/licenses/"&gt;&lt;span style=" font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;"&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=" font-size:10pt; font-style:italic;"&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://nitrokey.com"&gt;&lt;span style=" text-decoration: underline; color:#c80636;"&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-size:10pt; font-style:italic;"&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=" font-size:10pt; font-style:italic;"&gt;Ce logiciel est distribué sous &lt;/span&gt;&lt;a href="https://www.gnu.org/licenses/"&gt;&lt;span style=" font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;"&gt;licence GNU General Public v3&lt;/span&gt;&lt;/a&gt;&lt;span style=" font-size:10pt; font-style:italic;"&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="https://nitrokey.com"&gt;&lt;span style=" text-decoration: underline; color:#c80636;"&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Detailed Status</source>
@@ -107,7 +107,7 @@ SD card is not accessible
 
 </source>
         <translation>
-La carte SD n&apos;est pas accessible
+La carte SD n'est pas accessible
 
 </translation>
     </message>
@@ -117,14 +117,15 @@ Smartcard is not accessible
 
 </source>
         <translation>
-La smartcard n&apos;est pas accessible
+La smartcard n'est pas accessible
 
 </translation>
     </message>
     <message>
         <source>No connection
 Please retry</source>
-        <translation>Aucune connexion détectée. Merci de réessayer</translation>
+        <translation>Aucune connexion détectée
+Merci de réessayer</translation>
     </message>
     <message>
         <source>READ/WRITE</source>
@@ -150,7 +151,7 @@ Please retry</source>
     </message>
     <message>
         <source>Storage Capacity:</source>
-        <translation>Capacité de stokage&amp;nbsp;:</translation>
+        <translation>Capacité de stockage :</translation>
     </message>
     <message>
         <source>%1 GB</source>
@@ -165,7 +166,7 @@ Please retry</source>
     </message>
     <message>
         <source>Output GUI</source>
-        <translation>Sortie de l&apos;interface</translation>
+        <translation>Sortie de l'interface</translation>
     </message>
     <message>
         <source>Update</source>
@@ -177,11 +178,11 @@ Please retry</source>
     </message>
     <message>
         <source>Device Output</source>
-        <translation>Sortie du dispositif</translation>
+        <translation>Sortie de l'appareil</translation>
     </message>
     <message>
         <source>Device output logged via USB</source>
-        <translation>Sortie du dispositif journalisée via USB</translation>
+        <translation>Sortie de l'appareil journalisée via USB</translation>
     </message>
 </context>
 <context>
@@ -203,20 +204,20 @@ Please retry</source>
         <translation>Afficher le PIN</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;You can use upper and lower case, numbers, and special characters.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Vous pouvez utiliser des lettres en majuscule ou minuscule, des chiffres ou des caractères spéciaux.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-style:italic;"&gt;You can use upper and lower case, numbers, and special characters.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-style:italic;"&gt;Vous pouvez utiliser des lettres en majuscule ou minuscule, des chiffres ou des caractères spéciaux.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Les PIN ne peuvent être essayés que trois fois et ils sont protégés contre les introduction par force brute. Un PIN de 6 à 8 caractères est suffisament long. Des PIN plus longs ou plus complexes sont généralement superflus. Cette règle ne s&apos;applique pas pour le mot de passe du micrologiciel. La longueur minimum est de %1 (%3 pour l&apos;administrateur) et la longueur maximale de %2 caractères.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-style:italic;"&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-style:italic;"&gt;Les PIN ne peuvent être essayés que trois fois et ils sont protégés contre les introduction par force brute. Un PIN de 6 à 8 caractères est suffisamment long. Des PIN plus longs ou plus complexes sont généralement superflus. Cette règle ne s'applique pas pour le mot de passe du micrologiciel. La longueur minimum est de %1 (%3 pour l'administrateur) et la longueur maximale de %2 caractères.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Retry count left:</source>
-        <translation>Essais restant&amp;nbsp;:</translation>
+        <translation>Essais restant :</translation>
     </message>
     <message>
         <source>Admin PIN:</source>
-        <translation>PIN Administrateur&amp;nbsp;:</translation>
+        <translation>PIN Administrateur :</translation>
     </message>
     <message>
         <source>Change Firmware Password</source>
@@ -224,19 +225,19 @@ Please retry</source>
     </message>
     <message>
         <source>New Firmware Password:</source>
-        <translation>Nouveau mot de passe micrologiciel&amp;nbsp;:</translation>
+        <translation>Nouveau mot de passe micrologiciel :</translation>
     </message>
     <message>
-        <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
-        <translation>Malheureusement vous n&apos;avez plus d&apos;essai possible. Merci d&apos;utiliser la fonction &apos;Réinitialiser le PIN utilisateur&apos; du menu pour le réinitialiser</translation>
+        <source>Unfortunately you have no more trials left. Please use 'Reset User PIN' option from menu to reset password</source>
+        <translation>Malheureusement vous n'avez plus d'essai possible. Merci d'utiliser la fonction 'Réinitialiser le PIN utilisateur' du menu pour le réinitialiser</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
-        <translation>Malheureusement vous n&apos;avez plus d&apos;essai possible. Merci de vous reporter aux instructions concernant la réinitialisation du PIN administrateur.</translation>
+        <translation>Malheureusement vous n'avez plus d'essai possible. Merci de vous reporter aux instructions concernant la réinitialisation du PIN administrateur.</translation>
     </message>
     <message>
-        <source>Once the firmware password is forgotten the Nitrokey can&apos;t be updated or reset. Don&apos;t lose your firmware password, please.</source>
-        <translation>Si vous oubliez le mot de passe du micrologiciel, il ne sera plus possible de mettre à jour ou réinitialiser la Nitrokey. Merci de faire en sorte de ne pas l&apos;oublier.</translation>
+        <source>Once the firmware password is forgotten the Nitrokey can't be updated or reset. Don't lose your firmware password, please.</source>
+        <translation>Si vous oubliez le mot de passe du micrologiciel, il ne sera plus possible de mettre à jour ou réinitialiser la Nitrokey. Merci de faire en sorte de ne pas l'oublier.</translation>
     </message>
     <message>
         <source>Set User PIN</source>
@@ -244,11 +245,11 @@ Please retry</source>
     </message>
     <message>
         <source>Current User PIN:</source>
-        <translation>PIN utilisateur courant&amp;nbsp;:</translation>
+        <translation>PIN utilisateur courant :</translation>
     </message>
     <message>
         <source>New User PIN:</source>
-        <translation>Nouveau PIN utilisateur&amp;nbsp;:</translation>
+        <translation>Nouveau PIN utilisateur :</translation>
     </message>
     <message>
         <source>Set Admin PIN</source>
@@ -256,11 +257,11 @@ Please retry</source>
     </message>
     <message>
         <source>Current Admin PIN:</source>
-        <translation>PIN administrateur courant&amp;nbsp;:</translation>
+        <translation>PIN administrateur courant :</translation>
     </message>
     <message>
         <source>New Admin PIN:</source>
-        <translation>Nouveau PIN administrateur&amp;nbsp;:</translation>
+        <translation>Nouveau PIN administrateur :</translation>
     </message>
     <message>
         <source>Reset User PIN</source>
@@ -268,7 +269,7 @@ Please retry</source>
     </message>
     <message>
         <source>Current Firmware Password:</source>
-        <translation>Mot de passe courant du micrologiciel&amp;nbsp;:</translation>
+        <translation>Mot de passe courant du micrologiciel :</translation>
     </message>
     <message>
         <source>Show password</source>
@@ -276,63 +277,63 @@ Please retry</source>
     </message>
     <message>
         <source>There was a problem during communicating with device. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue durant la communication avec l'appareil. Merci de réessayer.</translation>
     </message>
     <message>
         <source>Current password is not correct. Please retry.</source>
-        <translation>Le PIN courant n&apos;est pas valide. Merci de réessayer.</translation>
+        <translation>Le PIN courant n'est pas valide. Merci de réessayer.</translation>
     </message>
     <message>
         <source>New password is not correct. Please retry.</source>
-        <translation>Le nouveau PIN n&apos;est pas valide. Merci de réessayer.</translation>
+        <translation>Le nouveau PIN n'est pas valide. Merci de réessayer.</translation>
     </message>
     <message>
         <source>New password is set</source>
-        <translation type="unfinished">New PIN is set</translation>
+        <translation>Le nouveau PIN est installé</translation>
     </message>
     <message>
         <source>Wrong password.</source>
-        <translation type="unfinished">Wrong PIN.</translation>
+        <translation>Mauvais PIN.</translation>
     </message>
     <message>
-        <source>Couldn&apos;t change %1 password</source>
-        <translation type="unfinished">Couldn&apos;t change %1 PIN</translation>
+        <source>Couldn't change %1 password</source>
+        <translation>Impossible de changer le PIN %1</translation>
     </message>
     <message>
         <source>Current Admin password is not correct. Please retry.</source>
-        <translation type="unfinished">Current Admin PIN is not correct. Please retry.</translation>
+        <translation>Le PIN administrateur courant n'est pas valide. Merci de réessayer.</translation>
     </message>
     <message>
         <source>There was a problem during communicating with device or new password is not correct. Please retry.</source>
-        <translation type="unfinished">There was a problem during communicating with device or new PIN is not correct. Please retry.</translation>
+        <translation>Une erreur est survenue durant la communication avec l'appareil ou le nouveau mot de passe n'est pas valide. Merci de réessayer.</translation>
     </message>
     <message>
         <source>New User password is set</source>
-        <translation type="unfinished">New User PIN is set</translation>
+        <translation>Le nouveau PIN utilisateur est installé</translation>
     </message>
     <message>
         <source>Wrong Admin PIN.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvais PIN administrateur.</translation>
     </message>
     <message>
-        <source>Couldn&apos;t unblock the user PIN. Error: %1</source>
-        <translation type="unfinished"></translation>
+        <source>Couldn't unblock the user PIN. Error: %1</source>
+        <translation>Impossible de débloquer le PIN utilisateur. Erreur : %1</translation>
     </message>
     <message>
         <source>User PIN successfully unblocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Le PIN utilisateur a été débloqué avec succès</translation>
     </message>
     <message>
         <source>Wrong password or there was a communication problem with the device.</source>
-        <translation type="unfinished">Wrong firmware password or there was a communication problem with the device.</translation>
+        <translation>Mauvais mot de passe pour le micrologiciel ou une erreur de communication est survenue avec l'appareil.</translation>
     </message>
     <message>
         <source>Password has been changed with success!</source>
-        <translation type="unfinished">Firmware password has been changed with success!</translation>
+        <translation>Le mot de passe du micrologiciel a été changé avec succès !</translation>
     </message>
     <message>
         <source>The minimum length of the old password is </source>
-        <translation type="unfinished">The minimum length of the old PIN/password is </translation>
+        <translation>La longueur minimale de l'ancien PIN/mot de passe est </translation>
     </message>
     <message>
         <source> chars</source>
@@ -340,19 +341,19 @@ Please retry</source>
     </message>
     <message>
         <source>The new password entrys are not the same</source>
-        <translation type="unfinished">The new PIN/password entries are not the same</translation>
+        <translation>Les champs pour le nouveau PIN/mot de passe ne correspondent pas</translation>
     </message>
     <message>
         <source>The maximum length of a password is </source>
-        <translation type="unfinished">The maximum length of a PIN/password is </translation>
+        <translation>La longueur maximale d'un PIN/mot de passe est </translation>
     </message>
     <message>
         <source>The minimum length of a password is </source>
-        <translation type="unfinished">The minimum length of a PIN/password is </translation>
+        <translation>La longueur minimale d'un PIN/mot de passe est </translation>
     </message>
     <message>
         <source>Device is not yet initialized. Please try again later.</source>
-        <translation type="unfinished"></translation>
+        <translation>L'appareil n'a pas encore été initialisé. Merci de réessayer plus tard.</translation>
     </message>
 </context>
 <context>
@@ -363,7 +364,7 @@ Please retry</source>
     </message>
     <message>
         <source>Your HOTP:</source>
-        <translation>Votre HOTP&amp;nbsp;:</translation>
+        <translation>Votre HOTP :</translation>
     </message>
     <message>
         <source>Close</source>
@@ -375,7 +376,7 @@ Please retry</source>
     </message>
     <message>
         <source>TOTP interval:</source>
-        <translation>Intervalle TOTP&amp;nbsp;:</translation>
+        <translation>Intervalle TOTP :</translation>
     </message>
     <message>
         <source>Valid</source>
@@ -391,11 +392,11 @@ Please retry</source>
     </message>
     <message>
         <source>Your TOTP:</source>
-        <translation>Votre TOTP&amp;nbsp;:</translation>
+        <translation>Votre TOTP :</translation>
     </message>
     <message>
         <source>Generate TOTP</source>
-        <translation>Générer TOTP</translation>
+        <translation>Générer un TOTP</translation>
     </message>
     <message>
         <source>TOTP copied to clipboard</source>
@@ -410,7 +411,7 @@ Please retry</source>
     <name>MainWindow</name>
     <message>
         <source>Configuration</source>
-        <translation>Configuration</translation>
+        <translation></translation>
     </message>
     <message>
         <source>OTP Slot Configuration</source>
@@ -422,15 +423,15 @@ Please retry</source>
     </message>
     <message>
         <source>TOTP</source>
-        <translation>TOTP</translation>
+        <translation></translation>
     </message>
     <message>
         <source>HOTP</source>
-        <translation>HOTP</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Slot:</source>
-        <translation>Espace&amp;nbsp;:</translation>
+        <translation>Espace :</translation>
     </message>
     <message>
         <source>HOTP slot 1</source>
@@ -458,11 +459,11 @@ Please retry</source>
     </message>
     <message>
         <source>Erase Slot</source>
-        <translation>Effacer l&apos;espace</translation>
+        <translation>Effacer l'espace</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Nom&amp;nbsp;:</translation>
+        <translation>Nom :</translation>
     </message>
     <message>
         <source>Secret key</source>
@@ -470,75 +471,75 @@ Please retry</source>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Le secret est fourni par le fournisseur de service auprès duquel vous souhaitez pouvoir vous authentifier ou peut être configuré dans l&apos;application locale sur laquelle vous souhaitez vous connecter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Le secret est fourni par le fournisseur de service auprès duquel vous souhaitez pouvoir vous authentifier ou peut être configuré dans l'application locale sur laquelle vous souhaitez vous connecter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Secret Key:</source>
-        <translation>Clé secrète&amp;nbsp;:</translation>
+        <translation>Clé secrète :</translation>
     </message>
     <message>
         <source>********************************</source>
-        <translation>********************************</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Secret copied to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Le secret a été copié dans le presse papier</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hide or show the secret.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Montrer ou cacher le secret.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Hide secret</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher le secret</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;After generating a random secret, you would need to copy it into your application or service where you want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Après avoir généré un secret aléatoire, vous allez devoir le copier au sein de l'application ou du service pour lequel vous souhaitez vous connecter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Generate random secret</source>
-        <translation type="unfinished"></translation>
+        <translation>Générer un secret aléatoire</translation>
     </message>
     <message>
         <source>Input format:</source>
-        <translation type="unfinished"></translation>
+        <translation>Format d'entrée :</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Example: &amp;quot;ZR3M5I...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exemple : &amp;quot;ZR3M5I…&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exampel: &amp;quot;0xA3911C05...&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Exemple : &amp;quot;0xA3911C05…&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Hex</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
-        <translation type="unfinished"></translation>
+        <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren't protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
+        <translation>Note : les 2&lt;sup&gt;nd&lt;/sup&gt; facteurs d'authentification ne sont pas protégés contre les attaques physique. Vous devrez changer tous les secrets OTP si vous perdez votre Nitrokey.</translation>
     </message>
     <message>
         <source>Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <source>Set to zero</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre à zéro</translation>
     </message>
     <message>
         <source>Set to random</source>
-        <translation type="unfinished"></translation>
+        <translation>Aléatoire</translation>
     </message>
     <message>
         <source>6 digits</source>
-        <translation type="unfinished"></translation>
+        <translation>6 chiffres</translation>
     </message>
     <message>
         <source>8 digits</source>
-        <translation type="unfinished"></translation>
+        <translation>8 chiffres</translation>
     </message>
     <message>
         <source>Moving factor seed:</source>
@@ -546,23 +547,23 @@ Please retry</source>
     </message>
     <message>
         <source>HOTP length:</source>
-        <translation type="unfinished"></translation>
+        <translation>Longueur de l'HOTP&amp;npsb;:</translation>
     </message>
     <message>
         <source>TOTP interval:</source>
-        <translation type="unfinished"></translation>
+        <translation>Intervalle du TOTP :</translation>
     </message>
     <message>
         <source>Token ID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Send token ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer le token ID</translation>
     </message>
     <message>
         <source>Keyboard layout (DISABLED FEATURE):</source>
-        <translation type="unfinished"></translation>
+        <translation>Disposition clavier (FONCTIONNALITÉ DÉSACTIVÉE) :</translation>
     </message>
     <message>
         <source>MUI:</source>
@@ -602,15 +603,15 @@ Please retry</source>
     </message>
     <message>
         <source>(Recommendation: Use TOTP for web applications and HOTP for local applications)</source>
-        <translation>(Recommendation&amp;nbsp;: Utilisez TOTP pour des applications web et HOTP pour des applications locales)</translation>
+        <translation>(Recommandation : utilisez un TOTP pour des applications web et un HOTP pour des applications locales)</translation>
     </message>
     <message>
         <source>Base32</source>
         <translation></translation>
     </message>
     <message>
-        <source>Send &apos;enter&apos; as the last keystroke</source>
-        <translation type="unfinished"></translation>
+        <source>Send 'enter' as the last keystroke</source>
+        <translation>Appuyez sur 'Entrée' en dernière touche</translation>
     </message>
     <message>
         <source>00000000000000000000</source>
@@ -622,63 +623,63 @@ Please retry</source>
     </message>
     <message>
         <source>OTP Password settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres des mots de passe OTP</translation>
     </message>
     <message>
         <source>USB-Keyboard only</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavier USB seulement</translation>
     </message>
     <message>
         <source>Double press NumLock:</source>
-        <translation type="unfinished"></translation>
+        <translation>Appuyez deux fois sur VerrNum :</translation>
     </message>
     <message>
         <source>Double press CapsLock:</source>
-        <translation type="unfinished"></translation>
+        <translation>Appuyez deux fois sur VerrMaj :</translation>
     </message>
     <message>
         <source>Double press ScrollLock:</source>
-        <translation type="unfinished"></translation>
+        <translation>Appuyez deux fois sur ScrollLock :</translation>
     </message>
     <message>
         <source>Do nothing</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne rien faire</translation>
     </message>
     <message>
         <source>Send HOTP1</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer HOTP1</translation>
     </message>
     <message>
         <source>Send HOTP2</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer HOTP2</translation>
     </message>
     <message>
         <source>Password Safe</source>
-        <translation type="unfinished"></translation>
+        <translation>Stockage des mots de passe</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe :</translation>
     </message>
     <message>
         <source>Login name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant :</translation>
     </message>
     <message>
         <source>Slot name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de l'espace :</translation>
     </message>
     <message>
         <source>Static password 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe statique 0</translation>
     </message>
     <message>
         <source>Generate random password</source>
-        <translation type="unfinished"></translation>
+        <translation>Générer un mot de passe aléatoire</translation>
     </message>
     <message>
         <source>Characters left:</source>
-        <translation type="unfinished"></translation>
+        <translation>Caractères restant :</translation>
     </message>
     <message>
         <source>...</source>
@@ -686,27 +687,27 @@ Please retry</source>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Password Safe fields support UTF8 data. It means that you can use your national characters here. Please remember however that non-English characters could take more space (up to 4 characters). The counters next to each field are to inform how much more standard English characters can given field accept.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Les champs du stockage de mots de passe supporte les caractères UTF8. Cela veut dire que vous pouvez utiliser des caractères nationaux (accents, alphabets variés). Veuillez cependant noter que les caractères en dehors de la plage ASCII (caractères alphabétiques romains simples) peuvent prendre plus de place, jusqu'à 4 caractères. Les compteurs de caractères à côté de chaque champ considèrent tous les caractères comme des caractères simple et peuvent donc être faux si vous utilisez de l'UTF8.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Unlock password safe</source>
-        <translation type="unfinished"></translation>
+        <translation>Débloquer le stockage de mots de passe</translation>
     </message>
     <message>
         <source>Nitrokey disconnected</source>
-        <translation type="unfinished"></translation>
+        <translation>Nitrokey déconnectée</translation>
     </message>
     <message>
         <source>Nitrokey Pro connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Nitrokey Pro connectée</translation>
     </message>
     <message>
         <source>Nitrokey Storage connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Nitrokey Storage connectée</translation>
     </message>
     <message>
         <source>&amp;OTP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Factory reset</source>
@@ -714,23 +715,23 @@ Please retry</source>
     </message>
     <message>
         <source>&amp;Change User PIN</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Changer le PIN utilisateur</translation>
     </message>
     <message>
         <source>&amp;Change Admin PIN</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Changer le PIN administrateur</translation>
     </message>
     <message>
         <source>&amp;Debug</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Débogage</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Quitter</translation>
     </message>
     <message>
         <source>&amp;About Nitrokey</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;À propos de Nitrokey</translation>
     </message>
     <message>
         <source>&amp;OTP and Password safe</source>
@@ -793,7 +794,7 @@ Please retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
+        <source>&amp;Disable 'initialize storage with random data' warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -810,16 +811,17 @@ Please retry</source>
     </message>
     <message>
         <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation type="unfinished"></translation>
+Select "Initialize device" option from context menu.</source>
+        <translation>Attention : le volume chiffré n'est pas sécurisé,
+Veuillez sélectionner l'option "Initialiser l'appareil" dans le menu contextuel.</translation>
     </message>
     <message>
         <source>&amp;Initialize device</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Initialiser l'appareil</translation>
     </message>
     <message>
         <source>&amp;Reset User PIN</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Réinitialiser le PIN utilisateur</translation>
     </message>
     <message>
         <source>&amp;Lock Device</source>
@@ -827,51 +829,51 @@ Select &quot;Initialize device&quot; option from context menu.</source>
     </message>
     <message>
         <source>Smartcard or SD card are not ready</source>
-        <translation type="unfinished"></translation>
+        <translation>La smartcard ou la carte SD ne sont pas prête</translation>
     </message>
     <message>
         <source>Passwords</source>
-        <translation type="unfinished"></translation>
+        <translation>Mots de passe</translation>
     </message>
     <message>
         <source>Configure</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer</translation>
     </message>
     <message>
         <source>Special Configure</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration spécifique</translation>
     </message>
     <message>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation>La valeur du compteur n'a pas été copiée, une erreur est survenue dans la conversion. Le compteur a été mis à 0. Merci de réessayer.</translation>
     </message>
     <message>
         <source>Counter value not copied - Nitrokey Storage handles HOTP counter values up to 7 digits. Setting counter value to 0. Please retry.</source>
-        <translation type="unfinished"></translation>
+        <translation>La valeur du compteur n'a pas été copiée, la Nitrokey Storage ne peut manipuler des valeurs de compteur que jusqu'à 7 chiffres. Le compteur a été mis à 0. Merci de réessayer.</translation>
     </message>
     <message>
         <source>TOTP length:</source>
-        <translation type="unfinished"></translation>
+        <translation>Longueur du TOTP&amp;npsb;:</translation>
     </message>
     <message>
         <source>Enter card admin PIN</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer le PIN de l'administrateur de la carte</translation>
     </message>
     <message>
         <source>Admin PIN:</source>
-        <translation type="unfinished"></translation>
+        <translation>PIN administrateur :</translation>
     </message>
     <message>
         <source>Wrong PIN. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvais PIN. Merci de réessayer.</translation>
     </message>
     <message>
         <source>Enter admin PIN</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer le PIN de l'administrateur</translation>
     </message>
     <message>
         <source>AES key generated</source>
-        <translation type="unfinished"></translation>
+        <translation>La clé AES a été générée</translation>
     </message>
     <message>
         <source>This activity locks your hidden volume. Do you want to proceed?
@@ -957,7 +959,7 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>Warning: The encrypted Volume is not formatted.
-&quot;Use GParted or fdisk for this.&quot;</source>
+"Use GParted or fdisk for this."</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1001,7 +1003,7 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can&apos;t clear slot.</source>
+        <source>Can't clear slot.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1013,7 +1015,7 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can&apos;t save slot. %1</source>
+        <source>Can't save slot. %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1035,9 +1037,9 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     <message>
         <source>WARNING!
 
-The time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
+The time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.
 
-Reset Nitrokey&apos;s time?</source>
+Reset Nitrokey's time?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1050,7 +1052,7 @@ Reset Nitrokey&apos;s time?</source>
     </message>
     <message>
         <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize storage with random data&quot;</source>
+Select "Initialize storage with random data"</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1088,10 +1090,10 @@ It requires more than 1 hour for 32GB. Do you want to continue?</source>
     </message>
     <message>
         <source>(debug) Response: </source>
-        <translation>(débogage) Réponse&amp;nbsp;: </translation>
+        <translation>(débogage) Réponse : </translation>
     </message>
     <message>
-        <source>Can&apos;t save slot.</source>
+        <source>Can't save slot.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1099,7 +1101,7 @@ It requires more than 1 hour for 32GB. Do you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can&apos;t unlock password safe.</source>
+        <source>Can't unlock password safe.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1115,7 +1117,7 @@ It requires more than 1 hour for 32GB. Do you want to continue?</source>
         <translation>Mauvais PIN utilisateur.</translation>
     </message>
     <message>
-        <source>Pasword safe: Can&apos;t get password</source>
+        <source>Pasword safe: Can't get password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1136,9 +1138,9 @@ It requires more than 1 hour for 32GB. Do you want to continue?</source>
 The time of your computer and Nitrokey are out of sync.
 Your computer may be configured with a wrong time or
 your Nitrokey may have been attacked. If an attacker or
-malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
+malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer's time is wrong, please configure it correctly and reset the time of your Nitrokey.
 
-Reset Nitrokey&apos;s time?</source>
+Reset Nitrokey's time?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1265,7 +1267,7 @@ If problem will occur again please:
     </message>
     <message>
         <source>Enter card password:</source>
-        <translation>Entrer le mot de passe de la carte&amp;nbsp;:</translation>
+        <translation>Entrer le mot de passe de la carte :</translation>
     </message>
     <message>
         <source>Show password</source>
@@ -1277,7 +1279,7 @@ If problem will occur again please:
     </message>
     <message>
         <source>Your PIN is too long! Use not more than 30 characters.</source>
-        <translation>Votre PIN est trop long&amp;nbsp;! N&apos;utilisez pas plus de 30 caractères.</translation>
+        <translation>Votre PIN est trop long ! N'utilisez pas plus de 30 caractères.</translation>
     </message>
     <message>
         <source>Your PIN is too short. Use at least 6 characters.</source>
@@ -1286,12 +1288,12 @@ If problem will occur again please:
     <message>
         <source>Warning: Default PIN is used.
 Please change the PIN.</source>
-        <translation>Attention&amp;nbsp;: PIN par défaut utilisé.
+        <translation>Attention : PIN par défaut utilisé.
 Merci de changer le PIN.</translation>
     </message>
     <message>
         <source>Device is not yet initialized. Please try again later.</source>
-        <translation>Le dispositif n&apos;est pas encore initialisé. Merci de réessayer plus tard.</translation>
+        <translation>Le dispositif n'est pas encore initialisé. Merci de réessayer plus tard.</translation>
     </message>
 </context>
 <context>
@@ -1306,7 +1308,7 @@ Merci de changer le PIN.</translation>
     </message>
     <message>
         <source>Send loginname</source>
-        <translation>Envoyer le nom d&apos;utilisateur</translation>
+        <translation>Envoyer le nom d'utilisateur</translation>
     </message>
     <message>
         <source>Send PW tab LN</source>
@@ -1339,28 +1341,28 @@ Press &lt;Button&gt; to copy value to clipboard</source>
 Appuyez sur &lt;Button&gt; pour copier la valeur dans le presse papier</translation>
     </message>
     <message>
-        <source>Can&apos;t send password chars via HID</source>
-        <translation>Impossible d&apos;envoyer le mot de passe via HID</translation>
+        <source>Can't send password chars via HID</source>
+        <translation>Impossible d'envoyer le mot de passe via HID</translation>
     </message>
     <message>
-        <source>Can&apos;t get password</source>
+        <source>Can't get password</source>
         <translation>Impossible de lire le mot de passe</translation>
     </message>
     <message>
-        <source>Can&apos;t send loginname via keyboard</source>
-        <translation>Impossible d&apos;envoyer le nom d&apos;utilisateur avec le clavier</translation>
+        <source>Can't send loginname via keyboard</source>
+        <translation>Impossible d'envoyer le nom d'utilisateur avec le clavier</translation>
     </message>
     <message>
-        <source>Can&apos;t send CR via keyboard</source>
-        <translation>Impossible d&apos;envoyer le CR avec le clavier</translation>
+        <source>Can't send CR via keyboard</source>
+        <translation>Impossible d'envoyer le CR avec le clavier</translation>
     </message>
     <message>
-        <source>Can&apos;t send password via keyboard</source>
-        <translation>Impossible d&apos;envoyer le mot de passe avec le clavier</translation>
+        <source>Can't send password via keyboard</source>
+        <translation>Impossible d'envoyer le mot de passe avec le clavier</translation>
     </message>
     <message>
-        <source>Can&apos;t send loginname chars via HID</source>
-        <translation>Impossible d&apos;envoyer le nom d&apos;utilisateur via HID</translation>
+        <source>Can't send loginname chars via HID</source>
+        <translation>Impossible d'envoyer le nom d'utilisateur via HID</translation>
     </message>
     <message>
         <source>PW Safe Slot </source>
@@ -1387,7 +1389,7 @@ La valeur va être envoyée dans </translation>
     </message>
     <message>
         <source>Enter card password:</source>
-        <translation>Entrez le mot de passe de la carte&amp;nbsp;:</translation>
+        <translation>Entrez le mot de passe de la carte :</translation>
     </message>
     <message>
         <source>Show password</source>
@@ -1411,7 +1413,7 @@ La valeur va être envoyée dans </translation>
     </message>
     <message>
         <source>Your PIN is too long! Use not more than 30 characters.</source>
-        <translation>Votre PIN est trop long&amp;nbsp;! N&apos;utilisez pas plus de 30 caractères.</translation>
+        <translation>Votre PIN est trop long ! N'utilisez pas plus de 30 caractères.</translation>
     </message>
     <message>
         <source>Your PIN is too short. Use at least 6 characters.</source>
@@ -1429,7 +1431,7 @@ Merci de changer le PIN.</translation>
     </message>
     <message>
         <source>Device is not yet initialized. Please try again later.</source>
-        <translation>Le dispositif n&apos;est pas encore initialisé. Merci de réessayer plus tard.</translation>
+        <translation>Le dispositif n'est pas encore initialisé. Merci de réessayer plus tard.</translation>
     </message>
 </context>
 <context>
@@ -1439,8 +1441,8 @@ Merci de changer le PIN.</translation>
         <translation>Clé 2.0</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Stick 2.0 command&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Commande pour la clé 2.0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="center"&gt;Stick 2.0 command&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="center"&gt;Commande pour la clé 2.0&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Admin-PIN&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -1553,10 +1555,10 @@ Merci de changer le PIN.</translation>
     </message>
     <message>
         <source>Storage successfully initialized with random data</source>
-        <translation>Espace de stockage initialisé avec succès à l&apos;aide de données aléatoires. Merci de débrancher le dispositif et de le brancher à nouveau pour terminer le processus d&apos;initialisation</translation>
+        <translation>Espace de stockage initialisé avec succès à l'aide de données aléatoires. Merci de débrancher le dispositif et de le brancher à nouveau pour terminer le processus d'initialisation</translation>
     </message>
     <message>
-        <source>Can&apos;t enable hidden volume</source>
+        <source>Can't enable hidden volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1609,7 +1611,7 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <source>Build a new base key for the hidden volume? all data get lost</source>
-        <translation>Construire une nouvelle clé principale pour le volume caché&amp;nbsp;? Toutes les données seront perdues</translation>
+        <translation>Construire une nouvelle clé principale pour le volume caché ? Toutes les données seront perdues</translation>
     </message>
 </context>
 <context>
@@ -1626,8 +1628,8 @@ Firmware update is not possible.</source>
         <translation>Mise à jour du micrologiciel</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;En sélectionnant &amp;quot;OK&amp;quot; le dispositif va passer en &lt;br/&gt;mode de mise à jour du micrologiciel. Il ne sera plus possible de revenir en arrière&amp;nbsp;!&lt;br/&gt;Merci de lire dans la &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation (en)&lt;/span&gt;&lt;/a&gt; comment &lt;br/&gt;mettre à jour le micrologiciel.&lt;/p&gt;&lt;p&gt;Êtes vous sûr de vouloir passer en mode mise à jour&amp;nbsp;?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href="https://www.nitrokey.com/en/doc/firmware-update-storage"&gt;&lt;span style=" text-decoration: underline; color:#0000ff;"&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;En sélectionnant &amp;quot;OK&amp;quot; le dispositif va passer en &lt;br/&gt;mode de mise à jour du micrologiciel. Il ne sera plus possible de revenir en arrière !&lt;br/&gt;Merci de lire dans la &lt;a href="https://www.nitrokey.com/en/doc/firmware-update-storage"&gt;&lt;span style=" text-decoration: underline; color:#0000ff;"&gt;documentation (en)&lt;/span&gt;&lt;/a&gt; comment &lt;br/&gt;mettre à jour le micrologiciel.&lt;/p&gt;&lt;p&gt;Êtes vous sûr de vouloir passer en mode mise à jour ?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -1637,7 +1639,7 @@ Firmware update is not possible.</source>
         <translation></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="center"&gt;&lt;span style=" font-size:12pt; font-weight:600;"&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600;"&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren't PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600;"&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor.&lt;/p&gt;&lt;p&gt;&lt;span style=" font-weight:600;"&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1646,7 +1648,7 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <source>I read and understood this security warning</source>
-        <translation>J&apos;ai lu et compris cet avertissement de sécûrité</translation>
+        <translation>J'ai lu et compris cet avertissement de sécûrité</translation>
     </message>
 </context>
 <context>
@@ -1656,7 +1658,7 @@ Firmware update is not possible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=" font-weight:600;"&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href="https://www.nitrokey.com/documentation/hidden-volumes"&gt;&lt;span style=" font-weight:600; text-decoration: underline; color:#0000ff;"&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=" font-weight:600;"&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1717,7 +1719,7 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <source>Show password</source>
-        <translation type="unfinished">Show password</translation>
+        <translation>Montrer le mot de passe</translation>
     </message>
     <message>
         <source>Your password is too short. Use at least 8 characters.</source>
@@ -1737,15 +1739,15 @@ Firmware update is not possible.</source>
     </message>
     <message>
         <source>%</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>MB</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>GB</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Size will be rounded down to integral percent of total storage size (%1MB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -1804,8 +1806,8 @@ is between %1 % and %2 % of the storage size</source>
         <translation>Verrouiller le micrologiciel</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the stick lock the firmware and close the hardware debug port.This disables any external hardware access to the data in the device (processor).&lt;/p&gt;&lt;p&gt;There is no way back! &lt;/p&gt;&lt;p&gt;After this you can&apos;t update the firmware.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;En sélectionnant &amp;laquo;&amp;nbsp;OK&amp;nbsp;&amp;raquo;, la clé va verrouiller son micrologiciel et fermer le port matériel de débogage. Ceci empêche tout accès matériel aux données depuis l&apos;extérieur.&lt;/p&gt;&lt;p&gt;Cette action n&apos;est pas réversible&amp;nbsp;!&lt;/p&gt;&lt;p&gt;Une fois cette action effectuée, il ne sera plus possible de mettre à jour le micrologiciel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the stick lock the firmware and close the hardware debug port.This disables any external hardware access to the data in the device (processor).&lt;/p&gt;&lt;p&gt;There is no way back! &lt;/p&gt;&lt;p&gt;After this you can't update the firmware.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;En sélectionnant &amp;laquo; OK &amp;raquo;, la clé va verrouiller son micrologiciel et fermer le port matériel de débogage. Ceci empêche tout accès matériel aux données depuis l'extérieur.&lt;/p&gt;&lt;p&gt;Cette action n'est pas réversible !&lt;/p&gt;&lt;p&gt;Une fois cette action effectuée, il ne sera plus possible de mettre à jour le micrologiciel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 </TS>
