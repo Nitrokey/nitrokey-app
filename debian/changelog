@@ -1,3 +1,9 @@
+nitrokey-app (1.0) xenial; urgency=medium
+
+  * Release of v1.0
+
+ -- Szczepan Zalega <szczepan@nitrokey.com>  Tue, 02 May 2017 13:26:56 +0200
+
 nitrokey-app (1.0beta1) xenial; urgency=medium
 
   * Beta test
