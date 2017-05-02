@@ -12,8 +12,7 @@ clean:
 	dh_clean -A
 
 build:
-	cd libnitrokey/build && cmake .. && ${MAKE}
-	qmake -qt=qt5
+	cmake .
 	${MAKE}
 	touch build
 
