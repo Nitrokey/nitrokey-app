@@ -1533,3 +1533,7 @@ void MainWindow::set_debug_mode() {
   tray.setDebug_mode(true);
   debug_mode = true;
 }
+
+void MainWindow::set_debug_level(int debug_level) {
+  nm::instance()->set_loglevel(debug_level);
+}

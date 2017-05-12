@@ -47,6 +47,7 @@ enum class ConnectionState{
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
+
 public :
     explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
@@ -196,6 +197,7 @@ public:
   void set_debug_window();
 
   void set_debug_mode();
+  void set_debug_level(int debug_level);
 
 private:
   bool debug_mode = false;
