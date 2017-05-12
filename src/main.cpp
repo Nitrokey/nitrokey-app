@@ -26,6 +26,7 @@
 #include <QSettings>
 #include <QFileInfo>
 #include <QDebug>
+#include <libnitrokey/include/log.h>
 //#include <QSharedMemory>
 #include "src/version.h"
 #include "src/utils/bool_values.h"
@@ -127,28 +128,32 @@ int main(int argc, char *argv[]) {
   }
 
   w.set_commands_delay(100);
-
   if (parser.isSet("delay")){
     auto delay_in_ms = parser.value("delay").toInt();
     w.set_commands_delay(delay_in_ms);
   }
 
+  w.set_debug_level(0);
+  if(parser.isSet("debug-level")){
+    w.set_debug_level(parser.value("debug-level").toInt());
+  }
+
+
 //  csApplet()->setParent(&w);
-  //TODO add global exception catch for logging?
-  //or use std::terminate
-  int retcode;
-#ifdef _NDEBUG
+  int retcode = -1;
+#ifndef _DEBUG
   try{
     retcode = a.exec();
   }
   catch (std::exception &e){
     auto message = QApplication::tr("Critical error encountered. Please restart application.\nMessage: ") + e.what();
+    nitrokey::log::Log::instance()(message.toStdString(), nitrokey::log::Loglevel::ERROR);
     csApplet()->warningBox(message);
     qDebug() << message;
   }
 #else
   retcode = a.exec();
-  qDebug() << "normal exit";
+  qDebug() << "Normal application exit";
 #endif
   return retcode;
 }
@@ -253,6 +258,9 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
           "log-file-name"},
       {{"dw","debug-window"},
           QCoreApplication::translate("main", "Save debug log to App's window (experimental)") },
+      {{"dl","debug-level"},
+          QCoreApplication::translate("main", "Set debug level, 0-4"),
+          "debug-level-int"},
       {{"s", "delay"},
           QCoreApplication::translate("main", "Set delay between commands sent to device (in ms) to <delay>"), "delay" },
       {"version-more",
@@ -286,6 +294,7 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
     qDebug() << CMAKE_CXX_COMPILER << CMAKE_CXX_FLAGS;
     return true;
   }
+
   return false;
 }
 
