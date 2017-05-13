@@ -16,13 +16,13 @@ public:
     enum Type{ADMIN, USER, FIRMWARE, HIDDEN_VOLUME};
     Authentication(QObject *parent, Type _type);
     bool authenticate();
-    const QString getTempPassword();
+    const QByteArray getTempPassword();
     std::string getPassword();
 private:
     Q_DISABLE_COPY(Authentication);
     quint64 authenticationValidUntilTime;
-    QString tempPassword;
-    QString generateTemporaryPassword() const;
+    QByteArray tempPassword;
+    QByteArray generateTemporaryPassword() const;
     const Type type;
     uint getCurrentTime() const;
 private slots:

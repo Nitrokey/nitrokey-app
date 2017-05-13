@@ -58,10 +58,10 @@ bool Authentication::authenticate(){
     try{
       switch (pinType){
         case PinDialog::USER_PIN:
-          nm::instance()->user_authenticate(password.c_str(), tempPassword.toLatin1().constData());
+          nm::instance()->user_authenticate(password.c_str(), tempPassword.constData());
           break;
         case PinDialog::ADMIN_PIN:
-          nm::instance()->first_authenticate(password.c_str(), tempPassword.toLatin1().constData());
+          nm::instance()->first_authenticate(password.c_str(), tempPassword.constData());
           break;
         default:
           break;
@@ -94,19 +94,26 @@ void Authentication::clearTemporaryPassword(bool force){
 }
 
 
-#include <QByteArray>
-QString Authentication::generateTemporaryPassword() const {
-  QByteArray tmp_p(25,0); //TODO remove magic number - 25 - maxlen of temp pass
-  for (int i = 0; i < tmp_p.size(); i++)
-    tmp_p[i] = qrand() & 0xFF;
+#include <random>
+QByteArray Authentication::generateTemporaryPassword() const {
+  static std::random_device rd;
+  static std::mt19937 mt(rd());
+  static std::uniform_int_distribution<unsigned char> dist(0, 0xFF);
+
+  auto temporary_password_length = 25;
+  QByteArray tmp_p(temporary_password_length, 0);
+  auto size = tmp_p.size();
+  for (int i = 0; i < size; i++){
+    tmp_p[i] = dist(mt);
+  }
   return tmp_p;
 }
 
 #include "core/ScopedGuard.h"
 
-const QString Authentication::getTempPassword() {
+const QByteArray Authentication::getTempPassword() {
 //    authenticate(); //TODO check?
-    QString local_tempPassword = tempPassword;
+    const QByteArray local_tempPassword = tempPassword;
     bool is_07nkpro_device = libada::i()->is_nkpro_07_rtm1();
     if (is_07nkpro_device) {
         clearTemporaryPassword(true);
