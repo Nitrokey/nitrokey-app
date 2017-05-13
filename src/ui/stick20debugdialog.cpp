@@ -33,5 +33,7 @@ DebugDialog::~DebugDialog() {
 
 
 void DebugDialog::on_DebugData(QString message) {
-  ui->TextGUI->appendPlainText(message.trimmed());
+  message[message.size()-1] = ' ';
+  ui->TextGUI->appendPlainText(message);
+//  ui->TextGUI->appendPlainText(message.trimmed());
 }
