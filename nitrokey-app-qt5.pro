@@ -107,7 +107,7 @@ LIBNITROKEY= -lnitrokey-static
 enable_log {
     message("enable_log : enabled")
     LIBNITROKEY= -lnitrokey-static-log
-    CONFIG += console
+#    CONFIG += console
 }
 
 

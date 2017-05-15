@@ -206,19 +206,19 @@ bool libada::isHOTPSlotProgrammed(const int i) {
   return !getHOTPSlotName(i).empty();
 }
 
-void libada::writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword) {
-  const auto byteArray = tempPassword.toLatin1();
+void libada::writeToOTPSlot(const OTPSlot &otpconf, const char * tempPassword) {
+  const auto byteArray = tempPassword;
   switch(otpconf.type){
     case OTPSlot::OTPType::HOTP: {
       nm::instance()->write_HOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
         otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
-      otpconf.tokenID, byteArray.constData());
+      otpconf.tokenID, byteArray);
     }
       break;
     case OTPSlot::OTPType::TOTP:
       nm::instance()->write_TOTP_slot(otpconf.slotNumber, otpconf.slotName, otpconf.secret, otpconf.interval,
                                 otpconf.config_st.useEightDigits, otpconf.config_st.useEnter, otpconf.config_st.useTokenID,
-                                otpconf.tokenID, byteArray.constData());
+                                otpconf.tokenID, byteArray);
       break;
     case OTPSlot::UNKNOWN:
       throw std::runtime_error("invalid OTP data");

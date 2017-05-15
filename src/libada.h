@@ -112,7 +112,7 @@ public:
     bool isPasswordSafeUnlocked();
     bool isTOTPSlotProgrammed(const int i);
     bool isHOTPSlotProgrammed(const int i);
-    void writeToOTPSlot(const OTPSlot &otpconf, const QString &tempPassword);
+    void writeToOTPSlot(const OTPSlot &otpconf, const char* tempPassword);
 
     bool is_nkpro_07_rtm1();
     bool is_secret320_supported();

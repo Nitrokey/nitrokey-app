@@ -450,10 +450,12 @@ void Tray::generateMenuForStorageDevice() {
     nitrokey::proto::stick20::DeviceConfigurationResponsePacket::ResponsePayload status;
 
 
-    for (int i=0; i < 3; i++){
+    for (int i=0; i < 20; i++){
       try {
         status = nm::instance()->get_status_storage();
         if(status.ActiveSD_CardID_u32 != 0) break;
+        auto message = "No active SD card or empty Storage status received, retrying " + std::to_string(i);
+        LOG(message, nitrokey::log::Loglevel::DEBUG);
       }
       catch (LongOperationInProgressException &e){
         return;
@@ -469,6 +471,7 @@ void Tray::generateMenuForStorageDevice() {
       // accessable?)
     {
       trayMenu->addAction(Stick20ActionUpdateStickStatus);
+      LOG("SD card status not active, aborting", nitrokey::log::Loglevel::DEBUG);
       return;
     }
 
