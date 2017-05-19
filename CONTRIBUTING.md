@@ -5,7 +5,7 @@ If you would like to contribute and do not have the idea, you can check our [Ide
 
 ## Reporting issues
 ### What issue description should contain
-To increase issue report processing please add some information about your environment. At least:
+To increase issue's report speed processing please add some information about your environment. At least:
 - Operating system (name, version, 32 or 64 bits?)
 - Stick firmware version (could be checked via `About` window)
 - Application version on which the issue occurs
@@ -27,7 +27,7 @@ Whether you have a solution to one of the issues or a quick small fix-up for a t
 - Please comment solution code in pull request and the impact of planned change on issue page.
 - Add test scenario to PR under which the solution fixes the issue (with environment description).
 
-Please be aware not all PRs will be merged to codebase including yours, however your effort will not go in vain. The PR could shed light on some overlook problem or be used as an inspiration for rewriting given code later. You can always develop it further in your fork and try again. Don't get discouraged!
+Please be aware not all PRs will be merged to codebase including yours, however your effort will not go in vain. The PR could shed light on some overlooked problem or be used as an inspiration for rewriting given code later. You can always develop it further in your fork and try again. Don't get discouraged!
 
 ### How to make a Pull Request
 To make a PR please:
