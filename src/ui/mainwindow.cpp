@@ -43,6 +43,7 @@
 #include "src/core/SecureString.h"
 
 #include <QString>
+#include <src/core/ScopedGuard.h>
 
 using nm = nitrokey::NitrokeyManager;
 static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
@@ -69,7 +70,8 @@ MainWindow::MainWindow(QWidget *parent):
   storage.set_show_message( [this](QString msg){ tray.showTrayMessage(msg); });
 
   //TODO make connections in objects instead of accumulating them here
-  connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
+//  connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
+  connect(&storage, SIGNAL(storageStatusUpdated()), &tray, SLOT(regenerateMenu()));
   connect(&storage, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(&storage, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
   connect(&storage, SIGNAL(longOperationStarted()), this, SLOT(on_KeepDeviceOnline()));
@@ -114,6 +116,8 @@ MainWindow::MainWindow(QWidget *parent):
   keepDeviceOnlineTimer = new QTimer(this);
   connect(keepDeviceOnlineTimer, SIGNAL(timeout()), this, SLOT(on_KeepDeviceOnline()));
   keepDeviceOnlineTimer->start(30*1000);
+  QTimer::singleShot(10*1000, this, SLOT(on_KeepDeviceOnline()));
+
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
@@ -177,9 +181,26 @@ void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
     }
 }
 
+//std::atomic_bool check_connection_flag {false};
+
+
+
 void MainWindow::checkConnection() {
   using cs = ConnectionState;
-  QMutexLocker locker(&check_connection_mutex);
+
+  //if (check_connection_flag)
+//    return;
+
+  //QMutexLocker locker(&check_connection_mutex);
+
+  if (!check_connection_mutex.tryLock(100)){
+      qDebug("xxxxxxx checkConnection skip");
+    return;
+  }
+
+  ScopedGuard mutexGuard([this](){
+      check_connection_mutex.unlock();
+  });
 
   bool deviceConnected = libada::i()->isDeviceConnected() && !libada::i()->have_communication_issues_occurred();
 
@@ -199,10 +220,12 @@ void MainWindow::checkConnection() {
                 emit ShortOperationBegins("Connecting Device");
 
               QTimer::singleShot(3000, [this](){
-                  ShortOperationEnds();
+                  emit ShortOperationEnds();
+          //        check_connection_flag =  true;
                   nitrokey::NitrokeyManager::instance()->connect();
+          //        check_connection_flag = false;
 
-              if(libada::i()->isStorageDeviceConnected()){
+              /*if(libada::i()->isStorageDeviceConnected()){
                   try {
                       libada::i()->get_status();
                       long_operation_in_progress = false;
@@ -212,7 +235,7 @@ void MainWindow::checkConnection() {
                       emit OperationInProgress(e.progress_bar_value);
                       return;
                   }
-              }
+              }*/
 
               //on connection
                   emit DeviceConnected();
@@ -227,6 +250,7 @@ void MainWindow::checkConnection() {
     }
     nitrokey::NitrokeyManager::instance()->connect();
   }
+
 
 }
 
@@ -1387,6 +1411,8 @@ void MainWindow::updateProgressBar(int i) {
 }
 
 void MainWindow::on_DeviceDisconnected() {
+    qDebug("xxxxxxx on_DeviceDisconnected");
+
 //  emit ShortOperationEnds(); //TODO enable and test
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
   tray.showTrayMessage(tr("Nitrokey disconnected"));
@@ -1399,6 +1425,8 @@ void MainWindow::on_DeviceDisconnected() {
 
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_DeviceConnected() {
+  qDebug("xxxxxxx on_DeviceConnected");
+
   if (debug_mode)
     emit ShortOperationBegins(tr("Connecting device"));
 
@@ -1462,6 +1490,20 @@ void MainWindow::on_DeviceConnected() {
 }
 
 void MainWindow::on_KeepDeviceOnline() {
+  //QMutexLocker locker(&check_connection_mutex);
+
+//  if (check_connection_flag)
+//    return;
+
+
+  if (!check_connection_mutex.tryLock(100)){
+      qDebug("xxxxxxx on_KeepDeviceOnline skip");
+      return;
+  }
+  ScopedGuard mutexGuard([this](){
+      check_connection_mutex.unlock();
+  });
+
   try{
     nm::instance()->get_status();
     //if long operation in progress jump to catch,

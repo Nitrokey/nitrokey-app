@@ -19,6 +19,7 @@
 #define LOCAL_PASSWORD_SIZE 40
 #include <memory>
 #include <src/core/ThreadWorker.h>
+#include <libnitrokey/include/stick20_commands.h>
 
 
 void unmountEncryptedVolumes() {
@@ -614,21 +615,59 @@ StorageActions::StorageActions(QObject *parent, Authentication *auth_admin, Auth
   connect(this, SIGNAL(storageStatusChanged()), this, SLOT(on_StorageStatusChanged()));
 }
 
+#include <QDebug>
+
+
 void StorageActions::on_StorageStatusChanged() {
   if (!libada::i()->isStorageDeviceConnected())
     return;
-  auto m = nitrokey::NitrokeyManager::instance();
-  try{
-    auto s = m->get_status_storage();
-    CryptedVolumeActive = s.VolumeActiceFlag_st.encrypted;
-    HiddenVolumeActive = s.VolumeActiceFlag_st.hidden;
-  }
-  catch (LongOperationInProgressException &e){
-    //TODO
-  }
-  catch (DeviceCommunicationException &e){
-    //TODO
-  }
+
+    new ThreadWorker(
+    []() -> Data {
+        bool interrupt = QThread::currentThread()->isInterruptionRequested();
+        static bool first_run = true;
+        int times = first_run? 20 : 3;
+        first_run = false;
+
+        //FIXME workaround for Storage v0.45 freezing for 20-30 seconds while
+        //running sequentially GET_STATUS (Pro) and GET_DEVICE_STATUS (Storage)
+        for (int i = 0; i < times && !interrupt; ++i) {
+            QThread::currentThread()->msleep(500);
+            interrupt = QThread::currentThread()->isInterruptionRequested();
+            qDebug() << QThread::currentThreadId() << "wait " << i;
+        }
+      Data data;
+        if(interrupt) {
+            qDebug() << QThread::currentThreadId() << "interrupt ";
+            return data;
+        }
+
+        qDebug() << QThread::currentThreadId() << "running command ";
+
+        auto m = nitrokey::NitrokeyManager::instance();
+        auto s = m->get_status_storage();
+        data["encrypted_active"] = s.VolumeActiceFlag_st.encrypted;
+        data["hidden_active"] = s.VolumeActiceFlag_st.hidden;
+        qDebug() << QThread::currentThreadId() << "finished ";
+        return data;
+    },
+    [this](Data data){
+        CryptedVolumeActive = data["encrypted_active"].toBool();
+        HiddenVolumeActive = data["hidden_active"].toBool();
+        emit storageStatusUpdated();
+    }, this, "update storage status");
+
+//  try{
+//    auto s = m->get_status_storage();
+//    CryptedVolumeActive = s.VolumeActiceFlag_st.encrypted;
+//    HiddenVolumeActive = s.VolumeActiceFlag_st.hidden;
+//  }
+//  catch (LongOperationInProgressException &e){
+//    //TODO
+//  }
+//  catch (DeviceCommunicationException &e){
+//    //TODO
+//  }
 }
 
 void StorageActions::set_start_progress_window(std::function<void(QString)> _start_progress_function) {
