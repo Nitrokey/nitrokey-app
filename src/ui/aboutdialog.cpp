@@ -88,6 +88,7 @@ void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
 #include <QTextStream>
 #include <QWindow>
 #include <QTextEdit>
+#include <libnitrokey/include/stick20_commands.h>
 #include "licensedialog.h"
 
 void AboutDialog::on_btn_3rdparty_clicked(){
@@ -251,7 +252,7 @@ void Worker::fetch_device_data() {
       devdata.storage.volume_active.encrypted_RW = st.ReadWriteFlagCryptedVolume_u8;
       devdata.storage.volume_active.hidden_RW = st.ReadWriteFlagHiddenVolume_u8;
       devdata.storage.keys_initiated = !st.StickKeysNotInitiated;
-      devdata.storage.sdcard.is_new = st.NewSDCardFound_u8;
+      devdata.storage.sdcard.is_new =  st.NewSDCardFound_st.NewCard; // st.NewSDCardFound_u8;
       devdata.storage.sdcard.filled_with_random = st.SDFillWithRandomChars_u8;
       devdata.storage.sdcard.id = st.ActiveSD_CardID_u32;
       devdata.storage.smartcard_id = st.ActiveSmartCardID_u32;
@@ -322,7 +323,7 @@ void AboutDialog::update_device_slots(bool connected) {
     }
 
     ui->newsd_label->setVisible(worker.devdata.storage.sdcard.is_new);
-    ui->not_erased_sd_label->setVisible(!worker.devdata.storage.filled_with_random);
+    ui->not_erased_sd_label->setVisible(!worker.devdata.storage.sdcard.filled_with_random);
 
     auto read_write_active = worker.devdata.storage.volume_active.plain_RW == 0; //FIXME correct variable naming in lib
     ui->unencrypted_volume_label->setText(read_write_active ? tr("READ/WRITE") : tr("READ ONLY"));
