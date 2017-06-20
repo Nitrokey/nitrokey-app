@@ -85,7 +85,7 @@ bool Authentication::authenticate(){
   return authenticationSuccess;
 }
 
-quint64 Authentication::getCurrentTime() const { return QDateTime::currentMSecsSinceEpoch(); }
+quint64 Authentication::getCurrentTime() const { return (quint64)QDateTime::currentMSecsSinceEpoch(); }
 
 void Authentication::clearTemporaryPassword(bool force){
   if (force || authenticationValidUntilTime < getCurrentTime()) {
