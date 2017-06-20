@@ -31,12 +31,10 @@ bool Authentication::authenticate(){
   bool authenticationSuccess = false;
 
   const auto validation_period = 10 * 60 * 1000; //TODO move to field, add to ctr as param
-//  if (!tempPassword.isEmpty() && authenticationValidUntilTime >= getCurrentTime()){
-//    authenticationValidUntilTime = getCurrentTime() + validation_period;
-//    authenticationSuccess = true;
-//    QTimer::singleShot(validation_period, this, SLOT(clearTemporaryPassword()));
-//    return authenticationSuccess;
-//  }
+  if (!tempPassword.isEmpty() && authenticationValidUntilTime >= getCurrentTime()){
+    authenticationSuccess = true;
+    return authenticationSuccess;
+  }
 
   QString password;
   do {
@@ -69,7 +67,9 @@ bool Authentication::authenticate(){
 
       //FIXME securedelete password
       authenticationValidUntilTime = getCurrentTime() + validation_period;
-//      tempPassword = tempPasswordLocal;
+      // arm the clearing of the temp password 10 ms after the deadline to
+      // avoid the race condition with comparing current time and expiry time
+      QTimer::singleShot(validation_period + 10, this, SLOT(clearTemporaryPassword()));
       authenticationSuccess = true;
       return authenticationSuccess;
     }
@@ -85,7 +85,7 @@ bool Authentication::authenticate(){
   return authenticationSuccess;
 }
 
-uint Authentication::getCurrentTime() const { return QDateTime::currentDateTime().toTime_t(); }
+quint64 Authentication::getCurrentTime() const { return QDateTime::currentMSecsSinceEpoch(); }
 
 void Authentication::clearTemporaryPassword(bool force){
   if (force || authenticationValidUntilTime < getCurrentTime()) {
