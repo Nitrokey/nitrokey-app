@@ -127,13 +127,13 @@ int main(int argc, char *argv[]) {
     w.set_debug_mode();
   }
 
-  w.set_commands_delay(100);
+  w.set_commands_delay(40);
   if (parser.isSet("delay")){
     auto delay_in_ms = parser.value("delay").toInt();
     w.set_commands_delay(delay_in_ms);
   }
 
-  w.set_debug_level(0);
+  w.set_debug_level(4);
   if(parser.isSet("debug-level")){
     w.set_debug_level(parser.value("debug-level").toInt());
   }
