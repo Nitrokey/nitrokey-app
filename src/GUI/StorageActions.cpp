@@ -626,7 +626,7 @@ void StorageActions::on_StorageStatusChanged() {
     []() -> Data {
         bool interrupt = QThread::currentThread()->isInterruptionRequested();
         static bool first_run = true;
-        int times = first_run? 20 : 3;
+        int times = first_run? 10 : 3;
         first_run = false;
 
         //FIXME workaround for Storage v0.45 freezing for 20-30 seconds while
