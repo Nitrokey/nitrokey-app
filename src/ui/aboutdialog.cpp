@@ -75,6 +75,11 @@ AboutDialog::AboutDialog(QWidget *parent)
   }
 
   fixWindowGeometry();
+
+  raise();
+  showNormal();
+  setWindowState(Qt::WindowActive) ;
+  activateWindow();
 }
 
 AboutDialog::~AboutDialog() {

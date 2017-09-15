@@ -76,6 +76,11 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
   // ui->status->setVisible(false);
 
   ui->lineEdit->setFocus();
+
+  raise();
+  showNormal();
+  setWindowState(Qt::WindowActive) ;
+  activateWindow();
 }
 
 PinDialog::~PinDialog() {
