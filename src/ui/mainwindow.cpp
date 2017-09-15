@@ -1043,7 +1043,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
     ui->PWS_EditPassword->setText("");
     ui->PWS_EditLoginName->setText("");
     ui->PWS_ComboBoxSelectSlot->setItemText(
-        item_number, QString("Slot ").append(QString::number(slot_number + 1)));
+        item_number, tr("Slot ").append(QString::number(slot_number + 1)));
     csApplet()->messageBox(tr("Slot has been erased successfully."));
     emit PWS_slot_saved(slot_number);
   }
