@@ -84,7 +84,6 @@ void StorageActions::startStick20EnableCryptedVolume() {
         auto m = nitrokey::NitrokeyManager::instance();
         m->unlock_encrypted_volume(s.c_str());
         //TODO disable for firmware versions where it is not needed
-        OwnSleep::sleep(5); //workaround for https://github.com/Nitrokey/nitrokey-storage-firmware/issues/31
         data["success"] = true;
       }
       catch (CommandFailedException &e){
@@ -196,8 +195,6 @@ void StorageActions::startStick20EnableHiddenVolume() {
     try {
       local_sync();
       m->unlock_hidden_volume(s.c_str());
-      //TODO disable for firmware versions where it is not needed
-      OwnSleep::sleep(5); //workaround for https://github.com/Nitrokey/nitrokey-storage-firmware/issues/31
       data["success"] = true;
     }
     catch (CommandFailedException &e){
