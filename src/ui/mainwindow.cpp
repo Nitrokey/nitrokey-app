@@ -209,8 +209,9 @@ void MainWindow::checkConnection() {
   if(!deviceConnected && nm::instance()->could_current_device_be_enumerated()){
     connection_trials++;
     if(connection_trials%5==0){
-      //FIXME use existing translation
-      csApplet()->warningBox(tr("Device is detected but could not be connected. Please reinsert it."));
+      csApplet()->warningBox(
+          tr("Device lock detected, please remove and insert the device again.\nIf problem will occur again please: \n1. Close the application\n2. Reinsert the device\n3. Wait 30 seconds and start application")
+      );
     }
   }
 
