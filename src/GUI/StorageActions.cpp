@@ -47,9 +47,9 @@ void local_sync() {
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
   sync();
 #endif // Q_OS_LINUX || Q_OS_MAC
-  // manual says sync waits until it's done, but they
+  // manual says sync blocks until it's done, but they
   // are not guaranteeing will this save data integrity anyway,
-  // additional sleep should help
+  // additional sleep might help
   OwnSleep::sleep(1);
   // unmount does sync on its own additionally (if successful)
   unmountEncryptedVolumes();
