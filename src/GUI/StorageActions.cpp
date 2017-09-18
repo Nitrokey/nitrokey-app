@@ -23,19 +23,16 @@
 
 
 void unmountEncryptedVolumes() {
-// TODO check will this work also on Mac
 #if defined(Q_OS_LINUX)
   std::string endev = systemutils::getEncryptedDevice();
   if (endev.size() < 1)
     return;
   std::string mntdir = systemutils::getMntPoint(endev);
-//  if (DebugingActive == TRUE)
   qDebug() << "Unmounting " << mntdir.c_str();
   // TODO polling with MNT_EXPIRE? test which will suit better
   // int err = umount2("/dev/nitrospace", MNT_DETACH);
   int err = umount(mntdir.c_str());
   if (err != 0) {
-//    if (DebugingActive == TRUE)
     qDebug() << "Unmount error: " << strerror(errno);
   }
 #endif // Q_OS_LINUX
@@ -83,7 +80,6 @@ void StorageActions::startStick20EnableCryptedVolume() {
         local_sync();
         auto m = nitrokey::NitrokeyManager::instance();
         m->unlock_encrypted_volume(s.c_str());
-        //TODO disable for firmware versions where it is not needed
         data["success"] = true;
       }
       catch (CommandFailedException &e){
@@ -626,26 +622,19 @@ void StorageActions::on_StorageStatusChanged() {
         int times = first_run? 5 : 3;
         first_run = false;
 
-        //FIXME workaround for Storage v0.45 freezing for 20-30 seconds while
-        //running sequentially GET_STATUS (Pro) and GET_DEVICE_STATUS (Storage)
         for (int i = 0; i < times && !interrupt; ++i) {
             QThread::currentThread()->msleep(500);
             interrupt = QThread::currentThread()->isInterruptionRequested();
-            qDebug() << QThread::currentThreadId() << "wait " << i;
         }
       Data data;
         if(interrupt) {
-            qDebug() << QThread::currentThreadId() << "interrupt ";
             return data;
         }
-
-        qDebug() << QThread::currentThreadId() << "running command ";
 
         auto m = nitrokey::NitrokeyManager::instance();
         auto s = m->get_status_storage();
         data["encrypted_active"] = s.VolumeActiceFlag_st.encrypted;
         data["hidden_active"] = s.VolumeActiceFlag_st.hidden;
-        qDebug() << QThread::currentThreadId() << "finished ";
         return data;
     },
     [this](Data data){
@@ -654,17 +643,6 @@ void StorageActions::on_StorageStatusChanged() {
         emit storageStatusUpdated();
     }, this, "update storage status");
 
-//  try{
-//    auto s = m->get_status_storage();
-//    CryptedVolumeActive = s.VolumeActiceFlag_st.encrypted;
-//    HiddenVolumeActive = s.VolumeActiceFlag_st.hidden;
-//  }
-//  catch (LongOperationInProgressException &e){
-//    //TODO
-//  }
-//  catch (DeviceCommunicationException &e){
-//    //TODO
-//  }
 }
 
 void StorageActions::set_start_progress_window(std::function<void(QString)> _start_progress_function) {
