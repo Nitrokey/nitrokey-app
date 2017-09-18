@@ -194,7 +194,8 @@ void MainWindow::checkConnection() {
   //QMutexLocker locker(&check_connection_mutex);
 
   if (!check_connection_mutex.tryLock(100)){
-      qDebug("xxxxxxx checkConnection skip");
+    if (debug_mode)
+      qDebug("checkConnection skip");
     return;
   }
 
@@ -1412,7 +1413,8 @@ void MainWindow::updateProgressBar(int i) {
 }
 
 void MainWindow::on_DeviceDisconnected() {
-    qDebug("xxxxxxx on_DeviceDisconnected");
+  if (debug_mode)
+    qDebug("on_DeviceDisconnected");
 
 //  emit ShortOperationEnds(); //TODO enable and test
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
@@ -1426,7 +1428,8 @@ void MainWindow::on_DeviceDisconnected() {
 
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_DeviceConnected() {
-  qDebug("xxxxxxx on_DeviceConnected");
+  if (debug_mode)
+    qDebug("on_DeviceConnected");
 
   if (debug_mode)
     emit ShortOperationBegins(tr("Connecting device"));
@@ -1498,7 +1501,8 @@ void MainWindow::on_KeepDeviceOnline() {
 
 
   if (!check_connection_mutex.tryLock(100)){
-      qDebug("xxxxxxx on_KeepDeviceOnline skip");
+    if (debug_mode)
+      qDebug("on_KeepDeviceOnline skip");
       return;
   }
   ScopedGuard mutexGuard([this](){
