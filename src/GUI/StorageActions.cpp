@@ -426,6 +426,7 @@ void StorageActions::_execute_SD_clearing(const std::string &s) {
   new ThreadWorker(
     [s]() -> Data { //FIXME use secure string
       Data data;
+      data["success"] = false;
       try{
         auto m = nitrokey::NitrokeyManager::instance();
         m->fill_SD_card_with_random_data(s.c_str());
@@ -449,8 +450,11 @@ void StorageActions::_execute_SD_clearing(const std::string &s) {
     },
     [this](Data data){
       if(data["success"].toBool()) {
-        emit storageStatusChanged();
-        emit longOperationStarted();
+        QTimer::singleShot(1000, [this](){
+          emit storageStatusUpdated();
+          emit longOperationStarted();
+          emit storageStatusChanged();
+        });
       } else if (data["wrong_password"].toBool()){
         csApplet()->warningBox(tr("Could not clear SD card.") + " " //FIXME use existing translation
                                + tr("Wrong password."));
