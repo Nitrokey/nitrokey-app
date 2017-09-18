@@ -1416,7 +1416,7 @@ void MainWindow::on_DeviceDisconnected() {
   if (debug_mode)
     qDebug("on_DeviceDisconnected");
 
-//  emit ShortOperationEnds(); //TODO enable and test
+  emit ShortOperationEnds();
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
   tray.showTrayMessage(tr("Nitrokey disconnected"));
 
