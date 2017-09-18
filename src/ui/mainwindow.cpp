@@ -214,6 +214,7 @@ void MainWindow::checkConnection() {
   }
 
   if (deviceConnected){
+        connection_trials = 0;
           if(connectionState == cs::disconnected){
               connectionState = cs::connected;
               if (debug_mode)
