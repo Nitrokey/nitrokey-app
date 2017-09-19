@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-27 20:42+0100\n"
-"PO-Revision-Date: 2017-01-27 21:25+0100\n"
+"POT-Creation-Date: 2015-07-09 14:40+0200\n"
+"PO-Revision-Date: 2017-09-20 00:04+0200\n"
+"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
 "Language-Team: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
-"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
+"X-Generator: Poedit 2.0.3\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: fr\n"
 
 #: src/ui/mainwindow.cpp:1065
 msgid "About"
@@ -76,7 +76,7 @@ msgstr "Initialiser l'espace de stockage avec des données aléatoires"
 
 #: src/ui/mainwindow.cpp:1537
 msgid "Lock device"
-msgstr "Verrouiller l'appareil"
+msgstr "Verrouiller le dispositif"
 
 #: src/ui/mainwindow.cpp:1533
 msgid "Lock encrypted volume"
@@ -100,7 +100,7 @@ msgstr "OTP"
 
 #: src/ui/mainwindow.cpp:1453
 msgid "OTP and Password safe"
-msgstr "OTP et stockage des mots de passe"
+msgstr "Espace sécurisé des mots de passe et OTP"
 
 #: src/ui/mainwindow.cpp:1266
 msgid "Passwords"
@@ -144,4 +144,4 @@ msgstr "Déverrouiller le volume caché"
 
 #: src/ui/mainwindow.cpp:3964
 msgid "Unlock password safe"
-msgstr "Déverrouiller l'accès aux mots de passe"
+msgstr "Déverrouiller l'espace sécurisé des mots de passe"
