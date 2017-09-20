@@ -76,6 +76,11 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
   // ui->status->setVisible(false);
 
   ui->lineEdit->setFocus();
+
+  raise();
+  showNormal();
+  setWindowState(Qt::WindowActive) ;
+  activateWindow();
 }
 
 PinDialog::~PinDialog() {
@@ -169,8 +174,14 @@ void PinDialog::clearBuffers() {
 
 //TODO get only the one interesting counter
 void PinDialogUI::Worker::fetch_device_data() {
-  devdata.retry_admin_count = libada::i()->getAdminPasswordRetryCount();
-  devdata.retry_user_count = libada::i()->getUserPasswordRetryCount();
-  emit finished();
+
+  try {
+    devdata.retry_admin_count = libada::i()->getAdminPasswordRetryCount();
+    devdata.retry_user_count = libada::i()->getUserPasswordRetryCount();
+    emit finished();
+  }
+  catch (...){
+    //ignore
+  }
 }
 

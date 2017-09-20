@@ -42,7 +42,6 @@ namespace AboutDialogUI{
               uint32_t id;
             } sdcard;
             bool keys_initiated;
-            uint8_t filled_with_random;
             bool firmware_locked;
             uint32_t smartcard_id;
             struct {

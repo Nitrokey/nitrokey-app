@@ -19,22 +19,20 @@
 #define LOCAL_PASSWORD_SIZE 40
 #include <memory>
 #include <src/core/ThreadWorker.h>
+#include <libnitrokey/include/stick20_commands.h>
 
 
 void unmountEncryptedVolumes() {
-// TODO check will this work also on Mac
 #if defined(Q_OS_LINUX)
   std::string endev = systemutils::getEncryptedDevice();
   if (endev.size() < 1)
     return;
   std::string mntdir = systemutils::getMntPoint(endev);
-//  if (DebugingActive == TRUE)
   qDebug() << "Unmounting " << mntdir.c_str();
   // TODO polling with MNT_EXPIRE? test which will suit better
   // int err = umount2("/dev/nitrospace", MNT_DETACH);
   int err = umount(mntdir.c_str());
   if (err != 0) {
-//    if (DebugingActive == TRUE)
     qDebug() << "Unmount error: " << strerror(errno);
   }
 #endif // Q_OS_LINUX
@@ -46,9 +44,9 @@ void local_sync() {
 #if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
   sync();
 #endif // Q_OS_LINUX || Q_OS_MAC
-  // manual says sync waits until it's done, but they
+  // manual says sync blocks until it's done, but they
   // are not guaranteeing will this save data integrity anyway,
-  // additional sleep should help
+  // additional sleep might help
   OwnSleep::sleep(1);
   // unmount does sync on its own additionally (if successful)
   unmountEncryptedVolumes();
@@ -82,8 +80,6 @@ void StorageActions::startStick20EnableCryptedVolume() {
         local_sync();
         auto m = nitrokey::NitrokeyManager::instance();
         m->unlock_encrypted_volume(s.c_str());
-        //TODO disable for firmware versions where it is not needed
-        OwnSleep::sleep(5); //workaround for https://github.com/Nitrokey/nitrokey-storage-firmware/issues/31
         data["success"] = true;
       }
       catch (CommandFailedException &e){
@@ -195,8 +191,6 @@ void StorageActions::startStick20EnableHiddenVolume() {
     try {
       local_sync();
       m->unlock_hidden_volume(s.c_str());
-      //TODO disable for firmware versions where it is not needed
-      OwnSleep::sleep(5); //workaround for https://github.com/Nitrokey/nitrokey-storage-firmware/issues/31
       data["success"] = true;
     }
     catch (CommandFailedException &e){
@@ -432,6 +426,7 @@ void StorageActions::_execute_SD_clearing(const std::string &s) {
   new ThreadWorker(
     [s]() -> Data { //FIXME use secure string
       Data data;
+      data["success"] = false;
       try{
         auto m = nitrokey::NitrokeyManager::instance();
         m->fill_SD_card_with_random_data(s.c_str());
@@ -455,8 +450,11 @@ void StorageActions::_execute_SD_clearing(const std::string &s) {
     },
     [this](Data data){
       if(data["success"].toBool()) {
-        emit storageStatusChanged();
-        emit longOperationStarted();
+        QTimer::singleShot(1000, [this](){
+          emit storageStatusUpdated();
+          emit longOperationStarted();
+          emit storageStatusChanged();
+        });
       } else if (data["wrong_password"].toBool()){
         csApplet()->warningBox(tr("Could not clear SD card.") + " " //FIXME use existing translation
                                + tr("Wrong password."));
@@ -614,21 +612,41 @@ StorageActions::StorageActions(QObject *parent, Authentication *auth_admin, Auth
   connect(this, SIGNAL(storageStatusChanged()), this, SLOT(on_StorageStatusChanged()));
 }
 
+#include <QDebug>
+
+
 void StorageActions::on_StorageStatusChanged() {
   if (!libada::i()->isStorageDeviceConnected())
     return;
-  auto m = nitrokey::NitrokeyManager::instance();
-  try{
-    auto s = m->get_status_storage();
-    CryptedVolumeActive = s.VolumeActiceFlag_st.encrypted;
-    HiddenVolumeActive = s.VolumeActiceFlag_st.hidden;
-  }
-  catch (LongOperationInProgressException &e){
-    //TODO
-  }
-  catch (DeviceCommunicationException &e){
-    //TODO
-  }
+
+    new ThreadWorker(
+    []() -> Data {
+        bool interrupt = QThread::currentThread()->isInterruptionRequested();
+        static bool first_run = true;
+        int times = first_run? 5 : 3;
+        first_run = false;
+
+        for (int i = 0; i < times && !interrupt; ++i) {
+            QThread::currentThread()->msleep(500);
+            interrupt = QThread::currentThread()->isInterruptionRequested();
+        }
+      Data data;
+        if(interrupt) {
+            return data;
+        }
+
+        auto m = nitrokey::NitrokeyManager::instance();
+        auto s = m->get_status_storage();
+        data["encrypted_active"] = s.VolumeActiceFlag_st.encrypted;
+        data["hidden_active"] = s.VolumeActiceFlag_st.hidden;
+        return data;
+    },
+    [this](Data data){
+        CryptedVolumeActive = data["encrypted_active"].toBool();
+        HiddenVolumeActive = data["hidden_active"].toBool();
+        emit storageStatusUpdated();
+    }, this, "update storage status");
+
 }
 
 void StorageActions::set_start_progress_window(std::function<void(QString)> _start_progress_function) {

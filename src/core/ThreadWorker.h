@@ -59,7 +59,7 @@ public:
    */
   ThreadWorker(const std::function<Data()> &datafunc,
                const std::function<void(Data)> &usefunc,
-               QObject *parent = nullptr);
+               QObject *parent = nullptr, std::string name = "");
 
   ~ThreadWorker();
 
@@ -74,6 +74,8 @@ private:
   QMutex mutex;
 
   void stop_thread();
+
+    std::string name;
 };
 
 //template:

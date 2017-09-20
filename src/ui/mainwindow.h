@@ -182,7 +182,7 @@ public:
   int get_supported_secret_length_base32() const;
   int get_supported_secret_length_hex() const;
 
-  bool long_operation_in_progress = false;
+  std::atomic_bool long_operation_in_progress {false};
   std::shared_ptr<Stick20ResponseDialog> progress_window;
 
   void PWS_set_controls_enabled(bool enabled) const;
