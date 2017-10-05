@@ -62,6 +62,7 @@ private:
   void accept(void) override;
   void UpdatePasswordRetry(void);
   void clearFields();
+  void fixWindowGeometry();
   void UI_deviceNotInitialized() const;
   void moveWindowToCenter();
 };

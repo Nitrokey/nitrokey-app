@@ -43,13 +43,19 @@ DialogChangePassword::DialogChangePassword(QWidget *parent, PasswordKind _kind):
   ui->lineEdit_NewPW_2->setEchoMode(QLineEdit::Password);
   ui->lineEdit_NewPW_2->setMaxLength(STICK20_PASSOWRD_LEN);
 
+  fixWindowGeometry();
   ui->lineEdit_OldPW->setFocus();
   setModal(true);
-
 }
 
 DialogChangePassword::~DialogChangePassword() { delete ui; }
 
+void DialogChangePassword::fixWindowGeometry() {
+  resize(0, 0);
+  adjustSize();
+  updateGeometry();
+  moveWindowToCenter();
+}
 
 void DialogChangePassword::UpdatePasswordRetry() {
   QString noTrialsLeft;
@@ -94,6 +100,7 @@ void DialogChangePassword::UpdatePasswordRetry() {
       int retryCount_local = data["counter"].toInt();
       ui->retryCount->setText(QString::number(retryCount_local));
       ui->retryCount->repaint();
+      fixWindowGeometry();
       if (retryCount_local == 0) {
         QString cssRed = "QLabel {color: red; font-weight: bold}";
         ui->retryCount->setStyleSheet(cssRed);
@@ -170,7 +177,7 @@ void DialogChangePassword::InitData(void) {
             QString("</i>");
   }
   ui->label_additional_information->setText(text);
-
+  fixWindowGeometry();
 }
 
 void DialogChangePassword::moveWindowToCenter() {// center the password window
