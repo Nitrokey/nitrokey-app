@@ -162,6 +162,7 @@ IF(NOT WIN32)
       set(UDEV_MAIN_DIR "${UDEV_MAIN_DIR}/rules.d")
   ENDIF()
   string(REGEX REPLACE "^/" "" UDEV_MAIN_DIR "${UDEV_MAIN_DIR}")
+  string(REGEX REPLACE "^usr/" "" UDEV_MAIN_DIR "${UDEV_MAIN_DIR}") # usual prefix is usr/local
   message(STATUS "Setting udev rules dir to ${UDEV_MAIN_DIR}")
 
   install(FILES
@@ -176,6 +177,7 @@ IF(NOT WIN32)
     set(BASH_COMPLETION_DIR "etc/bash_completion.d")
   ENDIF()
   string(REGEX REPLACE "^/" "" BASH_COMPLETION_DIR "${BASH_COMPLETION_DIR}")
+  string(REGEX REPLACE "^usr/" "" BASH_COMPLETION_DIR "${BASH_COMPLETION_DIR}") # usual prefix is usr/local
   message(STATUS "Setting bash-completion dir to ${BASH_COMPLETION_DIR}")
 
   install(FILES
