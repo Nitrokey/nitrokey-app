@@ -619,7 +619,7 @@ void StorageActions::on_StorageStatusChanged() {
   if (!libada::i()->isStorageDeviceConnected())
     return;
 
-    new ThreadWorker(
+  new ThreadWorker(
     []() -> Data {
         bool interrupt = QThread::currentThread()->isInterruptionRequested();
         static bool first_run = true;
@@ -646,7 +646,6 @@ void StorageActions::on_StorageStatusChanged() {
         HiddenVolumeActive = data["hidden_active"].toBool();
         emit storageStatusUpdated();
     }, this, "update storage status");
-
 }
 
 void StorageActions::set_start_progress_window(std::function<void(QString)> _start_progress_function) {
