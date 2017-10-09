@@ -1431,6 +1431,10 @@ If problem will occur again please:
         <source>The secret string you have entered is invalid. Please reenter it.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Connecting device</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MatrixPasswordDialog</name>
@@ -2247,6 +2251,10 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>Load translation file with given name and store this choice in settings file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set debug level, 0-4</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
