@@ -1,14 +1,12 @@
-#include "Authentication.h"
-
 #include <QDateTime>
+#include <QTimer>
+#include "Authentication.h"
 #include "pindialog.h"
-//#include "SecureString.h"
 #include "libada.h"
 #include "libnitrokey/include/NitrokeyManager.h"
-using nm = nitrokey::NitrokeyManager;
-#include <string>
 #include "nitrokey-applet.h"
-#include <QTimer>
+
+using nm = nitrokey::NitrokeyManager;
 
 Authentication::Authentication(QObject *parent, Type _type) : QObject(parent), type(_type) {
     tempPassword.clear();
@@ -27,7 +25,6 @@ std::string Authentication::getPassword() {
 }
 
 bool Authentication::authenticate(){
-//  qDebug() << tempPassword.toLatin1().toHex();
   bool authenticationSuccess = false;
 
   const auto validation_period = 10 * 60 * 1000; //TODO move to field, add to ctr as param
@@ -46,13 +43,9 @@ bool Authentication::authenticate(){
       return authenticationSuccess;
     }
 
-    //emit signal with password to authenticate (by pointer)
     auto password = dialog.getPassword();
-//    auto tempPasswordLocal = generateTemporaryPassword();
     tempPassword = generateTemporaryPassword();
-    //emit end
 
-    //slot receiving signal
     try{
       switch (pinType){
         case PinDialog::USER_PIN:
@@ -78,8 +71,6 @@ bool Authentication::authenticate(){
         throw;
       csApplet()->warningBox(tr("Wrong PIN. Please try again."));
     }
-    //emit success(true/false)
-    //slot end
 
   } while (true);
   return authenticationSuccess;
@@ -109,10 +100,8 @@ QByteArray Authentication::generateTemporaryPassword() const {
   return tmp_p;
 }
 
-#include "core/ScopedGuard.h"
 
 const QByteArray Authentication::getTempPassword() {
-//    authenticate(); //TODO check?
     const QByteArray local_tempPassword = tempPassword;
     bool is_07nkpro_device = libada::i()->is_nkpro_07_rtm1();
     if (is_07nkpro_device) {
