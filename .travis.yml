@@ -60,6 +60,10 @@ matrix:
       before_install: *before
       env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH" CMAKE_PREFIX_PATH=/usr/local/lib/cmake MACOS_DEPLOYMENT_TARGET=10.9
     - os: osx
-      osx_image: xcode8.2
+      osx_image: xcode8.3
+      before_install: *before
+      env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH" CMAKE_PREFIX_PATH=/usr/local/lib/cmake MACOS_DEPLOYMENT_TARGET=10.9
+    - os: osx
+      osx_image: xcode9.1
       before_install: *before
       env: builder=qmake PATH="/usr/local/opt/qt5/bin:$PATH" CMAKE_PREFIX_PATH=/usr/local/lib/cmake MACOS_DEPLOYMENT_TARGET=10.9
