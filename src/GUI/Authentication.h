@@ -24,7 +24,7 @@ private:
     QByteArray tempPassword;
     QByteArray generateTemporaryPassword() const;
     const Type type;
-    uint getCurrentTime() const;
+    quint64 getCurrentTime() const;
 private slots:
     void clearTemporaryPassword(bool force=false);
 };
