@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-09 14:40+0200\n"
+"PO-Revision-Date: 2017-09-20 00:04+0200\n"
+"Last-Translator: Étienne Deparis <etienne@depar.is>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/ui/mainwindow.cpp:1065
+msgid "About"
+msgstr "À propos"
+
+#: src/ui/mainwindow.cpp:1552
+msgid "Advanced configure"
+msgstr "Configuration avancée"
+
+#: src/ui/mainwindow.cpp:1560
+msgid "Change Firmware PIN"
+msgstr "Changer le code PIN du micrologiciel"
+
+#: src/ui/mainwindow.cpp:1435 src/ui/mainwindow.cpp:1559
+msgid "Change admin PIN"
+msgstr "Changer le code PIN administrateur"
+
+#: src/ui/mainwindow.cpp:1434 src/ui/mainwindow.cpp:1558
+msgid "Change user PIN"
+msgstr "Changer le code PIN utilisateur"
+
+#: src/ui/mainwindow.cpp:1430 src/ui/mainwindow.cpp:1550
+msgid "Configure"
+msgstr "Paramètres"
+
+#: src/ui/mainwindow.cpp:1547
+msgid "Debug"
+msgstr "Débogage"
+
+#: src/ui/mainwindow.cpp:1541
+msgid "Destroy encrypted data"
+msgstr "Détruire les données chiffrées"
+
+#: src/ui/mainwindow.cpp:1549
+msgid "Disable 'Initialize storage with random data' warning"
+msgstr "Désactiver l'avertissement 'Initialiser l'espace de stockage avec des données aléatoires'"
+
+#: src/ui/mainwindow.cpp:1542
+msgid "Enable firmware update"
+msgstr "Activer les mises à jour du micrologiciel"
+
+#: src/ui/mainwindow.cpp:1543
+msgid "Export firmware to file"
+msgstr "Exporter le micrologiciel vers un fichier"
+
+#: src/ui/mainwindow.cpp:1438
+msgid "Factory reset"
+msgstr "Restaurer les paramètres d'usine"
+
+#: src/ui/mainwindow.cpp:1530
+msgid "Initialize keys"
+msgstr "Initialiser les clés"
+
+#: src/ui/mainwindow.cpp:1531
+msgid "Initialize storage with random data"
+msgstr "Initialiser l'espace de stockage avec des données aléatoires"
+
+#: src/ui/mainwindow.cpp:1537
+msgid "Lock device"
+msgstr "Verrouiller le dispositif"
+
+#: src/ui/mainwindow.cpp:1533
+msgid "Lock encrypted volume"
+msgstr "Verrouiller le volume chiffré"
+
+#: src/ui/mainwindow.cpp:1544
+msgid "Lock hardware"
+msgstr "Verrouiller le matériel"
+
+#: src/ui/mainwindow.cpp:1535
+msgid "Lock hidden volume"
+msgstr "Verrouiller le volume caché"
+
+#: src/ui/mainwindow.cpp:1062
+msgid "Nitrokey not connected"
+msgstr "La Nitrokey n'est pas connectée"
+
+#: src/ui/mainwindow.cpp:1455
+msgid "OTP"
+msgstr "OTP"
+
+#: src/ui/mainwindow.cpp:1453
+msgid "OTP and Password safe"
+msgstr "Espace sécurisé des mots de passe et OTP"
+
+#: src/ui/mainwindow.cpp:1266
+msgid "Passwords"
+msgstr "Mots de passe"
+
+#: src/ui/mainwindow.cpp:1066
+msgid "Quit"
+msgstr "Quitter"
+
+#: src/ui/mainwindow.cpp:1436
+msgid "Reset User PIN"
+msgstr "Réinitialiser le PIN utilisateur"
+
+#: src/ui/mainwindow.cpp:1546
+msgid "Reset user PIN"
+msgstr "Réinitialiser le PIN utilisateur"
+
+#: src/ui/mainwindow.cpp:1539
+msgid "Set unencrypted volume read-only"
+msgstr "Mettre le volume non chiffré en lecture seule"
+
+#: src/ui/mainwindow.cpp:1540
+msgid "Set unencrypted volume read-write"
+msgstr "Rendre le volume non chiffré accessible en lecture et en écriture"
+
+#: src/ui/mainwindow.cpp:1536
+msgid "Setup hidden volume"
+msgstr "Mettre en place le volume caché"
+
+#: src/ui/mainwindow.cpp:1529
+msgid "Smartcard or SD card are not ready"
+msgstr "La carte SD ou la Smartcard ne sont pas prêtes"
+
+#: src/ui/mainwindow.cpp:1532
+msgid "Unlock encrypted volume"
+msgstr "Déverrouiller le volume chiffré"
+
+#: src/ui/mainwindow.cpp:1534
+msgid "Unlock hidden volume"
+msgstr "Déverrouiller le volume caché"
+
+#: src/ui/mainwindow.cpp:3964
+msgid "Unlock password safe"
+msgstr "Déverrouiller l'espace sécurisé des mots de passe"
