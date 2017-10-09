@@ -8,8 +8,9 @@
 
 using nm = nitrokey::NitrokeyManager;
 
+static const int validation_period = 10 * 60 * 1000; //TODO move to field, add to constructor as a parameter
+
 Authentication::Authentication(QObject *parent, Type _type) : QObject(parent), type(_type) {
-    tempPassword.clear();
 }
 
 std::string Authentication::getPassword() {
@@ -27,9 +28,9 @@ std::string Authentication::getPassword() {
 bool Authentication::authenticate(){
   bool authenticationSuccess = false;
 
-  const auto validation_period = 10 * 60 * 1000; //TODO move to field, add to ctr as param
-  if (!tempPassword.isEmpty() && authenticationValidUntilTime >= getCurrentTime()){
+  if (isAuthenticated()){
     authenticationSuccess = true;
+    markAuthenticated();
     return authenticationSuccess;
   }
 
@@ -58,11 +59,7 @@ bool Authentication::authenticate(){
           break;
       }
 
-      //FIXME securedelete password
-      authenticationValidUntilTime = getCurrentTime() + validation_period;
-      // arm the clearing of the temp password 10 ms after the deadline to
-      // avoid the race condition with comparing current time and expiry time
-      QTimer::singleShot(validation_period + 10, this, SLOT(clearTemporaryPassword()));
+      markAuthenticated();
       authenticationSuccess = true;
       return authenticationSuccess;
     }
@@ -76,10 +73,22 @@ bool Authentication::authenticate(){
   return authenticationSuccess;
 }
 
+bool Authentication::isAuthenticated() const { return !tempPassword.isEmpty() && authenticationValidUntilTime >= getCurrentTime(); }
+
+void Authentication::markAuthenticated() {
+  authenticationValidUntilTime = getCurrentTime() + validation_period;
+  // Arm the clearing of the temp password 1000 ms after the deadline to
+  // avoid the race condition with comparing current time and expiry time.
+  // On some OSes QTimer is rounded to nearest second hence need to add whole second.
+  // See http://doc.qt.io/qt-5/qt.html#TimerType-enum
+  QTimer::singleShot(validation_period + 1000, this, SLOT(clearTemporaryPassword()));
+}
+
 quint64 Authentication::getCurrentTime() const { return (quint64)QDateTime::currentMSecsSinceEpoch(); }
 
 void Authentication::clearTemporaryPassword(bool force){
-  if (force || authenticationValidUntilTime < getCurrentTime()) {
+  if (tempPassword.isEmpty()) return;
+  if (force || getCurrentTime() >= authenticationValidUntilTime) {
     tempPassword.clear(); //FIXME securely delete
   }
 }
@@ -108,4 +117,8 @@ const QByteArray Authentication::getTempPassword() {
         clearTemporaryPassword(true);
     }
     return local_tempPassword;
+}
+
+Authentication::~Authentication() {
+  tempPassword.clear();
 }
