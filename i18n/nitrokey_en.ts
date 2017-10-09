@@ -279,40 +279,8 @@ Please retry</source>
         <translation>Current PIN is not correct. Please retry.</translation>
     </message>
     <message>
-        <source>New password is not correct. Please retry.</source>
-        <translation type="vanished">New PIN is not correct. Please retry.</translation>
-    </message>
-    <message>
         <source>New password is set</source>
         <translation>New PIN is set</translation>
-    </message>
-    <message>
-        <source>Wrong password.</source>
-        <translation type="vanished">Wrong PIN.</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t change %1 password</source>
-        <translation type="vanished">Couldn&apos;t change %1 PIN</translation>
-    </message>
-    <message>
-        <source>Current Admin password is not correct. Please retry.</source>
-        <translation type="vanished">Current Admin PIN is not correct. Please retry.</translation>
-    </message>
-    <message>
-        <source>There was a problem during communicating with device or new password is not correct. Please retry.</source>
-        <translation type="vanished">There was a problem during communicating with device or new PIN is not correct. Please retry.</translation>
-    </message>
-    <message>
-        <source>New User password is set</source>
-        <translation type="vanished">New User PIN is set</translation>
-    </message>
-    <message>
-        <source>Wrong password or there was a communication problem with the device.</source>
-        <translation type="vanished">Wrong firmware password or there was a communication problem with the device.</translation>
-    </message>
-    <message>
-        <source>Password has been changed with success!</source>
-        <translation type="vanished">Firmware password has been changed with success!</translation>
     </message>
     <message>
         <source>The minimum length of the old password is </source>
@@ -321,10 +289,6 @@ Please retry</source>
     <message>
         <source> chars</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>The new password entrys are not the same</source>
-        <translation type="vanished">The new PIN/password entries are not the same</translation>
     </message>
     <message>
         <source>The maximum length of a password is </source>
@@ -630,11 +594,6 @@ Select &quot;Initialize device&quot; option from context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please enable the encrypted volume first.</source>
-        <translatorcomment>enable-&gt;unlock</translatorcomment>
-        <translation type="vanished">Please unlock the encrypted volume first.</translation>
-    </message>
-    <message>
         <source>Device has been locked</source>
         <translation type="unfinished"></translation>
     </message>
@@ -739,10 +698,6 @@ Select &quot;Initialize storage with random data&quot;</source>
     <message>
         <source>HOTP slot </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Either the password is not correct or the command execution resulted in an error. Please try again.</source>
-        <translation type="vanished">Either the PIN/password is not correct or the command execution resulted in an error. Please try again.</translation>
     </message>
     <message>
         <source>Can&apos;t unlock password safe.</source>
@@ -1096,25 +1051,6 @@ Message: </source>
     <message>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Stick20ResponseTask</name>
-    <message>
-        <source>Storage successfully initialized with random data</source>
-        <translation type="vanished">Storage successfully initialized with random data. Please remove the device and insert again to complete initialization process.</translation>
-    </message>
-    <message>
-        <source>Can&apos;t enable hidden volume</source>
-        <translation type="vanished">Can&apos;t unlock hidden volume</translation>
-    </message>
-    <message>
-        <source>Please enable the encrypted volume first.</source>
-        <translation type="vanished">Please unlock the encrypted volume first.</translation>
-    </message>
-    <message>
-        <source>Encrypted volume was not enabled, please enable the encrypted volume</source>
-        <translation type="vanished">Encrypted volume was not unlocked, please unlock the encrypted volume</translation>
     </message>
 </context>
 <context>
