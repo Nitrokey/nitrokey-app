@@ -30,7 +30,7 @@ private:
     void markAuthenticated();
 private slots:
     void clearTemporaryPassword(bool force=false);
-
+    void clearTemporaryPasswordForced();
 };
 
 

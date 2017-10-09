@@ -98,6 +98,10 @@ MainWindow::MainWindow(QWidget *parent):
   connect(this, SIGNAL(DeviceConnected()), this, SLOT(on_DeviceConnected()));
   connect(this, SIGNAL(DeviceConnected()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(DeviceDisconnected()), &tray, SLOT(regenerateMenu()));
+  connect(this, SIGNAL(DeviceConnected()), &auth_admin, SLOT(clearTemporaryPasswordForced()));
+  connect(this, SIGNAL(DeviceConnected()), &auth_user, SLOT(clearTemporaryPasswordForced()));
+  connect(this, SIGNAL(DeviceLocked()), &auth_admin, SLOT(clearTemporaryPasswordForced()));
+  connect(this, SIGNAL(DeviceLocked()), &auth_user, SLOT(clearTemporaryPasswordForced()));
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active

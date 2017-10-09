@@ -122,3 +122,7 @@ const QByteArray Authentication::getTempPassword() {
 Authentication::~Authentication() {
   tempPassword.clear();
 }
+
+void Authentication::clearTemporaryPasswordForced() {
+  clearTemporaryPassword(true);
+}
