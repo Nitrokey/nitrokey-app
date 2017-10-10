@@ -1,17 +1,16 @@
-#include "Authentication.h"
-
 #include <QDateTime>
+#include <QTimer>
+#include "Authentication.h"
 #include "pindialog.h"
-//#include "SecureString.h"
 #include "libada.h"
 #include "libnitrokey/include/NitrokeyManager.h"
-using nm = nitrokey::NitrokeyManager;
-#include <string>
 #include "nitrokey-applet.h"
-#include <QTimer>
+
+using nm = nitrokey::NitrokeyManager;
+
+static const int validation_period = 10 * 60 * 1000; //TODO move to field, add to constructor as a parameter
 
 Authentication::Authentication(QObject *parent, Type _type) : QObject(parent), type(_type) {
-    tempPassword.clear();
 }
 
 std::string Authentication::getPassword() {
@@ -27,16 +26,13 @@ std::string Authentication::getPassword() {
 }
 
 bool Authentication::authenticate(){
-//  qDebug() << tempPassword.toLatin1().toHex();
   bool authenticationSuccess = false;
 
-  const auto validation_period = 10 * 60 * 1000; //TODO move to field, add to ctr as param
-//  if (!tempPassword.isEmpty() && authenticationValidUntilTime >= getCurrentTime()){
-//    authenticationValidUntilTime = getCurrentTime() + validation_period;
-//    authenticationSuccess = true;
-//    QTimer::singleShot(validation_period, this, SLOT(clearTemporaryPassword()));
-//    return authenticationSuccess;
-//  }
+  if (isAuthenticated()){
+    authenticationSuccess = true;
+    markAuthenticated();
+    return authenticationSuccess;
+  }
 
   QString password;
   do {
@@ -48,13 +44,9 @@ bool Authentication::authenticate(){
       return authenticationSuccess;
     }
 
-    //emit signal with password to authenticate (by pointer)
     auto password = dialog.getPassword();
-//    auto tempPasswordLocal = generateTemporaryPassword();
     tempPassword = generateTemporaryPassword();
-    //emit end
 
-    //slot receiving signal
     try{
       switch (pinType){
         case PinDialog::USER_PIN:
@@ -67,9 +59,7 @@ bool Authentication::authenticate(){
           break;
       }
 
-      //FIXME securedelete password
-      authenticationValidUntilTime = getCurrentTime() + validation_period;
-//      tempPassword = tempPasswordLocal;
+      markAuthenticated();
       authenticationSuccess = true;
       return authenticationSuccess;
     }
@@ -78,17 +68,27 @@ bool Authentication::authenticate(){
         throw;
       csApplet()->warningBox(tr("Wrong PIN. Please try again."));
     }
-    //emit success(true/false)
-    //slot end
 
   } while (true);
   return authenticationSuccess;
 }
 
-uint Authentication::getCurrentTime() const { return QDateTime::currentDateTime().toTime_t(); }
+bool Authentication::isAuthenticated() const { return !tempPassword.isEmpty() && authenticationValidUntilTime >= getCurrentTime(); }
+
+void Authentication::markAuthenticated() {
+  authenticationValidUntilTime = getCurrentTime() + validation_period;
+  // Arm the clearing of the temp password 1000 ms after the deadline to
+  // avoid the race condition with comparing current time and expiry time.
+  // On some OSes QTimer is rounded to nearest second hence need to add whole second.
+  // See http://doc.qt.io/qt-5/qt.html#TimerType-enum
+  QTimer::singleShot(validation_period + 1000, this, SLOT(clearTemporaryPassword()));
+}
+
+quint64 Authentication::getCurrentTime() const { return (quint64)QDateTime::currentMSecsSinceEpoch(); }
 
 void Authentication::clearTemporaryPassword(bool force){
-  if (force || authenticationValidUntilTime < getCurrentTime()) {
+  if (tempPassword.isEmpty()) return;
+  if (force || getCurrentTime() >= authenticationValidUntilTime) {
     tempPassword.clear(); //FIXME securely delete
   }
 }
@@ -109,14 +109,20 @@ QByteArray Authentication::generateTemporaryPassword() const {
   return tmp_p;
 }
 
-#include "core/ScopedGuard.h"
 
 const QByteArray Authentication::getTempPassword() {
-//    authenticate(); //TODO check?
     const QByteArray local_tempPassword = tempPassword;
     bool is_07nkpro_device = libada::i()->is_nkpro_07_rtm1();
     if (is_07nkpro_device) {
         clearTemporaryPassword(true);
     }
     return local_tempPassword;
+}
+
+Authentication::~Authentication() {
+  tempPassword.clear();
+}
+
+void Authentication::clearTemporaryPasswordForced() {
+  clearTemporaryPassword(true);
 }
