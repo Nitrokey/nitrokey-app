@@ -448,7 +448,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Moving factor seed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Point de départ du facteur d&apos;évolution :</translation>
     </message>
     <message>
         <source>HOTP length:</source>
@@ -832,7 +832,7 @@ Réinitialiser l&apos;heure de la Nitrokey ?</translation>
     </message>
     <message>
         <source>HOTP moving factor seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Point de départ du facteur d&apos;évolution HOTP</translation>
     </message>
     <message>
         <source>Set HOTP counter to zero</source>
