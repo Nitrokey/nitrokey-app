@@ -54,6 +54,7 @@ public slots:
 
 signals:
   void storageStatusChanged();
+  void storageStatusUpdated();
   void longOperationStarted();
   void FactoryReset();
 

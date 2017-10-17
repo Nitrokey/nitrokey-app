@@ -1,9 +1,7 @@
+# message("CONFIG: $${CONFIG}")
 
-
-message("CONFIG: $${CONFIG}")
-
-CONFIG   += qt c++14
-QT       += core gui
+CONFIG   += qt c++14 debug
+QT       += core gui widgets
 
 target.path = /usr/local/bin
 desktop.path = /usr/share/applications
@@ -11,12 +9,14 @@ desktop.files += nitrokey-app.desktop
 
 INSTALLS += target desktop
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 sources.files = qss
+
+include(libnitrokey/libnitrokey.pro)
 
 TARGET = nitrokey-app
 TEMPLATE = app
+
+
 
 ROOTDIR=$$PWD
 UIDIR=$${ROOTDIR}/src/ui
@@ -100,39 +100,15 @@ INCLUDEPATH +=  $${SRCDIR} \
                 $${SRCUIDIR} \
                 $${UTILSDIR} \
                 $${COREDIR} \
-		        $${ROOTDIR}/3rdparty/cppcodec \
+                $${ROOTDIR}/3rdparty/cppcodec \
                 $${GUIDIR}
 
-LIBNITROKEY= -lnitrokey-static
-enable_log {
-    message("enable_log : enabled")
-    LIBNITROKEY= -lnitrokey-static-log
-#    CONFIG += console
-}
 
-
-unix{
-    LIBS += $${LIBNITROKEY} -L$${ROOTDIR}/libnitrokey/build
-}
-unix:!macx{
-    LIBS += -lhidapi-libusb
-}
-
-# TODO make second binary - debug - linked with libnitrokey-log
 win32 {
-    INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
-    #TODO add hidapi sources to libnitrokey instead
-    SOURCES += $${ROOTDIR}/libnitrokey/hidapi/windows/hid.c
-    LIBS= -lsetupapi -lhid
-    LIBS += $${LIBNITROKEY} -L$${ROOTDIR}/libnitrokey/build
     RC_FILE=appico.rc
 }
 
 macx{
-    INCLUDEPATH += $${ROOTDIR}/libnitrokey/hidapi/hidapi/
-    #TODO add hidapi sources to libnitrokey instead
-    SOURCES += $${ROOTDIR}/libnitrokey/hidapi/mac/hid.c
-    LIBS+=-framework IOKit -framework CoreFoundation
     ICON= images/CS_icon.icns
     QMAKE_INFO_PLIST = Info.plist
 }

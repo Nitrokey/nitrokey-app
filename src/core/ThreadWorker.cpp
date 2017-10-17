@@ -27,10 +27,12 @@ void ThreadWorkerNS::Worker::fetch_data() {
 }
 
 ThreadWorker::ThreadWorker(const std::function<Data()> &datafunc, const std::function<void(Data)> &usefunc,
-                           QObject *parent) :
+                           QObject *parent, std::string name) :
     QObject(parent),
     worker_thread(new QThread(this)),
     usefunc(usefunc) {
+
+  this->name = name;
 
   worker = std::make_shared<ThreadWorkerNS::Worker>(nullptr, datafunc);
 
@@ -58,7 +60,10 @@ void ThreadWorker::use_data(QMap<QString, QVariant> data) {
 
 void ThreadWorker::stop_thread() {
   if (worker_thread == nullptr) return;
+  worker_thread->requestInterruption();
   worker_thread->quit();
-  worker_thread->wait();
+  for (int i=0; i<5 && !worker_thread->wait(1000);i++){
+    qDebug() << "Worker has not finished yet: " << QString::fromStdString(name) << worker_thread;
+  };
 }
 

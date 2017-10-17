@@ -43,6 +43,7 @@
 #include "src/core/SecureString.h"
 
 #include <QString>
+#include <src/core/ScopedGuard.h>
 
 using nm = nitrokey::NitrokeyManager;
 static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
@@ -69,7 +70,8 @@ MainWindow::MainWindow(QWidget *parent):
   storage.set_show_message( [this](QString msg){ tray.showTrayMessage(msg); });
 
   //TODO make connections in objects instead of accumulating them here
-  connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
+//  connect(&storage, SIGNAL(storageStatusChanged()), &tray, SLOT(regenerateMenu()));
+  connect(&storage, SIGNAL(storageStatusUpdated()), &tray, SLOT(regenerateMenu()));
   connect(&storage, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(&storage, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
   connect(&storage, SIGNAL(longOperationStarted()), this, SLOT(on_KeepDeviceOnline()));
@@ -118,14 +120,13 @@ MainWindow::MainWindow(QWidget *parent):
   keepDeviceOnlineTimer = new QTimer(this);
   connect(keepDeviceOnlineTimer, SIGNAL(timeout()), this, SLOT(on_KeepDeviceOnline()));
   keepDeviceOnlineTimer->start(30*1000);
+  QTimer::singleShot(10*1000, this, SLOT(on_KeepDeviceOnline()));
+
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
   ui->deleteUserPasswordCheckBox->setEnabled(false);
   ui->deleteUserPasswordCheckBox->setChecked(false);
-
-  //TODO
-//    translateDeviceStatusToUserMessage(cryptostick->getStatus());
 
   ui->PWS_EditPassword->setValidator(
       new utf8FieldLengthValidator(PWS_PASSWORD_LENGTH, ui->PWS_EditPassword));
@@ -156,34 +157,18 @@ void MainWindow::first_run(){
   //TODO insert call to First run configuration wizard here
 }
 
-void MainWindow::translateDeviceStatusToUserMessage(const int getStatus){
-    switch (getStatus) {
-        case 1:
-            //regained connection
-            tray.showTrayMessage(
-                tr("Regained connection to the device.")
-            );
-        break;
-        case -10:
-            // problems with communication, received CRC other than expected, try to reinitialize
-          tray.showTrayMessage(
-                    tr("Detected some communication problems with the device. Reinitializing.")
-            );
-            break;
-        case -11:
-            // fatal error, cannot resume communication, ask user for reinsertion
-            csApplet()->warningBox(
-                tr("Device lock detected, please remove and insert the device again.\nIf problem will occur again please: \n1. Close the application\n2. Reinsert the device\n3. Wait 30 seconds and start application")
-            );
-            break;
-        default:
-            break;
-    }
-}
-
 void MainWindow::checkConnection() {
   using cs = ConnectionState;
-  QMutexLocker locker(&check_connection_mutex);
+
+  if (!check_connection_mutex.tryLock(100)){
+    if (debug_mode)
+      qDebug("checkConnection skip");
+    return;
+  }
+
+  ScopedGuard mutexGuard([this](){
+      check_connection_mutex.unlock();
+  });
 
   bool deviceConnected = libada::i()->isDeviceConnected() && !libada::i()->have_communication_issues_occurred();
 
@@ -191,32 +176,22 @@ void MainWindow::checkConnection() {
   if(!deviceConnected && nm::instance()->could_current_device_be_enumerated()){
     connection_trials++;
     if(connection_trials%5==0){
-      //FIXME use existing translation
-      csApplet()->warningBox(tr("Device is detected but could not be connected. Please reinsert it."));
+      csApplet()->warningBox(
+          tr("Device lock detected, please remove and insert the device again.\nIf problem will occur again please: \n1. Close the application\n2. Reinsert the device\n3. Wait 30 seconds and start application")
+      );
     }
   }
 
   if (deviceConnected){
+        connection_trials = 0;
           if(connectionState == cs::disconnected){
               connectionState = cs::connected;
               if (debug_mode)
                 emit ShortOperationBegins("Connecting Device");
 
               QTimer::singleShot(3000, [this](){
-                  ShortOperationEnds();
+                  emit ShortOperationEnds();
                   nitrokey::NitrokeyManager::instance()->connect();
-
-              if(libada::i()->isStorageDeviceConnected()){
-                  try {
-                      libada::i()->get_status();
-                      long_operation_in_progress = false;
-                  }
-                  catch (LongOperationInProgressException &e){
-                      long_operation_in_progress = true;
-                      emit OperationInProgress(e.progress_bar_value);
-                      return;
-                  }
-              }
 
               //on connection
                   emit DeviceConnected();
@@ -231,7 +206,6 @@ void MainWindow::checkConnection() {
     }
     nitrokey::NitrokeyManager::instance()->connect();
   }
-
 }
 
 void MainWindow::initialTimeReset() {
@@ -318,7 +292,6 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
 
     memset(slot->counter, 0, 8);
     // Nitrokey Storage needs counter value in text but Pro in binary [#60]
-//    if (libada::i()->isStorageDeviceConnected() == false) {
       bool conversionSuccess = false;
       uint64_t counterFromGUI = 0;
       if (0 != ui->counterEdit->text().toLatin1().length()) {
@@ -331,20 +304,6 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
                                             "Setting counter value to 0. Please retry."));
       }
     }
-//  else { // nitrokey storage version
-//      QByteArray counterFromGUI = QByteArray(ui->counterEdit->text().toLatin1());
-//      int digitsInCounter = counterFromGUI.length();
-//      if (0 < digitsInCounter && digitsInCounter < 8) {
-//        memcpy(slot->counter, counterFromGUI.constData(), std::min(counterFromGUI.length(), 7));
-//        // 8th char has to be '\0' since in firmware atoi is used directly on buffer
-//        slot->counter[7] = 0;
-//      } else {
-//          csApplet()->warningBox(tr("Counter value not copied - Nitrokey Storage handles HOTP counter "
-//                                            "values up to 7 digits. Setting counter value to 0. Please retry."));
-//      }
-//    }
-
-//  }
 }
 
 #include <cppcodec/base32_default_rfc4648.hpp>
@@ -553,21 +512,14 @@ void MainWindow::displayCurrentGeneralConfig() {
 }
 
 void MainWindow::startConfiguration() {
-  //TODO authenticate admin plain
-//  PinDialog dialog(tr("Enter card admin PIN"), tr("Admin PIN:"), cryptostick, PinDialog::PLAIN,
-//  csApplet()->warningBox(tr("Wrong PIN. Please try again."));
-
   bool validPassword = true;
   // Start the config dialog
   if (validPassword) {
-//    cryptostick->getSlotConfigs();
     displayCurrentSlotConfig();
-
-//      translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
     displayCurrentGeneralConfig();
-
     SetupPasswordSafeConfig();
 
+    //Bring up the window
     raise();
     activateWindow();
     showNormal();
@@ -734,12 +686,10 @@ int MainWindow::get_supported_secret_length_hex() const {
 }
 
 void MainWindow::on_base32RadioButton_toggled(bool checked) {
-  //TODO move conversion logic to separate class
   if (!checked) {
     return;
   }
 
-  
   auto secret_hex = ui->secretEdit->text().toStdString();
   if (secret_hex.size() != 0) {
     try{
@@ -761,7 +711,6 @@ void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
 void MainWindow::on_setToRandomButton_clicked() {
   quint64 counter;
   counter = qrand();
-//  TODO check counter digits limit on storage with libnitrokey
   if (libada::i()->isStorageDeviceConnected()) {
     const int maxDigits = 7;
     counter = counter % ((quint64)pow(10, maxDigits));
@@ -812,7 +761,6 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
     csApplet()->warningBox(tr("Error writing configuration!"));
   }
 
-//      translateDeviceStatusToUserMessage(cryptostick->getStatus()); //TODO
     generateAllConfigs();
   displayCurrentGeneralConfig();
 }
@@ -891,10 +839,6 @@ void MainWindow::on_eraseButton_clicked() {
   }
   emit OTP_slot_write(slotNo, isHOTP);
     csApplet()->messageBox(tr("Slot has been erased successfully."));
-
-    //TODO remove values from OTP name cache
-    //TODO regenerate menu (change name for given slot)
-    //TODO regenerate combo box (change name for given slot)
 
 //  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 //  QApplication::restoreOverrideCursor();
@@ -1023,7 +967,7 @@ void MainWindow::on_PWS_ButtonClearSlot_clicked() {
     ui->PWS_EditPassword->setText("");
     ui->PWS_EditLoginName->setText("");
     ui->PWS_ComboBoxSelectSlot->setItemText(
-        item_number, QString("Slot ").append(QString::number(slot_number + 1)));
+        item_number, tr("Slot ").append(QString::number(slot_number + 1)));
     csApplet()->messageBox(tr("Slot has been erased successfully."));
     emit PWS_slot_saved(slot_number);
   }
@@ -1132,7 +1076,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
        ui->PWS_EditLoginName->text().toUtf8().constData(),
        ui->PWS_EditPassword->text().toUtf8().constData());
     emit PWS_slot_saved(slot_number);
-    auto item_name = QString(tr("Slot "))
+    auto item_name = tr("Slot ")
         .append(QString::number(item_number))
         .append(QString(" [")
                     .append(ui->PWS_EditSlotName->text())
@@ -1147,19 +1091,6 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
   catch (DeviceCommunicationException &e){
     csApplet()->messageBox(tr("Can't save slot. %1").arg(communication_error_message));
   }
-
-//  cryptostick->passwordSafeStatus[Slot] = TRUE;
-//  STRCPY((char *)cryptostick->passwordSafeSlotNames[Slot],
-//         sizeof(cryptostick->passwordSafeSlotNames[Slot]), (char *)SlotName);
-//  ui->PWS_ComboBoxSelectSlot->setItemText(
-//      Slot, QString(tr("Slot "))
-//                .append(QString::number(Slot + 1, 10))
-//                .append(QString(" [")
-//                            .append((char *)cryptostick->passwordSafeSlotNames[Slot])
-//                            .append(QString("]"))));
-//
-//  generateMenu();
-//  csApplet()->messageBox(tr("Slot successfully written."));
 }
 
 
@@ -1314,6 +1245,7 @@ int MainWindow::factoryResetAction() {
       nm::instance()->factory_reset(password.c_str());
     }
     catch (InvalidCRCReceived &e) {
+      //FIXME WORKAROUND to remove on later firmwares
       //We are expecting this exception due to bug in Storage stick firmware, v0.45, with CRC set to "0" in response
     }
     catch (CommandFailedException &e){
@@ -1391,7 +1323,10 @@ void MainWindow::updateProgressBar(int i) {
 }
 
 void MainWindow::on_DeviceDisconnected() {
-//  emit ShortOperationEnds(); //TODO enable and test
+  if (debug_mode)
+    qDebug("on_DeviceDisconnected");
+
+  emit ShortOperationEnds();
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
   tray.showTrayMessage(tr("Nitrokey disconnected"));
 
@@ -1403,6 +1338,9 @@ void MainWindow::on_DeviceDisconnected() {
 
 #include "src/core/ThreadWorker.h"
 void MainWindow::on_DeviceConnected() {
+  if (debug_mode)
+    qDebug("on_DeviceConnected");
+
   if (debug_mode)
     emit ShortOperationBegins(tr("Connecting device"));
 
@@ -1423,7 +1361,6 @@ void MainWindow::on_DeviceConnected() {
 
   initialTimeReset();
 
-//TODO show warnings for storage (test)
   new ThreadWorker(
     []() -> Data {
       Data data;
@@ -1436,7 +1373,7 @@ void MainWindow::on_DeviceConnected() {
           data["initiated"] = !s.StickKeysNotInitiated;
           data["initiated_ask"] = !false; //FIXME select proper variable s.NewSDCardFound_u8
           data["erased"] = !s.NewSDCardFound_u8;
-          data["erased_ask"] = !s.SDFillWithRandomChars_u8; //FIXME s.NewSDCardFound_u8
+          data["erased_ask"] = !s.SDFillWithRandomChars_u8;
         }
         data["PWS_Access"] = libada::i()->isPasswordSafeUnlocked();
       }
@@ -1466,6 +1403,16 @@ void MainWindow::on_DeviceConnected() {
 }
 
 void MainWindow::on_KeepDeviceOnline() {
+
+  if (!check_connection_mutex.tryLock(100)){
+    if (debug_mode)
+      qDebug("on_KeepDeviceOnline skip");
+      return;
+  }
+  ScopedGuard mutexGuard([this](){
+      check_connection_mutex.unlock();
+  });
+
   try{
     nm::instance()->get_status();
     //if long operation in progress jump to catch,
