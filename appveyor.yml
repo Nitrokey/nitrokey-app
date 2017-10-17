@@ -9,9 +9,8 @@ environment:
   - BUILD: msvc
     PLATFORM: x64
   - BUILD: mingw
-  - install:
-      - set QTDIR=C:\Qt\5.9.1\mingw53_32
-      - set PATH="%PATH%;%QTDIR%\bin;C:\MinGW\bin"
+    QTDIR: C:\Qt\5.9.1\mingw53_32
+    PATH : %PATH%;%QTDIR%\bin;C:\MinGW\bin
     build_script:
       - git submodule update --init --recursive
       - qmake .
