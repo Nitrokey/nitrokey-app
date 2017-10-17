@@ -30,7 +30,7 @@ else:
         generator += ' Win64'
     cmake_command.append('-G' + generator)
     build_command = ['cmake', '--build', '.', '--config', config, '--', '/m:4']
-    test_command = ['ctest', '-C', contest_commandfig]
+    test_command = ['ctest', '-C', config]
 
 check_call(cmake_command)
 check_call(build_command)
