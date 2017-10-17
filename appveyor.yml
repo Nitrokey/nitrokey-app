@@ -9,21 +9,17 @@ environment:
   - BUILD: msvc
     PLATFORM: x64
   - BUILD: mingw
+  - BUILD: qmake
     QTDIR: C:\Qt\5.9.1\mingw53_32
-    PATH : %PATH%;%QTDIR%\bin;C:\MinGW\bin
-    build_script:
-      - git submodule update --init --recursive
-      - qmake .
-      - mingw32-make
+    PATH : '%PATH%;%QTDIR%\bin;C:\MinGW\bin'
+
+build_script:
+  - python support/appveyor-build.py
 
 before_build:
   # Workaround for CMake not wanting sh.exe on PATH for MinGW.
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
   - git submodule update --init --recursive
-
-build_script:
-  - git submodule update --init --recursive
-  - python support/appveyor-build.py
 
 on_failure:
   - appveyor PushArtifact Testing/Temporary/LastTest.log

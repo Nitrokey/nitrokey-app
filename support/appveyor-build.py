@@ -17,6 +17,10 @@ if build == 'mingw':
     # MinGW config.
     path = path.replace(r'C:\Program Files (x86)\Git\bin', '')
     os.environ['PATH'] = r'C:\MinGW\bin;' + path
+elif build == 'qmake':
+    cmake_command = ['qmake', '.']
+    build_command = ['mingw32-make', '-j2']
+    test_command = ['true']
 else:
     # Add MSBuild 14.0 to PATH as described in
     # http://help.appveyor.com/discussions/problems/2229-v140-not-found-on-vs2105rc.
@@ -26,7 +30,7 @@ else:
         generator += ' Win64'
     cmake_command.append('-G' + generator)
     build_command = ['cmake', '--build', '.', '--config', config, '--', '/m:4']
-    test_command = ['ctest', '-C', config]
+    test_command = ['ctest', '-C', contest_commandfig]
 
 check_call(cmake_command)
 check_call(build_command)
