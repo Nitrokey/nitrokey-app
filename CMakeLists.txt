@@ -200,12 +200,6 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
         ${qrc_files}
 )
 
-ADD_EXECUTABLE(nitrokey-app.debug ${GUI_TYPE}
-  ${nitrokey_app_sources}
-  ${i18n_resources}
-        ${qrc_files}
-)
-
 OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" ON)
 if (NOT MSVC)
     set(COMPILE_FLAGS "-Wall -Wno-unused-function -Wcast-qual -Woverloaded-virtual")
@@ -213,11 +207,11 @@ if (NOT MSVC)
     if (ERROR_ON_WARNING)
         set(COMPILE_FLAGS "${COMPILE_FLAGS} -Werror")
     endif()
-    SET_TARGET_PROPERTIES(nitrokey-app nitrokey-app.debug PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS} )
+    SET_TARGET_PROPERTIES(nitrokey-app PROPERTIES COMPILE_FLAGS ${COMPILE_FLAGS} )
     #    endif()
 endif()
 
-INSTALL(TARGETS nitrokey-app nitrokey-app.debug DESTINATION bin)
+INSTALL(TARGETS nitrokey-app DESTINATION bin)
 
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${EXTRA_LIBS}
@@ -225,14 +219,6 @@ TARGET_LINK_LIBRARIES(nitrokey-app
 #  ${platform_specific_libs}
   Qt5::Widgets Qt5::Core Qt5::Gui
 )
-
-TARGET_LINK_LIBRARIES(nitrokey-app.debug
-  ${EXTRA_LIBS}
-  ${NK_LIB}-log
-#  ${platform_specific_libs}
-  Qt5::Widgets Qt5::Core Qt5::Gui
-)
-
 
 
 # Packaging
