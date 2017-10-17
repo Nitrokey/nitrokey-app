@@ -9,9 +9,11 @@ config = os.environ['CONFIGURATION']
 platform = os.environ.get('PLATFORM')
 path = os.environ['PATH']
 cmake_command = ['cmake', '-DFMT_PEDANTIC=ON', '-DCMAKE_BUILD_TYPE=' + config]
+        
 if build == 'mingw':
     cmake_command.append('-GMinGW Makefiles')
-    build_command = ['mingw32-make', '-j4']
+    cmake_command.append('-DCMAKE_PREFIX_PATH="C:\\Qt\\5.9.1\\mingw53_32\\"')
+    build_command = ['mingw32-make', '-j2']
     test_command = ['mingw32-make', 'test']
     # Remove the path to Git bin directory from $PATH because it breaks
     # MinGW config.
@@ -29,7 +31,8 @@ else:
     if platform == 'x64':
         generator += ' Win64'
     cmake_command.append('-G' + generator)
-    build_command = ['cmake', '--build', '.', '--config', config, '--', '/m:4']
+    cmake_command.append('-DCMAKE_PREFIX_PATH="C:\\Qt\\5.9.1\\msvc2015\\"')
+    build_command = ['cmake', '--build', '.', '--config', config, '--', '/m:2']
     test_command = ['ctest', '-C', config]
 
 check_call(cmake_command)
