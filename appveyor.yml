@@ -10,8 +10,8 @@ environment:
     PLATFORM: x64
   - BUILD: mingw
   - install:
-      - 'set QTDIR=C:\Qt\5.5\mingw492_32'
-      - 'set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin'
+      - set QTDIR=C:\Qt\5.9.1\mingw53_32
+      - set PATH="%PATH%;%QTDIR%\bin;C:\MinGW\bin"
     build_script:
       - git submodule update --init --recursive
       - qmake .
@@ -20,6 +20,7 @@ environment:
 before_build:
   # Workaround for CMake not wanting sh.exe on PATH for MinGW.
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+  - git submodule update --init --recursive
 
 build_script:
   - git submodule update --init --recursive
