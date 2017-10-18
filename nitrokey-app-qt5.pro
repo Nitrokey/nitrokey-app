@@ -3,6 +3,11 @@
 CONFIG   += qt c++14 debug
 QT       += core gui widgets
 
+win32-g++ {
+	QMAKE_CXXFLAGS_CXX14 = -std=c++14
+	QMAKE_CXXFLAGS_GNUCXX14 = -std=c++14
+}
+
 target.path = /usr/local/bin
 desktop.path = /usr/share/applications
 desktop.files += nitrokey-app.desktop
