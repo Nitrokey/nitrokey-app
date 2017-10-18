@@ -11,7 +11,8 @@ environment:
   - BUILD: mingw
   - BUILD: qmake
     QTDIR: C:\Qt\5.9.1\mingw53_32
-    PATH : '%PATH%;%QTDIR%\bin;C:\MinGW\bin'
+    #    PATH : '%PATH%;%QTDIR%\bin;C:\MinGW\bin'
+    PATH : '%PATH%;%QTDIR%\bin;C:\mingw-w64\i686-5.3.0-posix-dwarf-rt_v4-rev0\bin'
 
 build_script:
   - python support/appveyor-build.py
