@@ -46,6 +46,7 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCDIR}/GUI/Clipboard.cpp \
             $${SRCDIR}/GUI/Authentication.cpp \
             $${SRCDIR}/GUI/StorageActions.cpp \
+            $${SRCDIR}/GUI/ManageWindow.cpp \
             $${SRCDIR}/libada.cpp \
     src/ui/licensedialog.cpp
 

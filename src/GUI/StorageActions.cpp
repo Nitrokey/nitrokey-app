@@ -76,10 +76,15 @@ void StorageActions::startStick20EnableCryptedVolume() {
       Data data;
       data["error"] = 0;
 
+      auto m = nitrokey::NitrokeyManager::instance();
+      auto l = libada::i();
       try{
         local_sync();
-        auto m = nitrokey::NitrokeyManager::instance();
+        bool enable_storage_v045_workaround = l->getMinorFirmwareVersion() <= 45;
         m->unlock_encrypted_volume(s.c_str());
+        if (enable_storage_v045_workaround)
+          OwnSleep::sleep(5); //workaround for https://github.com/Nitrokey/nitrokey-storage-firmware/issues/31
+
         data["success"] = true;
       }
       catch (CommandFailedException &e){
@@ -188,9 +193,15 @@ void StorageActions::startStick20EnableHiddenVolume() {
     Data data;
 
     auto m = nitrokey::NitrokeyManager::instance();
+    auto l = libada::i();
     try {
       local_sync();
+      bool enable_storage_v045_workaround = l->getMinorFirmwareVersion() <= 45;
       m->unlock_hidden_volume(s.c_str());
+
+      if (enable_storage_v045_workaround)
+        OwnSleep::sleep(5); //workaround for https://github.com/Nitrokey/nitrokey-storage-firmware/issues/31
+
       data["success"] = true;
     }
     catch (CommandFailedException &e){
@@ -517,7 +528,9 @@ void StorageActions::startStick20ClearNewSdCardFound() {
   runAndHandleErrorsInUI(QString(), operationFailureMessage, [s]() { //FIXME use secure string
     auto m = nitrokey::NitrokeyManager::instance();
     m->clear_new_sd_card_warning(s.c_str());
-  }, []() {});
+  }, [this]() {
+    emit storageStatusUpdated();
+  });
 }
 
 

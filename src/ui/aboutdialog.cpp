@@ -18,6 +18,7 @@
  */
 
 
+#include "src/GUI/ManageWindow.h"
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
@@ -27,6 +28,8 @@
 using nm = nitrokey::NitrokeyManager;
 
 using namespace AboutDialogUI;
+
+static const int invalid_value = 99;
 
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent), ui(nullptr) {
@@ -76,10 +79,7 @@ AboutDialog::AboutDialog(QWidget *parent)
 
   fixWindowGeometry();
 
-  raise();
-  showNormal();
-  setWindowState(Qt::WindowActive) ;
-  activateWindow();
+  ManageWindow::bringToFocus(this);
 }
 
 AboutDialog::~AboutDialog() {
@@ -95,6 +95,7 @@ void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
 #include <QTextEdit>
 #include <libnitrokey/include/stick20_commands.h>
 #include "licensedialog.h"
+
 
 void AboutDialog::on_btn_3rdparty_clicked(){
   QString line;
@@ -130,19 +131,6 @@ void AboutDialog::showStick20Configuration(void) {
   fixWindowGeometry();
 }
 
-/*******************************************************************************
-
-  showStick10Configuration
-
-  Changes
-  Date      Author        Info
-  23.07.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
-
 void AboutDialog::showStick10Configuration(void) {
   showPasswordCounters();
   hideStick20Menu();
@@ -150,8 +138,6 @@ void AboutDialog::showStick10Configuration(void) {
 }
 
 void AboutDialog::fixWindowGeometry() {
-  resize(0, 0);
-  adjustSize();
   updateGeometry();
 }
 
@@ -171,21 +157,30 @@ void AboutDialog::showWarning(void) {
 
 void AboutDialog::hideStick20Menu(void) {
   hideWarning();
-
-  ui->hidden_volume_label->hide();
-  ui->not_erased_sd_label->hide();
-  ui->newsd_label->hide();
-  ui->static_storage_info->hide();
+  setStorageLabelsVisible(false);
 
   fixWindowGeometry();
 }
 
-void AboutDialog::showStick20Menu(void) {
+void AboutDialog::setStorageLabelsVisible(bool v) {
+  auto labels = {
+      ui->hidden_volume_label,
+      ui->static_storage_info,
+      ui->label_8,
+      ui->label_9,
+      ui->label_10,
+      ui->label_11,
+      ui->unencrypted_volume_label,
+      ui->encrypted_volume_label,
+  };
 
-  ui->hidden_volume_label->show();
-  ui->unencrypted_volume_label->show();
-  ui->encrypted_volume_label->show();
-  ui->static_storage_info->show();
+  for (auto l: labels){
+    l->setVisible(v);
+  }
+}
+
+void AboutDialog::showStick20Menu(void) {
+  setStorageLabelsVisible(true);
 }
 
 void AboutDialog::hidePasswordCounters(void) {
@@ -283,6 +278,8 @@ void Worker::fetch_device_data() {
 
 
 void AboutDialog::update_device_slots(bool connected) {
+  fixWindowGeometry();
+
   if(!connected){
     showNoStickFound();
     return;
@@ -291,7 +288,6 @@ void AboutDialog::update_device_slots(bool connected) {
   QMutexLocker lock(&worker.mutex);
 
   QString OutputText;
-  bool ErrorFlag = false;
 
   if (worker.devdata.storage.long_operation.status){
     OutputText.append(QString(tr("      *** Clearing data in progress ***")).append("\n"));
@@ -324,7 +320,6 @@ void AboutDialog::update_device_slots(bool connected) {
 
     if (worker.devdata.storage.firmware_locked) {
       OutputText.append(QString(tr("      *** Firmware is locked ***")).append("\n"));
-      ErrorFlag = true;
     }
 
     ui->newsd_label->setVisible(worker.devdata.storage.sdcard.is_new);
@@ -344,6 +339,9 @@ void AboutDialog::update_device_slots(bool connected) {
     ui->sd_id_label->setText(
         QString("0x").append(QString::number(worker.devdata.storage.sdcard.id, 16)));
 
+    if (0 == worker.devdata.storage.sdcard.id) {
+      OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
+    }
   }
   ui->firmwareLabel->setText(QString::number(worker.devdata.majorFirmwareVersion)
                                  .append(".")
@@ -351,23 +349,16 @@ void AboutDialog::update_device_slots(bool connected) {
 
   ui->serialEdit->setText(QString::fromStdString(worker.devdata.cardSerial).trimmed());
 
-  if (0 == worker.devdata.storage.sdcard.id) {
-    OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
-    ErrorFlag = true;
-  }
 
   if (0 == worker.devdata.storage.smartcard_id) {
     ui->serialEdit->setText("-");
     OutputText.append(QString(tr("\nSmartcard is not accessible\n\n")));
-    ErrorFlag = true;
   }
 
-  if (99 == worker.devdata.userPasswordRetryCount) {
+  if (invalid_value == worker.devdata.userPasswordRetryCount) {
     OutputText.append(QString(tr("No connection\nPlease retry")));
-    ErrorFlag = true;
   }
-
-  if (ErrorFlag) {
+  if (!OutputText.isEmpty()) {
     ui->DeviceStatusLabel->setText(OutputText);
   }
 

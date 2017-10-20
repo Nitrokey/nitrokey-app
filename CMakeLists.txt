@@ -128,6 +128,7 @@ SET(nitrokey_app_sources
     ${platform_specific_sources}
         src/libada.cpp src/libada.h src/utils/bool_values.h src/GUI/Tray.cpp src/GUI/Tray.h src/GUI/Clipboard.cpp src/GUI/Clipboard.h src/GUI/Authentication.cpp src/GUI/Authentication.h src/core/ScopedGuard.h src/version.h src/GUI/StorageActions.cpp src/GUI/StorageActions.h
         src/ui/licensedialog.cpp
+        src/GUI/ManageWindow.cpp
 
         #        src/GUI/PasswordSafe.cpp src/GUI/PasswordSafe.h
         src/core/ThreadWorker.cpp src/core/ThreadWorker.h)

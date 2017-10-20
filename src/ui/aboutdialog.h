@@ -85,6 +85,8 @@ private:
   QThread worker_thread;
 
   void fixWindowGeometry();
+
+  void setStorageLabelsVisible(bool v);
 };
 
 #endif // ABOUTDIALOG_H

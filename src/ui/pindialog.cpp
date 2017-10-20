@@ -18,6 +18,7 @@
  * along with Nitrokey. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "src/GUI/ManageWindow.h"
 #include "mcvs-wrapper.h"
 #include "pindialog.h"
 #include "nitrokey-applet.h"
@@ -77,10 +78,8 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
 
   ui->lineEdit->setFocus();
 
-  raise();
-  showNormal();
-  setWindowState(Qt::WindowActive) ;
-  activateWindow();
+  this->setModal(true);
+  ManageWindow::bringToFocus(this);
 }
 
 PinDialog::~PinDialog() {

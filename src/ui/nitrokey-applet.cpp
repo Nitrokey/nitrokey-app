@@ -4,6 +4,7 @@
 #include <QtGui>
 
 #include "nitrokey-applet.h"
+#include "src/GUI/ManageWindow.h"
 
 QMutex AppMessageBox::mutex;
 
@@ -15,30 +16,20 @@ void AppMessageBox::warningBox(const QString msg) {
   QMessageBox *msgbox = new QMessageBox(
       QMessageBox::Warning, getBrand(), msg, QMessageBox::Ok, _parent);
 //  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
-  msgbox->setModal( false );
-  moveToCenter(msgbox);
+  msgbox->setModal( true );
+  ManageWindow::moveToCenter(msgbox);
+  ManageWindow::bringToFocus(msgbox);
   msgbox->exec();
-//  msgbox->open();
-//  msgbox->repaint();
-//  msgbox->show();
-}
-
-#include <QDesktopWidget>
-void AppMessageBox::moveToCenter(QWidget *widget) {
-  widget->adjustSize();
-  widget->move(QApplication::desktop()->screen()->rect().center() - widget->rect().center());
 }
 
 void AppMessageBox::messageBox(const QString msg) {
   QMessageBox *msgbox = new QMessageBox(
       QMessageBox::Information, getBrand(), msg, QMessageBox::Ok, _parent);
 //  msgbox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
-  msgbox->setModal( false );
-  moveToCenter(msgbox);
+  msgbox->setModal( true );
+  ManageWindow::moveToCenter(msgbox);
+  ManageWindow::bringToFocus(msgbox);
   msgbox->exec();
-//  msgbox->open();
-//  msgbox->repaint();
-//  msgbox->show();
 }
 
 bool AppMessageBox::yesOrNoBox(const QString msg, bool default_val) {
@@ -67,7 +58,9 @@ bool AppMessageBox::detailedYesOrNoBox(const QString msg, const QString detailed
   msgBox->setDefaultButton(default_val ? QMessageBox::Yes : QMessageBox::No);
 
 //  msgBox->setAttribute( Qt::WA_DeleteOnClose ); //makes sure the msgbox is deleted automatically when closed
-  moveToCenter(msgBox);
+  ManageWindow::moveToCenter(msgBox);
+  ManageWindow::bringToFocus(msgBox);
+
   bool b = msgBox->exec() == QMessageBox::Yes;
   return b;
 }

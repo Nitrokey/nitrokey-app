@@ -172,7 +172,8 @@ void MainWindow::checkConnection() {
 
   bool deviceConnected = libada::i()->isDeviceConnected() && !libada::i()->have_communication_issues_occurred();
 
-  static int connection_trials = 0;
+  static std::atomic_int connection_trials {0};
+
   if(!deviceConnected && nm::instance()->could_current_device_be_enumerated()){
     connection_trials++;
     if(connection_trials%5==0){
@@ -183,7 +184,7 @@ void MainWindow::checkConnection() {
   }
 
   if (deviceConnected){
-        connection_trials = 0;
+        connection_trials = std::max(0, static_cast<int>(connection_trials )- 1);
           if(connectionState == cs::disconnected){
               connectionState = cs::connected;
               if (debug_mode)
@@ -1383,6 +1384,7 @@ void MainWindow::on_DeviceConnected() {
       return data;
     },
     [this](Data data) {
+      emit ShortOperationEnds();
       PWS_Access = data["PWS_Access"].toBool();
       if(data["error"].toBool()) return;
       if(!data["storage_connected"].toBool()) return;
@@ -1397,7 +1399,6 @@ void MainWindow::on_DeviceConnected() {
           csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
                                         "storage with random data\""));
       }
-      emit ShortOperationEnds();
       }, this);
 
 }
