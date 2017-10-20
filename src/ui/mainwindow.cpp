@@ -311,10 +311,16 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
 #include <cppcodec/hex_upper.hpp>
 void MainWindow::generateOTPConfig(OTPSlot *slot) const {
   using hex = cppcodec::hex_upper;
-  auto secretFromGUI = this->ui->secretEdit->text().toStdString();
 
-  auto secret_raw = base32::decode(secretFromGUI);
-  auto secret_hex = hex::encode(secret_raw);
+  std::string secret_hex;
+  auto secretFromGUI = this->ui->secretEdit->text().toStdString();
+//  ui->base32RadioButton->toggle();
+  if(ui->base32RadioButton->isDown()){
+    auto secret_raw = base32::decode(secretFromGUI);
+    secret_hex = hex::encode(secret_raw);
+  } else{
+    secret_hex = secretFromGUI;
+  }
 
   size_t toCopy = std::min(sizeof(slot->secret)-1, (const size_t &) secret_hex.length());
   if (!libada::i()->is_secret320_supported() && toCopy > 40){
@@ -607,27 +613,35 @@ void MainWindow::on_writeButton_clicked() {
     csApplet()->warningBox(tr("Nitrokey is not connected!"));
     return;
   }
-    ui->base32RadioButton->toggle();
 
-    OTPSlot otp;
+  OTPSlot otp;
+  try{
     if (isHOTP) { // HOTP slot
       generateHOTPConfig(&otp);
     } else {
         generateTOTPConfig(&otp);
     }
-    if (!this->ui->secretEdit->text().isEmpty() && !validate_secret(otp.secret)) {
-      return;
+  }
+  catch(const cppcodec::parse_error){
+    ui->secretEdit->setText("");
+    csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it."));
+    return;
+  }
+
+  if (!this->ui->secretEdit->text().isEmpty() && !validate_secret(otp.secret)) {
+    return;
+  }
+
+  if(auth_admin.authenticate()){
+    try{
+      libada::i()->writeToOTPSlot(otp, auth_admin.getTempPassword().constData());
+      csApplet()->messageBox(tr("Configuration successfully written."));
+      emit OTP_slot_write(slotNo, isHOTP);
     }
-    if(auth_admin.authenticate()){
-      try{
-        libada::i()->writeToOTPSlot(otp, auth_admin.getTempPassword().constData());
-        csApplet()->messageBox(tr("Configuration successfully written."));
-        emit OTP_slot_write(slotNo, isHOTP);
-      }
-      catch (CommandFailedException &e){
-        csApplet()->warningBox(tr("Error writing configuration!"));
-      }
+    catch (CommandFailedException &e){
+      csApplet()->warningBox(tr("Error writing configuration!"));
     }
+  }
 
 //    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 //    QApplication::restoreOverrideCursor();
