@@ -169,21 +169,30 @@ void AboutDialog::showWarning(void) {
 
 void AboutDialog::hideStick20Menu(void) {
   hideWarning();
-
-  ui->hidden_volume_label->hide();
-  ui->not_erased_sd_label->hide();
-  ui->newsd_label->hide();
-  ui->static_storage_info->hide();
+  setStorageLabelsVisible(false);
 
   fixWindowGeometry();
 }
 
-void AboutDialog::showStick20Menu(void) {
+void AboutDialog::setStorageLabelsVisible(bool v) {
+  auto labels = {
+      ui->hidden_volume_label,
+      ui->static_storage_info,
+      ui->label_8,
+      ui->label_9,
+      ui->label_10,
+      ui->label_11,
+      ui->unencrypted_volume_label,
+      ui->encrypted_volume_label,
+  };
 
-  ui->hidden_volume_label->show();
-  ui->unencrypted_volume_label->show();
-  ui->encrypted_volume_label->show();
-  ui->static_storage_info->show();
+  for (auto l: labels){
+    l->setVisible(v);
+  }
+}
+
+void AboutDialog::showStick20Menu(void) {
+  setStorageLabelsVisible(true);
 }
 
 void AboutDialog::hidePasswordCounters(void) {
@@ -342,6 +351,10 @@ void AboutDialog::update_device_slots(bool connected) {
     ui->sd_id_label->setText(
         QString("0x").append(QString::number(worker.devdata.storage.sdcard.id, 16)));
 
+    if (0 == worker.devdata.storage.sdcard.id) {
+      OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
+      ErrorFlag = true;
+    }
   }
   ui->firmwareLabel->setText(QString::number(worker.devdata.majorFirmwareVersion)
                                  .append(".")
@@ -349,10 +362,6 @@ void AboutDialog::update_device_slots(bool connected) {
 
   ui->serialEdit->setText(QString::fromStdString(worker.devdata.cardSerial).trimmed());
 
-  if (0 == worker.devdata.storage.sdcard.id) {
-    OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
-    ErrorFlag = true;
-  }
 
   if (0 == worker.devdata.storage.smartcard_id) {
     ui->serialEdit->setText("-");
@@ -368,6 +377,7 @@ void AboutDialog::update_device_slots(bool connected) {
   if (ErrorFlag) {
     ui->DeviceStatusLabel->setText(OutputText);
   }
+  ui->label_12->setVisible(ErrorFlag);
 
   ui->admin_retry_label->setEnabled(true);
   ui->user_retry_label->setEnabled(true);
