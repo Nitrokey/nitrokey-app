@@ -68,6 +68,8 @@ class libada : public QObject {
 
     std::vector <uint8_t> status_PWS;
     std::string cardSerial_cached;
+  static constexpr int invalid_value = 99;
+  std::atomic_int minor_firmware_version_cached {invalid_value} ;
 
 
 public slots:

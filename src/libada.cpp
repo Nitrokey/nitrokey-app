@@ -34,12 +34,14 @@ int libada::getMajorFirmwareVersion() {
 }
 
 int libada::getMinorFirmwareVersion() {
+  if (minor_firmware_version_cached != invalid_value)
+    return minor_firmware_version_cached;
   try{
     return nm::instance()->get_minor_firmware_version();
   }
   catch (DeviceCommunicationException &e){
   }
-  return 99;
+  return invalid_value;
 }
 
 int libada::getAdminPasswordRetryCount() {
@@ -49,7 +51,7 @@ int libada::getAdminPasswordRetryCount() {
   }
   catch (DeviceCommunicationException &e){
   }
-  return 99;
+  return invalid_value;
 
 }
 
@@ -61,7 +63,7 @@ int libada::getUserPasswordRetryCount() {
   }
   catch (DeviceCommunicationException &e){
   }
-  return 99;
+  return invalid_value;
 }
 
 std::string libada::getCardSerial() {
@@ -82,6 +84,7 @@ void libada::on_FactoryReset(){
   status_PWS.clear();
   cache_HOTP_name.clear();
   cache_TOTP_name.clear();
+  minor_firmware_version_cached = invalid_value;
 }
 
 
@@ -282,6 +285,7 @@ void libada::on_DeviceDisconnect() {
   cache_PWS_name.clear();
   status_PWS.clear();
   cardSerial_cached.clear();
+  minor_firmware_version_cached = invalid_value;
 }
 
 
