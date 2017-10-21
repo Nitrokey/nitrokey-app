@@ -7,6 +7,7 @@
 class ManageWindow {
 public:
   static void bringToFocus(QWidget * w);
+  static void moveToCenter(QWidget *widget);
 };
 
 
