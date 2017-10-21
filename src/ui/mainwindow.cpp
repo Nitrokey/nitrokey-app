@@ -1384,6 +1384,7 @@ void MainWindow::on_DeviceConnected() {
       return data;
     },
     [this](Data data) {
+      emit ShortOperationEnds();
       PWS_Access = data["PWS_Access"].toBool();
       if(data["error"].toBool()) return;
       if(!data["storage_connected"].toBool()) return;
@@ -1398,7 +1399,6 @@ void MainWindow::on_DeviceConnected() {
           csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
                                         "storage with random data\""));
       }
-      emit ShortOperationEnds();
       }, this);
 
 }
