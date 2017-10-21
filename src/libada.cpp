@@ -37,7 +37,8 @@ int libada::getMinorFirmwareVersion() {
   if (minor_firmware_version_cached != invalid_value)
     return minor_firmware_version_cached;
   try{
-    return nm::instance()->get_minor_firmware_version();
+    minor_firmware_version_cached = nm::instance()->get_minor_firmware_version();
+    return minor_firmware_version_cached;
   }
   catch (DeviceCommunicationException &e){
   }
@@ -85,6 +86,7 @@ void libada::on_FactoryReset(){
   cache_HOTP_name.clear();
   cache_TOTP_name.clear();
   minor_firmware_version_cached = invalid_value;
+  secret320_supported_cached = invalid_value;
 }
 
 
@@ -235,7 +237,16 @@ bool libada::is_nkpro_07_rtm1() {
 }
 
 bool libada::is_secret320_supported() {
-  return nm::instance()->is_320_OTP_secret_supported();
+  constexpr auto true_value = 1;
+  constexpr auto false_value = 0;
+  if (secret320_supported_cached == invalid_value){
+    try{
+      const auto is_320_OTP_secret_supported = nm::instance()->is_320_OTP_secret_supported();
+      secret320_supported_cached = is_320_OTP_secret_supported ? true_value : false_value;
+    }
+    catch (DeviceCommunicationException &e){}
+  }
+  return secret320_supported_cached == true_value;
 }
 
 std::string libada::getTOTPCode(int slot_number, const char *user_temporary_password) {

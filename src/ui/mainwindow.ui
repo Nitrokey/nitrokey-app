@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -296,13 +296,16 @@
                   <string/>
                  </property>
                  <property name="maxLength">
-                  <number>64</number>
+                  <number>200</number>
                  </property>
                  <property name="echoMode">
                   <enum>QLineEdit::PasswordEchoOnEdit</enum>
                  </property>
                  <property name="placeholderText">
                   <string>********************************</string>
+                 </property>
+                 <property name="clearButtonEnabled">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -415,6 +418,18 @@
                   </size>
                  </property>
                 </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="l_supportedLength">
+                 <property name="font">
+                  <font>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string extracomment="Label shown when the OTP secret key is too long">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP 'Secret Key' string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>

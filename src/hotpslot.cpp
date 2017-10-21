@@ -21,6 +21,7 @@
 #include "hotpslot.h"
 #include "string.h"
 
+
 OTPSlot::OTPSlot() {
   isProgrammed = false;
   memset(slotName, 0, sizeof(slotName));
@@ -31,3 +32,35 @@ OTPSlot::OTPSlot() {
   slotNumber = 0;
 }
 
+
+#include <cppcodec/base32_crockford.hpp>
+#include <cppcodec/base32_default_rfc4648.hpp>
+#include <QDebug>
+#include <QString>
+
+std::vector<uint8_t> decodeBase32Secret(const std::string secret, const bool debug_mode) {
+  std::vector<uint8_t> secret_raw;
+  std::string error;
+  try {
+    secret_raw = base32::decode(secret);
+    return secret_raw;
+  }
+  catch (const cppcodec::parse_error &e){
+    if (debug_mode)
+      qDebug() << e.what();
+    error = error + "base32: " + e.what();
+  }
+  try {
+    auto s = QString::fromStdString(secret);
+    s = s.remove('=');
+    secret_raw = cppcodec::base32_crockford::decode(s);
+    return secret_raw;
+  }
+  catch (const cppcodec::parse_error &e){
+    if (debug_mode)
+      qDebug() << e.what();
+    error = error + "; crockford: " + e.what();
+  }
+  throw cppcodec::parse_error(error);
+  return secret_raw;
+}
