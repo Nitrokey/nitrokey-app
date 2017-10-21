@@ -49,6 +49,9 @@ using nm = nitrokey::NitrokeyManager;
 static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
 
 
+static const QString invalid_secret_key_string_details = QApplication::tr("The secret string you have entered is invalid. Please reenter it.")
+                           +"\n"+QApplication::tr("Details: ");
+
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -111,6 +114,7 @@ MainWindow::MainWindow(QWidget *parent):
   ui->PWS_ButtonCreatePW->setText(QString(tr("Generate random password ")));
   ui->PWS_progressBar->hide();
   ui->statusBar->showMessage(tr("Nitrokey disconnected"));
+  ui->l_supportedLength->hide();
 
   QTimer *timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(checkConnection()));
@@ -137,7 +141,6 @@ MainWindow::MainWindow(QWidget *parent):
 
   this->adjustSize();
   this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
-
 
   first_run();
 }
@@ -307,16 +310,22 @@ void MainWindow::generateHOTPConfig(OTPSlot *slot) {
     }
 }
 
-#include <cppcodec/base32_default_rfc4648.hpp>
+#include <src/GUI/ManageWindow.h>
+
 #include <cppcodec/hex_upper.hpp>
-void MainWindow::generateOTPConfig(OTPSlot *slot) const {
+
+
+void MainWindow::generateOTPConfig(OTPSlot *slot) {
   using hex = cppcodec::hex_upper;
 
   std::string secret_hex;
-  auto secretFromGUI = this->ui->secretEdit->text().toStdString();
-//  ui->base32RadioButton->toggle();
-  if(ui->base32RadioButton->isDown()){
-    auto secret_raw = base32::decode(secretFromGUI);
+  ui->base32RadioButton->toggle();
+  auto cleaned = getOTPSecretCleaned(ui->secretEdit->text());
+  ui->secretEdit->setText(cleaned);
+  auto secretFromGUI = cleaned.toLatin1().toStdString();
+
+  if(ui->base32RadioButton->isChecked()){
+    auto secret_raw = decodeBase32Secret(secretFromGUI);
     secret_hex = hex::encode(secret_raw);
   } else{
     secret_hex = secretFromGUI;
@@ -425,9 +434,8 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
   ui->intervalSpinBox->setValue(30);
 
-  //TODO readout TOTP slot data
-  //TODO implement reading slot data in libnitrokey
   //TODO move reading to separate thread
+
 
   try{
     if (libada::i()->isTOTPSlotProgrammed(slotNo)) {
@@ -505,6 +513,7 @@ void MainWindow::displayCurrentSlotConfig() {
     displayCurrentTotpSlotConfig(slotNo);
   }
   ui->slotComboBox->setEnabled(true);
+  checkTextEdited();
 }
 
 void MainWindow::displayCurrentGeneralConfig() {
@@ -526,11 +535,7 @@ void MainWindow::startConfiguration() {
     displayCurrentGeneralConfig();
     SetupPasswordSafeConfig();
 
-    //Bring up the window
-    raise();
-    activateWindow();
-    showNormal();
-    setWindowState(Qt::WindowActive);
+    ManageWindow::bringToFocus(this);
 
     QTimer::singleShot(0, this, SLOT(resizeMin()));
   }
@@ -605,7 +610,6 @@ void MainWindow::on_writeButton_clicked() {
 
   if (ui->nameEdit->text().isEmpty()) {
     csApplet()->warningBox(tr("Please enter a slotname."));
-//          csApplet()->warningBox(tr("The name of the slot must not be empty."));
     return;
   }
 
@@ -619,16 +623,16 @@ void MainWindow::on_writeButton_clicked() {
     if (isHOTP) { // HOTP slot
       generateHOTPConfig(&otp);
     } else {
-        generateTOTPConfig(&otp);
+      generateTOTPConfig(&otp);
     }
   }
-  catch(const cppcodec::parse_error){
-    ui->secretEdit->setText("");
-    csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it."));
+  catch(const cppcodec::parse_error &e){
+    csApplet()->warningBox(invalid_secret_key_string_details + e.what());
     return;
   }
 
-  if (!this->ui->secretEdit->text().isEmpty() && !validate_secret(otp.secret)) {
+  if (!this->ui->secretEdit->text().isEmpty() && !validate_raw_secret(otp.secret)) {
+    csApplet()->warningBox(invalid_secret_key_string_details + tr("secret is not passing validation."));
     return;
   }
 
@@ -638,8 +642,11 @@ void MainWindow::on_writeButton_clicked() {
       csApplet()->messageBox(tr("Configuration successfully written."));
       emit OTP_slot_write(slotNo, isHOTP);
     }
-    catch (CommandFailedException &e){
+    catch (const CommandFailedException&){
       csApplet()->warningBox(tr("Error writing configuration!"));
+    }
+    catch (const InvalidHexString&){
+      csApplet()->warningBox(tr("Provided secret hex string is invalid. Please check input and try again."));
     }
   }
 
@@ -649,14 +656,14 @@ void MainWindow::on_writeButton_clicked() {
     generateAllConfigs();
 }
 
-bool MainWindow::validate_secret(const char *secret) const {
+bool MainWindow::validate_raw_secret(const char *secret) const {
   if(libada::i()->is_nkpro_07_rtm1() && secret[0] == 0){
       csApplet()->warningBox(tr("Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret."));
     return false;
   }
   //check if the secret consist only from null bytes
   //(this value is reserved - it would be ignored by device)
-  for (int i=0; i < SECRET_LENGTH; i++){
+  for (unsigned int i=0; i < SECRET_LENGTH; i++){
     if (secret[i] != 0){
       return true;
     }
@@ -673,32 +680,49 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
   if (!checked) {
     return;
   }
-  ui->secretEdit->setMaxLength(get_supported_secret_length_hex());
 
-
-  auto secret = ui->secretEdit->text().toLatin1().toStdString();
+  QString secret_input = getOTPSecretCleaned(ui->secretEdit->text());
+  ui->secretEdit->setText(secret_input);
+  
+  auto secret = secret_input.toLatin1().toStdString();
   if (secret.size() != 0) {
     try{
-      auto secret_raw = base32::decode(secret);
+      auto secret_raw = decodeBase32Secret(secret);
       auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
       ui->secretEdit->setText(secret_hex);
       clipboard.copyToClipboard(secret_hex);
+      showNotificationLabel();
     }
     catch (const cppcodec::parse_error &e) {
       ui->secretEdit->setText("");
-      csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it."));
+      csApplet()->warningBox(invalid_secret_key_string_details + e.what());
     }
   }
 }
 
-int MainWindow::get_supported_secret_length_hex() const {
-  //TODO move to libada or libnitrokey
+QString MainWindow::getOTPSecretCleaned(QString secret_input) {
+  secret_input = secret_input.remove('-').remove(' ').trimmed();
+  constexpr auto base32_block_size = 8u;
+  int secret_length = std::min(get_supported_secret_length_base32(),
+                               roundToNextMultiple(secret_input.length(), base32_block_size));
+  secret_input = secret_input.leftJustified(secret_length, '=');
+  return secret_input;
+}
+
+unsigned int MainWindow::roundToNextMultiple(const int number, const int multipleOf) const {
+  return static_cast<unsigned int>(
+      number + ((number % multipleOf == 0) ? 0 : multipleOf - number % multipleOf));
+}
+
+unsigned int MainWindow::get_supported_secret_length_hex() const {
   auto local_secret_length = SECRET_LENGTH_HEX;
   if (!libada::i()->is_secret320_supported()){
     local_secret_length /= 2;
   }
   return local_secret_length;
 }
+
+#include <cppcodec/base32_default_rfc4648.hpp>
 
 void MainWindow::on_base32RadioButton_toggled(bool checked) {
   if (!checked) {
@@ -712,13 +736,14 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
       auto secret_base32 = QString::fromStdString(base32::encode(secret_raw));
       ui->secretEdit->setText(secret_base32);
       clipboard.copyToClipboard(secret_base32);
+      showNotificationLabel();
     }
     catch (const cppcodec::parse_error &e) {
       ui->secretEdit->setText("");
-      csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it."));
+      csApplet()->warningBox(tr("The secret string you have entered is invalid. Please reenter it.")
+                             +" "+tr("Details: ") + e.what());
     }
   }
-  ui->secretEdit->setMaxLength(get_supported_secret_length_base32());
 }
 
 void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
@@ -783,8 +808,9 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
 void MainWindow::getHOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x10 + slot);
-      if (OTPcode.empty()) return;
-      clipboard.copyToClipboard(QString::fromStdString(OTPcode));
+    if (OTPcode.empty()) return;
+    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
+
 
     if (libada::i()->getHOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("HOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -885,9 +911,25 @@ void MainWindow::on_randomSecretButton_clicked() {
   ui->checkBox->setEnabled(true);
   ui->checkBox->setChecked(true);
   clipboard.copyToClipboard(secretArray);
+  showNotificationLabel();
+  this->checkTextEdited();
 }
 
-int MainWindow::get_supported_secret_length_base32() const {
+void MainWindow::showNotificationLabel() {
+  static qint64 lastTimeNotificationShown = 0;
+  lastTimeNotificationShown = QDateTime::currentMSecsSinceEpoch();
+  constexpr auto delayBeforeHiding = 6000;
+  constexpr auto timer_precision_off = 1000;
+  ui->labelNotify->show();
+  QTimer::singleShot(delayBeforeHiding, [this](){
+    if (QDateTime::currentMSecsSinceEpoch() >
+        lastTimeNotificationShown + delayBeforeHiding - timer_precision_off){
+      ui->labelNotify->hide();
+    }
+  });
+}
+
+unsigned int MainWindow::get_supported_secret_length_base32() const {
   auto local_secret_length = SECRET_LENGTH_BASE32;
   if (!libada::i()->is_secret320_supported()){
     local_secret_length /= 2;
@@ -900,11 +942,48 @@ void MainWindow::on_checkBox_toggled(bool checked) {
 }
 
 void MainWindow::checkTextEdited() {
-  ui->secretEdit->setText(ui->secretEdit->text().remove(" ").remove("\t"));
   if (!ui->checkBox->isEnabled()) {
     ui->checkBox->setEnabled(true);
     ui->checkBox->setChecked(false);
   }
+  auto secret_key = ui->secretEdit->text();
+  bool valid = secret_key.isEmpty();
+  bool correct_length = true;
+
+  if (!valid){
+    bool base32 = ui->base32RadioButton->isChecked();
+    if (base32) {
+      auto secret = getOTPSecretCleaned(secret_key).toStdString();
+      if (secret.empty()) return;
+      try {
+        correct_length = secret.length() <= get_supported_secret_length_base32();
+        auto secret_raw = decodeBase32Secret(secret);
+        valid = validate_raw_secret(reinterpret_cast<const char *>(secret_raw.data()));
+        valid = valid && correct_length;
+      }
+      catch (...) {}
+    } else { // hex
+      const auto l = static_cast<unsigned int>(secret_key.length());
+      correct_length = l <= get_supported_secret_length_hex();
+      valid = l % 2 == 0;
+      valid = valid && correct_length;
+      if (valid){
+        try{
+          cppcodec::hex_upper::decode(secret_key.toStdString());
+        }
+        catch (const cppcodec::parse_error &e){
+          qDebug() << e.what();
+          valid = false;
+        }
+      }
+    }
+  }
+
+  ui->l_supportedLength->setVisible(!correct_length);
+  ui->secretEdit->setStyleSheet(valid ? "background: white;" : "background: #FFDDDD;");
+  ui->base32RadioButton->setEnabled(valid);
+  ui->hexRadioButton->setEnabled(valid);
+  ui->writeButton->setEnabled(valid);
 }
 
 void MainWindow::SetupPasswordSafeConfig(void) {
@@ -1352,6 +1431,8 @@ void MainWindow::on_DeviceDisconnected() {
 }
 
 #include "src/core/ThreadWorker.h"
+#include "hotpslot.h"
+
 void MainWindow::on_DeviceConnected() {
   if (debug_mode)
     qDebug("on_DeviceConnected");

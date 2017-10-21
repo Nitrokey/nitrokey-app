@@ -69,7 +69,7 @@ private:
   DebugDialog *debug;
 
 
-  bool validate_secret(const char *secret) const;
+  bool validate_raw_secret(const char *secret) const;
   void initialTimeReset();
   QMutex check_connection_mutex;
   QString nkpro_user_PIN;
@@ -178,9 +178,9 @@ private slots:
 
 
 public:
-  void generateOTPConfig(OTPSlot *slot) const;
-  int get_supported_secret_length_base32() const;
-  int get_supported_secret_length_hex() const;
+  void generateOTPConfig(OTPSlot *slot);
+  unsigned int get_supported_secret_length_base32() const;
+  unsigned int get_supported_secret_length_hex() const;
 
   std::atomic_bool long_operation_in_progress {false};
   std::shared_ptr<Stick20ResponseDialog> progress_window;
@@ -201,6 +201,12 @@ public:
 
 private:
   bool debug_mode = false;
+
+  void showNotificationLabel();
+
+  unsigned int roundToNextMultiple(const int number, const int multipleOf) const;
+
+  QString getOTPSecretCleaned(QString secret_input);
 };
 
 class utf8FieldLengthValidator : public QValidator {

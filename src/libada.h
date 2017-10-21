@@ -70,6 +70,7 @@ class libada : public QObject {
     std::string cardSerial_cached;
   static constexpr int invalid_value = 99;
   std::atomic_int minor_firmware_version_cached {invalid_value} ;
+  std::atomic_int secret320_supported_cached {invalid_value} ;
 
 
 public slots:
