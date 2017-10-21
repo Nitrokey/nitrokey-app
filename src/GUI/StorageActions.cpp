@@ -528,7 +528,9 @@ void StorageActions::startStick20ClearNewSdCardFound() {
   runAndHandleErrorsInUI(QString(), operationFailureMessage, [s]() { //FIXME use secure string
     auto m = nitrokey::NitrokeyManager::instance();
     m->clear_new_sd_card_warning(s.c_str());
-  }, []() {});
+  }, [this]() {
+    emit storageStatusUpdated();
+  });
 }
 
 
