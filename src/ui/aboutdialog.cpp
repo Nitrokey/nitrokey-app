@@ -138,8 +138,6 @@ void AboutDialog::showStick10Configuration(void) {
 }
 
 void AboutDialog::fixWindowGeometry() {
-  resize(0, 0);
-  adjustSize();
   updateGeometry();
 }
 
@@ -280,6 +278,8 @@ void Worker::fetch_device_data() {
 
 
 void AboutDialog::update_device_slots(bool connected) {
+  fixWindowGeometry();
+
   if(!connected){
     showNoStickFound();
     return;
