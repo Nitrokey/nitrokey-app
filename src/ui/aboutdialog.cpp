@@ -29,6 +29,8 @@ using nm = nitrokey::NitrokeyManager;
 
 using namespace AboutDialogUI;
 
+static const int invalid_value = 99;
+
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent), ui(nullptr) {
   ui = std::make_shared<Ui::AboutDialog>();
@@ -94,6 +96,7 @@ void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
 #include <libnitrokey/include/stick20_commands.h>
 #include "licensedialog.h"
 
+
 void AboutDialog::on_btn_3rdparty_clicked(){
   QString line;
   std::vector<QString> filenames {"General","Nitrokey-App",
@@ -127,19 +130,6 @@ void AboutDialog::showStick20Configuration(void) {
 
   fixWindowGeometry();
 }
-
-/*******************************************************************************
-
-  showStick10Configuration
-
-  Changes
-  Date      Author        Info
-  23.07.14  RB            Function created
-
-  Reviews
-  Date      Reviewer        Info
-
-*******************************************************************************/
 
 void AboutDialog::showStick10Configuration(void) {
   showPasswordCounters();
@@ -298,7 +288,6 @@ void AboutDialog::update_device_slots(bool connected) {
   QMutexLocker lock(&worker.mutex);
 
   QString OutputText;
-  bool ErrorFlag = false;
 
   if (worker.devdata.storage.long_operation.status){
     OutputText.append(QString(tr("      *** Clearing data in progress ***")).append("\n"));
@@ -331,7 +320,6 @@ void AboutDialog::update_device_slots(bool connected) {
 
     if (worker.devdata.storage.firmware_locked) {
       OutputText.append(QString(tr("      *** Firmware is locked ***")).append("\n"));
-      ErrorFlag = true;
     }
 
     ui->newsd_label->setVisible(worker.devdata.storage.sdcard.is_new);
@@ -353,7 +341,6 @@ void AboutDialog::update_device_slots(bool connected) {
 
     if (0 == worker.devdata.storage.sdcard.id) {
       OutputText.append(QString(tr("\nSD card is not accessible\n\n")));
-      ErrorFlag = true;
     }
   }
   ui->firmwareLabel->setText(QString::number(worker.devdata.majorFirmwareVersion)
@@ -366,18 +353,14 @@ void AboutDialog::update_device_slots(bool connected) {
   if (0 == worker.devdata.storage.smartcard_id) {
     ui->serialEdit->setText("-");
     OutputText.append(QString(tr("\nSmartcard is not accessible\n\n")));
-    ErrorFlag = true;
   }
 
-  if (99 == worker.devdata.userPasswordRetryCount) {
+  if (invalid_value == worker.devdata.userPasswordRetryCount) {
     OutputText.append(QString(tr("No connection\nPlease retry")));
-    ErrorFlag = true;
   }
-
-  if (ErrorFlag) {
+  if (!OutputText.isEmpty()) {
     ui->DeviceStatusLabel->setText(OutputText);
   }
-  ui->label_12->setVisible(ErrorFlag);
 
   ui->admin_retry_label->setEnabled(true);
   ui->user_retry_label->setEnabled(true);
