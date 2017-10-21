@@ -29,7 +29,7 @@ static const unsigned int SECRET_LENGTH = 40;
 static const unsigned int SECRET_LENGTH_BASE32 = SECRET_LENGTH / 10 * 16;
 static const unsigned int SECRET_LENGTH_HEX = SECRET_LENGTH * 2;
 
-std::vector<uint8_t> decodeBase32Secret(std::string secret);
+std::vector<uint8_t> decodeBase32Secret(const std::string secret, const bool debug_mode = false);
 
 
 class OTPSlot {

@@ -325,7 +325,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) {
   auto secretFromGUI = cleaned.toLatin1().toStdString();
 
   if(ui->base32RadioButton->isChecked()){
-    auto secret_raw = decodeBase32Secret(secretFromGUI);
+    auto secret_raw = decodeBase32Secret(secretFromGUI, debug_mode);
     secret_hex = hex::encode(secret_raw);
   } else{
     secret_hex = secretFromGUI;
@@ -687,7 +687,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
   auto secret = secret_input.toLatin1().toStdString();
   if (secret.size() != 0) {
     try{
-      auto secret_raw = decodeBase32Secret(secret);
+      auto secret_raw = decodeBase32Secret(secret, debug_mode);
       auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
       ui->secretEdit->setText(secret_hex);
       clipboard.copyToClipboard(secret_hex);
@@ -957,7 +957,7 @@ void MainWindow::checkTextEdited() {
       if (secret.empty()) return;
       try {
         correct_length = secret.length() <= get_supported_secret_length_base32();
-        auto secret_raw = decodeBase32Secret(secret);
+        auto secret_raw = decodeBase32Secret(secret, debug_mode);
         valid = validate_raw_secret(reinterpret_cast<const char *>(secret_raw.data()));
         valid = valid && correct_length;
       }
@@ -972,7 +972,8 @@ void MainWindow::checkTextEdited() {
           cppcodec::hex_upper::decode(secret_key.toStdString());
         }
         catch (const cppcodec::parse_error &e){
-          qDebug() << e.what();
+          if (debug_mode)
+            qDebug() << e.what();
           valid = false;
         }
       }
@@ -1550,12 +1551,13 @@ void MainWindow::enable_admin_commands() {
 }
 
 void MainWindow::set_debug_file(QString log_file_name) {
-  nm::instance()->set_log_function( [log_file_name](std::string data){
+  nm::instance()->set_log_function( [log_file_name, debug_mode=this->debug_mode](std::string data){
       static std::shared_ptr<QFile> log_file;
       if(!log_file){
         log_file = std::make_shared<QFile>(log_file_name);
         if (!log_file->open(QIODevice::WriteOnly | QIODevice::Text)){
-          qDebug() << "Could not open " << log_file_name;
+          if (debug_mode)
+            qDebug() << "Could not open " << log_file_name;
           log_file = nullptr;
         }
       }

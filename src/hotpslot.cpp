@@ -38,7 +38,7 @@ OTPSlot::OTPSlot() {
 #include <QDebug>
 #include <QString>
 
-std::vector<uint8_t> decodeBase32Secret(const std::string secret){
+std::vector<uint8_t> decodeBase32Secret(const std::string secret, const bool debug_mode) {
   std::vector<uint8_t> secret_raw;
   std::string error;
   try {
@@ -46,7 +46,8 @@ std::vector<uint8_t> decodeBase32Secret(const std::string secret){
     return secret_raw;
   }
   catch (const cppcodec::parse_error &e){
-    qDebug() << e.what();
+    if (debug_mode)
+      qDebug() << e.what();
     error = error + "base32: " + e.what();
   }
   try {
@@ -56,7 +57,8 @@ std::vector<uint8_t> decodeBase32Secret(const std::string secret){
     return secret_raw;
   }
   catch (const cppcodec::parse_error &e){
-    qDebug() << e.what();
+    if (debug_mode)
+      qDebug() << e.what();
     error = error + "; crockford: " + e.what();
   }
   throw cppcodec::parse_error(error);
