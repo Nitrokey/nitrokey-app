@@ -740,7 +740,7 @@ Reset Nitrokey&apos;s time?</source>
     </message>
     <message>
         <source>Detected some communication problems with the device. Reinitializing.</source>
-        <translation>Reinitializing connection.</translation>
+        <translation type="vanished">Reinitializing connection.</translation>
     </message>
     <message>
         <source>Device lock detected, please remove and insert the device again.
@@ -761,10 +761,6 @@ If problem will occur again please:
     <message>
         <source>Slot successfully written.</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Regained connection to the device.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Select slot type: TOTP</source>
@@ -871,10 +867,6 @@ If problem will occur again please:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Device is detected but could not be connected. Please reinsert it.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The secret string you have entered is invalid. Please reenter it.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -916,6 +908,23 @@ If problem will occur again please:
     </message>
     <message>
         <source>Connecting device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP &apos;Secret Key&apos; string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <extracomment>Label shown when the OTP secret key is too long</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>secret is not passing validation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Provided secret hex string is invalid. Please check input and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1031,6 +1040,14 @@ Message: </source>
     </message>
     <message>
         <source>Communication error. Please reinsert the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The secret string you have entered is invalid. Please reenter it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
