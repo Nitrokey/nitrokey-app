@@ -5,6 +5,7 @@
 #include <QWidget>
 
 class ManageWindow {
+public:
   static void bringToFocus(QWidget * w);
 };
 

@@ -18,6 +18,7 @@
  */
 
 
+#include "src/GUI/ManageWindow.h"
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
@@ -76,10 +77,7 @@ AboutDialog::AboutDialog(QWidget *parent)
 
   fixWindowGeometry();
 
-  raise();
-  showNormal();
-  setWindowState(Qt::WindowActive) ;
-  activateWindow();
+  ManageWindow::bringToFocus(this);
 }
 
 AboutDialog::~AboutDialog() {
