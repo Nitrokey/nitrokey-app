@@ -752,7 +752,7 @@ Reset Nitrokey&apos;s time?</source>
     </message>
     <message>
         <source>Detected some communication problems with the device. Reinitializing.</source>
-        <translation>تم اكتشاف بعض مشكلات الاتصال بالجهاز. تتم إعادة التأسيس</translation>
+        <translation type="vanished">تم اكتشاف بعض مشكلات الاتصال بالجهاز. تتم إعادة التأسيس</translation>
     </message>
     <message>
         <source>Device lock detected, please remove and insert the device again.
@@ -780,7 +780,7 @@ If problem will occur again please:
     </message>
     <message>
         <source>Regained connection to the device.</source>
-        <translation>تم استعادة التوصيل مع الجهاز</translation>
+        <translation type="vanished">تم استعادة التوصيل مع الجهاز</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -792,10 +792,6 @@ If problem will occur again please:
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Password Safe fields support UTF8 data. It means that you can use your national characters here. Please remember however that non-English characters could take more space (up to 4 characters). The counters next to each field are to inform how much more standard English characters can given field accept.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Device is detected but could not be connected. Please reinsert it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -946,6 +942,23 @@ If problem will occur again please:
         <source>Connecting device</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP &apos;Secret Key&apos; string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <extracomment>Label shown when the OTP secret key is too long</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>secret is not passing validation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Provided secret hex string is invalid. Please check input and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PasswordDialog</name>
@@ -1028,7 +1041,7 @@ Please change the PIN.</source>
     </message>
     <message>
         <source>Admin PIN:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">كلمة سر المستخدم المدير</translation>
     </message>
     <message>
         <source>Enter Firmware Password</source>
@@ -1060,6 +1073,14 @@ Message: </source>
     </message>
     <message>
         <source>Communication error. Please reinsert the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The secret string you have entered is invalid. Please reenter it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1450,7 +1471,7 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">نعم</translation>
     </message>
     <message>
         <source>I read and understood this security warning</source>

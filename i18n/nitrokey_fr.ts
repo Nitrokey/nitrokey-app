@@ -764,7 +764,7 @@ Réinitialiser l&apos;heure de la Nitrokey ?</translation>
     </message>
     <message>
         <source>Detected some communication problems with the device. Reinitializing.</source>
-        <translation>Des problèmes de communication avec la clef ont été détectés. Réinitialisation.</translation>
+        <translation type="vanished">Des problèmes de communication avec la clef ont été détectés. Réinitialisation.</translation>
     </message>
     <message>
         <source>Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret.</source>
@@ -780,7 +780,7 @@ Réinitialiser l&apos;heure de la Nitrokey ?</translation>
     </message>
     <message>
         <source>Regained connection to the device.</source>
-        <translation>Connexion établie à nouveau avec la clef.</translation>
+        <translation type="vanished">Connexion établie à nouveau avec la clef.</translation>
     </message>
     <message>
         <source>Select slot type: TOTP</source>
@@ -892,7 +892,7 @@ If problem will occur again please:
 1. Close the application
 2. Reinsert the device
 3. Wait 30 seconds and start application</source>
-        <translation>Blocage de la clef détecté, merci de la retirer et de l&apos;insérer à nouveau.
+        <translation type="vanished">Blocage de la clef détecté, merci de la retirer et de l&apos;insérer à nouveau.
 Si le problème persiste, veuillez :
 1. fermer l&apos;application
 2 réinsérer la clef
@@ -900,7 +900,7 @@ Si le problème persiste, veuillez :
     </message>
     <message>
         <source>Device is detected but could not be connected. Please reinsert it.</source>
-        <translation>La clef est détectée mais il est impossible de s&apos;y connecter. Veuillez la réinsérer.</translation>
+        <translation type="vanished">La clef est détectée mais il est impossible de s&apos;y connecter. Veuillez la réinsérer.</translation>
     </message>
     <message>
         <source>The secret string you have entered is invalid. Please reenter it.</source>
@@ -945,6 +945,31 @@ Si le problème persiste, veuillez :
     <message>
         <source>Connecting device</source>
         <translation>Connexion à la clef</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP &apos;Secret Key&apos; string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <extracomment>Label shown when the OTP secret key is too long</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device lock detected, please remove and insert the device again.
+If problem will occur again please: 
+1. Close the application
+2. Reinsert the device
+3. Wait 30 seconds and start application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>secret is not passing validation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Provided secret hex string is invalid. Please check input and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1062,6 +1087,14 @@ Message : </translation>
     <message>
         <source>Communication error. Please reinsert the device.</source>
         <translation>Erreur de communication. Merci de réinsérer la clef.</translation>
+    </message>
+    <message>
+        <source>The secret string you have entered is invalid. Please reenter it.</source>
+        <translation type="unfinished">La chaîne de caractère secrète que vous avez entrée est invalide. Merci de bien vouloir réessayer.</translation>
+    </message>
+    <message>
+        <source>Details: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
