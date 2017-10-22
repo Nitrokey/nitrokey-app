@@ -162,37 +162,40 @@
                <property name="accessibleName">
                 <string>Select OTP slot number</string>
                </property>
+               <property name="currentText">
+                <string notr="true">HOTP slot 1</string>
+               </property>
                <property name="currentIndex">
                 <number>0</number>
                </property>
                <item>
                 <property name="text">
-                 <string>HOTP slot 1</string>
+                 <string notr="true">HOTP slot 1</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>HOTP slot 2</string>
+                 <string notr="true">HOTP slot 2</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>TOTP slot 1</string>
+                 <string notr="true">TOTP slot 1</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>TOTP slot 2</string>
+                 <string notr="true">TOTP slot 2</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>TOTP slot 3</string>
+                 <string notr="true">TOTP slot 3</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>TOTP slot 4</string>
+                 <string notr="true">TOTP slot 4</string>
                 </property>
                </item>
               </widget>

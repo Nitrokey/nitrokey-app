@@ -437,174 +437,168 @@ Please retry</source>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.ui" line="156"/>
-        <location filename="../src/ui/mainwindow.ui" line="1192"/>
+        <location filename="../src/ui/mainwindow.ui" line="1201"/>
         <source>Slot:</source>
         <translation>موضع</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="170"/>
         <source>HOTP slot 1</source>
-        <translation>HOTP موضع 1</translation>
+        <translation type="vanished">HOTP موضع 1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="175"/>
         <source>HOTP slot 2</source>
-        <translation>HOTP موضع 2</translation>
+        <translation type="vanished">HOTP موضع 2</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="180"/>
         <source>TOTP slot 1</source>
-        <translation>TOTP موضع 1</translation>
+        <translation type="vanished">TOTP موضع 1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="185"/>
         <source>TOTP slot 2</source>
-        <translation>TOTP موضع 2</translation>
+        <translation type="vanished">TOTP موضع 2</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="190"/>
         <source>TOTP slot 3</source>
-        <translation>TOTP موضع 3</translation>
+        <translation type="vanished">TOTP موضع 3</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="195"/>
         <source>TOTP slot 4</source>
-        <translation>TOTP موضع 4</translation>
+        <translation type="vanished">TOTP موضع 4</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="203"/>
-        <location filename="../src/ui/mainwindow.ui" line="1153"/>
+        <location filename="../src/ui/mainwindow.ui" line="206"/>
+        <location filename="../src/ui/mainwindow.ui" line="1162"/>
         <source>Erase Slot</source>
         <translation>إلغاء موضع</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="210"/>
+        <location filename="../src/ui/mainwindow.ui" line="213"/>
         <source>Name:</source>
         <translation>إسم</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="253"/>
+        <location filename="../src/ui/mainwindow.ui" line="256"/>
         <source>Secret key</source>
         <translation>مفتاح سري</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="275"/>
+        <location filename="../src/ui/mainwindow.ui" line="278"/>
         <source>Secret Key:</source>
         <translation>مفتاح سري</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="305"/>
+        <location filename="../src/ui/mainwindow.ui" line="308"/>
         <source>********************************</source>
         <translation>********************************</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="323"/>
+        <location filename="../src/ui/mainwindow.ui" line="326"/>
         <source>Secret copied to clipboard</source>
         <translation>السر نسخ إلى الحافظة</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="338"/>
-        <location filename="../src/ui/mainwindow.ui" line="1205"/>
+        <location filename="../src/ui/mainwindow.ui" line="341"/>
+        <location filename="../src/ui/mainwindow.ui" line="1214"/>
         <source>Hide secret</source>
         <translation>أخف السر</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="364"/>
+        <location filename="../src/ui/mainwindow.ui" line="367"/>
         <source>Generate random secret</source>
         <translation>ولِّد السر العشوائي</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="265"/>
+        <location filename="../src/ui/mainwindow.ui" line="268"/>
         <source>Input format:</source>
         <translation>صيغة المدخلات</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="402"/>
+        <location filename="../src/ui/mainwindow.ui" line="405"/>
         <source>Hex</source>
         <translation>الاساس الست عشري</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="447"/>
+        <location filename="../src/ui/mainwindow.ui" line="456"/>
         <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
         <translation>ملاحظة: 2&lt;sup&gt;الثاني&lt;/sup&gt; المعاملات غير محمية ضد الهجمات الحسية. قم بتغيير كل كلمات السر عند فقدانك لنتروكي</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="478"/>
+        <location filename="../src/ui/mainwindow.ui" line="487"/>
         <source>Parameters</source>
         <translation>معاملات</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="520"/>
+        <location filename="../src/ui/mainwindow.ui" line="529"/>
         <source>Set to zero</source>
         <translation>اضبطه صفرا</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="530"/>
+        <location filename="../src/ui/mainwindow.ui" line="539"/>
         <source>Set to random</source>
         <translation>اضبطه عشوائيا</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="559"/>
+        <location filename="../src/ui/mainwindow.ui" line="568"/>
         <source>6 digits</source>
         <translation>6 أرقام</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="572"/>
+        <location filename="../src/ui/mainwindow.ui" line="581"/>
         <source>8 digits</source>
         <translation>8 أرقام</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="627"/>
+        <location filename="../src/ui/mainwindow.ui" line="636"/>
         <source>Moving factor seed:</source>
         <translation>تحريك معامل البذر العشوائي</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="634"/>
+        <location filename="../src/ui/mainwindow.ui" line="643"/>
         <location filename="../src/ui/mainwindow.cpp" line="459"/>
         <source>HOTP length:</source>
         <translation>طول كلمة السر لمرة واحدة طويلة الأمد</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="641"/>
+        <location filename="../src/ui/mainwindow.ui" line="650"/>
         <source>TOTP interval:</source>
         <translation>مدى كلمة السر لمرة واحدة قصيرة الأمد</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="671"/>
+        <location filename="../src/ui/mainwindow.ui" line="680"/>
         <source>Token ID</source>
         <translation>رقم التوكن</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="683"/>
+        <location filename="../src/ui/mainwindow.ui" line="692"/>
         <source>Send token ID</source>
         <translation>أرسل رقم التوكن</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="738"/>
+        <location filename="../src/ui/mainwindow.ui" line="747"/>
         <source>MUI:</source>
         <translation>MUI</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="715"/>
+        <location filename="../src/ui/mainwindow.ui" line="724"/>
         <source>TT:</source>
         <translation>TT</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="692"/>
+        <location filename="../src/ui/mainwindow.ui" line="701"/>
         <source>OMP:</source>
         <translation>OMP</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="816"/>
-        <location filename="../src/ui/mainwindow.ui" line="1072"/>
-        <location filename="../src/ui/mainwindow.ui" line="1322"/>
+        <location filename="../src/ui/mainwindow.ui" line="825"/>
+        <location filename="../src/ui/mainwindow.ui" line="1081"/>
+        <location filename="../src/ui/mainwindow.ui" line="1331"/>
         <source>Cancel</source>
         <translation>ألغ</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="823"/>
-        <location filename="../src/ui/mainwindow.ui" line="1079"/>
-        <location filename="../src/ui/mainwindow.ui" line="1329"/>
+        <location filename="../src/ui/mainwindow.ui" line="832"/>
+        <location filename="../src/ui/mainwindow.ui" line="1088"/>
+        <location filename="../src/ui/mainwindow.ui" line="1338"/>
         <source>Save</source>
         <translation>احفظ</translation>
     </message>
@@ -616,109 +610,109 @@ Please retry</source>
         <translation>(توصية: استخدم كلمة سر لمرة واحدة قصيرة الأمد لتطبيقات الوب، وطويلة الأمد للتطبيقات المحلية)</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="383"/>
+        <location filename="../src/ui/mainwindow.ui" line="386"/>
         <source>Base32</source>
         <translation>أساس 32</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="485"/>
+        <location filename="../src/ui/mainwindow.ui" line="494"/>
         <source>Send &apos;enter&apos; as the last keystroke</source>
         <translation>أرسل &apos;enter&apos; كآخر مدخل من لوحة المفاتيح</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="507"/>
+        <location filename="../src/ui/mainwindow.ui" line="516"/>
         <source>00000000000000000000</source>
         <translation>00000000000000000000</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="833"/>
+        <location filename="../src/ui/mainwindow.ui" line="842"/>
         <source>OTP General</source>
         <translation>OTP العام</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="857"/>
+        <location filename="../src/ui/mainwindow.ui" line="866"/>
         <source>OTP Password settings</source>
         <translation>إعدادات كلمة السر OTP</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="914"/>
-        <location filename="../src/ui/mainwindow.ui" line="939"/>
+        <location filename="../src/ui/mainwindow.ui" line="923"/>
+        <location filename="../src/ui/mainwindow.ui" line="948"/>
         <source>Double press NumLock:</source>
         <translation>اضغط مرتين على NumLock</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="921"/>
-        <location filename="../src/ui/mainwindow.ui" line="964"/>
+        <location filename="../src/ui/mainwindow.ui" line="930"/>
+        <location filename="../src/ui/mainwindow.ui" line="973"/>
         <source>Double press CapsLock:</source>
         <translation>اضغط مرتين على CapsLock</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="928"/>
-        <location filename="../src/ui/mainwindow.ui" line="989"/>
+        <location filename="../src/ui/mainwindow.ui" line="937"/>
+        <location filename="../src/ui/mainwindow.ui" line="998"/>
         <source>Double press ScrollLock:</source>
         <translation>اضغط مرتين على ScrollLock</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="946"/>
-        <location filename="../src/ui/mainwindow.ui" line="971"/>
-        <location filename="../src/ui/mainwindow.ui" line="996"/>
+        <location filename="../src/ui/mainwindow.ui" line="955"/>
+        <location filename="../src/ui/mainwindow.ui" line="980"/>
+        <location filename="../src/ui/mainwindow.ui" line="1005"/>
         <source>Do nothing</source>
         <translation>لا تفعل شيئا</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="951"/>
-        <location filename="../src/ui/mainwindow.ui" line="976"/>
-        <location filename="../src/ui/mainwindow.ui" line="1001"/>
+        <location filename="../src/ui/mainwindow.ui" line="960"/>
+        <location filename="../src/ui/mainwindow.ui" line="985"/>
+        <location filename="../src/ui/mainwindow.ui" line="1010"/>
         <source>Send HOTP1</source>
         <translation>أرسل HOTP1</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="956"/>
-        <location filename="../src/ui/mainwindow.ui" line="981"/>
-        <location filename="../src/ui/mainwindow.ui" line="1006"/>
+        <location filename="../src/ui/mainwindow.ui" line="965"/>
+        <location filename="../src/ui/mainwindow.ui" line="990"/>
+        <location filename="../src/ui/mainwindow.ui" line="1015"/>
         <source>Send HOTP2</source>
         <translation>أرسل HTOP2</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1089"/>
+        <location filename="../src/ui/mainwindow.ui" line="1098"/>
         <source>Password Safe</source>
         <translation>خزانة كلمات السر</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1115"/>
-        <location filename="../src/ui/mainwindow.ui" line="1129"/>
+        <location filename="../src/ui/mainwindow.ui" line="1124"/>
+        <location filename="../src/ui/mainwindow.ui" line="1138"/>
         <source>Password:</source>
         <translation>كلمة سر</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1122"/>
-        <location filename="../src/ui/mainwindow.ui" line="1143"/>
+        <location filename="../src/ui/mainwindow.ui" line="1131"/>
+        <location filename="../src/ui/mainwindow.ui" line="1152"/>
         <source>Login name:</source>
         <translation>اسم الدخول</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1136"/>
-        <location filename="../src/ui/mainwindow.ui" line="1160"/>
+        <location filename="../src/ui/mainwindow.ui" line="1145"/>
+        <location filename="../src/ui/mainwindow.ui" line="1169"/>
         <source>Slot name:</source>
         <translation>اسم الموضع</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1174"/>
+        <location filename="../src/ui/mainwindow.ui" line="1183"/>
         <source>Static password 0</source>
         <translation>كلمة سر ثابتة 0</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1185"/>
+        <location filename="../src/ui/mainwindow.ui" line="1194"/>
         <source>Generate random password</source>
         <translation>ولد كلمة سر عشوائية</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1215"/>
+        <location filename="../src/ui/mainwindow.ui" line="1224"/>
         <source>Characters left:</source>
         <translation>أحرف متبقية</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1242"/>
+        <location filename="../src/ui/mainwindow.ui" line="1251"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -960,12 +954,12 @@ Reset Nitrokey&apos;s time?</source>
 هل تريد إعادة تهيئة الوقت على نتروكي؟</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="866"/>
+        <location filename="../src/ui/mainwindow.ui" line="875"/>
         <source>Protect OTP by user PIN (will be requested on first use each session)</source>
         <translation>قم بحماية كلمة السر لمرة واحدة برقم سري للمستخدم (سوف يطلب منك إدخاله في كل استخدام جديد)</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="873"/>
+        <location filename="../src/ui/mainwindow.ui" line="882"/>
         <source>Forget user PIN after 10 minutes (if unchecked user PIN will remain in memory until application exits)</source>
         <translation>امح كلمة السر للمستخدم بعد 10 دقائق (إذا لم يتم اختياره فإن كلمة سر المستخدم ستبقى في الذاكرة إلى حين الخروج من البرنامج)</translation>
     </message>
@@ -1016,17 +1010,17 @@ If problem will occur again please:
         <translation type="vanished">تم استعادة التوصيل مع الجهاز</translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="272"/>
+        <location filename="../src/ui/mainwindow.ui" line="275"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="335"/>
+        <location filename="../src/ui/mainwindow.ui" line="338"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hide or show the secret.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1260"/>
+        <location filename="../src/ui/mainwindow.ui" line="1269"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Password Safe fields support UTF8 data. It means that you can use your national characters here. Please remember however that non-English characters could take more space (up to 4 characters). The counters next to each field are to inform how much more standard English characters can given field accept.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1091,115 +1085,125 @@ If problem will occur again please:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="217"/>
+        <location filename="../src/ui/mainwindow.ui" line="220"/>
         <source>Slot name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="284"/>
+        <location filename="../src/ui/mainwindow.ui" line="287"/>
         <source>The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="287"/>
+        <location filename="../src/ui/mainwindow.ui" line="290"/>
         <source>OTP secret key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="290"/>
+        <location filename="../src/ui/mainwindow.ui" line="293"/>
         <source>Note: 2nd factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="361"/>
+        <location filename="../src/ui/mainwindow.ui" line="364"/>
         <source>After generating a random secret, you would need to copy it into your application or service where you want to login to.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="377"/>
+        <location filename="../src/ui/mainwindow.ui" line="380"/>
         <source>Example: &quot;ZR3M5I...&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="380"/>
+        <location filename="../src/ui/mainwindow.ui" line="383"/>
         <source>Secret input format: base32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="396"/>
+        <location filename="../src/ui/mainwindow.ui" line="399"/>
         <source>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="399"/>
+        <location filename="../src/ui/mainwindow.ui" line="402"/>
         <source>Secret input format: hex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="501"/>
+        <location filename="../src/ui/mainwindow.ui" line="433"/>
+        <source>Entered OTP &apos;Secret Key&apos; string is longer than supported by this device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/mainwindow.ui" line="436"/>
+        <source>Label shown when the OTP secret key is too long</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/mainwindow.ui" line="510"/>
         <source>HOTP moving factor seed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="517"/>
+        <location filename="../src/ui/mainwindow.ui" line="526"/>
         <source>Set HOTP counter to zero</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="527"/>
+        <location filename="../src/ui/mainwindow.ui" line="536"/>
         <source>Set HOTP counter to random value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="556"/>
+        <location filename="../src/ui/mainwindow.ui" line="565"/>
         <source>OTP code length: 6 digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="569"/>
+        <location filename="../src/ui/mainwindow.ui" line="578"/>
         <source>OTP code length:  8 digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="596"/>
+        <location filename="../src/ui/mainwindow.ui" line="605"/>
         <source>TOTP interval value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="702"/>
+        <location filename="../src/ui/mainwindow.ui" line="711"/>
         <source>OMP part of Token ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="725"/>
+        <location filename="../src/ui/mainwindow.ui" line="734"/>
         <source>TT part of Token ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="748"/>
+        <location filename="../src/ui/mainwindow.ui" line="757"/>
         <source>MUI part of Token ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="903"/>
-        <location filename="../src/ui/mainwindow.ui" line="942"/>
-        <location filename="../src/ui/mainwindow.ui" line="967"/>
-        <location filename="../src/ui/mainwindow.ui" line="992"/>
+        <location filename="../src/ui/mainwindow.ui" line="912"/>
+        <location filename="../src/ui/mainwindow.ui" line="951"/>
+        <location filename="../src/ui/mainwindow.ui" line="976"/>
+        <location filename="../src/ui/mainwindow.ui" line="1001"/>
         <source>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1150"/>
+        <location filename="../src/ui/mainwindow.ui" line="1159"/>
         <source>Erase Password Safe slot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1167"/>
+        <location filename="../src/ui/mainwindow.ui" line="1176"/>
         <source>Password Safe slot number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="1295"/>
+        <location filename="../src/ui/mainwindow.ui" line="1304"/>
         <source>Unlock Password Safe</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1219,7 +1223,7 @@ If problem will occur again please:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/mainwindow.ui" line="430"/>
+        <location filename="../src/ui/mainwindow.ui" line="439"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP &apos;Secret Key&apos; string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>Label shown when the OTP secret key is too long</extracomment>
         <translation type="unfinished"></translation>
