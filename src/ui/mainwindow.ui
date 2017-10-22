@@ -162,37 +162,40 @@
                <property name="accessibleName">
                 <string>Select OTP slot number</string>
                </property>
+               <property name="currentText">
+                <string notr="true">HOTP slot 1</string>
+               </property>
                <property name="currentIndex">
                 <number>0</number>
                </property>
                <item>
                 <property name="text">
-                 <string>HOTP slot 1</string>
+                 <string notr="true">HOTP slot 1</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>HOTP slot 2</string>
+                 <string notr="true">HOTP slot 2</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>TOTP slot 1</string>
+                 <string notr="true">TOTP slot 1</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>TOTP slot 2</string>
+                 <string notr="true">TOTP slot 2</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>TOTP slot 3</string>
+                 <string notr="true">TOTP slot 3</string>
                 </property>
                </item>
                <item>
                 <property name="text">
-                 <string>TOTP slot 4</string>
+                 <string notr="true">TOTP slot 4</string>
                 </property>
                </item>
               </widget>
@@ -425,6 +428,12 @@
                   <font>
                    <pointsize>11</pointsize>
                   </font>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Entered OTP 'Secret Key' string is longer than supported by this device</string>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Label shown when the OTP secret key is too long</string>
                  </property>
                  <property name="text">
                   <string extracomment="Label shown when the OTP secret key is too long">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP 'Secret Key' string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
