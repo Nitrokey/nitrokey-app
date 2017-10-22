@@ -426,6 +426,12 @@
                    <pointsize>11</pointsize>
                   </font>
                  </property>
+                 <property name="accessibleName">
+                  <string>Entered OTP 'Secret Key' string is longer than supported by this device</string>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Label shown when the OTP secret key is too long</string>
+                 </property>
                  <property name="text">
                   <string extracomment="Label shown when the OTP secret key is too long">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP 'Secret Key' string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
