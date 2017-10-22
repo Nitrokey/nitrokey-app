@@ -1471,6 +1471,7 @@ void MainWindow::on_DeviceConnected() {
           data["initiated_ask"] = !false; //FIXME select proper variable s.NewSDCardFound_u8
           data["erased"] = !s.NewSDCardFound_u8;
           data["erased_ask"] = !s.SDFillWithRandomChars_u8;
+          data["v0.48"] = s.versionInfo.major == 0 && s.versionInfo.minor == 48;
         }
         data["PWS_Access"] = libada::i()->isPasswordSafeUnlocked();
       }
@@ -1495,6 +1496,15 @@ void MainWindow::on_DeviceConnected() {
           csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
                                         "storage with random data\""));
       }
+
+#if defined(Q_OS_MAC) || defined(Q_OS_DARWIN)
+      if(data["v0.48"].toBool()){
+        csApplet()->warningBox(tr("Warning: This Storage firmware version (v0.48) is not correctly handled on "
+                                      "MacOS. Application may be unresponsive and unlocking encrypted volume "
+                                      "may not work. Please update the firmware to v0.47 "
+                                      "or use the other latest one when available."));
+      }
+#endif
       }, this);
 
 }
