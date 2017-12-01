@@ -3,6 +3,7 @@
 CONFIG   += qt c++14 debug
 QT       += core gui widgets
 
+
 target.path = /usr/local/bin
 desktop.path = /usr/share/applications
 desktop.files += nitrokey-app.desktop
@@ -105,9 +106,7 @@ INCLUDEPATH +=  $${SRCDIR} \
                 $${GUIDIR}
 
 
-win32 {
-    RC_FILE=appico.rc
-}
+win32:RC_ICONS = images/icon/nitrokey-app-icon-256-red.ico
 
 macx{
     ICON= images/CS_icon.icns
