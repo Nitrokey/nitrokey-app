@@ -30,7 +30,7 @@ script: |
     if [ "$builder" == "qmake" ]; then pushd libnitrokey/build/ && cmake .. && make; popd ; fi
     if [ "$builder" == "qmake" -a "${TRAVIS_OS_NAME}" == "osx" ]; then ${QMAKE} && make ; fi
     if [ "$builder" == "qmake" -a "${TRAVIS_OS_NAME}" == "linux" ]; then ${QMAKE} && make CXX=${CXX} CC=${CC} LINK=${CXX} ; fi
-    if [ "$builder" == "cmake" ]; then cmake . && make VERBOSE=1; fi
+    if [ "$builder" == "cmake" ]; then cmake -DERROR_ON_WARNING=ON . && make VERBOSE=1; fi
 
 env:
   matrix:
