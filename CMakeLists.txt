@@ -1,11 +1,18 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
-PROJECT(NitrokeyApp CXX)
+PROJECT(NitrokeyApp LANGUAGES CXX)
 SET(PROJECT_VERSION "1.2-beta.3")
+
+include(GNUInstallDirs)
+
+
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
+set(BUILD_SHARED_LIBS ON CACHE BOOL "Build all libraries as shared")
 
 IF (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RelWithDebInfo)
@@ -31,14 +38,6 @@ ADD_DEFINITIONS(-DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}")
 ADD_DEFINITIONS(-DCMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER_ID}, ${CMAKE_CXX_COMPILER}, built on: ${CMAKE_SYSTEM} ")
 ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
 
-
-add_subdirectory (libnitrokey)
-
-IF(LIBNITROKEY_STATIC)
-    SET(NK_LIB nitrokey-static)
-ELSE()
-    SET(NK_LIB nitrokey)
-ENDIF()
 
 # QT configuration
 FIND_PACKAGE(Qt5Core)
@@ -139,17 +138,17 @@ SET(nitrokey_app_sources
 IF(NOT WIN32)
   install(DIRECTORY
     ${CMAKE_SOURCE_DIR}/data/icons/
-    DESTINATION share/icons
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/nitrokey-app.desktop
-    DESTINATION share/applications
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
   )
 
   install(FILES
     ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
-    DESTINATION share/pixmaps
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps
   )
 
   find_package(PkgConfig)
@@ -191,7 +190,7 @@ IF(NOT WIN32)
     ${CMAKE_SOURCE_DIR}/images/quit.png
     ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
     ${CMAKE_SOURCE_DIR}/images/settings.png
-    DESTINATION share/nitrokey
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/nitrokey
   )
 
 ENDIF () # NOT WIN32
@@ -203,7 +202,7 @@ ADD_EXECUTABLE(nitrokey-app ${GUI_TYPE}
         ${qrc_files}
 )
 
-OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" ON)
+OPTION(ERROR_ON_WARNING "Stop compilation on warning found (not supported for MSVC)" OFF)
 if (NOT MSVC)
     set(COMPILE_FLAGS "-Wall -Wno-unused-function -Wcast-qual -Woverloaded-virtual")
     #    IF(NOT APPLE)
@@ -214,14 +213,32 @@ if (NOT MSVC)
     #    endif()
 endif()
 
-INSTALL(TARGETS nitrokey-app DESTINATION bin)
+INSTALL(TARGETS nitrokey-app DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${EXTRA_LIBS}
-  ${NK_LIB}
 #  ${platform_specific_libs}
   Qt5::Widgets Qt5::Core Qt5::Gui
 )
+
+# first try to find libnitrokey via pkg-config
+find_package(PkgConfig)
+pkg_search_module(LIBNITROKEY libnitrokey-1)
+
+if(LIBNITROKEY_FOUND)
+  MESSAGE("Found system libnitrokey")
+  if (BUILD_SHARED_LIBS)
+    target_compile_options(nitrokey-app PRIVATE ${LIBNITROKEY_CFLAGS})
+    target_link_libraries(nitrokey-app ${LIBNITROKEY_LDFLAGS})
+  else()
+    target_compile_options(nitrokey-app PRIVATE ${LIBNITROKEY_STATIC_CFLAGS})
+    target_link_libraries(nitrokey-app ${LIBNITROKEY_STATIC_LDFLAGS})
+  endif()
+else()
+  MESSAGE("Using bundled libnitrokey")
+  add_subdirectory (libnitrokey)
+  target_link_libraries(nitrokey-app nitrokey)
+endif()
 
 
 # Packaging
