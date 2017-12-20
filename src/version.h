@@ -8,7 +8,7 @@
 #endif
 
 #ifndef GUI_VERSION
-#define GUI_VERSION "1.2-beta.3"
+#define GUI_VERSION "1.2"
 #endif
 
 #ifndef GIT_VERSION
