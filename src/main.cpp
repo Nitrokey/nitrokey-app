@@ -45,8 +45,6 @@ void configureTranslator(const QApplication &a, const QCommandLineParser &parser
 void configureRandomGenerator();
 
 int main(int argc, char *argv[]) {
-  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
   qRegisterMetaType<QMap<QString, QVariant>>();
   issue_43_workaround();
 
