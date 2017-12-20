@@ -33,6 +33,7 @@
 #include "GUI/Authentication.h"
 #include "stick20responsedialog.h"
 #include "stick20debugdialog.h"
+#include <atomic>
 
 
 namespace Ui {
