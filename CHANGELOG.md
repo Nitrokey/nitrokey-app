@@ -1,5 +1,63 @@
 # Change Log
 
+## [v1.2](https://github.com/Nitrokey/nitrokey-app/tree/v1.2) (2017-12-20)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.2-beta.4...v1.2)
+
+**Closed issues:**
+
+- Wrong disconnection message on `real` disconnection [\#258](https://github.com/Nitrokey/nitrokey-app/issues/258)
+- macOS 10.12.5 - wrong information in the About Box - encrypted volume [\#248](https://github.com/Nitrokey/nitrokey-app/issues/248)
+- Setting TOTP secret with Paypal is not working [\#239](https://github.com/Nitrokey/nitrokey-app/issues/239)
+
+## [v1.2-beta.4](https://github.com/Nitrokey/nitrokey-app/tree/v1.2-beta.4) (2017-12-01)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.2-beta.3...v1.2-beta.4)
+
+**Fixed bugs:**
+
+- OTP generation always asks for User PIN [\#250](https://github.com/Nitrokey/nitrokey-app/issues/250)
+
+**Closed issues:**
+
+- Application icon looks poor [\#297](https://github.com/Nitrokey/nitrokey-app/issues/297)
+- Warning for MacOS and Storage v0.48 [\#287](https://github.com/Nitrokey/nitrokey-app/issues/287)
+- OTP with Tutanota Mail \(codec expects padded input string\) [\#280](https://github.com/Nitrokey/nitrokey-app/issues/280)
+- nitrokey-app doesn't compile with latest libnitrokey [\#279](https://github.com/Nitrokey/nitrokey-app/issues/279)
+- About-Box confusing with NK Pro [\#272](https://github.com/Nitrokey/nitrokey-app/issues/272)
+- Crash on invalid base32 OTP secret [\#240](https://github.com/Nitrokey/nitrokey-app/issues/240)
+
+## [v1.2-beta.3](https://github.com/Nitrokey/nitrokey-app/tree/v1.2-beta.3) (2017-10-17)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.2-beta.2...v1.2-beta.3)
+
+**Closed issues:**
+
+- build: udev rules and bash completion is installed in /usr/usr/... [\#275](https://github.com/Nitrokey/nitrokey-app/issues/275)
+- Set proper license for RPM package [\#268](https://github.com/Nitrokey/nitrokey-app/issues/268)
+- Configuration of Passwordsafe - wrong language shown [\#265](https://github.com/Nitrokey/nitrokey-app/issues/265)
+
+## [v1.2-beta.2](https://github.com/Nitrokey/nitrokey-app/tree/v1.2-beta.2) (2017-09-20)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.2-beta.1...v1.2-beta.2)
+
+**Fixed bugs:**
+
+- macOS build artifacts are damaged [\#246](https://github.com/Nitrokey/nitrokey-app/issues/246)
+
+**Closed issues:**
+
+- \[osx\] "The app has been modified or damaged" [\#260](https://github.com/Nitrokey/nitrokey-app/issues/260)
+- Update installation instructions for Fedora [\#192](https://github.com/Nitrokey/nitrokey-app/issues/192)
+- Some functions not working reliably on openSUSE Tumbleweed [\#181](https://github.com/Nitrokey/nitrokey-app/issues/181)
+
+## [v1.2-beta.1](https://github.com/Nitrokey/nitrokey-app/tree/v1.2-beta.1) (2017-06-01)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.1...v1.2-beta.1)
+
+**Implemented enhancements:**
+
+- Make the Nitrokey app more secure \(sig binary, provide checksums+GPG\) [\#110](https://github.com/Nitrokey/nitrokey-app/issues/110)
+
+**Closed issues:**
+
+- Ask user for AES key generation if there is none [\#238](https://github.com/Nitrokey/nitrokey-app/issues/238)
+
 ## [v1.1](https://github.com/Nitrokey/nitrokey-app/tree/v1.1) (2017-05-15)
 [Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.0...v1.1)
 
