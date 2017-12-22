@@ -29,7 +29,7 @@
 #endif
 
 #ifndef GUI_VERSION
-#define GUI_VERSION "1.2.1"
+#define GUI_VERSION "1.3-alpha"
 #endif
 
 #ifndef GIT_VERSION
