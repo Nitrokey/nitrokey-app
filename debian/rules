@@ -27,7 +27,6 @@ binary: nitrokey-app
 	dh_installdirs
 
 	install -m755 nitrokey-app debian/nitrokey-app/usr/bin/nitrokey-app
-	install -m755 nitrokey-app.debug debian/nitrokey-app/usr/bin/nitrokey-app.debug
 
 	cp -r data/icons/ubuntu-mono-dark/* debian/nitrokey-app/usr/share/icons/ubuntu-mono-dark/
 	cp -r data/icons/ubuntu-mono-dark/* debian/nitrokey-app/usr/share/icons/breeze-dark/
