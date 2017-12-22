@@ -251,9 +251,10 @@ void Worker::fetch_device_data() {
       devdata.storage.volume_active.plain = st.VolumeActiceFlag_st.unencrypted;
       devdata.storage.volume_active.encrypted = st.VolumeActiceFlag_st.encrypted;
       devdata.storage.volume_active.hidden = st.VolumeActiceFlag_st.hidden;
-      devdata.storage.volume_active.plain_RW = st.ReadWriteFlagUncryptedVolume_u8;
-      devdata.storage.volume_active.encrypted_RW = st.ReadWriteFlagCryptedVolume_u8;
-      devdata.storage.volume_active.hidden_RW = st.ReadWriteFlagHiddenVolume_u8;
+      devdata.storage.volume_active.plain_RW = !st.ReadWriteFlagUncryptedVolume_u8;  //FIXME correct variable naming in lib
+      devdata.storage.volume_active.encrypted_RW = !st.ReadWriteFlagCryptedVolume_u8;
+      //using st.ReadWriteFlagCryptedVolume_u8, since st.ReadWriteFlagHiddenVolume_u8 always returns 0
+      devdata.storage.volume_active.hidden_RW = !st.ReadWriteFlagCryptedVolume_u8;
       devdata.storage.keys_initiated = !st.StickKeysNotInitiated;
       devdata.storage.sdcard.is_new =  st.NewSDCardFound_st.NewCard; // st.NewSDCardFound_u8;
       devdata.storage.sdcard.filled_with_random = st.SDFillWithRandomChars_u8;
@@ -328,15 +329,25 @@ void AboutDialog::update_device_slots(bool connected) {
     ui->newsd_label->setVisible(worker.devdata.storage.sdcard.is_new);
     ui->not_erased_sd_label->setVisible(!worker.devdata.storage.sdcard.filled_with_random);
 
-    auto read_write_active = worker.devdata.storage.volume_active.plain_RW == 0; //FIXME correct variable naming in lib
+    auto read_write_active = worker.devdata.storage.volume_active.plain_RW;
     ui->unencrypted_volume_label->setText(read_write_active ? tr("READ/WRITE") : tr("READ ONLY"));
 
     if (worker.devdata.storage.volume_active.hidden) {
-      ui->hidden_volume_label->setText(tr("Active"));
+      ui->encrypted_volume_label->setText(
+          tr("Active") + " " + tr("(hidden)"));
+      ui->hidden_volume_label->setText(
+          worker.devdata.storage.volume_active.hidden_RW ?
+          tr("READ/WRITE") : tr("READ ONLY"));
     } else {
       ui->hidden_volume_label->setText(tr("Not active"));
-      ui->encrypted_volume_label->setText(
-          worker.devdata.storage.volume_active.encrypted ? tr("Active") : tr("Not active"));
+      if(!worker.devdata.storage.volume_active.encrypted){
+        ui->encrypted_volume_label->setText(tr("Not active"));
+      }
+      else {
+        ui->encrypted_volume_label->setText(
+          worker.devdata.storage.volume_active.encrypted_RW ?
+          tr("READ/WRITE") : tr("READ ONLY"));
+      }
     }
 
     ui->sd_id_label->setText(
