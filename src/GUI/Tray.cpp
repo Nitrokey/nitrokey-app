@@ -297,6 +297,17 @@ void Tray::initActionsForStick20() {
   connect(Stick20ActionSetReadWriteUncryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20SetReadWriteUncryptedVolume()));
 
+
+  Stick20ActionSetReadonlyEncryptedVolume =
+      new QAction(tr("&Set encrypted volume read-only"), main_window);
+  connect(Stick20ActionSetReadonlyEncryptedVolume, SIGNAL(triggered()), storageActions,
+          SLOT(startStick20SetReadOnlyEncryptedVolume()));
+
+  Stick20ActionSetReadWriteEncryptedVolume =
+      new QAction(tr("&Set encrypted volume read-write"), main_window);
+  connect(Stick20ActionSetReadWriteEncryptedVolume, SIGNAL(triggered()), storageActions,
+          SLOT(startStick20SetReadWriteEncryptedVolume()));
+
 //  Stick20ActionDebugAction = new QAction(tr("&Debug"), main_window);
 //  connect(Stick20ActionDebugAction, SIGNAL(triggered()), storageActions, SLOT(startStick20DebugAction()));
 
@@ -563,6 +574,13 @@ void Tray::generateMenuForStorageDevice() {
     else
       // Set RW active
       trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);
+
+    auto read_write_active_encrypted = status.ReadWriteFlagCryptedVolume_u8 == 0;
+    //TODO add only one depending on current read-write status of encrypted volume
+    trayMenuSubConfigure->addAction(
+        read_write_active_encrypted ?
+        Stick20ActionSetReadonlyEncryptedVolume : Stick20ActionSetReadWriteEncryptedVolume
+    );
 
 //    if (FALSE == SdCardNotErased)
     if (status.SDFillWithRandomChars_u8)
