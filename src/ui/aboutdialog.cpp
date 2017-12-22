@@ -241,6 +241,7 @@ void Worker::fetch_device_data() {
   }
 
   try{
+    devdata.testFirmwareVersion = 0;
     devdata.majorFirmwareVersion = libada::i()->getMajorFirmwareVersion();
     devdata.minorFirmwareVersion = libada::i()->getMinorFirmwareVersion();
 
@@ -248,6 +249,8 @@ void Worker::fetch_device_data() {
     if (devdata.storage.active ) {
       devdata.storage.sdcard.size_GB = libada::i()->getStorageSDCardSizeGB();
       auto st = nm::instance()->get_status_storage(); //FIXME use libada?
+      devdata.testFirmwareVersion = st.versionInfo.build_iteration;
+      devdata.minorFirmwareVersion = st.versionInfo.minor;
       devdata.storage.volume_active.plain = st.VolumeActiceFlag_st.unencrypted;
       devdata.storage.volume_active.encrypted = st.VolumeActiceFlag_st.encrypted;
       devdata.storage.volume_active.hidden = st.VolumeActiceFlag_st.hidden;
@@ -359,7 +362,10 @@ void AboutDialog::update_device_slots(bool connected) {
   }
   ui->firmwareLabel->setText(QString::number(worker.devdata.majorFirmwareVersion)
                                  .append(".")
-                                 .append(QString::number(worker.devdata.minorFirmwareVersion)));
+                                 .append(QString::number(worker.devdata.minorFirmwareVersion))
+                             .append( worker.devdata.testFirmwareVersion != 0 ?
+                                      QString::number(worker.devdata.testFirmwareVersion) : "")
+  );
 
   ui->serialEdit->setText(QString::fromStdString(worker.devdata.cardSerial).trimmed());
 
