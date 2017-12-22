@@ -1,0 +1,10 @@
+*.sw*
+*.log
+*.o
+unittest/build/
+*.pyc
+core
+.cache/
+.idea/
+CMakeFiles/
+/.vs
