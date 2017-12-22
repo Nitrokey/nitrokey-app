@@ -12,8 +12,9 @@ clean:
 	dh_clean -A
 
 build:
-	cd libnitrokey/build && cmake .. && ${MAKE}
-	qmake -qt=qt5
+	#cd libnitrokey/build && cmake .. && ${MAKE}
+	#qmake -qt=qt5
+	cmake .
 	${MAKE}
 	touch build
 
@@ -63,4 +64,4 @@ binary-indep: binary
 build-arch: build
 build-indep: build
 
-.PHONY: clean binary
+.PHONY: clean binary build
