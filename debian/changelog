@@ -1,3 +1,9 @@
+nitrokey-app (1.2releaseubuntu2) xenial; urgency=medium
+
+  * Release of v1.2
+
+ -- Szczepan Zalega <szczepan@nitrokey.com>  Fri, 22 Dec 2017 17:38:56 +0100
+
 nitrokey-app (1.1releaseubuntu1) xenial; urgency=medium
 
   * Release of v1.1
