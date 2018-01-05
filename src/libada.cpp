@@ -114,8 +114,6 @@ void libada::on_FactoryReset(){
   status_PWS.clear();
   cache_HOTP_name.clear();
   cache_TOTP_name.clear();
-  minor_firmware_version_cached = invalid_value;
-  secret320_supported_cached = invalid_value;
 }
 
 
@@ -326,6 +324,7 @@ void libada::on_DeviceDisconnect() {
   status_PWS.clear();
   cardSerial_cached.clear();
   minor_firmware_version_cached = invalid_value;
+  secret320_supported_cached = invalid_value;
 }
 
 
