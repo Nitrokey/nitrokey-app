@@ -110,10 +110,14 @@ std::string libada::getCardSerial() {
 #include "hotpslot.h"
 
 void libada::on_FactoryReset(){
+  clearUserDataCache();
+}
+
+void libada::clearUserDataCache() {
+  cache_TOTP_name.clear();
+  cache_HOTP_name.clear();
   cache_PWS_name.clear();
   status_PWS.clear();
-  cache_HOTP_name.clear();
-  cache_TOTP_name.clear();
 }
 
 
@@ -264,6 +268,8 @@ bool libada::is_nkpro_07_rtm1() {
 }
 
 bool libada::is_secret320_supported() {
+  //reused atomic_int for this tri-bool
+  //TODO rewrite with enum and templated atomic<> for better clarity
   constexpr auto true_value = 1;
   constexpr auto false_value = 0;
   if (secret320_supported_cached == invalid_value){
@@ -318,10 +324,7 @@ bool libada::set_current_time() {
 
 void libada::on_DeviceDisconnect() {
   //TODO imp perf compare serial numbers to not clear cache if it is the same device
-  cache_TOTP_name.clear();
-  cache_HOTP_name.clear();
-  cache_PWS_name.clear();
-  status_PWS.clear();
+  clearUserDataCache();
   cardSerial_cached.clear();
   minor_firmware_version_cached = invalid_value;
   secret320_supported_cached = invalid_value;
