@@ -1,4 +1,5 @@
 Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app) [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FNitrokey%2Fnitrokey-app.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FNitrokey%2Fnitrokey-app?ref=badge_shield)
 ============
 Nitrokey App runs under Windows, Linux and Mac OS. Lately developed under Ubuntu 16.10 with Qt5.6.
 
@@ -209,3 +210,7 @@ The report protocol is described [here](https://github.com/Nitrokey/nitrokey-pro
 The HID reports are set to 64 bytes. The "output report" is what you get from the device. When you send a report (command), the first byte sets the command type, then you have 59 bytes for your data, and the last 4 bytes are the CRC32 of the whole report.
 
 On the GUI side, please check documentation of [libnitrokey](https://github.com/Nitrokey/libnitrokey) project.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FNitrokey%2Fnitrokey-app.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FNitrokey%2Fnitrokey-app?ref=badge_large)
