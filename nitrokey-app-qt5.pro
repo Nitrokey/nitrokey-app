@@ -17,6 +17,7 @@ include(libnitrokey/libnitrokey.pro)
 TARGET = nitrokey-app
 TEMPLATE = app
 
+VERSION = 1.2.1
 
 
 ROOTDIR=$$PWD
