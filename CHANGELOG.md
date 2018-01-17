@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.2.1](https://github.com/Nitrokey/nitrokey-app/tree/v1.2.1) (2018-01-17)
+[Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.2...v1.2.1)
+
+**Fixed bugs:**
+
+- v.1.2-beta.4 not cooperating with VM/Virtualbox \(Windows'es 7/10 do not detect the device\) [\#300](https://github.com/Nitrokey/nitrokey-app/issues/300)
+
+**Closed issues:**
+
+- Windows 10 - device is disconnecting after 30-60 seconds [\#252](https://github.com/Nitrokey/nitrokey-app/issues/252)
+
 ## [v1.2](https://github.com/Nitrokey/nitrokey-app/tree/v1.2) (2017-12-20)
 [Full Changelog](https://github.com/Nitrokey/nitrokey-app/compare/v1.2-beta.4...v1.2)
 
