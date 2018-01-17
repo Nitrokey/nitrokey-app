@@ -18,6 +18,13 @@ TARGET = nitrokey-app
 TEMPLATE = app
 
 VERSION = 1.2.1
+QMAKE_TARGET_COMPANY = Nitrokey
+QMAKE_TARGET_PRODUCT = Nitrokey App
+QMAKE_TARGET_DESCRIPTION =   The Nitrokey App is required for Nitrokey Pro and Nitrokey Storage. \
+			It offers Google Authenticator compatible One-Time-Passwords and \
+			and  tamper-proof password storage.
+
+QMAKE_TARGET_COPYRIGHT = Copyright (c) 2012-2018 Nitrokey UG
 
 
 ROOTDIR=$$PWD
