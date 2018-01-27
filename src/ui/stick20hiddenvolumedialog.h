@@ -77,7 +77,7 @@ private:
   double current_max = 100;
   double current_step = 1;
 
-  std::atomic_bool cancel_BlockSpin_event_propagation {false};
+  std::atomic<bool> cancel_BlockSpin_event_propagation {false};
 
 };
 

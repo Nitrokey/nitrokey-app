@@ -33,6 +33,7 @@
 #include "GUI/Authentication.h"
 #include "stick20responsedialog.h"
 #include "stick20debugdialog.h"
+#include <atomic>
 
 
 namespace Ui {
@@ -182,7 +183,7 @@ public:
   unsigned int get_supported_secret_length_base32() const;
   unsigned int get_supported_secret_length_hex() const;
 
-  std::atomic_bool long_operation_in_progress {false};
+  std::atomic<bool> long_operation_in_progress {false};
   std::shared_ptr<Stick20ResponseDialog> progress_window;
 
   void PWS_set_controls_enabled(bool enabled) const;
