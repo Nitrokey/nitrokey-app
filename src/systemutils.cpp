@@ -24,7 +24,6 @@
 #include <cctype>
 #include <fstream>
 #include <iostream>
-#include <mntent.h>
 #include <vector>
 using namespace std;
 
@@ -72,22 +71,7 @@ string getEncryptedDevice() {
   return string("/dev/") + nitrodevices.back();
 }
 
-string getMntPoint(string deviceName) {
-  // return mount point of given device
-  string res;
-  FILE *src = setmntent("/etc/mtab", "r");
-  struct mntent mnt;
-  char buf[4096];
-  while (getmntent_r(src, &mnt, buf, sizeof(buf))) {
-    if (mnt.mnt_dir == NULL)
-      continue;
-    string device(mnt.mnt_fsname);
-    if (device.find(deviceName) != string::npos) {
-      res = string(mnt.mnt_dir);
-      break;
-    }
-  }
-  endmntent(src);
-  return res;
+string getMntPoint(string) {
+  return string();
 }
 }

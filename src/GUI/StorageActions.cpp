@@ -43,6 +43,7 @@
 
 
 void unmountEncryptedVolumes() {
+    return;
 #if defined(Q_OS_LINUX)
   std::string endev = systemutils::getEncryptedDevice();
   if (endev.size() < 1)
