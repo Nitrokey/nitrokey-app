@@ -266,7 +266,7 @@ SET(PACKAGE_MAINTAINER "Szczepan Zalega <szczepan@nitrokey.com>" )
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER ${PACKAGE_MAINTAINER} )
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5, libqt5gui5, libqt5core5a, libhidapi-libusb0")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5core5a, libqt5dbus5, libqt5gui5, libqt5widgets5, libqt5xml5, libhidapi-libusb0")
 SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/debian/postinst")
 
 
