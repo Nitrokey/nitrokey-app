@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2018 Nitrokey UG
+ * Copyright (c) 2016-2018 Nitrokey UG
  *
  * This file is part of Nitrokey App.
  *
