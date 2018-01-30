@@ -154,21 +154,7 @@ IF(NOT WIN32)
   find_package(PkgConfig)
 
   # Install Nitrokey udev rules
-  set(PKG_GET_UDEV_DIR ${PKG_CONFIG_EXECUTABLE} --variable=udevdir udev)
-  execute_process(COMMAND ${PKG_GET_UDEV_DIR} RESULT_VARIABLE ERR OUTPUT_VARIABLE UDEV_MAIN_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-  IF(${ERR})
-      set(UDEV_MAIN_DIR "lib/udev/rules.d")
-  ELSE()
-      set(UDEV_MAIN_DIR "${UDEV_MAIN_DIR}/rules.d")
-  ENDIF()
-  string(REGEX REPLACE "^/" "" UDEV_MAIN_DIR "${UDEV_MAIN_DIR}")
-  string(REGEX REPLACE "^usr/" "" UDEV_MAIN_DIR "${UDEV_MAIN_DIR}") # usual prefix is usr/local
-  message(STATUS "Setting udev rules dir to ${UDEV_MAIN_DIR}")
-
-  install(FILES
-   ${CMAKE_SOURCE_DIR}/data/41-nitrokey.rules
-    DESTINATION ${UDEV_MAIN_DIR}
-  )
+  # Removed - should be provided by libnitrokey
 
   # Install autocompletion scripts
   set(PKG_GET_BASH_COMPLETION ${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion)
