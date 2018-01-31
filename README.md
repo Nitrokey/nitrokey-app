@@ -1,10 +1,19 @@
 Nitrokey App [![Build Status](https://travis-ci.org/Nitrokey/nitrokey-app.png?branch=master)](https://travis-ci.org/Nitrokey/nitrokey-app) [![Coverity Scan Build](https://scan.coverity.com/projects/4744/badge.svg)](https://scan.coverity.com/projects/4744)
 ============
-Nitrokey App runs under Windows, Linux and Mac OS. Lately developed under Ubuntu 16.10 with Qt5.6.
+Nitrokey App is a cross-platform (runs under Windows, Linux and Mac OS) application created to manage [Nitrokey devices](https://www.nitrokey.com/). Lately developed under Ubuntu 17.10 with Qt5.9. 
+Underneath it uses [libnitrokey](https://github.com/Nitrokey/libnitrokey) to communicate with the supported devices. 
+Both Nitrokey App and libnitrokey are available under GPLv3 license.
 
+##### Compatibility
 The implementation is compatible to the Google Authenticator application which can be used for testing purposes. See [google-authenticator](http://google-authenticator.googlecode.com/git/libpam/totp.html)
 
-Using the application under Linux requires configuration of device privileges in udev (due to USB communication). The configuration is installed automatically with application (either with package or after `make install`). Without it application cannot communicate unless run with root privileges.
+##### Using under Linux 
+Using the application under Linux requires configuration of device privileges in udev (due to USB communication). 
+The configuration is installed automatically with the libnitrokey library (either with package or after `make install`). Without it application cannot communicate unless run with root privileges.
+
+Known issue: tray icon under Gnome 3.26
+----------------------------------------
+Gnome 3.26 (and later) removed support for tray dock and tray icon. For more details please see: https://github.com/Nitrokey/nitrokey-app/issues/274
 
 Known issue: tray icon under Debian Jessie
 ----------------
@@ -20,14 +29,19 @@ Compilation
 
 Compiling on Ubuntu Linux
 -------------------------
-Prerequisites for building on Ubuntu 16.10:
-- libusb-1.0.0-dev # libusb library
+Prerequisites for building on Ubuntu 17.10:
+- build-essential # for building applications
 - cmake # for compiling libnitrokey
-- qt5-default # QT5.6 library
+- qt5-default # QT5 library
+- qttools5-dev # QT5 library tools - generating translations
+- pkg-config # system libraries detection
+- libnitrokey v3.2 # compiled only, if not already installed in the OS
+	- libusb-1.0-0-dev # library to communicate with USB devices
+	- libhidapi-dev # to communicate using HID layer
 
-
+Whole command 
 ```
-sudo apt-get install libusb-1.0.0-dev cmake qt5-default
+sudo apt-get install libusb-1.0.0-dev cmake qt5-default qttools5-dev pkg-config libhidapi-dev build-essential
 ```
 
 #### Getting the Nitrokey Sources
@@ -55,7 +69,7 @@ Use QT Creator (IDE) for compilation or perform the following steps:
       `$HOME/Qt/5.5/gcc_64/bin/qmake -spec  $HOME/Qt/5.5/gcc_64/mkspecs/linux-g++-64 -o Makefile $HOME/git/nitrokey-app/nitrokey-app-qt5.pro`
    3. `make -j4`
 
-- simple build in source directory (assuming Qt being in `$PATH`):
+- simple build in source directory (assuming Qt being in `$PATH` or installed through system's package manager):
    `qmake && make -j4`
 
 #### Using cmake:
@@ -82,7 +96,7 @@ sudo make install
 ```
 
 #### Using qmake:
-Please compile earlier libnitrokey (following instructions from its readme). QMake will search static libnitrokey library in `libnitrokey/build` directory.
+Please run following commands for in-source build:
 ```
 qmake
 make -j4
@@ -208,4 +222,4 @@ By default the OTP serial number (OTP Token) is OpenPGP Card's serial number. It
 The report protocol is described [here](https://github.com/Nitrokey/nitrokey-pro-firmware/blob/master/src/inc/report_protocol.h) for Pro and [here](https://github.com/Nitrokey/nitrokey-storage-firmware/blob/master/src/OTP/report_protocol.h) for Storage.
 The HID reports are set to 64 bytes. The "output report" is what you get from the device. When you send a report (command), the first byte sets the command type, then you have 59 bytes for your data, and the last 4 bytes are the CRC32 of the whole report.
 
-On the GUI side, please check documentation of [libnitrokey](https://github.com/Nitrokey/libnitrokey) project.
+On the client side, please check documentation of [libnitrokey](https://github.com/Nitrokey/libnitrokey) project.
