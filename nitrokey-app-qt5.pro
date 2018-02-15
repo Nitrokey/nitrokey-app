@@ -20,7 +20,7 @@ TEMPLATE = app
 VERSION = 1.2.1
 QMAKE_TARGET_COMPANY = Nitrokey
 QMAKE_TARGET_PRODUCT = Nitrokey App
-QMAKE_TARGET_DESCRIPTION = Nitrokey Devices Manager
+QMAKE_TARGET_DESCRIPTION = Nitrokey Device Manager
 
 QMAKE_TARGET_COPYRIGHT = Copyright (c) 2012-2018 Nitrokey UG
 
