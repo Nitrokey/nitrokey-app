@@ -37,7 +37,7 @@
         <string/>
        </property>
        <property name="placeholderText">
-        <string>Debug log</string>
+        <string>Debug Log</string>
        </property>
       </widget>
      </item>

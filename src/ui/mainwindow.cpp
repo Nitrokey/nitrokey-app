@@ -782,7 +782,7 @@ void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
 
 void MainWindow::on_writeGeneralConfigButton_clicked() {
   if (!libada::i()->isDeviceConnected()) {
-      csApplet()->warningBox(tr("Nitrokey not connected!"));
+      csApplet()->warningBox(tr("Nitrokey is not connected!"));
   }
     if(!auth_admin.authenticate()){
       csApplet()->warningBox(tr("Wrong PIN. Please try again."));
@@ -1350,10 +1350,10 @@ int MainWindow::factoryResetAction() {
     catch (CommandFailedException &e){
       if(!e.reason_wrong_password())
         throw;
-      csApplet()->messageBox("Wrong Pin. Please try again.");
+      csApplet()->messageBox(tr("Wrong Pin. Please try again."));
       continue;
     }
-    csApplet()->messageBox("Factory reset was successful.");
+    csApplet()->messageBox(tr("Factory reset was successful."));
     emit FactoryReset();
     return 1;
   }
