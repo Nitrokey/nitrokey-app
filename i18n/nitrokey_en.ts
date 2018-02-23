@@ -922,10 +922,6 @@ Select &quot;Initialize storage with random data&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Detected some communication problems with the device. Reinitializing.</source>
-        <translation type="vanished">Reinitializing connection.</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="199"/>
         <source>Device lock detected, please remove and insert the device again.
 If problem will occur again please: 
@@ -1177,13 +1173,6 @@ If problem will occur again please:
         <location filename="../src/ui/mainwindow.cpp" line="1503"/>
         <source>Warning: This Storage firmware version (v0.48) is not correctly handled on MacOS. Application may be unresponsive and unlocking encrypted volume may not work. Please update the firmware to v0.47 or use the other latest one when available.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PasswordDialog</name>
-    <message>
-        <source>Show password</source>
-        <translation type="vanished">Show PIN/password</translation>
     </message>
 </context>
 <context>

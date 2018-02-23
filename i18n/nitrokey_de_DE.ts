@@ -442,30 +442,6 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Eintrag:</translation>
     </message>
     <message>
-        <source>HOTP slot 1</source>
-        <translation type="vanished">HOTP Eintrag 1</translation>
-    </message>
-    <message>
-        <source>HOTP slot 2</source>
-        <translation type="vanished">HOTP Eintrag 2</translation>
-    </message>
-    <message>
-        <source>TOTP slot 1</source>
-        <translation type="vanished">TOTP Eintrag 1</translation>
-    </message>
-    <message>
-        <source>TOTP slot 2</source>
-        <translation type="vanished">TOTP Eintrag 2</translation>
-    </message>
-    <message>
-        <source>TOTP slot 3</source>
-        <translation type="vanished">TOTP Eintrag 3</translation>
-    </message>
-    <message>
-        <source>TOTP slot 4</source>
-        <translation type="vanished">TOTP Eintrag 4</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.ui" line="181"/>
         <location filename="../src/ui/mainwindow.ui" line="1137"/>
         <source>Erase Slot</source>
@@ -790,10 +766,6 @@ Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
         <translation>Nitrokey ist nicht verbunden!</translation>
     </message>
     <message>
-        <source>Nitrokey not connected!</source>
-        <translation type="vanished">Nitrokey ist nicht verbunden!</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="825"/>
         <location filename="../src/ui/mainwindow.cpp" line="833"/>
         <location filename="../src/ui/mainwindow.cpp" line="849"/>
@@ -942,21 +914,6 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
         <translation>Passwort-Safe [%1]</translation>
     </message>
     <message>
-        <source>WARNING!
-
-The time of your computer and Nitrokey are out of sync.
-Your computer may be configured with a wrong time or
-your Nitrokey may have been attacked. If an attacker or
-malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
-
-Reset Nitrokey&apos;s time?</source>
-        <translation type="vanished">WARNUNG!
-
-Die Zeit Ihres Computers und des Nitrokey sind nicht synchron. Ihr Computer könnte mit einer falschen Zeit konfiguriert sein oder Ihr Nitrokey wurde angegriffen. Falls ein Angreifer oder Schadsoftware auf Ihren Nitrokey zugegriffen haben könnte, sollten Sie die Geheimnissse der konfigurierten Einmalpasswörter ändern. Falls die Zeit Ihres Computers falsch ist, sollten Sie diese korrigieren und anschließend die Zeit ihres Nitrokey zurücksetzen.
-
-Zeit des Nitrokey zurücksetzen?</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="1325"/>
         <source>Counter must be a value between 0 and %1</source>
         <translation>Zähler muss ein Wert zwischen 0 und %1 sein</translation>
@@ -987,10 +944,6 @@ Zeit des Nitrokey zurücksetzen?</translation>
         <translation>Für diese Funktionalität speichert die Anwendung Ihre Benutzer-PIN im Arbeitsspeicher. Wollen Sie fortfahren?</translation>
     </message>
     <message>
-        <source>Detected some communication problems with the device. Reinitializing.</source>
-        <translation type="vanished">Es wurde ein Problem mit der Gerätekommunikation festgestellt. Reinitialisierung.</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="199"/>
         <source>Device lock detected, please remove and insert the device again.
 If problem will occur again please: 
@@ -1017,10 +970,6 @@ Falls das Problem erneut auftritt:
         <location filename="../src/ui/mainwindow.cpp" line="1189"/>
         <source>Slot successfully written.</source>
         <translation>Eintrag erfolgreich gespeichert.</translation>
-    </message>
-    <message>
-        <source>Regained connection to the device.</source>
-        <translation type="vanished">Verbindung zum Gerät wurde wiederhergestellt.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1013"/>
@@ -1061,10 +1010,6 @@ Falls das Problem erneut auftritt:
         <location filename="../src/ui/mainwindow.cpp" line="1431"/>
         <source>Closing window due to device disconnection</source>
         <translation>Schließe Fenster wegen Verbindungsproblem</translation>
-    </message>
-    <message>
-        <source>Device is detected but could not be connected. Please reinsert it.</source>
-        <translation type="vanished">Gerät wurde erkannt aber konnte nicht verbunden werden. Bitte verbinden Sie es erneut.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="1404"/>
@@ -1252,25 +1197,6 @@ Falls das Problem erneut auftritt:
     </message>
 </context>
 <context>
-    <name>PasswordDialog</name>
-    <message>
-        <source>Password dialog</source>
-        <translation type="vanished">Passwortdialog</translation>
-    </message>
-    <message>
-        <source>Enter card password:</source>
-        <translation type="vanished">Passwort eingeben:</translation>
-    </message>
-    <message>
-        <source>Show password</source>
-        <translation type="vanished">Passwort anzeigen</translation>
-    </message>
-    <message>
-        <source>Use password matrix</source>
-        <translation type="vanished">Passwortmatrix verwenden</translation>
-    </message>
-</context>
-<context>
     <name>PinDialog</name>
     <message>
         <location filename="../src/ui/pindialog.ui" line="20"/>
@@ -1394,10 +1320,6 @@ Nachricht: </translation>
         <location filename="../src/ui/mainwindow.cpp" line="57"/>
         <source>Details: </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset Nitrokey&apos;s time?</source>
-        <translation type="obsolete">Zeit des Nitrokeys zurücksetzen?</translation>
     </message>
 </context>
 <context>
@@ -1660,10 +1582,6 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
         <location filename="../src/GUI/Tray.cpp" line="87"/>
         <source>Active</source>
         <translation>aktiv</translation>
-    </message>
-    <message>
-        <source>Nitrokey not connected</source>
-        <translation type="vanished">Nitrokey ist nicht verbunden</translation>
     </message>
     <message>
         <location filename="../src/GUI/Tray.cpp" line="167"/>
@@ -2145,10 +2063,6 @@ steht für verschlüsselten Volumen zur Verfügung.</translation>
 </context>
 <context>
     <name>stick20LockFirmwareDialog</name>
-    <message>
-        <source>Lock firmware</source>
-        <translation type="vanished">Firmware sperren</translation>
-    </message>
     <message>
         <location filename="../src/ui/stick20lockfirmwaredialog.ui" line="20"/>
         <location filename="../src/ui/stick20lockfirmwaredialog.ui" line="49"/>

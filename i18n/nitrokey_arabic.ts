@@ -9,14 +9,6 @@
         <translation>حول</translation>
     </message>
     <message>
-        <source>ICON</source>
-        <translation type="vanished">أيقونة</translation>
-    </message>
-    <message>
-        <source>i</source>
-        <translation type="vanished">i</translation>
-    </message>
-    <message>
         <location filename="../src/ui/aboutdialog.ui" line="139"/>
         <source>App version:</source>
         <translation>إصدار التطبيق</translation>
@@ -30,10 +22,6 @@
         <location filename="../src/ui/aboutdialog.ui" line="225"/>
         <source>Card serial number:</source>
         <translation>الرقم التلسلي للكرت</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="obsolete">TextLabel</translation>
     </message>
     <message>
         <location filename="../src/ui/aboutdialog.ui" line="284"/>
@@ -446,30 +434,6 @@ Please retry</source>
         <translation>موضع</translation>
     </message>
     <message>
-        <source>HOTP slot 1</source>
-        <translation type="vanished">HOTP موضع 1</translation>
-    </message>
-    <message>
-        <source>HOTP slot 2</source>
-        <translation type="vanished">HOTP موضع 2</translation>
-    </message>
-    <message>
-        <source>TOTP slot 1</source>
-        <translation type="vanished">TOTP موضع 1</translation>
-    </message>
-    <message>
-        <source>TOTP slot 2</source>
-        <translation type="vanished">TOTP موضع 2</translation>
-    </message>
-    <message>
-        <source>TOTP slot 3</source>
-        <translation type="vanished">TOTP موضع 3</translation>
-    </message>
-    <message>
-        <source>TOTP slot 4</source>
-        <translation type="vanished">TOTP موضع 4</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.ui" line="181"/>
         <location filename="../src/ui/mainwindow.ui" line="1137"/>
         <source>Erase Slot</source>
@@ -817,10 +781,6 @@ Select &quot;Initialize device&quot; option from context menu.</source>
         <translation>نتروكي ليس متصلا</translation>
     </message>
     <message>
-        <source>Nitrokey not connected!</source>
-        <translation type="vanished">نتروكي ليس متصلا</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="825"/>
         <location filename="../src/ui/mainwindow.cpp" line="833"/>
         <location filename="../src/ui/mainwindow.cpp" line="849"/>
@@ -944,24 +904,6 @@ Select &quot;Initialize storage with random data&quot;</source>
         <translation>خزانة كلمات السر [%1]</translation>
     </message>
     <message>
-        <source>WARNING!
-
-The time of your computer and Nitrokey are out of sync.
-Your computer may be configured with a wrong time or
-your Nitrokey may have been attacked. If an attacker or
-malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
-
-Reset Nitrokey&apos;s time?</source>
-        <translation type="vanished">تحذير
-
-الوقت بين جهازك ونتروكي غير متزامن.
-جهاز يبدو أنه مهيأ بتوقيت خاطئ أو
-أن نتروكي تم اختراقه. إذا مخترق أو
-برمجية خبيثة أصابته فيجب إعادة تهيئة الأسرار لكلمة السر لمرة واحدة. إذا كان الوقت هلى جهازك خطأ فيجب إعادة ضبطه وإعادة ضبط الوقت على نتروكي.
-
-هل تريد إعادة تهيئة الوقت على نتروكي؟</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.ui" line="850"/>
         <source>Protect OTP by user PIN (will be requested on first use each session)</source>
         <translation>قم بحماية كلمة السر لمرة واحدة برقم سري للمستخدم (سوف يطلب منك إدخاله في كل استخدام جديد)</translation>
@@ -980,10 +922,6 @@ Reset Nitrokey&apos;s time?</source>
         <location filename="../src/ui/mainwindow.cpp" line="1390"/>
         <source>To handle this functionality application will keep your user PIN in memory. Do you want to continue?</source>
         <translation>للتعامل مع هذه الخاصية، التطبيق سوف يحفظ كلمة سر المستخدم في الذاكرة. هل تريد الاستمرار؟</translation>
-    </message>
-    <message>
-        <source>Detected some communication problems with the device. Reinitializing.</source>
-        <translation type="vanished">تم اكتشاف بعض مشكلات الاتصال بالجهاز. تتم إعادة التأسيس</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.cpp" line="199"/>
@@ -1012,10 +950,6 @@ If problem will occur again please:
         <location filename="../src/ui/mainwindow.cpp" line="1189"/>
         <source>Slot successfully written.</source>
         <translation>تمت كتابة الموضع بنجاح</translation>
-    </message>
-    <message>
-        <source>Regained connection to the device.</source>
-        <translation type="vanished">تم استعادة التوصيل مع الجهاز</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.ui" line="250"/>
@@ -1263,25 +1197,6 @@ If problem will occur again please:
     </message>
 </context>
 <context>
-    <name>PasswordDialog</name>
-    <message>
-        <source>Password dialog</source>
-        <translation type="vanished">شاشة كلمة السر</translation>
-    </message>
-    <message>
-        <source>Enter card password:</source>
-        <translation type="vanished">أدخل كلمة سر الكرت</translation>
-    </message>
-    <message>
-        <source>Show password</source>
-        <translation type="vanished">أظهر كلمة السر</translation>
-    </message>
-    <message>
-        <source>Use password matrix</source>
-        <translation type="vanished">استخدم مصفوفة كلمات السر</translation>
-    </message>
-</context>
-<context>
     <name>PinDialog</name>
     <message>
         <location filename="../src/ui/pindialog.ui" line="20"/>
@@ -1297,10 +1212,6 @@ If problem will occur again please:
         <location filename="../src/ui/pindialog.ui" line="82"/>
         <source>Show password</source>
         <translation>أظهر كلمة السر</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="vanished">TextLabel</translation>
     </message>
     <message>
         <location filename="../src/ui/pindialog.ui" line="158"/>
@@ -1416,18 +1327,6 @@ Message: </source>
         <location filename="../src/ui/stick20responsedialog.ui" line="23"/>
         <source>Progress</source>
         <translation>التقدم</translation>
-    </message>
-    <message>
-        <source>HeaderLabel</source>
-        <translation type="vanished">HeaderLabel</translation>
-    </message>
-    <message>
-        <source>LabelProgressWheel</source>
-        <translation type="vanished">LabelProgressWheel</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="obsolete">TextLabel</translation>
     </message>
 </context>
 <context>
@@ -1682,10 +1581,6 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
         <location filename="../src/GUI/Tray.cpp" line="87"/>
         <source>Active</source>
         <translation type="unfinished">نشط</translation>
-    </message>
-    <message>
-        <source>Nitrokey not connected</source>
-        <translation type="obsolete">نتروكي غير متصل</translation>
     </message>
     <message>
         <location filename="../src/GUI/Tray.cpp" line="167"/>
@@ -2167,10 +2062,6 @@ is between %1 % and %2 % of the storage size</source>
 </context>
 <context>
     <name>stick20LockFirmwareDialog</name>
-    <message>
-        <source>Lock firmware</source>
-        <translation type="vanished">أغلق الفيم وير</translation>
-    </message>
     <message>
         <location filename="../src/ui/stick20lockfirmwaredialog.ui" line="20"/>
         <location filename="../src/ui/stick20lockfirmwaredialog.ui" line="49"/>

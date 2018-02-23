@@ -9,17 +9,9 @@
         <translation>À propos</translation>
     </message>
     <message>
-        <source>ICON</source>
-        <translation type="vanished">ICON</translation>
-    </message>
-    <message>
         <location filename="../src/ui/aboutdialog.ui" line="70"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This application allows you to configure and use the Nitrokey Pro and Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cette application vous permet de configurer et utiliser vos Nitrokey Pro et Nitrokey Storage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>i</source>
-        <translation type="vanished">i</translation>
     </message>
     <message>
         <location filename="../src/ui/aboutdialog.ui" line="139"/>
@@ -238,10 +230,6 @@ Merci de réessayer</translation>
         <source>Debug Log</source>
         <translation>Journal de débogage</translation>
     </message>
-    <message>
-        <source>Debug log</source>
-        <translation type="vanished">Journal de débogage</translation>
-    </message>
 </context>
 <context>
     <name>DialogChangePassword</name>
@@ -445,30 +433,6 @@ Merci de réessayer</translation>
         <location filename="../src/ui/mainwindow.ui" line="1179"/>
         <source>Slot:</source>
         <translation>Emplacement :</translation>
-    </message>
-    <message>
-        <source>HOTP slot 1</source>
-        <translation type="vanished">Emplacement HOTP 1</translation>
-    </message>
-    <message>
-        <source>HOTP slot 2</source>
-        <translation type="vanished">Emplacement HOTP 2</translation>
-    </message>
-    <message>
-        <source>TOTP slot 1</source>
-        <translation type="vanished">Emplacement TOTP 1</translation>
-    </message>
-    <message>
-        <source>TOTP slot 2</source>
-        <translation type="vanished">Emplacement TOTP 2</translation>
-    </message>
-    <message>
-        <source>TOTP slot 3</source>
-        <translation type="vanished">Emplacement TOTP 3</translation>
-    </message>
-    <message>
-        <source>TOTP slot 4</source>
-        <translation type="vanished">Emplacement TOTP 4</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.ui" line="181"/>
@@ -827,10 +791,6 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le men
         <translation>La Nitrokey n&apos;est pas connectée !</translation>
     </message>
     <message>
-        <source>Nitrokey not connected!</source>
-        <translation type="vanished">Nitrokey non connectée !</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="825"/>
         <location filename="../src/ui/mainwindow.cpp" line="833"/>
         <location filename="../src/ui/mainwindow.cpp" line="849"/>
@@ -954,24 +914,6 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
         <translation>Espace sécurisé des mots de passe [%1]</translation>
     </message>
     <message>
-        <source>WARNING!
-
-The time of your computer and Nitrokey are out of sync.
-Your computer may be configured with a wrong time or
-your Nitrokey may have been attacked. If an attacker or
-malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
-
-Reset Nitrokey&apos;s time?</source>
-        <translation type="vanished">ATTENTION !
-
-Les heures de votre ordinateur et de votre Nitrokey ne sont plus synchronisées.
-Votre ordinateur est peut-être configuré avec une mauvaise heure ou
-votre Nitrokey peut avoir été attaquée. Si un attaquant ou
-un malware a été dans la possibilité d&apos;utiliser votre Nitrokey, vous devriez réinitialiser les secrets de vos mots de passe temporaires déjà configurés. Si c&apos;est l&apos;heure de votre ordinateur qui est fausse, merci de la configurer correctement puis réinitialisez l&apos;heure de votre Nitrokey.
-
-Réinitialiser l&apos;heure de la Nitrokey ?</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.ui" line="850"/>
         <source>Protect OTP by user PIN (will be requested on first use each session)</source>
         <translation>Protéger OTP avec le PIN utilisateur (qui sera demandé lors de la première utilisation de chaque session)</translation>
@@ -992,10 +934,6 @@ Réinitialiser l&apos;heure de la Nitrokey ?</translation>
         <translation>Pour manier cette fonctionnalité, l&apos;application devra conserver votre PIN utilisateur en mémoire. Voulez-vous continuer ?</translation>
     </message>
     <message>
-        <source>Detected some communication problems with the device. Reinitializing.</source>
-        <translation type="vanished">Des problèmes de communication avec la clef ont été détectés. Réinitialisation.</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="669"/>
         <source>Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret.</source>
         <translation>Nitrokey Pro v0.7 ne supporte pas les secrets commençant par un byte nul. Merci de changer de secret.</translation>
@@ -1009,10 +947,6 @@ Réinitialiser l&apos;heure de la Nitrokey ?</translation>
         <location filename="../src/ui/mainwindow.cpp" line="1189"/>
         <source>Slot successfully written.</source>
         <translation>Emplacement écrit avec succès.</translation>
-    </message>
-    <message>
-        <source>Regained connection to the device.</source>
-        <translation type="vanished">Connexion établie à nouveau avec la clef.</translation>
     </message>
     <message>
         <location filename="../src/ui/mainwindow.ui" line="98"/>
@@ -1158,22 +1092,6 @@ Réinitialiser l&apos;heure de la Nitrokey ?</translation>
         <translation>L&apos;application Nitrokey est disponible sous la forme d&apos;une icône dans la zone de notification.</translation>
     </message>
     <message>
-        <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please:
-1. Close the application
-2. Reinsert the device
-3. Wait 30 seconds and start application</source>
-        <translation type="vanished">Blocage de la clef détecté, merci de la retirer et de l&apos;insérer à nouveau.
-Si le problème persiste, veuillez :
-1. fermer l&apos;application
-2 réinsérer la clef
-3 attendre 30 secondes et démarrer l&apos;application</translation>
-    </message>
-    <message>
-        <source>Device is detected but could not be connected. Please reinsert it.</source>
-        <translation type="vanished">La clef est détectée mais il est impossible de s&apos;y connecter. Veuillez la réinsérer.</translation>
-    </message>
-    <message>
         <location filename="../src/ui/mainwindow.cpp" line="751"/>
         <source>The secret string you have entered is invalid. Please reenter it.</source>
         <translation>La chaîne de caractère secrète que vous avez entrée est invalide. Merci de bien vouloir réessayer.</translation>
@@ -1272,25 +1190,6 @@ If problem will occur again please:
         <location filename="../src/ui/mainwindow.cpp" line="1503"/>
         <source>Warning: This Storage firmware version (v0.48) is not correctly handled on MacOS. Application may be unresponsive and unlocking encrypted volume may not work. Please update the firmware to v0.47 or use the other latest one when available.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PasswordDialog</name>
-    <message>
-        <source>Password dialog</source>
-        <translation type="vanished">Fenêtre de dialogue de mot de passe</translation>
-    </message>
-    <message>
-        <source>Enter card password:</source>
-        <translation type="vanished">Entrez le mot de passe de la carte :</translation>
-    </message>
-    <message>
-        <source>Show password</source>
-        <translation type="vanished">Afficher le PIN/mot de passe</translation>
-    </message>
-    <message>
-        <source>Use password matrix</source>
-        <translation type="vanished">Utiliser le clavier matriciel pour entrer les mots de passe</translation>
     </message>
 </context>
 <context>
@@ -1417,10 +1316,6 @@ Message : </translation>
         <location filename="../src/ui/mainwindow.cpp" line="57"/>
         <source>Details: </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset Nitrokey&apos;s time?</source>
-        <translation type="obsolete">Réinitialiser l&apos;heure de la Nitrokey ?</translation>
     </message>
 </context>
 <context>
@@ -1683,10 +1578,6 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
         <location filename="../src/GUI/Tray.cpp" line="87"/>
         <source>Active</source>
         <translation>Activée</translation>
-    </message>
-    <message>
-        <source>Nitrokey not connected</source>
-        <translation type="vanished">Nitrokey non connectée</translation>
     </message>
     <message>
         <location filename="../src/GUI/Tray.cpp" line="167"/>
@@ -2168,10 +2059,6 @@ est compris entre %1 % et %2 % de la taille totale du stockage</translation>
 </context>
 <context>
     <name>stick20LockFirmwareDialog</name>
-    <message>
-        <source>Lock firmware</source>
-        <translation type="vanished">Verrouiller le micrologiciel</translation>
-    </message>
     <message>
         <location filename="../src/ui/stick20lockfirmwaredialog.ui" line="20"/>
         <location filename="../src/ui/stick20lockfirmwaredialog.ui" line="49"/>
