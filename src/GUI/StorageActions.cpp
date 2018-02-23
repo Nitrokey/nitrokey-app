@@ -555,7 +555,12 @@ void StorageActions::startStick20ClearNewSdCardFound() {
 
 
 void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
-  PinDialog dialog(PinDialog::ADMIN_PIN); //TODO set to USER PIN for v0.48 and below
+  using nm = nitrokey::NitrokeyManager;
+  PinDialog::PinType type = PinDialog::ADMIN_PIN;
+  if(nm::instance()->set_unencrypted_volume_rorw_pin_type_user()){
+    type = PinDialog::USER_PIN;
+  }
+  PinDialog dialog(type);
 
   bool user_provided_pin = QDialog::Accepted == dialog.exec();
   if (!user_provided_pin) {
@@ -576,7 +581,12 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
 }
 
 void StorageActions::startStick20SetReadWriteUncryptedVolume() {
-  PinDialog dialog(PinDialog::ADMIN_PIN); //TODO set to USER PIN for v0.48 and below
+  using nm = nitrokey::NitrokeyManager;
+  PinDialog::PinType type = PinDialog::ADMIN_PIN;
+  if(nm::instance()->set_unencrypted_volume_rorw_pin_type_user()){
+    type = PinDialog::USER_PIN;
+  }
+  PinDialog dialog(type);
 
   bool user_provided_pin = QDialog::Accepted == dialog.exec();
   if (!user_provided_pin) {
