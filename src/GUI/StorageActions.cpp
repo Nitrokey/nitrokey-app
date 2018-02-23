@@ -555,7 +555,12 @@ void StorageActions::startStick20ClearNewSdCardFound() {
 
 
 void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
-  PinDialog dialog(PinDialog::USER_PIN);
+  using nm = nitrokey::NitrokeyManager;
+  PinDialog::PinType type = PinDialog::ADMIN_PIN;
+  if(nm::instance()->set_unencrypted_volume_rorw_pin_type_user()){
+    type = PinDialog::USER_PIN;
+  }
+  PinDialog dialog(type);
 
   bool user_provided_pin = QDialog::Accepted == dialog.exec();
   if (!user_provided_pin) {
@@ -576,7 +581,12 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
 }
 
 void StorageActions::startStick20SetReadWriteUncryptedVolume() {
-  PinDialog dialog(PinDialog::USER_PIN);
+  using nm = nitrokey::NitrokeyManager;
+  PinDialog::PinType type = PinDialog::ADMIN_PIN;
+  if(nm::instance()->set_unencrypted_volume_rorw_pin_type_user()){
+    type = PinDialog::USER_PIN;
+  }
+  PinDialog dialog(type);
 
   bool user_provided_pin = QDialog::Accepted == dialog.exec();
   if (!user_provided_pin) {
@@ -590,6 +600,48 @@ void StorageActions::startStick20SetReadWriteUncryptedVolume() {
   runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
     auto m = nitrokey::NitrokeyManager::instance();
     m->set_unencrypted_read_write(s.c_str()); //FIXME use secure string
+  }, [this]() {
+    emit storageStatusChanged();
+  });
+
+}
+
+void StorageActions::startStick20SetReadOnlyEncryptedVolume() {
+  PinDialog dialog(PinDialog::ADMIN_PIN);
+
+  bool user_provided_pin = QDialog::Accepted == dialog.exec();
+  if (!user_provided_pin) {
+    return;
+  }
+
+  auto operationFailureMessage = tr("Cannot set encrypted volume read-only"); //FIXME use existing translation
+  auto operationSuccessMessage = tr("Encrypted volume set read-only"); //FIXME use existing translation
+  auto s = dialog.getPassword();
+
+  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->set_encrypted_volume_read_only(s.c_str()); //FIXME use secure string
+  }, [this]() {
+    emit storageStatusChanged();
+  });
+
+}
+
+void StorageActions::startStick20SetReadWriteEncryptedVolume() {
+  PinDialog dialog(PinDialog::ADMIN_PIN);
+
+  bool user_provided_pin = QDialog::Accepted == dialog.exec();
+  if (!user_provided_pin) {
+    return;
+  }
+
+  auto operationFailureMessage = tr("Cannot set encrypted volume read-write"); //FIXME use existing translation
+  auto operationSuccessMessage = tr("Encrypted volume set read-write"); //FIXME use existing translation
+  auto s = dialog.getPassword();
+
+  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
+    auto m = nitrokey::NitrokeyManager::instance();
+    m->set_encrypted_volume_read_write(s.c_str()); //FIXME use secure string
   }, [this]() {
     emit storageStatusChanged();
   });

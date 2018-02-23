@@ -68,13 +68,14 @@ public slots:
 
   void startStick20ClearNewSdCardFound();
   void startStick20SetupHiddenVolume();
+  void startStick20SetReadOnlyEncryptedVolume();
+  void startStick20SetReadWriteEncryptedVolume();
 
 signals:
   void storageStatusChanged();
   void storageStatusUpdated();
   void longOperationStarted();
   void FactoryReset();
-
 
 
 };

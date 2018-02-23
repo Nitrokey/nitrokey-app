@@ -51,7 +51,15 @@ libada::libada() {
 libada::~libada() {}
 
 int libada::getMajorFirmwareVersion() {
-  return 0; //FIXME get real version
+  if (major_firmware_version_cached != invalid_value)
+    return major_firmware_version_cached;
+  try{
+    major_firmware_version_cached = nm::instance()->get_major_firmware_version();
+    return major_firmware_version_cached;
+  }
+  catch (DeviceCommunicationException &e){
+  }
+  return invalid_value;
 }
 
 int libada::getMinorFirmwareVersion() {
