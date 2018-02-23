@@ -256,8 +256,7 @@ void Worker::fetch_device_data() {
       devdata.storage.volume_active.hidden = st.VolumeActiceFlag_st.hidden;
       devdata.storage.volume_active.plain_RW = !st.ReadWriteFlagUncryptedVolume_u8;  //FIXME correct variable naming in lib
       devdata.storage.volume_active.encrypted_RW = !st.ReadWriteFlagCryptedVolume_u8;
-      //using st.ReadWriteFlagCryptedVolume_u8, since st.ReadWriteFlagHiddenVolume_u8 always returns 0
-      devdata.storage.volume_active.hidden_RW = !st.ReadWriteFlagCryptedVolume_u8;
+      devdata.storage.volume_active.hidden_RW = !st.ReadWriteFlagHiddenVolume_u8;
       devdata.storage.keys_initiated = !st.StickKeysNotInitiated;
       devdata.storage.sdcard.is_new =  st.NewSDCardFound_st.NewCard; // st.NewSDCardFound_u8;
       devdata.storage.sdcard.filled_with_random = st.SDFillWithRandomChars_u8;
