@@ -56,6 +56,17 @@ static const QString communication_error_message = QApplication::tr("Communicati
 static const QString invalid_secret_key_string_details = QApplication::tr("The secret string you have entered is invalid. Please reenter it.")
                            +"\n"+QApplication::tr("Details: ");
 
+const QString MainWindow::RESET_NITROKEYS_TIME = MainWindow::tr("Reset Nitrokey's time?");
+const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
+    MainWindow::tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+                         "sync. Your computer may be configured with a wrong time or "
+                         "your Nitrokey may have been attacked. If an attacker or "
+                         "malware could have used your Nitrokey you should reset the "
+                         "secrets of your configured One Time Passwords. If your "
+                         "computer's time is wrong, please configure it correctly and "
+                         "reset the time of your Nitrokey.\n\nReset Nitrokey's time?");
+
+
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -222,14 +233,7 @@ void MainWindow::initialTimeReset() {
   }
 
   if (!libada::i()->is_time_synchronized()) {
-    bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"),
-      tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-                 "sync. Your computer may be configured with a wrong time or "
-                 "your Nitrokey may have been attacked. If an attacker or "
-                 "malware could have used your Nitrokey you should reset the "
-                 "secrets of your configured One Time Passwords. If your "
-                 "computer's time is wrong, please configure it correctly and "
-                 "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
+    bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"), WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED,
       false);
     if (answer) {
       auto res = libada::i()->set_current_time();
@@ -1273,16 +1277,9 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
     //run only once before first TOTP request
     static bool time_synchronized = libada::i()->is_time_synchronized();
     if (!time_synchronized) {
-       bool user_wants_time_reset = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync")
-                                                                  + " - " + tr("Reset Nitrokey's time?"),
-                  tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
-                             "sync.\nYour computer may be configured with a wrong time "
-                             "or\nyour Nitrokey may have been attacked. If an attacker "
-                             "or\nmalware could have used your Nitrokey you should reset the "
-                             "secrets of your configured One Time Passwords. If your "
-                             "computer's time is wrong, please configure it correctly and "
-                             "reset the time of your Nitrokey.\n\nReset Nitrokey's time?"),
-                  false);
+       bool user_wants_time_reset =
+           csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + RESET_NITROKEYS_TIME,
+                                          WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED, false);
       if (user_wants_time_reset){
           if(libada::i()->set_current_time()){
             csApplet()->messageBox(tr("Time reset!"));
