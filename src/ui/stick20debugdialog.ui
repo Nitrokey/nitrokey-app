@@ -34,7 +34,7 @@
         <bool>true</bool>
        </property>
        <property name="plainText">
-        <string/>
+        <string notr="true"/>
        </property>
        <property name="placeholderText">
         <string>Debug Log</string>
