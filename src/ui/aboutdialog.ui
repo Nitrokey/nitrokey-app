@@ -49,8 +49,11 @@
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QLabel" name="IconLabel">
+          <property name="accessibleDescription">
+           <string>Logo</string>
+          </property>
           <property name="text">
-           <string>ICON</string>
+           <string notr="true">ICON</string>
           </property>
          </widget>
         </item>
@@ -79,7 +82,7 @@
           <item>
            <widget class="QLabel" name="info_icon">
             <property name="text">
-             <string>i</string>
+             <string notr="true">i</string>
             </property>
            </widget>
           </item>
@@ -149,7 +152,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">TextLabel</string>
             </property>
            </widget>
           </item>
@@ -192,7 +195,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">TextLabel</string>
             </property>
            </widget>
           </item>
@@ -234,8 +237,11 @@
             <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
+            <property name="accessibleName">
+             <string/>
+            </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">TextLabel</string>
             </property>
            </widget>
           </item>

@@ -98,7 +98,6 @@ FORMS +=    $${UIDIR}/mainwindow.ui \
             $${UIDIR}/stick20hiddenvolumedialog.ui \
             $${UIDIR}/stick20debugdialog.ui \
             $${UIDIR}/stick20changepassworddialog.ui \
-            $${UIDIR}/passworddialog.ui \
             $${UIDIR}/pindialog.ui \
             $${UIDIR}/aboutdialog.ui \
             $${UIDIR}/securitydialog.ui \

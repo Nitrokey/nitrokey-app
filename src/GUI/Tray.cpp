@@ -164,7 +164,7 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
     if (!init){
       // Setup the new menu
       if (!libada::i()->isDeviceConnected()) {
-        trayMenu->addAction(tr("Nitrokey not connected"));
+        trayMenu->addAction(tr("Nitrokey is not connected!"));
       } else {
         if (!libada::i()->isStorageDeviceConnected()) // Nitrokey Pro connected
           generateMenuForProDevice();

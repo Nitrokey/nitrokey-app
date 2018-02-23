@@ -163,39 +163,14 @@
                 <string>Select OTP slot number</string>
                </property>
                <property name="currentText">
-                <string notr="true">HOTP slot 1</string>
+                <string notr="true">HOTP slot</string>
                </property>
                <property name="currentIndex">
                 <number>0</number>
                </property>
                <item>
                 <property name="text">
-                 <string notr="true">HOTP slot 1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string notr="true">HOTP slot 2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string notr="true">TOTP slot 1</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string notr="true">TOTP slot 2</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string notr="true">TOTP slot 3</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string notr="true">TOTP slot 4</string>
+                 <string notr="true">HOTP slot</string>
                 </property>
                </item>
               </widget>
@@ -1174,6 +1149,9 @@
               <widget class="QComboBox" name="PWS_ComboBoxSelectSlot">
                <property name="accessibleName">
                 <string>Password Safe slot number</string>
+               </property>
+               <property name="currentText">
+                <string notr="true">Static password 0</string>
                </property>
                <property name="currentIndex">
                 <number>0</number>

@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Lock firmware</string>
+   <string>Lock Firmware</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">

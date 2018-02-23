@@ -34,10 +34,10 @@
         <bool>true</bool>
        </property>
        <property name="plainText">
-        <string/>
+        <string notr="true"/>
        </property>
        <property name="placeholderText">
-        <string>Debug log</string>
+        <string>Debug Log</string>
        </property>
       </widget>
      </item>
