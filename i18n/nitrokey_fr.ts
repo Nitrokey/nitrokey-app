@@ -29,6 +29,11 @@
         <translation>Numéro de série de la carte :</translation>
     </message>
     <message>
+        <location filename="../src/ui/aboutdialog.ui" line="679"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright %1 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright %1 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Ce logiciel est distribué sous &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;licence GNU General Public v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
         <location filename="../src/ui/aboutdialog.ui" line="95"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Guides et aide en ligne (anglais exclusivement)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
@@ -101,11 +106,6 @@ Sélectionner les clefs d&apos;initialisation.</translation>
         <translation>Utilisateur :</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.ui" line="679"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Ce logiciel est distribué sous &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;licence GNU General Public v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="../src/ui/aboutdialog.ui" line="726"/>
         <source>Detailed Status</source>
         <translation>Statut détaillé</translation>
@@ -116,7 +116,7 @@ Sélectionner les clefs d&apos;initialisation.</translation>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="359"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="361"/>
         <source>
 SD card is not accessible
 
@@ -127,7 +127,7 @@ La carte SD n&apos;est pas accessible
 </translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="374"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="376"/>
         <source>
 Smartcard is not accessible
 
@@ -138,44 +138,44 @@ La smartcard n&apos;est pas accessible
 </translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="378"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="380"/>
         <source>No connection
 Please retry</source>
         <translation>Aucune connexion détectée
 Merci de réessayer</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="335"/>
-        <location filename="../src/ui/aboutdialog.cpp" line="342"/>
-        <location filename="../src/ui/aboutdialog.cpp" line="351"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="337"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="344"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="353"/>
         <source>READ/WRITE</source>
         <translation>LECTURE/ÉCRITURE</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="335"/>
-        <location filename="../src/ui/aboutdialog.cpp" line="342"/>
-        <location filename="../src/ui/aboutdialog.cpp" line="351"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="337"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="344"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="353"/>
         <source>READ ONLY</source>
         <translation>LECTURE SEULE</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="339"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="341"/>
         <source>Active</source>
         <translation>Activée</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="339"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="341"/>
         <source>(hidden)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="344"/>
         <location filename="../src/ui/aboutdialog.cpp" line="346"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="348"/>
         <source>Not active</source>
         <translation>Non activée</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="224"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="226"/>
         <source>No active Nitrokey
 
 </source>
@@ -189,7 +189,7 @@ Merci de réessayer</translation>
         <translation>Capacité de stockage :</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="317"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="319"/>
         <source>%1 GB</source>
         <translation>%1 GB</translation>
     </message>
@@ -199,17 +199,17 @@ Merci de réessayer</translation>
         <translation>Licences et composants tiers</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="299"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="301"/>
         <source>      *** Clearing data in progress ***</source>
         <translation>      *** Nettoyage des données en cours ***</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="303"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="305"/>
         <source>      *** Communication error ***</source>
         <translation>      *** Erreur de communication ***</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="328"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="330"/>
         <source>      *** Firmware is locked ***</source>
         <translation>      *** Le micrologiciel est verrouillé ***</translation>
     </message>

@@ -70,6 +70,8 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->not_erased_sd_label->hide();
   ui->newsd_label->hide();
 
+  ui->AboutLabel_2->setText(ui->AboutLabel_2->text().arg(COPYRIGHT_YEARS));
+
   if (libada::i()->isDeviceConnected()) {
     if (libada::i()->isStorageDeviceConnected()) {
       showStick20Configuration();
