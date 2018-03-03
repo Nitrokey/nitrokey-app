@@ -560,6 +560,13 @@ void MainWindow::startStickDebug() {
   debug->raise();
 }
 
+#include <QDesktopServices>
+#include <QUrl>
+void MainWindow::startHelpAction() {
+    QString link = "https://www.nitrokey.com/start";
+    QDesktopServices::openUrl(QUrl(link));
+}
+
 void MainWindow::startAboutDialog() {
   AboutDialog dialog(this);
   dialog.exec();

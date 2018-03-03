@@ -104,6 +104,7 @@ private:
 
 public slots:
   void startAboutDialog();
+  void startHelpAction();
   void startConfiguration();
   void PWS_Clicked_EnablePWSAccess();
 

@@ -111,6 +111,7 @@ private:
     QAction *configureActionStick20;
     QAction *DebugAction;
     QAction *ActionAboutDialog;
+    QAction *ActionHelp;
 //    QAction *SecPasswordAction;
 //    QAction *Stick20SetupAction;
     QAction *Stick10ActionChangeUserPIN;
