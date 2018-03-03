@@ -362,6 +362,22 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
     return;
   }
 
+  auto successMessage = tr("Device set in update mode");
+  auto failureMessage = tr("Device could not be set in update mode.");
+
+  bool success = false;
+  // try with default password
+  // ask for password when fails
+  runAndHandleErrorsInUI(successMessage, "",
+                         [&success](){ //FIXME use secure string
+                           local_sync();
+                           auto m = nitrokey::NitrokeyManager::instance();
+                           m->enable_firmware_update("12345678");
+                           success = true;
+                         },[](){});
+
+  if(success) return;
+
   PinDialog dialog(PinDialog::FIRMWARE_PIN);
   user_wants_to_proceed = QDialog::Accepted == dialog.exec();
 
@@ -370,8 +386,6 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
   }
   auto s = dialog.getPassword();
 
-  auto successMessage = tr("Device set in update mode");
-  auto failureMessage = tr("Device could not be set in update mode.");
   runAndHandleErrorsInUI(successMessage, failureMessage,
      [s](){ //FIXME use secure string
          local_sync();
@@ -518,17 +532,21 @@ void StorageActions::runAndHandleErrorsInUI(QString successMessage, QString oper
     show_message_function(successMessage);
   }
   catch (CommandFailedException &e){
-    if (e.reason_wrong_password()){
-      csApplet()->warningBox(operationFailureMessage + " " //FIXME use existing translation
-                             + tr("Wrong password."));
-    } else {
-      csApplet()->warningBox(operationFailureMessage + " "
-                             + tr("Status code: %1").arg(e.last_command_status)); //FIXME use existing translation
+    if (!operationFailureMessage.isEmpty()){
+      if (e.reason_wrong_password()){
+        csApplet()->warningBox(operationFailureMessage + " "
+                               + tr("Wrong password."));
+      } else {
+        csApplet()->warningBox(operationFailureMessage + " "
+                               + tr("Status code: %1").arg(e.last_command_status));
+      }
     }
   }
   catch (DeviceCommunicationException &e){
-    csApplet()->warningBox(operationFailureMessage + " " +
-                           tr("Communication issue.")); //FIXME use existing translation
+    if (!operationFailureMessage.isEmpty()){
+      csApplet()->warningBox(operationFailureMessage + " " +
+                           tr("Communication issue."));
+    }
   }
 //  end_progress_function();
 }
