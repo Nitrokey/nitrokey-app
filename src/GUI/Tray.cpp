@@ -181,6 +181,9 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
 
     trayMenu->addSeparator();
 
+    // Help entry
+    trayMenu->addAction(ActionHelp);
+
     // About entry
     trayMenu->addAction(ActionAboutDialog);
 
@@ -217,8 +220,11 @@ void Tray::initCommonActions() {
   quitAction->setIcon(QIcon(":/images/quit.png"));
   connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-  ActionAboutDialog = new QAction(tr("&About Nitrokey"), main_window);
+  ActionHelp = new QAction(tr("&Help"), main_window);
+  ActionHelp->setIcon(QIcon(":/images/about.png"));
+  connect(ActionHelp, SIGNAL(triggered()), main_window, SLOT(startHelpAction()));
 
+  ActionAboutDialog = new QAction(tr("&About Nitrokey"), main_window);
   ActionAboutDialog->setIcon(QIcon(":/images/about.png"));
   connect(ActionAboutDialog, SIGNAL(triggered()), main_window, SLOT(startAboutDialog()));
 }
