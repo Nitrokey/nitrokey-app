@@ -51,11 +51,6 @@ Select Init keys.</source>
 Initialisieren Sie die Schlüssel.</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.ui" line="679"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright 2016 durch Nitrokey UG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt; lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="../src/ui/aboutdialog.ui" line="540"/>
         <source>New SD card found</source>
         <translation>Neue SD-Karte gefunden</translation>
@@ -106,6 +101,11 @@ Initialisieren Sie die Schlüssel.</translation>
         <translation>Benutzer:</translation>
     </message>
     <message>
+        <location filename="../src/ui/aboutdialog.ui" line="679"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright %1 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright %1 durch Nitrokey UG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Diese Software ist unter der &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt; lizensiert.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
         <location filename="../src/ui/aboutdialog.ui" line="726"/>
         <source>Detailed Status</source>
         <translation>Detaillierter Status</translation>
@@ -116,7 +116,7 @@ Initialisieren Sie die Schlüssel.</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="359"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="361"/>
         <source>
 SD card is not accessible
 
@@ -127,7 +127,7 @@ Kann nicht auf SD-Karte zugreifen
 </translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="374"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="376"/>
         <source>
 Smartcard is not accessible
 
@@ -138,44 +138,44 @@ Kann nicht auf Chipkarte zugreifen
 </translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="378"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="380"/>
         <source>No connection
 Please retry</source>
         <translation>Keine Verbindung
 Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="335"/>
-        <location filename="../src/ui/aboutdialog.cpp" line="342"/>
-        <location filename="../src/ui/aboutdialog.cpp" line="351"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="337"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="344"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="353"/>
         <source>READ/WRITE</source>
         <translation>LESEN/SCHREIBEN</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="335"/>
-        <location filename="../src/ui/aboutdialog.cpp" line="342"/>
-        <location filename="../src/ui/aboutdialog.cpp" line="351"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="337"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="344"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="353"/>
         <source>READ ONLY</source>
         <translation>NUR-LESEN</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="339"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="341"/>
         <source>Active</source>
         <translation>aktiv</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="339"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="341"/>
         <source>(hidden)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="344"/>
         <location filename="../src/ui/aboutdialog.cpp" line="346"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="348"/>
         <source>Not active</source>
         <translation>inaktiv</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="224"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="226"/>
         <source>No active Nitrokey
 
 </source>
@@ -189,22 +189,22 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Speichergröße:</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="317"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="319"/>
         <source>%1 GB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="299"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="301"/>
         <source>      *** Clearing data in progress ***</source>
         <translation>      *** Daten werden entfernt... ***</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="303"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="305"/>
         <source>      *** Communication error ***</source>
         <translation>     *** Verbindungsproblem ***</translation>
     </message>
     <message>
-        <location filename="../src/ui/aboutdialog.cpp" line="328"/>
+        <location filename="../src/ui/aboutdialog.cpp" line="330"/>
         <source>      *** Firmware is locked ***</source>
         <translation>      *** Firmware ist gesperrt ***</translation>
     </message>

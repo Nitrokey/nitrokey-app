@@ -36,4 +36,6 @@
 #define GIT_VERSION ""
 #endif
 
+#define COPYRIGHT_YEARS "2012-2018"
+
 #endif //NITROKEYAPP_VERSION_H
