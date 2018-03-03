@@ -718,7 +718,7 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please: 
+If problem will occur again please:
 1. Close the application
 2. Reinsert the device
 3. Wait 30 seconds and start application</source>
@@ -1247,6 +1247,10 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     <message>
         <source>&amp;Quit</source>
         <translation>&amp;Beenden</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <source>&amp;About Nitrokey</source>

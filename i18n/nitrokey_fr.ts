@@ -883,7 +883,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please: 
+If problem will occur again please:
 1. Close the application
 2. Reinsert the device
 3. Wait 30 seconds and start application</source>
@@ -1351,6 +1351,10 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     <message>
         <source>Long operation in progress: %1%</source>
         <translation>Une longue opération est en cours : %1%</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -711,12 +711,12 @@ Select &quot;Initialize storage with random data&quot;</translation>
     </message>
     <message>
         <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please: 
+If problem will occur again please:
 1. Close the application
 2. Reinsert the device
 3. Wait 30 seconds and start application</source>
         <translation>Device lock detected, please remove and insert the device again.
-If the problem reoccurs please: 
+If the problem reoccurs please:
 1. Close the application
 2. Reinsert the device
 3. Wait 30 seconds and start application</translation>
@@ -1237,6 +1237,10 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     <message>
         <source>&amp;Quit</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation>&amp;Help</translation>
     </message>
     <message>
         <source>&amp;About Nitrokey</source>

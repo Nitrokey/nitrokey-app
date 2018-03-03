@@ -702,7 +702,7 @@ Select &quot;Initialize storage with random data&quot;</source>
     </message>
     <message>
         <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please: 
+If problem will occur again please:
 1. Close the application
 2. Reinsert the device
 3. Wait 30 seconds and start application</source>
@@ -1353,6 +1353,10 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>Long operation in progress: %1%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
