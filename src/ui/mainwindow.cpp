@@ -1472,7 +1472,7 @@ void MainWindow::on_DeviceConnected() {
           data["initiated_ask"] = !false; //FIXME select proper variable s.NewSDCardFound_u8
           data["erased"] = !s.NewSDCardFound_u8;
           data["erased_ask"] = !s.SDFillWithRandomChars_u8;
-          data["v0.48"] = s.versionInfo.major == 0 && s.versionInfo.minor == 48;
+          data["old_firmware"] = s.versionInfo.major == 0 && s.versionInfo.minor <= 49;
         }
         data["PWS_Access"] = libada::i()->isPasswordSafeUnlocked();
       }
@@ -1499,11 +1499,12 @@ void MainWindow::on_DeviceConnected() {
       }
 
 #if defined(Q_OS_MAC) || defined(Q_OS_DARWIN)
-      if(data["v0.48"].toBool()){
-        csApplet()->warningBox(tr("Warning: This Storage firmware version (v0.48) is not correctly handled on "
-                                      "MacOS. Application may be unresponsive and unlocking encrypted volume "
-                                      "may not work. Please update the firmware to v0.47 "
-                                      "or use the other latest one when available."));
+      if(data["old_firmware"].toBool()){
+        csApplet()->warningBox(tr(
+                                  "WARNING: This Storage firmware version is old. Application may be unresponsive and unlocking encrypted volume may not work. Please update the firmware to the latest version."
+                                   " "
+                                   "Guide should be available at: <br/><a href='https://www.nitrokey.com/en/doc/firmware-update-storage'>www.nitrokey.com/en/doc/firmware-update-storage</a>."
+                                  ));
       }
 #endif
       }, this);
