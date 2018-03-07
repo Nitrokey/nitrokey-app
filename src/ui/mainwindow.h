@@ -75,6 +75,7 @@ private:
   const unsigned char TOTP_SlotCount;
   DebugDialog *debug;
 
+  void keyPressEvent(QKeyEvent *keyevent) override;
 
   bool validate_raw_secret(const char *secret) const;
   void initialTimeReset();
@@ -169,6 +170,7 @@ private slots:
   void on_checkBox_toggled(bool checked);
 
   void startStickDebug();
+  void load_settings();
 
   void on_PWS_ButtonClearSlot_clicked();
   void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
@@ -184,6 +186,8 @@ private slots:
   void on_PWS_EditLoginName_textChanged(const QString &arg1);
   void on_PWS_EditPassword_textChanged(const QString &arg1);
 
+
+  void on_btn_writeSettings_clicked();
 
 public:
   void generateOTPConfig(OTPSlot *slot);

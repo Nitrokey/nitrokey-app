@@ -66,6 +66,34 @@ const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
                          "computer's time is wrong, please configure it correctly and "
                          "reset the time of your Nitrokey.\n\nReset Nitrokey's time?");
 
+void MainWindow::load_settings(){
+    QSettings settings;
+    const auto first_run_key = "main/first_run";
+    auto first_run = settings.value(first_run_key, true).toBool();
+    ui->cb_first_run_message->setChecked(first_run);
+
+    const auto lang_key = "main/language";
+    auto lang_selected = settings.value(lang_key, "-----").toString();
+
+    ui->combo_languages->clear();
+    QDir langDir(":/i18n/");
+    auto list = langDir.entryList();
+    for (auto &&translationFile : list) {
+      auto lang = translationFile.remove("nitrokey_").remove(".qm");
+      ui->combo_languages->addItem(lang, lang);
+    }
+    ui->combo_languages->addItem("current: " + lang_selected, lang_selected);
+    ui->combo_languages->setCurrentText("current: " + lang_selected);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *keyevent)
+{
+    if (keyevent->key()==Qt::Key_Escape){
+         hide();
+    } else {
+        QMainWindow::keyPressEvent(keyevent);
+    }
+}
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
@@ -158,6 +186,8 @@ MainWindow::MainWindow(QWidget *parent):
   this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
   first_run();
+
+  load_settings();
 }
 
 void MainWindow::first_run(){
@@ -171,6 +201,7 @@ void MainWindow::first_run(){
         "The Nitrokey App is available as an icon in the tray bar."
   );
   csApplet()->messageBox(msg);
+  tray.showTrayMessage(msg);
 
   //TODO insert call to First run configuration wizard here
 }
@@ -1604,4 +1635,34 @@ void MainWindow::set_debug_mode() {
 
 void MainWindow::set_debug_level(int debug_level) {
   nm::instance()->set_loglevel(debug_level);
+}
+
+void MainWindow::on_btn_writeSettings_clicked()
+{
+    QSettings settings;
+
+    // see if restart is required
+    bool restart_required = false;
+    if (settings.value("main/language").toString() != ui->combo_languages->currentData().toString()){
+        restart_required = true;
+    }
+
+    // save the settings
+    settings.setValue("main/first_run", ui->cb_first_run_message->isChecked());
+    settings.setValue("main/language", ui->combo_languages->currentData());
+
+    // inform user and quit if asked
+    if (!restart_required){
+        csApplet()->messageBox(tr("Configuration successfully written."));
+    } else {
+        auto user_wants_quit = csApplet()->yesOrNoBox(
+                tr("Configuration successfully written.") + " "+
+                tr("Please run the application again to apply new settings.") + " "+
+                tr("Would you like to quit now?"), true);
+        if (user_wants_quit)
+        {
+            QApplication::exit();
+        }
+    }
+    load_settings();
 }
