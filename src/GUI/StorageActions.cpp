@@ -85,7 +85,7 @@ void StorageActions::startStick20EnableCryptedVolume() {
       return;
   }
 
-  PinDialog dialog(PinDialog::USER_PIN, nullptr);
+  PinDialog dialog(PinType::USER_PIN, nullptr);
 
   const auto user_wants_to_proceed = QDialog::Accepted == dialog.exec();
   if (user_wants_to_proceed) {
@@ -198,7 +198,7 @@ void StorageActions::startStick20EnableHiddenVolume() {
   if (!user_wants_to_proceed)
     return;
 
-  PinDialog dialog(PinDialog::HIDDEN_VOLUME, nullptr);
+  PinDialog dialog(PinType::HIDDEN_VOLUME, nullptr);
   const auto user_gives_password = dialog.exec() == QDialog::Accepted ;
 
   if (!user_gives_password) {
@@ -378,7 +378,7 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
 
   if(success) return;
 
-  PinDialog dialog(PinDialog::FIRMWARE_PIN);
+  PinDialog dialog(PinType::FIRMWARE_PIN);
   user_wants_to_proceed = QDialog::Accepted == dialog.exec();
 
   if (!user_wants_to_proceed) {
@@ -396,7 +396,7 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
 
 
 void StorageActions::startStick20ExportFirmwareToFile() {
-  PinDialog dialog(PinDialog::ADMIN_PIN);
+  PinDialog dialog(PinType::ADMIN_PIN);
   bool user_provided_PIN = QDialog::Accepted == dialog.exec();
   if (!user_provided_PIN) {
     return;
@@ -417,7 +417,7 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
   answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
                                          "hidden volumes, and password safe! Continue?"), false);
   if (answer) {
-    PinDialog dialog(PinDialog::ADMIN_PIN);
+    PinDialog dialog(PinType::ADMIN_PIN);
     user_entered_PIN = QDialog::Accepted == dialog.exec();
     if (!user_entered_PIN) {
       return;
@@ -513,7 +513,7 @@ void StorageActions::_execute_SD_clearing(const std::string &s) {
 }
 
 void StorageActions::startStick20FillSDCardWithRandomChars() {
-  PinDialog dialog(PinDialog::ADMIN_PIN);
+  PinDialog dialog(PinType::ADMIN_PIN);
   bool user_provided_PIN = QDialog::Accepted == dialog.exec();
   if (user_provided_PIN) {
     auto s = dialog.getPassword();
@@ -553,7 +553,7 @@ void StorageActions::runAndHandleErrorsInUI(QString successMessage, QString oper
 
 
 void StorageActions::startStick20ClearNewSdCardFound() {
-  PinDialog dialog(PinDialog::ADMIN_PIN);
+  PinDialog dialog(PinType::ADMIN_PIN);
 
   bool user_provided_pin = QDialog::Accepted == dialog.exec();
   if (!user_provided_pin) {
@@ -575,9 +575,9 @@ void StorageActions::startStick20ClearNewSdCardFound() {
 
 void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
   using nm = nitrokey::NitrokeyManager;
-  PinDialog::PinType type = PinDialog::ADMIN_PIN;
+  auto type = PinType::ADMIN_PIN;
   if(nm::instance()->set_unencrypted_volume_rorw_pin_type_user()){
-    type = PinDialog::USER_PIN;
+    type = PinType::USER_PIN;
   }
   PinDialog dialog(type);
 
@@ -601,9 +601,9 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
 
 void StorageActions::startStick20SetReadWriteUncryptedVolume() {
   using nm = nitrokey::NitrokeyManager;
-  PinDialog::PinType type = PinDialog::ADMIN_PIN;
+  auto type = PinType::ADMIN_PIN;
   if(nm::instance()->set_unencrypted_volume_rorw_pin_type_user()){
-    type = PinDialog::USER_PIN;
+    type = PinType::USER_PIN;
   }
   PinDialog dialog(type);
 
@@ -626,7 +626,7 @@ void StorageActions::startStick20SetReadWriteUncryptedVolume() {
 }
 
 void StorageActions::startStick20SetReadOnlyEncryptedVolume() {
-  PinDialog dialog(PinDialog::ADMIN_PIN);
+  PinDialog dialog(PinType::ADMIN_PIN);
 
   bool user_provided_pin = QDialog::Accepted == dialog.exec();
   if (!user_provided_pin) {
@@ -647,7 +647,7 @@ void StorageActions::startStick20SetReadOnlyEncryptedVolume() {
 }
 
 void StorageActions::startStick20SetReadWriteEncryptedVolume() {
-  PinDialog dialog(PinDialog::ADMIN_PIN);
+  PinDialog dialog(PinType::ADMIN_PIN);
 
   bool user_provided_pin = QDialog::Accepted == dialog.exec();
   if (!user_provided_pin) {
@@ -674,7 +674,7 @@ void StorageActions::startStick20LockStickHardware() {
   stick20LockFirmwareDialog firmwareDialog(nullptr);
   bool user_wants_to_proceed = QDialog::Accepted == firmwareDialog.exec();
   if (user_wants_to_proceed) {
-    PinDialog pinDialog(PinDialog::ADMIN_PIN);
+    PinDialog pinDialog(PinType::ADMIN_PIN);
 
     bool user_provided_PIN = pinDialog.exec() == QDialog::Accepted;
     if (!user_provided_PIN) {

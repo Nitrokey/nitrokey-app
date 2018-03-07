@@ -25,13 +25,11 @@
 #include "mcvs-wrapper.h"
 #include "pindialog.h"
 #include "nitrokey-applet.h"
-#include "libada.h"
-#include "src/utils/bool_values.h"
 #include "stick20changepassworddialog.h"
 
 PinDialog::PinDialog(PinType pinType, QWidget *parent):
     QDialog(parent),
-    _pinType(pinType)
+    _pinType(pinType), worker(pinType)
 {
   ui = std::make_shared<Ui::PinDialog>();
   ui->setupUi(this);
@@ -61,6 +59,7 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
       break;
   }
 
+//  worker.pin_type = _pinType;
   connect(&worker_thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
   connect(&worker, SIGNAL(finished()), this, SLOT(updateTryCounter()));
   worker.moveToThread(&worker_thread);
@@ -102,16 +101,16 @@ void PinDialog::on_checkBox_toggled(bool checked) {
   ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }
 
-PasswordKind translate_type(PinDialog::PinType type){
+PasswordKind translate_type(PinType type){
   switch (type){
-    case PinDialog::USER_PIN:
+    case PinType::USER_PIN:
       return PasswordKind::USER;
-    case PinDialog::ADMIN_PIN:
+    case PinType::ADMIN_PIN:
       return PasswordKind::ADMIN;
-    case PinDialog::HIDDEN_VOLUME:break;
-    case PinDialog::FIRMWARE_PIN:
+    case PinType::HIDDEN_VOLUME:break;
+    case PinType::FIRMWARE_PIN:
       return PasswordKind::UPDATE;
-    case PinDialog::OTHER:break;
+    case PinType::OTHER:break;
   }
   throw std::runtime_error("Wrong password kind selected");
 }
@@ -197,16 +196,21 @@ void PinDialog::clearBuffers() {
   ui->lineEdit->setText(ui->lineEdit->placeholderText());
 }
 
-//TODO get only the one interesting counter
 void PinDialogUI::Worker::fetch_device_data() {
-
   try {
-    devdata.retry_admin_count = libada::i()->getAdminPasswordRetryCount();
-    devdata.retry_user_count = libada::i()->getUserPasswordRetryCount();
+    if (pin_type == PinType::ADMIN_PIN){
+      devdata.retry_admin_count = libada::i()->getAdminPasswordRetryCount();
+    } else if (pin_type == PinType::USER_PIN) {
+      devdata.retry_user_count = libada::i()->getUserPasswordRetryCount();
+    }
     emit finished();
   }
   catch (...){
     //ignore
   }
+}
+
+PinDialogUI::Worker::Worker(const PinType _pin_type) {
+  pin_type = _pin_type;
 }
 
