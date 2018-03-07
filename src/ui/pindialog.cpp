@@ -27,8 +27,7 @@
 #include "nitrokey-applet.h"
 #include "libada.h"
 #include "src/utils/bool_values.h"
-
-#define LOCAL_PASSWORD_SIZE 40 // Todo make define global
+#include "stick20changepassworddialog.h"
 
 PinDialog::PinDialog(PinType pinType, QWidget *parent):
     QDialog(parent),
@@ -103,6 +102,19 @@ void PinDialog::on_checkBox_toggled(bool checked) {
   ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }
 
+PasswordKind translate_type(PinDialog::PinType type){
+  switch (type){
+    case PinDialog::USER_PIN:
+      return PasswordKind::USER;
+    case PinDialog::ADMIN_PIN:
+      return PasswordKind::ADMIN;
+    case PinDialog::HIDDEN_VOLUME:break;
+    case PinDialog::FIRMWARE_PIN:
+      return PasswordKind::UPDATE;
+    case PinDialog::OTHER:break;
+  }
+  throw std::runtime_error("Wrong password kind selected");
+}
 
 void PinDialog::onOkButtonClicked() {
   int n;
@@ -122,9 +134,22 @@ void PinDialog::onOkButtonClicked() {
     return;
   }
 
-  // Check for default pin
-  if (passwordString == "123456" || passwordString == "12345678") {
-      csApplet()->warningBox(tr("Warning: Default PIN is used.\nPlease change the PIN."));
+  // Check for default pin and ask for change if set default
+  if (passwordString == DEFAULT_PIN_USER || passwordString == DEFAULT_PIN_ADMIN) {
+    auto warning_message = tr("Warning: Default PIN is used.\nPlease change the PIN.");
+    if (_pinType == USER_PIN || _pinType == ADMIN_PIN || _pinType == FIRMWARE_PIN) {
+      auto yesOrNoBox = csApplet()->yesOrNoBox(warning_message +" "+ tr("Would you like to so now?"), true);
+      if (yesOrNoBox) {
+        auto dialog = new DialogChangePassword(this, translate_type(_pinType));
+        dialog->InitData();
+        const auto password_changed = dialog->exec();
+        if (password_changed){
+          ui->lineEdit->clear();
+          csApplet()->messageBox(tr("Please enter the new PIN/password"));
+        }
+        return;
+      }
+    }
   }
 
   done(Accepted);
