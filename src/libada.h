@@ -143,6 +143,8 @@ public:
   nitrokey::proto::stick10::GetStatus::ResponsePayload get_status();
 
   bool have_communication_issues_occurred();
+
+    void clearUserDataCache();
 };
 
 
