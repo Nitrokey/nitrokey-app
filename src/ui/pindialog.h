@@ -24,6 +24,18 @@
 #ifndef PINDIALOG_H
 #define PINDIALOG_H
 
+#include <src/libada.h>
+
+static const int PIN_LENGTH_MAXIMUM = 30;
+
+static const int PIN_LENGTH_MINIMUM = 6;
+
+static const char *const DEFAULT_PIN_USER = "123456";
+
+static const char *const DEFAULT_PIN_ADMIN = "12345678";
+
+static const int UI_PASSWORD_LENGTH_MAXIMUM = STICK20_PASSOWRD_LEN;
+
 #include <QDialog>
 #include <QObject>
 #include <QtCore/QThread>

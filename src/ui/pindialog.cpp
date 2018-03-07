@@ -73,9 +73,7 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
   this->setWindowTitle(title);
   ui->label->setText(label);
   ui->lineEdit->setAccessibleName(label);
-  ui->lineEdit->setMaxLength(STICK20_PASSOWRD_LEN); // TODO change to
-                                                    // UI_PASSWORD_LEN this and
-                                                    // other occurences
+  ui->lineEdit->setMaxLength(UI_PASSWORD_LENGTH_MAXIMUM);
 
   // ui->status->setVisible(false);
 
@@ -112,14 +110,14 @@ void PinDialog::onOkButtonClicked() {
   // Check the password length
   auto passwordString = ui->lineEdit->text().toLatin1();
   n = passwordString.size();
-  if (30 <= n) // FIXME use constants/defines!
+  if (PIN_LENGTH_MAXIMUM <= n)
   {
-      csApplet()->warningBox(tr("Your PIN is too long! Use not more than 30 characters."));
+      csApplet()->warningBox(tr("Your PIN is too long! Use not more than 30 characters.")); //FIXME use %1 instead of constant in translation
     ui->lineEdit->clear();
     return;
   }
-  if (6 > n) {
-      csApplet()->warningBox(tr("Your PIN is too short. Use at least 6 characters."));
+  if (PIN_LENGTH_MINIMUM > n) {
+      csApplet()->warningBox(tr("Your PIN is too short. Use at least 6 characters.")); //FIXME use %1 instead of constant in translation
     ui->lineEdit->clear();
     return;
   }
