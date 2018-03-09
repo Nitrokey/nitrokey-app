@@ -24,11 +24,25 @@
 #ifndef PINDIALOG_H
 #define PINDIALOG_H
 
+#include <src/libada.h>
+
+static const int PIN_LENGTH_MAXIMUM = 30;
+
+static const int PIN_LENGTH_MINIMUM = 6;
+
+static const char *const DEFAULT_PIN_USER = "123456";
+
+static const char *const DEFAULT_PIN_ADMIN = "12345678";
+
+static const int UI_PASSWORD_LENGTH_MAXIMUM = STICK20_PASSOWRD_LEN;
+
 #include <QDialog>
 #include <QObject>
 #include <QtCore/QThread>
 #include "ui_pindialog.h"
 #include <memory>
+
+enum PinType { USER_PIN, ADMIN_PIN, HIDDEN_VOLUME, FIRMWARE_PIN, OTHER };
 
 namespace Ui {
 class PinDialog;
@@ -39,10 +53,13 @@ namespace PinDialogUI{
     {
     Q_OBJECT
     public:
+        Worker(PinType _pin_type);
         struct {
             int retry_user_count;
             int retry_admin_count;
         } devdata;
+    private:
+        PinType pin_type;
     public slots:
         void fetch_device_data();
     signals:
@@ -53,7 +70,6 @@ namespace PinDialogUI{
 class PinDialog : public QDialog {
   Q_OBJECT
 public :
-    enum PinType { USER_PIN, ADMIN_PIN, HIDDEN_VOLUME, FIRMWARE_PIN, OTHER };
     explicit PinDialog(PinType pinType, QWidget *parent = nullptr);
   ~PinDialog();
 
@@ -70,10 +86,9 @@ private slots:
 private:
     Q_DISABLE_COPY(PinDialog);
     std::shared_ptr<Ui::PinDialog> ui;
+  const PinType _pinType;
   PinDialogUI::Worker worker;
   QThread worker_thread;
-
-  const PinType _pinType;
 
   void clearBuffers();
   void UI_deviceNotInitialized() const;

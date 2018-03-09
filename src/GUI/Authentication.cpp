@@ -35,7 +35,7 @@ Authentication::Authentication(QObject *parent, Type _type) : QObject(parent), t
 }
 
 std::string Authentication::getPassword() {
-  const auto pinType = type==ADMIN? PinDialog::ADMIN_PIN : PinDialog::USER_PIN;
+  const auto pinType = type==ADMIN? PinType::ADMIN_PIN : PinType::USER_PIN;
   PinDialog dialog(pinType);
 
   int ok = dialog.exec();
@@ -57,7 +57,7 @@ bool Authentication::authenticate(){
 
   QString password;
   do {
-      const auto pinType = type==ADMIN? PinDialog::ADMIN_PIN : PinDialog::USER_PIN;
+      const auto pinType = type==ADMIN? PinType::ADMIN_PIN : PinType::USER_PIN;
       PinDialog dialog(pinType);
 
     int ok = dialog.exec();
@@ -70,10 +70,10 @@ bool Authentication::authenticate(){
 
     try{
       switch (pinType){
-        case PinDialog::USER_PIN:
+        case PinType::USER_PIN:
           nm::instance()->user_authenticate(password.c_str(), tempPassword.constData());
           break;
-        case PinDialog::ADMIN_PIN:
+        case PinType::ADMIN_PIN:
           nm::instance()->first_authenticate(password.c_str(), tempPassword.constData());
           break;
         default:

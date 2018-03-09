@@ -25,14 +25,11 @@
 #include "mcvs-wrapper.h"
 #include "pindialog.h"
 #include "nitrokey-applet.h"
-#include "libada.h"
-#include "src/utils/bool_values.h"
-
-#define LOCAL_PASSWORD_SIZE 40 // Todo make define global
+#include "stick20changepassworddialog.h"
 
 PinDialog::PinDialog(PinType pinType, QWidget *parent):
     QDialog(parent),
-    _pinType(pinType)
+    _pinType(pinType), worker(pinType)
 {
   ui = std::make_shared<Ui::PinDialog>();
   ui->setupUi(this);
@@ -62,6 +59,7 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
       break;
   }
 
+//  worker.pin_type = _pinType;
   connect(&worker_thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
   connect(&worker, SIGNAL(finished()), this, SLOT(updateTryCounter()));
   worker.moveToThread(&worker_thread);
@@ -73,9 +71,7 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
   this->setWindowTitle(title);
   ui->label->setText(label);
   ui->lineEdit->setAccessibleName(label);
-  ui->lineEdit->setMaxLength(STICK20_PASSOWRD_LEN); // TODO change to
-                                                    // UI_PASSWORD_LEN this and
-                                                    // other occurences
+  ui->lineEdit->setMaxLength(UI_PASSWORD_LENGTH_MAXIMUM);
 
   // ui->status->setVisible(false);
 
@@ -105,6 +101,19 @@ void PinDialog::on_checkBox_toggled(bool checked) {
   ui->lineEdit->setEchoMode(checked ? QLineEdit::Normal : QLineEdit::Password);
 }
 
+PasswordKind translate_type(PinType type){
+  switch (type){
+    case PinType::USER_PIN:
+      return PasswordKind::USER;
+    case PinType::ADMIN_PIN:
+      return PasswordKind::ADMIN;
+    case PinType::HIDDEN_VOLUME:break;
+    case PinType::FIRMWARE_PIN:
+      return PasswordKind::UPDATE;
+    case PinType::OTHER:break;
+  }
+  throw std::runtime_error("Wrong password kind selected");
+}
 
 void PinDialog::onOkButtonClicked() {
   int n;
@@ -112,21 +121,34 @@ void PinDialog::onOkButtonClicked() {
   // Check the password length
   auto passwordString = ui->lineEdit->text().toLatin1();
   n = passwordString.size();
-  if (30 <= n) // FIXME use constants/defines!
+  if (PIN_LENGTH_MAXIMUM <= n)
   {
-      csApplet()->warningBox(tr("Your PIN is too long! Use not more than 30 characters."));
+      csApplet()->warningBox(tr("Your PIN is too long! Use not more than 30 characters.")); //FIXME use %1 instead of constant in translation
     ui->lineEdit->clear();
     return;
   }
-  if (6 > n) {
-      csApplet()->warningBox(tr("Your PIN is too short. Use at least 6 characters."));
+  if (PIN_LENGTH_MINIMUM > n) {
+      csApplet()->warningBox(tr("Your PIN is too short. Use at least 6 characters.")); //FIXME use %1 instead of constant in translation
     ui->lineEdit->clear();
     return;
   }
 
-  // Check for default pin
-  if (passwordString == "123456" || passwordString == "12345678") {
-      csApplet()->warningBox(tr("Warning: Default PIN is used.\nPlease change the PIN."));
+  // Check for default pin and ask for change if set default
+  if (passwordString == DEFAULT_PIN_USER || passwordString == DEFAULT_PIN_ADMIN) {
+    auto warning_message = tr("Warning: Default PIN is used.\nPlease change the PIN.");
+    if (_pinType == USER_PIN || _pinType == ADMIN_PIN || _pinType == FIRMWARE_PIN) {
+      auto yesOrNoBox = csApplet()->yesOrNoBox(warning_message +" "+ tr("Would you like to so now?"), true);
+      if (yesOrNoBox) {
+        auto dialog = new DialogChangePassword(this, translate_type(_pinType));
+        dialog->InitData();
+        const auto password_changed = dialog->exec();
+        if (password_changed){
+          ui->lineEdit->clear();
+          csApplet()->messageBox(tr("Please enter the new PIN/password"));
+        }
+        return;
+      }
+    }
   }
 
   done(Accepted);
@@ -174,16 +196,21 @@ void PinDialog::clearBuffers() {
   ui->lineEdit->setText(ui->lineEdit->placeholderText());
 }
 
-//TODO get only the one interesting counter
 void PinDialogUI::Worker::fetch_device_data() {
-
   try {
-    devdata.retry_admin_count = libada::i()->getAdminPasswordRetryCount();
-    devdata.retry_user_count = libada::i()->getUserPasswordRetryCount();
+    if (pin_type == PinType::ADMIN_PIN){
+      devdata.retry_admin_count = libada::i()->getAdminPasswordRetryCount();
+    } else if (pin_type == PinType::USER_PIN) {
+      devdata.retry_user_count = libada::i()->getUserPasswordRetryCount();
+    }
     emit finished();
   }
   catch (...){
     //ignore
   }
+}
+
+PinDialogUI::Worker::Worker(const PinType _pin_type) {
+  pin_type = _pin_type;
 }
 
