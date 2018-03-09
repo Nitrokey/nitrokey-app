@@ -1640,6 +1640,18 @@
   <tabstop>generalCancelButton</tabstop>
   <tabstop>writeButton</tabstop>
   <tabstop>writeGeneralConfigButton</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>cb_first_run_message</tabstop>
+  <tabstop>cb_device_connection_message</tabstop>
+  <tabstop>combo_languages</tabstop>
+  <tabstop>cb_debug_enabled</tabstop>
+  <tabstop>edit_debug_file_path</tabstop>
+  <tabstop>btn_select_debug_file_path</tabstop>
+  <tabstop>spin_debug_verbosity</tabstop>
+  <tabstop>spin_PWS_time</tabstop>
+  <tabstop>spin_OTP_time</tabstop>
+  <tabstop>btn_cancelSettings</tabstop>
+  <tabstop>btn_writeSettings</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
