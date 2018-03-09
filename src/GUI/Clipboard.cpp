@@ -23,9 +23,19 @@
 #include <QApplication>
 #include <QTimer>
 #include <QDateTime>
+#include <QSettings>
+
+void Clipboard::copyOTP(QString text){
+    QSettings settings;
+    copyToClipboard(text, settings.value("clipboard/OTP_time", 120).toInt());
+}
+
+void Clipboard::copyPWS(QString text){
+    QSettings settings;
+    copyToClipboard(text, settings.value("clipboard/PWS_time", 60).toInt());
+}
 
 void Clipboard::copyToClipboard(QString text, int time) {
-  //TODO introduce longer time for OTP secrets: 120 seconds
   if (text.length() != 0) {
     lastClipboardTime = QDateTime::currentDateTime().toTime_t() + time - 1;
     clipboard->setText(text);

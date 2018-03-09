@@ -120,6 +120,11 @@ int main(int argc, char *argv[]) {
   if (parser.isSet("admin")){
     w.enable_admin_commands();
   }
+
+  QString df = settings.value("debug/file", "").toString().trimmed();
+  if (!df.isEmpty() && settings.value("debug/enabled", false).toBool()){
+    w.set_debug_file(df);
+  }
   auto debug_file_option_name = "debug-file";
   if (parser.isSet(debug_file_option_name) && !parser.value(debug_file_option_name).isEmpty()){
     w.set_debug_file(parser.value(debug_file_option_name));
@@ -137,7 +142,10 @@ int main(int argc, char *argv[]) {
     w.set_commands_delay(delay_in_ms);
   }
 
-  w.set_debug_level(4);
+  w.set_debug_level(2);
+  if (settings.value("debug/enabled", false).toBool()){
+    w.set_debug_level(settings.value("debug/level", 2).toInt());
+  }
   if(parser.isSet("debug-level")){
     w.set_debug_level(parser.value("debug-level").toInt());
   }
@@ -177,28 +185,23 @@ void configureTranslator(const QApplication &a, const QCommandLineParser &parser
   if (parser.isSet("debug")) {
     qDebug() << loc << lang << loc.name();
   }
-  if (!parser.isSet("language") && settings_language.isEmpty()) {
-    success = myappTranslator.load(QLocale::system(), // locale
-                                   "",                // file name
-                                   "nitrokey_",       // prefix
-                                   ":/i18n/",         // folder
-                                   ".qm");            // suffix
-  }
 
   if (!success) {
     auto translation_paths = {
-        QString("/i18n/nitrokey_%1.qm").arg(settings_language),
-        QString("/i18n/nitrokey_%1.qm").arg(QLocale::system().name()),
-        QString("/i18n/nitrokey_%1.qm").arg(lang.toLower()),
-        QString("/i18n/nitrokey_%1.qm").arg("en"),
+        QString(settings_language),
+        QString(QLocale::system().name()),
+        QString(lang.toLower()),
+        QString("en"),
     };
 
     if (parser.isSet("debug")) {
       qDebug() << "Loading translation files";
     }
+    QString working_translation_file;
     for (auto path : translation_paths) {
       for (auto p : {QString(':'), QString('.')}) {
-        auto path2 = p + path;
+        if(path.isEmpty()) continue;
+        auto path2 = p + QString("/i18n/nitrokey_%1.qm").arg(path);
         success = myappTranslator.load(path2);
         QFileInfo fileInfo(path2);
         if (parser.isSet("debug")) {
@@ -207,8 +210,19 @@ void configureTranslator(const QApplication &a, const QCommandLineParser &parser
         }
         if (success) break;
       }
-      if (success) break;
+      if (success){
+        working_translation_file = path;
+        break;
+      }
     }
+
+    QSettings settings;
+    const auto language_key = "main/language";    
+    if (settings.value(language_key).toString().isEmpty()){
+        qDebug() << "Setting working language to " << working_translation_file;
+        settings.setValue(language_key, working_translation_file);
+    }
+
   }
 #else
   success = myappTranslator.load(QString(":/i18n/nitrokey_%1.qm").arg(QLocale::system().name()));
@@ -255,8 +269,10 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
 
   //keep in sync with data/bash-autocomplete/nitrokey-app
   parser.addOptions({
+      {"clear-settings",
+          QCoreApplication::translate("main", "Clear all application's settings")},
       {{"d", "debug"},
-          QCoreApplication::translate("main", "Enable debug messages")},
+          QCoreApplication::translate("main", "Enable debug messages")},                        
       {{"df","debug-file"},
           QCoreApplication::translate("main", "Save debug log to file with name <log-file-name> (experimental)"),
           "log-file-name"},
@@ -297,6 +313,12 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
     qDebug() << CMAKE_BUILD_TYPE << GUI_VERSION << GIT_VERSION;
     qDebug() << CMAKE_CXX_COMPILER << CMAKE_CXX_FLAGS;
     return true;
+  }
+
+  if(parser.isSet("clear-settings")){
+      qDebug() << "Clearing settings";
+      QSettings settings;
+      settings.clear();
   }
 
   return false;

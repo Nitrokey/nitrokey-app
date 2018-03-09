@@ -66,6 +66,42 @@ const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
                          "computer's time is wrong, please configure it correctly and "
                          "reset the time of your Nitrokey.\n\nReset Nitrokey's time?");
 
+void MainWindow::load_settings(){
+    QSettings settings;
+    const auto first_run_key = "main/first_run";
+    auto first_run = settings.value(first_run_key, true).toBool();
+    ui->cb_first_run_message->setChecked(first_run);
+
+    const auto lang_key = "main/language";
+    auto lang_selected = settings.value(lang_key, "-----").toString();
+
+    ui->combo_languages->clear();
+    QDir langDir(":/i18n/");
+    auto list = langDir.entryList();
+    for (auto &&translationFile : list) {
+      auto lang = translationFile.remove("nitrokey_").remove(".qm");
+      ui->combo_languages->addItem(lang, lang);
+    }
+    ui->combo_languages->addItem("current: " + lang_selected, lang_selected);
+    ui->combo_languages->setCurrentText("current: " + lang_selected);
+
+    ui->edit_debug_file_path->setText(settings.value("debug/file", "").toString());
+    ui->spin_debug_verbosity->setValue(settings.value("debug/level", 2).toInt());
+    ui->cb_debug_enabled->setChecked(settings.value("debug/enabled", false).toBool());
+    emit ui->cb_debug_enabled->toggled(settings.value("debug/enabled", false).toBool());
+    ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
+    ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
+    ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *keyevent)
+{
+    if (keyevent->key()==Qt::Key_Escape){
+         hide();
+    } else {
+        QMainWindow::keyPressEvent(keyevent);
+    }
+}
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
@@ -158,6 +194,8 @@ MainWindow::MainWindow(QWidget *parent):
   this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
   first_run();
+
+  load_settings();
 }
 
 void MainWindow::first_run(){
@@ -171,6 +209,7 @@ void MainWindow::first_run(){
         "The Nitrokey App is available as an icon in the tray bar."
   );
   csApplet()->messageBox(msg);
+  tray.showTrayMessage(msg);
 
   //TODO insert call to First run configuration wizard here
 }
@@ -705,7 +744,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
       auto secret_raw = decodeBase32Secret(secret, debug_mode);
       auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
       ui->secretEdit->setText(secret_hex);
-      clipboard.copyToClipboard(secret_hex);
+      clipboard.copyOTP(secret_hex);
       showNotificationLabel();
     }
     catch (const cppcodec::parse_error &e) {
@@ -750,7 +789,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
       auto secret_raw = cppcodec::hex_upper::decode(secret_hex);
       auto secret_base32 = QString::fromStdString(base32::encode(secret_raw));
       ui->secretEdit->setText(secret_base32);
-      clipboard.copyToClipboard(secret_base32);
+      clipboard.copyOTP(secret_base32);
       showNotificationLabel();
     }
     catch (const cppcodec::parse_error &e) {
@@ -824,7 +863,7 @@ void MainWindow::getHOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x10 + slot);
     if (OTPcode.empty()) return;
-    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
+    clipboard.copyOTP(QString::fromStdString(OTPcode));
 
 
     if (libada::i()->getHOTPSlotName(slot).empty())
@@ -849,7 +888,7 @@ void MainWindow::getTOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x20 + slot);
       if (OTPcode.empty()) return;
-    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
+    clipboard.copyOTP(QString::fromStdString(OTPcode));
 
     if (libada::i()->getTOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -925,7 +964,7 @@ void MainWindow::on_randomSecretButton_clicked() {
   ui->secretEdit->setText(secretArray);
   ui->checkBox->setEnabled(true);
   ui->checkBox->setChecked(true);
-  clipboard.copyToClipboard(secretArray);
+  clipboard.copyOTP(secretArray);
   showNotificationLabel();
   this->checkTextEdited();
 }
@@ -1254,7 +1293,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
 void MainWindow::PWS_ExceClickedSlot(int Slot) {
   try {
     auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
-    clipboard.copyToClipboard(slot_password);
+    clipboard.copyPWS(slot_password);
     clear_free_cstr(const_cast<char*>(slot_password));
     QString password_safe_slot_info =
         QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
@@ -1430,8 +1469,12 @@ void MainWindow::on_DeviceDisconnected() {
     qDebug("on_DeviceDisconnected");
 
   emit ShortOperationEnds();
-  ui->statusBar->showMessage(tr("Nitrokey disconnected"));
-  tray.showTrayMessage(tr("Nitrokey disconnected"));
+
+  QSettings settings;
+  if(settings.value("main/connection_message", true).toBool()){
+    ui->statusBar->showMessage(tr("Nitrokey disconnected"));
+    tray.showTrayMessage(tr("Nitrokey disconnected"));
+  }
 
   if(this->isVisible()){
     this->close();
@@ -1458,11 +1501,15 @@ void MainWindow::on_DeviceConnected() {
     return;
   }
 
-  auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
+  QSettings settings;
+  if(settings.value("main/connection_message", true).toBool()){
+
+     auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
                                 tr("Nitrokey Storage connected") :
                                 tr("Nitrokey Pro connected");
-  ui->statusBar->showMessage(connected_device_model);
-  tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
+    ui->statusBar->showMessage(connected_device_model);
+    tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
+  }
 
   initialTimeReset();
 
@@ -1604,4 +1651,46 @@ void MainWindow::set_debug_mode() {
 
 void MainWindow::set_debug_level(int debug_level) {
   nm::instance()->set_loglevel(debug_level);
+}
+
+void MainWindow::on_btn_writeSettings_clicked()
+{
+    QSettings settings;
+
+    // see if restart is required
+    bool restart_required = false;
+    if (settings.value("main/language").toString() != ui->combo_languages->currentData().toString()){
+        restart_required = true;
+    }
+
+    // save the settings
+    settings.setValue("main/first_run", ui->cb_first_run_message->isChecked());
+    settings.setValue("main/language", ui->combo_languages->currentData());
+    settings.setValue("debug/file", ui->edit_debug_file_path->text());
+    settings.setValue("debug/level", ui->spin_debug_verbosity->text().toInt());
+    settings.setValue("debug/enabled", ui->cb_debug_enabled->isChecked());
+    settings.setValue("clipboard/PWS_time", ui->spin_PWS_time->value());
+    settings.setValue("clipboard/OTP_time", ui->spin_OTP_time->value());
+    settings.setValue("main/connection_message", ui->cb_device_connection_message->isChecked());
+
+    // inform user and quit if asked
+    if (!restart_required){
+        csApplet()->messageBox(tr("Configuration successfully written."));
+    } else {
+        auto user_wants_quit = csApplet()->yesOrNoBox(
+                tr("Configuration successfully written.") + " "+
+                tr("Please run the application again to apply new settings.") + " "+
+                tr("Would you like to quit now?"), true);
+        if (user_wants_quit)
+        {
+            QApplication::exit();
+        }
+    }
+    load_settings();
+}
+
+void MainWindow::on_btn_select_debug_file_path_clicked()
+{
+    auto filename = QFileDialog::getSaveFileName(this, tr("Debug file location (will be overwritten)"));
+    ui->edit_debug_file_path->setText(filename);
 }

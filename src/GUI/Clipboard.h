@@ -31,7 +31,8 @@ class Clipboard : public QObject
 Q_OBJECT
 public:
     Clipboard(QObject *parent);
-    void copyToClipboard(QString text, int time=60);
+    void copyOTP(QString text);
+    void copyPWS(QString text);
 
     virtual ~Clipboard();
 
@@ -39,6 +40,7 @@ private:
     QClipboard *clipboard;
     uint lastClipboardTime;
     QString secretInClipboard;
+    void copyToClipboard(QString text, int time=60);
 private slots:
     void checkClipboard_Valid(bool force_clear=false);
 
