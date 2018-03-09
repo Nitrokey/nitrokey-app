@@ -120,6 +120,11 @@ int main(int argc, char *argv[]) {
   if (parser.isSet("admin")){
     w.enable_admin_commands();
   }
+
+  QString df = settings.value("debug/file", "").toString().trimmed();
+  if (!df.isEmpty() && settings.value("debug/enabled", false).toBool()){
+    w.set_debug_file(df);
+  }
   auto debug_file_option_name = "debug-file";
   if (parser.isSet(debug_file_option_name) && !parser.value(debug_file_option_name).isEmpty()){
     w.set_debug_file(parser.value(debug_file_option_name));
@@ -138,6 +143,9 @@ int main(int argc, char *argv[]) {
   }
 
   w.set_debug_level(2);
+  if (settings.value("debug/enabled", false).toBool()){
+    w.set_debug_level(settings.value("debug/level", 2).toInt());
+  }
   if(parser.isSet("debug-level")){
     w.set_debug_level(parser.value("debug-level").toInt());
   }

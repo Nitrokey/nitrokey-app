@@ -30,8 +30,8 @@
    <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_23">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -1374,6 +1374,9 @@
                      <property name="text">
                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Translation file (needs restart)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
+                     <property name="buddy">
+                      <cstring>combo_languages</cstring>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1390,6 +1393,62 @@
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_71">
+            <item>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>Debug log settings</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_3">
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="edit_debug_file_path"/>
+               </item>
+               <item row="3" column="1">
+                <widget class="QSpinBox" name="spin_debug_verbosity">
+                 <property name="maximum">
+                  <number>6</number>
+                 </property>
+                 <property name="value">
+                  <number>2</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>Path for debug log file</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>edit_debug_file_path</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_20">
+                 <property name="text">
+                  <string>Verbosity level</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>spin_debug_verbosity</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QCheckBox" name="cb_debug_enabled">
+                 <property name="text">
+                  <string>Logging enabled</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="btn_select_debug_file_path">
+                 <property name="text">
+                  <string>Select path</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
             <item>
              <spacer name="verticalSpacer_4">
               <property name="orientation">
@@ -1516,7 +1575,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>824</x>
-     <y>655</y>
+     <y>739</y>
     </hint>
     <hint type="destinationlabel">
      <x>300</x>
@@ -1532,7 +1591,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>824</x>
-     <y>655</y>
+     <y>739</y>
     </hint>
     <hint type="destinationlabel">
      <x>262</x>
@@ -1547,12 +1606,60 @@
    <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>774</x>
-     <y>643</y>
+     <x>823</x>
+     <y>738</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
      <y>670</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_debug_enabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>edit_debug_file_path</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>203</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>230</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_debug_enabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spin_debug_verbosity</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>182</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_debug_enabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>btn_select_debug_file_path</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>78</x>
+     <y>203</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>221</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>

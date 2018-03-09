@@ -84,6 +84,11 @@ void MainWindow::load_settings(){
     }
     ui->combo_languages->addItem("current: " + lang_selected, lang_selected);
     ui->combo_languages->setCurrentText("current: " + lang_selected);
+
+    ui->edit_debug_file_path->setText(settings.value("debug/file", "").toString());
+    ui->spin_debug_verbosity->setValue(settings.value("debug/level", 2).toInt());
+    ui->cb_debug_enabled->setChecked(settings.value("debug/enabled", false).toBool());
+    emit ui->cb_debug_enabled->toggled(settings.value("debug/enabled", false).toBool());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *keyevent)
@@ -1650,6 +1655,9 @@ void MainWindow::on_btn_writeSettings_clicked()
     // save the settings
     settings.setValue("main/first_run", ui->cb_first_run_message->isChecked());
     settings.setValue("main/language", ui->combo_languages->currentData());
+    settings.setValue("debug/file", ui->edit_debug_file_path->text());
+    settings.setValue("debug/level", ui->spin_debug_verbosity->text().toInt());
+    settings.setValue("debug/enabled", ui->cb_debug_enabled->isChecked());
 
     // inform user and quit if asked
     if (!restart_required){
@@ -1665,4 +1673,10 @@ void MainWindow::on_btn_writeSettings_clicked()
         }
     }
     load_settings();
+}
+
+void MainWindow::on_btn_select_debug_file_path_clicked()
+{
+    auto filename = QFileDialog::getSaveFileName(this, "Debug file location (will be overwritten)");
+    ui->edit_debug_file_path->setText(filename);
 }
