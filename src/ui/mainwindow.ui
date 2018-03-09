@@ -1368,6 +1368,16 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QCheckBox" name="cb_device_connection_message">
+                   <property name="text">
+                    <string>Show message about device's connection / disconnection</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_12">
                    <item>
                     <widget class="QLabel" name="label_28">

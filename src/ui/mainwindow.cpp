@@ -91,6 +91,7 @@ void MainWindow::load_settings(){
     emit ui->cb_debug_enabled->toggled(settings.value("debug/enabled", false).toBool());
     ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
     ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
+    ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *keyevent)
@@ -1468,8 +1469,12 @@ void MainWindow::on_DeviceDisconnected() {
     qDebug("on_DeviceDisconnected");
 
   emit ShortOperationEnds();
-  ui->statusBar->showMessage(tr("Nitrokey disconnected"));
-  tray.showTrayMessage(tr("Nitrokey disconnected"));
+
+  QSettings settings;
+  if(settings.value("main/connection_message", true).toBool()){
+    ui->statusBar->showMessage(tr("Nitrokey disconnected"));
+    tray.showTrayMessage(tr("Nitrokey disconnected"));
+  }
 
   if(this->isVisible()){
     this->close();
@@ -1496,11 +1501,15 @@ void MainWindow::on_DeviceConnected() {
     return;
   }
 
-  auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
+  QSettings settings;
+  if(settings.value("main/connection_message", true).toBool()){
+
+     auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
                                 tr("Nitrokey Storage connected") :
                                 tr("Nitrokey Pro connected");
-  ui->statusBar->showMessage(connected_device_model);
-  tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
+    ui->statusBar->showMessage(connected_device_model);
+    tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
+  }
 
   initialTimeReset();
 
@@ -1662,6 +1671,7 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("debug/enabled", ui->cb_debug_enabled->isChecked());
     settings.setValue("clipboard/PWS_time", ui->spin_PWS_time->value());
     settings.setValue("clipboard/OTP_time", ui->spin_OTP_time->value());
+    settings.setValue("main/connection_message", ui->cb_device_connection_message->isChecked());
 
     // inform user and quit if asked
     if (!restart_required){
