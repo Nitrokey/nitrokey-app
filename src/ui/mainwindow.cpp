@@ -89,6 +89,8 @@ void MainWindow::load_settings(){
     ui->spin_debug_verbosity->setValue(settings.value("debug/level", 2).toInt());
     ui->cb_debug_enabled->setChecked(settings.value("debug/enabled", false).toBool());
     emit ui->cb_debug_enabled->toggled(settings.value("debug/enabled", false).toBool());
+    ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
+    ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *keyevent)
@@ -741,7 +743,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
       auto secret_raw = decodeBase32Secret(secret, debug_mode);
       auto secret_hex = QString::fromStdString(cppcodec::hex_upper::encode(secret_raw));
       ui->secretEdit->setText(secret_hex);
-      clipboard.copyToClipboard(secret_hex);
+      clipboard.copyOTP(secret_hex);
       showNotificationLabel();
     }
     catch (const cppcodec::parse_error &e) {
@@ -786,7 +788,7 @@ void MainWindow::on_base32RadioButton_toggled(bool checked) {
       auto secret_raw = cppcodec::hex_upper::decode(secret_hex);
       auto secret_base32 = QString::fromStdString(base32::encode(secret_raw));
       ui->secretEdit->setText(secret_base32);
-      clipboard.copyToClipboard(secret_base32);
+      clipboard.copyOTP(secret_base32);
       showNotificationLabel();
     }
     catch (const cppcodec::parse_error &e) {
@@ -860,7 +862,7 @@ void MainWindow::getHOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x10 + slot);
     if (OTPcode.empty()) return;
-    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
+    clipboard.copyOTP(QString::fromStdString(OTPcode));
 
 
     if (libada::i()->getHOTPSlotName(slot).empty())
@@ -885,7 +887,7 @@ void MainWindow::getTOTPDialog(int slot) {
   try{
     auto OTPcode = getNextCode(0x20 + slot);
       if (OTPcode.empty()) return;
-    clipboard.copyToClipboard(QString::fromStdString(OTPcode));
+    clipboard.copyOTP(QString::fromStdString(OTPcode));
 
     if (libada::i()->getTOTPSlotName(slot).empty())
       tray.showTrayMessage(QString(tr("TOTP slot ")).append(QString::number(slot + 1, 10)),
@@ -961,7 +963,7 @@ void MainWindow::on_randomSecretButton_clicked() {
   ui->secretEdit->setText(secretArray);
   ui->checkBox->setEnabled(true);
   ui->checkBox->setChecked(true);
-  clipboard.copyToClipboard(secretArray);
+  clipboard.copyOTP(secretArray);
   showNotificationLabel();
   this->checkTextEdited();
 }
@@ -1290,7 +1292,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
 void MainWindow::PWS_ExceClickedSlot(int Slot) {
   try {
     auto slot_password = nm::instance()->get_password_safe_slot_password((uint8_t) Slot);
-    clipboard.copyToClipboard(slot_password);
+    clipboard.copyPWS(slot_password);
     clear_free_cstr(const_cast<char*>(slot_password));
     QString password_safe_slot_info =
         QString(tr("Password safe [%1]").arg(QString::fromStdString(libada::i()->getPWSSlotName(Slot))));
@@ -1658,6 +1660,8 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("debug/file", ui->edit_debug_file_path->text());
     settings.setValue("debug/level", ui->spin_debug_verbosity->text().toInt());
     settings.setValue("debug/enabled", ui->cb_debug_enabled->isChecked());
+    settings.setValue("clipboard/PWS_time", ui->spin_PWS_time->value());
+    settings.setValue("clipboard/OTP_time", ui->spin_OTP_time->value());
 
     // inform user and quit if asked
     if (!restart_required){
@@ -1677,6 +1681,6 @@ void MainWindow::on_btn_writeSettings_clicked()
 
 void MainWindow::on_btn_select_debug_file_path_clicked()
 {
-    auto filename = QFileDialog::getSaveFileName(this, "Debug file location (will be overwritten)");
+    auto filename = QFileDialog::getSaveFileName(this, tr("Debug file location (will be overwritten)"));
     ui->edit_debug_file_path->setText(filename);
 }
