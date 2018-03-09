@@ -1390,7 +1390,11 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QComboBox" name="combo_languages"/>
+                    <widget class="QComboBox" name="combo_languages">
+                     <property name="accessibleName">
+                      <string>Translation file (needs restart)</string>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </item>
@@ -1430,10 +1434,17 @@
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QLineEdit" name="edit_debug_file_path"/>
+                <widget class="QLineEdit" name="edit_debug_file_path">
+                 <property name="accessibleName">
+                  <string>Path for debug log file:</string>
+                 </property>
+                </widget>
                </item>
                <item row="3" column="1">
                 <widget class="QSpinBox" name="spin_debug_verbosity">
+                 <property name="accessibleName">
+                  <string>Verbosity level:</string>
+                 </property>
                  <property name="maximum">
                   <number>6</number>
                  </property>
@@ -1451,6 +1462,9 @@
                </item>
                <item row="0" column="0">
                 <widget class="QCheckBox" name="cb_debug_enabled">
+                 <property name="accessibleName">
+                  <string/>
+                 </property>
                  <property name="text">
                   <string>Logging enabled</string>
                  </property>
@@ -1467,6 +1481,9 @@
               <layout class="QGridLayout" name="gridLayout_4">
                <item row="3" column="1">
                 <widget class="QSpinBox" name="spin_OTP_time">
+                 <property name="accessibleName">
+                  <string>Time to store OTP secrets in clipboard (in seconds):</string>
+                 </property>
                  <property name="minimum">
                   <number>10</number>
                  </property>
@@ -1490,6 +1507,9 @@
                </item>
                <item row="1" column="1">
                 <widget class="QSpinBox" name="spin_PWS_time">
+                 <property name="accessibleName">
+                  <string>TIme to store Password Safe secrets in clipboard (in seconds):</string>
+                 </property>
                  <property name="minimum">
                   <number>10</number>
                  </property>
