@@ -92,6 +92,10 @@ void MainWindow::load_settings(){
     ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
     ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
     ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
+    ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", true).toBool());
+#ifndef Q_OS_LINUX
+    ui->cb_check_symlink->setEnabled(false);
+#endif
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *keyevent)
@@ -136,6 +140,7 @@ MainWindow::MainWindow(QWidget *parent):
   connect(this, SIGNAL(PWS_unlocked()), this, SLOT(SetupPasswordSafeConfig()));
   connect(this, SIGNAL(DeviceLocked()), this, SLOT(SetupPasswordSafeConfig()));
   connect(&storage, SIGNAL(storageStatusChanged()), this, SLOT(SetupPasswordSafeConfig()));
+  connect(&storage, SIGNAL(storageStatusChanged()), this, SLOT(storage_check_symlink()));
   connect(this, SIGNAL(PWS_slot_saved(int)), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(PWS_slot_saved(int)), libada::i().get(), SLOT(on_PWS_save(int)));
 
@@ -640,10 +645,21 @@ void MainWindow::startResetUserPassword() {
 
 
 void MainWindow::storage_check_symlink(){
-    if (!QFileInfo("/dev/nitrospace").isSymLink()) {
-        csApplet()->warningBox(tr("Warning: The encrypted Volume is not formatted.\n\"Use GParted "
-                                          "or fdisk for this.\""));
+//TODO make better partition detection method
+#ifdef Q_OS_LINUX
+    QSettings settings;
+    bool should_remind = settings.value("storage/check_symlink", true).toBool();
+    if (should_remind && !QFileInfo("/dev/nitrospace").isSymLink()) {
+        bool user_wants_reminding = csApplet()->yesOrNoBox(
+                                    tr("Warning: Application could not detect any partition on the Encrypted Volume. "
+                                       "Please use graphical GParted or terminal fdisk/parted tools for this.")+
+                                       " " + tr("Would you like to be reminded again?")
+                                    , true);
+        if (!user_wants_reminding){
+            settings.setValue("storage/check_symlink", false);
+        }
     }
+#endif
 }
 
 //int MainWindow::stick20SendCommand(uint8_t stick20Command, uint8_t *password) {
@@ -1561,8 +1577,7 @@ void MainWindow::on_DeviceConnected() {
                                   ));
       }
 #endif
-      }, this);
-
+      }, this);  
 }
 
 void MainWindow::on_KeepDeviceOnline() {
@@ -1672,6 +1687,7 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("clipboard/PWS_time", ui->spin_PWS_time->value());
     settings.setValue("clipboard/OTP_time", ui->spin_OTP_time->value());
     settings.setValue("main/connection_message", ui->cb_device_connection_message->isChecked());
+    settings.setValue("storage/check_symlink", ui->cb_check_symlink->isChecked());
 
     // inform user and quit if asked
     if (!restart_required){
