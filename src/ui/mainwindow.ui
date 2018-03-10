@@ -1368,6 +1368,16 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QCheckBox" name="cb_check_symlink">
+                   <property name="text">
+                    <string>Show warning when no partitions could be detected on Encrypted Volume (Linux only)</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QCheckBox" name="cb_device_connection_message">
                    <property name="text">
                     <string>Show message about device's connection / disconnection</string>
