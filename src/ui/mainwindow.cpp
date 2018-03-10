@@ -66,6 +66,9 @@ const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
                          "computer's time is wrong, please configure it correctly and "
                          "reset the time of your Nitrokey.\n\nReset Nitrokey's time?");
 
+const auto tray_location_msg = "\n"+MainWindow::tr("You can find application’s tray icon in system tray in "
+                                      "the right down corner of your screen (Windows) or in the upper right (Linux, MacOS).");
+
 void MainWindow::load_settings(){
     QSettings settings;
     const auto first_run_key = "main/first_run";
@@ -203,13 +206,15 @@ void MainWindow::first_run(){
   const auto first_run_key = "main/first_run";
   auto first_run = settings.value(first_run_key, true).toBool();
   if (!first_run) return;
-  settings.setValue(first_run_key, false);
 
-  auto msg = tr(
-        "The Nitrokey App is available as an icon in the tray bar."
-  );
-  csApplet()->messageBox(msg);
+  auto msg = tr("The Nitrokey App is available as an icon in the tray bar.");
   tray.showTrayMessage(msg);
+  msg += tray_location_msg;
+  msg += " " + tr("Would you like to show this message again?");
+  bool user_wants_to_be_reminded = csApplet()->yesOrNoBox(msg, true);
+  if(!user_wants_to_be_reminded){
+      settings.setValue(first_run_key, false);
+  }
 
   //TODO insert call to First run configuration wizard here
 }
@@ -1544,12 +1549,12 @@ void MainWindow::on_DeviceConnected() {
       if (!data["initiated"].toBool()) {
         if (data["initiated_ask"].toBool())
           csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-                                        "device\" option from context menu."));
+                                        "device\" option from context menu.") + " " + tray_location_msg);
       }
       if (data["initiated"].toBool() && !data["erased"].toBool()) {
         if (data["erased_ask"].toBool())
           csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-                                        "storage with random data\""));
+                                        "storage with random data\"") + ". " + tray_location_msg);
       }
 
 #if defined(Q_OS_MAC) || defined(Q_OS_DARWIN)
