@@ -282,12 +282,12 @@ void MainWindow::initialTimeReset() {
   }
 
   if (!libada::i()->is_time_synchronized()) {
-    bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync"), WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED,
+    bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + RESET_NITROKEYS_TIME, WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED,
       false);
     if (answer) {
       auto res = libada::i()->set_current_time();
       if (res) {
-        csApplet()->messageBox(tr("Time reset!"));
+          tray.showTrayMessage(tr("Time reset!"));
       }
     }
   }
@@ -1349,7 +1349,7 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
                                           WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED, false);
       if (user_wants_time_reset){
           if(libada::i()->set_current_time()){
-            csApplet()->messageBox(tr("Time reset!"));
+            tray.showTrayMessage(tr("Time reset!"));
             time_synchronized = true;
           }
       }
