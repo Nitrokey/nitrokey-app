@@ -44,6 +44,8 @@ class DialogChangePassword : public QDialog {
     const static int minimumPasswordLengthUser = 6;
     const static int minimumPasswordLengthAdmin = 8;
     const static int minimumPasswordLengthFirmware = 6;
+    const static int maximumPasswordLengthFirmware = 20;
+    static constexpr auto defaultFirmwarePassword = "12345678";
     int minimumPasswordLength = {};
 
   explicit DialogChangePassword(QWidget *parent, PasswordKind _kind);
