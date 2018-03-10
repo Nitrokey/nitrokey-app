@@ -35,7 +35,7 @@ void ManageWindow::bringToFocus(QWidget *w) {
 
 #include <QDesktopWidget>
 
-void ManageWindow::moveToCenter(QWidget *widget) {
-  widget->adjustSize();
-  widget->move(QApplication::desktop()->screen()->rect().center() - widget->rect().center());
+void ManageWindow::moveToCenter(QWidget */*widget*/) {
+//  widget->adjustSize();
+//  widget->move(QApplication::desktop()->screen()->rect().center() - widget->rect().center());
 }
