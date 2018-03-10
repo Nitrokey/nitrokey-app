@@ -136,6 +136,8 @@ MainWindow::MainWindow(QWidget *parent):
   connect(&storage, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(&storage, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
   connect(&storage, SIGNAL(longOperationStarted()), this, SLOT(on_KeepDeviceOnline()));
+  connect(&storage, SIGNAL(longOperationStarted()), this, SLOT(on_longOperationStart()));
+
   connect(this, SIGNAL(FactoryReset()), &tray, SLOT(regenerateMenu()));
   connect(this, SIGNAL(FactoryReset()), libada::i().get(), SLOT(on_FactoryReset()));
 
@@ -614,6 +616,11 @@ void MainWindow::startStickDebug() {
 void MainWindow::startHelpAction() {
     QString link = "https://www.nitrokey.com/start";
     QDesktopServices::openUrl(QUrl(link));
+}
+
+void MainWindow::on_longOperationStart(){
+  hide();
+  emit LongOperationStart();
 }
 
 void MainWindow::startAboutDialog() {

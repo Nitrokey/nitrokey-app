@@ -85,6 +85,7 @@ AboutDialog::AboutDialog(QWidget *parent)
   fixWindowGeometry();
 
   ManageWindow::bringToFocus(this);
+  connect(parent, SIGNAL(LongOperationStart()), this, SLOT(reject()));
 }
 
 AboutDialog::~AboutDialog() {
