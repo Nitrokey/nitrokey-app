@@ -206,12 +206,15 @@ void MainWindow::first_run(){
   const auto first_run_key = "main/first_run";
   auto first_run = settings.value(first_run_key, true).toBool();
   if (!first_run) return;
-  settings.setValue(first_run_key, false);
 
   auto msg = tr("The Nitrokey App is available as an icon in the tray bar.");
   tray.showTrayMessage(msg);
   msg += tray_location_msg;
-  csApplet()->messageBox(msg);
+  msg += " " + tr("Would you like to show this message again?");
+  bool user_wants_to_be_reminded = csApplet()->yesOrNoBox(msg, true);
+  if(!user_wants_to_be_reminded){
+      settings.setValue(first_run_key, false);
+  }
 
   //TODO insert call to First run configuration wizard here
 }
