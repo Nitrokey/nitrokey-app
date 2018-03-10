@@ -60,7 +60,7 @@ public :
   static const QString WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED;
 
 protected:
-  void closeEvent(QCloseEvent *event);
+  void closeEvent(QCloseEvent *event) override;
 
 private:
   Q_DISABLE_COPY(MainWindow);
