@@ -24,7 +24,7 @@
 #include "Authentication.h"
 #include "pindialog.h"
 #include "libada.h"
-#include "libnitrokey/include/NitrokeyManager.h"
+#include <libnitrokey/NitrokeyManager.h>
 #include "nitrokey-applet.h"
 
 using nm = nitrokey::NitrokeyManager;
