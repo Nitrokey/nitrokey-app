@@ -22,7 +22,7 @@
 #include "StorageActions.h"
 #include "src/ui/pindialog.h"
 #include "src/utils/bool_values.h"
-#include "libnitrokey/include/NitrokeyManager.h"
+#include <libnitrokey/NitrokeyManager.h>
 
 #ifdef Q_OS_LINUX
 #include "systemutils.h"
@@ -39,7 +39,7 @@
 #define LOCAL_PASSWORD_SIZE 40
 #include <memory>
 #include <src/core/ThreadWorker.h>
-#include <libnitrokey/include/stick20_commands.h>
+#include <libnitrokey/stick20_commands.h>
 
 
 void unmountEncryptedVolumes() {
