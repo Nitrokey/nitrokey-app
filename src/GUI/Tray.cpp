@@ -30,7 +30,7 @@ TODO
 #include "libada.h"
 #include "bool_values.h"
 #include "nitrokey-applet.h"
-#include <libnitrokey/include/NitrokeyManager.h>
+#include <libnitrokey/NitrokeyManager.h>
 #include <QMenu>
 
 Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,

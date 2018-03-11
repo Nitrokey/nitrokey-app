@@ -53,7 +53,7 @@
 #include <QObject>
 #include <QCache>
 
-#include "libnitrokey/include/stick10_commands.h"
+#include <libnitrokey/stick10_commands.h>
 
 #include <functional>
 #include <QMutex>

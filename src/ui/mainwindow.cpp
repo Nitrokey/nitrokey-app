@@ -21,7 +21,7 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
-#include "libnitrokey/include/NitrokeyManager.h"
+#include <libnitrokey/NitrokeyManager.h>
 
 #include "mainwindow.h"
 #include "aboutdialog.h"
