@@ -176,16 +176,14 @@ void DialogChangePassword::InitData(void) {
   QString text = ui->label_additional_information->text();
   text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
   if (kind == PasswordKind::UPDATE) {
-    text = QString("<p><b>") + tr("Once the firmware password is forgotten the Nitrokey can't be "
+    text = "<i> " + tr("Other than PINs, the firmware password doesn't have a retry counter and therefore doesn't prevent password guessing attacks. "
+                     "A secure firmware password should contain lower and upper case letters, numbers and special characters with a length between %2 and %3 characters. "
+                     "<br/>Default firmware password is: '%1'.").arg(defaultFirmwarePassword).arg(minimumPasswordLengthFirmware).arg(maximumPasswordLengthFirmware)
+            + "</i>";
+    text += QString("<p><b>") + tr("Once the firmware password is forgotten the Nitrokey can't be "
                                     "updated or reset. Don't lose your firmware password, please.") +
             QString("</b></p>");
-    text += "<i> " + tr("Firmware password's length should be between %1 and %2 characters.")
-                .arg(minimumPasswordLengthFirmware).arg(maximumPasswordLengthFirmware);
-    text += " " + tr("It does not have attempts counter meaning device would never "
-                     "block updates until the correct password is provided. "
-                     "It is a separate mechanism to smart card's Admin and User PINs authentication. "
-                     "<br/>Default firmware password is: '%1'.").arg(defaultFirmwarePassword)
-            + "</i>";
+
   }
   ui->label_additional_information->setText(text);
   fixWindowGeometry();
