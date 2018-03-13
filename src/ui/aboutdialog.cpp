@@ -285,6 +285,7 @@ void Worker::fetch_device_data() {
   emit finished(true);
 }
 
+#include "src/ui/nitrokey-applet.h"
 
 void AboutDialog::update_device_slots(bool connected) {
   fixWindowGeometry();
@@ -300,6 +301,11 @@ void AboutDialog::update_device_slots(bool connected) {
 
   if (worker.devdata.storage.long_operation.status){
     OutputText.append(QString(tr("      *** Clearing data in progress ***")).append("\n"));
+    QApplication::processEvents();
+    reject();
+    QApplication::processEvents();
+    csApplet()->warningBox(tr("Cannot open dialog: ") + tr("      *** Clearing data in progress ***").trimmed());
+    return;
   }
 
   if (worker.devdata.comm_error) {
