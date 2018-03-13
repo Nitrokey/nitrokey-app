@@ -134,8 +134,10 @@ signals:
   void ShortOperationEnds();
   void OTP_slot_write(int slot_no, bool isHOTP);
   void DebugData(QString msg);
+  void LongOperationStart();
 
 private slots:
+  void on_longOperationStart();
   void on_KeepDeviceOnline();
   void on_DeviceConnected();
   void on_DeviceDisconnected();

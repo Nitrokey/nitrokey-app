@@ -673,11 +673,11 @@ void Tray::updateOperationInProgressBar(int p) {
   if (trayMenu == nullptr) {
     generateMenu(true);
   }
-  static bool done = false;
-  if (!done){
+  static bool initialized = false;
+  if (!initialized){
     this->showTrayMessage(te);
     trayMenu->addAction(a.get());
-    done = true;
+    initialized = true;
   }
   a->setText(te);
   trayIcon->setContextMenu(trayMenu.get());

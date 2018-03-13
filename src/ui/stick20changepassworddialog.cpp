@@ -49,6 +49,7 @@ DialogChangePassword::DialogChangePassword(QWidget *parent, PasswordKind _kind):
   fixWindowGeometry();
   ui->lineEdit_OldPW->setFocus();
   setModal(true);
+  connect(parent, SIGNAL(LongOperationStart()), this, SLOT(reject()));
 }
 
 DialogChangePassword::~DialogChangePassword() { delete ui; }
