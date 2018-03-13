@@ -29,10 +29,10 @@ script: |
     fi
     if [ "$builder" == "qmake" ]; then 
       ${QMAKE} 
-      if [ "${TRAVIS_OS_NAME}" == "osx" ]; then make ; fi
-      if [ "${TRAVIS_OS_NAME}" == "linux" ]; then make CXX=${CXX} CC=${CC} LINK=${CXX} ; fi
+      if [ "${TRAVIS_OS_NAME}" == "osx" ]; then make || exit 1; fi
+      if [ "${TRAVIS_OS_NAME}" == "linux" ]; then make CXX=${CXX} CC=${CC} LINK=${CXX} || exit 1 ; fi
     elif [ "$builder" == "cmake" ]; then 
-      cmake -DERROR_ON_WARNING=ON . && make VERBOSE=1; 
+      cmake -DERROR_ON_WARNING=ON . && make VERBOSE=1 || exit 1;
     fi
 
 env:
