@@ -19,7 +19,7 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
-#include <libnitrokey/include/NitrokeyManager.h>
+#include <libnitrokey/NitrokeyManager.h>
 #include "libada.h"
 
 
@@ -106,7 +106,7 @@ std::string libada::getCardSerial() {
 }
 
 #include <QtCore/QMutex>
-#include "libnitrokey/include/CommandFailedException.h"
+#include <libnitrokey/CommandFailedException.h>
 #include "hotpslot.h"
 
 void libada::on_FactoryReset(){
@@ -215,7 +215,7 @@ bool libada::isPasswordSafeAvailable() {
 }
 
 #include <QDebug>
-#include "libnitrokey/include/DeviceCommunicationExceptions.h"
+#include <libnitrokey/DeviceCommunicationExceptions.h>
 bool libada::isPasswordSafeUnlocked() {
   try{
     nm::instance()->get_password_safe_slot_status();

@@ -26,8 +26,8 @@
 #include "ui_aboutdialog.h"
 
 #include "libada.h"
-#include "libnitrokey/include/NitrokeyManager.h"
-#include "libnitrokey/include/DeviceCommunicationExceptions.h"
+#include <libnitrokey/NitrokeyManager.h>
+#include <libnitrokey/DeviceCommunicationExceptions.h>
 using nm = nitrokey::NitrokeyManager;
 
 using namespace AboutDialogUI;
@@ -98,7 +98,7 @@ void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
 #include <QTextStream>
 #include <QWindow>
 #include <QTextEdit>
-#include <libnitrokey/include/stick20_commands.h>
+#include <libnitrokey/stick20_commands.h>
 #include "licensedialog.h"
 
 

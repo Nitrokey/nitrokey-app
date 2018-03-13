@@ -23,7 +23,7 @@
 
 #include <QMutexLocker>
 #include <QDebug>
-#include "libnitrokey/include/DeviceCommunicationExceptions.h"
+#include <libnitrokey/DeviceCommunicationExceptions.h>
 
 
 ThreadWorkerNS::Worker::Worker(QObject *parent, const std::function<Data()> &datafunc) :

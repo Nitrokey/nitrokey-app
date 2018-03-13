@@ -25,7 +25,7 @@
 #include "stick20responsedialog.h"
 #include "ui_stick20changepassworddialog.h"
 #include "libada.h"
-#include "libnitrokey/include/NitrokeyManager.h"
+#include <libnitrokey/NitrokeyManager.h>
 #include "src/core/ThreadWorker.h"
 using nm = nitrokey::NitrokeyManager;
 

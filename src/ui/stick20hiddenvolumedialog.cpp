@@ -21,7 +21,7 @@
  */
 
 #include <src/core/ThreadWorker.h>
-#include <libnitrokey/include/NitrokeyManager.h>
+#include <libnitrokey/NitrokeyManager.h>
 #include "stick20hiddenvolumedialog.h"
 #include "math.h"
 #include "mcvs-wrapper.h"

@@ -109,7 +109,7 @@ Stick20ResponseDialog::~Stick20ResponseDialog() {
 //  delete pollStick20Timer;
 }
 
-#include "libnitrokey/include/NitrokeyManager.h"
+#include <libnitrokey/NitrokeyManager.h>
 
 void Stick20ResponseDialog::checkStick20StatusDialog(void) {
 //  QString OutputText;

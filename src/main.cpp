@@ -30,7 +30,7 @@
 #include <QSettings>
 #include <QFileInfo>
 #include <QDebug>
-#include <libnitrokey/include/log.h>
+#include <libnitrokey/log.h>
 //#include <QSharedMemory>
 #include "src/version.h"
 #include "src/utils/bool_values.h"
