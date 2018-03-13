@@ -147,6 +147,11 @@ IF(NOT WIN32)
   )
 
   install(FILES
+    ${CMAKE_SOURCE_DIR}/data/com.nitrokey.nitrokey-app.appdata.xml
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo/
+  )
+
+  install(FILES
     ${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/apps/nitrokey-app.png
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps
   )
