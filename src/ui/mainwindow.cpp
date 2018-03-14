@@ -47,7 +47,13 @@
 #include "src/core/SecureString.h"
 
 #include <QString>
-#include <src/core/ScopedGuard.h>
+#include "src/core/ScopedGuard.h"
+#include "src/core/ThreadWorker.h"
+#include "hotpslot.h"
+
+#include <QFuture>
+#include <QtConcurrent/QtConcurrent>
+
 
 using nm = nitrokey::NitrokeyManager;
 static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
@@ -95,7 +101,7 @@ void MainWindow::load_settings(){
     ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
     ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
     ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
-    ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", true).toBool());
+    ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", false).toBool());
 #ifndef Q_OS_LINUX
     ui->cb_check_symlink->setEnabled(false);
 #endif
@@ -206,6 +212,12 @@ MainWindow::MainWindow(QWidget *parent):
   first_run();
 
   load_settings();
+
+//  tray.regenerateMenu();
+  tray.setFile_menu(menuBar());
+  ui->tabWidget->setEnabled(false);
+//  startConfiguration();
+  show();
 }
 
 void MainWindow::first_run(){
@@ -283,7 +295,10 @@ void MainWindow::initialTimeReset() {
     return;
   }
 
-  if (!libada::i()->is_time_synchronized()) {
+  QFuture<bool> is_time_synchronized = QtConcurrent::run(libada::i().get(), &libada::is_time_synchronized);
+  is_time_synchronized.waitForFinished();
+
+  if (!is_time_synchronized.result()) {
     bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + RESET_NITROKEYS_TIME, WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED,
       false);
     if (answer) {
@@ -1110,12 +1125,13 @@ void MainWindow::SetupPasswordSafeConfig(void) {
 
   ui->PWS_ComboBoxSelectSlot->setEnabled(PWS_Access);
   ui->PWS_ButtonEnable->setVisible(!PWS_Access);
+  ui->PWS_Lock->setVisible(PWS_Access);
 
   ui->PWS_EditSlotName->setMaxLength(PWS_SLOTNAME_LENGTH);
   ui->PWS_EditPassword->setMaxLength(PWS_PASSWORD_LENGTH);
   ui->PWS_EditLoginName->setMaxLength(PWS_LOGINNAME_LENGTH);
 
-  ui->PWS_CheckBoxHideSecret->setChecked(TRUE);
+  ui->PWS_CheckBoxHideSecret->setChecked(true);
   ui->PWS_EditPassword->setEchoMode(QLineEdit::Password);
 }
 
@@ -1504,14 +1520,8 @@ void MainWindow::on_DeviceDisconnected() {
     tray.showTrayMessage(tr("Nitrokey disconnected"));
   }
 
-  if(this->isVisible()){
-    this->close();
-    csApplet()->messageBox(tr("Closing window due to device disconnection"));
-  }
+  ui->tabWidget->setEnabled(false);
 }
-
-#include "src/core/ThreadWorker.h"
-#include "hotpslot.h"
 
 void MainWindow::on_DeviceConnected() {
   if (debug_mode)
@@ -1520,23 +1530,15 @@ void MainWindow::on_DeviceConnected() {
   if (debug_mode)
     emit ShortOperationBegins(tr("Connecting device"));
 
-  //TODO share device state to improve performance
+  ui->statusBar->showMessage(tr("Device connected. Waiting for initialization..."));
+
   try{
-    libada::i()->get_status();
+    auto result = QtConcurrent::run(libada::i().get(), &libada::get_status);
+    result.waitForFinished();
   }
   catch (LongOperationInProgressException &e){
     long_operation_in_progress = true;
     return;
-  }
-
-  QSettings settings;
-  if(settings.value("main/connection_message", true).toBool()){
-
-     auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
-                                tr("Nitrokey Storage connected") :
-                                tr("Nitrokey Pro connected");
-    ui->statusBar->showMessage(connected_device_model);
-    tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
   }
 
   initialTimeReset();
@@ -1589,7 +1591,19 @@ void MainWindow::on_DeviceConnected() {
                                   ));
       }
 #endif
-      }, this);  
+      }, this);
+  startConfiguration();
+  ui->tabWidget->setEnabled(true);
+
+  QSettings settings;
+  if(settings.value("main/connection_message", true).toBool()){
+
+    auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
+                                  tr("Nitrokey Storage connected") :
+                                  tr("Nitrokey Pro connected");
+    ui->statusBar->showMessage(connected_device_model);
+    tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
+  }
 }
 
 void MainWindow::on_KeepDeviceOnline() {
@@ -1721,4 +1735,9 @@ void MainWindow::on_btn_select_debug_file_path_clicked()
 {
     auto filename = QFileDialog::getSaveFileName(this, tr("Debug file location (will be overwritten)"));
     ui->edit_debug_file_path->setText(filename);
+}
+
+void MainWindow::on_PWS_Lock_clicked()
+{
+  startLockDeviceAction(true);
 }

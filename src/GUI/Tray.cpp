@@ -32,12 +32,14 @@ TODO
 #include "nitrokey-applet.h"
 #include <libnitrokey/NitrokeyManager.h>
 #include <QMenu>
+#include <QMenuBar>
 
 Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
            StorageActions *actions) :
     QObject(_parent),
     trayMenu(nullptr),
     trayMenuPasswdSubMenu(nullptr),
+    file_menu(nullptr),
     worker(nullptr)
 {
   main_window = _parent;
@@ -49,8 +51,6 @@ Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
   initActionsForStick10();
   initActionsForStick20();
   initCommonActions();
-
-  generateMenu(true);
 
   mapper_TOTP = new QSignalMapper(this);
   mapper_HOTP = new QSignalMapper(this);
@@ -148,9 +148,7 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
   return QObject::eventFilter(obj, event);
 }
 
-
   void Tray::generateMenu(bool init, std::function<void(QMenu *)> run_before) {
-  {
     static QMutex mtx;
     QMutexLocker locker(&mtx);
 
@@ -189,8 +187,12 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
 
     trayMenu->addAction(quitAction);
     trayIcon->setContextMenu(trayMenu.get());
+
+    if (file_menu != nullptr){
+      trayMenu->setTitle(tr("Menu"));
+      file_menu->addMenu(trayMenu.get());
+    }
   }
-}
 
 void Tray::initActionsForStick10() {
   UnlockPasswordSafeAction = new QAction(tr("Unlock password safe"), main_window);
@@ -685,5 +687,12 @@ void Tray::updateOperationInProgressBar(int p) {
 
 void Tray::setAdmin_mode(bool _admin_mode) {
   ExtendedConfigActive = _admin_mode;
+}
+
+void Tray::setFile_menu(QMenuBar *file_menu) {
+  Tray::file_menu = file_menu;
+  generateMenu(true);
+  if (trayMenu!= nullptr)
+    file_menu->addMenu(trayMenu.get());
 }
 

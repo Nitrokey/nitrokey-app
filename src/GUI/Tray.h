@@ -50,6 +50,7 @@ signals:
 #include <QSystemTrayIcon>
 #include <QAction>
 #include <memory>
+#include <QtWidgets/QMainWindow>
 #include "StorageActions.h"
 
 class Tray : public QObject {
@@ -104,8 +105,13 @@ private:
 //    QMenu *trayMenuTOTPSubMenu;
 //    QMenu *trayMenuHOTPSubMenu;
     QMenu *trayMenuSubSpecialConfigure;
+    QMenuBar* file_menu;
+public:
+  void setFile_menu(QMenuBar *file_menu);
 
-    QAction *quitAction;
+private:
+
+  QAction *quitAction;
     QAction *configureAction;
     QAction *resetAction;
     QAction *configureActionStick20;

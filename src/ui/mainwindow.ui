@@ -60,6 +60,11 @@
       <property name="movable">
        <bool>false</bool>
       </property>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Start</string>
+       </attribute>
+      </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
         <string>OTP Slot Configuration</string>
@@ -1284,9 +1289,16 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="PWS_Lock">
+            <property name="text">
+             <string>Lock Device</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QProgressBar" name="PWS_progressBar">
             <property name="value">
-             <number>24</number>
+             <number>42</number>
             </property>
            </widget>
           </item>
@@ -1624,6 +1636,16 @@
   <widget class="QStatusBar" name="statusBar">
    <property name="sizeGripEnabled">
     <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>932</width>
+     <height>20</height>
+    </rect>
    </property>
   </widget>
  </widget>
