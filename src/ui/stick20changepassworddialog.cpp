@@ -139,29 +139,29 @@ void DialogChangePassword::InitData(void) {
     case PasswordKind::USER:
       this->setWindowTitle(tr("Set User PIN"));
       ui->label_2->setText(tr("Current User PIN:"));
-      ui->label_3->setText(tr("New User PIN:"));
-      ui->label_4->setText(tr("New User PIN:"));
+      ui->label_3->setText(tr("New PIN:"));
+      ui->label_4->setText(tr("Confirm New PIN:"));
       minimumPasswordLength = minimumPasswordLengthUser;
       break;
     case PasswordKind::ADMIN:
       this->setWindowTitle(tr("Set Admin PIN"));
       ui->label_2->setText(tr("Current Admin PIN:"));
-      ui->label_3->setText(tr("New Admin PIN:"));
-      ui->label_4->setText(tr("New Admin PIN:"));
+      ui->label_3->setText(tr("New PIN:"));
+      ui->label_4->setText(tr("Confirm New PIN:"));
       minimumPasswordLength = minimumPasswordLengthAdmin;
       break;
     case PasswordKind::RESET_USER:
       this->setWindowTitle(tr("Reset User PIN"));
-      ui->label_2->setText(tr("Admin PIN:"));
+      ui->label_2->setText(tr("Current Admin PIN:"));
       ui->label_3->setText(tr("New User PIN:"));
-      ui->label_4->setText(tr("New User PIN:"));
+      ui->label_4->setText(tr("Confirm New User PIN:"));
       minimumPasswordLength = minimumPasswordLengthUser;
       break;
     case PasswordKind::UPDATE:
       this->setWindowTitle(tr("Change Firmware Password"));
       ui->label_2->setText(tr("Current Firmware Password:"));
-      ui->label_3->setText(tr("New Firmware Password:"));
-      ui->label_4->setText(tr("New Firmware Password:"));
+      ui->label_3->setText(tr("New Password:"));
+      ui->label_4->setText(tr("Confirm New Password:"));
       ui->checkBox->setText(tr("Show password"));
       minimumPasswordLength = minimumPasswordLengthFirmware;
       break;
@@ -174,15 +174,16 @@ void DialogChangePassword::InitData(void) {
   // replace %1 and %2 from text with proper values
   //(min and max of password length)
   QString text = ui->label_additional_information->text();
-  text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN).arg(minimumPasswordLengthAdmin);
+
+  text = text.arg(minimumPasswordLength).arg(STICK20_PASSOWRD_LEN);
+
   if (kind == PasswordKind::UPDATE) {
-    text = "<i> " + tr("Other than PINs, the firmware password doesn't have a retry counter and therefore doesn't prevent password guessing attacks. "
-                     "A secure firmware password should contain lower and upper case letters, numbers and special characters with a length between %2 and %3 characters. "
+    text = "<i> " + tr("The Firmware password doesn’t have a retry counter, and therefore doesn’t prevent against password guessing attacks. "
+                       "A secure and complex password should be created with the use of: "
+                       "lower and upper case letters, numbers and special characters; with a length between %2 and %3 characters."
                      "<br/>Default firmware password is: '%1'.").arg(defaultFirmwarePassword).arg(minimumPasswordLengthFirmware).arg(maximumPasswordLengthFirmware)
             + "</i>";
-    text += QString("<p><b>") + tr("Once the firmware password is forgotten the Nitrokey can't be "
-                                    "updated or reset. Don't lose your firmware password, please.") +
-            QString("</b></p>");
+    text += QString("<p><b>") + tr("WARNING! If you lose your Firmware password, Nitrokey can’t be updated or reset!") + QString("</b></p>");
 
   }
   ui->label_additional_information->setText(text);
