@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Configuration</string>
+   <string>Nitrokey App</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources.qrc">
@@ -249,6 +249,76 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QRadioButton" name="base32RadioButton">
+                 <property name="toolTip">
+                  <string>Example: &quot;ZR3M5I...&quot;</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Secret input format: base32</string>
+                 </property>
+                 <property name="text">
+                  <string>Base32</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="hexRadioButton">
+                 <property name="toolTip">
+                  <string>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Secret input format: hex</string>
+                 </property>
+                 <property name="text">
+                  <string>Hex</string>
+                 </property>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="l_supportedLength">
+                 <property name="font">
+                  <font>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Entered OTP 'Secret Key' string is longer than supported by this device</string>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Label shown when the OTP secret key is too long</string>
+                 </property>
+                 <property name="text">
+                  <string extracomment="Label shown when the OTP secret key is too long">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP 'Secret Key' string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_3">
                <property name="toolTip">
@@ -339,9 +409,22 @@
                   </spacer>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="btn_copyToClipboard">
+                   <property name="toolTip">
+                    <string>Copy secret to clipboard</string>
+                   </property>
+                   <property name="text">
+                    <string>Copy to clipboard</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="randomSecretButton">
                    <property name="toolTip">
                     <string>After generating a random secret, you would need to copy it into your application or service where you want to login to.</string>
+                   </property>
+                   <property name="accessibleDescription">
+                    <string/>
                    </property>
                    <property name="text">
                     <string>Generate random secret</string>
@@ -349,76 +432,6 @@
                   </widget>
                  </item>
                 </layout>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_6">
-               <item>
-                <widget class="QRadioButton" name="base32RadioButton">
-                 <property name="toolTip">
-                  <string>Example: &quot;ZR3M5I...&quot;</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Secret input format: base32</string>
-                 </property>
-                 <property name="text">
-                  <string>Base32</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="hexRadioButton">
-                 <property name="toolTip">
-                  <string>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Secret input format: hex</string>
-                 </property>
-                 <property name="text">
-                  <string>Hex</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_2">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <widget class="QLabel" name="l_supportedLength">
-                 <property name="font">
-                  <font>
-                   <pointsize>11</pointsize>
-                  </font>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Entered OTP 'Secret Key' string is longer than supported by this device</string>
-                 </property>
-                 <property name="accessibleDescription">
-                  <string>Label shown when the OTP secret key is too long</string>
-                 </property>
-                 <property name="text">
-                  <string extracomment="Label shown when the OTP secret key is too long">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP 'Secret Key' string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
                </item>
               </layout>
              </item>
@@ -1400,6 +1413,26 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QCheckBox" name="cb_show_main_window_on_connection">
+                   <property name="text">
+                    <string>Show main window when device connects</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="cb_hide_main_window_on_connection">
+                   <property name="text">
+                    <string>Hide main window when device disconnects</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_12">
                    <item>
                     <widget class="QLabel" name="label_28">
@@ -1660,7 +1693,6 @@
   <tabstop>hexRadioButton</tabstop>
   <tabstop>secretEdit</tabstop>
   <tabstop>checkBox</tabstop>
-  <tabstop>randomSecretButton</tabstop>
   <tabstop>enterCheckBox</tabstop>
   <tabstop>intervalSpinBox</tabstop>
   <tabstop>digits6radioButton</tabstop>

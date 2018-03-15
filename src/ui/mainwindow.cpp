@@ -96,12 +96,16 @@ void MainWindow::load_settings(){
 
     ui->edit_debug_file_path->setText(settings.value("debug/file", "").toString());
     ui->spin_debug_verbosity->setValue(settings.value("debug/level", 2).toInt());
-    ui->cb_debug_enabled->setChecked(settings.value("debug/enabled", false).toBool());
-    emit ui->cb_debug_enabled->toggled(settings.value("debug/enabled", false).toBool());
+    auto settings_debug_enabled = settings.value("debug/enabled", false).toBool();
+    ui->cb_debug_enabled->setChecked(settings_debug_enabled);
+    emit ui->cb_debug_enabled->toggled(settings_debug_enabled);
     ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
     ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
     ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
-    ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", false).toBool());
+    ui->cb_show_main_window_on_connection->setChecked(settings.value("main/show_main_on_connection", true).toBool());
+    ui->cb_hide_main_window_on_connection->setChecked(settings.value("main/close_main_on_connection", false).toBool());
+
+  ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", false).toBool());
 #ifndef Q_OS_LINUX
     ui->cb_check_symlink->setEnabled(false);
 #endif
@@ -174,6 +178,7 @@ MainWindow::MainWindow(QWidget *parent):
   connect(this, SIGNAL(DeviceConnected()), &auth_user, SLOT(clearTemporaryPasswordForced()));
   connect(this, SIGNAL(DeviceLocked()), &auth_admin, SLOT(clearTemporaryPasswordForced()));
   connect(this, SIGNAL(DeviceLocked()), &auth_user, SLOT(clearTemporaryPasswordForced()));
+  connect(this, SIGNAL(DeviceConnected()), this, SLOT(ready()));
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
@@ -213,11 +218,11 @@ MainWindow::MainWindow(QWidget *parent):
 
   load_settings();
 
-//  tray.regenerateMenu();
   tray.setFile_menu(menuBar());
+
   ui->tabWidget->setEnabled(false);
-//  startConfiguration();
-  show();
+  startConfiguration(false);
+  ui->statusBar->showMessage(tr("Idle"));
 }
 
 void MainWindow::first_run(){
@@ -601,21 +606,24 @@ void MainWindow::displayCurrentGeneralConfig() {
   ui->deleteUserPasswordCheckBox->setChecked(status.delete_user_password != 0);
 }
 
-void MainWindow::startConfiguration() {
-  bool validPassword = true;
-  // Start the config dialog
-  if (validPassword) {
+void MainWindow::startConfiguration(bool changeTab) {
     displayCurrentSlotConfig();
     displayCurrentGeneralConfig();
     SetupPasswordSafeConfig();
 
-    ManageWindow::bringToFocus(this);
+    if (libada::i()->isStorageDeviceConnected()) {
+      ui->counterEdit->setMaxLength(7);
+    }
 
     QTimer::singleShot(0, this, SLOT(resizeMin()));
-  }
-  if (libada::i()->isStorageDeviceConnected()) {
-    ui->counterEdit->setMaxLength(7);
-  }
+
+    if (changeTab){
+      ui->tabWidget->setCurrentIndex(1);
+    }
+    QTimer::singleShot(0, this, [this](){
+      ManageWindow::bringToFocus(this);
+      ui->tabWidget->setEnabled(libada::i()->isDeviceConnected());
+    });
 }
 
 void MainWindow::resizeMin() { resize(minimumSizeHint()); }
@@ -1082,6 +1090,7 @@ void MainWindow::checkTextEdited() {
   ui->base32RadioButton->setEnabled(valid);
   ui->hexRadioButton->setEnabled(valid);
   ui->writeButton->setEnabled(valid);
+  ui->btn_copyToClipboard->setEnabled(valid && !secret_key.isEmpty());
 }
 
 void MainWindow::SetupPasswordSafeConfig(void) {
@@ -1516,8 +1525,12 @@ void MainWindow::on_DeviceDisconnected() {
 
   QSettings settings;
   if(settings.value("main/connection_message", true).toBool()){
-    ui->statusBar->showMessage(tr("Nitrokey disconnected"));
     tray.showTrayMessage(tr("Nitrokey disconnected"));
+  }
+  ui->statusBar->showMessage(tr("Nitrokey disconnected"));
+
+  if(this->isVisible() && settings.value("main/close_main_on_connection", false).toBool()){
+    this->hide();
   }
 
   ui->tabWidget->setEnabled(false);
@@ -1592,18 +1605,19 @@ void MainWindow::on_DeviceConnected() {
       }
 #endif
       }, this);
-  startConfiguration();
-  ui->tabWidget->setEnabled(true);
 
   QSettings settings;
-  if(settings.value("main/connection_message", true).toBool()){
+  if (settings.value("main/show_main_on_connection", true).toBool()){
+    startConfiguration(false);
+  }
 
-    auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
+  auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
                                   tr("Nitrokey Storage connected") :
                                   tr("Nitrokey Pro connected");
-    ui->statusBar->showMessage(connected_device_model);
+  if(settings.value("main/connection_message", true).toBool()){
     tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
   }
+  ui->statusBar->showMessage(connected_device_model);
 }
 
 void MainWindow::on_KeepDeviceOnline() {
@@ -1713,6 +1727,8 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("clipboard/PWS_time", ui->spin_PWS_time->value());
     settings.setValue("clipboard/OTP_time", ui->spin_OTP_time->value());
     settings.setValue("main/connection_message", ui->cb_device_connection_message->isChecked());
+    settings.setValue("main/show_main_on_connection", ui->cb_show_main_window_on_connection->isChecked());
+    settings.setValue("main/close_main_on_connection", ui->cb_hide_main_window_on_connection->isChecked());
     settings.setValue("storage/check_symlink", ui->cb_check_symlink->isChecked());
 
     // inform user and quit if asked
@@ -1740,4 +1756,14 @@ void MainWindow::on_btn_select_debug_file_path_clicked()
 void MainWindow::on_PWS_Lock_clicked()
 {
   startLockDeviceAction(true);
+}
+
+void MainWindow::on_btn_copyToClipboard_clicked()
+{
+    clipboard.copyOTP(ui->secretEdit->text());
+    showNotificationLabel();
+}
+
+void MainWindow::ready() {
+  ui->tabWidget->setEnabled(true);
 }

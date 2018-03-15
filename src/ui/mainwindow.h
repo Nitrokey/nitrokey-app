@@ -106,7 +106,7 @@ private:
 public slots:
   void startAboutDialog();
   void startHelpAction();
-  void startConfiguration();
+  void startConfiguration(bool changeTab = true);
   void PWS_Clicked_EnablePWSAccess();
 
   int factoryResetAction();
@@ -145,6 +145,7 @@ private slots:
   void on_enableUserPasswordCheckBox_clicked(bool checked);
 
   void resizeMin();
+  void ready();
   void checkConnection();
   void storage_check_symlink();
 
@@ -194,6 +195,8 @@ private slots:
   void on_btn_select_debug_file_path_clicked();
 
   void on_PWS_Lock_clicked();
+
+  void on_btn_copyToClipboard_clicked();
 
 public:
   void generateOTPConfig(OTPSlot *slot);
