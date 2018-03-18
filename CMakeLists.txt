@@ -106,7 +106,6 @@ INCLUDE_DIRECTORIES(
   ${SRCDIR}
   ${UTILSDIR}
   ${SRCUIDIR}
-    3rdparty/cppcodec
 )
 
 # c/cpp sources
@@ -210,7 +209,7 @@ find_package(PkgConfig)
 pkg_search_module(LIBNITROKEY libnitrokey-1)
 
 if(LIBNITROKEY_FOUND)
-  MESSAGE(STATUS "Found system libnitrokey (flags: ${LIBNITROKEY_CFLAGS} ${LIBNITROKEY_LDFLAGS})")
+  MESSAGE(STATUS "Found system libnitrokey (Cflags: '${LIBNITROKEY_CFLAGS}' Libs: '${LIBNITROKEY_LDFLAGS}')")
   if (BUILD_SHARED_LIBS)
     target_compile_options(nitrokey-app PRIVATE ${LIBNITROKEY_CFLAGS})
     target_link_libraries(nitrokey-app ${LIBNITROKEY_LDFLAGS})
@@ -225,6 +224,22 @@ else()
   target_link_libraries(nitrokey-app nitrokey)
 endif()
 
+# ... same for cppcodec
+pkg_search_module(CPPCODEC cppcodec-1)
+
+if(CPPCODEC_FOUND)
+  MESSAGE(STATUS "Found system cppcodec (Cflags: '${CPPCODEC_CFLAGS}' Libs: '${CPPCODEC_LDFLAGS}')")
+  if (BUILD_SHARED_LIBS)
+    target_compile_options(nitrokey-app PRIVATE ${CPPCODEC_CFLAGS})
+    target_link_libraries(nitrokey-app ${CPPCODEC_LDFLAGS})
+  else()
+    target_compile_options(nitrokey-app PRIVATE ${CPPCODEC_STATIC_CFLAGS})
+    target_link_libraries(nitrokey-app ${CPPCODEC_STATIC_LDFLAGS})
+  endif()
+else()
+  MESSAGE("Using bundled cppcodec")
+  include_directories(3rdparty/cppcodec)
+endif()
 
 # Packaging
 SET(CPACK_GENERATOR
