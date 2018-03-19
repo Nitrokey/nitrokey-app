@@ -48,7 +48,7 @@ FIND_PACKAGE(Qt5Widgets)
 # add git version info
 IF(ADD_GIT_INFO)
 execute_process(
-        COMMAND git describe --abbrev=4 HEAD
+        COMMAND git describe --always --abbrev=4 HEAD
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE GIT_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE

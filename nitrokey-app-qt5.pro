@@ -134,3 +134,6 @@ TRANSLATIONS += i18n/nitrokey_de_DE.ts \
                 i18n/nitrokey_en.ts \
                 i18n/nitrokey_fr.ts
 
+
+DEFINES += GIT_VERSION=\"\\\"$$system(git describe --abbrev=4 --always)\\\"\"
+message($$DEFINES)
