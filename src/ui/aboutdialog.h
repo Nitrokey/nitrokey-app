@@ -103,7 +103,7 @@ private slots:
   void on_btn_3rdparty_clicked();
 
 private:
-  std::shared_ptr<Ui::AboutDialog> ui;
+  Ui::AboutDialog *ui;
   AboutDialogUI::Worker worker;
   QThread worker_thread;
 

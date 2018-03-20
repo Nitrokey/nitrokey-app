@@ -36,7 +36,7 @@ static const int invalid_value = 99;
 
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent), ui(nullptr) {
-  ui = std::make_shared<Ui::AboutDialog>();
+  ui = new Ui::AboutDialog;
   ui->setupUi(this);
 
   connect(&worker_thread, SIGNAL(started()), &worker, SLOT(fetch_device_data()));
@@ -91,6 +91,7 @@ AboutDialog::AboutDialog(QWidget *parent)
 AboutDialog::~AboutDialog() {
   worker_thread.quit();
   worker_thread.wait();
+  delete ui;
 }
 
 void AboutDialog::on_ButtonOK_clicked() { done(TRUE); }
