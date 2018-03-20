@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>932</width>
-    <height>781</height>
+    <height>717</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1564,6 +1564,16 @@
                   </widget>
                  </item>
                  <item>
+                  <widget class="QCheckBox" name="cb_hide_main_window_on_close">
+                   <property name="text">
+                    <string>Do not quit when the main window is closed</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_12">
                    <item>
                     <widget class="QLabel" name="label_28">
@@ -1639,7 +1649,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
+               <item row="1" column="3">
                 <widget class="QPushButton" name="btn_select_debug_file_path">
                  <property name="text">
                   <string>Select path</string>
@@ -1653,6 +1663,13 @@
                  </property>
                  <property name="text">
                   <string>Logging enabled</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="btn_select_debug_console">
+                 <property name="text">
+                  <string>Log to console</string>
                  </property>
                 </widget>
                </item>
@@ -1684,7 +1701,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="label_30">
                  <property name="text">
-                  <string>TIme to store Password Safe secrets in clipboard (in seconds):</string>
+                  <string>Time to store Password Safe secrets in clipboard (in seconds):</string>
                  </property>
                  <property name="buddy">
                   <cstring>spin_debug_verbosity</cstring>
@@ -1880,7 +1897,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>824</x>
-     <y>739</y>
+     <y>675</y>
     </hint>
     <hint type="destinationlabel">
      <x>300</x>
@@ -1896,7 +1913,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>824</x>
-     <y>739</y>
+     <y>675</y>
     </hint>
     <hint type="destinationlabel">
      <x>262</x>
@@ -1912,7 +1929,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>823</x>
-     <y>738</y>
+     <y>674</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -1927,12 +1944,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>129</x>
-     <y>203</y>
+     <x>154</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
-     <x>206</x>
-     <y>230</y>
+     <x>374</x>
+     <y>384</y>
     </hint>
    </hints>
   </connection>
@@ -1943,12 +1960,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>105</x>
-     <y>192</y>
+     <x>130</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
-     <x>182</x>
-     <y>297</y>
+     <x>350</x>
+     <y>414</y>
     </hint>
    </hints>
   </connection>
@@ -1959,12 +1976,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>203</y>
+     <x>103</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
-     <x>221</x>
-     <y>255</y>
+     <x>897</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_debug_enabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>btn_select_debug_console</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>763</x>
+     <y>376</y>
     </hint>
    </hints>
   </connection>

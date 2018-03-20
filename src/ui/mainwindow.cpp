@@ -104,6 +104,7 @@ void MainWindow::load_settings(){
     ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
     ui->cb_show_main_window_on_connection->setChecked(settings.value("main/show_main_on_connection", true).toBool());
     ui->cb_hide_main_window_on_connection->setChecked(settings.value("main/close_main_on_connection", false).toBool());
+    ui->cb_hide_main_window_on_close->setChecked(settings.value("main/hide_on_close", true).toBool());
 
   ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", false).toBool());
 #ifndef Q_OS_LINUX
@@ -371,8 +372,13 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  this->hide();
-  event->ignore();
+  QSettings settings;
+  if (settings.value("main/hide_on_close", true).toBool()){
+      this->hide();
+      event->ignore();
+  } else {
+      QApplication::quit();
+  }
 }
 
 void MainWindow::generateComboBoxEntrys() {
@@ -1771,7 +1777,10 @@ void MainWindow::on_btn_writeSettings_clicked()
 
     // see if restart is required
     bool restart_required = false;
-    if (settings.value("main/language").toString() != ui->combo_languages->currentData().toString()){
+    if (settings.value("main/language").toString() != ui->combo_languages->currentData().toString()
+            || settings.value("debug/enabled").toBool() != ui->cb_debug_enabled->isChecked()
+            || settings.value("debug/file").toString() != ui->edit_debug_file_path->text()
+            ){
         restart_required = true;
     }
 
@@ -1786,6 +1795,8 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("main/connection_message", ui->cb_device_connection_message->isChecked());
     settings.setValue("main/show_main_on_connection", ui->cb_show_main_window_on_connection->isChecked());
     settings.setValue("main/close_main_on_connection", ui->cb_hide_main_window_on_connection->isChecked());
+    settings.setValue("main/hide_on_close", ui->cb_hide_main_window_on_close->isChecked());
+
     settings.setValue("storage/check_symlink", ui->cb_check_symlink->isChecked());
 
     // inform user and quit if asked
@@ -1823,4 +1834,9 @@ void MainWindow::on_btn_copyToClipboard_clicked()
 
 void MainWindow::ready() {
   ui->tabWidget->setEnabled(true);
+}
+
+void MainWindow::on_btn_select_debug_console_clicked()
+{
+    ui->edit_debug_file_path->setText("console");
 }

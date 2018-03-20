@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
   }
 
   QString df = settings.value("debug/file", "").toString().trimmed();
-  if (!df.isEmpty() && settings.value("debug/enabled", false).toBool()){
+  if (!df.isEmpty() && settings.value("debug/enabled", false).toBool() && df != "console"){
     w.set_debug_file(df);
   }
   auto debug_file_option_name = "debug-file";
