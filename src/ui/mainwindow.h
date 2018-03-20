@@ -138,6 +138,7 @@ signals:
   void LongOperationStart();
 
 private slots:
+  void manageStartPage();
   void on_longOperationStart();
   void on_KeepDeviceOnline();
   void on_DeviceConnected();

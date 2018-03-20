@@ -180,6 +180,11 @@ MainWindow::MainWindow(QWidget *parent):
   connect(this, SIGNAL(DeviceLocked()), &auth_user, SLOT(clearTemporaryPasswordForced()));
   connect(this, SIGNAL(DeviceConnected()), this, SLOT(ready()));
 
+  connect(this, SIGNAL(DeviceConnected()), this, SLOT(manageStartPage()));
+  connect(&storage, SIGNAL(storageStatusUpdated()), this, SLOT(manageStartPage()));
+  connect(this, SIGNAL(PWS_unlocked()), this, SLOT(manageStartPage()));
+  connect(this, SIGNAL(DeviceLocked()), this, SLOT(manageStartPage()));
+
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
   PWS_set_controls_enabled(false);
@@ -223,6 +228,51 @@ MainWindow::MainWindow(QWidget *parent):
   ui->tabWidget->setEnabled(false);
   startConfiguration(false);
   ui->statusBar->showMessage(tr("Idle"));
+
+  // Connect dial page
+  connect(ui->btn_dial_PWS, SIGNAL(clicked()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
+  connect(ui->btn_dial_lock, SIGNAL(clicked()), this, SLOT(startLockDeviceAction()));
+  connect(ui->btn_dial_configure, SIGNAL(clicked()), this, SLOT(startConfiguration()));
+  connect(ui->btn_dial_EV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableCryptedVolume()));
+  connect(ui->btn_dial_help, SIGNAL(clicked()), this, SLOT(startHelpAction()));
+  connect(ui->btn_dial_HV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableHiddenVolume()));
+}
+
+#include <libnitrokey/stick20_commands.h>
+
+void MainWindow::manageStartPage(){
+
+    if (!libada::i()->isDeviceConnected() || libada::i()->get_status_no_except() !=0 ) {
+        ui->tab_5->setEnabled(false);
+        hide();
+        return;
+    }
+
+    QFuture<bool> PWS_unlocked = QtConcurrent::run(libada::i().get(), &libada::isPasswordSafeUnlocked);
+    PWS_unlocked.waitForFinished();
+    ui->btn_dial_PWS->setEnabled(!PWS_unlocked.result());
+    ui->btn_dial_lock->setEnabled(PWS_unlocked.result());
+
+    auto is_storage = libada::i()->isStorageDeviceConnected();
+    ui->btn_dial_EV->setEnabled(is_storage);
+    ui->btn_dial_HV->setEnabled(is_storage);
+
+    if (is_storage){
+        QFuture<nitrokey::stick20::DeviceConfigurationResponsePacket::ResponsePayload> status
+                = QtConcurrent::run(nitrokey::NitrokeyManager::instance().get(),
+                                    &nitrokey::NitrokeyManager::get_status_storage);
+        status.waitForFinished();
+
+        bool initialized = !status.result().StickKeysNotInitiated && status.result().SDFillWithRandomChars_u8;
+
+        ui->btn_dial_PWS->setEnabled(initialized && !PWS_unlocked.result());
+        ui->btn_dial_EV->setEnabled(initialized && !status.result().VolumeActiceFlag_st.encrypted);
+        ui->btn_dial_HV->setEnabled(initialized && !status.result().VolumeActiceFlag_st.hidden);
+        ui->btn_dial_lock->setEnabled(status.result().VolumeActiceFlag_st.encrypted
+                                      || status.result().VolumeActiceFlag_st.hidden
+                                      || PWS_unlocked.result()
+                                      );
+    }
 }
 
 void MainWindow::first_run(){
