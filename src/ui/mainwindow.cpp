@@ -296,7 +296,7 @@ void MainWindow::checkConnection() {
 }
 
 void MainWindow::initialTimeReset() {
-  if (!libada::i()->isDeviceConnected()) {
+  if (!libada::i()->isDeviceConnected() || long_operation_in_progress) {
     return;
   }
 
@@ -611,6 +611,8 @@ void MainWindow::startConfigurationMain() {
 }
 
 void MainWindow::startConfiguration(bool changeTab) {
+    if (long_operation_in_progress) return;
+
     displayCurrentSlotConfig();
     displayCurrentGeneralConfig();
     SetupPasswordSafeConfig();
@@ -1549,13 +1551,14 @@ void MainWindow::on_DeviceConnected() {
 
   ui->statusBar->showMessage(tr("Device connected. Waiting for initialization..."));
 
-  try{
-    auto result = QtConcurrent::run(libada::i().get(), &libada::get_status);
-    result.waitForFinished();
-  }
-  catch (LongOperationInProgressException &e){
+  auto result = QtConcurrent::run(libada::i().get(), &libada::get_status_no_except);
+  result.waitForFinished();
+
+  if (result.result() == 2){
     long_operation_in_progress = true;
-    return;
+  }
+  if (result.result() !=0){
+      return;
   }
 
   initialTimeReset();

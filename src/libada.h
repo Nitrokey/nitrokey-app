@@ -141,6 +141,7 @@ public:
   std::string get_serial_number();
 
   nitrokey::proto::stick10::GetStatus::ResponsePayload get_status();
+  int get_status_no_except();
 
   bool have_communication_issues_occurred();
 
