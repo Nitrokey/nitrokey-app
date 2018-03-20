@@ -20,9 +20,22 @@
     </qresource>
     <qresource prefix="/license">
         <file alias="General">3RDPARTY.txt</file>
-        <file alias="Nitrokey-App">LICENSES/GPLv3</file> <!-- GPLv3 -->
-        <file alias="Qt-framework">LICENSES/GPLv3</file> <!-- GPLv3 -->
-        <file alias="libnitrokey">LICENSES/LGPLv3</file> <!-- LGPLv3 -->
-        <file alias="cppcodec">LICENSES/MIT</file> <!-- MIT -->
+        <file alias="Nitrokey-App">LICENSES/GPLv3</file>
+        <file alias="Qt-framework">LICENSES/GPLv3</file>
+        <file alias="libnitrokey">LICENSES/LGPLv3</file>
+        <file alias="cppcodec">LICENSES/MIT</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>images/new/icon_about_nitrokey.svg</file>
+        <file>images/new/icon_fragezeichen.svg</file>
+        <file>images/new/icon_harddrive.svg</file>
+        <file>images/new/icon_info.svg</file>
+        <file>images/new/icon_Logo_App.svg</file>
+        <file>images/new/icon_NK.svg</file>
+        <file>images/new/icon_passwords.svg</file>
+        <file>images/new/icon_quit.svg</file>
+        <file>images/new/icon_safe.svg</file>
+        <file>images/new/icon_settings.svg</file>
+        <file>images/new/icon_warning.svg</file>
     </qresource>
 </RCC>
