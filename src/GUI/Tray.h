@@ -111,11 +111,13 @@ public:
 
 private:
 
+  bool long_operation_in_progress = false;
   QAction *quitAction;
     QAction *configureAction;
     QAction *resetAction;
     QAction *configureActionStick20;
     QAction *DebugAction;
+    QAction *ShowWindowAction;
     QAction *ActionAboutDialog;
     QAction *ActionHelp;
 //    QAction *SecPasswordAction;

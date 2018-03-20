@@ -107,6 +107,7 @@ public slots:
   void startAboutDialog();
   void startHelpAction();
   void startConfiguration(bool changeTab = true);
+  void startConfigurationMain();
   void PWS_Clicked_EnablePWSAccess();
 
   int factoryResetAction();

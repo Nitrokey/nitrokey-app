@@ -605,6 +605,10 @@ void MainWindow::displayCurrentGeneralConfig() {
   ui->enableUserPasswordCheckBox->setChecked(status.enable_user_password != 0);
   ui->deleteUserPasswordCheckBox->setChecked(status.delete_user_password != 0);
 }
+void MainWindow::startConfigurationMain() {
+    startConfiguration(false);
+    ui->tabWidget->setCurrentIndex(0);
+}
 
 void MainWindow::startConfiguration(bool changeTab) {
     displayCurrentSlotConfig();

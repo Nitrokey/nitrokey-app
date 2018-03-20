@@ -179,6 +179,9 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
 
     trayMenu->addSeparator();
 
+    if (!long_operation_in_progress)
+        trayMenu->addAction(ShowWindowAction);
+
     // Help entry
     trayMenu->addAction(ActionHelp);
 
@@ -217,6 +220,9 @@ void Tray::initActionsForStick10() {
 void Tray::initCommonActions() {
   DebugAction = new QAction(tr("&Debug"), main_window);
   connect(DebugAction, SIGNAL(triggered()), main_window, SLOT(startStickDebug()));
+
+  ShowWindowAction = new QAction(tr("&Show main window"), main_window);
+  connect(ShowWindowAction, SIGNAL(triggered()), main_window, SLOT(startConfigurationMain()));
 
   quitAction = new QAction(tr("&Quit"), main_window);
   quitAction->setIcon(QIcon(":/images/quit.png"));
@@ -500,6 +506,7 @@ void Tray::generateMenuForStorageDevice() {
         LOG(message, nitrokey::log::Loglevel::DEBUG);
       }
       catch (LongOperationInProgressException &e){
+        long_operation_in_progress = true;
         return;
       }
       catch (DeviceCommunicationException &e){
@@ -507,7 +514,7 @@ void Tray::generateMenuForStorageDevice() {
         return;
       }
     }
-
+    long_operation_in_progress = false;
 
     if (status.ActiveSD_CardID_u32 == 0) // Is Stick 2.0 online (SD + SC
       // accessable?)
