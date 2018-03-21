@@ -1,18 +1,23 @@
 # message("CONFIG: $${CONFIG}")
 
-CONFIG   += qt c++14 debug
+include(libnitrokey/libnitrokey.pro)
+
+CONFIG   += qt c++14
 QT       += core gui widgets
 
+isEmpty(PREFIX) {
+    PREFIX = /usr/local
+}
 
-target.path = /usr/local/bin
-desktop.path = /usr/share/applications
-desktop.files += nitrokey-app.desktop
-
-INSTALLS += target desktop
+target.path = $$PREFIX/bin
+desktop.path = $$PREFIX/share/applications
+desktop.files = data/nitrokey-app.desktop
+icons.files = data/icons/*
+icons.path = $$PREFIX/share/icons/
+INSTALLS = target desktop icons
 
 sources.files = qss
 
-include(libnitrokey/libnitrokey.pro)
 
 TARGET = nitrokey-app
 TEMPLATE = app
@@ -128,3 +133,4 @@ TRANSLATIONS += i18n/nitrokey_de_DE.ts \
                 i18n/nitrokey_arabic.ts \
                 i18n/nitrokey_en.ts \
                 i18n/nitrokey_fr.ts
+
