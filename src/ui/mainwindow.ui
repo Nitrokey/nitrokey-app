@@ -30,8 +30,8 @@
    <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -64,15 +64,39 @@
        <attribute name="title">
         <string>Start</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_13">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>Quick access</string>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="2">
-            <widget class="QPushButton" name="btn_dial_HV">
+          <property name="minimumSize">
+           <size>
+            <width>561</width>
+            <height>211</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Overview</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="btn_dial_PWS">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -80,14 +104,14 @@
               </sizepolicy>
              </property>
              <property name="styleSheet">
-              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
+              <string notr="true"/>
              </property>
              <property name="text">
-              <string>Unlock Hidden Volume</string>
+              <string>Unlock Password Safe</string>
              </property>
              <property name="icon">
               <iconset resource="../../resources.qrc">
-               <normaloff>:/images/harddrive.png</normaloff>:/images/harddrive.png</iconset>
+               <normaloff>:/images/safe.png</normaloff>:/images/safe.png</iconset>
              </property>
             </widget>
            </item>
@@ -111,8 +135,8 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QPushButton" name="btn_dial_help">
+           <item row="0" column="2">
+            <widget class="QPushButton" name="btn_dial_HV">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -123,11 +147,31 @@
               <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
              </property>
              <property name="text">
-              <string>Help</string>
+              <string>Unlock Hidden Volume</string>
              </property>
              <property name="icon">
               <iconset resource="../../resources.qrc">
-               <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
+               <normaloff>:/images/harddrive.png</normaloff>:/images/harddrive.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="btn_dial_lock">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
+             </property>
+             <property name="text">
+              <string>Lock Device</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/images/new/icon_Logo_App.svg</normaloff>:/images/new/icon_Logo_App.svg</iconset>
              </property>
             </widget>
            </item>
@@ -152,7 +196,7 @@
             </widget>
            </item>
            <item row="1" column="2">
-            <widget class="QPushButton" name="btn_dial_lock">
+            <widget class="QPushButton" name="btn_dial_help">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -163,31 +207,11 @@
               <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
              </property>
              <property name="text">
-              <string>Lock Device</string>
+              <string>Help</string>
              </property>
              <property name="icon">
               <iconset resource="../../resources.qrc">
-               <normaloff>:/images/new/icon_Logo_App.svg</normaloff>:/images/new/icon_Logo_App.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="btn_dial_PWS">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true"/>
-             </property>
-             <property name="text">
-              <string>Unlock Password Safe</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources.qrc">
-               <normaloff>:/images/safe.png</normaloff>:/images/safe.png</iconset>
+               <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
              </property>
             </widget>
            </item>
@@ -1872,7 +1896,6 @@
   <tabstop>generalCancelButton</tabstop>
   <tabstop>writeButton</tabstop>
   <tabstop>writeGeneralConfigButton</tabstop>
-  <tabstop>tabWidget</tabstop>
   <tabstop>cb_first_run_message</tabstop>
   <tabstop>cb_device_connection_message</tabstop>
   <tabstop>combo_languages</tabstop>

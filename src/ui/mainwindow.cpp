@@ -237,6 +237,7 @@ MainWindow::MainWindow(QWidget *parent):
   connect(ui->btn_dial_EV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableCryptedVolume()));
   connect(ui->btn_dial_help, SIGNAL(clicked()), this, SLOT(startHelpAction()));
   connect(ui->btn_dial_HV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableHiddenVolume()));
+
 }
 
 #include <libnitrokey/stick20_commands.h>
