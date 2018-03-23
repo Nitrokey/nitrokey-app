@@ -74,7 +74,7 @@ Tray::~Tray() {
  */
 void Tray::createIndicator() {
   trayIcon = new QSystemTrayIcon(this);
-  trayIcon->setIcon(QIcon(":/images/CS_icon.png"));
+  trayIcon->setIcon(QIcon(":/images/new/icon_NK.svg"));
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
           SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
@@ -208,7 +208,7 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
 
 void Tray::initActionsForStick10() {
   UnlockPasswordSafeAction = new QAction(tr("Unlock password safe"), main_window);
-  UnlockPasswordSafeAction->setIcon(QIcon(":/images/safe.png"));
+  UnlockPasswordSafeAction->setIcon(QIcon(":/images/new/icon_safe.svg"));
   connect(UnlockPasswordSafeAction, SIGNAL(triggered()), main_window, SLOT(PWS_Clicked_EnablePWSAccess()));
 
   configureAction = new QAction(tr("&OTP"), main_window);
@@ -234,15 +234,15 @@ void Tray::initCommonActions() {
   connect(ShowWindowAction, SIGNAL(triggered()), main_window, SLOT(startConfigurationMain()));
 
   quitAction = new QAction(tr("&Quit"), main_window);
-  quitAction->setIcon(QIcon(":/images/quit.png"));
+  quitAction->setIcon(QIcon(":/images/new/icon_quit.svg"));
   connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
   ActionHelp = new QAction(tr("&Help"), main_window);
-  ActionHelp->setIcon(QIcon(":/images/about.png"));
+  ActionHelp->setIcon(QIcon(":/images/new/icon_fragezeichen.svg"));
   connect(ActionHelp, SIGNAL(triggered()), main_window, SLOT(startHelpAction()));
 
   ActionAboutDialog = new QAction(tr("&About Nitrokey"), main_window);
-  ActionAboutDialog->setIcon(QIcon(":/images/about.png"));
+  ActionAboutDialog->setIcon(QIcon(":/images/new/icon_about_nitrokey.svg"));
   connect(ActionAboutDialog, SIGNAL(triggered()), main_window, SLOT(startAboutDialog()));
 }
 
@@ -251,21 +251,22 @@ void Tray::initActionsForStick20() {
   connect(configureActionStick20, SIGNAL(triggered()), main_window, SLOT(startConfiguration()));
 
   Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), main_window);
-  Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
+  Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/new/icon_harddrive.svg"));
   connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20EnableCryptedVolume()));
 
   Stick20ActionDisableCryptedVolume = new QAction(tr("&Lock encrypted volume"), main_window);
-  Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
+  Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/new/icon_harddrive.svg"));
   connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20DisableCryptedVolume()));
 
   Stick20ActionEnableHiddenVolume = new QAction(tr("&Unlock hidden volume"), main_window);
-  Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/harddrive.png"));
+  Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/new/icon_harddrive.svg"));
   connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20EnableHiddenVolume()));
 
   Stick20ActionDisableHiddenVolume = new QAction(tr("&Lock hidden volume"), main_window);
+  Stick20ActionDisableHiddenVolume->setIcon(QIcon(":/images/new/icon_harddrive.svg"));
   connect(Stick20ActionDisableHiddenVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20DisableHiddenVolume()));
 
@@ -395,7 +396,8 @@ void tray_Worker::doWork() {
 }
 
 void Tray::generatePasswordMenu() {
-  trayMenuPasswdSubMenu = std::make_shared<QMenu>(tr("Passwords")); //TODO make shared pointer
+  trayMenuPasswdSubMenu = std::make_shared<QMenu>(tr("Passwords"));
+  trayMenuPasswdSubMenu->setIcon(QIcon(":/images/new/icon_passwords.svg"));
 
   trayMenu->addMenu(trayMenuPasswdSubMenu.get());
   trayMenu->addSeparator();
@@ -477,7 +479,7 @@ void Tray::generateMenuForProDevice() {
     generateMenuPasswordSafe();
 
     trayMenuSubConfigure = trayMenu->addMenu(tr("Configure"));
-    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
+    trayMenuSubConfigure->setIcon(QIcon(":/images/new/icon_settings.svg"));
 
     if (TRUE == libada::i()->isPasswordSafeAvailable())
       trayMenuSubConfigure->addAction(configureActionStick20);
@@ -580,7 +582,7 @@ void Tray::generateMenuForStorageDevice() {
       trayMenu->addAction(LockDeviceAction);
 
     trayMenuSubConfigure = trayMenu->addMenu(tr("Configure"));
-    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
+    trayMenuSubConfigure->setIcon(QIcon(":/images/new/icon_settings.svg"));
     trayMenuSubConfigure->addAction(configureActionStick20);
     trayMenuSubConfigure->addSeparator();
 

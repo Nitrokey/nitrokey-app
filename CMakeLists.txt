@@ -40,9 +40,10 @@ ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
 
 
 # QT configuration
-FIND_PACKAGE(Qt5Core)
-FIND_PACKAGE(Qt5Gui)
-FIND_PACKAGE(Qt5Widgets)
+FIND_PACKAGE(Qt5Core REQUIRED)
+FIND_PACKAGE(Qt5Gui REQUIRED)
+FIND_PACKAGE(Qt5Widgets REQUIRED)
+FIND_PACKAGE(Qt5Svg REQUIRED)
 
 
 # add git version info
@@ -209,7 +210,7 @@ INSTALL(TARGETS nitrokey-app DESTINATION ${CMAKE_INSTALL_BINDIR})
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${EXTRA_LIBS}
 #  ${platform_specific_libs}
-  Qt5::Widgets Qt5::Core Qt5::Gui
+Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Svg
 )
 
 # first try to find libnitrokey via pkg-config
@@ -258,7 +259,7 @@ SET(PACKAGE_MAINTAINER "Szczepan Zalega <szczepan@nitrokey.com>" )
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER ${PACKAGE_MAINTAINER} )
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5, libqt5gui5, libqt5core5a, libhidapi-libusb0")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5, libqt5gui5, libqt5core5a, libqt5svg5, libhidapi-libusb0")
 SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/debian/postinst")
 
 

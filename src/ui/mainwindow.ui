@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources.qrc">
-    <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
+    <normaloff>:/images/new/icon_NK.svg</normaloff>:/images/new/icon_NK.svg</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -111,7 +111,7 @@
              </property>
              <property name="icon">
               <iconset resource="../../resources.qrc">
-               <normaloff>:/images/safe.png</normaloff>:/images/safe.png</iconset>
+               <normaloff>:/images/new/icon_safe.svg</normaloff>:/images/new/icon_safe.svg</iconset>
              </property>
             </widget>
            </item>
@@ -131,7 +131,7 @@
              </property>
              <property name="icon">
               <iconset resource="../../resources.qrc">
-               <normaloff>:/images/harddrive.png</normaloff>:/images/harddrive.png</iconset>
+               <normaloff>:/images/new/icon_harddrive.svg</normaloff>:/images/new/icon_harddrive.svg</iconset>
              </property>
             </widget>
            </item>
@@ -151,7 +151,7 @@
              </property>
              <property name="icon">
               <iconset resource="../../resources.qrc">
-               <normaloff>:/images/harddrive.png</normaloff>:/images/harddrive.png</iconset>
+               <normaloff>:/images/new/icon_harddrive.svg</normaloff>:/images/new/icon_harddrive.svg</iconset>
              </property>
             </widget>
            </item>
@@ -168,10 +168,6 @@
              </property>
              <property name="text">
               <string>Lock Device</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources.qrc">
-               <normaloff>:/images/new/icon_Logo_App.svg</normaloff>:/images/new/icon_Logo_App.svg</iconset>
              </property>
             </widget>
            </item>
@@ -191,7 +187,7 @@
              </property>
              <property name="icon">
               <iconset resource="../../resources.qrc">
-               <normaloff>:/images/about.png</normaloff>:/images/about.png</iconset>
+               <normaloff>:/images/new/icon_fragezeichen.svg</normaloff>:/images/new/icon_fragezeichen.svg</iconset>
              </property>
             </widget>
            </item>

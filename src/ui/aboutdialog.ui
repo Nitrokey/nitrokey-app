@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -24,7 +24,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources.qrc">
-    <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
+    <normaloff>:/images/new/icon_NK.svg</normaloff>:/images/new/icon_NK.svg</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -49,11 +49,32 @@
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QLabel" name="IconLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>500</width>
+            <height>161</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>500</width>
+            <height>161</height>
+           </size>
+          </property>
           <property name="accessibleDescription">
            <string>Logo</string>
           </property>
           <property name="text">
-           <string notr="true">ICON</string>
+           <string notr="true"/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="../../resources.qrc">:/images/new/icon_Logo_App.svg</pixmap>
           </property>
          </widget>
         </item>
@@ -82,7 +103,7 @@
           <item>
            <widget class="QLabel" name="info_icon">
             <property name="text">
-             <string notr="true">i</string>
+             <string notr="true"/>
             </property>
            </widget>
           </item>
@@ -152,7 +173,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="text">
-             <string notr="true">TextLabel</string>
+             <string notr="true">......</string>
             </property>
            </widget>
           </item>
@@ -195,7 +216,7 @@
              <enum>Qt::StrongFocus</enum>
             </property>
             <property name="text">
-             <string notr="true">TextLabel</string>
+             <string notr="true">......</string>
             </property>
            </widget>
           </item>
@@ -241,7 +262,7 @@
              <string/>
             </property>
             <property name="text">
-             <string notr="true">TextLabel</string>
+             <string notr="true">......</string>
             </property>
            </widget>
           </item>
@@ -572,6 +593,9 @@
             <widget class="QLabel" name="warning_sign">
              <property name="text">
               <string/>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
              </property>
             </widget>
            </item>

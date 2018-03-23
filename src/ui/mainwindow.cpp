@@ -53,7 +53,7 @@
 
 #include <QFuture>
 #include <QtConcurrent/QtConcurrent>
-
+#include <QSvgWidget>
 
 using nm = nitrokey::NitrokeyManager;
 static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
@@ -183,6 +183,7 @@ MainWindow::MainWindow(QWidget *parent):
 
   connect(this, SIGNAL(DeviceConnected()), this, SLOT(manageStartPage()));
   connect(&storage, SIGNAL(storageStatusUpdated()), this, SLOT(manageStartPage()));
+  connect(&storage, SIGNAL(storageStatusChanged()), this, SLOT(manageStartPage()));
   connect(this, SIGNAL(PWS_unlocked()), this, SLOT(manageStartPage()));
   connect(this, SIGNAL(DeviceLocked()), this, SLOT(manageStartPage()));
 
@@ -241,7 +242,6 @@ MainWindow::MainWindow(QWidget *parent):
 #include <libnitrokey/stick20_commands.h>
 
 void MainWindow::manageStartPage(){
-
     if (!libada::i()->isDeviceConnected() || libada::i()->get_status_no_except() !=0 ) {
         ui->tab_5->setEnabled(false);
         hide();

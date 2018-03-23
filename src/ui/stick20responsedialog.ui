@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>342</width>
-    <height>96</height>
+    <height>123</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,9 +23,9 @@
    <string>Progress</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
-    <normaloff>:/images/CS_icon.png</normaloff>
-    <normalon>:/images/CS_icon.png</normalon>:/images/CS_icon.png</iconset>
+   <iconset resource="../../resources.qrc">
+    <normaloff>:/images/new/icon_NK.svg</normaloff>
+    <normalon>:/images/new/icon_NK.svg</normalon>:/images/new/icon_NK.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="sizeConstraint">
@@ -139,7 +139,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources.qrc"/>
  </resources>
  <connections>
   <connection>
