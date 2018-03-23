@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -62,7 +62,7 @@
       </property>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
-        <string>Start</string>
+        <string>Overview</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
         <item row="0" column="0">
@@ -80,7 +80,7 @@
            </size>
           </property>
           <property name="title">
-           <string>Overview</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>

@@ -221,7 +221,7 @@ void Tray::initCommonActions() {
   DebugAction = new QAction(tr("&Debug"), main_window);
   connect(DebugAction, SIGNAL(triggered()), main_window, SLOT(startStickDebug()));
 
-  ShowWindowAction = new QAction(tr("&Show main window"), main_window);
+  ShowWindowAction = new QAction(tr("&Overview"), main_window);
   connect(ShowWindowAction, SIGNAL(triggered()), main_window, SLOT(startConfigurationMain()));
 
   quitAction = new QAction(tr("&Quit"), main_window);
