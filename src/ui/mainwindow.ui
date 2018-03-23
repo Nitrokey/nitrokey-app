@@ -1825,6 +1825,12 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>btn_dial_PWS</tabstop>
+  <tabstop>btn_dial_EV</tabstop>
+  <tabstop>btn_dial_HV</tabstop>
+  <tabstop>btn_dial_lock</tabstop>
+  <tabstop>btn_dial_help</tabstop>
   <tabstop>radioButton_2</tabstop>
   <tabstop>radioButton</tabstop>
   <tabstop>slotComboBox</tabstop>
@@ -1834,6 +1840,8 @@
   <tabstop>hexRadioButton</tabstop>
   <tabstop>secretEdit</tabstop>
   <tabstop>checkBox</tabstop>
+  <tabstop>btn_copyToClipboard</tabstop>
+  <tabstop>randomSecretButton</tabstop>
   <tabstop>enterCheckBox</tabstop>
   <tabstop>intervalSpinBox</tabstop>
   <tabstop>digits6radioButton</tabstop>
@@ -1845,11 +1853,15 @@
   <tabstop>ompEdit</tabstop>
   <tabstop>ttEdit</tabstop>
   <tabstop>muiEdit</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>writeButton</tabstop>
   <tabstop>enableUserPasswordCheckBox</tabstop>
   <tabstop>deleteUserPasswordCheckBox</tabstop>
   <tabstop>numLockComboBox</tabstop>
   <tabstop>capsLockComboBox</tabstop>
   <tabstop>scrollLockComboBox</tabstop>
+  <tabstop>generalCancelButton</tabstop>
+  <tabstop>writeGeneralConfigButton</tabstop>
   <tabstop>PWS_ComboBoxSelectSlot</tabstop>
   <tabstop>PWS_ButtonClearSlot</tabstop>
   <tabstop>PWS_EditSlotName</tabstop>
@@ -1859,17 +1871,19 @@
   <tabstop>PWS_CheckBoxHideSecret</tabstop>
   <tabstop>l_utf8_info</tabstop>
   <tabstop>PWS_ButtonEnable</tabstop>
+  <tabstop>PWS_Lock</tabstop>
   <tabstop>PWS_ButtonClose</tabstop>
   <tabstop>PWS_ButtonSaveSlot</tabstop>
-  <tabstop>cancelButton</tabstop>
-  <tabstop>generalCancelButton</tabstop>
-  <tabstop>writeButton</tabstop>
-  <tabstop>writeGeneralConfigButton</tabstop>
   <tabstop>cb_first_run_message</tabstop>
+  <tabstop>cb_check_symlink</tabstop>
   <tabstop>cb_device_connection_message</tabstop>
+  <tabstop>cb_show_main_window_on_connection</tabstop>
+  <tabstop>cb_hide_main_window_on_connection</tabstop>
+  <tabstop>cb_hide_main_window_on_close</tabstop>
   <tabstop>combo_languages</tabstop>
   <tabstop>cb_debug_enabled</tabstop>
   <tabstop>edit_debug_file_path</tabstop>
+  <tabstop>btn_select_debug_console</tabstop>
   <tabstop>btn_select_debug_file_path</tabstop>
   <tabstop>spin_debug_verbosity</tabstop>
   <tabstop>spin_PWS_time</tabstop>
