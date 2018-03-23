@@ -157,6 +157,12 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
     else
       trayMenu->clear(); // Clear old menu
 
+    if (nullptr == windowMenu)
+      windowMenu = std::make_shared<QMenu>("Menu");
+    else
+      windowMenu->clear(); // Clear old menu
+
+
     run_before(trayMenu.get());
 
     if (!init){
@@ -174,26 +180,29 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
     }
 
     // Add debug window ?
-    if (debug_mode)
+    if (debug_mode){
       trayMenu->addAction(DebugAction);
+      windowMenu->addAction(DebugAction);
+    }
 
     trayMenu->addSeparator();
 
     if (!long_operation_in_progress)
         trayMenu->addAction(ShowWindowAction);
 
-    // Help entry
     trayMenu->addAction(ActionHelp);
-
-    // About entry
     trayMenu->addAction(ActionAboutDialog);
-
     trayMenu->addAction(quitAction);
+
+    windowMenu->addSeparator();
+    windowMenu->addAction(ActionHelp);
+    windowMenu->addAction(ActionAboutDialog);
+    windowMenu->addAction(quitAction);
+
     trayIcon->setContextMenu(trayMenu.get());
 
-    if (file_menu != nullptr){
-      trayMenu->setTitle(tr("Menu"));
-      file_menu->addMenu(trayMenu.get());
+    if (file_menu != nullptr && windowMenu != nullptr){
+      file_menu->addMenu(windowMenu.get());
     }
   }
 
@@ -391,6 +400,9 @@ void Tray::generatePasswordMenu() {
   trayMenu->addMenu(trayMenuPasswdSubMenu.get());
   trayMenu->addSeparator();
 
+  windowMenu->addMenu(trayMenuPasswdSubMenu.get());
+  windowMenu->addSeparator();
+
   if (thread_tray_populateOTP!= nullptr){
     destroyThread();
   }
@@ -460,7 +472,6 @@ void Tray::populateOTPPasswordMenu() {
 
 
 void Tray::generateMenuForProDevice() {
-  {
     generatePasswordMenu();
     trayMenu->addSeparator();
     generateMenuPasswordSafe();
@@ -488,7 +499,7 @@ void Tray::generateMenuForProDevice() {
       trayMenuSubConfigure->addSeparator();
       trayMenuSubConfigure->addAction(resetAction);
     }
-  }
+    windowMenu->addMenu(trayMenuSubConfigure);
 }
 using nm = nitrokey::NitrokeyManager;
 
@@ -496,7 +507,6 @@ void Tray::generateMenuForStorageDevice() {
   int AddSeperator = FALSE;
   {
     nitrokey::proto::stick20::DeviceConfigurationResponsePacket::ResponsePayload status;
-
 
     for (int i=0; i < 20; i++){
       try {
@@ -528,33 +538,30 @@ void Tray::generateMenuForStorageDevice() {
 //    if (TRUE == StickNotInitated) {
     if (TRUE == status.StickKeysNotInitiated) {
       trayMenu->addAction(Stick20ActionInitCryptedVolume);
+      windowMenu->addAction(Stick20ActionInitCryptedVolume);
       AddSeperator = TRUE;
     }
 
 //    if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
     if (!status.StickKeysNotInitiated && !status.SDFillWithRandomChars_u8) {
       trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars);
+      windowMenu->addAction(Stick20ActionFillSDCardWithRandomChars);
       AddSeperator = TRUE;
     }
 
-    if (TRUE == AddSeperator)
+    if (TRUE == AddSeperator){
       trayMenu->addSeparator();
+      windowMenu->addSeparator();
+    }
 
     generatePasswordMenu();
     trayMenu->addSeparator();
 
     if (!status.StickKeysNotInitiated) {
-      //FIXME move to mainwindow
-      // Enable tab for password safe for stick 2
-//      if (-1 == ui->tabWidget->indexOf(ui->tab_3)) {
-//        ui->tabWidget->addTab(ui->tab_3, tr("Password Safe"));
-//      }
-
       // Setup entrys for password safe
       generateMenuPasswordSafe();
     }
 
-//    if (FALSE == SdCardNotErased) {
     if (status.SDFillWithRandomChars_u8) { //filled randomly
       if (!status.VolumeActiceFlag_st.encrypted)
         trayMenu->addAction(Stick20ActionEnableCryptedVolume);
@@ -615,9 +622,9 @@ void Tray::generateMenuForStorageDevice() {
     trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate);
     trayMenuSubConfigure->addAction(Stick20ActionExportFirmwareToFile);
 
-    trayMenuSubConfigure->addSeparator();
 
     if (TRUE == ExtendedConfigActive) {
+      trayMenuSubConfigure->addSeparator();
       trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu(tr("Special Configure"));
       trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars);
 
@@ -626,11 +633,13 @@ void Tray::generateMenuForStorageDevice() {
 
       trayMenuSubSpecialConfigure->addAction(resetAction);
     }
+    windowMenu->addMenu(trayMenuSubConfigure);
 
     // Enable "reset user PIN" ?
     if (0 == libada::i()->getUserPasswordRetryCount()) {
       trayMenu->addSeparator();
       trayMenu->addAction(Stick20ActionResetUserPassword);
+      windowMenu->addAction(Stick20ActionResetUserPassword);
     }
 
 //    // Add debug window ?
@@ -699,7 +708,7 @@ void Tray::setAdmin_mode(bool _admin_mode) {
 void Tray::setFile_menu(QMenuBar *file_menu) {
   Tray::file_menu = file_menu;
   generateMenu(true);
-  if (trayMenu!= nullptr)
-    file_menu->addMenu(trayMenu.get());
+  if (windowMenu!= nullptr)
+    file_menu->addMenu(windowMenu.get());
 }
 
