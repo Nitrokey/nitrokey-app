@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -172,26 +172,6 @@
              <property name="icon">
               <iconset resource="../../resources.qrc">
                <normaloff>:/images/new/icon_Logo_App.svg</normaloff>:/images/new/icon_Logo_App.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QPushButton" name="btn_dial_configure">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
-             </property>
-             <property name="text">
-              <string>Configure</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../../resources.qrc">
-               <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
              </property>
             </widget>
            </item>

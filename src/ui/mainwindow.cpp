@@ -232,12 +232,10 @@ MainWindow::MainWindow(QWidget *parent):
 
   // Connect dial page
   connect(ui->btn_dial_PWS, SIGNAL(clicked()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
-  connect(ui->btn_dial_lock, SIGNAL(clicked()), this, SLOT(startLockDeviceAction()));
-  connect(ui->btn_dial_configure, SIGNAL(clicked()), this, SLOT(startConfiguration()));
+  connect(ui->btn_dial_lock, SIGNAL(clicked()), this, SLOT(startLockDeviceAction()));  
   connect(ui->btn_dial_EV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableCryptedVolume()));
   connect(ui->btn_dial_help, SIGNAL(clicked()), this, SLOT(startHelpAction()));
   connect(ui->btn_dial_HV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableHiddenVolume()));
-
 }
 
 #include <libnitrokey/stick20_commands.h>
