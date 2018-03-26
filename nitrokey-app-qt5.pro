@@ -60,7 +60,8 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCDIR}/GUI/StorageActions.cpp \
             $${SRCDIR}/GUI/ManageWindow.cpp \
             $${SRCDIR}/libada.cpp \
-    src/ui/licensedialog.cpp
+    src/ui/licensedialog.cpp \
+    src/GUI/graphicstools.cpp
 
 
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
@@ -85,7 +86,8 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCDIR}/libada.h \
             $${SRCDIR}/GUI/Tray.h \
             $${SRCDIR}/GUI/StorageActions.h \
-    src/ui/licensedialog.h
+    src/ui/licensedialog.h \
+    src/GUI/graphicstools.h
 
 
 

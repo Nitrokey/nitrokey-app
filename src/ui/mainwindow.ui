@@ -205,6 +205,10 @@
              <property name="text">
               <string>Quit</string>
              </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/images/new/icon_quit.svg</normaloff>:/images/new/icon_quit.svg</iconset>
+             </property>
             </widget>
            </item>
           </layout>
