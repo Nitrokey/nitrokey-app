@@ -171,7 +171,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="2">
+           <item row="1" column="1">
             <widget class="QPushButton" name="btn_dial_help">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -188,6 +188,22 @@
              <property name="icon">
               <iconset resource="../../resources.qrc">
                <normaloff>:/images/new/icon_fragezeichen.svg</normaloff>:/images/new/icon_fragezeichen.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QPushButton" name="btn_dial_quit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
+             </property>
+             <property name="text">
+              <string>Quit</string>
              </property>
             </widget>
            </item>
@@ -1827,6 +1843,7 @@
   <tabstop>btn_dial_HV</tabstop>
   <tabstop>btn_dial_lock</tabstop>
   <tabstop>btn_dial_help</tabstop>
+  <tabstop>btn_dial_quit</tabstop>
   <tabstop>radioButton_2</tabstop>
   <tabstop>radioButton</tabstop>
   <tabstop>slotComboBox</tabstop>
@@ -1856,8 +1873,6 @@
   <tabstop>numLockComboBox</tabstop>
   <tabstop>capsLockComboBox</tabstop>
   <tabstop>scrollLockComboBox</tabstop>
-  <tabstop>generalCancelButton</tabstop>
-  <tabstop>writeGeneralConfigButton</tabstop>
   <tabstop>PWS_ComboBoxSelectSlot</tabstop>
   <tabstop>PWS_ButtonClearSlot</tabstop>
   <tabstop>PWS_EditSlotName</tabstop>
@@ -1886,6 +1901,8 @@
   <tabstop>spin_OTP_time</tabstop>
   <tabstop>btn_cancelSettings</tabstop>
   <tabstop>btn_writeSettings</tabstop>
+  <tabstop>writeGeneralConfigButton</tabstop>
+  <tabstop>generalCancelButton</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
