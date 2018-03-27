@@ -159,6 +159,16 @@ private:
   QSignalMapper *mapper_HOTP;
   QSignalMapper *mapper_PWS;
 
+  QAction *quitAction_tray;
+  QAction *ActionHelp_tray;
+  QAction *ActionAboutDialog_tray;
+  QAction *Stick20ActionEnableCryptedVolume_tray;
+  QAction *Stick20ActionDisableCryptedVolume_tray;
+  QAction *Stick20ActionEnableHiddenVolume_tray;
+  QAction *Stick20ActionDisableHiddenVolume_tray;
+  std::shared_ptr<QMenu> trayMenuPasswdSubMenu_tray;
+  QMenu *trayMenuSubConfigure_tray;
+  QAction *UnlockPasswordSafeAction_tray;
 };
 
 
