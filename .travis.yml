@@ -13,11 +13,10 @@ before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
   - sudo apt-get -qq update
   - sudo apt-get -qq install ${AF} qt56base qt56tools qt56svg  # qttools5-dev
-  - sudo apt-get -qq install ${AF} ccache cmake libhidapi-dev ${COMP}
+  - sudo apt-get -qq install ${AF} cmake libhidapi-dev ${COMP}
   - sudo apt-get -qq remove gcc-4.8 g++-4.8 --purge
 
 cache:
-  - ccache
   - apt
 
 
