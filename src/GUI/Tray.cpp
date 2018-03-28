@@ -638,8 +638,10 @@ void Tray::generateMenuForStorageDevice() {
 
     //FIXME run in separate thread
     const auto PasswordSafeEnabled = libada::i()->isPasswordSafeUnlocked();
-    if (FALSE != (status.VolumeActiceFlag_st.hidden || status.VolumeActiceFlag_st.encrypted || PasswordSafeEnabled))
+    if (false != (status.VolumeActiceFlag_st.hidden || status.VolumeActiceFlag_st.encrypted || PasswordSafeEnabled)){
       trayMenu->addAction(LockDeviceAction);
+      windowMenu->addAction(LockDeviceAction);
+    }
 
     trayMenuSubConfigure = trayMenu->addMenu(tr("Configure"));
     trayMenuSubConfigure->setIcon(GraphicsTools::loadColorize(":/images/new/icon_settings.svg"));
@@ -721,12 +723,15 @@ int Tray::UpdateDynamicMenuEntrys(void) {
 void Tray::generateMenuPasswordSafe() {
   auto passwordSafeUnlocked = libada::i()->isPasswordSafeUnlocked();
   if (!passwordSafeUnlocked) {
-      trayMenu->addAction(UnlockPasswordSafeAction);
+      trayMenu->addAction(UnlockPasswordSafeAction_tray);
+      windowMenu->addAction(UnlockPasswordSafeAction);
 
       auto passwordSafeAvailable = libada::i()->isPasswordSafeAvailable();
       UnlockPasswordSafeAction->setEnabled(passwordSafeAvailable);
+      UnlockPasswordSafeAction_tray->setEnabled(passwordSafeAvailable);
   } else {
     trayMenu->addAction(LockDeviceAction);
+    windowMenu->addAction(LockDeviceAction);
   }
 }
 
