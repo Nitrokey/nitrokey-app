@@ -123,6 +123,10 @@ win32:RC_ICONS = images/icon/nitrokey-app-icon-256-red.ico
 macx{
     ICON= images/CS_icon.icns
     QMAKE_INFO_PLIST = Info.plist
+
+    # PLUGINS += iconengines/libqsvgicon.dylib
+#    QTPLUGIN += qsvgicon libqsvgicon
+#    CONFIG += import_plugins
 }
 
 
