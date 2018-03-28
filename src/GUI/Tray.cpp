@@ -203,7 +203,8 @@ void Tray::generateMenu(bool init, std::function<void(QMenu *)> run_before) {
     trayIcon->setContextMenu(trayMenu.get());
 
     if (file_menu != nullptr && windowMenu != nullptr){
-      file_menu->addMenu(windowMenu.get());
+//      file_menu->addMenu(windowMenu.get()); // does not work for macOS
+      file_menu->addAction(windowMenu->menuAction());
     }
   }
 
