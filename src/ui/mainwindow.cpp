@@ -254,15 +254,15 @@ MainWindow::MainWindow(QWidget *parent):
 #include <libnitrokey/stick20_commands.h>
 
 void MainWindow::make_UI_enabled(bool enabled) {
-//  ui->tabWidget->setEnabled(enabled);
   ui->tab->setEnabled(enabled);
   ui->tab_2->setEnabled(enabled);
   ui->tab_3->setEnabled(enabled);
-
-  ui->btn_dial_PWS->setEnabled(enabled);
-  ui->btn_dial_EV->setEnabled(enabled);
-  ui->btn_dial_HV->setEnabled(enabled);
-  ui->btn_dial_lock->setEnabled(enabled);
+  if(!enabled){
+    ui->btn_dial_PWS->setEnabled(enabled);
+    ui->btn_dial_lock->setEnabled(enabled);
+    ui->btn_dial_EV->setEnabled(enabled);
+    ui->btn_dial_HV->setEnabled(enabled);
+  }
 }
 
 void MainWindow::manageStartPage(){
@@ -270,6 +270,8 @@ void MainWindow::manageStartPage(){
       make_UI_enabled(false);
       return;
     }
+    make_UI_enabled(true);
+
 
     QFuture<bool> PWS_unlocked = QtConcurrent::run(libada::i().get(), &libada::isPasswordSafeUnlocked);
     PWS_unlocked.waitForFinished();
@@ -277,8 +279,8 @@ void MainWindow::manageStartPage(){
     ui->btn_dial_lock->setEnabled(PWS_unlocked.result());
 
     auto is_storage = libada::i()->isStorageDeviceConnected();
-    ui->btn_dial_EV->setEnabled(is_storage);
-    ui->btn_dial_HV->setEnabled(is_storage);
+    ui->btn_dial_EV->setEnabled(false);
+    ui->btn_dial_HV->setEnabled(false);
 
     if (is_storage){
         QFuture<nitrokey::stick20::DeviceConfigurationResponsePacket::ResponsePayload> status
@@ -287,6 +289,9 @@ void MainWindow::manageStartPage(){
         status.waitForFinished();
 
         bool initialized = !status.result().StickKeysNotInitiated && status.result().SDFillWithRandomChars_u8;
+        if (!initialized){
+          make_UI_enabled(false);
+        }
 
         ui->btn_dial_PWS->setEnabled(initialized && !PWS_unlocked.result());
         ui->btn_dial_EV->setEnabled(initialized && !status.result().VolumeActiceFlag_st.encrypted);
@@ -295,6 +300,7 @@ void MainWindow::manageStartPage(){
                                       || status.result().VolumeActiceFlag_st.hidden
                                       || PWS_unlocked.result()
                                       );
+        ui->PWS_ButtonEnable->setEnabled(ui->btn_dial_PWS->isEnabled());
     }
 }
 
@@ -1857,7 +1863,6 @@ void MainWindow::on_btn_copyToClipboard_clicked()
 }
 
 void MainWindow::ready() {
-  make_UI_enabled(true);
 }
 
 void MainWindow::on_btn_select_debug_console_clicked()
