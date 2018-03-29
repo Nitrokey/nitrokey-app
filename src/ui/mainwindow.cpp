@@ -62,6 +62,10 @@ static const QString communication_error_message = QApplication::tr("Communicati
 static const QString invalid_secret_key_string_details = QApplication::tr("The secret string you have entered is invalid. Please reenter it.")
                            +"\n"+QApplication::tr("Details: ");
 
+static const QString WARNING_EV_NOT_SECURE_INITIALIZE = QApplication::tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
+                                                           "device\" option from context menu.");
+
+
 const QString MainWindow::RESET_NITROKEYS_TIME = MainWindow::tr("Reset Nitrokey's time?");
 const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
     MainWindow::tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
@@ -1662,9 +1666,11 @@ void MainWindow::on_DeviceConnected() {
       if(!data["storage_connected"].toBool()) return;
 
       if (!data["initiated"].toBool()) {
-        if (data["initiated_ask"].toBool())
-          csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-                                        "device\" option from context menu.") + " " + tray_location_msg);
+        if (data["initiated_ask"].toBool()){
+          csApplet()->warningBox(WARNING_EV_NOT_SECURE_INITIALIZE + " " + tray_location_msg);
+          ui->statusBar->showMessage(WARNING_EV_NOT_SECURE_INITIALIZE);
+          make_UI_enabled(false);
+        }
       }
       if (data["initiated"].toBool() && !data["erased"].toBool()) {
         if (data["erased_ask"].toBool())
