@@ -119,7 +119,11 @@ void MainWindow::load_settings_page(){
 void MainWindow::keyPressEvent(QKeyEvent *keyevent)
 {
     if (keyevent->key()==Qt::Key_Escape){
-         hide();
+        QSettings settings;
+        if (settings.value("main/hide_on_close", true).toBool())
+            hide();
+        else
+            QApplication::quit();
     } else {
         QMainWindow::keyPressEvent(keyevent);
     }
