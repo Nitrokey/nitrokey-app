@@ -148,6 +148,25 @@ bool libada::have_communication_issues_occurred(){
   return false;
 }
 
+int libada::get_status_no_except(){
+  try{
+    nm::instance()->get_status();
+    return 0;
+  }
+  catch (DeviceCommunicationException &e){
+    return 1;
+  }
+  catch (LongOperationInProgressException &e){
+    return 2;
+  }
+  catch (const CommandFailedException &e){
+    return 3;
+  }
+  catch (const std::exception &e){
+    return 4;
+  }
+}
+
 nitrokey::proto::stick10::GetStatus::ResponsePayload libada::get_status(){
   try{
     return nm::instance()->get_status();

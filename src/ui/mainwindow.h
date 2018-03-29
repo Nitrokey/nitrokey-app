@@ -106,7 +106,8 @@ private:
 public slots:
   void startAboutDialog();
   void startHelpAction();
-  void startConfiguration();
+  void startConfiguration(bool changeTab = true);
+  void startConfigurationMain();
   void PWS_Clicked_EnablePWSAccess();
 
   int factoryResetAction();
@@ -137,6 +138,7 @@ signals:
   void LongOperationStart();
 
 private slots:
+  void manageStartPage();
   void on_longOperationStart();
   void on_KeepDeviceOnline();
   void on_DeviceConnected();
@@ -145,6 +147,7 @@ private slots:
   void on_enableUserPasswordCheckBox_clicked(bool checked);
 
   void resizeMin();
+  void ready();
   void checkConnection();
   void storage_check_symlink();
 
@@ -172,7 +175,7 @@ private slots:
   void on_checkBox_toggled(bool checked);
 
   void startStickDebug();
-  void load_settings();
+  void load_settings_page();
 
   void on_PWS_ButtonClearSlot_clicked();
   void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
@@ -192,6 +195,12 @@ private slots:
   void on_btn_writeSettings_clicked();
 
   void on_btn_select_debug_file_path_clicked();
+
+  void on_PWS_Lock_clicked();
+
+  void on_btn_copyToClipboard_clicked();
+
+  void on_btn_select_debug_console_clicked();
 
 public:
   void generateOTPConfig(OTPSlot *slot);
@@ -223,6 +232,8 @@ private:
   unsigned int roundToNextMultiple(const int number, const int multipleOf) const;
 
   QString getOTPSecretCleaned(QString secret_input);
+
+  void make_UI_enabled(bool enabled);
 };
 
 class utf8FieldLengthValidator : public QValidator {

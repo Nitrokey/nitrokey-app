@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>430</width>
-    <height>575</height>
+    <width>525</width>
+    <height>668</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources.qrc">
-    <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
+    <normaloff>:/images/new/icon_NK.svg</normaloff>:/images/new/icon_NK.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -52,8 +52,26 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>66</width>
+            <height>58</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>66</width>
+            <height>58</height>
+           </size>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>66</width>
+            <height>58</height>
+           </size>
+          </property>
           <property name="text">
-           <string/>
+           <string notr="true"/>
           </property>
           <property name="pixmap">
            <pixmap resource="../../resources.qrc">:/images/warning.png</pixmap>

@@ -32,12 +32,15 @@ TODO
 #include "nitrokey-applet.h"
 #include <libnitrokey/NitrokeyManager.h>
 #include <QMenu>
+#include <QMenuBar>
+#include "graphicstools.h"
 
 Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
            StorageActions *actions) :
     QObject(_parent),
     trayMenu(nullptr),
     trayMenuPasswdSubMenu(nullptr),
+    file_menu(nullptr),
     worker(nullptr)
 {
   main_window = _parent;
@@ -49,8 +52,6 @@ Tray::Tray(QObject *_parent, bool _debug_mode, bool _extended_config,
   initActionsForStick10();
   initActionsForStick20();
   initCommonActions();
-
-  generateMenu(true);
 
   mapper_TOTP = new QSignalMapper(this);
   mapper_HOTP = new QSignalMapper(this);
@@ -74,7 +75,7 @@ Tray::~Tray() {
  */
 void Tray::createIndicator() {
   trayIcon = new QSystemTrayIcon(this);
-  trayIcon->setIcon(QIcon(":/images/CS_icon.png"));
+  trayIcon->setIcon(GraphicsTools::loadColorize(":/images/new/icon_NK.svg", true));
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
           SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
@@ -148,9 +149,7 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
   return QObject::eventFilter(obj, event);
 }
 
-
-  void Tray::generateMenu(bool init, std::function<void(QMenu *)> run_before) {
-  {
+void Tray::generateMenu(bool init, std::function<void(QMenu *)> run_before) {
     static QMutex mtx;
     QMutexLocker locker(&mtx);
 
@@ -158,6 +157,12 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
       trayMenu = std::make_shared<QMenu>();
     else
       trayMenu->clear(); // Clear old menu
+
+    if (nullptr == windowMenu)
+      windowMenu = std::make_shared<QMenu>("Menu");
+    else
+      windowMenu->clear(); // Clear old menu
+
 
     run_before(trayMenu.get());
 
@@ -176,26 +181,41 @@ bool Tray::eventFilter(QObject *obj, QEvent *event) {
     }
 
     // Add debug window ?
-    if (debug_mode)
+    if (debug_mode){
       trayMenu->addAction(DebugAction);
+      windowMenu->addAction(DebugAction);
+    }
 
     trayMenu->addSeparator();
 
-    // Help entry
-    trayMenu->addAction(ActionHelp);
+    if (!long_operation_in_progress)
+        trayMenu->addAction(ShowWindowAction);
 
-    // About entry
-    trayMenu->addAction(ActionAboutDialog);
+    trayMenu->addAction(ActionHelp_tray);
+    trayMenu->addAction(ActionAboutDialog_tray);
+    trayMenu->addAction(quitAction_tray);
 
-    trayMenu->addAction(quitAction);
+    windowMenu->addSeparator();
+    windowMenu->addAction(ActionHelp);
+    windowMenu->addAction(ActionAboutDialog);
+    windowMenu->addAction(quitAction);
+
     trayIcon->setContextMenu(trayMenu.get());
+
+    if (file_menu != nullptr && windowMenu != nullptr){
+//      file_menu->addMenu(windowMenu.get()); // does not work for macOS
+      file_menu->addAction(windowMenu->menuAction());
+    }
   }
-}
 
 void Tray::initActionsForStick10() {
   UnlockPasswordSafeAction = new QAction(tr("Unlock password safe"), main_window);
-  UnlockPasswordSafeAction->setIcon(QIcon(":/images/safe.png"));
+  UnlockPasswordSafeAction->setIcon(GraphicsTools::loadColorize(":/images/new/icon_safe.svg"));
   connect(UnlockPasswordSafeAction, SIGNAL(triggered()), main_window, SLOT(PWS_Clicked_EnablePWSAccess()));
+
+  UnlockPasswordSafeAction_tray = new QAction(tr("Unlock password safe"), main_window);
+  UnlockPasswordSafeAction_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_safe.svg", true));
+  connect(UnlockPasswordSafeAction_tray, SIGNAL(triggered()), main_window, SLOT(PWS_Clicked_EnablePWSAccess()));
 
   configureAction = new QAction(tr("&OTP"), main_window);
   connect(configureAction, SIGNAL(triggered()), main_window, SLOT(startConfiguration()));
@@ -216,17 +236,32 @@ void Tray::initCommonActions() {
   DebugAction = new QAction(tr("&Debug"), main_window);
   connect(DebugAction, SIGNAL(triggered()), main_window, SLOT(startStickDebug()));
 
+  ShowWindowAction = new QAction(tr("&Overview"), main_window);
+  connect(ShowWindowAction, SIGNAL(triggered()), main_window, SLOT(startConfigurationMain()));
+
+  quitAction_tray = new QAction(tr("&Quit"), main_window);
+  quitAction_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_quit.svg", true));
+  connect(quitAction_tray, SIGNAL(triggered()), qApp, SLOT(quit()));
+
   quitAction = new QAction(tr("&Quit"), main_window);
-  quitAction->setIcon(QIcon(":/images/quit.png"));
+  quitAction->setIcon(GraphicsTools::loadColorize(":/images/new/icon_quit.svg"));
   connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
   ActionHelp = new QAction(tr("&Help"), main_window);
-  ActionHelp->setIcon(QIcon(":/images/about.png"));
+  ActionHelp->setIcon(GraphicsTools::loadColorize(":/images/new/icon_fragezeichen.svg"));
   connect(ActionHelp, SIGNAL(triggered()), main_window, SLOT(startHelpAction()));
 
+  ActionHelp_tray = new QAction(tr("&Help"), main_window);
+  ActionHelp_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_fragezeichen.svg", true));
+  connect(ActionHelp_tray, SIGNAL(triggered()), main_window, SLOT(startHelpAction()));
+
   ActionAboutDialog = new QAction(tr("&About Nitrokey"), main_window);
-  ActionAboutDialog->setIcon(QIcon(":/images/about.png"));
+  ActionAboutDialog->setIcon(GraphicsTools::loadColorize(":/images/new/icon_about_nitrokey.svg"));
   connect(ActionAboutDialog, SIGNAL(triggered()), main_window, SLOT(startAboutDialog()));
+
+  ActionAboutDialog_tray = new QAction(tr("&About Nitrokey"), main_window);
+  ActionAboutDialog_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_about_nitrokey.svg", true));
+  connect(ActionAboutDialog_tray, SIGNAL(triggered()), main_window, SLOT(startAboutDialog()));
 }
 
 void Tray::initActionsForStick20() {
@@ -234,22 +269,44 @@ void Tray::initActionsForStick20() {
   connect(configureActionStick20, SIGNAL(triggered()), main_window, SLOT(startConfiguration()));
 
   Stick20ActionEnableCryptedVolume = new QAction(tr("&Unlock encrypted volume"), main_window);
-  Stick20ActionEnableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
+  Stick20ActionEnableCryptedVolume->setIcon(GraphicsTools::loadColorize(":/images/new/icon_harddrive.svg"));
   connect(Stick20ActionEnableCryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20EnableCryptedVolume()));
 
   Stick20ActionDisableCryptedVolume = new QAction(tr("&Lock encrypted volume"), main_window);
-  Stick20ActionDisableCryptedVolume->setIcon(QIcon(":/images/harddrive.png"));
+  Stick20ActionDisableCryptedVolume->setIcon(GraphicsTools::loadColorize(":/images/new/icon_harddrive.svg"));
   connect(Stick20ActionDisableCryptedVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20DisableCryptedVolume()));
 
   Stick20ActionEnableHiddenVolume = new QAction(tr("&Unlock hidden volume"), main_window);
-  Stick20ActionEnableHiddenVolume->setIcon(QIcon(":/images/harddrive.png"));
+  Stick20ActionEnableHiddenVolume->setIcon(GraphicsTools::loadColorize(":/images/new/icon_harddrive.svg"));
   connect(Stick20ActionEnableHiddenVolume, SIGNAL(triggered()), storageActions,
           SLOT(startStick20EnableHiddenVolume()));
 
   Stick20ActionDisableHiddenVolume = new QAction(tr("&Lock hidden volume"), main_window);
+  Stick20ActionDisableHiddenVolume->setIcon(GraphicsTools::loadColorize(":/images/new/icon_harddrive.svg"));
   connect(Stick20ActionDisableHiddenVolume, SIGNAL(triggered()), storageActions,
+          SLOT(startStick20DisableHiddenVolume()));
+
+
+  Stick20ActionEnableCryptedVolume_tray = new QAction(tr("&Unlock encrypted volume"), main_window);
+  Stick20ActionEnableCryptedVolume_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_harddrive.svg", true));
+  connect(Stick20ActionEnableCryptedVolume_tray, SIGNAL(triggered()), storageActions,
+          SLOT(startStick20EnableCryptedVolume()));
+
+  Stick20ActionDisableCryptedVolume_tray = new QAction(tr("&Lock encrypted volume"), main_window);
+  Stick20ActionDisableCryptedVolume_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_harddrive.svg", true));
+  connect(Stick20ActionDisableCryptedVolume_tray, SIGNAL(triggered()), storageActions,
+          SLOT(startStick20DisableCryptedVolume()));
+
+  Stick20ActionEnableHiddenVolume_tray = new QAction(tr("&Unlock hidden volume"), main_window);
+  Stick20ActionEnableHiddenVolume_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_harddrive.svg", true));
+  connect(Stick20ActionEnableHiddenVolume_tray, SIGNAL(triggered()), storageActions,
+          SLOT(startStick20EnableHiddenVolume()));
+
+  Stick20ActionDisableHiddenVolume_tray = new QAction(tr("&Lock hidden volume"), main_window);
+  Stick20ActionDisableHiddenVolume_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_harddrive.svg", true));
+  connect(Stick20ActionDisableHiddenVolume_tray, SIGNAL(triggered()), storageActions,
           SLOT(startStick20DisableHiddenVolume()));
 
   Stick20ActionChangeUserPIN = new QAction(tr("&Change User PIN"), main_window);
@@ -378,10 +435,18 @@ void tray_Worker::doWork() {
 }
 
 void Tray::generatePasswordMenu() {
-  trayMenuPasswdSubMenu = std::make_shared<QMenu>(tr("Passwords")); //TODO make shared pointer
+  trayMenuPasswdSubMenu = std::make_shared<QMenu>(tr("Passwords"));
+  trayMenuPasswdSubMenu->setIcon(GraphicsTools::loadColorize(":/images/new/icon_passwords.svg"));
 
-  trayMenu->addMenu(trayMenuPasswdSubMenu.get());
+  trayMenuPasswdSubMenu_tray = std::make_shared<QMenu>(tr("Passwords"));
+  trayMenuPasswdSubMenu_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_passwords.svg", true));
+
+
+  trayMenu->addMenu(trayMenuPasswdSubMenu_tray.get());
   trayMenu->addSeparator();
+
+  windowMenu->addMenu(trayMenuPasswdSubMenu.get());
+  windowMenu->addSeparator();
 
   if (thread_tray_populateOTP!= nullptr){
     destroyThread();
@@ -444,21 +509,29 @@ void Tray::populateOTPPasswordMenu() {
   }
 
   if (trayMenuPasswdSubMenu->actions().empty()) {
-    trayMenuPasswdSubMenu->hide();
     trayMenuPasswdSubMenu->setEnabled(false);
     trayMenuPasswdSubMenu->setTitle( trayMenuPasswdSubMenu->title() + " " + tr("(empty)") );
+  }
+
+  trayMenuPasswdSubMenu_tray->addActions(trayMenuPasswdSubMenu->actions());
+
+  if (trayMenuPasswdSubMenu_tray->actions().empty()) {
+    trayMenuPasswdSubMenu_tray->setEnabled(false);
+    trayMenuPasswdSubMenu_tray->setTitle( trayMenuPasswdSubMenu_tray->title() + " " + tr("(empty)") );
   }
 }
 
 
 void Tray::generateMenuForProDevice() {
-  {
     generatePasswordMenu();
     trayMenu->addSeparator();
     generateMenuPasswordSafe();
 
     trayMenuSubConfigure = trayMenu->addMenu(tr("Configure"));
-    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
+    trayMenuSubConfigure->setIcon(GraphicsTools::loadColorize(":/images/new/icon_settings.svg"));
+
+    trayMenuSubConfigure_tray = trayMenu->addMenu(tr("Configure"));
+    trayMenuSubConfigure_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_settings.svg", true));
 
     if (TRUE == libada::i()->isPasswordSafeAvailable())
       trayMenuSubConfigure->addAction(configureActionStick20);
@@ -480,7 +553,7 @@ void Tray::generateMenuForProDevice() {
       trayMenuSubConfigure->addSeparator();
       trayMenuSubConfigure->addAction(resetAction);
     }
-  }
+    windowMenu->addMenu(trayMenuSubConfigure);
 }
 using nm = nitrokey::NitrokeyManager;
 
@@ -488,7 +561,6 @@ void Tray::generateMenuForStorageDevice() {
   int AddSeperator = FALSE;
   {
     nitrokey::proto::stick20::DeviceConfigurationResponsePacket::ResponsePayload status;
-
 
     for (int i=0; i < 20; i++){
       try {
@@ -498,6 +570,7 @@ void Tray::generateMenuForStorageDevice() {
         LOG(message, nitrokey::log::Loglevel::DEBUG);
       }
       catch (LongOperationInProgressException &e){
+        long_operation_in_progress = true;
         return;
       }
       catch (DeviceCommunicationException &e){
@@ -505,7 +578,7 @@ void Tray::generateMenuForStorageDevice() {
         return;
       }
     }
-
+    long_operation_in_progress = false;
 
     if (status.ActiveSD_CardID_u32 == 0) // Is Stick 2.0 online (SD + SC
       // accessable?)
@@ -519,52 +592,59 @@ void Tray::generateMenuForStorageDevice() {
 //    if (TRUE == StickNotInitated) {
     if (TRUE == status.StickKeysNotInitiated) {
       trayMenu->addAction(Stick20ActionInitCryptedVolume);
+      windowMenu->addAction(Stick20ActionInitCryptedVolume);
       AddSeperator = TRUE;
     }
 
 //    if (FALSE == StickNotInitated && TRUE == SdCardNotErased) {
     if (!status.StickKeysNotInitiated && !status.SDFillWithRandomChars_u8) {
       trayMenu->addAction(Stick20ActionFillSDCardWithRandomChars);
+      windowMenu->addAction(Stick20ActionFillSDCardWithRandomChars);
       AddSeperator = TRUE;
     }
 
-    if (TRUE == AddSeperator)
+    if (TRUE == AddSeperator){
       trayMenu->addSeparator();
+      windowMenu->addSeparator();
+    }
 
     generatePasswordMenu();
     trayMenu->addSeparator();
 
     if (!status.StickKeysNotInitiated) {
-      //FIXME move to mainwindow
-      // Enable tab for password safe for stick 2
-//      if (-1 == ui->tabWidget->indexOf(ui->tab_3)) {
-//        ui->tabWidget->addTab(ui->tab_3, tr("Password Safe"));
-//      }
-
       // Setup entrys for password safe
       generateMenuPasswordSafe();
     }
 
-//    if (FALSE == SdCardNotErased) {
     if (status.SDFillWithRandomChars_u8) { //filled randomly
-      if (!status.VolumeActiceFlag_st.encrypted)
-        trayMenu->addAction(Stick20ActionEnableCryptedVolume);
-      else
-        trayMenu->addAction(Stick20ActionDisableCryptedVolume);
+      if (!status.VolumeActiceFlag_st.encrypted){
+        trayMenu->addAction(Stick20ActionEnableCryptedVolume_tray);
+        windowMenu->addAction(Stick20ActionEnableCryptedVolume);
+      }
+      else{
+        trayMenu->addAction(Stick20ActionDisableCryptedVolume_tray);
+        windowMenu->addAction(Stick20ActionDisableCryptedVolume);
+      }
 
-      if (!status.VolumeActiceFlag_st.hidden)
-        trayMenu->addAction(Stick20ActionEnableHiddenVolume);
-      else
-        trayMenu->addAction(Stick20ActionDisableHiddenVolume);
+      if (!status.VolumeActiceFlag_st.hidden){
+        trayMenu->addAction(Stick20ActionEnableHiddenVolume_tray);
+        windowMenu->addAction(Stick20ActionEnableHiddenVolume);
+      }
+      else{
+        trayMenu->addAction(Stick20ActionDisableHiddenVolume_tray);
+        windowMenu->addAction(Stick20ActionDisableHiddenVolume);
+      }
     }
 
     //FIXME run in separate thread
     const auto PasswordSafeEnabled = libada::i()->isPasswordSafeUnlocked();
-    if (FALSE != (status.VolumeActiceFlag_st.hidden || status.VolumeActiceFlag_st.encrypted || PasswordSafeEnabled))
+    if (false != (status.VolumeActiceFlag_st.hidden || status.VolumeActiceFlag_st.encrypted || PasswordSafeEnabled)){
       trayMenu->addAction(LockDeviceAction);
+      windowMenu->addAction(LockDeviceAction);
+    }
 
     trayMenuSubConfigure = trayMenu->addMenu(tr("Configure"));
-    trayMenuSubConfigure->setIcon(QIcon(":/images/settings.png"));
+    trayMenuSubConfigure->setIcon(GraphicsTools::loadColorize(":/images/new/icon_settings.svg"));
     trayMenuSubConfigure->addAction(configureActionStick20);
     trayMenuSubConfigure->addSeparator();
 
@@ -606,9 +686,9 @@ void Tray::generateMenuForStorageDevice() {
     trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate);
     trayMenuSubConfigure->addAction(Stick20ActionExportFirmwareToFile);
 
-    trayMenuSubConfigure->addSeparator();
 
     if (TRUE == ExtendedConfigActive) {
+      trayMenuSubConfigure->addSeparator();
       trayMenuSubSpecialConfigure = trayMenuSubConfigure->addMenu(tr("Special Configure"));
       trayMenuSubSpecialConfigure->addAction(Stick20ActionFillSDCardWithRandomChars);
 
@@ -617,11 +697,13 @@ void Tray::generateMenuForStorageDevice() {
 
       trayMenuSubSpecialConfigure->addAction(resetAction);
     }
+    windowMenu->addMenu(trayMenuSubConfigure);
 
     // Enable "reset user PIN" ?
     if (0 == libada::i()->getUserPasswordRetryCount()) {
       trayMenu->addSeparator();
       trayMenu->addAction(Stick20ActionResetUserPassword);
+      windowMenu->addAction(Stick20ActionResetUserPassword);
     }
 
 //    // Add debug window ?
@@ -641,12 +723,15 @@ int Tray::UpdateDynamicMenuEntrys(void) {
 void Tray::generateMenuPasswordSafe() {
   auto passwordSafeUnlocked = libada::i()->isPasswordSafeUnlocked();
   if (!passwordSafeUnlocked) {
-      trayMenu->addAction(UnlockPasswordSafeAction);
+      trayMenu->addAction(UnlockPasswordSafeAction_tray);
+      windowMenu->addAction(UnlockPasswordSafeAction);
 
       auto passwordSafeAvailable = libada::i()->isPasswordSafeAvailable();
       UnlockPasswordSafeAction->setEnabled(passwordSafeAvailable);
+      UnlockPasswordSafeAction_tray->setEnabled(passwordSafeAvailable);
   } else {
     trayMenu->addAction(LockDeviceAction);
+    windowMenu->addAction(LockDeviceAction);
   }
 }
 
@@ -685,5 +770,12 @@ void Tray::updateOperationInProgressBar(int p) {
 
 void Tray::setAdmin_mode(bool _admin_mode) {
   ExtendedConfigActive = _admin_mode;
+}
+
+void Tray::setFile_menu(QMenuBar *file_menu) {
+  Tray::file_menu = file_menu;
+  generateMenu(true);
+  if (windowMenu!= nullptr)
+    file_menu->addMenu(windowMenu.get());
 }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>932</width>
-    <height>781</height>
+    <height>717</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,11 +17,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Configuration</string>
+   <string>Nitrokey App</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources.qrc">
-    <normaloff>:/images/CS_icon.png</normaloff>:/images/CS_icon.png</iconset>
+    <normaloff>:/images/new/icon_NK.svg</normaloff>:/images/new/icon_NK.svg</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -30,8 +30,8 @@
    <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -46,7 +46,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -60,6 +60,162 @@
       <property name="movable">
        <bool>false</bool>
       </property>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Overview</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>561</width>
+            <height>211</height>
+           </size>
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="btn_dial_PWS">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string>Unlock Password Safe</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/images/new/icon_safe.svg</normaloff>:/images/new/icon_safe.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="btn_dial_EV">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
+             </property>
+             <property name="text">
+              <string>Unlock Encrypted Volume</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/images/new/icon_harddrive.svg</normaloff>:/images/new/icon_harddrive.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="btn_dial_HV">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
+             </property>
+             <property name="text">
+              <string>Unlock Hidden Volume</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/images/new/icon_harddrive.svg</normaloff>:/images/new/icon_harddrive.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="btn_dial_lock">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
+             </property>
+             <property name="text">
+              <string>Lock Device</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="btn_dial_help">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
+             </property>
+             <property name="text">
+              <string>Help</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/images/new/icon_fragezeichen.svg</normaloff>:/images/new/icon_fragezeichen.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QPushButton" name="btn_dial_quit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">#upLeft { background-color: transparent; border-image: url(:/images/new/icon_safe.svg); background: none; border: none; background-repeat: none; }</string>
+             </property>
+             <property name="text">
+              <string>Quit</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/images/new/icon_quit.svg</normaloff>:/images/new/icon_quit.svg</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
         <string>OTP Slot Configuration</string>
@@ -244,6 +400,76 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QRadioButton" name="base32RadioButton">
+                 <property name="toolTip">
+                  <string>Example: &quot;ZR3M5I...&quot;</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Secret input format: base32</string>
+                 </property>
+                 <property name="text">
+                  <string>Base32</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="hexRadioButton">
+                 <property name="toolTip">
+                  <string>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Secret input format: hex</string>
+                 </property>
+                 <property name="text">
+                  <string>Hex</string>
+                 </property>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="l_supportedLength">
+                 <property name="font">
+                  <font>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Entered OTP 'Secret Key' string is longer than supported by this device</string>
+                 </property>
+                 <property name="accessibleDescription">
+                  <string>Label shown when the OTP secret key is too long</string>
+                 </property>
+                 <property name="text">
+                  <string extracomment="Label shown when the OTP secret key is too long">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP 'Secret Key' string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_3">
                <property name="toolTip">
@@ -334,9 +560,22 @@
                   </spacer>
                  </item>
                  <item>
+                  <widget class="QPushButton" name="btn_copyToClipboard">
+                   <property name="toolTip">
+                    <string>Copy secret to clipboard</string>
+                   </property>
+                   <property name="text">
+                    <string>Copy to clipboard</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QPushButton" name="randomSecretButton">
                    <property name="toolTip">
                     <string>After generating a random secret, you would need to copy it into your application or service where you want to login to.</string>
+                   </property>
+                   <property name="accessibleDescription">
+                    <string/>
                    </property>
                    <property name="text">
                     <string>Generate random secret</string>
@@ -344,76 +583,6 @@
                   </widget>
                  </item>
                 </layout>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_6">
-               <item>
-                <widget class="QRadioButton" name="base32RadioButton">
-                 <property name="toolTip">
-                  <string>Example: &quot;ZR3M5I...&quot;</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Secret input format: base32</string>
-                 </property>
-                 <property name="text">
-                  <string>Base32</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="hexRadioButton">
-                 <property name="toolTip">
-                  <string>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Secret input format: hex</string>
-                 </property>
-                 <property name="text">
-                  <string>Hex</string>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_2">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <widget class="QLabel" name="l_supportedLength">
-                 <property name="font">
-                  <font>
-                   <pointsize>11</pointsize>
-                  </font>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Entered OTP 'Secret Key' string is longer than supported by this device</string>
-                 </property>
-                 <property name="accessibleDescription">
-                  <string>Label shown when the OTP secret key is too long</string>
-                 </property>
-                 <property name="text">
-                  <string extracomment="Label shown when the OTP secret key is too long">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP 'Secret Key' string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
                </item>
               </layout>
              </item>
@@ -1284,9 +1453,16 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="PWS_Lock">
+            <property name="text">
+             <string>Lock Device</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QProgressBar" name="PWS_progressBar">
             <property name="value">
-             <number>24</number>
+             <number>42</number>
             </property>
            </widget>
           </item>
@@ -1344,73 +1520,92 @@
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_15">
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout_17">
-               <item>
-                <widget class="QLabel" name="label_27">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>General</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QVBoxLayout" name="verticalLayout_20">
-                 <item>
-                  <widget class="QCheckBox" name="cb_first_run_message">
-                   <property name="text">
-                    <string>Show first-run message</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="cb_check_symlink">
-                   <property name="text">
-                    <string>Show warning when no partitions could be detected on Encrypted Volume (Linux only)</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="cb_device_connection_message">
-                   <property name="text">
-                    <string>Show message about device's connection / disconnection</string>
-                   </property>
-                   <property name="checked">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_12">
-                   <item>
-                    <widget class="QLabel" name="label_28">
-                     <property name="text">
-                      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Translation file (needs restart)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>combo_languages</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QComboBox" name="combo_languages">
-                     <property name="accessibleName">
-                      <string>Translation file (needs restart)</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                </layout>
-               </item>
-              </layout>
+              <widget class="QGroupBox" name="gr_general">
+               <property name="title">
+                <string>General</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_17">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_20">
+                  <item>
+                   <widget class="QCheckBox" name="cb_first_run_message">
+                    <property name="text">
+                     <string>Show first-run message</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_check_symlink">
+                    <property name="text">
+                     <string>Show warning when no partitions could be detected on Encrypted Volume (Linux only)</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_device_connection_message">
+                    <property name="text">
+                     <string>Show message about device's connection / disconnection</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_show_main_window_on_connection">
+                    <property name="text">
+                     <string>Show main window when device connects</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_hide_main_window_on_connection">
+                    <property name="text">
+                     <string>Hide main window when device disconnects</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_hide_main_window_on_close">
+                    <property name="text">
+                     <string>Do not quit when the main window is closed</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_12">
+                    <item>
+                     <widget class="QLabel" name="label_28">
+                      <property name="text">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Translation file (needs restart)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="combo_languages">
+                      <property name="accessibleName">
+                       <string>Translation file (needs restart)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -1463,7 +1658,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
+               <item row="1" column="3">
                 <widget class="QPushButton" name="btn_select_debug_file_path">
                  <property name="text">
                   <string>Select path</string>
@@ -1477,6 +1672,13 @@
                  </property>
                  <property name="text">
                   <string>Logging enabled</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="btn_select_debug_console">
+                 <property name="text">
+                  <string>Log to console</string>
                  </property>
                 </widget>
                </item>
@@ -1508,7 +1710,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="label_30">
                  <property name="text">
-                  <string>TIme to store Password Safe secrets in clipboard (in seconds):</string>
+                  <string>Time to store Password Safe secrets in clipboard (in seconds):</string>
                  </property>
                  <property name="buddy">
                   <cstring>spin_debug_verbosity</cstring>
@@ -1626,9 +1828,26 @@
     <bool>false</bool>
    </property>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>932</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>btn_dial_PWS</tabstop>
+  <tabstop>btn_dial_EV</tabstop>
+  <tabstop>btn_dial_HV</tabstop>
+  <tabstop>btn_dial_lock</tabstop>
+  <tabstop>btn_dial_help</tabstop>
+  <tabstop>btn_dial_quit</tabstop>
   <tabstop>radioButton_2</tabstop>
   <tabstop>radioButton</tabstop>
   <tabstop>slotComboBox</tabstop>
@@ -1638,6 +1857,7 @@
   <tabstop>hexRadioButton</tabstop>
   <tabstop>secretEdit</tabstop>
   <tabstop>checkBox</tabstop>
+  <tabstop>btn_copyToClipboard</tabstop>
   <tabstop>randomSecretButton</tabstop>
   <tabstop>enterCheckBox</tabstop>
   <tabstop>intervalSpinBox</tabstop>
@@ -1650,6 +1870,8 @@
   <tabstop>ompEdit</tabstop>
   <tabstop>ttEdit</tabstop>
   <tabstop>muiEdit</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>writeButton</tabstop>
   <tabstop>enableUserPasswordCheckBox</tabstop>
   <tabstop>deleteUserPasswordCheckBox</tabstop>
   <tabstop>numLockComboBox</tabstop>
@@ -1664,24 +1886,27 @@
   <tabstop>PWS_CheckBoxHideSecret</tabstop>
   <tabstop>l_utf8_info</tabstop>
   <tabstop>PWS_ButtonEnable</tabstop>
+  <tabstop>PWS_Lock</tabstop>
   <tabstop>PWS_ButtonClose</tabstop>
   <tabstop>PWS_ButtonSaveSlot</tabstop>
-  <tabstop>cancelButton</tabstop>
-  <tabstop>generalCancelButton</tabstop>
-  <tabstop>writeButton</tabstop>
-  <tabstop>writeGeneralConfigButton</tabstop>
-  <tabstop>tabWidget</tabstop>
   <tabstop>cb_first_run_message</tabstop>
+  <tabstop>cb_check_symlink</tabstop>
   <tabstop>cb_device_connection_message</tabstop>
+  <tabstop>cb_show_main_window_on_connection</tabstop>
+  <tabstop>cb_hide_main_window_on_connection</tabstop>
+  <tabstop>cb_hide_main_window_on_close</tabstop>
   <tabstop>combo_languages</tabstop>
   <tabstop>cb_debug_enabled</tabstop>
   <tabstop>edit_debug_file_path</tabstop>
+  <tabstop>btn_select_debug_console</tabstop>
   <tabstop>btn_select_debug_file_path</tabstop>
   <tabstop>spin_debug_verbosity</tabstop>
   <tabstop>spin_PWS_time</tabstop>
   <tabstop>spin_OTP_time</tabstop>
   <tabstop>btn_cancelSettings</tabstop>
   <tabstop>btn_writeSettings</tabstop>
+  <tabstop>writeGeneralConfigButton</tabstop>
+  <tabstop>generalCancelButton</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
@@ -1695,7 +1920,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>824</x>
-     <y>739</y>
+     <y>675</y>
     </hint>
     <hint type="destinationlabel">
      <x>300</x>
@@ -1711,7 +1936,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>824</x>
-     <y>739</y>
+     <y>675</y>
     </hint>
     <hint type="destinationlabel">
      <x>262</x>
@@ -1727,7 +1952,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>823</x>
-     <y>738</y>
+     <y>674</y>
     </hint>
     <hint type="destinationlabel">
      <x>6</x>
@@ -1742,12 +1967,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>129</x>
-     <y>203</y>
+     <x>154</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
-     <x>206</x>
-     <y>230</y>
+     <x>374</x>
+     <y>384</y>
     </hint>
    </hints>
   </connection>
@@ -1758,12 +1983,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>105</x>
-     <y>192</y>
+     <x>130</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
-     <x>182</x>
-     <y>297</y>
+     <x>350</x>
+     <y>414</y>
     </hint>
    </hints>
   </connection>
@@ -1774,12 +1999,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>78</x>
-     <y>203</y>
+     <x>103</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
-     <x>221</x>
-     <y>255</y>
+     <x>897</x>
+     <y>384</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cb_debug_enabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>btn_select_debug_console</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>763</x>
+     <y>376</y>
     </hint>
    </hints>
   </connection>

@@ -171,6 +171,10 @@ Merci de réessayer</translation>
         <source>      *** Firmware is locked ***</source>
         <translation>      *** Le micrologiciel est verrouillé ***</translation>
     </message>
+    <message>
+        <source>Cannot open dialog: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Authentication</name>
@@ -193,40 +197,16 @@ Merci de réessayer</translation>
         <translation>Changer le PIN utilisateur</translation>
     </message>
     <message>
-        <source>Old PIN</source>
-        <translation>Ancien PIN</translation>
-    </message>
-    <message>
-        <source>New PIN</source>
-        <translation>Nouveau PIN</translation>
-    </message>
-    <message>
         <source>Show PIN</source>
         <translation>Afficher le PIN</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;You can use upper and lower case, numbers, and special characters.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Vous pouvez utiliser des lettres en majuscule ou minuscule, des chiffres ou des caractères spéciaux.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Les PIN ne peuvent être essayés que trois fois et ils sont protégés contre les introduction par force brute. Un PIN de 6 à 8 caractères est suffisamment long. Des PIN plus longs ou plus complexes sont généralement superflus. Cette règle ne s&apos;applique pas pour le mot de passe du micrologiciel. La longueur minimum est de %1 (%3 pour l&apos;administrateur) et la longueur maximale de %2 caractères.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Retry count left:</source>
         <translation>Essais restant :</translation>
     </message>
     <message>
-        <source>Admin PIN:</source>
-        <translation>PIN administrateur :</translation>
-    </message>
-    <message>
         <source>Change Firmware Password</source>
         <translation>Modifier le mot de passe du micrologiciel</translation>
-    </message>
-    <message>
-        <source>New Firmware Password:</source>
-        <translation>Nouveau mot de passe micrologiciel :</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
@@ -235,10 +215,6 @@ Merci de réessayer</translation>
     <message>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
         <translation>Malheureusement vous n&apos;avez plus d&apos;essai possible. Merci de vous reporter aux instructions concernant la réinitialisation du PIN administrateur.</translation>
-    </message>
-    <message>
-        <source>Once the firmware password is forgotten the Nitrokey can&apos;t be updated or reset. Don&apos;t lose your firmware password, please.</source>
-        <translation>Si vous oubliez le mot de passe du micrologiciel, il ne sera plus possible de mettre à jour ou réinitialiser la Nitrokey. Merci de faire en sorte de ne pas l&apos;oublier.</translation>
     </message>
     <message>
         <source>Set User PIN</source>
@@ -259,10 +235,6 @@ Merci de réessayer</translation>
     <message>
         <source>Current Admin PIN:</source>
         <translation>PIN administrateur courant :</translation>
-    </message>
-    <message>
-        <source>New Admin PIN:</source>
-        <translation>Nouveau PIN administrateur :</translation>
     </message>
     <message>
         <source>Reset User PIN</source>
@@ -308,6 +280,46 @@ Merci de réessayer</translation>
         <source>The new password entries are not the same</source>
         <translation>Les nouveaux mots de passe entrées ne concordent pas</translation>
     </message>
+    <message>
+        <source>Current PIN or password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New PIN or password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Nitrokey prevents against brute force password guessing attacks by allowing a maximum of 3 incorrect PIN attempts. Therefore a PIN of %1 digits is sufficient. The PIN must be between %1 and %2 characters.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New PIN:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Confirm New PIN:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Confirm New User PIN:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Confirm New Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Firmware password doesn’t have a retry counter, and therefore doesn’t prevent against password guessing attacks. A secure and complex password should be created with the use of: lower and upper case letters, numbers and special characters; with a length between %2 and %3 characters.&lt;br/&gt;Default firmware password is: &apos;%1&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WARNING! If you lose your Firmware password, Nitrokey can’t be updated or reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LicenseDialog</name>
@@ -318,10 +330,6 @@ Merci de réessayer</translation>
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <source>Configuration</source>
-        <translation></translation>
-    </message>
     <message>
         <source>OTP Slot Configuration</source>
         <translation>Configuration des emplacements OTP</translation>
@@ -555,12 +563,6 @@ Merci de réessayer</translation>
         <translation>Nitrokey Storage connectée</translation>
     </message>
     <message>
-        <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation>Attention : le volume chiffré n&apos;est pas sécurisé,
-Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le menu contextuel.</translation>
-    </message>
-    <message>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
         <translation>La valeur du compteur n&apos;a pas été copiée, une erreur est survenue dans la conversion. Le compteur a été mis à 0. Merci de réessayer.</translation>
     </message>
@@ -583,12 +585,6 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le men
     <message>
         <source>For Nitrokey Storage counter must be a value between 0 and 9999999</source>
         <translation>Pour la Nitrokey Storage, le compteur doit être une valeur entre 0 et 9999999</translation>
-    </message>
-    <message>
-        <source>Warning: The encrypted Volume is not formatted.
-&quot;Use GParted or fdisk for this.&quot;</source>
-        <translation>Attention : le volume chiffré n&apos;est pas formatté.
-&quot;Utilisez GParted ou fdisk pour cela.&quot;</translation>
     </message>
     <message>
         <source>Please enter a slotname.</source>
@@ -869,24 +865,12 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
         <translation>Verrouillage de la clef</translation>
     </message>
     <message>
-        <source>Closing window due to device disconnection</source>
-        <translation>Fermeture de la fenêtre à cause d&apos;une déconnexion de la clef</translation>
-    </message>
-    <message>
         <source>Connecting device</source>
         <translation>Connexion à la clef</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP &apos;Secret Key&apos; string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>Label shown when the OTP secret key is too long</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please:
-1. Close the application
-2. Reinsert the device
-3. Wait 30 seconds and start application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -911,6 +895,166 @@ If problem will occur again please:
     </message>
     <message>
         <source>WARNING: This Storage firmware version is old. Application may be unresponsive and unlocking encrypted volume may not work. Please update the firmware to the latest version. Guide should be available at: &lt;br/&gt;&lt;a href=&apos;https://www.nitrokey.com/en/doc/firmware-update-storage&apos;&gt;www.nitrokey.com/en/doc/firmware-update-storage&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nitrokey App</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock Encrypted Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unlock Hidden Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lock Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy secret to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show first-run message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show warning when no partitions could be detected on Encrypted Volume (Linux only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show message about device&apos;s connection / disconnection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show main window when device connects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide main window when device disconnects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do not quit when the main window is closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Translation file (needs restart)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translation file (needs restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Debug log settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Path for debug log file:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Verbosity level:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logging enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log to console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clipboard settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time to store OTP secrets in clipboard (in seconds):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time to store Password Safe secrets in clipboard (in seconds):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TIme to store Password Safe secrets in clipboard (in seconds):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can find application’s tray icon in system tray in the right down corner of your screen (Windows) or in the upper right (Linux, MacOS).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Idle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like to show this message again?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device lock detected, please remove and insert the device again.
+If problem will occur again please: 
+1. Close the application
+2. Reinsert the device
+3. Wait 30 seconds and start application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning: Application could not detect any partition on the Encrypted Volume. Please use graphical GParted or terminal fdisk/parted tools for this.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like to be reminded again?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device connected. Waiting for initialization...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please run the application again to apply new settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like to quit now?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Debug file location (will be overwritten)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -994,6 +1138,14 @@ Merci de changer le PIN.</translation>
         <source>Enter password for hidden volume:</source>
         <translation>Entrez le mot de passe du volume caché :</translation>
     </message>
+    <message>
+        <source>Would you like to so now?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter the new PIN/password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
@@ -1014,6 +1166,12 @@ Message : </translation>
     <message>
         <source>Details: </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</source>
+        <translation type="unfinished">Attention : le volume chiffré n&apos;est pas sécurisé,
+Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le menu contextuel.</translation>
     </message>
 </context>
 <context>
@@ -1356,6 +1514,10 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Overview</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UpdateDialog</name>
@@ -1409,6 +1571,10 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     <message>
         <source>Load translation file with given name and store this choice in settings file.</source>
         <translation>Charger un fichier de traduction portant ce nom et enregistrer ce choix dans le fichier de configuration.</translation>
+    </message>
+    <message>
+        <source>Clear all application&apos;s settings</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

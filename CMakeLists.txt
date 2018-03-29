@@ -40,15 +40,16 @@ ADD_DEFINITIONS(-DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}")
 
 
 # QT configuration
-FIND_PACKAGE(Qt5Core)
-FIND_PACKAGE(Qt5Gui)
-FIND_PACKAGE(Qt5Widgets)
+FIND_PACKAGE(Qt5Core REQUIRED)
+FIND_PACKAGE(Qt5Gui REQUIRED)
+FIND_PACKAGE(Qt5Widgets REQUIRED)
+FIND_PACKAGE(Qt5Svg REQUIRED)
 
 
 # add git version info
 IF(ADD_GIT_INFO)
 execute_process(
-        COMMAND git describe --abbrev=4 HEAD
+        COMMAND git describe --always --abbrev=4 HEAD
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE GIT_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -128,7 +129,7 @@ SET(nitrokey_app_sources
         src/libada.cpp src/libada.h src/utils/bool_values.h src/GUI/Tray.cpp src/GUI/Tray.h src/GUI/Clipboard.cpp src/GUI/Clipboard.h src/GUI/Authentication.cpp src/GUI/Authentication.h src/core/ScopedGuard.h src/version.h src/GUI/StorageActions.cpp src/GUI/StorageActions.h
         src/ui/licensedialog.cpp
         src/GUI/ManageWindow.cpp
-
+	src/GUI/graphicstools.cpp
         #        src/GUI/PasswordSafe.cpp src/GUI/PasswordSafe.h
         src/core/ThreadWorker.cpp src/core/ThreadWorker.h)
 
@@ -176,14 +177,6 @@ IF(NOT WIN32)
     DESTINATION ${BASH_COMPLETION_DIR}
   )
 
-  install(FILES
-    ${CMAKE_SOURCE_DIR}/images/info.png
-    ${CMAKE_SOURCE_DIR}/images/quit.png
-    ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
-    ${CMAKE_SOURCE_DIR}/images/settings.png
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/nitrokey
-  )
-
 ENDIF () # NOT WIN32
 
 
@@ -209,7 +202,7 @@ INSTALL(TARGETS nitrokey-app DESTINATION ${CMAKE_INSTALL_BINDIR})
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${EXTRA_LIBS}
 #  ${platform_specific_libs}
-  Qt5::Widgets Qt5::Core Qt5::Gui
+Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Svg
 )
 
 # first try to find libnitrokey via pkg-config
@@ -258,7 +251,7 @@ SET(PACKAGE_MAINTAINER "Szczepan Zalega <szczepan@nitrokey.com>" )
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER ${PACKAGE_MAINTAINER} )
 SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 SET(CPACK_DEBIAN_PACKAGE_SECTION "utils")
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5, libqt5gui5, libqt5core5a, libhidapi-libusb0")
+SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5widgets5, libqt5gui5, libqt5core5a, libqt5svg5, libhidapi-libusb0")
 SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/debian/postinst")
 
 

@@ -3,7 +3,7 @@
 include(libnitrokey/libnitrokey.pro)
 
 CONFIG   += qt c++14
-QT       += core gui widgets
+QT       += core gui widgets svg
 
 isEmpty(PREFIX) {
     PREFIX = /usr/local
@@ -60,7 +60,8 @@ SOURCES +=  $${SRCDIR}/main.cpp\
             $${SRCDIR}/GUI/StorageActions.cpp \
             $${SRCDIR}/GUI/ManageWindow.cpp \
             $${SRCDIR}/libada.cpp \
-    src/ui/licensedialog.cpp
+    src/ui/licensedialog.cpp \
+    src/GUI/graphicstools.cpp
 
 
 HEADERS  += $${SRCUIDIR}/mainwindow.h \
@@ -85,7 +86,8 @@ HEADERS  += $${SRCUIDIR}/mainwindow.h \
             $${SRCDIR}/libada.h \
             $${SRCDIR}/GUI/Tray.h \
             $${SRCDIR}/GUI/StorageActions.h \
-    src/ui/licensedialog.h
+    src/ui/licensedialog.h \
+    src/GUI/graphicstools.h
 
 
 
@@ -121,6 +123,10 @@ win32:RC_ICONS = images/icon/nitrokey-app-icon-256-red.ico
 macx{
     ICON= images/CS_icon.icns
     QMAKE_INFO_PLIST = Info.plist
+
+    # PLUGINS += iconengines/libqsvgicon.dylib
+#    QTPLUGIN += qsvgicon libqsvgicon
+#    CONFIG += import_plugins
 }
 
 
@@ -134,3 +140,6 @@ TRANSLATIONS += i18n/nitrokey_de_DE.ts \
                 i18n/nitrokey_en.ts \
                 i18n/nitrokey_fr.ts
 
+
+DEFINES += GIT_VERSION=\"\\\"$$system(git describe --abbrev=4 --always)\\\"\"
+message($$DEFINES)

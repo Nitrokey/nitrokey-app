@@ -50,6 +50,7 @@ signals:
 #include <QSystemTrayIcon>
 #include <QAction>
 #include <memory>
+#include <QtWidgets/QMainWindow>
 #include "StorageActions.h"
 
 class Tray : public QObject {
@@ -99,17 +100,25 @@ private:
 
     QSystemTrayIcon *trayIcon;
     std::shared_ptr<QMenu> trayMenu;
+    std::shared_ptr<QMenu> windowMenu;
     QMenu *trayMenuSubConfigure;
     std::shared_ptr<QMenu> trayMenuPasswdSubMenu;
 //    QMenu *trayMenuTOTPSubMenu;
 //    QMenu *trayMenuHOTPSubMenu;
     QMenu *trayMenuSubSpecialConfigure;
+    QMenuBar* file_menu;
+public:
+  void setFile_menu(QMenuBar *file_menu);
 
-    QAction *quitAction;
+private:
+
+  bool long_operation_in_progress = false;
+  QAction *quitAction;
     QAction *configureAction;
     QAction *resetAction;
     QAction *configureActionStick20;
     QAction *DebugAction;
+    QAction *ShowWindowAction;
     QAction *ActionAboutDialog;
     QAction *ActionHelp;
 //    QAction *SecPasswordAction;
@@ -150,6 +159,16 @@ private:
   QSignalMapper *mapper_HOTP;
   QSignalMapper *mapper_PWS;
 
+  QAction *quitAction_tray;
+  QAction *ActionHelp_tray;
+  QAction *ActionAboutDialog_tray;
+  QAction *Stick20ActionEnableCryptedVolume_tray;
+  QAction *Stick20ActionDisableCryptedVolume_tray;
+  QAction *Stick20ActionEnableHiddenVolume_tray;
+  QAction *Stick20ActionDisableHiddenVolume_tray;
+  std::shared_ptr<QMenu> trayMenuPasswdSubMenu_tray;
+  QMenu *trayMenuSubConfigure_tray;
+  QAction *UnlockPasswordSafeAction_tray;
 };
 
 

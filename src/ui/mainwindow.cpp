@@ -47,7 +47,13 @@
 #include "src/core/SecureString.h"
 
 #include <QString>
-#include <src/core/ScopedGuard.h>
+#include "src/core/ScopedGuard.h"
+#include "src/core/ThreadWorker.h"
+#include "hotpslot.h"
+
+#include <QFuture>
+#include <QtConcurrent/QtConcurrent>
+#include <QSvgWidget>
 
 using nm = nitrokey::NitrokeyManager;
 static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
@@ -55,6 +61,10 @@ static const QString communication_error_message = QApplication::tr("Communicati
 
 static const QString invalid_secret_key_string_details = QApplication::tr("The secret string you have entered is invalid. Please reenter it.")
                            +"\n"+QApplication::tr("Details: ");
+
+static const QString WARNING_EV_NOT_SECURE_INITIALIZE = QApplication::tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
+                                                           "device\" option from context menu.");
+
 
 const QString MainWindow::RESET_NITROKEYS_TIME = MainWindow::tr("Reset Nitrokey's time?");
 const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
@@ -69,7 +79,7 @@ const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
 const auto tray_location_msg = "\n"+MainWindow::tr("You can find application’s tray icon in system tray in "
                                       "the right down corner of your screen (Windows) or in the upper right (Linux, MacOS).");
 
-void MainWindow::load_settings(){
+void MainWindow::load_settings_page(){
     QSettings settings;
     const auto first_run_key = "main/first_run";
     auto first_run = settings.value(first_run_key, true).toBool();
@@ -90,12 +100,17 @@ void MainWindow::load_settings(){
 
     ui->edit_debug_file_path->setText(settings.value("debug/file", "").toString());
     ui->spin_debug_verbosity->setValue(settings.value("debug/level", 2).toInt());
-    ui->cb_debug_enabled->setChecked(settings.value("debug/enabled", false).toBool());
-    emit ui->cb_debug_enabled->toggled(settings.value("debug/enabled", false).toBool());
+    auto settings_debug_enabled = settings.value("debug/enabled", false).toBool();
+    ui->cb_debug_enabled->setChecked(settings_debug_enabled);
+    emit ui->cb_debug_enabled->toggled(settings_debug_enabled);
     ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
     ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
     ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
-    ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", true).toBool());
+    ui->cb_show_main_window_on_connection->setChecked(settings.value("main/show_main_on_connection", true).toBool());
+    ui->cb_hide_main_window_on_connection->setChecked(settings.value("main/close_main_on_connection", false).toBool());
+    ui->cb_hide_main_window_on_close->setChecked(settings.value("main/hide_on_close", true).toBool());
+
+  ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", false).toBool());
 #ifndef Q_OS_LINUX
     ui->cb_check_symlink->setEnabled(false);
 #endif
@@ -104,7 +119,11 @@ void MainWindow::load_settings(){
 void MainWindow::keyPressEvent(QKeyEvent *keyevent)
 {
     if (keyevent->key()==Qt::Key_Escape){
-         hide();
+        QSettings settings;
+        if (settings.value("main/hide_on_close", true).toBool())
+            hide();
+        else
+            QApplication::quit();
     } else {
         QMainWindow::keyPressEvent(keyevent);
     }
@@ -168,6 +187,13 @@ MainWindow::MainWindow(QWidget *parent):
   connect(this, SIGNAL(DeviceConnected()), &auth_user, SLOT(clearTemporaryPasswordForced()));
   connect(this, SIGNAL(DeviceLocked()), &auth_admin, SLOT(clearTemporaryPasswordForced()));
   connect(this, SIGNAL(DeviceLocked()), &auth_user, SLOT(clearTemporaryPasswordForced()));
+  connect(this, SIGNAL(DeviceConnected()), this, SLOT(ready()));
+
+  connect(this, SIGNAL(DeviceConnected()), this, SLOT(manageStartPage()));
+  connect(&storage, SIGNAL(storageStatusUpdated()), this, SLOT(manageStartPage()));
+  connect(&storage, SIGNAL(storageStatusChanged()), this, SLOT(manageStartPage()));
+  connect(this, SIGNAL(PWS_unlocked()), this, SLOT(manageStartPage()));
+  connect(this, SIGNAL(DeviceLocked()), this, SLOT(manageStartPage()));
 
   ui->setupUi(this);
   ui->tabWidget->setCurrentIndex(0); // Set first tab active
@@ -203,9 +229,79 @@ MainWindow::MainWindow(QWidget *parent):
   this->adjustSize();
   this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
-  first_run();
+  tray.setFile_menu(menuBar());
+  ui->progressBar->hide();
 
-  load_settings();
+  first_run();
+  load_settings_page();
+
+  make_UI_enabled(false);
+  startConfiguration(false);
+
+  ui->statusBar->showMessage(tr("Idle"));
+
+  // Connect dial page
+  connect(ui->btn_dial_PWS, SIGNAL(clicked()), this, SLOT(PWS_Clicked_EnablePWSAccess()));
+  connect(ui->btn_dial_lock, SIGNAL(clicked()), this, SLOT(startLockDeviceAction()));  
+  connect(ui->btn_dial_EV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableCryptedVolume()));
+  connect(ui->btn_dial_help, SIGNAL(clicked()), this, SLOT(startHelpAction()));
+  connect(ui->btn_dial_HV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableHiddenVolume()));
+  connect(ui->btn_dial_quit, SIGNAL(clicked()), qApp, SLOT(quit()));
+
+
+}
+
+#include <libnitrokey/stick20_commands.h>
+
+void MainWindow::make_UI_enabled(bool enabled) {
+  ui->tab->setEnabled(enabled);
+  ui->tab_2->setEnabled(enabled);
+  ui->tab_3->setEnabled(enabled);
+  if(!enabled){
+    ui->btn_dial_PWS->setEnabled(enabled);
+    ui->btn_dial_lock->setEnabled(enabled);
+    ui->btn_dial_EV->setEnabled(enabled);
+    ui->btn_dial_HV->setEnabled(enabled);
+  }
+}
+
+void MainWindow::manageStartPage(){
+    if (!libada::i()->isDeviceConnected() || libada::i()->get_status_no_except() !=0 ) {
+      make_UI_enabled(false);
+      return;
+    }
+    make_UI_enabled(true);
+
+
+    QFuture<bool> PWS_unlocked = QtConcurrent::run(libada::i().get(), &libada::isPasswordSafeUnlocked);
+    PWS_unlocked.waitForFinished();
+    ui->btn_dial_PWS->setEnabled(!PWS_unlocked.result());
+    ui->btn_dial_lock->setEnabled(PWS_unlocked.result());
+
+    auto is_storage = libada::i()->isStorageDeviceConnected();
+    ui->btn_dial_EV->setEnabled(false);
+    ui->btn_dial_HV->setEnabled(false);
+
+    if (is_storage){
+        QFuture<nitrokey::stick20::DeviceConfigurationResponsePacket::ResponsePayload> status
+                = QtConcurrent::run(nitrokey::NitrokeyManager::instance().get(),
+                                    &nitrokey::NitrokeyManager::get_status_storage);
+        status.waitForFinished();
+
+        bool initialized = !status.result().StickKeysNotInitiated && status.result().SDFillWithRandomChars_u8;
+        if (!initialized){
+          make_UI_enabled(false);
+        }
+
+        ui->btn_dial_PWS->setEnabled(initialized && !PWS_unlocked.result());
+        ui->btn_dial_EV->setEnabled(initialized && !status.result().VolumeActiceFlag_st.encrypted);
+        ui->btn_dial_HV->setEnabled(initialized && !status.result().VolumeActiceFlag_st.hidden);
+        ui->btn_dial_lock->setEnabled(status.result().VolumeActiceFlag_st.encrypted
+                                      || status.result().VolumeActiceFlag_st.hidden
+                                      || PWS_unlocked.result()
+                                      );
+        ui->PWS_ButtonEnable->setEnabled(ui->btn_dial_PWS->isEnabled());
+    }
 }
 
 void MainWindow::first_run(){
@@ -279,11 +375,14 @@ void MainWindow::checkConnection() {
 }
 
 void MainWindow::initialTimeReset() {
-  if (!libada::i()->isDeviceConnected()) {
+  if (!libada::i()->isDeviceConnected() || long_operation_in_progress) {
     return;
   }
 
-  if (!libada::i()->is_time_synchronized()) {
+  QFuture<bool> is_time_synchronized = QtConcurrent::run(libada::i().get(), &libada::is_time_synchronized);
+  is_time_synchronized.waitForFinished();
+
+  if (!is_time_synchronized.result()) {
     bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + RESET_NITROKEYS_TIME, WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED,
       false);
     if (answer) {
@@ -301,8 +400,13 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  this->hide();
-  event->ignore();
+  QSettings settings;
+  if (settings.value("main/hide_on_close", true).toBool()){
+      this->hide();
+      event->ignore();
+  } else {
+      QApplication::quit();
+  }
 }
 
 void MainWindow::generateComboBoxEntrys() {
@@ -585,22 +689,31 @@ void MainWindow::displayCurrentGeneralConfig() {
   ui->enableUserPasswordCheckBox->setChecked(status.enable_user_password != 0);
   ui->deleteUserPasswordCheckBox->setChecked(status.delete_user_password != 0);
 }
+void MainWindow::startConfigurationMain() {
+    startConfiguration(false);
+    ui->tabWidget->setCurrentIndex(0);
+}
 
-void MainWindow::startConfiguration() {
-  bool validPassword = true;
-  // Start the config dialog
-  if (validPassword) {
+void MainWindow::startConfiguration(bool changeTab) {
+    if (long_operation_in_progress) return;
+
     displayCurrentSlotConfig();
     displayCurrentGeneralConfig();
     SetupPasswordSafeConfig();
 
-    ManageWindow::bringToFocus(this);
+    if (libada::i()->isStorageDeviceConnected()) {
+      ui->counterEdit->setMaxLength(7);
+    }
 
     QTimer::singleShot(0, this, SLOT(resizeMin()));
-  }
-  if (libada::i()->isStorageDeviceConnected()) {
-    ui->counterEdit->setMaxLength(7);
-  }
+
+    if (changeTab){
+      ui->tabWidget->setCurrentIndex(1);
+    }
+    QTimer::singleShot(0, this, [this](){
+      ManageWindow::bringToFocus(this);
+      make_UI_enabled(libada::i()->isDeviceConnected());
+    });
 }
 
 void MainWindow::resizeMin() { resize(minimumSizeHint()); }
@@ -1067,6 +1180,7 @@ void MainWindow::checkTextEdited() {
   ui->base32RadioButton->setEnabled(valid);
   ui->hexRadioButton->setEnabled(valid);
   ui->writeButton->setEnabled(valid);
+  ui->btn_copyToClipboard->setEnabled(valid && !secret_key.isEmpty());
 }
 
 void MainWindow::SetupPasswordSafeConfig(void) {
@@ -1110,12 +1224,13 @@ void MainWindow::SetupPasswordSafeConfig(void) {
 
   ui->PWS_ComboBoxSelectSlot->setEnabled(PWS_Access);
   ui->PWS_ButtonEnable->setVisible(!PWS_Access);
+  ui->PWS_Lock->setVisible(PWS_Access);
 
   ui->PWS_EditSlotName->setMaxLength(PWS_SLOTNAME_LENGTH);
   ui->PWS_EditPassword->setMaxLength(PWS_PASSWORD_LENGTH);
   ui->PWS_EditLoginName->setMaxLength(PWS_LOGINNAME_LENGTH);
 
-  ui->PWS_CheckBoxHideSecret->setChecked(TRUE);
+  ui->PWS_CheckBoxHideSecret->setChecked(true);
   ui->PWS_EditPassword->setEchoMode(QLineEdit::Password);
 }
 
@@ -1500,18 +1615,16 @@ void MainWindow::on_DeviceDisconnected() {
 
   QSettings settings;
   if(settings.value("main/connection_message", true).toBool()){
-    ui->statusBar->showMessage(tr("Nitrokey disconnected"));
     tray.showTrayMessage(tr("Nitrokey disconnected"));
   }
+  ui->statusBar->showMessage(tr("Nitrokey disconnected"));
 
-  if(this->isVisible()){
-    this->close();
-    csApplet()->messageBox(tr("Closing window due to device disconnection"));
+  if(this->isVisible() && settings.value("main/close_main_on_connection", false).toBool()){
+    this->hide();
   }
-}
 
-#include "src/core/ThreadWorker.h"
-#include "hotpslot.h"
+  make_UI_enabled(false);
+}
 
 void MainWindow::on_DeviceConnected() {
   if (debug_mode)
@@ -1520,23 +1633,16 @@ void MainWindow::on_DeviceConnected() {
   if (debug_mode)
     emit ShortOperationBegins(tr("Connecting device"));
 
-  //TODO share device state to improve performance
-  try{
-    libada::i()->get_status();
-  }
-  catch (LongOperationInProgressException &e){
+  ui->statusBar->showMessage(tr("Device connected. Waiting for initialization..."));
+
+  auto result = QtConcurrent::run(libada::i().get(), &libada::get_status_no_except);
+  result.waitForFinished();
+
+  if (result.result() == 2){
     long_operation_in_progress = true;
-    return;
   }
-
-  QSettings settings;
-  if(settings.value("main/connection_message", true).toBool()){
-
-     auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
-                                tr("Nitrokey Storage connected") :
-                                tr("Nitrokey Pro connected");
-    ui->statusBar->showMessage(connected_device_model);
-    tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
+  if (result.result() !=0){
+      return;
   }
 
   initialTimeReset();
@@ -1570,9 +1676,11 @@ void MainWindow::on_DeviceConnected() {
       if(!data["storage_connected"].toBool()) return;
 
       if (!data["initiated"].toBool()) {
-        if (data["initiated_ask"].toBool())
-          csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-                                        "device\" option from context menu.") + " " + tray_location_msg);
+        if (data["initiated_ask"].toBool()){
+          csApplet()->warningBox(WARNING_EV_NOT_SECURE_INITIALIZE + " " + tray_location_msg);
+          ui->statusBar->showMessage(WARNING_EV_NOT_SECURE_INITIALIZE);
+          make_UI_enabled(false);
+        }
       }
       if (data["initiated"].toBool() && !data["erased"].toBool()) {
         if (data["erased_ask"].toBool())
@@ -1589,7 +1697,20 @@ void MainWindow::on_DeviceConnected() {
                                   ));
       }
 #endif
-      }, this);  
+      }, this);
+
+  QSettings settings;
+  if (settings.value("main/show_main_on_connection", true).toBool()){
+    startConfiguration(false);
+  }
+
+  auto connected_device_model = libada::i()->isStorageDeviceConnected() ?
+                                  tr("Nitrokey Storage connected") :
+                                  tr("Nitrokey Pro connected");
+  if(settings.value("main/connection_message", true).toBool()){
+    tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
+  }
+  ui->statusBar->showMessage(connected_device_model);
 }
 
 void MainWindow::on_KeepDeviceOnline() {
@@ -1686,7 +1807,10 @@ void MainWindow::on_btn_writeSettings_clicked()
 
     // see if restart is required
     bool restart_required = false;
-    if (settings.value("main/language").toString() != ui->combo_languages->currentData().toString()){
+    if (settings.value("main/language").toString() != ui->combo_languages->currentData().toString()
+            || settings.value("debug/enabled").toBool() != ui->cb_debug_enabled->isChecked()
+            || settings.value("debug/file").toString() != ui->edit_debug_file_path->text()
+            ){
         restart_required = true;
     }
 
@@ -1699,6 +1823,10 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("clipboard/PWS_time", ui->spin_PWS_time->value());
     settings.setValue("clipboard/OTP_time", ui->spin_OTP_time->value());
     settings.setValue("main/connection_message", ui->cb_device_connection_message->isChecked());
+    settings.setValue("main/show_main_on_connection", ui->cb_show_main_window_on_connection->isChecked());
+    settings.setValue("main/close_main_on_connection", ui->cb_hide_main_window_on_connection->isChecked());
+    settings.setValue("main/hide_on_close", ui->cb_hide_main_window_on_close->isChecked());
+
     settings.setValue("storage/check_symlink", ui->cb_check_symlink->isChecked());
 
     // inform user and quit if asked
@@ -1714,11 +1842,30 @@ void MainWindow::on_btn_writeSettings_clicked()
             QApplication::exit();
         }
     }
-    load_settings();
+  load_settings_page();
 }
 
 void MainWindow::on_btn_select_debug_file_path_clicked()
 {
     auto filename = QFileDialog::getSaveFileName(this, tr("Debug file location (will be overwritten)"));
     ui->edit_debug_file_path->setText(filename);
+}
+
+void MainWindow::on_PWS_Lock_clicked()
+{
+  startLockDeviceAction(true);
+}
+
+void MainWindow::on_btn_copyToClipboard_clicked()
+{
+    clipboard.copyOTP(ui->secretEdit->text());
+    showNotificationLabel();
+}
+
+void MainWindow::ready() {
+}
+
+void MainWindow::on_btn_select_debug_console_clicked()
+{
+    ui->edit_debug_file_path->setText("console");
 }

@@ -1,14 +1,5 @@
 <RCC>
     <qresource prefix="/images">
-        <file alias="CS_icon.png">images/CS_icon.png</file>
-        <file alias="warning.png">images/warning.png</file>
-        <file alias="splash.png">images/splash.png</file>
-        <file alias="info-icon.png">images/info-icon.png</file>
-        <file alias="quit.png">images/quit.png</file>
-        <file alias="safe.png">images/safe.png</file>
-        <file alias="settings.png">images/settings.png</file>
-        <file alias="harddrive.png">images/harddrive.png</file>
-        <file alias="about.png">images/about.png</file>
         <file alias="ProgressWheel.GIF">images/ProgressWheel.GIF</file>
         <file alias="progressWheel2.gif">images/progressWheel2.gif</file>
     </qresource>
@@ -20,9 +11,22 @@
     </qresource>
     <qresource prefix="/license">
         <file alias="General">3RDPARTY.txt</file>
-        <file alias="Nitrokey-App">LICENSES/GPLv3</file> <!-- GPLv3 -->
-        <file alias="Qt-framework">LICENSES/GPLv3</file> <!-- GPLv3 -->
-        <file alias="libnitrokey">LICENSES/LGPLv3</file> <!-- LGPLv3 -->
-        <file alias="cppcodec">LICENSES/MIT</file> <!-- MIT -->
+        <file alias="Nitrokey-App">LICENSES/GPLv3</file>
+        <file alias="Qt-framework">LICENSES/GPLv3</file>
+        <file alias="libnitrokey">LICENSES/LGPLv3</file>
+        <file alias="cppcodec">LICENSES/MIT</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>images/new/icon_about_nitrokey.svg</file>
+        <file>images/new/icon_fragezeichen.svg</file>
+        <file>images/new/icon_harddrive.svg</file>
+        <file>images/new/icon_info.svg</file>
+        <file>images/new/icon_Logo_App.svg</file>
+        <file>images/new/icon_NK.svg</file>
+        <file>images/new/icon_passwords.svg</file>
+        <file>images/new/icon_quit.svg</file>
+        <file>images/new/icon_safe.svg</file>
+        <file>images/new/icon_settings.svg</file>
+        <file>images/new/icon_warning.svg</file>
     </qresource>
 </RCC>
