@@ -75,7 +75,7 @@ const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
 const auto tray_location_msg = "\n"+MainWindow::tr("You can find application’s tray icon in system tray in "
                                       "the right down corner of your screen (Windows) or in the upper right (Linux, MacOS).");
 
-void MainWindow::load_settings(){
+void MainWindow::load_settings_page(){
     QSettings settings;
     const auto first_run_key = "main/first_run";
     auto first_run = settings.value(first_run_key, true).toBool();
@@ -221,14 +221,15 @@ MainWindow::MainWindow(QWidget *parent):
   this->adjustSize();
   this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
-  first_run();
-
-  load_settings();
-
   tray.setFile_menu(menuBar());
+  ui->progressBar->hide();
 
-  ui->tabWidget->setEnabled(false);
+  first_run();
+  load_settings_page();
+
+  make_UI_enabled(false);
   startConfiguration(false);
+
   ui->statusBar->showMessage(tr("Idle"));
 
   // Connect dial page
@@ -238,15 +239,28 @@ MainWindow::MainWindow(QWidget *parent):
   connect(ui->btn_dial_help, SIGNAL(clicked()), this, SLOT(startHelpAction()));
   connect(ui->btn_dial_HV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableHiddenVolume()));
   connect(ui->btn_dial_quit, SIGNAL(clicked()), qApp, SLOT(quit()));
+
+
 }
 
 #include <libnitrokey/stick20_commands.h>
 
+void MainWindow::make_UI_enabled(bool enabled) {
+//  ui->tabWidget->setEnabled(enabled);
+  ui->tab->setEnabled(enabled);
+  ui->tab_2->setEnabled(enabled);
+  ui->tab_3->setEnabled(enabled);
+
+  ui->btn_dial_PWS->setEnabled(enabled);
+  ui->btn_dial_EV->setEnabled(enabled);
+  ui->btn_dial_HV->setEnabled(enabled);
+  ui->btn_dial_lock->setEnabled(enabled);
+}
+
 void MainWindow::manageStartPage(){
     if (!libada::i()->isDeviceConnected() || libada::i()->get_status_no_except() !=0 ) {
-        ui->tab_5->setEnabled(false);
-        hide();
-        return;
+      make_UI_enabled(false);
+      return;
     }
 
     QFuture<bool> PWS_unlocked = QtConcurrent::run(libada::i().get(), &libada::isPasswordSafeUnlocked);
@@ -684,7 +698,7 @@ void MainWindow::startConfiguration(bool changeTab) {
     }
     QTimer::singleShot(0, this, [this](){
       ManageWindow::bringToFocus(this);
-      ui->tabWidget->setEnabled(libada::i()->isDeviceConnected());
+      make_UI_enabled(libada::i()->isDeviceConnected());
     });
 }
 
@@ -1595,7 +1609,7 @@ void MainWindow::on_DeviceDisconnected() {
     this->hide();
   }
 
-  ui->tabWidget->setEnabled(false);
+  make_UI_enabled(false);
 }
 
 void MainWindow::on_DeviceConnected() {
@@ -1812,7 +1826,7 @@ void MainWindow::on_btn_writeSettings_clicked()
             QApplication::exit();
         }
     }
-    load_settings();
+  load_settings_page();
 }
 
 void MainWindow::on_btn_select_debug_file_path_clicked()
@@ -1833,7 +1847,7 @@ void MainWindow::on_btn_copyToClipboard_clicked()
 }
 
 void MainWindow::ready() {
-  ui->tabWidget->setEnabled(true);
+  make_UI_enabled(true);
 }
 
 void MainWindow::on_btn_select_debug_console_clicked()

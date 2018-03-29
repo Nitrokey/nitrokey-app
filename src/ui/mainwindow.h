@@ -175,7 +175,7 @@ private slots:
   void on_checkBox_toggled(bool checked);
 
   void startStickDebug();
-  void load_settings();
+  void load_settings_page();
 
   void on_PWS_ButtonClearSlot_clicked();
   void on_PWS_ComboBoxSelectSlot_currentIndexChanged(int index);
@@ -232,6 +232,8 @@ private:
   unsigned int roundToNextMultiple(const int number, const int multipleOf) const;
 
   QString getOTPSecretCleaned(QString secret_input);
+
+  void make_UI_enabled(bool enabled);
 };
 
 class utf8FieldLengthValidator : public QValidator {
