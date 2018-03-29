@@ -194,14 +194,6 @@ Please try again</translation>
         <translation></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;You can use upper and lower case, numbers, and special characters.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;A secure PIN should contain upper and lower case letters, numbers and special characters.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Brute force protection prevents agains a maximum of 3 incorrect PIN attempts. A PIN of 6 or 8 digits is sufficient, longer or more complex PINs are unnecessary. This rule does not apply to the firmware password. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars.  &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>Retry count left:</source>
         <translation>PIN attempts left:</translation>
     </message>
@@ -216,10 +208,6 @@ Please try again</translation>
     <message>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
         <translation>Unfortunately you have no more attempts left. Please check the instructions on how to reset the Admin PIN.</translation>
-    </message>
-    <message>
-        <source>Once the firmware password is forgotten the Nitrokey can&apos;t be updated or reset. Don&apos;t lose your firmware password, please.</source>
-        <translation type="vanished">Once the firmware password is forgotten the Nitrokey can&apos;t be updated or reset. Please don&apos;t lose your firmware password.</translation>
     </message>
     <message>
         <source>Set User PIN</source>
@@ -568,12 +556,6 @@ Please try again</translation>
         <translation></translation>
     </message>
     <message>
-        <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation>WARNING: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</translation>
-    </message>
-    <message>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
         <translation>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please try again.</translation>
     </message>
@@ -604,12 +586,6 @@ Select &quot;Initialize device&quot; option from context menu.</translation>
     <message>
         <source>For Nitrokey Storage counter must be a value between 0 and 9999999</source>
         <translation>Nitrokey Storage counter must be a value between 0 and 9999999</translation>
-    </message>
-    <message>
-        <source>Warning: The encrypted Volume is not formatted.
-&quot;Use GParted or fdisk for this.&quot;</source>
-        <translation type="vanished">WARNING: The encrypted Volume is not formatted.
-&quot;Use GParted or fdisk for this.&quot;</translation>
     </message>
     <message>
         <source>Please enter a slotname.</source>
@@ -728,18 +704,6 @@ Select &quot;Initialize storage with random data&quot;</translation>
     <message>
         <source>To handle this functionality application will keep your user PIN in memory. Do you want to continue?</source>
         <translation>To handle this functionality the application will keep your user PIN in memory. Do you want to continue?</translation>
-    </message>
-    <message>
-        <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please:
-1. Close the application
-2. Reinsert the device
-3. Wait 30 seconds and start application</source>
-        <translation type="vanished">Device lock detected, please remove and insert the device again.
-If the problem reoccurs please:
-1. Close the application
-2. Reinsert the device
-3. Wait 30 seconds and start application</translation>
     </message>
     <message>
         <source>Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret.</source>
@@ -1194,6 +1158,12 @@ Message: </source>
     <message>
         <source>Details: </source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Warning: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</source>
+        <translation type="unfinished">WARNING: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</translation>
     </message>
 </context>
 <context>

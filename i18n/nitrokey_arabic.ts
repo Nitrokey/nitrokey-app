@@ -196,14 +196,6 @@ Please retry</source>
         <translation>غير الرقم السري للمستخدم</translation>
     </message>
     <message>
-        <source>Old PIN</source>
-        <translation type="vanished">الرقم السري القديم</translation>
-    </message>
-    <message>
-        <source>New PIN</source>
-        <translation type="vanished">الرقم السري الجديد</translation>
-    </message>
-    <message>
         <source>Show PIN</source>
         <translation>أظهر الرقم السري</translation>
     </message>
@@ -212,16 +204,8 @@ Please retry</source>
         <translation>عدد محاولات الإعادة المتبقية</translation>
     </message>
     <message>
-        <source>Admin PIN:</source>
-        <translation type="vanished">كلمة سر المستخدم المدير</translation>
-    </message>
-    <message>
         <source>Change Firmware Password</source>
         <translation>قم بتغيير كلمة السر للفيرم وير</translation>
-    </message>
-    <message>
-        <source>New Firmware Password:</source>
-        <translation type="vanished">كلمة السر الجديدة للفبرم وير</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
@@ -230,10 +214,6 @@ Please retry</source>
     <message>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
         <translation>لسوء الحظ، استنفذت كل محاولات الإعادة. يرجى مطالعة التعليمات لمعرفة كيفية إعادة تهيئة كلمة السر للمدير.</translation>
-    </message>
-    <message>
-        <source>Once the firmware password is forgotten the Nitrokey can&apos;t be updated or reset. Don&apos;t lose your firmware password, please.</source>
-        <translation type="vanished">في حالة نسيان كلمة السر للفيرم وير فإنه لن يمكن تحديثه أو إعادة تهيئته. لذلك يرجى عدم نسيان كلمة سر الفير وير.</translation>
     </message>
     <message>
         <source>Set User PIN</source>
@@ -254,10 +234,6 @@ Please retry</source>
     <message>
         <source>Current Admin PIN:</source>
         <translation>الرقم السري الحالي للمدير:</translation>
-    </message>
-    <message>
-        <source>New Admin PIN:</source>
-        <translation type="vanished">الرقم السري الجديد للمدير:</translation>
     </message>
     <message>
         <source>Reset User PIN</source>
@@ -353,10 +329,6 @@ Please retry</source>
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <source>Configuration</source>
-        <translation type="vanished">تهيئة</translation>
-    </message>
     <message>
         <source>OTP Slot Configuration</source>
         <translation>تهيئة موضع كلمة السر لمرة واحدة</translation>
@@ -578,12 +550,6 @@ Please retry</source>
         <translation>نتروكي ستوريج متصل</translation>
     </message>
     <message>
-        <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation>تحذير: الجزء المسفر غير آمن.
-اختر خاصية &quot;أسس الجهاز&quot; من القائمة الخاصة به</translation>
-    </message>
-    <message>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
         <translation>قيمة العداد لم يتم نسخها. هناك خطأ في التحويل.
 ضبط قيمة العداد لصفر. يرجى إعادة المحاولة</translation>
@@ -611,12 +577,6 @@ Select &quot;Initialize device&quot; option from context menu.</source>
     <message>
         <source>For Nitrokey Storage counter must be a value between 0 and 9999999</source>
         <translation>لنتروكي ستوريج يجب أن يتكون قيمة العداد بين صفر و 9999999</translation>
-    </message>
-    <message>
-        <source>Warning: The encrypted Volume is not formatted.
-&quot;Use GParted or fdisk for this.&quot;</source>
-        <translation type="vanished">تحذير: الجزء المشفر ليس مهيأ.
-استخدم أداة GParted أو fdisk للقيام بتهيئته</translation>
     </message>
     <message>
         <source>Please enter a slotname.</source>
@@ -735,18 +695,6 @@ Select &quot;Initialize storage with random data&quot;</source>
     <message>
         <source>To handle this functionality application will keep your user PIN in memory. Do you want to continue?</source>
         <translation>للتعامل مع هذه الخاصية، التطبيق سوف يحفظ كلمة سر المستخدم في الذاكرة. هل تريد الاستمرار؟</translation>
-    </message>
-    <message>
-        <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please:
-1. Close the application
-2. Reinsert the device
-3. Wait 30 seconds and start application</source>
-        <translation type="vanished">تم اكتشاف قفل الجهاز. يرجى إزالة الجهاز ثم إعادة توصيله.
-إذا حدثت مشكلة مرة أخرى فيرجى:
-1- إغلاق التطبيق
-2- إعادة توصيل الجهاز
-3- الانتظار 30 ثانية ثم تشغيل التطبيق</translation>
     </message>
     <message>
         <source>Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret.</source>
@@ -1217,6 +1165,12 @@ Message: </source>
     <message>
         <source>Details: </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</source>
+        <translation type="unfinished">تحذير: الجزء المسفر غير آمن.
+اختر خاصية &quot;أسس الجهاز&quot; من القائمة الخاصة به</translation>
     </message>
 </context>
 <context>

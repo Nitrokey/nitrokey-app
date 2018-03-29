@@ -197,40 +197,16 @@ Bitte versuchen Sie es erneut</translation>
         <translation>Ändere Benutzer-PIN</translation>
     </message>
     <message>
-        <source>Old PIN</source>
-        <translation type="vanished">Alte PIN</translation>
-    </message>
-    <message>
-        <source>New PIN</source>
-        <translation type="vanished">Neue PIN</translation>
-    </message>
-    <message>
         <source>Show PIN</source>
         <translation>PIN anzeigen</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;You can use upper and lower case, numbers, and special characters.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Sie können Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen verwenden.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs können nur dreimal ausprobiert werden und sind daher sicher gegen Brute Force Angriffe. Eine PIN mit 6 oder 8 Zahlen ist ausreichend lang, so dass längere und kompliziere PINs in der Regel unnötig sind. Die minimale Länge beträgt %1 (%3 für Admin) und die maximale Länge beträgt %2 Zeichen. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Retry count left:</source>
         <translation>Anzahl möglicher Versuche:</translation>
     </message>
     <message>
-        <source>Admin PIN:</source>
-        <translation type="vanished">Administrator-PIN:</translation>
-    </message>
-    <message>
         <source>Change Firmware Password</source>
         <translation>Firmware-Passwort ändern</translation>
-    </message>
-    <message>
-        <source>New Firmware Password:</source>
-        <translation type="vanished">Neues Firmware-Passwort:</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
@@ -239,10 +215,6 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
         <translation>Leider sind keine Eingaben mehr möglich. Bitte lesen Sie die Dokumentation wie die Admin-PIN zurückgesetzt werden kann.</translation>
-    </message>
-    <message>
-        <source>Once the firmware password is forgotten the Nitrokey can&apos;t be updated or reset. Don&apos;t lose your firmware password, please.</source>
-        <translation type="vanished">Wenn das Firmware-Passwort vergessen wurde, kann der Nitrokey nicht mehr aktualisiert oder zurückgesetzt werden. Bitte verlieren Sie Ihr Firmware-Passwort nicht.</translation>
     </message>
     <message>
         <source>Set User PIN</source>
@@ -263,10 +235,6 @@ Bitte versuchen Sie es erneut</translation>
     <message>
         <source>Current Admin PIN:</source>
         <translation>Aktuelle Admin-PIN:</translation>
-    </message>
-    <message>
-        <source>New Admin PIN:</source>
-        <translation type="vanished">Neue Admin-PIN:</translation>
     </message>
     <message>
         <source>Reset User PIN</source>
@@ -362,10 +330,6 @@ Bitte versuchen Sie es erneut</translation>
 </context>
 <context>
     <name>MainWindow</name>
-    <message>
-        <source>Configuration</source>
-        <translation type="vanished">Konfiguration</translation>
-    </message>
     <message>
         <source>OTP Slot Configuration</source>
         <translation>Einmalpasswörter-Einträge</translation>
@@ -603,18 +567,6 @@ Bitte versuchen Sie es erneut</translation>
         <translation>TOTP-Länge:</translation>
     </message>
     <message>
-        <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation>Warnung: Verschlüsseltes Volumen ist nicht sicher,
-Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
-    </message>
-    <message>
-        <source>Warning: The encrypted Volume is not formatted.
-&quot;Use GParted or fdisk for this.&quot;</source>
-        <translation type="vanished">Warnung: Das verschlüsselte Volumen ist noch nicht formatiert.
-&quot;Dafür können Sie GParted oder fdisk verwenden.&quot;</translation>
-    </message>
-    <message>
         <source>Please enter a slotname.</source>
         <translation>Bitte Namen des Eintrags eingeben.</translation>
     </message>
@@ -761,18 +713,6 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
         <translation>Für diese Funktionalität speichert die Anwendung Ihre Benutzer-PIN im Arbeitsspeicher. Wollen Sie fortfahren?</translation>
     </message>
     <message>
-        <source>Device lock detected, please remove and insert the device again.
-If problem will occur again please:
-1. Close the application
-2. Reinsert the device
-3. Wait 30 seconds and start application</source>
-        <translation type="vanished">Ein gesperrtes Gerät wurde erkannt. Bitte entfernen und verbinden Sie das Gerät erneut.
-Falls das Problem erneut auftritt:
-1. Schließen Sie die Anwendung
-2. Verbinden Sie das Gerät erneut
-3. Warten Sie 30 Sekunden und starten anschließend die Anwendung</translation>
-    </message>
-    <message>
         <source>Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret.</source>
         <translation>Nitrokey Pro v0.7 unterstützt keine Geheimnisse die mit Null Bytes beginnen. Bitte ändern Sie das Geheimnis.</translation>
     </message>
@@ -811,10 +751,6 @@ Falls das Problem erneut auftritt:
     <message>
         <source>Reset Nitrokey&apos;s time?</source>
         <translation>Zeit des Nitrokeys zurücksetzen?</translation>
-    </message>
-    <message>
-        <source>Closing window due to device disconnection</source>
-        <translation type="vanished">Schließe Fenster wegen Verbindungsproblem</translation>
     </message>
     <message>
         <source>Locking device</source>
@@ -1230,6 +1166,12 @@ Nachricht: </translation>
     <message>
         <source>Details: </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</source>
+        <translation type="unfinished">Warnung: Verschlüsseltes Volumen ist nicht sicher,
+Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
     </message>
 </context>
 <context>

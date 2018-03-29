@@ -197,40 +197,16 @@ Merci de réessayer</translation>
         <translation>Changer le PIN utilisateur</translation>
     </message>
     <message>
-        <source>Old PIN</source>
-        <translation type="vanished">Ancien PIN</translation>
-    </message>
-    <message>
-        <source>New PIN</source>
-        <translation type="vanished">Nouveau PIN</translation>
-    </message>
-    <message>
         <source>Show PIN</source>
         <translation>Afficher le PIN</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;You can use upper and lower case, numbers, and special characters.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Vous pouvez utiliser des lettres en majuscule ou minuscule, des chiffres ou des caractères spéciaux.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;PINs can only be tried three times and are secure against brute force guessing. A PIN of 6 or 8 digits is sufficiently long and longer or more complex PINs are usually unnecessary. The minimum length is %1 (%3 for admin) and the maximum length is %2 chars. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Les PIN ne peuvent être essayés que trois fois et ils sont protégés contre les introduction par force brute. Un PIN de 6 à 8 caractères est suffisamment long. Des PIN plus longs ou plus complexes sont généralement superflus. Cette règle ne s&apos;applique pas pour le mot de passe du micrologiciel. La longueur minimum est de %1 (%3 pour l&apos;administrateur) et la longueur maximale de %2 caractères.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Retry count left:</source>
         <translation>Essais restant :</translation>
     </message>
     <message>
-        <source>Admin PIN:</source>
-        <translation type="vanished">PIN administrateur :</translation>
-    </message>
-    <message>
         <source>Change Firmware Password</source>
         <translation>Modifier le mot de passe du micrologiciel</translation>
-    </message>
-    <message>
-        <source>New Firmware Password:</source>
-        <translation type="vanished">Nouveau mot de passe micrologiciel :</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
@@ -239,10 +215,6 @@ Merci de réessayer</translation>
     <message>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
         <translation>Malheureusement vous n&apos;avez plus d&apos;essai possible. Merci de vous reporter aux instructions concernant la réinitialisation du PIN administrateur.</translation>
-    </message>
-    <message>
-        <source>Once the firmware password is forgotten the Nitrokey can&apos;t be updated or reset. Don&apos;t lose your firmware password, please.</source>
-        <translation type="vanished">Si vous oubliez le mot de passe du micrologiciel, il ne sera plus possible de mettre à jour ou réinitialiser la Nitrokey. Merci de faire en sorte de ne pas l&apos;oublier.</translation>
     </message>
     <message>
         <source>Set User PIN</source>
@@ -263,10 +235,6 @@ Merci de réessayer</translation>
     <message>
         <source>Current Admin PIN:</source>
         <translation>PIN administrateur courant :</translation>
-    </message>
-    <message>
-        <source>New Admin PIN:</source>
-        <translation type="vanished">Nouveau PIN administrateur :</translation>
     </message>
     <message>
         <source>Reset User PIN</source>
@@ -595,12 +563,6 @@ Merci de réessayer</translation>
         <translation>Nitrokey Storage connectée</translation>
     </message>
     <message>
-        <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation>Attention : le volume chiffré n&apos;est pas sécurisé,
-Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le menu contextuel.</translation>
-    </message>
-    <message>
         <source>Counter value not copied - there was an error in conversion. Setting counter value to 0. Please retry.</source>
         <translation>La valeur du compteur n&apos;a pas été copiée, une erreur est survenue dans la conversion. Le compteur a été mis à 0. Merci de réessayer.</translation>
     </message>
@@ -623,12 +585,6 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le men
     <message>
         <source>For Nitrokey Storage counter must be a value between 0 and 9999999</source>
         <translation>Pour la Nitrokey Storage, le compteur doit être une valeur entre 0 et 9999999</translation>
-    </message>
-    <message>
-        <source>Warning: The encrypted Volume is not formatted.
-&quot;Use GParted or fdisk for this.&quot;</source>
-        <translation type="vanished">Attention : le volume chiffré n&apos;est pas formatté.
-&quot;Utilisez GParted ou fdisk pour cela.&quot;</translation>
     </message>
     <message>
         <source>Please enter a slotname.</source>
@@ -907,10 +863,6 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     <message>
         <source>Locking device</source>
         <translation>Verrouillage de la clef</translation>
-    </message>
-    <message>
-        <source>Closing window due to device disconnection</source>
-        <translation type="vanished">Fermeture de la fenêtre à cause d&apos;une déconnexion de la clef</translation>
     </message>
     <message>
         <source>Connecting device</source>
@@ -1214,6 +1166,12 @@ Message : </translation>
     <message>
         <source>Details: </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</source>
+        <translation type="unfinished">Attention : le volume chiffré n&apos;est pas sécurisé,
+Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le menu contextuel.</translation>
     </message>
 </context>
 <context>
