@@ -1,14 +1,5 @@
 <RCC>
     <qresource prefix="/images">
-        <file alias="CS_icon.png">images/CS_icon.png</file>
-        <file alias="warning.png">images/warning.png</file>
-        <file alias="splash.png">images/splash.png</file>
-        <file alias="info-icon.png">images/info-icon.png</file>
-        <file alias="quit.png">images/quit.png</file>
-        <file alias="safe.png">images/safe.png</file>
-        <file alias="settings.png">images/settings.png</file>
-        <file alias="harddrive.png">images/harddrive.png</file>
-        <file alias="about.png">images/about.png</file>
         <file alias="ProgressWheel.GIF">images/ProgressWheel.GIF</file>
         <file alias="progressWheel2.gif">images/progressWheel2.gif</file>
     </qresource>

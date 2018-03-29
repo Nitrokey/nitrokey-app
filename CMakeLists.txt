@@ -177,14 +177,6 @@ IF(NOT WIN32)
     DESTINATION ${BASH_COMPLETION_DIR}
   )
 
-  install(FILES
-    ${CMAKE_SOURCE_DIR}/images/info.png
-    ${CMAKE_SOURCE_DIR}/images/quit.png
-    ${CMAKE_SOURCE_DIR}/images/safe_zahlenkreis.png
-    ${CMAKE_SOURCE_DIR}/images/settings.png
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/nitrokey
-  )
-
 ENDIF () # NOT WIN32
 
 
