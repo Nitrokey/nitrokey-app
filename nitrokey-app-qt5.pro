@@ -22,7 +22,7 @@ sources.files = qss
 TARGET = nitrokey-app
 TEMPLATE = app
 
-VERSION = 1.2.1
+VERSION = 1.3-beta.1
 QMAKE_TARGET_COMPANY = Nitrokey
 QMAKE_TARGET_PRODUCT = Nitrokey App
 QMAKE_TARGET_DESCRIPTION = Nitrokey Device Manager
@@ -141,5 +141,5 @@ TRANSLATIONS += i18n/nitrokey_de_DE.ts \
                 i18n/nitrokey_fr.ts
 
 
-DEFINES += GIT_VERSION=\"\\\"$$system(git describe --abbrev=4 --always)\\\"\"
+DEFINES += GIT_VERSION=\"\\\"$$system(git describe --abbrev=4 --always)\\\"\" GUI_VERSION="\\\"$${VERSION}\\\""
 message($$DEFINES)
