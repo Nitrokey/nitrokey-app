@@ -414,7 +414,7 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
   bool user_entered_PIN;
   bool answer;
 
-  answer = csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
+  answer = (fillSDWithRandomChars == 1) || csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
                                          "hidden volumes, and password safe! Continue?"), false);
   if (answer) {
     PinDialog dialog(PinType::ADMIN_PIN);
