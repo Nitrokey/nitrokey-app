@@ -30,8 +30,8 @@
    <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
