@@ -53,6 +53,17 @@ int main(int argc, char *argv[]) {
   issue_43_workaround();
 
   QApplication a(argc, argv);
+
+
+#ifdef Q_OS_MAC
+  QDir dir(QCoreApplication::applicationDirPath());
+  dir.cdUp();
+  dir.cd("PlugIns");
+  QCoreApplication::addLibraryPath(dir.absolutePath());
+  dir.cd("iconengines");
+  QCoreApplication::addLibraryPath(dir.absolutePath());
+#endif
+
   configureApplicationName();
   QCommandLineParser parser;
   auto shouldQuit = configureParser(a, parser);

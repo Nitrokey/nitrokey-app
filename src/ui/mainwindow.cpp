@@ -248,7 +248,8 @@ MainWindow::MainWindow(QWidget *parent):
   connect(ui->btn_dial_HV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableHiddenVolume()));
   connect(ui->btn_dial_quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
-
+  QIcon icon(QStringLiteral(":/images/new/icon_NK.svg"));
+  QGuiApplication::setWindowIcon(icon);
 }
 
 #include <libnitrokey/stick20_commands.h>
