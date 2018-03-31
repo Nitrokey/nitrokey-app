@@ -120,9 +120,13 @@ void MainWindow::keyPressEvent(QKeyEvent *keyevent)
 {
     if (keyevent->key()==Qt::Key_Escape){
         QSettings settings;
-        if (settings.value("main/hide_on_close", true).toBool())
+        if (settings.value("main/hide_on_close", true).toBool()){
+#ifdef Q_OS_MAC
+            showMinimized();
+#else
             hide();
-        else
+#endif
+        } else
             QApplication::quit();
     } else {
         QMainWindow::keyPressEvent(keyevent);
@@ -402,7 +406,11 @@ MainWindow::~MainWindow() {
 void MainWindow::closeEvent(QCloseEvent *event) {
   QSettings settings;
   if (settings.value("main/hide_on_close", true).toBool()){
-      this->hide();
+#ifdef Q_OS_MAC
+     showMinimized();
+#else
+      hide();
+#endif
       event->ignore();
   } else {
       QApplication::quit();
