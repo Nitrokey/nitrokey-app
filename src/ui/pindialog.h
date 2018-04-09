@@ -89,6 +89,8 @@ private:
   const PinType _pinType;
   PinDialogUI::Worker worker;
   QThread worker_thread;
+  static int instances;
+  static PinDialog* current_instance;
 
   void clearBuffers();
   void UI_deviceNotInitialized() const;

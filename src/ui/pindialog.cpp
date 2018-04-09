@@ -27,10 +27,18 @@
 #include "nitrokey-applet.h"
 #include "stick20changepassworddialog.h"
 
+
+int PinDialog::instances = 0;
+PinDialog* PinDialog::current_instance = nullptr;
+
 PinDialog::PinDialog(PinType pinType, QWidget *parent):
     QDialog(parent),
     _pinType(pinType), worker(pinType)
 {
+  ++instances;
+  if (PinDialog::current_instance == nullptr)
+     PinDialog::current_instance = this;
+
   ui = std::make_shared<Ui::PinDialog>();
   ui->setupUi(this);
 
@@ -77,13 +85,15 @@ PinDialog::PinDialog(PinType pinType, QWidget *parent):
 
   ui->lineEdit->setFocus();
 
-  this->setModal(true);
-  ManageWindow::bringToFocus(this);
+  this->setModal(true);  
 }
 
 PinDialog::~PinDialog() {
   worker_thread.quit();
   worker_thread.wait();
+  --instances;
+  if (PinDialog::current_instance == this)
+    PinDialog::current_instance = nullptr;
 }
 
 void PinDialog::getPassword(QString &pin) {
@@ -155,11 +165,19 @@ void PinDialog::onOkButtonClicked() {
 }
 
 int PinDialog::exec() {
+    if (PinDialog::instances > 1){
+        done(Rejected);
+        if (PinDialog::current_instance != nullptr){
+            ManageWindow::bringToFocus(PinDialog::current_instance);
+        }
+        return QDialog::Rejected;
+    }
   if (!libada::i()->isDeviceInitialized()) {
         UI_deviceNotInitialized();
         done(Rejected);
         return QDialog::Rejected;
   }
+  ManageWindow::bringToFocus(this);
   return QDialog::exec();
 }
 
