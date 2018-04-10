@@ -1353,6 +1353,10 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
         <source>Hidden volume could not be created.</source>
         <translation></translation>
     </message>
+    <message>
+        <source>To complete the lock procedure, please remove and reconnect the Nitrokey.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Tray</name>

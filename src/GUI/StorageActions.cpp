@@ -175,8 +175,12 @@ void StorageActions::startStick20DisableCryptedVolume() {
         CryptedVolumeActive = false;
         emit storageStatusChanged();
         show_message_function(tr("Encrypted volume disabled"));
-      }
-       else {
+        //  for v0.50 and below ask for reinsertion to complete the lock procedure
+        if (libada::i()->getMinorFirmwareVersion() <= 50){
+          csApplet()->messageBox(
+              tr("To complete the lock procedure, please remove and reconnect the Nitrokey."));
+        }
+      } else {
         csApplet()->warningBox(tr("Could not lock encrypted volume.") + " "
                                + tr("Status code: %1").arg(data["error"].toInt())); //FIXME use existing translation
       }
@@ -341,6 +345,11 @@ void StorageActions::startLockDeviceAction(bool ask_for_confirmation) {
         CryptedVolumeActive = false;
         emit storageStatusChanged();
         show_message_function(tr("Device locked")); //FIXME use existing translation
+        //  for v0.50 and below ask for reinsertion to complete the lock procedure
+        if (libada::i()->getMinorFirmwareVersion() <= 50){
+          csApplet()->messageBox(
+              tr("To complete the lock procedure, please remove and reconnect the Nitrokey."));
+        }
       }
       else {
         csApplet()->warningBox(tr("Could not lock device.") + " "

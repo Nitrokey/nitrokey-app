@@ -1363,6 +1363,10 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
         <source>Hidden volume could not be created.</source>
         <translation>Le volume caché n&apos;a pas pu être créé.</translation>
     </message>
+    <message>
+        <source>To complete the lock procedure, please remove and reconnect the Nitrokey.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Tray</name>
