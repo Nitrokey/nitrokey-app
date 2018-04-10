@@ -22,8 +22,8 @@ sources.files = qss
 TARGET = nitrokey-app
 TEMPLATE = app
 
-VERSION = 1.3.101
-VERSION_STR = 1.3-beta.1
+VERSION = 1.3.0
+VERSION_STR = 1.3
 QMAKE_TARGET_COMPANY = Nitrokey
 QMAKE_TARGET_PRODUCT = Nitrokey App
 QMAKE_TARGET_DESCRIPTION = Nitrokey Device Manager
