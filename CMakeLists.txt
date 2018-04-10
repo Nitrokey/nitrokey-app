@@ -3,6 +3,7 @@ cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
 PROJECT(NitrokeyApp LANGUAGES CXX)
 SET(PROJECT_VERSION "1.3")
+set(LIBNK_MIN_VERSION 3.3)
 
 include(GNUInstallDirs)
 
@@ -206,8 +207,9 @@ Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Svg
 
 # first try to find libnitrokey via pkg-config
 find_package(PkgConfig)
-pkg_search_module(LIBNITROKEY libnitrokey-1)
+pkg_search_module(LIBNITROKEY ${_pkgconfig_REQUIRED} libnitrokey-1 >= ${LIBNK_MIN_VERSION})
 
+MESSAGE(STATUS "Required libnitrokey version: ${LIBNK_MIN_VERSION}")
 if(LIBNITROKEY_FOUND)
   MESSAGE(STATUS "Found system libnitrokey (Cflags: '${LIBNITROKEY_CFLAGS}' Libs: '${LIBNITROKEY_LDFLAGS}')")
   if (BUILD_SHARED_LIBS)
