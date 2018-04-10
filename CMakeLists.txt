@@ -45,6 +45,7 @@ FIND_PACKAGE(Qt5Core REQUIRED)
 FIND_PACKAGE(Qt5Gui REQUIRED)
 FIND_PACKAGE(Qt5Widgets REQUIRED)
 FIND_PACKAGE(Qt5Svg REQUIRED)
+FIND_PACKAGE(Qt5Concurrent REQUIRED)
 
 
 # add git version info
@@ -202,7 +203,7 @@ INSTALL(TARGETS nitrokey-app DESTINATION ${CMAKE_INSTALL_BINDIR})
 TARGET_LINK_LIBRARIES(nitrokey-app
   ${EXTRA_LIBS}
 #  ${platform_specific_libs}
-Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Svg
+  Qt5::Widgets Qt5::Core Qt5::Gui Qt5::Svg Qt5::Concurrent
 )
 
 # first try to find libnitrokey via pkg-config

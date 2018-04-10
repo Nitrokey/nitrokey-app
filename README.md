@@ -35,6 +35,7 @@ Prerequisites for building on Ubuntu 17.10:
 - qt5-default # QT5 library
 - qttools5-dev # QT5 library tools - generating translations
 - libqt5svg5-dev # QT5 library for rendering SVG
+- libqt5concurrent5 # QT5 library for concurrent calls
 - pkg-config # system libraries detection
 - libnitrokey v3.2 # compiled only, if not already installed in the OS
 	- libusb-1.0-0-dev # library to communicate with USB devices
@@ -42,7 +43,7 @@ Prerequisites for building on Ubuntu 17.10:
 
 Whole command 
 ```
-sudo apt-get install libusb-1.0.0-dev cmake qt5-default qttools5-dev pkg-config libhidapi-dev build-essential libqt5svg5-dev
+sudo apt-get install libusb-1.0.0-dev cmake qt5-default qttools5-dev pkg-config libhidapi-dev build-essential libqt5svg5-dev libqt5concurrent5
 ```
 
 #### Getting the Nitrokey Sources

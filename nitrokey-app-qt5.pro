@@ -3,7 +3,7 @@
 include(libnitrokey/libnitrokey.pro)
 
 CONFIG   += qt c++14
-QT       += core gui widgets svg
+QT       += core gui widgets svg concurrent
 
 isEmpty(PREFIX) {
     PREFIX = /usr/local
