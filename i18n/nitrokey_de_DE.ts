@@ -1368,6 +1368,10 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
         <source>Hidden volume could not be created.</source>
         <translation>Verstecktes Volumen konnte nicht angelegt werden.</translation>
     </message>
+    <message>
+        <source>To complete the lock procedure, please remove and reconnect the Nitrokey.</source>
+        <translation>Um das Verschließen durchzuführen, entfernen und verbinden Sie den Nitrokey bitte erneut.</translation>
+    </message>
 </context>
 <context>
     <name>Tray</name>

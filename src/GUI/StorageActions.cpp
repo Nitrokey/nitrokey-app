@@ -178,7 +178,7 @@ void StorageActions::startStick20DisableCryptedVolume() {
         //  for v0.50 and below ask for reinsertion to complete the lock procedure
         if (libada::i()->getMinorFirmwareVersion() <= 50){
           csApplet()->messageBox(
-              tr("Please remove and insert back the device to USB port to complete the Lock procedure."));
+              tr("To complete the lock procedure, please remove and reconnect the Nitrokey."));
         }
       } else {
         csApplet()->warningBox(tr("Could not lock encrypted volume.") + " "
@@ -348,7 +348,7 @@ void StorageActions::startLockDeviceAction(bool ask_for_confirmation) {
         //  for v0.50 and below ask for reinsertion to complete the lock procedure
         if (libada::i()->getMinorFirmwareVersion() <= 50){
           csApplet()->messageBox(
-              tr("Please remove and insert back the device to USB port to complete the Lock procedure."));
+              tr("To complete the lock procedure, please remove and reconnect the Nitrokey."));
         }
       }
       else {
