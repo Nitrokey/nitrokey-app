@@ -1061,6 +1061,11 @@ Falls das Problem erneut auftritt:
         <source>Debug file location (will be overwritten)</source>
         <translation>Ort des Fehlerprotokolls (wird überschrieben)</translation>
     </message>
+    <message>
+        <source>current:</source>
+        <translatorcomment>(Google translate)</translatorcomment>
+        <translation>gewählt:</translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>

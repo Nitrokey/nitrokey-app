@@ -1057,6 +1057,10 @@ If problem will occur again please:
         <source>Debug file location (will be overwritten)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>current:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
