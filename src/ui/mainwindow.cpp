@@ -95,8 +95,8 @@ void MainWindow::load_settings_page(){
       auto lang = translationFile.remove("nitrokey_").remove(".qm");
       ui->combo_languages->addItem(lang, lang);
     }
-    ui->combo_languages->addItem("current: " + lang_selected, lang_selected);
-    ui->combo_languages->setCurrentText("current: " + lang_selected);
+    ui->combo_languages->addItem(tr("current:") +" "+ lang_selected, lang_selected);
+    ui->combo_languages->setCurrentText(tr("current:") +" "+ lang_selected);
 
     ui->edit_debug_file_path->setText(settings.value("debug/file", "").toString());
     ui->spin_debug_verbosity->setValue(settings.value("debug/level", 2).toInt());
