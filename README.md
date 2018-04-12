@@ -34,8 +34,7 @@ Gnome 3.26 (and later) removed support for the tray dock and tray icon (Ubuntu 1
 #### Tray icon under Debian Jessie
 Under Debian Jessie application's tray icon might be unavailable. There were reports it can be fixed with updating Qt libraries to 5.4.2 version and up. The packages are available in experimental OS branch. For more details please refer to: [NitrokeyApp#86](https://github.com/Nitrokey/nitrokey-app/issues/86). Another way to workaround this is using an AppImage binary release, introduced in [Nitrokey App v1.3](https://github.com/Nitrokey/nitrokey-app/releases/tag/v1.3).
 
-Installation and downloads
--------------------------
+## Installation and downloads
 Ready to use packages and install instructions are available on main site in download section: https://www.nitrokey.com/download
 
 ## Compilation
@@ -188,3 +187,12 @@ The report protocol is described [here](https://github.com/Nitrokey/nitrokey-pro
 The HID reports are set to 64 bytes. The "output report" is what you get from the device. When you send a report (command), the first byte sets the command type, then you have 59 bytes for your data, and the last 4 bytes are the CRC32 of the whole report.
 
 On the client side, please check documentation of [libnitrokey](https://github.com/Nitrokey/libnitrokey) project.
+
+## Advantages of App 1.x branch over 0.x 
+Nitrokey App v1.x uses `libnitrokey` for communication with device, making the code both testable and reusable. 
+Furthermore communication speed is vastly improved. Most of the code now makes requests to device in the background improving 
+GUI responsiveness. Also the delay between sending and receiving is decreased. Additionally device-related information is now lazy-loaded,
+which means App requests the data only when it needs them (it was earlier loading all OTP slot data to memory).
+
+Migration to `libnitrokey` comes with a cost of increasing compiler's requirements to be compliant with C++14 standard. 
+Fortunately most compatible compilers have been released in 2015 and all current ones should work.
