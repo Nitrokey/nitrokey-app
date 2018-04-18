@@ -7,12 +7,12 @@ clean:
 	-rm build
 	-rm nitrokey-app
 	dh_testdir
-	qmake -qt=qt5
+	cmake .
 	make clean
 	dh_clean -A
 
 build:
-	qmake -qt=qt5
+	cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
 	${MAKE}
 	touch build
 
@@ -61,4 +61,4 @@ binary-indep: binary
 build-arch: build
 build-indep: build
 
-.PHONY: clean binary
+.PHONY: clean binary build
