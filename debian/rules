@@ -6,7 +6,6 @@ export QT_SELECT=qt5
 clean:
 	-rm build
 	-rm nitrokey-app
-	git submodule update --init --recursive
 	dh_testdir
 	qmake -qt=qt5
 	make clean
