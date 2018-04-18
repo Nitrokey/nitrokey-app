@@ -1,6 +1,0 @@
-[submodule "unittest/Catch"]
-	path = unittest/Catch
-	url = https://github.com/philsquared/Catch.git
-[submodule "hidapi"]
-	path = hidapi
-	url = https://github.com/Nitrokey/hidapi.git
