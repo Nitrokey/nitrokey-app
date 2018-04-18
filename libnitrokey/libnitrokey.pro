@@ -14,7 +14,7 @@ QMAKE_TARGET_DESCRIPTION = Communicate with Nitrokey stick devices in a clean an
 QMAKE_TARGET_COPYRIGHT = Copyright (c) 2015-2018 Nitrokey UG
 
 HEADERS = \
-   $$PWD/hidapi/hidapi/hidapi.h \
+   $$PWD/libnitrokey/hidapi/hidapi.h \
    $$PWD/libnitrokey/command.h \
    $$PWD/libnitrokey/command_id.h \
    $$PWD/libnitrokey/CommandFailedException.h \
