@@ -56,19 +56,19 @@
 #include <QSvgWidget>
 
 using nm = nitrokey::NitrokeyManager;
-static const QString communication_error_message = QApplication::tr("Communication error. Please reinsert the device.");
+const auto Communication_error_message = QT_TRANSLATE_NOOP("MainWindow", "Communication error. Please reinsert the device.");
 
 
-static const QString invalid_secret_key_string_details = QApplication::tr("The secret string you have entered is invalid. Please reenter it.")
-                           +"\n"+QApplication::tr("Details: ");
+const auto Invalid_secret_key_string_details_1 = QT_TRANSLATE_NOOP("MainWindow", "The secret string you have entered is invalid. Please reenter it.");
+const auto Invalid_secret_key_string_details_2 = /*"\n" +*/ QT_TRANSLATE_NOOP("MainWindow", "Details: ");
 
-static const QString WARNING_EV_NOT_SECURE_INITIALIZE = QApplication::tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
+const auto Warning_ev_not_secure_initialize = QT_TRANSLATE_NOOP("MainWindow", "Warning: Encrypted volume is not secure,\nSelect \"Initialize "
                                                            "device\" option from context menu.");
 
 
-const QString MainWindow::RESET_NITROKEYS_TIME = MainWindow::tr("Reset Nitrokey's time?");
-const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
-    MainWindow::tr("WARNING!\n\nThe time of your computer and Nitrokey are out of "
+const auto Reset_nitrokeys_time = QT_TRANSLATE_NOOP("MainWindow", "Reset Nitrokey's time?");
+const auto Warning_devices_clock_not_desynchronized =
+    QT_TRANSLATE_NOOP("MainWindow", "WARNING!\n\nThe time of your computer and Nitrokey are out of "
                          "sync. Your computer may be configured with a wrong time or "
                          "your Nitrokey may have been attacked. If an attacker or "
                          "malware could have used your Nitrokey you should reset the "
@@ -76,7 +76,7 @@ const QString MainWindow::WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED =
                          "computer's time is wrong, please configure it correctly and "
                          "reset the time of your Nitrokey.\n\nReset Nitrokey's time?");
 
-const auto tray_location_msg = "\n"+MainWindow::tr("You can find application’s tray icon in system tray in "
+const auto Tray_location_msg = /*"\n" +*/ QT_TRANSLATE_NOOP("MainWindow", "You can find application’s tray icon in system tray in "
                                       "the right down corner of your screen (Windows) or in the upper right (Linux, MacOS).");
 
 void MainWindow::load_settings_page(){
@@ -316,7 +316,7 @@ void MainWindow::first_run(){
 
   auto msg = tr("The Nitrokey App is available as an icon in the tray bar.");
   tray.showTrayMessage(msg);
-  msg += tray_location_msg;
+  msg += "\n" + tr(Tray_location_msg);
   msg += " " + tr("Would you like to show this message again?");
   bool user_wants_to_be_reminded = csApplet()->yesOrNoBox(msg, true);
   if(!user_wants_to_be_reminded){
@@ -387,7 +387,7 @@ void MainWindow::initialTimeReset() {
   is_time_synchronized.waitForFinished();
 
   if (!is_time_synchronized.result()) {
-    bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + RESET_NITROKEYS_TIME, WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED,
+    bool answer = csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + tr(Reset_nitrokeys_time), tr(Warning_devices_clock_not_desynchronized),
       false);
     if (answer) {
       auto res = libada::i()->set_current_time();
@@ -830,12 +830,12 @@ void MainWindow::on_writeButton_clicked() {
     }
   }
   catch(const cppcodec::parse_error &e){
-    csApplet()->warningBox(invalid_secret_key_string_details + e.what());
+    csApplet()->warningBox(tr(Invalid_secret_key_string_details_1) + "\n" + tr(Invalid_secret_key_string_details_2) + e.what());
     return;
   }
 
   if (!this->ui->secretEdit->text().isEmpty() && !validate_raw_secret(otp.secret)) {
-    csApplet()->warningBox(invalid_secret_key_string_details + tr("secret is not passing validation."));
+    csApplet()->warningBox(tr(Invalid_secret_key_string_details_1) + "\n" + tr(Invalid_secret_key_string_details_2) + tr("secret is not passing validation."));
     return;
   }
 
@@ -898,7 +898,7 @@ void MainWindow::on_hexRadioButton_toggled(bool checked) {
     }
     catch (const cppcodec::parse_error &e) {
       ui->secretEdit->setText("");
-      csApplet()->warningBox(invalid_secret_key_string_details + e.what());
+      csApplet()->warningBox(tr(Invalid_secret_key_string_details_1) + "\n" + tr(Invalid_secret_key_string_details_2) + e.what());
     }
   }
 }
@@ -1029,7 +1029,7 @@ void MainWindow::getHOTPDialog(int slot) {
                       TRAY_MSG_TIMEOUT);
   }
   catch(DeviceCommunicationException &e){
-    tray.showTrayMessage(communication_error_message);
+    tray.showTrayMessage(tr(Communication_error_message));
   }
 }
 
@@ -1053,7 +1053,7 @@ void MainWindow::getTOTPDialog(int slot) {
                            TRAY_MSG_TIMEOUT);
   }
   catch(DeviceCommunicationException &e){
-    tray.showTrayMessage(communication_error_message);
+    tray.showTrayMessage(tr(Communication_error_message));
   }
 
 }
@@ -1389,7 +1389,7 @@ void MainWindow::on_PWS_ButtonSaveSlot_clicked() {
     csApplet()->messageBox(tr("Can't save slot. %1").arg(e.last_command_status));
   }
   catch (DeviceCommunicationException &e){
-    csApplet()->messageBox(tr("Can't save slot. %1").arg(communication_error_message));
+    csApplet()->messageBox(tr("Can't save slot. %1").arg(tr(Communication_error_message)));
   }
 }
 
@@ -1408,7 +1408,7 @@ void MainWindow::PWS_Clicked_EnablePWSAccess() {
       return;
     }
     catch (DeviceCommunicationException &e){
-      csApplet()->warningBox(communication_error_message);
+      csApplet()->warningBox(tr(Communication_error_message));
     }
     catch (CommandFailedException &e){
       //TODO emit pw safe not available when not available
@@ -1452,7 +1452,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
     tray.showTrayMessage(title, password_safe_slot_info);
   }
   catch(DeviceCommunicationException){
-    tray.showTrayMessage(communication_error_message);
+    tray.showTrayMessage(tr(Communication_error_message));
   }
 }
 
@@ -1475,8 +1475,8 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
     static bool time_synchronized = libada::i()->is_time_synchronized();
     if (!time_synchronized) {
        bool user_wants_time_reset =
-           csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + RESET_NITROKEYS_TIME,
-                                          WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED, false);
+           csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + tr(Reset_nitrokeys_time),
+                                          tr(Warning_devices_clock_not_desynchronized), false);
       if (user_wants_time_reset){
           if(libada::i()->set_current_time()){
             tray.showTrayMessage(tr("Time reset!"));
@@ -1685,15 +1685,15 @@ void MainWindow::on_DeviceConnected() {
 
       if (!data["initiated"].toBool()) {
         if (data["initiated_ask"].toBool()){
-          csApplet()->warningBox(WARNING_EV_NOT_SECURE_INITIALIZE + " " + tray_location_msg);
-          ui->statusBar->showMessage(WARNING_EV_NOT_SECURE_INITIALIZE);
+          csApplet()->warningBox(tr(Warning_ev_not_secure_initialize) + " " + "\n" + tr(Tray_location_msg));
+          ui->statusBar->showMessage(tr(Warning_ev_not_secure_initialize));
           make_UI_enabled(false);
         }
       }
       if (data["initiated"].toBool() && !data["erased"].toBool()) {
         if (data["erased_ask"].toBool())
           csApplet()->warningBox(tr("Warning: Encrypted volume is not secure,\nSelect \"Initialize "
-                                        "storage with random data\"") + ". " + tray_location_msg);
+                                        "storage with random data\"") + ". " + "\n" + tr(Tray_location_msg));
       }
 
 #if defined(Q_OS_MAC) || defined(Q_OS_DARWIN)

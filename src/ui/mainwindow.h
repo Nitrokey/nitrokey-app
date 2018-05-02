@@ -56,9 +56,6 @@ public :
     explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
 
-  static const QString RESET_NITROKEYS_TIME;
-  static const QString WARNING_DEVICES_CLOCK_NOT_DESYNCHRONIZED;
-
 protected:
   void closeEvent(QCloseEvent *event) override;
 
