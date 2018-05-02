@@ -161,7 +161,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>      *** Communication error ***</source>
-        <translation>     *** Verbindungsproblem ***</translation>
+        <translation>      *** Verbindungsproblem ***</translation>
     </message>
     <message>
         <source>      *** Firmware is locked ***</source>
@@ -173,7 +173,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Cannot open dialog: </source>
-        <translation>Dialog konnte nicht geöffnet werden:</translation>
+        <translation>Dialog konnte nicht geöffnet werden: </translation>
     </message>
 </context>
 <context>
@@ -548,7 +548,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Characters left:</source>
-        <translation>Zeichen verfügbar</translation>
+        <translation>Zeichen verfügbar:</translation>
     </message>
     <message>
         <source>...</source>
@@ -646,11 +646,11 @@ Zeit des Nitrokey zurücksetzen?</translation>
         <source>Warning: Encrypted volume is not secure,
 Select &quot;Initialize storage with random data&quot;</source>
         <translation>Warnung: Verschlüsseltes Volumen ist nicht sicher.
-Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translation>
+Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus</translation>
     </message>
     <message>
         <source>TOTP slot </source>
-        <translation>TOTP-Eintrag</translation>
+        <translation>TOTP-Eintrag </translation>
     </message>
     <message>
         <source>HOTP slot </source>
@@ -678,7 +678,7 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Can&apos;t unlock password safe.</source>
-        <translation>Passwort-Safe konnte nicht freigeschaltet werden.</translation>
+        <translation>Passwort-Safe konnte nicht entsperrt werden.</translation>
     </message>
     <message>
         <source>Wrong user password.</source>
@@ -730,7 +730,7 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Password safe unlocked</source>
-        <translation>Passwort-Safe freigeschaltet</translation>
+        <translation>Passwort-Safe entsperrt</translation>
     </message>
     <message>
         <source>AES keys not initialized. Please provide Admin PIN.</source>
@@ -862,7 +862,7 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Unlock Password Safe</source>
-        <translation>Passwort-Safe freischalten</translation>
+        <translation>Passwort-Safe entsperren</translation>
     </message>
     <message>
         <source>The Nitrokey App is available as an icon in the tray bar.</source>
@@ -895,7 +895,7 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>WARNING: This Storage firmware version is old. Application may be unresponsive and unlocking encrypted volume may not work. Please update the firmware to the latest version. Guide should be available at: &lt;br/&gt;&lt;a href=&apos;https://www.nitrokey.com/en/doc/firmware-update-storage&apos;&gt;www.nitrokey.com/en/doc/firmware-update-storage&lt;/a&gt;.</source>
-        <translation>WARNUNG: Die Firmware des Nitrokey Storage ist veraltet. Die Anwendung könnte nicht reagieren und das Freischalten des verschlüsselten Volumens könnte nicht funktionieren. Bitte aktualisieren Sie die Firmware. Die Anleitung ist hier verfügbar: &lt;br/&gt;&lt;a href=&apos;https://www.nitrokey.com/en/doc/firmware-update-storage&apos;&gt;www.nitrokey.com/en/doc/firmware-update-storage&lt;/a&gt;.</translation>
+        <translation>WARNUNG: Die Firmware des Nitrokey Storage ist veraltet. Die Anwendung könnte nicht reagieren und das Entsperren des verschlüsselten Volumens könnte nicht funktionieren. Bitte aktualisieren Sie die Firmware. Die Anleitung ist hier verfügbar: &lt;br/&gt;&lt;a href=&apos;https://www.nitrokey.com/en/doc/firmware-update-storage&apos;&gt;www.nitrokey.com/en/doc/firmware-update-storage&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>Nitrokey App</source>
@@ -907,11 +907,11 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus.</translati
     </message>
     <message>
         <source>Unlock Encrypted Volume</source>
-        <translation>Verschlüsseltes Volumen freischalten</translation>
+        <translation>Verschlüsseltes Volumen entsperren</translation>
     </message>
     <message>
         <source>Unlock Hidden Volume</source>
-        <translation>Verstecktes Volumen freischalten</translation>
+        <translation>Verstecktes Volumen entsperren</translation>
     </message>
     <message>
         <source>Lock Device</source>
@@ -1598,7 +1598,7 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sicherheits-Informationen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Bitte lesen Sie diesen Text aufmerksam.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN-Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Ihr Nitrokey wird durch eine Benutzer-PIN und eine Administrator-PIN geschützt. Ihre Benutzer-PIN kann den verschlüsselten Speicher, den Passwort-Safe, die Chipkarte und (falls aktiviert) die Einmalpasswörter freischalten. Einmalpasswörter sind standardmäßig nicht PIN-geschützt da sie lediglich als zweiter Faktor dienen. Die Chipkarte wird immer bei Eingabe der Benutzer-PIN freigeschaltet, unabhängig von der Funktion für die die Benutzer-PIN eingegeben wurde. Die Administrator-PIN dient zum konfigurieren von Einstellungen und zum Hinzufügen oder Ändern von Einträgen. Sie sollten unbedingt die voreingestellten PINs ändern und geheim halten. Falls die Benutzer-PIN and die Administrator-PIN jeweils dreimal falsch eingegeben werden, oder falls die Chipkarte auf den Auslieferungszustand zurückgesetzt wird, gehen alle Ihre sensiblen Daten unwiderruflich verloren.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physischer Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Alle sensiblen Daten sind verschlüsselt und gegen physische Angriffe geschützt. Dies gilt nicht für Einmalpasswörter, da diese lediglich als zweiter Faktor verwendet werden.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Versteckte Volumen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Versteckte Volumen erfordern, dass der Massenspeicher mit Zufallsdaten initialisiert wird. Versteckte Volumen sind durch die Benutzer-PIN und ein separates Passwort, welches für jedes versteckte Volumen unterschiedlich sein kann, geschützt. Ohne Kenntnis der Benutzer-PIN und des Passworts kann das versteckte Volumen nicht gefunden werden und dessen Existenz kann somit weder bewiesen noch widerlegt werden. Das Passwort für das versteckte Volumen muss stark und lang genug sein um Bruteforce-Angriffen zu widerstehen. Die versteckten Volumen werden jedoch auf einem Flash-Speicher mit integriertem Wear-Levelling gespeichert, so dass möglicherweise Informationen anfallen können, die für einen hochentwickelten Angreifer die Existenz von versteckten Volumen belegen könnten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Sicherheits-Informationen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Bitte lesen Sie diesen Text aufmerksam.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN-Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Ihr Nitrokey wird durch eine Benutzer-PIN und eine Administrator-PIN geschützt. Ihre Benutzer-PIN kann den verschlüsselten Speicher, den Passwort-Safe, die Chipkarte und (falls aktiviert) die Einmalpasswörter entsperren. Einmalpasswörter sind standardmäßig nicht PIN-geschützt da sie lediglich als zweiter Faktor dienen. Die Chipkarte wird immer bei Eingabe der Benutzer-PIN entsperrt, unabhängig von der Funktion für die die Benutzer-PIN eingegeben wurde. Die Administrator-PIN dient zum konfigurieren von Einstellungen und zum Hinzufügen oder Ändern von Einträgen. Sie sollten unbedingt die voreingestellten PINs ändern und geheim halten. Falls die Benutzer-PIN and die Administrator-PIN jeweils dreimal falsch eingegeben werden, oder falls die Chipkarte auf den Auslieferungszustand zurückgesetzt wird, gehen alle Ihre sensiblen Daten unwiderruflich verloren.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physischer Schutz&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Alle sensiblen Daten sind verschlüsselt und gegen physische Angriffe geschützt. Dies gilt nicht für Einmalpasswörter, da diese lediglich als zweiter Faktor verwendet werden.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Versteckte Volumen&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Versteckte Volumen erfordern, dass der Massenspeicher mit Zufallsdaten initialisiert wird. Versteckte Volumen sind durch die Benutzer-PIN und ein separates Passwort, welches für jedes versteckte Volumen unterschiedlich sein kann, geschützt. Ohne Kenntnis der Benutzer-PIN und des Passworts kann das versteckte Volumen nicht gefunden werden und dessen Existenz kann somit weder bewiesen noch widerlegt werden. Das Passwort für das versteckte Volumen muss stark und lang genug sein um Bruteforce-Angriffen zu widerstehen. Die versteckten Volumen werden jedoch auf einem Flash-Speicher mit integriertem Wear-Levelling gespeichert, so dass möglicherweise Informationen anfallen können, die für einen hochentwickelten Angreifer die Existenz von versteckten Volumen belegen könnten.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>OK</source>
@@ -1735,7 +1735,7 @@ Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aush
         <source>The unwritten area available for hidden volume
 is between %1 % and %2 % of the storage size</source>
         <translation>Der unbeschriebene Bereich zwischen %1% und %2%
-steht für verschlüsselte Volumen zur Verfügung.</translation>
+steht für verschlüsselte Volumen zur Verfügung</translation>
     </message>
     <message>
         <source>Storage capacity: %1GB</source>
