@@ -1195,8 +1195,8 @@ Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
     <message>
         <source>This activity locks your hidden volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>Diese Aktivität verriegelt Ihr verstecktes Volumen. Wollen Sie fortsetzen?
-Um Datenverlust zu vermeiden, sollten Sie vor dem Fortfahren die Partitionen aushängen.</translation>
+        <translation>Diese Aktivität sperrt Ihr verstecktes Volumen. Wollen Sie fortsetzen?
+Um Datenverlust zu vermeiden, sollten Sie vor dem Fortfahren die Partitionen auswerfen.</translation>
     </message>
     <message>
         <source>Enabling encrypted volume</source>
@@ -1221,8 +1221,8 @@ Um Datenverlust zu vermeiden, sollten Sie vor dem Fortfahren die Partitionen aus
     <message>
         <source>This activity locks your encrypted volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>Diese Aktivität verriegelt Ihr verschlüsseltes Volumen. Wollen Sie fortsetzen?
-Um Datenverlust zu vermeiden sollten Sie vor dem Fortfahren die Partitionen aushängen.</translation>
+        <translation>Diese Aktivität sperrt Ihr verschlüsseltes Volumen. Wollen Sie fortsetzen?
+Um Datenverlust zu vermeiden, sollten Sie vor dem Fortfahren die Partitionen auswerfen.</translation>
     </message>
     <message>
         <source>Disabling encrypted volume</source>
