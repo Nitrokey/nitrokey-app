@@ -1066,6 +1066,16 @@ Falls das Problem erneut auftritt:
         <translatorcomment>(Google translate)</translatorcomment>
         <translation>gewählt:</translation>
     </message>
+    <message>
+        <source>Communication error. Please reinsert the device.</source>
+        <translation type="unfinished">Verbindungsfehler. Bitte verbinden Sie das Gerät erneut.</translation>
+    </message>
+    <message>
+        <source>Warning: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</source>
+        <translation type="unfinished">Warnung: Verschlüsseltes Volumen ist nicht sicher,
+Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
@@ -1163,24 +1173,6 @@ Bitte ändern Sie die PIN.</translation>
 Message: </source>
         <translation>Kritischer Fehler aufgetreten. Bitte starten Sie die Anwendung neu.
 Nachricht: </translation>
-    </message>
-    <message>
-        <source>Communication error. Please reinsert the device.</source>
-        <translation>Verbindungsfehler. Bitte verbinden Sie das Gerät erneut.</translation>
-    </message>
-    <message>
-        <source>The secret string you have entered is invalid. Please reenter it.</source>
-        <translation>Das eingegebene Geheimnis war ungültig. Bitte versuchen Sie es erneut.</translation>
-    </message>
-    <message>
-        <source>Details: </source>
-        <translation>Details: </translation>
-    </message>
-    <message>
-        <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation>Warnung: Verschlüsseltes Volumen ist nicht sicher,
-Wählen Sie im Kontextmenü &quot;Gerät initialisieren&quot;.</translation>
     </message>
 </context>
 <context>
