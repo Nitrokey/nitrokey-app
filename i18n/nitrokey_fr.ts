@@ -1061,6 +1061,16 @@ If problem will occur again please:
         <source>current:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Communication error. Please reinsert the device.</source>
+        <translation>Erreur de communication. Merci de réinsérer la clef.</translation>
+    </message>
+    <message>
+        <source>Warning: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</source>
+        <translation>Attention : le volume chiffré n&apos;est pas sécurisé,
+Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le menu contextuel.</translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
@@ -1158,24 +1168,6 @@ Merci de changer le PIN.</translation>
 Message: </source>
         <translation>Une erreur critique est survenue. Merci de redémarrer l&apos;application.
 Message : </translation>
-    </message>
-    <message>
-        <source>Communication error. Please reinsert the device.</source>
-        <translation>Erreur de communication. Merci de réinsérer la clef.</translation>
-    </message>
-    <message>
-        <source>The secret string you have entered is invalid. Please reenter it.</source>
-        <translation type="unfinished">La chaîne de caractère secrète que vous avez entrée est invalide. Merci de bien vouloir réessayer.</translation>
-    </message>
-    <message>
-        <source>Details: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation type="unfinished">Attention : le volume chiffré n&apos;est pas sécurisé,
-Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le menu contextuel.</translation>
     </message>
 </context>
 <context>
