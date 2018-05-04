@@ -8,6 +8,7 @@
         <file alias="nitrokey_en.qm">i18n/nitrokey_en.qm</file>
         <file alias="nitrokey_arabic.qm">i18n/nitrokey_arabic.qm</file>
         <file alias="nitrokey_fr.qm">i18n/nitrokey_fr.qm</file>
+        <file alias="nitrokey_it.qm">i18n/nitrokey_it.qm</file>
     </qresource>
     <qresource prefix="/license">
         <file alias="General">3RDPARTY.txt</file>
