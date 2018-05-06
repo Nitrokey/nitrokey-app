@@ -402,6 +402,7 @@ void Tray::initActionsForStick20() {
           SLOT(startResetUserPassword()));
 
   LockDeviceAction = new QAction(tr("&Lock Device"), main_window);
+  LockDeviceAction->setIcon(GraphicsTools::loadColorize(":/images/new/icon_unsafe.svg"));
   connect(LockDeviceAction, SIGNAL(triggered()), main_window, SLOT(startLockDeviceAction()));
 
   Stick20ActionUpdateStickStatus = new QAction(tr("Smartcard or SD card are not ready"), main_window);
