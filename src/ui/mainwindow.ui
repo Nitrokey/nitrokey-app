@@ -166,6 +166,10 @@
              <property name="text">
               <string>Lock Device</string>
              </property>
+             <property name="icon">
+              <iconset resource="../../resources.qrc">
+               <normaloff>:/images/new/icon_unsafe.svg</normaloff>:/images/new/icon_unsafe.svg</iconset>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">
