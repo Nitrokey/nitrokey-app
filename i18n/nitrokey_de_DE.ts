@@ -1159,7 +1159,7 @@ Bitte ändern Sie die PIN.</translation>
     </message>
     <message>
         <source>Would you like to so now?</source>
-        <translation>Wollen Sie sie gleich ändern?</translation>
+        <translation>Wollen Sie sie jetzt ändern?</translation>
     </message>
     <message>
         <source>Please enter the new PIN/password</source>
