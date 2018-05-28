@@ -1047,7 +1047,7 @@ Falls das Problem erneut auftritt:
     </message>
     <message>
         <source>Device connected. Waiting for initialization...</source>
-        <translation>Gerät verbunde. Warte auf Initialisierung...</translation>
+        <translation>Gerät verbunden. Warte auf Initialisierung...</translation>
     </message>
     <message>
         <source>Please run the application again to apply new settings.</source>
