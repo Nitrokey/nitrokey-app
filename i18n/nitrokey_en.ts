@@ -1147,7 +1147,7 @@ Please change the PIN.</translation>
     </message>
     <message>
         <source>Would you like to so now?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Would you like to do so now?</translation>
     </message>
     <message>
         <source>Please enter the new PIN/password</source>
