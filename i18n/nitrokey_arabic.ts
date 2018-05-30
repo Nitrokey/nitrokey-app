@@ -1061,6 +1061,16 @@ If problem will occur again please:
         <source>current:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Communication error. Please reinsert the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning: Encrypted volume is not secure,
+Select &quot;Initialize device&quot; option from context menu.</source>
+        <translation type="unfinished">تحذير: الجزء المسفر غير آمن.
+اختر خاصية &quot;أسس الجهاز&quot; من القائمة الخاصة به</translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
@@ -1157,24 +1167,6 @@ Please change the PIN.</source>
         <source>Critical error encountered. Please restart application.
 Message: </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Communication error. Please reinsert the device.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The secret string you have entered is invalid. Please reenter it.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Details: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning: Encrypted volume is not secure,
-Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation type="unfinished">تحذير: الجزء المسفر غير آمن.
-اختر خاصية &quot;أسس الجهاز&quot; من القائمة الخاصة به</translation>
     </message>
 </context>
 <context>
