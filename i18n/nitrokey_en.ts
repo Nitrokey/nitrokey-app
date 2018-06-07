@@ -1271,7 +1271,7 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     </message>
     <message>
         <source>Firmware exported</source>
-        <translation></translation>
+        <translation type="unfinished">Firmware exported to unencrypted volume</translation>
     </message>
     <message>
         <source>Could not export firmware.</source>
