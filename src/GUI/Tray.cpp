@@ -661,11 +661,13 @@ void Tray::generateMenuForStorageDevice() {
       // Set RW active
       trayMenuSubConfigure->addAction(Stick20ActionSetReadWriteUncryptedVolume);
 
-    auto read_write_active_encrypted = status.ReadWriteFlagCryptedVolume_u8 == 0 && status.versionInfo.minor >= 52 ;
-    trayMenuSubConfigure->addAction(
-        read_write_active_encrypted ?
-        Stick20ActionSetReadonlyEncryptedVolume : Stick20ActionSetReadWriteEncryptedVolume
-    );
+    if (status.versionInfo.minor >= 52){
+      auto read_write_active_encrypted = status.ReadWriteFlagCryptedVolume_u8 == 0;
+      trayMenuSubConfigure->addAction(
+          read_write_active_encrypted ?
+          Stick20ActionSetReadonlyEncryptedVolume : Stick20ActionSetReadWriteEncryptedVolume
+      );
+    }
 
 //    if (FALSE == SdCardNotErased)
     if (status.SDFillWithRandomChars_u8)
