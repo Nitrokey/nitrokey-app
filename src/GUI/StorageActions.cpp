@@ -599,9 +599,19 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
   auto operationSuccessMessage = tr("Unencrypted volume set read-only"); //FIXME use existing translation
   auto s = dialog.getPassword();
 
-  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
+  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s, type]() {
     auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_only(s.c_str()); //FIXME use secure string
+    //FIXME use secure string
+    switch(type){
+      case USER_PIN:
+        m->set_unencrypted_read_only(s.c_str());
+        break;
+      case ADMIN_PIN:
+        m->set_unencrypted_read_only_admin(s.c_str());
+        break;
+      default:
+        break;
+    }
   }, [this]() {
     emit storageStatusChanged();
   });
@@ -625,9 +635,19 @@ void StorageActions::startStick20SetReadWriteUncryptedVolume() {
   auto operationSuccessMessage = tr("Unencrypted volume set read-write"); //FIXME use existing translation
   auto s = dialog.getPassword();
 
-  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s]() {
+  runAndHandleErrorsInUI(operationSuccessMessage, operationFailureMessage, [s, type]() {
     auto m = nitrokey::NitrokeyManager::instance();
-    m->set_unencrypted_read_write(s.c_str()); //FIXME use secure string
+    //FIXME use secure string
+    switch(type){
+      case USER_PIN:
+        m->set_unencrypted_read_write(s.c_str());
+        break;
+      case ADMIN_PIN:
+        m->set_unencrypted_read_write_admin(s.c_str());
+        break;
+      default:
+        break;
+    }
   }, [this]() {
     emit storageStatusChanged();
   });
