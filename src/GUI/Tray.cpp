@@ -538,9 +538,6 @@ void Tray::generateMenuForProDevice() {
     trayMenuSubConfigure = trayMenu->addMenu(tr("Configure"));
     trayMenuSubConfigure->setIcon(GraphicsTools::loadColorize(":/images/new/icon_settings.svg"));
 
-    trayMenuSubConfigure_tray = trayMenu->addMenu(tr("Configure"));
-    trayMenuSubConfigure_tray->setIcon(GraphicsTools::loadColorize(":/images/new/icon_settings.svg", true));
-
     if (TRUE == libada::i()->isPasswordSafeAvailable())
       trayMenuSubConfigure->addAction(configureActionStick20);
     else

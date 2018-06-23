@@ -169,7 +169,6 @@ private:
   QAction *Stick20ActionEnableHiddenVolume_tray;
   QAction *Stick20ActionDisableHiddenVolume_tray;
   std::shared_ptr<QMenu> trayMenuPasswdSubMenu_tray;
-  QMenu *trayMenuSubConfigure_tray;
   QAction *UnlockPasswordSafeAction_tray;
 };
 
