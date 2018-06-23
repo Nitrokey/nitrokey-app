@@ -20,6 +20,7 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
+#include <QStyle>
 #include <QDateTime>
 #include <QDesktopWidget>
 #include <QTimer>
