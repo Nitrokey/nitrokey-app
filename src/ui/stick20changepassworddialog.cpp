@@ -27,6 +27,7 @@
 #include "libada.h"
 #include <libnitrokey/NitrokeyManager.h>
 #include "src/core/ThreadWorker.h"
+#include <QStyle>
 using nm = nitrokey::NitrokeyManager;
 
 DialogChangePassword::DialogChangePassword(QWidget *parent, PasswordKind _kind):
