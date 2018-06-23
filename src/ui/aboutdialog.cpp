@@ -375,7 +375,7 @@ void AboutDialog::update_device_slots(bool connected) {
   ui->serialEdit->setText(QString::fromStdString(worker.devdata.cardSerial).trimmed());
 
 
-  if (0 == worker.devdata.storage.smartcard_id) {
+  if (0 == worker.devdata.storage.smartcard_id && worker.devdata.storage.active) {
     ui->serialEdit->setText("-");
     OutputText.append(QString(tr("\nSmartcard is not accessible\n\n")));
   }
