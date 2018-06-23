@@ -69,6 +69,11 @@ Tray::~Tray() {
   destroyThread();
 }
 
+void Tray::delayedShowIndicator(){
+  if(!trayIcon->isSystemTrayAvailable()) return;
+  trayIcon->show();
+  delayedShowTimer->stop();
+}
 
 /*
  * Create the tray menu.
@@ -79,7 +84,10 @@ void Tray::createIndicator() {
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
           SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
-  trayIcon->show();
+  delayedShowTimer = new QTimer(this);
+  connect(delayedShowTimer, SIGNAL(timeout()), this, SLOT(delayedShowIndicator()));
+  delayedShowTimer->setSingleShot(false);
+  delayedShowTimer->start(2000);
 
   // Initial message
   if (debug_mode)
