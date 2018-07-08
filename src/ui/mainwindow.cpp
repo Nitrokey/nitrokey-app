@@ -1451,7 +1451,7 @@ void MainWindow::PWS_ExceClickedSlot(int Slot) {
     QString title = QString("Password has been copied to clipboard");
     tray.showTrayMessage(title, password_safe_slot_info);
   }
-  catch(DeviceCommunicationException){
+  catch(DeviceCommunicationException &e){
     tray.showTrayMessage(tr(Communication_error_message));
   }
 }
