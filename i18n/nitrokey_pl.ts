@@ -400,7 +400,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
-        <translation>Uwaga: Dwuskładnikowe uwierzytelnianie nie jest odporne na atakami fizyczne. Zmień wszystkie klucze tajne OTP w przypadku utraty Nitrokey.</translation>
+        <translation type="vanished">Uwaga: Dwuskładnikowe uwierzytelnianie nie jest odporne na atakami fizyczne. Zmień wszystkie klucze tajne OTP w przypadku utraty Nitrokey.</translation>
     </message>
     <message>
         <source>Parameters</source>
@@ -1075,6 +1075,10 @@ Select &quot;Initialize device&quot; option from context menu.</source>
         <translation>OSTRZEŻENIE: Zaszyfrowany wolumin nie jest bezpieczny,
 wybierz &quot;Inicjalizuj urządzenie&quot; z menu kontekstowego.</translation>
     </message>
+    <message>
+        <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
+        <translation>Uwaga: Dwuskładnikowe uwierzytelnianie nie jest odporne na atakami fizyczne. Zmień wszystkie klucze tajne OTP w przypadku utraty Nitrokey.</translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
@@ -1146,7 +1150,7 @@ Zmień kod PIN.</translation>
     </message>
     <message>
         <source>Enter Firmware Password:</source>
-        <translation>Wprowadź hasło do firmware'u</translation>
+        <translation>Wprowadź hasło do firmware&apos;u</translation>
     </message>
     <message>
         <source>Enter password for hidden volume</source>
