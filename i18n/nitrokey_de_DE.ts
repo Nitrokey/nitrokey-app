@@ -1278,7 +1278,7 @@ Um Datenverlust zu vermeiden, sollten Sie vor dem Fortfahren die Partitionen aus
     </message>
     <message>
         <source>Firmware exported</source>
-        <translation>Firmware exportiert</translation>
+        <translation type="unfinished">Firmware auf unverschlüsseltes Volumen als &apos;firmware.bin&apos; exportiert</translation>
     </message>
     <message>
         <source>Could not export firmware.</source>
