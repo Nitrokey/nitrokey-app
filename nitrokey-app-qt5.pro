@@ -139,6 +139,7 @@ RESOURCES += \
 TRANSLATIONS += i18n/nitrokey_de_DE.ts \
                 i18n/nitrokey_arabic.ts \
                 i18n/nitrokey_en.ts \
+                i18n/nitrokey_pl.ts \
                 i18n/nitrokey_fr.ts \
                 i18n/nitrokey_it.ts
 
