@@ -468,7 +468,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Base32</source>
-        <translation>Podstawowy 32-bitowy</translation>
+        <translation>Base32</translation>
     </message>
     <message>
         <source>Send &apos;enter&apos; as the last keystroke</source>
