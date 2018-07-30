@@ -25,7 +25,7 @@
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright %1 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright %1 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Licencja na to oprogramowanie udzielana jest na podstawie &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright %1 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Licencja na to oprogramowanie udzielana jest na podstawie &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3. Poprawki polskiej wersji aplikacji: Grzegorz Trzciński&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://www.nitrokey.com/start&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;Instructions and help&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -400,7 +400,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
-        <translation type="vanished">Uwaga: Dwuskładnikowe uwierzytelnianie nie jest odporne na atakami fizyczne. Zmień wszystkie klucze tajne OTP w przypadku utraty Nitrokey.</translation>
+        <translation>Uwaga: Dwuskładnikowe uwierzytelnianie nie jest odporne na ataki fizyczne. Zmień wszystkie klucze tajne OTP w przypadku utraty klucza Nitrokey.</translation>
     </message>
     <message>
         <source>Parameters</source>
@@ -468,7 +468,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Base32</source>
-        <translation>Base32</translation>
+        <translation>Podstawowy 32-bitowy</translation>
     </message>
     <message>
         <source>Send &apos;enter&apos; as the last keystroke</source>
@@ -544,7 +544,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Password Safe fields support UTF8 data. It means that you can use your national characters here. Please remember however that non-English characters could take more space (up to 4 characters). The counters next to each field are to inform how much more standard English characters can given field accept.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hasło Pola haseł obsługują dane UTF8. Oznacza to, że można tu używać znaków narodowych. Pamiętaj jednak, że znaki nieangielskie mogą zajmować więcej miejsca (do 4 znaków). Liczniki znajdujące się obok każdego pola informują o tym, o ile więcej standardowych znaków angielskich może być akceptowanych w danym polu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Pola haseł obsługują dane UTF8. Oznacza to, że można tu używać znaków narodowych. Pamiętaj jednak, że znaki nieangielskie mogą zajmować więcej miejsca (do 4 znaków). Liczniki znajdujące się obok każdego pola informują o tym, o ile więcej standardowych znaków angielskich może być wpisanych w danym polu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Unlock password safe</source>
@@ -644,7 +644,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Generate random password </source>
-        <translation>Wyeneruj losowe hasło </translation>
+        <translation>Wygeneruj losowe hasło </translation>
     </message>
     <message>
         <source>Time is out-of-sync</source>
@@ -682,7 +682,7 @@ Wybierz opcję &quot;Inicjalizacja przy użyciu losowych danych&quot;</translati
     </message>
     <message>
         <source>HOTP slot </source>
-        <translation>SLot HOTP </translation>
+        <translation>Slot HOTP </translation>
     </message>
     <message>
         <source>Can&apos;t unlock password safe.</source>
@@ -947,27 +947,27 @@ Wybierz opcję &quot;Inicjalizacja przy użyciu losowych danych&quot;</translati
     </message>
     <message>
         <source>Show warning when no partitions could be detected on Encrypted Volume (Linux only)</source>
-        <translation>Wyświetlenie ostrzeżenia, gdy na zaszyfrowanym woluminie nie można wykryć partycji(tylko Linux)</translation>
+        <translation>Wyświetlaj ostrzeżenia, gdy na zaszyfrowanym woluminie nie można wykryć partycji (tylko Linux)</translation>
     </message>
     <message>
         <source>Show message about device&apos;s connection / disconnection</source>
-        <translation>Wyświetla komunikat o podłączeniu/odłączeniu urządzenia</translation>
+        <translation>Wyświetlaj komunikat o podłączeniu/odłączeniu urządzenia</translation>
     </message>
     <message>
         <source>Show main window when device connects</source>
-        <translation>Pokaż okno główne programu, gdy urządzenie próbuje się podłączyć</translation>
+        <translation>Pokazuj okno główne programu, gdy urządzenie próbuje się podłączyć</translation>
     </message>
     <message>
         <source>Hide main window when device disconnects</source>
-        <translation>Ukryj okno główne, gdy urządzenie próbuje się rozłączyć</translation>
+        <translation>Ukrywaj okno główne, gdy urządzenie próbuje się rozłączyć</translation>
     </message>
     <message>
         <source>Do not quit when the main window is closed</source>
-        <translation>Nie zamykaj programu, gdy okno główne jest zamknięte</translation>
+        <translation>Po kliknięciu na przycisk zamknij minimalizuj do paska systemowego i zezwól na pracę w tle</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Translation file (needs restart)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Plik tłumaczenia (wymaga ponownego uruchomienia)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Język (wymaga ponownego uruchomienia)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Translation file (needs restart)</source>
@@ -1003,7 +1003,7 @@ Wybierz opcję &quot;Inicjalizacja przy użyciu losowych danych&quot;</translati
     </message>
     <message>
         <source>Time to store OTP secrets in clipboard (in seconds):</source>
-        <translation>Czas na przechowywanie haseł OTP w schowku (w sekundach):</translation>
+        <translation>Czas przechowywania haseł OTP w schowku (w sekundach):</translation>
     </message>
     <message>
         <source>Time to store Password Safe secrets in clipboard (in seconds):</source>
@@ -1063,7 +1063,7 @@ Jeśli problem wystąpi ponownie, należy:
     </message>
     <message>
         <source>current:</source>
-        <translation>Obecna:</translation>
+        <translation>Bieżący:</translation>
     </message>
     <message>
         <source>Communication error. Please reinsert the device.</source>
@@ -1074,10 +1074,6 @@ Jeśli problem wystąpi ponownie, należy:
 Select &quot;Initialize device&quot; option from context menu.</source>
         <translation>OSTRZEŻENIE: Zaszyfrowany wolumin nie jest bezpieczny,
 wybierz &quot;Inicjalizuj urządzenie&quot; z menu kontekstowego.</translation>
-    </message>
-    <message>
-        <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
-        <translation>Uwaga: Dwuskładnikowe uwierzytelnianie nie jest odporne na atakami fizyczne. Zmień wszystkie klucze tajne OTP w przypadku utraty Nitrokey.</translation>
     </message>
 </context>
 <context>
@@ -1150,7 +1146,7 @@ Zmień kod PIN.</translation>
     </message>
     <message>
         <source>Enter Firmware Password:</source>
-        <translation>Wprowadź hasło do firmware&apos;u</translation>
+        <translation>Wprowadź hasło do firmware'u</translation>
     </message>
     <message>
         <source>Enter password for hidden volume</source>
