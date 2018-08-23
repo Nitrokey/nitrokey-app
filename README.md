@@ -51,7 +51,7 @@ Prerequisites for building on Ubuntu 17.10:
 - `libqt5svg5-dev` - QT5 library for rendering SVG
 - `libqt5concurrent5` - QT5 library for concurrent calls
 - `pkg-config` - system libraries detection
-- `libnitrokey` v3.3 - compiled only, if not already installed in the OS
+- `libnitrokey` (v3.3+) - this is built only, if not already installed in the OS (otherwise App will use system library)
 	- `libusb-1.0-0-dev` - library to communicate with USB devices
 	- `libhidapi-dev` - to communicate using HID layer
 
@@ -59,6 +59,8 @@ Whole command for Ubuntu:
 ```
 sudo apt-get install libusb-1.0.0-dev cmake qt5-default qttools5-dev-tools pkg-config libhidapi-dev build-essential libqt5svg5-dev libqt5concurrent5
 ```
+
+During the compilation CMake will test via `pkg-config`, whether system libnitrokey is available, and is it at least [LIBNK_MIN_VERSION](https://github.com/Nitrokey/nitrokey-app/blob/d6fad2bd1aecbda2e36d4e9873f613ef5bf7649d/CMakeLists.txt#L210) version. On failed test libnitrokey will be compiled as well.
 
 #### Getting the Nitrokey Sources
 
