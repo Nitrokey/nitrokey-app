@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<TS version="2.2" language="fr">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -79,7 +79,7 @@ Sélectionner les clefs d&apos;initialisation.</translation>
     </message>
     <message>
         <source>Logo</source>
-        <translation type="unfinished"></translation>
+        <translation>Logo</translation>
     </message>
     <message>
         <source>User:</source>
@@ -133,7 +133,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>(hidden)</source>
-        <translation type="unfinished"></translation>
+        <translation>(caché)</translation>
     </message>
     <message>
         <source>Not active</source>
@@ -173,7 +173,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Cannot open dialog: </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le dialogue :</translation>
     </message>
 </context>
 <context>
@@ -879,7 +879,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Provided secret hex string is invalid. Please check input and try again.</source>
-        <translation>La chaîne hexadécimale secrète n'est pas valide. Veuillez vérifier les données saisies et réessayer.</translation>
+        <translation>La chaîne hexadécimale secrète n&apos;est pas valide. Veuillez vérifier les données saisies et réessayer.</translation>
     </message>
     <message>
         <source>Details: </source>
@@ -891,7 +891,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Factory reset was successful.</source>
-        <translation>La réinitialisation d'usine a réussi.</translation>
+        <translation>La réinitialisation d&apos;usine a réussi.</translation>
     </message>
     <message>
         <source>WARNING: This Storage firmware version is old. Application may be unresponsive and unlocking encrypted volume may not work. Please update the firmware to the latest version. Guide should be available at: &lt;br/&gt;&lt;a href=&apos;https://www.nitrokey.com/en/doc/firmware-update-storage&apos;&gt;www.nitrokey.com/en/doc/firmware-update-storage&lt;/a&gt;.</source>
@@ -903,7 +903,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Overview</source>
-        <translation>Vue d'ensemble</translation>
+        <translation>Vue d&apos;ensemble</translation>
     </message>
     <message>
         <source>Unlock Encrypted Volume</source>
@@ -911,7 +911,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Unlock Hidden Volume</source>
-        <translation>Déverrouiller le Volume Caché</translation>
+        <translation>Déverrouiller Volume Caché</translation>
     </message>
     <message>
         <source>Lock Device</source>
@@ -1456,15 +1456,15 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-write</source>
-        <translation>&amp;Rendre le volume déchiffré accessible en lecture et en écriture</translation>
+        <translation>&amp;Rendre le volume déchiffré accessible en lecture-écriture</translation>
     </message>
     <message>
         <source>&amp;Set encrypted volume read-only</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Définir le volume chiffré en lecture seule</translation>
     </message>
     <message>
         <source>&amp;Set encrypted volume read-write</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Définir le volume chiffré en lecture-écriture</translation>
     </message>
     <message>
         <source>&amp;Setup hidden volume</source>
@@ -1512,11 +1512,11 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aide</translation>
     </message>
     <message>
         <source>&amp;Overview</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vue d&apos;ensemble</translation>
     </message>
 </context>
 <context>
@@ -1574,14 +1574,14 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     </message>
     <message>
         <source>Clear all application&apos;s settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer tous les paramètres de l&apos;application</translation>
     </message>
 </context>
 <context>
     <name>securitydialog</name>
     <message>
         <source>Dialog</source>
-        <translation></translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Security Information&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Please read the following carefully.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PIN Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Nitrokey is protected by both a user PIN and an admin PIN. Your user PIN can unlock the encrypted storage, password safe, smart card and (if enabled) One-Time Passwords (OTP). OTPs aren&apos;t PIN-protected by default because they are only used as a secondary factor. The smart card is unlocked whenever the user PIN is entered, regardless of the function for which the PIN is entered. The admin PIN can be used to configure settings and to add or change entries. You must change the default PINs and keep them confidential. If the user PIN and admin PIN are entered incorrectly three times each, or if the smart card has been reset to factory settings, all your sensitive data will be permanently lost.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Physical Protection&lt;/span&gt;&lt;/p&gt;&lt;p&gt;All sensitive data is encrypted and secured against physical attacks. This does not apply to One-Time Passwords (OTP) because they are only used as a secondary factor.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Hidden Volumes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Hidden volumes require that the mass storage be initialised with random data. Hidden volumes are protected by both a user PIN and a separate password which can be different for each hidden volume. Without knowing both the user PIN and password, the hidden volume cannot be found and its existence can therefore neither be proven nor disproven. The password for the hidden volume must be strong and long enough to withstand a brute force attack. The hidden volumes are however stored on a flash storage with integrated wear levelling, meaning that information could potentially be leaked to a sophisticated attacker, thereby revealing the existence of hidden volumes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
