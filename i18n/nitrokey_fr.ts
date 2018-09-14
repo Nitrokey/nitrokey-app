@@ -871,7 +871,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Entered OTP &apos;Secret Key&apos; string is longer than supported by this device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>Label shown when the OTP secret key is too long</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Étiquette affichée lorsque la clé secrète OTP est trop longue</translation>
     </message>
     <message>
         <source>secret is not passing validation.</source>
@@ -879,87 +879,87 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Provided secret hex string is invalid. Please check input and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>La chaîne hexadécimale secrète n'est pas valide. Veuillez vérifier les données saisies et réessayer.</translation>
     </message>
     <message>
         <source>Details: </source>
-        <translation type="unfinished"></translation>
+        <translation>Détails :</translation>
     </message>
     <message>
         <source>Wrong Pin. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvais Pin. Veuillez réessayer.</translation>
     </message>
     <message>
         <source>Factory reset was successful.</source>
-        <translation type="unfinished"></translation>
+        <translation>La réinitialisation d'usine a réussi.</translation>
     </message>
     <message>
         <source>WARNING: This Storage firmware version is old. Application may be unresponsive and unlocking encrypted volume may not work. Please update the firmware to the latest version. Guide should be available at: &lt;br/&gt;&lt;a href=&apos;https://www.nitrokey.com/en/doc/firmware-update-storage&apos;&gt;www.nitrokey.com/en/doc/firmware-update-storage&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>AVERTISSEMENT : Cette version du micrologiciel de stockage est ancienne. L&apos;application peut ne pas répondre et le déverrouillage du volume chiffré peut ne pas fonctionner. Veuillez mettre à jour le firmware avec la dernière version. Le guide devrait être disponible à l&apos;adresse :</translation>
     </message>
     <message>
         <source>Nitrokey App</source>
-        <translation type="unfinished"></translation>
+        <translation>Application Nitrokey</translation>
     </message>
     <message>
         <source>Overview</source>
-        <translation type="unfinished"></translation>
+        <translation>Vue d'ensemble</translation>
     </message>
     <message>
         <source>Unlock Encrypted Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Déverrouiller Volume Chiffré</translation>
     </message>
     <message>
         <source>Unlock Hidden Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Déverrouiller le Volume Caché</translation>
     </message>
     <message>
         <source>Lock Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositif de verrouillage</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Aide</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitter</translation>
     </message>
     <message>
         <source>Copy secret to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier le secret dans le presse-papiers</translation>
     </message>
     <message>
         <source>Copy to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier dans le presse-papiers</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Général</translation>
     </message>
     <message>
         <source>Show first-run message</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le message de première exécution</translation>
     </message>
     <message>
         <source>Show warning when no partitions could be detected on Encrypted Volume (Linux only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher un avertissement lorsqu&apos;aucune partition n&apos;a pu être détectée sur le volume chiffré (Linux uniquement)</translation>
     </message>
     <message>
         <source>Show message about device&apos;s connection / disconnection</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le message concernant la connexion / déconnexion de l&apos;appareil</translation>
     </message>
     <message>
         <source>Show main window when device connects</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la fenêtre principale lorsque l&apos;appareil se connecte</translation>
     </message>
     <message>
         <source>Hide main window when device disconnects</source>
-        <translation type="unfinished"></translation>
+        <translation>Masquer la fenêtre principale lorsque l&apos;appareil se déconnecte</translation>
     </message>
     <message>
         <source>Do not quit when the main window is closed</source>
