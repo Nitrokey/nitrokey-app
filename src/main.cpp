@@ -150,6 +150,10 @@ int main(int argc, char *argv[]) {
     w.set_debug_level(parser.value("debug-level").toInt());
   }
 
+  if(parser.isSet("no-window")) {
+    w.hideOnStartup();
+  }
+
 
 //  csApplet()->setParent(&w);
   int retcode = -1;
@@ -296,6 +300,8 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
                                       "Load translation file with given name "
                                       "and store this choice in settings file."),
           "en"},
+      {"no-window",
+          QCoreApplication::translate("main", "Display no window.")},
 });
 
   parser.process(a);

@@ -58,6 +58,7 @@ public :
 
 protected:
   void closeEvent(QCloseEvent *event) override;
+  void showEvent(QShowEvent *event) override;
 
 private:
   Q_DISABLE_COPY(MainWindow);
@@ -221,8 +222,11 @@ public:
   void set_debug_mode();
   void set_debug_level(int debug_level);
 
+  void hideOnStartup();
+
 private:
   bool debug_mode = false;
+  bool suppress_next_show = false;
 
   void showNotificationLabel();
 
