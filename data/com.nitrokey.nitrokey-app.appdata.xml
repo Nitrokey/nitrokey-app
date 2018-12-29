@@ -21,6 +21,8 @@
   </releases>
   <provides>
 	  <binary>nitrokey-app</binary>
+         <modalias>usb:v20A0p4108d*</modalias> <!-- Nitrokey Pro -->
+         <modalias>usb:v20A0p4109d*</modalias> <!-- Nitrokey Storage -->
   </provides>
   <launchable type="desktop-id">nitrokey-app.desktop</launchable>
   <url type="homepage">https://www.nitrokey.com/</url>
