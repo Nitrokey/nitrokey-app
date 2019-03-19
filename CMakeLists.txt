@@ -3,7 +3,7 @@ cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
 PROJECT(NitrokeyApp LANGUAGES CXX)
 SET(PROJECT_VERSION "1.3.2")
-set(LIBNK_MIN_VERSION 3.3)
+set(LIBNK_MIN_VERSION 3.5)
 
 include(GNUInstallDirs)
 
