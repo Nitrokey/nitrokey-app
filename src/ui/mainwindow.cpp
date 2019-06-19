@@ -417,6 +417,22 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   }
 }
 
+void MainWindow::showEvent(QShowEvent *event) {
+  if (suppress_next_show){
+    suppress_next_show = false;
+#ifdef Q_OS_MAC
+    QTimer::singleShot(0, this, SLOT(showMinimized()));
+#else
+    QTimer::singleShot(0, this, SLOT(hide()));
+#endif
+  }
+}
+
+void MainWindow::hideOnStartup()
+{
+  suppress_next_show = true;
+}
+
 void MainWindow::generateComboBoxEntrys() {
   //FIXME run in separate thread
   int i;
