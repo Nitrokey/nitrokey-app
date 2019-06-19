@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Hidden Volume:</source>
-        <translation>Versteckte Volumen:</translation>
+        <translation>Verstecktes Volumen:</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;color:#c80636&quot;&gt;Warning&lt;/span&gt;</source>
@@ -210,7 +210,7 @@ Bitte versuchen Sie es erneut</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please use &apos;Reset User PIN&apos; option from menu to reset password</source>
-        <translation>Leider sind keine Eingaben mehr möglich. Bitte nutzen Sie die Option &quot;Reset Benutzer-PIN&quot; im Menü um Ihre PIN zurückzusetzen</translation>
+        <translation>Leider sind keine Eingaben mehr möglich. Bitte nutzen Sie die Option &quot;Benutzer-PIN zurücksetzen&quot; im Menü um Ihre PIN zurückzusetzen</translation>
     </message>
     <message>
         <source>Unfortunately you have no more trials left. Please check instruction how to reset Admin password.</source>
@@ -702,7 +702,7 @@ Wählen Sie &quot;Speicher mit Zufallsdaten initialisieren&quot; aus</translatio
     </message>
     <message>
         <source>Forget user PIN after 10 minutes (if unchecked user PIN will remain in memory until application exits)</source>
-        <translation>Vergiss die Benutzer-PIN nach 10 Minuten (wenn nicht ausgewählt wird die Benutzer-PIN im Speicher abgelegt bis die Anwendung geschlossen wird)</translation>
+        <translation>Benutzer-PIN nach 10 Minuten vergessen (wenn nicht ausgewählt wird die Benutzer-PIN im Speicher abgelegt bis die Anwendung geschlossen wird)</translation>
     </message>
     <message>
         <source>Command execution failed. Please try again.</source>
@@ -1532,7 +1532,7 @@ Um Datenverlust zu vermeiden, sollten Sie vor dem Fortfahren die Partitionen aus
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wenn Sie mit &amp;quot;OK&amp;quot; bestätigen wird der Nitrokey &lt;br/&gt;in den Firmware-Aktualisierungs-Modus versetzt. Dies lässt sich nicht rückgängig machen!&lt;br/&gt;Bitte lesen Sie die &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Dokumentation &lt;/span&gt;&lt;/a&gt;um die &lt;br/&gt;Firmware zu aktualisieren.&lt;/p&gt;&lt;p&gt;Mit Firmware-Aktualisierungs-Modus fortfahren?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wenn Sie mit &amp;quot;OK&amp;quot; bestätigen wird der Nitrokey &lt;br/&gt;in den Firmware-Aktualisierungs-Modus versetzt. Dies lässt sich nicht rückgängig machen!&lt;br/&gt;Bitte lesen Sie die &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Dokumentation &lt;/span&gt;&lt;/a&gt;um die &lt;br/&gt;Firmware zu aktualisieren.&lt;/p&gt;&lt;p&gt;Weiter in den Firmware-Update-Modus wechseln?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -1755,7 +1755,7 @@ steht für verschlüsselte Volumen zur Verfügung</translation>
     </message>
     <message>
         <source>Slot under which hidden volume information will be stored</source>
-        <translation>Slot in dem Informationen des versteckten Volumens gespeichert werden</translation>
+        <translation>Eintrag in dem Informationen des versteckten Volumens gespeichert werden</translation>
     </message>
     <message>
         <source>Use this as hidden volume size unit</source>
