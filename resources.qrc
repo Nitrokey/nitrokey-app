@@ -28,6 +28,7 @@
         <file>images/new/icon_passwords.svg</file>
         <file>images/new/icon_quit.svg</file>
         <file>images/new/icon_safe.svg</file>
+        <file>images/new/icon_unsafe.svg</file>
         <file>images/new/icon_settings.svg</file>
         <file>images/new/icon_warning.svg</file>
     </qresource>
