@@ -79,6 +79,7 @@ private slots:
     void populateOTPPasswordMenu();
     void passOTPProgressFurther(int i);
     void showOTPProgressInTray(int i);
+    void delayedShowIndicator();
 
 private:
     Q_DISABLE_COPY(Tray);
@@ -107,6 +108,7 @@ private:
 //    QMenu *trayMenuHOTPSubMenu;
     QMenu *trayMenuSubSpecialConfigure;
     QMenuBar* file_menu;
+    QTimer *delayedShowTimer;
 public:
   void setFile_menu(QMenuBar *file_menu);
 
@@ -167,7 +169,6 @@ private:
   QAction *Stick20ActionEnableHiddenVolume_tray;
   QAction *Stick20ActionDisableHiddenVolume_tray;
   std::shared_ptr<QMenu> trayMenuPasswdSubMenu_tray;
-  QMenu *trayMenuSubConfigure_tray;
   QAction *UnlockPasswordSafeAction_tray;
 };
 
