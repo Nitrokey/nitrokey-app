@@ -1077,26 +1077,22 @@ void MainWindow::on_eraseButton_clicked() {
 }
 
 void MainWindow::on_randomSecretButton_clicked() {
-  int i = 0;
 
-
-  int local_secret_length = get_supported_secret_length_base32();
+  int local_secret_length = std::min( (int) get_supported_secret_length_hex()/2, ui->secret_key_generated_len->value());
+  local_secret_length = std::max(local_secret_length, 1);
   uint8_t secret[local_secret_length];
 
-  char temp;
-
+  int i = 0;
   while (i < local_secret_length) {
-    temp = qrand() & 0xFF;
-    if ((temp >= 'A' && temp <= 'Z') || (temp >= '2' && temp <= '7')) {
-      secret[i] = temp;
+    secret[i] = QRandomGenerator::global()->generate() & 0xFF;
       i++;
-    }
   }
 
-  QByteArray secretArray((char *)secret, local_secret_length);
+  QByteArray secretArray = QByteArray((char*)secret, sizeof(secret));
 
-  ui->base32RadioButton->setChecked(true);
-  ui->secretEdit->setText(secretArray);
+//  ui->base32RadioButton->setChecked(false);
+  ui->hexRadioButton->setChecked(true);
+  ui->secretEdit->setText(secretArray.toHex());
   ui->checkBox->setEnabled(true);
   ui->checkBox->setChecked(true);
   clipboard.copyOTP(secretArray);
