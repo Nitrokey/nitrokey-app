@@ -316,6 +316,12 @@
              </item>
              <item>
               <widget class="QComboBox" name="slotComboBox">
+               <property name="minimumSize">
+                <size>
+                 <width>300</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="accessibleName">
                 <string>Select OTP slot number</string>
                </property>
@@ -330,13 +336,6 @@
                  <string notr="true">HOTP slot</string>
                 </property>
                </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="eraseButton">
-               <property name="text">
-                <string>Erase Slot</string>
-               </property>
               </widget>
              </item>
              <item>
@@ -356,6 +355,13 @@
                </property>
                <property name="maxLength">
                 <number>15</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="eraseButton">
+               <property name="text">
+                <string>Erase Slot</string>
                </property>
               </widget>
              </item>
@@ -1581,7 +1587,6 @@
   <tabstop>radioButton_2</tabstop>
   <tabstop>radioButton</tabstop>
   <tabstop>slotComboBox</tabstop>
-  <tabstop>eraseButton</tabstop>
   <tabstop>nameEdit</tabstop>
   <tabstop>base32RadioButton</tabstop>
   <tabstop>hexRadioButton</tabstop>
