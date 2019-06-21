@@ -566,13 +566,30 @@
                    </property>
                   </spacer>
                  </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <item>
-                  <widget class="QPushButton" name="btn_copyToClipboard">
-                   <property name="toolTip">
-                    <string>Copy secret to clipboard</string>
-                   </property>
+                  <widget class="QLabel" name="label_7">
                    <property name="text">
-                    <string>Copy to clipboard</string>
+                    <string>Generated secret target length (bytes):</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="secret_key_generated_len">
+                   <property name="accessibleName">
+                    <string>TOTP interval value</string>
+                   </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>40</number>
+                   </property>
+                   <property name="value">
+                    <number>40</number>
                    </property>
                   </widget>
                  </item>
@@ -586,6 +603,16 @@
                    </property>
                    <property name="text">
                     <string>Generate random secret</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="btn_copyToClipboard">
+                   <property name="toolTip">
+                    <string>Copy secret to clipboard</string>
+                   </property>
+                   <property name="text">
+                    <string>Copy to clipboard</string>
                    </property>
                   </widget>
                  </item>
@@ -1577,7 +1604,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
   <tabstop>btn_dial_PWS</tabstop>
   <tabstop>btn_dial_EV</tabstop>
   <tabstop>btn_dial_HV</tabstop>
@@ -1588,12 +1614,11 @@
   <tabstop>radioButton</tabstop>
   <tabstop>slotComboBox</tabstop>
   <tabstop>nameEdit</tabstop>
+  <tabstop>eraseButton</tabstop>
   <tabstop>base32RadioButton</tabstop>
   <tabstop>hexRadioButton</tabstop>
   <tabstop>secretEdit</tabstop>
   <tabstop>checkBox</tabstop>
-  <tabstop>btn_copyToClipboard</tabstop>
-  <tabstop>randomSecretButton</tabstop>
   <tabstop>intervalSpinBox</tabstop>
   <tabstop>digits6radioButton</tabstop>
   <tabstop>digits8radioButton</tabstop>
@@ -1634,6 +1659,7 @@
   <tabstop>btn_writeSettings</tabstop>
   <tabstop>writeGeneralConfigButton</tabstop>
   <tabstop>generalCancelButton</tabstop>
+  <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
