@@ -618,6 +618,8 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
       if (interval < 1) interval = 30;
       ui->intervalSpinBox->setValue(interval);
     }
+    ui->secret_key_generated_len->setValue(get_supported_secret_length_hex()/2);
+    ui->secret_key_generated_len->setMaximum(get_supported_secret_length_hex()/2);
   }
   catch (DeviceCommunicationException &e){
     emit DeviceDisconnected();
@@ -653,6 +655,8 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
       updateSlotConfig(p, ui);
       ui->counterEdit->setText(QString::number(p.slot_counter));
     }
+    ui->secret_key_generated_len->setValue(get_supported_secret_length_hex()/2);
+    ui->secret_key_generated_len->setMaximum(get_supported_secret_length_hex()/2);
   }
   catch (DeviceCommunicationException &e){
     emit DeviceDisconnected();
