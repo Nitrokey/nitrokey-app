@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>932</width>
-    <height>717</height>
+    <height>850</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -43,7 +43,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -635,6 +635,9 @@
            </item>
            <item>
             <widget class="QCheckBox" name="enterCheckBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Send 'enter' as the last keystroke</string>
              </property>
@@ -803,6 +806,9 @@
         </item>
         <item>
          <widget class="QFrame" name="frame_3">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="autoFillBackground">
            <bool>false</bool>
           </property>
@@ -831,7 +837,7 @@
              <item>
               <widget class="QCheckBox" name="tokenIDCheckBox">
                <property name="enabled">
-                <bool>true</bool>
+                <bool>false</bool>
                </property>
                <property name="text">
                 <string>Send token ID</string>
@@ -1035,6 +1041,9 @@
         </item>
         <item>
          <widget class="QFrame" name="frame_5">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="autoFillBackground">
            <bool>false</bool>
           </property>
@@ -1835,7 +1844,7 @@
      <x>0</x>
      <y>0</y>
      <width>932</width>
-     <height>20</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>
