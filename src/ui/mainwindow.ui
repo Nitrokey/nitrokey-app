@@ -634,16 +634,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="enterCheckBox">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Send 'enter' as the last keystroke</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <layout class="QFormLayout" name="formLayout_5">
              <property name="fieldGrowthPolicy">
               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
@@ -805,124 +795,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="frame_3">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_10">
-           <item>
-            <widget class="QLabel" name="label_23">
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Token ID</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_8">
-             <item>
-              <widget class="QCheckBox" name="tokenIDCheckBox">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Send token ID</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_10">
-               <item>
-                <widget class="QLabel" name="label_7">
-                 <property name="text">
-                  <string>OMP:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="ompEdit">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="accessibleName">
-                  <string>OMP part of Token ID</string>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="maxLength">
-                  <number>2</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_8">
-                 <property name="text">
-                  <string>TT:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="ttEdit">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="accessibleName">
-                  <string>TT part of Token ID</string>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="maxLength">
-                  <number>2</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_9">
-                 <property name="text">
-                  <string>MUI:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="muiEdit">
-                 <property name="enabled">
-                  <bool>false</bool>
-                 </property>
-                 <property name="accessibleName">
-                  <string>MUI part of Token ID</string>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="maxLength">
-                  <number>8</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -1033,158 +905,6 @@
                 <string>Forget user PIN after 10 minutes (if unchecked user PIN will remain in memory until application exits)</string>
                </property>
               </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QFrame" name="frame_5">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <item>
-            <widget class="QLabel" name="label_12">
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_16">
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_21">
-               <item>
-                <widget class="QLabel" name="label_13">
-                 <property name="text">
-                  <string>Double press NumLock:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_14">
-                 <property name="text">
-                  <string>Double press CapsLock:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_15">
-                 <property name="text">
-                  <string>Double press ScrollLock:</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_22">
-               <item>
-                <widget class="QComboBox" name="numLockComboBox">
-                 <property name="accessibleName">
-                  <string>Double press NumLock:</string>
-                 </property>
-                 <property name="accessibleDescription">
-                  <string>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</string>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>Do nothing</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Send HOTP1</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Send HOTP2</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="capsLockComboBox">
-                 <property name="accessibleName">
-                  <string>Double press CapsLock:</string>
-                 </property>
-                 <property name="accessibleDescription">
-                  <string>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</string>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>Do nothing</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Send HOTP1</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Send HOTP2</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="scrollLockComboBox">
-                 <property name="accessibleName">
-                  <string>Double press ScrollLock:</string>
-                 </property>
-                 <property name="accessibleDescription">
-                  <string>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</string>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>Do nothing</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Send HOTP1</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Send HOTP2</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_11">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
              </item>
             </layout>
            </item>
@@ -1869,24 +1589,16 @@
   <tabstop>checkBox</tabstop>
   <tabstop>btn_copyToClipboard</tabstop>
   <tabstop>randomSecretButton</tabstop>
-  <tabstop>enterCheckBox</tabstop>
   <tabstop>intervalSpinBox</tabstop>
   <tabstop>digits6radioButton</tabstop>
   <tabstop>digits8radioButton</tabstop>
   <tabstop>counterEdit</tabstop>
   <tabstop>setToZeroButton</tabstop>
   <tabstop>setToRandomButton</tabstop>
-  <tabstop>tokenIDCheckBox</tabstop>
-  <tabstop>ompEdit</tabstop>
-  <tabstop>ttEdit</tabstop>
-  <tabstop>muiEdit</tabstop>
   <tabstop>cancelButton</tabstop>
   <tabstop>writeButton</tabstop>
   <tabstop>enableUserPasswordCheckBox</tabstop>
   <tabstop>deleteUserPasswordCheckBox</tabstop>
-  <tabstop>numLockComboBox</tabstop>
-  <tabstop>capsLockComboBox</tabstop>
-  <tabstop>scrollLockComboBox</tabstop>
   <tabstop>PWS_ComboBoxSelectSlot</tabstop>
   <tabstop>PWS_ButtonClearSlot</tabstop>
   <tabstop>PWS_EditSlotName</tabstop>

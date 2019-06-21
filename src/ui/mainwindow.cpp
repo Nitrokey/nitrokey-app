@@ -532,15 +532,15 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) {
   memcpy(slot->slotName, slotNameFromGUI.constData(), toCopy);
 
   memset(slot->tokenID, 0, sizeof(slot->tokenID));
-  QByteArray ompFromGUI = (this->ui->ompEdit->text().toLatin1());
+  QByteArray ompFromGUI = "";
   toCopy = std::min(2ul, (const unsigned long &) ompFromGUI.length());
   memcpy(slot->tokenID, ompFromGUI.constData(), toCopy);
 
-  QByteArray ttFromGUI = (this->ui->ttEdit->text().toLatin1());
+  QByteArray ttFromGUI = "";
   toCopy = std::min(2ul, (const unsigned long &) ttFromGUI.length());
   memcpy(slot->tokenID + 2, ttFromGUI.constData(), toCopy);
 
-  QByteArray muiFromGUI = (this->ui->muiEdit->text().toLatin1());
+  QByteArray muiFromGUI = "";
   toCopy = std::min(8ul, (const unsigned long &) muiFromGUI.length());
   memcpy(slot->tokenID + 4, muiFromGUI.constData(), toCopy);
 
@@ -549,10 +549,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) {
   slot->config = 0;
   if (ui->digits8radioButton->isChecked())
       slot->config += (1 << 0);
-  if (ui->enterCheckBox->isChecked())
-      slot->config += (1 << 1);
-  if (ui->tokenIDCheckBox->isChecked())
-      slot->config += (1 << 2);
+
 }
 
 void MainWindow::generateTOTPConfig(OTPSlot *slot) {
@@ -581,17 +578,10 @@ void MainWindow::generateAllConfigs() {
 }
 
 void updateSlotConfig(const nitrokey::ReadSlot::ResponsePayload &p, Ui::MainWindow* ui)  {
-  ui->ompEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.omp)).trimmed());
-  ui->ttEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.tt)).trimmed());
-  ui->muiEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.mui)).trimmed());
-
   if (p.use_8_digits)
     ui->digits8radioButton->setChecked(true);
   else
     ui->digits6radioButton->setChecked(true);
-
-  ui->enterCheckBox->setChecked(p.use_enter);
-  ui->tokenIDCheckBox->setChecked(p.use_tokenID);
 }
 
 void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
@@ -600,7 +590,6 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->counterEdit->hide();
   ui->setToZeroButton->hide();
   ui->setToRandomButton->hide();
-  ui->enterCheckBox->hide();
   ui->labelNotify->hide();
   ui->intervalLabel->show();
   ui->intervalSpinBox->show();
@@ -612,13 +601,9 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->base32RadioButton->setChecked(true);
 
   ui->counterEdit->setText("0");
-  ui->tokenIDCheckBox->setChecked(false);
   ui->digits6radioButton->setChecked(true);
 
-  ui->ompEdit->setText("NK");
-  ui->ttEdit->setText("01");
   std::string cardSerial = libada::i()->get_serial_number();
-  ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
   ui->intervalSpinBox->setValue(30);
 
   //TODO move reading to separate thread
@@ -648,7 +633,6 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->counterEdit->show();
   ui->setToZeroButton->show();
   ui->setToRandomButton->show();
-  ui->enterCheckBox->show();
   ui->labelNotify->hide();
   ui->intervalLabel->hide();
   ui->intervalSpinBox->hide();
@@ -660,9 +644,6 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
 
   ui->base32RadioButton->setChecked(true);
   std::string cardSerial = libada::i()->get_serial_number();
-  ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
-  ui->ompEdit->setText("NK");
-  ui->ttEdit->setText("01");
   ui->counterEdit->setText(QString::number(0));
 
   try {
@@ -706,9 +687,6 @@ void MainWindow::displayCurrentSlotConfig() {
 void MainWindow::displayCurrentGeneralConfig() {
   auto status = libada::i()->get_status();
 
-  ui->numLockComboBox->setCurrentIndex(status.numlock<2?status.numlock+1:0);
-  ui->capsLockComboBox->setCurrentIndex(status.capslock<2?status.capslock+1:0);
-  ui->scrollLockComboBox->setCurrentIndex(status.scrolllock<2?status.scrolllock+1:0);
 
   ui->enableUserPasswordCheckBox->setChecked(status.enable_user_password != 0);
   ui->deleteUserPasswordCheckBox->setChecked(status.delete_user_password != 0);
@@ -978,12 +956,6 @@ void MainWindow::on_setToRandomButton_clicked() {
 }
 
 void MainWindow::on_tokenIDCheckBox_toggled(bool checked) {
-  ui->ompEdit->setEnabled(checked);
-  ui->ttEdit->setEnabled(checked);
-  ui->muiEdit->setEnabled(checked);
-  ui->ompEdit->setText(ui->ompEdit->text().trimmed());
-  ui->ttEdit->setText(ui->ttEdit->text().trimmed());
-  ui->muiEdit->setText(ui->muiEdit->text().trimmed());
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
@@ -1006,9 +978,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
   try{
     auto password_byte_array = auth_admin.getTempPassword();
     nm::instance()->write_config(
-        ui->numLockComboBox->currentIndex() - 1,
-        ui->capsLockComboBox->currentIndex() - 1,
-        ui->scrollLockComboBox->currentIndex() - 1,
+        0,0,0,
         ui->enableUserPasswordCheckBox->isChecked(),
         ui->deleteUserPasswordCheckBox->isChecked() &&
         ui->enableUserPasswordCheckBox->isChecked(),
