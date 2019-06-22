@@ -995,7 +995,6 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
   }
 
     generateAllConfigs();
-  displayCurrentGeneralConfig();
 }
 
 void MainWindow::getHOTPDialog(int slot) {
@@ -1077,7 +1076,6 @@ void MainWindow::on_eraseButton_clicked() {
 //  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 //  QApplication::restoreOverrideCursor();
   generateAllConfigs();
-  displayCurrentSlotConfig();
 }
 
 void MainWindow::on_randomSecretButton_clicked() {
