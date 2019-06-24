@@ -47,7 +47,7 @@ Prerequisites for building on Ubuntu 17.10:
 - `build-essential` - for building applications
 - `cmake` - for compiling libnitrokey
 - `qt5-default` - QT5 library
-- `qttools5-dev-tools` - QT5 library tools - generating translations
+- `qttools5-dev` and `qttools5-dev-tools` - QT5 library tools - generating translations
 - `libqt5svg5-dev` - QT5 library for rendering SVG
 - `libqt5concurrent5` - QT5 library for concurrent calls
 - `pkg-config` - system libraries detection
@@ -57,7 +57,7 @@ Prerequisites for building on Ubuntu 17.10:
 
 Whole command for Ubuntu:
 ```
-sudo apt-get install libusb-1.0.0-dev cmake qt5-default qttools5-dev-tools pkg-config libhidapi-dev build-essential libqt5svg5-dev libqt5concurrent5
+sudo apt-get install libusb-1.0.0-dev cmake qt5-default qttools5-dev qttools5-dev-tools pkg-config libhidapi-dev build-essential libqt5svg5-dev libqt5concurrent5
 ```
 
 During the compilation CMake will test via `pkg-config`, whether system libnitrokey is available, and is it at least [LIBNK_MIN_VERSION](https://github.com/Nitrokey/nitrokey-app/blob/d6fad2bd1aecbda2e36d4e9873f613ef5bf7649d/CMakeLists.txt#L210) version. On failed test libnitrokey will be compiled as well.

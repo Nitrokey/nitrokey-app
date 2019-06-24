@@ -55,6 +55,8 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QSvgWidget>
 
+#include <random>
+
 using nm = nitrokey::NitrokeyManager;
 const auto Communication_error_message = QT_TRANSLATE_NOOP("MainWindow", "Communication error. Please reinsert the device.");
 
@@ -417,6 +419,22 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   }
 }
 
+void MainWindow::showEvent(QShowEvent *event) {
+  if (suppress_next_show){
+    suppress_next_show = false;
+#ifdef Q_OS_MAC
+    QTimer::singleShot(0, this, SLOT(showMinimized()));
+#else
+    QTimer::singleShot(0, this, SLOT(hide()));
+#endif
+  }
+}
+
+void MainWindow::hideOnStartup()
+{
+  suppress_next_show = true;
+}
+
 void MainWindow::generateComboBoxEntrys() {
   //FIXME run in separate thread
   int i;
@@ -516,15 +534,15 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) {
   memcpy(slot->slotName, slotNameFromGUI.constData(), toCopy);
 
   memset(slot->tokenID, 0, sizeof(slot->tokenID));
-  QByteArray ompFromGUI = (this->ui->ompEdit->text().toLatin1());
+  QByteArray ompFromGUI = "";
   toCopy = std::min(2ul, (const unsigned long &) ompFromGUI.length());
   memcpy(slot->tokenID, ompFromGUI.constData(), toCopy);
 
-  QByteArray ttFromGUI = (this->ui->ttEdit->text().toLatin1());
+  QByteArray ttFromGUI = "";
   toCopy = std::min(2ul, (const unsigned long &) ttFromGUI.length());
   memcpy(slot->tokenID + 2, ttFromGUI.constData(), toCopy);
 
-  QByteArray muiFromGUI = (this->ui->muiEdit->text().toLatin1());
+  QByteArray muiFromGUI = "";
   toCopy = std::min(8ul, (const unsigned long &) muiFromGUI.length());
   memcpy(slot->tokenID + 4, muiFromGUI.constData(), toCopy);
 
@@ -533,10 +551,7 @@ void MainWindow::generateOTPConfig(OTPSlot *slot) {
   slot->config = 0;
   if (ui->digits8radioButton->isChecked())
       slot->config += (1 << 0);
-  if (ui->enterCheckBox->isChecked())
-      slot->config += (1 << 1);
-  if (ui->tokenIDCheckBox->isChecked())
-      slot->config += (1 << 2);
+
 }
 
 void MainWindow::generateTOTPConfig(OTPSlot *slot) {
@@ -565,17 +580,10 @@ void MainWindow::generateAllConfigs() {
 }
 
 void updateSlotConfig(const nitrokey::ReadSlot::ResponsePayload &p, Ui::MainWindow* ui)  {
-  ui->ompEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.omp)).trimmed());
-  ui->ttEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.tt)).trimmed());
-  ui->muiEdit->setText(QString(reinterpret_cast<const char*>(p.slot_token_fields.mui)).trimmed());
-
   if (p.use_8_digits)
     ui->digits8radioButton->setChecked(true);
   else
     ui->digits6radioButton->setChecked(true);
-
-  ui->enterCheckBox->setChecked(p.use_enter);
-  ui->tokenIDCheckBox->setChecked(p.use_tokenID);
 }
 
 void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
@@ -584,7 +592,6 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->counterEdit->hide();
   ui->setToZeroButton->hide();
   ui->setToRandomButton->hide();
-  ui->enterCheckBox->hide();
   ui->labelNotify->hide();
   ui->intervalLabel->show();
   ui->intervalSpinBox->show();
@@ -596,13 +603,9 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
   ui->base32RadioButton->setChecked(true);
 
   ui->counterEdit->setText("0");
-  ui->tokenIDCheckBox->setChecked(false);
   ui->digits6radioButton->setChecked(true);
 
-  ui->ompEdit->setText("NK");
-  ui->ttEdit->setText("01");
   std::string cardSerial = libada::i()->get_serial_number();
-  ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
   ui->intervalSpinBox->setValue(30);
 
   //TODO move reading to separate thread
@@ -617,6 +620,8 @@ void MainWindow::displayCurrentTotpSlotConfig(uint8_t slotNo) {
       if (interval < 1) interval = 30;
       ui->intervalSpinBox->setValue(interval);
     }
+    ui->secret_key_generated_len->setValue(get_supported_secret_length_hex()/2);
+    ui->secret_key_generated_len->setMaximum(get_supported_secret_length_hex()/2);
   }
   catch (DeviceCommunicationException &e){
     emit DeviceDisconnected();
@@ -632,7 +637,6 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
   ui->counterEdit->show();
   ui->setToZeroButton->show();
   ui->setToRandomButton->show();
-  ui->enterCheckBox->show();
   ui->labelNotify->hide();
   ui->intervalLabel->hide();
   ui->intervalSpinBox->hide();
@@ -644,9 +648,6 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
 
   ui->base32RadioButton->setChecked(true);
   std::string cardSerial = libada::i()->get_serial_number();
-  ui->muiEdit->setText(QString("%1").arg(QString::fromStdString(cardSerial), 8, '0'));
-  ui->ompEdit->setText("NK");
-  ui->ttEdit->setText("01");
   ui->counterEdit->setText(QString::number(0));
 
   try {
@@ -656,6 +657,8 @@ void MainWindow::displayCurrentHotpSlotConfig(uint8_t slotNo) {
       updateSlotConfig(p, ui);
       ui->counterEdit->setText(QString::number(p.slot_counter));
     }
+    ui->secret_key_generated_len->setValue(get_supported_secret_length_hex()/2);
+    ui->secret_key_generated_len->setMaximum(get_supported_secret_length_hex()/2);
   }
   catch (DeviceCommunicationException &e){
     emit DeviceDisconnected();
@@ -690,9 +693,6 @@ void MainWindow::displayCurrentSlotConfig() {
 void MainWindow::displayCurrentGeneralConfig() {
   auto status = libada::i()->get_status();
 
-  ui->numLockComboBox->setCurrentIndex(status.numlock<2?status.numlock+1:0);
-  ui->capsLockComboBox->setCurrentIndex(status.capslock<2?status.capslock+1:0);
-  ui->scrollLockComboBox->setCurrentIndex(status.scrolllock<2?status.scrolllock+1:0);
 
   ui->enableUserPasswordCheckBox->setChecked(status.enable_user_password != 0);
   ui->deleteUserPasswordCheckBox->setChecked(status.delete_user_password != 0);
@@ -962,12 +962,6 @@ void MainWindow::on_setToRandomButton_clicked() {
 }
 
 void MainWindow::on_tokenIDCheckBox_toggled(bool checked) {
-  ui->ompEdit->setEnabled(checked);
-  ui->ttEdit->setEnabled(checked);
-  ui->muiEdit->setEnabled(checked);
-  ui->ompEdit->setText(ui->ompEdit->text().trimmed());
-  ui->ttEdit->setText(ui->ttEdit->text().trimmed());
-  ui->muiEdit->setText(ui->muiEdit->text().trimmed());
 }
 
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
@@ -990,9 +984,7 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
   try{
     auto password_byte_array = auth_admin.getTempPassword();
     nm::instance()->write_config(
-        ui->numLockComboBox->currentIndex() - 1,
-        ui->capsLockComboBox->currentIndex() - 1,
-        ui->scrollLockComboBox->currentIndex() - 1,
+        0,0,0,
         ui->enableUserPasswordCheckBox->isChecked(),
         ui->deleteUserPasswordCheckBox->isChecked() &&
         ui->enableUserPasswordCheckBox->isChecked(),
@@ -1005,7 +997,6 @@ void MainWindow::on_writeGeneralConfigButton_clicked() {
   }
 
     generateAllConfigs();
-  displayCurrentGeneralConfig();
 }
 
 void MainWindow::getHOTPDialog(int slot) {
@@ -1087,30 +1078,36 @@ void MainWindow::on_eraseButton_clicked() {
 //  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 //  QApplication::restoreOverrideCursor();
   generateAllConfigs();
-  displayCurrentSlotConfig();
+}
+
+quint32 get_random(){
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+  return QRandomGenerator::global()->generate();
+#else
+  static std::random_device dev;
+  static std::mt19937 rng(dev());
+  static std::uniform_int_distribution<std::mt19937::result_type> dist(0, UINT32_MAX);
+  return dist(rng);
+#endif
 }
 
 void MainWindow::on_randomSecretButton_clicked() {
-  int i = 0;
 
-
-  int local_secret_length = get_supported_secret_length_base32();
+  int local_secret_length = std::min( (int) get_supported_secret_length_hex()/2, ui->secret_key_generated_len->value());
+  local_secret_length = std::max(local_secret_length, 1);
   uint8_t secret[local_secret_length];
 
-  char temp;
-
+  int i = 0;
   while (i < local_secret_length) {
-    temp = qrand() & 0xFF;
-    if ((temp >= 'A' && temp <= 'Z') || (temp >= '2' && temp <= '7')) {
-      secret[i] = temp;
+    secret[i] = get_random() & 0xFF;
       i++;
-    }
   }
 
-  QByteArray secretArray((char *)secret, local_secret_length);
+  QByteArray secretArray = QByteArray((char*)secret, sizeof(secret));
 
-  ui->base32RadioButton->setChecked(true);
-  ui->secretEdit->setText(secretArray);
+//  ui->base32RadioButton->setChecked(false);
+  ui->hexRadioButton->setChecked(true);
+  ui->secretEdit->setText(secretArray.toHex());
   ui->checkBox->setEnabled(true);
   ui->checkBox->setChecked(true);
   clipboard.copyOTP(secretArray);
@@ -1498,12 +1495,12 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
 
 void MainWindow::on_PWS_ButtonCreatePW_clicked() {
   //FIXME generate in separate class
-  int n;
+  quint32 n;
   const QString PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
   QString generated_password(20, 0);
 
   for (int i = 0; i < PWS_CreatePWSize; i++) {
-    n = qrand();
+    n = get_random();
     n = n % PasswordCharSpace.length();
     generated_password[i] = PasswordCharSpace[n];
   }

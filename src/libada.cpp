@@ -321,7 +321,7 @@ int libada::eraseTOTPSlot(const int i, const char *string) {
 bool libada::is_time_synchronized() {
   auto time = QDateTime::currentDateTimeUtc().toTime_t();
   try{
-    nm::instance()->get_time(time);
+    nm::instance()->set_time_soft(time);
     return true;
   }
   catch (const LongOperationInProgressException &e){
