@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
     w.set_debug_level(parser.value("debug-level").toInt());
   }
 
-  if(parser.isSet("no-window")) {
+  if(parser.isSet("no-window") || !settings.value("main/show_on_start", true).toBool() ) {
     w.hideOnStartup();
   }
 

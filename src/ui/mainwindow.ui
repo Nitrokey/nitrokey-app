@@ -43,7 +43,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>4</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -1287,83 +1287,86 @@
                <property name="title">
                 <string>General</string>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_17">
+               <layout class="QVBoxLayout" name="verticalLayout_3">
                 <item>
-                 <layout class="QVBoxLayout" name="verticalLayout_20">
+                 <widget class="QCheckBox" name="cb_first_run_message">
+                  <property name="text">
+                   <string>Show first-run message</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="cb_show_window_on_start">
+                  <property name="text">
+                   <string>Show main window on start</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="cb_check_symlink">
+                  <property name="text">
+                   <string>Show warning when no partitions could be detected on Encrypted Volume (Linux only)</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="cb_device_connection_message">
+                  <property name="text">
+                   <string>Show message about device's connection / disconnection</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="cb_show_main_window_on_connection">
+                  <property name="text">
+                   <string>Show main window when device connects</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="cb_hide_main_window_on_connection">
+                  <property name="text">
+                   <string>Hide main window when device disconnects</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="cb_hide_main_window_on_close">
+                  <property name="text">
+                   <string>Do not quit when the main window is closed</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_12">
                   <item>
-                   <widget class="QCheckBox" name="cb_first_run_message">
+                   <widget class="QLabel" name="label_28">
                     <property name="text">
-                     <string>Show first-run message</string>
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Translation file (needs restart)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="cb_check_symlink">
-                    <property name="text">
-                     <string>Show warning when no partitions could be detected on Encrypted Volume (Linux only)</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
+                   <widget class="QComboBox" name="combo_languages">
+                    <property name="accessibleName">
+                     <string>Translation file (needs restart)</string>
                     </property>
                    </widget>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="cb_device_connection_message">
-                    <property name="text">
-                     <string>Show message about device's connection / disconnection</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="cb_show_main_window_on_connection">
-                    <property name="text">
-                     <string>Show main window when device connects</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="cb_hide_main_window_on_connection">
-                    <property name="text">
-                     <string>Hide main window when device disconnects</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QCheckBox" name="cb_hide_main_window_on_close">
-                    <property name="text">
-                     <string>Do not quit when the main window is closed</string>
-                    </property>
-                    <property name="checked">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_12">
-                    <item>
-                     <widget class="QLabel" name="label_28">
-                      <property name="text">
-                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Translation file (needs restart)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item>
-                     <widget class="QComboBox" name="combo_languages">
-                      <property name="accessibleName">
-                       <string>Translation file (needs restart)</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
                   </item>
                  </layout>
                 </item>
@@ -1642,6 +1645,7 @@
   <tabstop>PWS_ButtonClose</tabstop>
   <tabstop>PWS_ButtonSaveSlot</tabstop>
   <tabstop>cb_first_run_message</tabstop>
+  <tabstop>cb_show_window_on_start</tabstop>
   <tabstop>cb_check_symlink</tabstop>
   <tabstop>cb_device_connection_message</tabstop>
   <tabstop>cb_show_main_window_on_connection</tabstop>
@@ -1660,6 +1664,9 @@
   <tabstop>writeGeneralConfigButton</tabstop>
   <tabstop>generalCancelButton</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>secret_key_generated_len</tabstop>
+  <tabstop>randomSecretButton</tabstop>
+  <tabstop>btn_copyToClipboard</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
