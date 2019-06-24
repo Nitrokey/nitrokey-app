@@ -55,6 +55,8 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QSvgWidget>
 
+#include <random>
+
 using nm = nitrokey::NitrokeyManager;
 const auto Communication_error_message = QT_TRANSLATE_NOOP("MainWindow", "Communication error. Please reinsert the device.");
 
@@ -1078,6 +1080,17 @@ void MainWindow::on_eraseButton_clicked() {
   generateAllConfigs();
 }
 
+quint32 get_random(){
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+  return QRandomGenerator::global()->generate();
+#else
+  static std::random_device dev;
+  static std::mt19937 rng(dev());
+  static std::uniform_int_distribution<std::mt19937::result_type> dist(0, UINT32_MAX);
+  return dist(rng);
+#endif
+}
+
 void MainWindow::on_randomSecretButton_clicked() {
 
   int local_secret_length = std::min( (int) get_supported_secret_length_hex()/2, ui->secret_key_generated_len->value());
@@ -1086,7 +1099,7 @@ void MainWindow::on_randomSecretButton_clicked() {
 
   int i = 0;
   while (i < local_secret_length) {
-    secret[i] = QRandomGenerator::global()->generate() & 0xFF;
+    secret[i] = get_random() & 0xFF;
       i++;
   }
 
@@ -1482,12 +1495,12 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
 
 void MainWindow::on_PWS_ButtonCreatePW_clicked() {
   //FIXME generate in separate class
-  int n;
+  quint32 n;
   const QString PasswordCharSpace = PWS_RANDOM_PASSWORD_CHAR_SPACE;
   QString generated_password(20, 0);
 
   for (int i = 0; i < PWS_CreatePWSize; i++) {
-    n = qrand();
+    n = get_random();
     n = n % PasswordCharSpace.length();
     generated_password[i] = PasswordCharSpace[n];
   }
