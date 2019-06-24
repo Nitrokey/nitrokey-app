@@ -111,6 +111,7 @@ void MainWindow::load_settings_page(){
     ui->cb_show_main_window_on_connection->setChecked(settings.value("main/show_main_on_connection", true).toBool());
     ui->cb_hide_main_window_on_connection->setChecked(settings.value("main/close_main_on_connection", false).toBool());
     ui->cb_hide_main_window_on_close->setChecked(settings.value("main/hide_on_close", true).toBool());
+    ui->cb_show_window_on_start->setChecked(settings.value("main/show_on_start", true).toBool());
 
   ui->cb_check_symlink->setChecked(settings.value("storage/check_symlink", false).toBool());
 #ifndef Q_OS_LINUX
@@ -1831,6 +1832,7 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("main/show_main_on_connection", ui->cb_show_main_window_on_connection->isChecked());
     settings.setValue("main/close_main_on_connection", ui->cb_hide_main_window_on_connection->isChecked());
     settings.setValue("main/hide_on_close", ui->cb_hide_main_window_on_close->isChecked());
+    settings.setValue("main/show_on_start", ui->cb_show_window_on_start->isChecked());
 
     settings.setValue("storage/check_symlink", ui->cb_check_symlink->isChecked());
 
