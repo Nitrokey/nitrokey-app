@@ -1645,6 +1645,7 @@
   <tabstop>PWS_ButtonClose</tabstop>
   <tabstop>PWS_ButtonSaveSlot</tabstop>
   <tabstop>cb_first_run_message</tabstop>
+  <tabstop>cb_show_window_on_start</tabstop>
   <tabstop>cb_check_symlink</tabstop>
   <tabstop>cb_device_connection_message</tabstop>
   <tabstop>cb_show_main_window_on_connection</tabstop>
@@ -1663,6 +1664,9 @@
   <tabstop>writeGeneralConfigButton</tabstop>
   <tabstop>generalCancelButton</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>secret_key_generated_len</tabstop>
+  <tabstop>randomSecretButton</tabstop>
+  <tabstop>btn_copyToClipboard</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>
