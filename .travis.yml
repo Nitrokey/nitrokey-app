@@ -19,6 +19,15 @@ before_install:
 #cache:
 #  - apt
 
+before_cache:
+  - brew cleanup
+
+cache:
+  directories:
+    # https://stackoverflow.com/questions/39930171/cache-brew-builds-with-travis-ci
+    - $HOME/Library/Caches/Homebrew
+    - /usr/local/Homebrew/
+
 
 script: |
     echo "${TRAVIS_OS_NAME}"
@@ -46,7 +55,6 @@ env:
 
 
 matrix:
-#  exclude:
   include:
     - os: osx
       osx_image: xcode8.3 #default
