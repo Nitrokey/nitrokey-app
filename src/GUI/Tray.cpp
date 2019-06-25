@@ -485,6 +485,10 @@ void Tray::populateOTPPasswordMenu() {
   //should not run before worker is done
   QMutexLocker mutexLocker(&worker->mtx);
 
+  if (!trayMenuPasswdSubMenu->actions().empty()) {
+    return;
+  }
+
 
   for (int i=0; i < TOTP_SLOT_COUNT; i++){
     auto slotName = libada::i()->getTOTPSlotName(i);
