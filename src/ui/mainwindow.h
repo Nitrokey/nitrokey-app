@@ -159,7 +159,6 @@ private slots:
   void on_base32RadioButton_toggled(bool checked);
   void on_setToZeroButton_clicked();
   void on_setToRandomButton_clicked();
-  void on_tokenIDCheckBox_toggled(bool checked);
   void on_enableUserPasswordCheckBox_toggled(bool checked);
   void on_writeGeneralConfigButton_clicked();
 

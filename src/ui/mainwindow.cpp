@@ -962,8 +962,6 @@ void MainWindow::on_setToRandomButton_clicked() {
   ui->counterEdit->setText(QString(QByteArray::number(counter, 10)));
 }
 
-void MainWindow::on_tokenIDCheckBox_toggled(bool checked) {
-}
 
 void MainWindow::on_enableUserPasswordCheckBox_toggled(bool checked) {
   ui->deleteUserPasswordCheckBox->setEnabled(checked);
