@@ -1,5 +1,0 @@
-?package(nitrokey-app): needs="X11" \
-                    section="Applications/System/Security" \
-                    title="Nitrokey App" \
-                    command="nitrokey-app" \
-                    icon="/usr/share/pixmaps/nitrokey-app-small.xpm"
