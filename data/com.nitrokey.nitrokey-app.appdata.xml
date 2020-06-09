@@ -17,8 +17,8 @@
 	  <category>Qt</category>
   </categories>
   <releases>
-	<release version="1.3.2" date="2018-08-21" />
     <release version="1.4.0" date="2019-06-25" />
+    <release version="1.3.2" date="2018-08-21" />
   </releases>
   <provides>
 	  <binary>nitrokey-app</binary>
