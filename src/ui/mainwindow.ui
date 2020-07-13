@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>932</width>
-    <height>850</height>
+    <height>750</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1289,16 +1289,54 @@
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_3">
                 <item>
-                 <widget class="QCheckBox" name="cb_first_run_message">
-                  <property name="text">
-                   <string>Show first-run message</string>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_19">
+                  <item>
+                   <widget class="QCheckBox" name="cb_first_run_message">
+                    <property name="text">
+                     <string>Show first-run message</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_show_window_on_start">
+                    <property name="text">
+                     <string>Show main window on start</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="cb_show_window_on_start">
+                 <layout class="QHBoxLayout" name="horizontalLayout_17">
+                  <item>
+                   <widget class="QCheckBox" name="cb_hide_main_window_on_close">
+                    <property name="text">
+                     <string>Do not quit when the main window is closed</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_hide_main_window_on_connection">
+                    <property name="text">
+                     <string>Hide main window when device disconnects</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="cb_show_main_window_on_connection">
                   <property name="text">
-                   <string>Show main window on start</string>
+                   <string>Show main window when device connects</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -1316,36 +1354,6 @@
                  <widget class="QCheckBox" name="cb_device_connection_message">
                   <property name="text">
                    <string>Show message about device's connection / disconnection</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="cb_show_main_window_on_connection">
-                  <property name="text">
-                   <string>Show main window when device connects</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="cb_hide_main_window_on_connection">
-                  <property name="text">
-                   <string>Hide main window when device disconnects</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="cb_hide_main_window_on_close">
-                  <property name="text">
-                   <string>Do not quit when the main window is closed</string>
                   </property>
                   <property name="checked">
                    <bool>true</bool>
@@ -1384,26 +1392,6 @@
                <string>Debug log settings</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_3">
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_10">
-                 <property name="text">
-                  <string>Path for debug log file:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>edit_debug_file_path</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_20">
-                 <property name="text">
-                  <string>Verbosity level:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>spin_debug_verbosity</cstring>
-                 </property>
-                </widget>
-               </item>
                <item row="1" column="1">
                 <widget class="QLineEdit" name="edit_debug_file_path">
                  <property name="accessibleName">
@@ -1424,10 +1412,23 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="3">
-                <widget class="QPushButton" name="btn_select_debug_file_path">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_10">
                  <property name="text">
-                  <string>Select path</string>
+                  <string>Path for debug log file:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>edit_debug_file_path</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_20">
+                 <property name="text">
+                  <string>Verbosity level:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>spin_debug_verbosity</cstring>
                  </property>
                 </widget>
                </item>
@@ -1445,6 +1446,13 @@
                 <widget class="QPushButton" name="btn_select_debug_console">
                  <property name="text">
                   <string>Log to console</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QPushButton" name="btn_select_debug_file_path">
+                 <property name="text">
+                  <string>Select path</string>
                  </property>
                 </widget>
                </item>
@@ -1536,7 +1544,7 @@
               <property name="sizeHint" stdset="0">
                <size>
                 <width>20</width>
-                <height>78</height>
+                <height>0</height>
                </size>
               </property>
              </spacer>
