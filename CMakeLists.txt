@@ -163,14 +163,22 @@ IF(NOT WIN32)
   # Removed - should be provided by libnitrokey
 
   # Install autocompletion scripts
-  set(PKG_GET_BASH_COMPLETION ${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion)
-  execute_process(COMMAND ${PKG_GET_BASH_COMPLETION} RESULT_VARIABLE ERR OUTPUT_VARIABLE BASH_COMPLETION_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-  IF(${ERR})
-    set(BASH_COMPLETION_DIR "etc/bash_completion.d")
+  set(BASH_COMPLETION_PATH "" CACHE STRING "Directory for installing bash autocompletion files. The default (empty) means we will try to autodetect it")
+
+  IF(BASH_COMPLETION_PATH STREQUAL "")
+    message(STATUS "Trying to autodetect bash autocompletion directory")
+    set(PKG_GET_BASH_COMPLETION ${PKG_CONFIG_EXECUTABLE} --variable=completionsdir bash-completion)
+    execute_process(COMMAND ${PKG_GET_BASH_COMPLETION} RESULT_VARIABLE ERR OUTPUT_VARIABLE BASH_COMPLETION_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+    IF(${ERR})
+      set(BASH_COMPLETION_DIR "etc/bash_completion.d")
+    ENDIF()
+    string(REGEX REPLACE "^/" "" BASH_COMPLETION_DIR "${BASH_COMPLETION_DIR}")
+    string(REGEX REPLACE "^usr/" "" BASH_COMPLETION_DIR "${BASH_COMPLETION_DIR}") # usual prefix is usr/local
+    message(STATUS "Setting bash-completion dir to ${BASH_COMPLETION_DIR}")
+  ELSE()
+    message(STATUS "User-provided bash autocompletion directory: ${BASH_COMPLETION_PATH}")
+    set(BASH_COMPLETION_DIR ${BASH_COMPLETION_PATH})
   ENDIF()
-  string(REGEX REPLACE "^/" "" BASH_COMPLETION_DIR "${BASH_COMPLETION_DIR}")
-  string(REGEX REPLACE "^usr/" "" BASH_COMPLETION_DIR "${BASH_COMPLETION_DIR}") # usual prefix is usr/local
-  message(STATUS "Setting bash-completion dir to ${BASH_COMPLETION_DIR}")
 
   install(FILES
    ${CMAKE_SOURCE_DIR}/data/bash-autocomplete/nitrokey-app
