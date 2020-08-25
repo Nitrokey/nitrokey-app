@@ -157,6 +157,12 @@ IF(NOT WIN32)
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps
   )
 
+  # Install man page
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/data/nitrokey-app.1
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/man/man1
+  )
+
   find_package(PkgConfig)
 
   # Install Nitrokey udev rules

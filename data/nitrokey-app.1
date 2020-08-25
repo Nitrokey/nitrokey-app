@@ -1,0 +1,61 @@
+.\" (C) Copyright 2020 Nitrokey UG and Jan Luca Naumann <j.naumann@fu-berlin.de>,
+.TH NITROKEY\-APP 1 "21 August 2020" "" "nitrokey-app man page"
+.SH NAME
+nitrokey-app \- Manage your Nitrokey stick
+
+.SH SYNOPSIS
+.B nitrokey-app
+.RI [ options ]
+
+.SH DESCRIPTION
+.B nitrokey-app
+is the official application to manage the features of the Nitrokey.
+Nitrokey is an open source/open hardware USB key supporting secure encryption
+and signing.
+
+.SH OPTIONS
+.TP
+.B \-a, \-\-admin
+Enable extra administrative functions
+.TP
+.B \-\-clear\-settings
+Clear all application's settings
+.TP
+.B \-d, \-\-debug
+Enable debug messages
+.TP
+.B \-df, \-\-debug\-file <log-file-name>
+Save debug log to file with name <log-file-name> (experimental)
+.TP
+.B \-dl, \-\-debug\-level <debug-level-int>
+Set debug level, 0-4
+.TP
+.B \-dw, \-\-debug\-window
+Save debug log to App's window (experimental)
+.TP
+.B \-h, \-\-help
+Display the help and exit.
+.TP
+.B \-\-help\-all
+Displays help including Qt specific options.
+.TP
+.B \-l, \-\-language
+Load translation file with given name and store this choice in settings file.
+.TP
+.B \-\-language-list
+List available languages
+.TP
+.B \-\-no\-window
+Display no window.
+.TP
+.B \-s, \-\-delay <delay>
+Set delay between commands sent to device (in ms) to <delay>
+.TP
+.B \-v, \-\-version
+Displays version information.
+.TP
+.B \-\-version\-more
+Show additional information about binary
+
+.SH AUTHOR
+This man page was written by Jan Luca Naumann <j.naumann@fu-berlin.de>.
