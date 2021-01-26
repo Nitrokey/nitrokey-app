@@ -34,9 +34,13 @@
   <url type="help">https://www.nitrokey.com/start</url>
   <screenshots>
     <screenshot type="default">
-	    <image>https://raw.githubusercontent.com/Nitrokey/nitrokey-app/master/images/icon/nitrokey-app-icon-128-black.png</image>
-      <caption><!-- Describe this screenshot in less than ~10 words --></caption>
-    </screenshot>
+	    <image>https://github.com/Nitrokey/nitrokey-app/raw/master/images/screenshot-main-window.png</image>
+			<caption>Main window</caption>
+		</screenshot>
+		<screenshot>
+	    <image>https://github.com/Nitrokey/nitrokey-app/raw/master/images/screenshot-about-window.png</image>
+			<caption>About window</caption>
+		</screenshot>
   </screenshots>
   <developer_name>Nitrokey UG</developer_name>
   <update_contact>info_AT_nitrokey.com</update_contact>
