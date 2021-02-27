@@ -433,6 +433,7 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
     }
     auto s = dialog.getPassword();
 
+    emit DeviceLocked();
     startProgressFunc(tr("Generating new AES keys")); //FIXME use existing translation
 
     new ThreadWorker(
