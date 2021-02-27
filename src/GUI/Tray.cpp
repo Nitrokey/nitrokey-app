@@ -562,6 +562,7 @@ void Tray::generateMenuForProDevice() {
     if (ExtendedConfigActive) {
       trayMenuSubConfigure->addSeparator();
       trayMenuSubConfigure->addAction(resetAction);
+      trayMenuSubConfigure->addAction(Stick20ActionDestroyCryptedVolume);
     }
     windowMenu->addMenu(trayMenuSubConfigure);
 }

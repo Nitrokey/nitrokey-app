@@ -76,6 +76,7 @@ signals:
   void storageStatusUpdated();
   void longOperationStarted();
   void FactoryReset();
+  void DeviceLocked();
 
 
 };
