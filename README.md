@@ -18,6 +18,18 @@ The implementation is compatible to the Google Authenticator application which c
 
 Each libnitrokey's and supported devices' firmware release OTPs are tested automatically, according to the RFCs test vectors. 
 
+#### Dependencies
+
+Following dependencies are provided directly as submodules, and are required for building the application.
+
+|Name | Url  | Description |
+--- | --- | ---
+|cppcodec|https://github.com/tplgy/cppcodec|  Header-only C++11 library to encode/decode base64, base64url, base32, base32hex and hex (a.k.a. base16) as specified in RFC 4648, plus Crockford's base32. |
+|libnitrokey|https://github.com/Nitrokey/libnitrokey| A library for communication with Nitrokey devices |
+|Catch2|https://github.com/catchorg/Catch2| A modern, C++-native, header-only, test framework for unit-tests, TDD and BDD - using C++11, C++14, C++17 and later (or C++03 on the Catch1.x branch) (not with the final binary; coming from libnitrokey)|
+|hidapi|https://github.com/Nitrokey/hidapi| A Simple library for communicating with USB and Bluetooth HID devices on Linux, Mac, and Windows. (coming from libnitrokey)|
+
+
 ##### Builds
 Ready to use binaries are available at [releases page](https://github.com/Nitrokey/nitrokey-app/releases). More details could be found at [main download site](https://www.nitrokey.com/download).
 
