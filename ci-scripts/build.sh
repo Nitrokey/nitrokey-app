@@ -5,7 +5,7 @@ export
 . ./nitrokey-app-source-metadata/metadata
 tar xf ./output/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
-pushd nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
+pushd ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
 
 mkdir build
 mkdir install
