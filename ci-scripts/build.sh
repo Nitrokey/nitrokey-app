@@ -3,7 +3,7 @@ set -exuo pipefail
 export 
 
 . ./nitrokey-app-source-metadata/metadata
-tar xf nitrokey-app-source/output/nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
+tar xf ./output/nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
 pushd nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
 
