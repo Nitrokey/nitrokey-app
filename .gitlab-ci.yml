@@ -58,8 +58,8 @@ build-bionic-gcc8:
     - apt-get update
     - apt-get -y install wget curl
   script: 
-    - chmod +x ci-script/build.sh
-    - ci-script/build.sh
+    - chmod +x ci-scripts/build.sh
+    - ci-scripts/build.sh
     - mkdir -p artifacts
     - cp libnitrokey-source/output/*.tar.gz artifacts
   after_script:
