@@ -36,7 +36,7 @@ gzip ${OUTDIR}/${OUTNAME}.tar
 echo "NITROKEY_APP_BUILD_VERSION=\"${VERSION}\"" >> ./metadata
 echo "NITROKEY_APP_BUILD_ID=\"${BUILD}\"" >> ./metadata
 echo "NITROKEY_APP_BUILD_DATE=\"${DATE}\"" >> ./metadata
-echo "NITROKEY_APP_BUILD_TYPE=\"${BUILD_TYPE}\"" >> ./metadata
+echo "NITROKEY_APP_BUILD_TYPE=\"${CI_PIPELINE_SOURCE}\"" >> ./metadata
 echo "NITROKEY_APP_BUILD_ARTIFACT_VERSION=\"${ARTIFACT_VERSION}\"" >> ./metadata
 mkdir -p libnitrokey-source-metadata
 mv metadata libnitrokey-source-metadata/
