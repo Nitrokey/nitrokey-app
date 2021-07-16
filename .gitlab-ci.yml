@@ -13,7 +13,7 @@ variables:
   GIT_SUBMODULE_STRATEGY: recursive #This seems to have no effect also set in webinterfac
   SCRIPTS_REPO: git@git.dotplex.com:nitrokey/gitlab-ci.git
   REPO_USER: nitrokey
-  REPO_NAME: libnitrokey
+  REPO_NAME: nitrokey-app
   MAIN_BRANCH: master
   COMMON_PULL: "true"
   COMMON_UPLOAD_NIGHTLY: "true"
@@ -27,7 +27,7 @@ variables:
 #registry.git.dotplex.com/nitrokey/libnitrokey/libnitrokey-bionic-gcc5
 
 fetchAndPackage:
-  image: registry.git.dotplex.com/nitrokey/libnitrokey/libnitrokey-bionic-gcc8:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc8-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
   tags:
@@ -44,11 +44,11 @@ fetchAndPackage:
   artifacts:
     paths:
       - output
-      - libnitrokey-source-metadata
+      - nitrokey-app-source-metadata
     expire_in: 2 weeks
 
 build-bionic-gcc8:
-  image: registry.git.dotplex.com/nitrokey/libnitrokey/libnitrokey-bionic-gcc8:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc8-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
   tags:
@@ -61,7 +61,7 @@ build-bionic-gcc8:
     - chmod +x ci-scripts/build.sh
     - ci-scripts/build.sh
     - mkdir -p artifacts
-    - cp libnitrokey-source/output/*.tar.gz artifacts
+    - cp affe-source/output/*.tar.gz artifacts
   after_script:
     - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
   artifacts:
