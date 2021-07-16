@@ -37,7 +37,7 @@ echo "NITROKEY_APP_BUILD_VERSION=\"${VERSION}\"" >> ./metadata
 echo "NITROKEY_APP_BUILD_ID=\"${BUILD}\"" >> ./metadata
 echo "NITROKEY_APP_BUILD_DATE=\"${DATE}\"" >> ./metadata
 echo "NITROKEY_APP_BUILD_TYPE=\"${CI_PIPELINE_SOURCE}\"" >> ./metadata
-echo "NITROKEY_APP_BUILD_ARTIFACT_VERSION=\"${ARTIFACT_VERSION}\"" >> ./metadata
+echo "NITROKEY_APP_BUILD_ARTIFACT_VERSION=\"${OUTNAME}\"" >> ./metadata
 mkdir -p libnitrokey-source-metadata
 mv metadata libnitrokey-source-metadata/
 pushd ${OUTDIR}
