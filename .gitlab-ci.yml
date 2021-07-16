@@ -37,8 +37,8 @@ fetchAndPackage:
     - apt-get update
     - apt-get -y install git wget
   script: 
-    - chmod +x ci-script/package.sh
-    - ci-script/package.sh
+    - chmod +x ci-scripts/package.sh
+    - ci-scripts/package.sh
   after_script:
     - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
   artifacts:
