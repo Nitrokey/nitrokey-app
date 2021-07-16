@@ -32,7 +32,6 @@ git archive --format tar --prefix ${OUTNAME}/ ${CI_COMMIT_SHA} > ${OUTDIR}/${OUT
 ## git archive doesn't package submodules, some magic is needed to do it
 git submodule foreach "git archive --format tar --prefix=\"${OUTNAME}/\${path}/\" --output=\"${OUTDIR}/\${sha1}.tar\" \${sha1} && tar Af ${OUTDIR}/${OUTNAME}.tar ${OUTDIR}/\${sha1}.tar && rm ${OUTDIR}/\${sha1}.tar"
 gzip ${OUTDIR}/${OUTNAME}.tar
-popd
 
 echo "NITROKEY_APP_BUILD_VERSION=\"${VERSION}\"" >> ./metadata
 echo "NITROKEY_APP_BUILD_ID=\"${BUILD}\"" >> ./metadata
