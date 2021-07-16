@@ -15,12 +15,6 @@ git submodule update libnitrokey
 VERSION="$(git describe --abbrev=0)"
 BUILD="${VERSION}.${CI_COMMIT_SHORT_SHA}"
 DATE="$(date +%Y%m%d%H%M%S%z)"
-
-BUILD_TYPE="continuous"
-git describe --exact-match ${GO_REVISION_NITROKEY_APP} &>/dev/null && BUILD_TYPE="release"
-gzip -l ${OUTDIR}/${OUTNAME}.tar.gz
-[ "${GO_TRIGGER_USER}" == "timer" ] && BUILD_TYPE="nightly"
-
 case "${CI_PIPELINE_SOURCE}" in
   push)
     OUTNAME="${BASENAME}-${BUILD}"
