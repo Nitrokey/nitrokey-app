@@ -3,7 +3,7 @@ set -exuo pipefail
 
 . ./nitrokey-app-source-metadata/metadata
 
-mkdir artifacts
+mkdir -p artifacts
 OUTDIR="$(realpath artifacts)"
 OUTNAME="Nitrokey-App-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.exe"
 MXE_TARGET=i686-w64-mingw32.static

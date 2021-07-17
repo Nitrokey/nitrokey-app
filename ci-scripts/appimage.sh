@@ -4,7 +4,7 @@ set -exuo pipefail
 
 tar xf ./artifacts/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
-mkdir artifacts
+mkdir -p artifacts
 OUTDIR="$(realpath artifacts)"
 
 OUTNAME="Nitrokey_App-x86_64-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.AppImage"

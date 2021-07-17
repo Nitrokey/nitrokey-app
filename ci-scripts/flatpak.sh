@@ -6,8 +6,8 @@ set -exuo pipefail
 tar xf ./artifacts/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 SRCDIR="$(realpath ${NITROKEY_APP_BUILD_ARTIFACT_VERSION})"
 
-mkdir output
-OUTDIR="$(realpath output)"
+mkdir -p artifacts
+OUTDIR="$(realpath artifacts)"
 
 OUTNAME="${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.flatpak"
 

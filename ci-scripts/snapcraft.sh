@@ -5,7 +5,7 @@ set -exuo pipefail
 
 tar xf ./artifacts/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
-mkdir artifacts
+mkdir -p artifacts
 OUTDIR="$(realpath artifacts)"
 
 OUTNAME="nitrokey-app_${NITROKEY_APP_BUILD_ARTIFACT_VERSION}_amd64.snap"

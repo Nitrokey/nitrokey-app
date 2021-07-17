@@ -19,8 +19,8 @@ case "${CI_PIPELINE_SOURCE}" in
     ;;
 esac
 
-mkdir output
-OUTDIR="$(realpath output)"
+mkdir -p artifacts
+OUTDIR="$(realpath artifacts)"
 
 tar xf nitrokey-app-source/output/nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
