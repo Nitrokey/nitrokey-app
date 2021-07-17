@@ -1,8 +1,8 @@
 #!/bin/bash
 set -exuo pipefail
 
-mkdir output
-OUTDIR="$(realpath output)"
+mkdir artifacts
+OUTDIR="$(realpath artifacts)"
 
 BASENAME="nitrokey-app"
 

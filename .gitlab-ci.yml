@@ -37,7 +37,7 @@ fetch-and-package:
     - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
   artifacts:
     paths:
-      - output
+      - artifacts
       - nitrokey-app-source-metadata
     expire_in: 2 weeks
 
