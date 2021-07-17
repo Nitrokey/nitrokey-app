@@ -8,8 +8,9 @@ mkdir -p artifacts
 OUTDIR="$(realpath artifacts)"
 
 OUTNAME="Nitrokey_App-x86_64-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.AppImage"
-
-pushd nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
+ls
+echo $NITROKEY_APP_BUILD_ARTIFACT_VERSION
+pushd ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
 
 ## compile
 APPDIR="$(readlink -f .)/nitrokey-app.AppImage"

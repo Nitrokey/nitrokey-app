@@ -140,7 +140,7 @@ mxe:
   stage: build
   before_script: 
     - apt-get update
-    - apt-get -y install wget curl qttools5-dev
+    - apt-get -y install wget curl qttools5-dev git
   script: 
     - chmod +x ci-scripts/mxe.sh
     - ci-scripts/mxe.sh
