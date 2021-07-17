@@ -84,6 +84,9 @@ snapcraft:
   tags:
     - docker
   stage: build
+  before_script: 
+  - apt-get update
+  - apt-get -y install wget curl qttools5-dev
   script: 
     - chmod +x ci-scripts/snapcraft.sh
     - ci-scripts/snapcraft.sh
