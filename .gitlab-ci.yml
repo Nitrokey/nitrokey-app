@@ -150,3 +150,23 @@ mxe:
     paths:
       - artifacts
     expire_in: 2 week
+
+flatpak:
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: build
+  before_script: 
+    - apt-get update
+    - apt-get -y install wget curl qttools5-dev git
+  script: 
+    - chmod +x ci-scripts/flatpak.sh
+    - ci-scripts/flatpak.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 week
