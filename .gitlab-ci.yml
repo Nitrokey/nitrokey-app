@@ -59,7 +59,8 @@ fetch-and-package:
 build-bionic-gcc8:
   extends: .build
   image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc8-agent:latest
-  after_script: sleep 3h
+  after_script: 
+    sleep 3h
 
 build-bionic-gcc7:
   extends: .build
