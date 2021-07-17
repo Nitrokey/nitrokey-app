@@ -21,7 +21,7 @@ variables:
   COMMON_UPLOAD_FILES: "false"
 
 fetch-and-package:
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc8-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
   tags:
@@ -53,9 +53,9 @@ fetch-and-package:
   script: 
     - chmod +x ci-scripts/build.sh
     - ci-scripts/build.sh
-    - sleep 4h
   after_script:
     - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  allow_failure: true
 
 build-bionic-gcc8:
   extends: .build
@@ -76,5 +76,22 @@ build-bionic-gcc5:
 build-bionic-llvm7:
   extends: .build
   image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-bionic-llvm7-agent:latest
+
+snapcraft:
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: build
+  script: 
+    - chmod +x ci-scripts/snapcraft.sh
+    - ci-scripts/snapcraft.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 weeks
 
     

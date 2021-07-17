@@ -1,0 +1,33 @@
+#!/bin/bash
+set -exuo pipefail
+
+. ./nitrokey-app-source-metadata/metadata
+
+mkdir artifacts
+OUTDIR="$(realpath artifacts)"
+OUTNAME="Nitrokey-App-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.exe"
+MXE_TARGET=i686-w64-mingw32.static
+
+pushd nitrokey-app
+
+git submodule init
+git submodule update --init --recursive
+
+## compile
+mkdir -p build/
+pushd build
+${MXE_TARGET}-qmake-qt5 ..
+make -j2 -f Makefile.Release
+
+pushd release
+upx nitrokey-app.exe
+cp nitrokey-app.exe ${OUTDIR}/${OUTNAME}
+popd
+popd
+popd
+
+upx -t ${OUTDIR}/${OUTNAME}
+
+pushd ${OUTDIR}
+sha256sum *.exe > SHA256SUMS
+popd
