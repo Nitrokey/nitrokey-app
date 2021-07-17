@@ -56,7 +56,7 @@ build-bionic-gcc8:
   stage: build
   before_script: 
     - apt-get update
-    - apt-get -y install wget curl
+    - apt-get -y install wget curl qttools5-dev
   script: 
     - chmod +x ci-scripts/build.sh
     - ci-scripts/build.sh
