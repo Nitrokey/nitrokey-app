@@ -10,7 +10,7 @@ OUTDIR="$(realpath artifacts)"
 
 OUTNAME="nitrokey-app_${NITROKEY_APP_BUILD_ARTIFACT_VERSION}_amd64.snap"
 
-pushd nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
+pushd ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
 
 mkdir -p snap/gui/
 ln -s ../../images/icon/nitrokey-app-icon-vector.svg snap/gui/icon.svg
