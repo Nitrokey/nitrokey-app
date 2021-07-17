@@ -8,8 +8,6 @@ OUTDIR="$(realpath artifacts)"
 OUTNAME="Nitrokey-App-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.exe"
 MXE_TARGET=i686-w64-mingw32.static
 
-pushd nitrokey-app
-
 git submodule init
 git submodule update --init --recursive
 

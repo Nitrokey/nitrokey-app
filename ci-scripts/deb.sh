@@ -27,7 +27,7 @@ tar xf nitrokey-app-source/output/nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VER
 rm -rf nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}/debian
 cp -a nitrokey-app-build/debian nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}/
 
-pushd nitrokey-app-${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
+pushd ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
 
 DEBFULLNAME=Nitrokey DEBEMAIL=info@nitrokey.com dch --create --package nitrokey-app -v "${UBUNTU_VERSION}" -D "${UBUNTU_DISTRIBUTION}" "${UBUNTU_CHANGELOG}"
 echo "3.0 (native)" > debian/source/format
