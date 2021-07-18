@@ -12,7 +12,7 @@ OUTDIR="$(realpath artifacts)"
 OUTNAME="${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.flatpak"
 
 ls
-pushd nitrokey-app-flatpak
+#pushd nitrokey-app-flatpak
 
 ln -s "${SRCDIR}" nitrokey-app-source
 flatpak-builder vbuild --disable-rofiles-fuse --repo ci-repo com.nitrokey.app.json

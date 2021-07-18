@@ -13,7 +13,9 @@ git submodule update --init --recursive
 
 ## compile
 mkdir -p build/
+ls
 pushd build
+ls
 ${MXE_TARGET}-qmake-qt5 ..
 make -j2 -f Makefile.Release
 
