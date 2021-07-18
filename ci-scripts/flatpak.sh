@@ -11,7 +11,7 @@ OUTDIR="$(realpath artifacts)"
 
 OUTNAME="${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.flatpak"
 
-
+ls
 pushd nitrokey-app-flatpak
 
 ln -s "${SRCDIR}" nitrokey-app-source

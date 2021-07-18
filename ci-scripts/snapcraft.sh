@@ -27,6 +27,7 @@ esac
 
 cat <<-EOF > snapcraft.yaml
   name: nitrokey-app
+  base: core18
   version: ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
   summary: Nitrokey Application
   description: A QT GUI for managing your Nitrokey device
