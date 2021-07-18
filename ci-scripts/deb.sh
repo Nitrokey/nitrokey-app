@@ -22,7 +22,7 @@ esac
 mkdir -p artifacts
 OUTDIR="$(realpath artifacts)"
 
-tar xf nitrokey-app-source/output/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
+tar xf ./artifacts/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
 rm -rf ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}/debian
 cp -a nitrokey-app-build/debian ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}/
