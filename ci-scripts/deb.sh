@@ -25,6 +25,7 @@ OUTDIR="$(realpath artifacts)"
 tar xf ./artifacts/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
 rm -rf ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}/debian
+sleep 3h 
 cp -a nitrokey-app-build/debian ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}/
 
 pushd ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
