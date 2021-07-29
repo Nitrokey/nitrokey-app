@@ -1,0 +1,209 @@
+include: 'https://raw.githubusercontent.com/Nitrokey/common-ci-jobs/master/common_jobs.yml'
+
+stages:
+  - pull-github
+  - fetch
+  - build
+  - deploy
+
+variables:
+  #Repo for shared scripts (pull.sh release.sh, nightly_upload.sh):
+  GIT_STRATEGY: clone     #This seems to have no effect also set in webinterface
+  GIT_DEPTH: 0          #This seems to have no effect also set in webinterface
+  GIT_SUBMODULE_STRATEGY: recursive
+  SCRIPTS_REPO: git@git.dotplex.com:nitrokey/gitlab-ci.git
+  REPO_USER: nitrokey
+  REPO_NAME: nitrokey-app
+  MAIN_BRANCH: ci
+  COMMON_PULL: "true"
+  COMMON_UPLOAD_NIGHTLY: "true"
+  COMMON_GITHUB_RELEASE: "false"
+  COMMON_UPLOAD_FILES: "false"
+
+fetch-and-package:
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: fetch
+  before_script: 
+    - apt-get update
+    - apt-get -y install git wget
+  script: 
+    - chmod +x ci-scripts/package.sh
+    - ci-scripts/package.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+      - nitrokey-app-source-metadata
+    expire_in: 2 weeks
+
+.build:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: build
+  before_script: 
+    - apt-get update
+    - apt-get -y install wget curl qttools5-dev
+  script: 
+    - chmod +x ci-scripts/build.sh
+    - ci-scripts/build.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+
+build-bionic-gcc8:
+  extends: .build
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc8-agent:latest
+
+build-bionic-gcc7:
+  extends: .build
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc7-agent:latest
+
+build-bionic-gcc6:
+  extends: .build
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc6-agent:latest
+
+build-bionic-gcc5:
+  extends: .build
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc5-agent:latest
+
+build-bionic-llvm7:
+  extends: .build
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-bionic-llvm7-agent:latest
+
+snapcraft:
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: build
+  before_script: 
+  - apt-get update
+  - apt-get -y install wget curl qttools5-dev
+  script: 
+    - chmod +x ci-scripts/snapcraft.sh
+    - ci-scripts/snapcraft.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 week
+
+deb:
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: build
+  before_script: 
+    - add-apt-repository ppa:nitrokey/nitrokey
+    - apt-get update
+    - apt-get -y install git debhelper dh-virtualenv libgtk2.0-dev libnotify-dev qttools5-dev libnitrokey-dev 
+  script: 
+    - chmod +x ci-scripts/deb.sh
+    - ci-scripts/deb.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 week
+
+appimage:
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-appimages-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: build
+  script: 
+    - chmod +x ci-scripts/appimage.sh
+    - ci-scripts/appimage.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 week
+
+mxe:
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-mxe-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: build
+  before_script: 
+    - apt-get update
+    - apt-get -y install wget curl qttools5-dev git
+  script: 
+    - chmod +x ci-scripts/mxe.sh
+    - ci-scripts/mxe.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 week
+
+flatpak:
+  #image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - lxc
+  stage: build
+  #before_script: 
+  #  - apt-get update
+  #  - apt-get -y install wget curl qttools5-dev git
+  script: 
+    - chmod +x ci-scripts/flatpak.sh
+    - ci-scripts/flatpak.sh
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 week
+
+#macos-dmg:
+#  rules:
+#    - if: '$CI_PIPELINE_SOURCE == "push"'
+#  tags:
+#    - mac
+#  stage: build
+#  script: 
+#    - echo Hello Mac
+#    - chmod +x ci-scripts/OSX/build.sh 
+#    - ci-scripts/OSX/build.sh /Users/work/Qt/5.9.9/clang_64/bin/ master "enable_log"
+#  after_script:
+#    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+#  artifacts:
+#    paths:
+#      - artifacts
+#    expire_in: 2 week
+#  allow_failure: true
+
+collect-artifacts:
+  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+  tags:
+    - docker
+  stage: deploy
+  script: 
+    - echo collecting artifacts
+  after_script:
+    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
+  artifacts:
+    paths:
+      - artifacts
+    expire_in: 2 week
