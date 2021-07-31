@@ -197,6 +197,8 @@ void DialogChangePassword::moveWindowToCenter() {// center the password window
       QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), desktop->availableGeometry()));
 }
 
+#include <QDebug>
+
 void DialogChangePassword::_changePassword(void) {
   QByteArray PasswordString, PasswordStringNew;
   PasswordString = ui->lineEdit_OldPW->text().toLatin1();
@@ -206,20 +208,44 @@ void DialogChangePassword::_changePassword(void) {
   new ThreadWorker(
       [k, PasswordString, PasswordStringNew]() -> Data {
         Data data;
+        data["update_feature"] = true;
         try {
           switch (k) {
-            case PasswordKind::USER:
-              nm::instance()->change_user_PIN(PasswordString.constData(), PasswordStringNew.constData());
+          case PasswordKind::USER:
+            nm::instance()->change_user_PIN(PasswordString.constData(),
+                                            PasswordStringNew.constData());
+            break;
+          case PasswordKind::ADMIN:
+            nm::instance()->change_admin_PIN(PasswordString.constData(),
+                                             PasswordStringNew.constData());
+            break;
+          case PasswordKind::UPDATE:
+            switch (nm::instance()->get_connected_device_model()) {
+            case nitrokey::device::DeviceModel::STORAGE:
+              nm::instance()->change_update_password(PasswordString.constData(),
+                                                     PasswordStringNew.constData());
               break;
-            case PasswordKind::ADMIN:
-              nm::instance()->change_admin_PIN(PasswordString.constData(), PasswordStringNew.constData());
+            case nitrokey::device::DeviceModel::PRO:
+              if (nm::instance()->get_major_firmware_version() > 0
+                  || ( nm::instance()->get_major_firmware_version() == 0
+                  && nm::instance()->get_minor_firmware_version() >= 11) ){
+                nm::instance()->change_firmware_update_password_pro(PasswordString.constData(),
+                                                       PasswordStringNew.constData());
+              } else {
+                // TODO inform this device is not capable of firmware updates
+                data["result"] = false;
+                data["update_feature"] = false;
+              }
               break;
-            case PasswordKind::UPDATE:
-              nm::instance()->change_update_password(PasswordString.constData(), PasswordStringNew.constData());
+            default:
+              qDebug() << "Unknown device";
               break;
-            case PasswordKind::RESET_USER:
-              nm::instance()->unlock_user_password(PasswordString.constData(), PasswordStringNew.constData());
-              break;
+            }
+            break;
+          case PasswordKind::RESET_USER:
+            nm::instance()->unlock_user_password(PasswordString.constData(),
+                                                 PasswordStringNew.constData());
+            break;
           }
           data["result"] = true;
         }
@@ -233,8 +259,12 @@ void DialogChangePassword::_changePassword(void) {
         return data;
       },
       [this](Data data){
-        bool result = data["result"].toBool();
-        if (!result){
+        const bool result = data["result"].toBool();
+        const bool update_feature = data["update_feature"].toBool();
+        if (!update_feature) {
+          csApplet()->warningBox(tr("This device does not have firmware update feature."));
+          done(true);
+        } else if (!result){
           csApplet()->warningBox(tr("Current password is not correct. Please retry."));
           this->UpdatePasswordRetry();
           this->clearFields();
