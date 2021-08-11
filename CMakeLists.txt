@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+OPTION(LIBNITROKEY_FORCE_BUNDLED "Do not use system provided libnitrokey" FALSE)
 OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build all libraries as shared")
 
@@ -224,7 +225,11 @@ find_package(PkgConfig)
 pkg_search_module(LIBNITROKEY ${_pkgconfig_REQUIRED} libnitrokey-1 >= ${LIBNK_MIN_VERSION})
 
 MESSAGE(STATUS "Required libnitrokey version: ${LIBNK_MIN_VERSION}")
-if(LIBNITROKEY_FOUND)
+if(LIBNITROKEY_FORCE_BUNDLED)
+    MESSAGE(WARNING "Using bundled libnitrokey forced")
+endif()
+
+if(LIBNITROKEY_FOUND AND !LIBNITROKEY_FORCE_BUNDLED)
   MESSAGE(STATUS "Found system libnitrokey (Cflags: '${LIBNITROKEY_CFLAGS}' Libs: '${LIBNITROKEY_LDFLAGS}')")
   if (BUILD_SHARED_LIBS)
     target_compile_options(nitrokey-app PRIVATE ${LIBNITROKEY_CFLAGS})
