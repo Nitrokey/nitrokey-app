@@ -170,13 +170,6 @@ Please try again</translation>
     </message>
 </context>
 <context>
-    <name>Authentication</name>
-    <message>
-        <source>Wrong PIN. Please try again.</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>DebugDialog</name>
     <message>
         <source>Debug Log</source>
@@ -313,6 +306,10 @@ Please try again</translation>
         <source>WARNING! If you lose your Firmware password, Nitrokey can’t be updated or reset!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>This device does not have firmware update feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LicenseDialog</name>
@@ -428,26 +425,6 @@ Please try again</translation>
         <translation></translation>
     </message>
     <message>
-        <source>Token ID</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Send token ID</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>MUI:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>TT:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>OMP:</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation></translation>
     </message>
@@ -465,7 +442,7 @@ Please try again</translation>
     </message>
     <message>
         <source>Send &apos;enter&apos; as the last keystroke</source>
-        <translation>Press &apos;enter&apos; as the last keystroke</translation>
+        <translation type="vanished">Press &apos;enter&apos; as the last keystroke</translation>
     </message>
     <message>
         <source>00000000000000000000</source>
@@ -477,30 +454,6 @@ Please try again</translation>
     </message>
     <message>
         <source>OTP Password settings</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Double press NumLock:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Double press CapsLock:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Double press ScrollLock:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Do nothing</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Send HOTP1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Send HOTP2</source>
         <translation></translation>
     </message>
     <message>
@@ -798,22 +751,6 @@ Select &quot;Initialize storage with random data&quot;</translation>
         <translation></translation>
     </message>
     <message>
-        <source>OMP part of Token ID</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>TT part of Token ID</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>MUI part of Token ID</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Erase Password Safe slot</source>
         <translation></translation>
     </message>
@@ -1064,6 +1001,14 @@ Select &quot;Initialize device&quot; option from context menu.</source>
         <translation type="unfinished">WARNING: Encrypted volume is not secure,
 Select &quot;Initialize device&quot; option from context menu.</translation>
     </message>
+    <message>
+        <source>Generated secret target length (bytes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show main window on start</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
@@ -1155,14 +1100,6 @@ Please change the PIN.</translation>
     </message>
 </context>
 <context>
-    <name>QApplication</name>
-    <message>
-        <source>Critical error encountered. Please restart application.
-Message: </source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>Stick20ResponseDialog</name>
     <message>
         <source>Progress</source>
@@ -1172,341 +1109,75 @@ Message: </source>
 <context>
     <name>StorageActions</name>
     <message>
-        <source>This activity locks your hidden volume. Do you want to proceed?
-To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Enabling encrypted volume</source>
-        <translation>Unlocking encrypted volume</translation>
+        <translation type="vanished">Unlocking encrypted volume</translation>
     </message>
     <message>
         <source>Encrypted volume enabled</source>
-        <translation>Encrypted volume unlocked</translation>
+        <translation type="vanished">Encrypted volume unlocked</translation>
     </message>
     <message>
         <source>Could not enable encrypted volume.</source>
-        <translation>Could not unlock encrypted volume.</translation>
+        <translation type="vanished">Could not unlock encrypted volume.</translation>
     </message>
     <message>
         <source>Wrong password.</source>
-        <translation>Wrong PIN.</translation>
-    </message>
-    <message>
-        <source>Status code: %1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>This activity locks your encrypted volume. Do you want to proceed?
-To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation></translation>
+        <translation type="vanished">Wrong PIN.</translation>
     </message>
     <message>
         <source>Disabling encrypted volume</source>
-        <translation>Locking encrypted volume</translation>
+        <translation type="vanished">Locking encrypted volume</translation>
     </message>
     <message>
         <source>Encrypted volume disabled</source>
-        <translation>Encrypted volume locked</translation>
-    </message>
-    <message>
-        <source>Could not lock encrypted volume.</source>
-        <translation></translation>
+        <translation type="vanished">Encrypted volume locked</translation>
     </message>
     <message>
         <source>Please enable the encrypted volume first.</source>
-        <translation>Please unlock the encrypted volume first.</translation>
+        <translation type="vanished">Please unlock the encrypted volume first.</translation>
     </message>
     <message>
         <source>Enabling hidden volume</source>
-        <translation>Unlocking hidden volume</translation>
+        <translation type="vanished">Unlocking hidden volume</translation>
     </message>
     <message>
         <source>Hidden volume enabled</source>
-        <translation>Hidden volume unlocked</translation>
+        <translation type="vanished">Hidden volume unlocked</translation>
     </message>
     <message>
         <source>Could not enable hidden volume.</source>
-        <translation>Could not unlock hidden volume.</translation>
+        <translation type="vanished">Could not unlock hidden volume.</translation>
     </message>
     <message>
         <source>Disabling hidden volume</source>
-        <translation>Locking hidden volume</translation>
+        <translation type="vanished">Locking hidden volume</translation>
     </message>
     <message>
         <source>Hidden volume disabled</source>
-        <translation>Hidden volume locked</translation>
-    </message>
-    <message>
-        <source>Could not lock hidden volume.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Locking device</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Device locked</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Could not lock device.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Device set in update mode</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Device could not be set in update mode.</source>
-        <translation></translation>
+        <translation type="vanished">Hidden volume locked</translation>
     </message>
     <message>
         <source>Firmware exported</source>
-        <translation type="unfinished">Firmware exported to unencrypted volume as &apos;firmware.bin&apos;</translation>
-    </message>
-    <message>
-        <source>Could not export firmware.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Generating new AES keys</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>New AES keys generated</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Keys could not be generated.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Could not clear SD card.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Communication issue.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Flag cannot be cleared.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Flag cleared.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cannot set unencrypted volume read-only</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Unencrypted volume set read-only</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cannot set unencrypted volume read-write</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Unencrypted volume set read-write</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Cannot set encrypted volume read-only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Encrypted volume set read-only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot set encrypted volume read-write</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Encrypted volume set read-write</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Functionality not implemented in current version</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hidden volume created</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Hidden volume could not be created.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>To complete the lock procedure, please remove and reconnect the Nitrokey.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Firmware exported to unencrypted volume as &apos;firmware.bin&apos;</translation>
     </message>
 </context>
 <context>
     <name>Tray</name>
     <message>
-        <source>Active (debug mode)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Active</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Nitrokey is not connected!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unlock password safe</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;OTP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Factory reset</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Change User PIN</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Change Admin PIN</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Debug</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Quit</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
-        <translation>&amp;Help</translation>
-    </message>
-    <message>
-        <source>&amp;About Nitrokey</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;OTP and Password safe</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Unlock encrypted volume</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Lock encrypted volume</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Unlock hidden volume</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Lock hidden volume</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Change Firmware Password</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Enable firmware update</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Export firmware to file</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Destroy encrypted data</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Initialize device</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Initialize storage with random data</source>
-        <translation></translation>
+        <translation type="vanished">&amp;Help</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-only</source>
-        <translation>&amp;Set unencrypted volume to read-only</translation>
+        <translation type="vanished">&amp;Set unencrypted volume to read-only</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-write</source>
-        <translation>&amp;Set unencrypted volume to read-write</translation>
-    </message>
-    <message>
-        <source>&amp;Set encrypted volume read-only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Set encrypted volume read-write</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Setup hidden volume</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
-        <translation></translation>
+        <translation type="vanished">&amp;Set unencrypted volume to read-write</translation>
     </message>
     <message>
         <source>&amp;Lock stick hardware</source>
-        <translation>&amp;Lock device hardware</translation>
-    </message>
-    <message>
-        <source>&amp;Reset User PIN</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Lock Device</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Smartcard or SD card are not ready</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Passwords</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>(empty)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Configure</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Special Configure</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Long operation in progress: %1%</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>&amp;Overview</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">&amp;Lock device hardware</translation>
     </message>
 </context>
 <context>
@@ -1524,47 +1195,7 @@ To avoid data loss, please unmount the partitions before proceeding.</source>
     <name>main</name>
     <message>
         <source>Nitrokey App - Manage your Nitrokey sticks</source>
-        <translation>Nitrokey App - Manage your Nitrokey devices</translation>
-    </message>
-    <message>
-        <source>Enable debug messages</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Save debug log to file with name &lt;log-file-name&gt; (experimental)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Save debug log to App&apos;s window (experimental)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Set delay between commands sent to device (in ms) to &lt;delay&gt;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Show additional information about binary</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Enable extra administrative functions</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>List available languages</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Load translation file with given name and store this choice in settings file.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Set debug level, 0-4</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Clear all application&apos;s settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Nitrokey App - Manage your Nitrokey devices</translation>
     </message>
 </context>
 <context>
