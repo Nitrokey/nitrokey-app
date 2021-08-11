@@ -242,6 +242,7 @@ else()
   MESSAGE("Using bundled libnitrokey")
   add_subdirectory (libnitrokey)
   include_directories(libnitrokey)
+  include_directories(libnitrokey/libnitrokey)
   target_link_libraries(nitrokey-app nitrokey)
 endif()
 

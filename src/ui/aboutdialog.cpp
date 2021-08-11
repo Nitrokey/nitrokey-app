@@ -34,6 +34,8 @@ using namespace AboutDialogUI;
 
 static const int invalid_value = 99;
 
+#include "libnitrokey/NK_C_API.h"
+
 AboutDialog::AboutDialog(QWidget *parent)
     : QDialog(parent), ui(nullptr) {
   ui = new Ui::AboutDialog;
@@ -58,8 +60,12 @@ AboutDialog::AboutDialog(QWidget *parent)
   ui->firmwareLabel->setDisabled(true);
   ui->serialEdit->setDisabled(true);
 
-  auto string = QString(GUI_VERSION);
-  ui->VersionLabel->setText(string);
+  auto app_version = QString(GUI_VERSION);
+  auto libnk_version = QStringLiteral("%1.%2").arg(
+          QString::number(NK_get_major_library_version()),
+          QString::number(NK_get_minor_library_version()));
+  auto version_string = QStringLiteral("%1 / %2").arg(app_version, libnk_version);
+  ui->VersionLabel->setText(version_string);
 
   ui->ButtonStickStatus->hide();
   hideWarning();
