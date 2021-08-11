@@ -553,6 +553,7 @@ void Tray::generateMenuForProDevice() {
     trayMenuSubConfigure->addAction(Stick10ActionChangeUserPIN);
     trayMenuSubConfigure->addAction(Stick10ActionChangeAdminPIN);
     trayMenuSubConfigure->addAction(Stick20ActionChangeUpdatePIN);
+    trayMenuSubConfigure->addAction(Stick20ActionEnableFirmwareUpdate);
 
     // Enable "reset user PIN" ?
     if (0 == libada::i()->getUserPasswordRetryCount())
