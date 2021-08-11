@@ -47,8 +47,6 @@ void issue_43_workaround();
 void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
                          QTranslator &myappTranslator);
 
-void configureRandomGenerator();
-
 void set_dark_theme();
 
 int main(int argc, char *argv[]) {
@@ -115,7 +113,6 @@ int main(int argc, char *argv[]) {
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
 
-  configureRandomGenerator();
   a.setQuitOnLastWindowClosed(false);
 
 
@@ -178,10 +175,6 @@ int main(int argc, char *argv[]) {
   return retcode;
 }
 
-void configureRandomGenerator() {
-    QDateTime local(QDateTime::currentDateTime());
-    qsrand(static_cast<uint> (local.currentMSecsSinceEpoch() % 2000000000));
-  }
 
 void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
                          QTranslator &myappTranslator) {
