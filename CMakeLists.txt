@@ -63,6 +63,7 @@ ELSE()
 ENDIF()
 
 add_definitions(-DGUI_VERSION="${PROJECT_VERSION}")
+add_definitions(-DLIBNK_MIN_VERSION="${LIBNK_MIN_VERSION}")
 
 
 # for out of source build

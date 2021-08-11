@@ -234,6 +234,8 @@ private:
   QString getOTPSecretCleaned(QString secret_input);
 
   void make_UI_enabled(bool enabled);
+
+  void check_libnitrokey_version();
 };
 
 class utf8FieldLengthValidator : public QValidator {
