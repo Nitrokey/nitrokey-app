@@ -1468,8 +1468,8 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
   bool isTOTP = slotNumber >= 0x20;
   auto temp_password_byte_array = tempPassword;
   if (isTOTP){
-    //run only once before first TOTP request
-    static bool time_synchronized = libada::i()->is_time_synchronized();
+    //run each time before a TOTP request
+    bool time_synchronized = libada::i()->is_time_synchronized();
     if (!time_synchronized) {
        bool user_wants_time_reset =
            csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + tr(Reset_nitrokeys_time),
