@@ -80,7 +80,7 @@ void Tray::delayedShowIndicator(){
  */
 void Tray::createIndicator() {
   trayIcon = new QSystemTrayIcon(this);
-  trayIcon->setIcon(GraphicsTools::loadColorize(":/images/new/icon_NK.svg", true));
+  trayIcon->setIcon(GraphicsTools::loadColorize(":/images/new/icon_NK.svg", true, true));
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
           SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
