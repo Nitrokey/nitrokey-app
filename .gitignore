@@ -1,7 +1,8 @@
+tmp
 *.pro.user*
-build
+build*
 release
-build-*-Debug
+cmake-build*
 *~
 *.o
 *.lst
