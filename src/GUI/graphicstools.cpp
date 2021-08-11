@@ -22,7 +22,7 @@ bool test_if_gnome(){
     return false;
 }
 
-QPixmap GraphicsTools::loadColorize(QString path, bool loadForTray, bool mainTrayIcon){
+QPixmap GraphicsTools::loadColorize(const QString& path, bool loadForTray, bool mainTrayIcon){
     QColor text_color;
     bool is_gnome = test_if_gnome();
 
