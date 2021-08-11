@@ -1095,6 +1095,10 @@ wybierz &quot;Zainicjalizuj urządzenie&quot; z menu kontekstowego.</translation
         <source>Show main window on start</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Old libnitrokey library detected. Some features may not work. Minimal supported version is %1, but the current one is %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
