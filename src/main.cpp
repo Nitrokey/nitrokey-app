@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <libnitrokey/log.h>
+#include <QStyleFactory>
 //#include <QSharedMemory>
 #include "src/version.h"
 #include "src/utils/bool_values.h"
@@ -47,6 +48,8 @@ void configureTranslator(const QApplication &a, const QCommandLineParser &parser
                          QTranslator &myappTranslator);
 
 void configureRandomGenerator();
+
+void set_dark_theme();
 
 int main(int argc, char *argv[]) {
   qRegisterMetaType<QMap<QString, QVariant>>();
@@ -152,6 +155,9 @@ int main(int argc, char *argv[]) {
     w.hideOnStartup();
   }
 
+  if(parser.isSet("dark-theme")){
+      set_dark_theme();
+  }
 
 //  csApplet()->setParent(&w);
   int retcode = -1;
@@ -280,6 +286,8 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
           "log-file-name"},
       {{"dw","debug-window"},
           QCoreApplication::translate("main", "Save debug log to App's window (experimental)") },
+      {"dark-theme",
+          QCoreApplication::translate("main", "Set dark theme")},
       {{"dl","debug-level"},
           QCoreApplication::translate("main", "Set debug level, 0-4"),
           "debug-level-int"},
@@ -328,3 +336,14 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
   return false;
 }
 
+
+void set_dark_theme() {
+    QApplication::setStyle(QStyleFactory::create("Fusion"));
+    QPalette p;
+    p = qApp->palette();
+    p.setColor(QPalette::Window, QColor(53,53,53));
+    p.setColor(QPalette::Button, QColor(53,53,53));
+    p.setColor(QPalette::Highlight, QColor(142,45,197));
+    p.setColor(QPalette::ButtonText, QColor(255,255,255));
+    qApp->setPalette(p);
+}
