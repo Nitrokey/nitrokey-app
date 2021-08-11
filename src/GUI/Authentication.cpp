@@ -119,7 +119,7 @@ void Authentication::clearTemporaryPassword(bool force){
 QByteArray Authentication::generateTemporaryPassword() const {
   static std::random_device rd;
   static std::mt19937 mt(rd());
-  static std::uniform_int_distribution<unsigned char> dist(0, 0xFF);
+  static std::uniform_int_distribution<unsigned char> dist(1, 0xFF);
 
   auto temporary_password_length = 25;
   QByteArray tmp_p(temporary_password_length, 0);
