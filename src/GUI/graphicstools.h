@@ -8,7 +8,7 @@
 class GraphicsTools
 {
 public:
-    static QPixmap loadColorize(QString path, bool loadForTray = false, bool mainTrayIcon = false);
+    static QPixmap loadColorize(const QString &path, bool loadForTray = false, bool mainTrayIcon = false);
     static QImage applyEffectToImage(QImage src, QGraphicsEffect *effect);
 };
 
