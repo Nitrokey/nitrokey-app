@@ -338,6 +338,7 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
 
 
 void set_dark_theme() {
+    //    https://stackoverflow.com/questions/48256772/dark-theme-for-qt-widgets
     qApp->setStyle(QStyleFactory::create("Fusion"));
 
     QPalette darkPalette;
@@ -362,6 +363,7 @@ void set_dark_theme() {
 }
 
 void set_dark_theme2() {
+    //    https://stackoverflow.com/questions/48256772/dark-theme-for-qt-widgets
     QApplication::setStyle(QStyleFactory::create("Fusion"));
     QPalette p;
     p = qApp->palette();
@@ -370,4 +372,10 @@ void set_dark_theme2() {
     p.setColor(QPalette::Highlight, QColor(142,45,197));
     p.setColor(QPalette::ButtonText, QColor(255,255,255));
     qApp->setPalette(p);
+}
+
+void set_dark_theme3(){
+//  further resources
+//  https://github.com/ColinDuquesnoy/QDarkStyleSheet
+//  https://github.com/albertosottile/darkdetect
 }
