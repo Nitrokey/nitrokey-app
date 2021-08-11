@@ -381,8 +381,19 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
                          [&success](){ //FIXME use secure string
                            local_sync();
                            auto m = nitrokey::NitrokeyManager::instance();
-                           m->enable_firmware_update("12345678");
-                           success = true;
+                             if (m->get_connected_device_model() == nitrokey::device::DeviceModel::STORAGE) {
+                                 m->enable_firmware_update("12345678");
+                                 success = true;
+                             } else {
+                                 try{
+                                     m->enable_firmware_update_pro("12345678");
+                                     success = false;
+                                 }
+                                 catch (DeviceCommunicationException &e) {
+                                     // losing connection to the device is expected once it switches to bootloader
+                                     success = true;
+                                 }
+                             }
                          },[](){});
 
   if(success) return;
@@ -400,6 +411,11 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
          local_sync();
          auto m = nitrokey::NitrokeyManager::instance();
          m->enable_firmware_update(s.c_str());
+         if (m->get_connected_device_model() == nitrokey::device::DeviceModel::STORAGE) {
+             m->enable_firmware_update(s.c_str());
+         } else {
+             m->enable_firmware_update_pro(s.c_str());
+         }
        },[](){});
 }
 
