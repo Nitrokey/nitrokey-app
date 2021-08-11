@@ -320,7 +320,7 @@ void MainWindow::manageStartPage(){
 #include "libnitrokey/NK_C_API.h"
 
 void MainWindow::check_libnitrokey_version(){
-    const auto msg = tr("Old libnitrokey library detected. Some features may not work. "
+    const auto msg_template = tr("Old libnitrokey library detected. Some features may not work. "
                   "Minimal supported version is %1, but the current one is %2.");
 
     const unsigned int current_major = NK_get_major_library_version();
@@ -328,18 +328,18 @@ void MainWindow::check_libnitrokey_version(){
     const QStringList &libnk_version_list = QStringLiteral(LIBNK_MIN_VERSION).split(".");
     const unsigned int min_supported_major = libnk_version_list[0].toLong();
     const unsigned int min_supported_minor = libnk_version_list[1].toLong();
-    const bool too_old = current_major < min_supported_major
-            || (current_major == min_supported_major && current_minor < min_supported_minor);
+    const bool libnitrokey_too_old = current_major < min_supported_major
+                                     || (current_major == min_supported_major && current_minor < min_supported_minor);
 
-    if (!too_old) {
+    if (!libnitrokey_too_old) {
         return;
     }
 
-    const auto msg2 = msg.arg(LIBNK_MIN_VERSION, QStringLiteral("%1.%2").arg(QString::number(current_major), QString::number(current_minor)));
-    tray.showTrayMessage(msg2);
-    ui->statusBar->showMessage(msg2);
-    qWarning() << msg2;
-    csApplet()->warningBox(msg2);
+    const auto final_message = msg_template.arg(LIBNK_MIN_VERSION, QStringLiteral("%1.%2").arg(QString::number(current_major), QString::number(current_minor)));
+    tray.showTrayMessage(final_message);
+    ui->statusBar->showMessage(final_message);
+    qWarning() << final_message;
+    csApplet()->warningBox(final_message);
 }
 
 void MainWindow::first_run(){
