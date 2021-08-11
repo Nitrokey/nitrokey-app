@@ -236,7 +236,10 @@ private:
   void make_UI_enabled(bool enabled);
 
   void check_libnitrokey_version();
+
 };
+
+quint32 get_random();
 
 class utf8FieldLengthValidator : public QValidator {
   Q_OBJECT

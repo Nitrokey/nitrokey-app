@@ -985,7 +985,7 @@ void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
 
 void MainWindow::on_setToRandomButton_clicked() {
   quint64 counter;
-  counter = qrand();
+  counter = get_random();
   if (libada::i()->isStorageDeviceConnected()) {
     const int maxDigits = 7;
     counter = counter % ((quint64)pow(10, maxDigits));
@@ -1112,6 +1112,7 @@ void MainWindow::on_eraseButton_clicked() {
 
 quint32 get_random(){
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+  // will be securely seeded by Qt
   return QRandomGenerator::global()->generate();
 #else
   static std::random_device dev;
