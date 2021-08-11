@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.2" language="fr">
+<TS version="2.1" language="fr">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -13,15 +13,15 @@
     </message>
     <message>
         <source>App version:</source>
-        <translation>Version de l&apos;application :</translation>
+        <translation>Version de l&apos;application&#xa0;:</translation>
     </message>
     <message>
         <source>Firmware version:</source>
-        <translation>Version du micrologiciel :</translation>
+        <translation>Version du micrologiciel&#xa0;:</translation>
     </message>
     <message>
         <source>Card serial number:</source>
-        <translation>Numéro de série de la carte :</translation>
+        <translation>Numéro de série de la carte&#xa0;:</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;Copyright %1 by NitrokeyUG. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;This software is licensed under the &lt;/span&gt;&lt;a href=&quot;https://www.gnu.org/licenses/&quot;&gt;&lt;span style=&quot; font-size:10pt; font-style:italic; text-decoration: underline; color:#c80636;&quot;&gt;GNU General Public License v3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:10pt; font-style:italic;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://nitrokey.com&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#c80636;&quot;&gt;www.nitrokey.com&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -37,7 +37,7 @@
     </message>
     <message>
         <source>Hidden Volume:</source>
-        <translation>Volume caché :</translation>
+        <translation>Volume caché&#xa0;:</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;color:#c80636&quot;&gt;Warning&lt;/span&gt;</source>
@@ -46,7 +46,7 @@
     <message>
         <source>Stick is not secure!
 Select Init keys.</source>
-        <translation>La clef USB n&apos;est pas sécurisée !
+        <translation>La clef USB n&apos;est pas sécurisée&#xa0;!
 Sélectionner les clefs d&apos;initialisation.</translation>
     </message>
     <message>
@@ -59,23 +59,23 @@ Sélectionner les clefs d&apos;initialisation.</translation>
     </message>
     <message>
         <source>SD ID:</source>
-        <translation>SD ID :</translation>
+        <translation>SD ID&#xa0;:</translation>
     </message>
     <message>
         <source>Unencrypted volume:</source>
-        <translation>Volume non chiffré :</translation>
+        <translation>Volume non chiffré&#xa0;:</translation>
     </message>
     <message>
         <source>Encrypted volume:</source>
-        <translation>Volume chiffré :</translation>
+        <translation>Volume chiffré&#xa0;:</translation>
     </message>
     <message>
         <source>Password retry counters:</source>
-        <translation>Compteur d&apos;essai de PIN :</translation>
+        <translation>Compteur d&apos;essai de PIN&#xa0;:</translation>
     </message>
     <message>
         <source>Admin:</source>
-        <translation>Administrateur :</translation>
+        <translation>Administrateur&#xa0;:</translation>
     </message>
     <message>
         <source>Logo</source>
@@ -83,7 +83,7 @@ Sélectionner les clefs d&apos;initialisation.</translation>
     </message>
     <message>
         <source>User:</source>
-        <translation>Utilisateur :</translation>
+        <translation>Utilisateur&#xa0;:</translation>
     </message>
     <message>
         <source>Detailed Status</source>
@@ -149,7 +149,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Storage Capacity:</source>
-        <translation>Capacité de stockage :</translation>
+        <translation>Capacité de stockage&#xa0;:</translation>
     </message>
     <message>
         <source>%1 GB</source>
@@ -180,7 +180,7 @@ Merci de réessayer</translation>
     <name>Authentication</name>
     <message>
         <source>Wrong PIN. Please try again.</source>
-        <translation>Mauvais PIN. Merci de réessayer.</translation>
+        <translation type="vanished">Mauvais PIN. Merci de réessayer.</translation>
     </message>
 </context>
 <context>
@@ -202,7 +202,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Retry count left:</source>
-        <translation>Essais restant :</translation>
+        <translation>Essais restant&#xa0;:</translation>
     </message>
     <message>
         <source>Change Firmware Password</source>
@@ -222,11 +222,11 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Current User PIN:</source>
-        <translation>PIN utilisateur courant :</translation>
+        <translation>PIN utilisateur courant&#xa0;:</translation>
     </message>
     <message>
         <source>New User PIN:</source>
-        <translation>Nouveau PIN utilisateur :</translation>
+        <translation>Nouveau PIN utilisateur&#xa0;:</translation>
     </message>
     <message>
         <source>Set Admin PIN</source>
@@ -234,7 +234,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Current Admin PIN:</source>
-        <translation>PIN administrateur courant :</translation>
+        <translation>PIN administrateur courant&#xa0;:</translation>
     </message>
     <message>
         <source>Reset User PIN</source>
@@ -242,7 +242,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Current Firmware Password:</source>
-        <translation>Mot de passe courant du micrologiciel :</translation>
+        <translation>Mot de passe courant du micrologiciel&#xa0;:</translation>
     </message>
     <message>
         <source>Show password</source>
@@ -320,6 +320,10 @@ Merci de réessayer</translation>
         <source>WARNING! If you lose your Firmware password, Nitrokey can’t be updated or reset!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>This device does not have firmware update feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LicenseDialog</name>
@@ -348,7 +352,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Slot:</source>
-        <translation>Emplacement :</translation>
+        <translation>Emplacement&#xa0;:</translation>
     </message>
     <message>
         <source>Erase Slot</source>
@@ -356,7 +360,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Nom :</translation>
+        <translation>Nom&#xa0;:</translation>
     </message>
     <message>
         <source>Secret key</source>
@@ -368,7 +372,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Secret Key:</source>
-        <translation>Clef secrète :</translation>
+        <translation>Clef secrète&#xa0;:</translation>
     </message>
     <message>
         <source>********************************</source>
@@ -392,7 +396,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Input format:</source>
-        <translation>Format d&apos;entrée :</translation>
+        <translation>Format d&apos;entrée&#xa0;:</translation>
     </message>
     <message>
         <source>Hex</source>
@@ -400,7 +404,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
-        <translation>Note : les 2&lt;sup&gt;ds&lt;/sup&gt; facteurs d&apos;authentification ne sont pas protégés contre les attaques physique. Vous devrez changer tous les secrets OTP si vous perdez votre Nitrokey.</translation>
+        <translation>Note&#xa0;: les 2&lt;sup&gt;ds&lt;/sup&gt; facteurs d&apos;authentification ne sont pas protégés contre les attaques physique. Vous devrez changer tous les secrets OTP si vous perdez votre Nitrokey.</translation>
     </message>
     <message>
         <source>Parameters</source>
@@ -424,35 +428,19 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Moving factor seed:</source>
-        <translation>Point de départ du facteur d&apos;évolution :</translation>
+        <translation>Point de départ du facteur d&apos;évolution&#xa0;:</translation>
     </message>
     <message>
         <source>HOTP length:</source>
-        <translation>Longueur de l&apos;HOTP :</translation>
+        <translation>Longueur de l&apos;HOTP&#xa0;:</translation>
     </message>
     <message>
         <source>TOTP interval:</source>
-        <translation>Intervalle du TOTP :</translation>
-    </message>
-    <message>
-        <source>Token ID</source>
-        <translation></translation>
+        <translation>Intervalle du TOTP&#xa0;:</translation>
     </message>
     <message>
         <source>Send token ID</source>
-        <translation>Envoyer le token ID</translation>
-    </message>
-    <message>
-        <source>MUI:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>TT:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>OMP:</source>
-        <translation></translation>
+        <translation type="vanished">Envoyer le token ID</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -464,7 +452,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>(Recommendation: Use TOTP for web applications and HOTP for local applications)</source>
-        <translation>(Recommandation : utilisez un TOTP pour des applications web et un HOTP pour des applications locales)</translation>
+        <translation>(Recommandation&#xa0;: utilisez un TOTP pour des applications web et un HOTP pour des applications locales)</translation>
     </message>
     <message>
         <source>Base32</source>
@@ -472,7 +460,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Send &apos;enter&apos; as the last keystroke</source>
-        <translation>Appuyez sur &apos;Entrée&apos; en dernière touche</translation>
+        <translation type="vanished">Appuyez sur &apos;Entrée&apos; en dernière touche</translation>
     </message>
     <message>
         <source>00000000000000000000</source>
@@ -488,27 +476,27 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Double press NumLock:</source>
-        <translation>Appuyez deux fois sur VerrNum :</translation>
+        <translation type="vanished">Appuyez deux fois sur VerrNum&#xa0;:</translation>
     </message>
     <message>
         <source>Double press CapsLock:</source>
-        <translation>Appuyez deux fois sur VerrMaj :</translation>
+        <translation type="vanished">Appuyez deux fois sur VerrMaj&#xa0;:</translation>
     </message>
     <message>
         <source>Double press ScrollLock:</source>
-        <translation>Appuyez deux fois sur ScrollLock :</translation>
+        <translation type="vanished">Appuyez deux fois sur ScrollLock&#xa0;:</translation>
     </message>
     <message>
         <source>Do nothing</source>
-        <translation>Ne rien faire</translation>
+        <translation type="vanished">Ne rien faire</translation>
     </message>
     <message>
         <source>Send HOTP1</source>
-        <translation>Envoyer HOTP1</translation>
+        <translation type="vanished">Envoyer HOTP1</translation>
     </message>
     <message>
         <source>Send HOTP2</source>
-        <translation>Envoyer HOTP2</translation>
+        <translation type="vanished">Envoyer HOTP2</translation>
     </message>
     <message>
         <source>Password Safe</source>
@@ -516,15 +504,15 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation>Mot de passe&#xa0;:</translation>
     </message>
     <message>
         <source>Login name:</source>
-        <translation>Identifiant :</translation>
+        <translation>Identifiant&#xa0;:</translation>
     </message>
     <message>
         <source>Slot name:</source>
-        <translation>Nom de l&apos;emplacement :</translation>
+        <translation>Nom de l&apos;emplacement&#xa0;:</translation>
     </message>
     <message>
         <source>Static password 0</source>
@@ -536,7 +524,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Characters left:</source>
-        <translation>Caractères restant :</translation>
+        <translation>Caractères restant&#xa0;:</translation>
     </message>
     <message>
         <source>...</source>
@@ -568,7 +556,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>TOTP length:</source>
-        <translation>Longueur du TOTP :</translation>
+        <translation>Longueur du TOTP&#xa0;:</translation>
     </message>
     <message>
         <source>Wrong PIN. Please try again.</source>
@@ -596,11 +584,11 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>Error writing configuration!</source>
-        <translation>Une erreur est survenue durant l&apos;écriture de la configuration !</translation>
+        <translation>Une erreur est survenue durant l&apos;écriture de la configuration&#xa0;!</translation>
     </message>
     <message>
         <source>Nitrokey is not connected!</source>
-        <translation>La Nitrokey n&apos;est pas connectée !</translation>
+        <translation>La Nitrokey n&apos;est pas connectée&#xa0;!</translation>
     </message>
     <message>
         <source>One-time password has been copied to clipboard.</source>
@@ -608,7 +596,7 @@ Merci de réessayer</translation>
     </message>
     <message>
         <source>WARNING: Are you sure you want to erase the slot?</source>
-        <translation>ATTENTION : êtes-vous sûr de vouloir effacer cet emplacement ?</translation>
+        <translation>ATTENTION&#xa0;: êtes-vous sûr de vouloir effacer cet emplacement&#xa0;?</translation>
     </message>
     <message>
         <source>Slot has been erased successfully.</source>
@@ -648,15 +636,15 @@ Merci de réessayer</translation>
 The time of your computer and Nitrokey are out of sync. Your computer may be configured with a wrong time or your Nitrokey may have been attacked. If an attacker or malware could have used your Nitrokey you should reset the secrets of your configured One Time Passwords. If your computer&apos;s time is wrong, please configure it correctly and reset the time of your Nitrokey.
 
 Reset Nitrokey&apos;s time?</source>
-        <translation>ATTENTION !
+        <translation>ATTENTION&#xa0;!
 
 Les heures de votre ordinateur et de votre Nitrokey ne sont plus synchronisées. Votre ordinateur est peut-être configuré avec une mauvaise heure ou votre Nitrokey peut avoir été attaquée. Si un attaquant ou un malware a été dans la possibilité d&apos;utiliser votre Nitrokey, vous devriez réinitialiser les secrets de vos mots de passe temporaires déjà configurés. Si c&apos;est l&apos;heure de votre ordinateur qui est fausse, merci de la configurer correctement puis réinitialisez l&apos;heure de votre Nitrokey.
 
-Réinitialiser l&apos;heure de la Nitrokey ?</translation>
+Réinitialiser l&apos;heure de la Nitrokey&#xa0;?</translation>
     </message>
     <message>
         <source>Time reset!</source>
-        <translation>Réinitialisation de l&apos;heure !</translation>
+        <translation>Réinitialisation de l&apos;heure&#xa0;!</translation>
     </message>
     <message>
         <source>Nitrokey connected</source>
@@ -665,7 +653,7 @@ Réinitialiser l&apos;heure de la Nitrokey ?</translation>
     <message>
         <source>Warning: Encrypted volume is not secure,
 Select &quot;Initialize storage with random data&quot;</source>
-        <translation>Attention : le volume chiffré n&apos;est pas sécurisé,
+        <translation>Attention&#xa0;: le volume chiffré n&apos;est pas sécurisé,
 Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données aléatoires&quot;</translation>
     </message>
     <message>
@@ -702,7 +690,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>To handle this functionality application will keep your user PIN in memory. Do you want to continue?</source>
-        <translation>Pour manier cette fonctionnalité, l&apos;application devra conserver votre PIN utilisateur en mémoire. Voulez-vous continuer ?</translation>
+        <translation>Pour manier cette fonctionnalité, l&apos;application devra conserver votre PIN utilisateur en mémoire. Voulez-vous continuer&#xa0;?</translation>
     </message>
     <message>
         <source>Nitrokey Pro v0.7 does not support secrets starting from null byte. Please change the secret.</source>
@@ -718,11 +706,11 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Select slot type: TOTP</source>
-        <translation>Sélectionner un emplacement de type : TOTP</translation>
+        <translation>Sélectionner un emplacement de type&#xa0;: TOTP</translation>
     </message>
     <message>
         <source>Select slot type: HOTP</source>
-        <translation>Sélectionner un emplacement de type : HOTP</translation>
+        <translation>Sélectionner un emplacement de type&#xa0;: HOTP</translation>
     </message>
     <message>
         <source>Select OTP slot number</source>
@@ -742,7 +730,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Note: 2nd factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
-        <translation>Note : les 2ds facteurs d&apos;authentification ne sont pas protégés contre les attaques physique. Vous devrez changer tous les secrets OTP si vous perdez votre Nitrokey.</translation>
+        <translation>Note&#xa0;: les 2ds facteurs d&apos;authentification ne sont pas protégés contre les attaques physique. Vous devrez changer tous les secrets OTP si vous perdez votre Nitrokey.</translation>
     </message>
     <message>
         <source>After generating a random secret, you would need to copy it into your application or service where you want to login to.</source>
@@ -750,19 +738,19 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Example: &quot;ZR3M5I...&quot;</source>
-        <translation>Exemple : &quot;ZR3MSI…&quot;</translation>
+        <translation>Exemple&#xa0;: &quot;ZR3MSI…&quot;</translation>
     </message>
     <message>
         <source>Secret input format: base32</source>
-        <translation>Format d&apos;entré du secret : base32</translation>
+        <translation>Format d&apos;entré du secret&#xa0;: base32</translation>
     </message>
     <message>
         <source>Example: &quot;A3911C05...&quot; (remove any 0x prefix)</source>
-        <translation>Exemple : &quot;A3911C05...&quot; (retirez le préfixe 0x s&apos;il y a lieu)</translation>
+        <translation>Exemple&#xa0;: &quot;A3911C05...&quot; (retirez le préfixe 0x s&apos;il y a lieu)</translation>
     </message>
     <message>
         <source>Secret input format: hex</source>
-        <translation>Format d&apos;entré du secret : hex</translation>
+        <translation>Format d&apos;entré du secret&#xa0;: hex</translation>
     </message>
     <message>
         <source>Entered OTP &apos;Secret Key&apos; string is longer than supported by this device</source>
@@ -786,11 +774,11 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>OTP code length: 6 digits</source>
-        <translation>Longueur du code OTP : 6 chiffres</translation>
+        <translation>Longueur du code OTP&#xa0;: 6 chiffres</translation>
     </message>
     <message>
         <source>OTP code length:  8 digits</source>
-        <translation>Longueur du code OTP : 8 chiffres</translation>
+        <translation>Longueur du code OTP&#xa0;: 8 chiffres</translation>
     </message>
     <message>
         <source>TOTP interval value</source>
@@ -798,19 +786,19 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>OMP part of Token ID</source>
-        <translation>Partie OMP du Token ID</translation>
+        <translation type="vanished">Partie OMP du Token ID</translation>
     </message>
     <message>
         <source>TT part of Token ID</source>
-        <translation>Partie TT du Token ID</translation>
+        <translation type="vanished">Partie TT du Token ID</translation>
     </message>
     <message>
         <source>MUI part of Token ID</source>
-        <translation>Partie MUI du Token ID</translation>
+        <translation type="vanished">Partie MUI du Token ID</translation>
     </message>
     <message>
         <source>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</source>
-        <translation>Paramètres d&apos;insertion d&apos;un code HOTP à l&apos;aide d&apos;un raccourci clavier (clavier USB seulement)</translation>
+        <translation type="vanished">Paramètres d&apos;insertion d&apos;un code HOTP à l&apos;aide d&apos;un raccourci clavier (clavier USB seulement)</translation>
     </message>
     <message>
         <source>Erase Password Safe slot</source>
@@ -858,7 +846,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef avec des données
     </message>
     <message>
         <source>Reset Nitrokey&apos;s time?</source>
-        <translation>Réinitialiser l&apos;heure de la Nitrokey ?</translation>
+        <translation>Réinitialiser l&apos;heure de la Nitrokey&#xa0;?</translation>
     </message>
     <message>
         <source>Locking device</source>
@@ -1068,8 +1056,16 @@ If problem will occur again please:
     <message>
         <source>Warning: Encrypted volume is not secure,
 Select &quot;Initialize device&quot; option from context menu.</source>
-        <translation>Attention : le volume chiffré n&apos;est pas sécurisé,
+        <translation>Attention&#xa0;: le volume chiffré n&apos;est pas sécurisé,
 Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le menu contextuel.</translation>
+    </message>
+    <message>
+        <source>Generated secret target length (bytes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show main window on start</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1080,7 +1076,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le men
     </message>
     <message>
         <source>Enter card password:</source>
-        <translation>Entrez le mot de passe de la carte :</translation>
+        <translation>Entrez le mot de passe de la carte&#xa0;:</translation>
     </message>
     <message>
         <source>Show password</source>
@@ -1096,7 +1092,7 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le men
     </message>
     <message>
         <source>Your PIN is too long! Use not more than 30 characters.</source>
-        <translation>Votre PIN est trop long ! N&apos;utilisez pas plus de 30 caractères.</translation>
+        <translation>Votre PIN est trop long&#xa0;! N&apos;utilisez pas plus de 30 caractères.</translation>
     </message>
     <message>
         <source>Your PIN is too short. Use at least 6 characters.</source>
@@ -1126,7 +1122,7 @@ Merci de changer le PIN.</translation>
     </message>
     <message>
         <source>User PIN:</source>
-        <translation>PIN utilisateur :</translation>
+        <translation>PIN utilisateur&#xa0;:</translation>
     </message>
     <message>
         <source>Enter admin PIN</source>
@@ -1134,7 +1130,7 @@ Merci de changer le PIN.</translation>
     </message>
     <message>
         <source>Admin PIN:</source>
-        <translation>PIN administrateur :</translation>
+        <translation>PIN administrateur&#xa0;:</translation>
     </message>
     <message>
         <source>Enter Firmware Password</source>
@@ -1142,7 +1138,7 @@ Merci de changer le PIN.</translation>
     </message>
     <message>
         <source>Enter Firmware Password:</source>
-        <translation>Entrez le mot de passe du micrologiciel :</translation>
+        <translation>Entrez le mot de passe du micrologiciel&#xa0;:</translation>
     </message>
     <message>
         <source>Enter password for hidden volume</source>
@@ -1150,7 +1146,7 @@ Merci de changer le PIN.</translation>
     </message>
     <message>
         <source>Enter password for hidden volume:</source>
-        <translation>Entrez le mot de passe du volume caché :</translation>
+        <translation>Entrez le mot de passe du volume caché&#xa0;:</translation>
     </message>
     <message>
         <source>Would you like to so now?</source>
@@ -1166,8 +1162,8 @@ Merci de changer le PIN.</translation>
     <message>
         <source>Critical error encountered. Please restart application.
 Message: </source>
-        <translation>Une erreur critique est survenue. Merci de redémarrer l&apos;application.
-Message : </translation>
+        <translation type="vanished">Une erreur critique est survenue. Merci de redémarrer l&apos;application.
+Message&#xa0;: </translation>
     </message>
 </context>
 <context>
@@ -1182,341 +1178,321 @@ Message : </translation>
     <message>
         <source>This activity locks your hidden volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>Cette activité verrouille votre volume caché. Êtes vous sûr de vouloir continuer ?
+        <translation type="vanished">Cette activité verrouille votre volume caché. Êtes vous sûr de vouloir continuer&#xa0;?
 Pour éviter toute perte de données, merci de démonter les partitions avant de continuer.</translation>
     </message>
     <message>
         <source>Enabling encrypted volume</source>
-        <translation>Activation du volume chiffré</translation>
+        <translation type="vanished">Activation du volume chiffré</translation>
     </message>
     <message>
         <source>Encrypted volume enabled</source>
-        <translation>Volume chiffré activé</translation>
+        <translation type="vanished">Volume chiffré activé</translation>
     </message>
     <message>
         <source>Could not enable encrypted volume.</source>
-        <translation>Impossible d&apos;activer le volume chiffré.</translation>
+        <translation type="vanished">Impossible d&apos;activer le volume chiffré.</translation>
     </message>
     <message>
         <source>Wrong password.</source>
-        <translation>Mauvais mot de passe.</translation>
+        <translation type="vanished">Mauvais mot de passe.</translation>
     </message>
     <message>
         <source>Status code: %1</source>
-        <translation>Code de statut : %1</translation>
+        <translation type="vanished">Code de statut&#xa0;: %1</translation>
     </message>
     <message>
         <source>This activity locks your encrypted volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>Cette activité verrouille votre volume chiffré. Êtes vous sûr de vouloir continuer ?
+        <translation type="vanished">Cette activité verrouille votre volume chiffré. Êtes vous sûr de vouloir continuer&#xa0;?
 Pour éviter toute perte de données, merci de démonter les partitions avant de continuer.</translation>
     </message>
     <message>
         <source>Disabling encrypted volume</source>
-        <translation>Désactivation du volume chiffré</translation>
+        <translation type="vanished">Désactivation du volume chiffré</translation>
     </message>
     <message>
         <source>Encrypted volume disabled</source>
-        <translation>Volume chiffré désactivé</translation>
+        <translation type="vanished">Volume chiffré désactivé</translation>
     </message>
     <message>
         <source>Could not lock encrypted volume.</source>
-        <translation>Impossible de verrouiller le volume chiffré.</translation>
+        <translation type="vanished">Impossible de verrouiller le volume chiffré.</translation>
     </message>
     <message>
         <source>Please enable the encrypted volume first.</source>
-        <translation>Merci d&apos;activer le volume chiffré avant toute chose.</translation>
+        <translation type="vanished">Merci d&apos;activer le volume chiffré avant toute chose.</translation>
     </message>
     <message>
         <source>Enabling hidden volume</source>
-        <translation>Activation du volume caché</translation>
+        <translation type="vanished">Activation du volume caché</translation>
     </message>
     <message>
         <source>Hidden volume enabled</source>
-        <translation>Volume caché activé</translation>
+        <translation type="vanished">Volume caché activé</translation>
     </message>
     <message>
         <source>Could not enable hidden volume.</source>
-        <translation>Impossible d&apos;activer le volume caché.</translation>
+        <translation type="vanished">Impossible d&apos;activer le volume caché.</translation>
     </message>
     <message>
         <source>Disabling hidden volume</source>
-        <translation>Désactivation du volume caché</translation>
+        <translation type="vanished">Désactivation du volume caché</translation>
     </message>
     <message>
         <source>Hidden volume disabled</source>
-        <translation>Volume caché désactivé</translation>
+        <translation type="vanished">Volume caché désactivé</translation>
     </message>
     <message>
         <source>Could not lock hidden volume.</source>
-        <translation>Impossible de verrouiller le volume caché.</translation>
+        <translation type="vanished">Impossible de verrouiller le volume caché.</translation>
     </message>
     <message>
         <source>Locking device</source>
-        <translation>Verrouillage de la clef</translation>
+        <translation type="vanished">Verrouillage de la clef</translation>
     </message>
     <message>
         <source>Device locked</source>
-        <translation>Clef verrouillée</translation>
+        <translation type="vanished">Clef verrouillée</translation>
     </message>
     <message>
         <source>Could not lock device.</source>
-        <translation>Impossible de verrouiller la clef.</translation>
+        <translation type="vanished">Impossible de verrouiller la clef.</translation>
     </message>
     <message>
         <source>Device set in update mode</source>
-        <translation>La clef est en mode de mise à jour</translation>
+        <translation type="vanished">La clef est en mode de mise à jour</translation>
     </message>
     <message>
         <source>Device could not be set in update mode.</source>
-        <translation>Impossible de mettre la clef en mode de mise à jour.</translation>
+        <translation type="vanished">Impossible de mettre la clef en mode de mise à jour.</translation>
     </message>
     <message>
         <source>Firmware exported</source>
-        <translation>Le micrologiciel a été exporté</translation>
+        <translation type="vanished">Le micrologiciel a été exporté</translation>
     </message>
     <message>
         <source>Could not export firmware.</source>
-        <translation>Impossible d&apos;exporter le micrologiciel.</translation>
+        <translation type="vanished">Impossible d&apos;exporter le micrologiciel.</translation>
     </message>
     <message>
         <source>WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?</source>
-        <translation>ATTENTION : générer de nouvelles clefs AES va détruire les volumes chiffrés, cachés et l&apos;espace sécurisé des mots de passe ! Continuer ?</translation>
+        <translation type="vanished">ATTENTION&#xa0;: générer de nouvelles clefs AES va détruire les volumes chiffrés, cachés et l&apos;espace sécurisé des mots de passe&#xa0;! Continuer&#xa0;?</translation>
     </message>
     <message>
         <source>Generating new AES keys</source>
-        <translation>Génération de nouvelles clefs AES</translation>
+        <translation type="vanished">Génération de nouvelles clefs AES</translation>
     </message>
     <message>
         <source>New AES keys generated</source>
-        <translation>Les nouvelles clefs AES ont été générées</translation>
+        <translation type="vanished">Les nouvelles clefs AES ont été générées</translation>
     </message>
     <message>
         <source>Keys could not be generated.</source>
-        <translation>Impossible de générer les clefs.</translation>
+        <translation type="vanished">Impossible de générer les clefs.</translation>
     </message>
     <message>
         <source>Could not clear SD card.</source>
-        <translation>Impossible de nettoyer la carte SD.</translation>
+        <translation type="vanished">Impossible de nettoyer la carte SD.</translation>
     </message>
     <message>
         <source>Communication issue.</source>
-        <translation>Erreur de communication.</translation>
+        <translation type="vanished">Erreur de communication.</translation>
     </message>
     <message>
         <source>Flag cannot be cleared.</source>
-        <translation>Les drapeaux n&apos;ont pas pu être nettoyés.</translation>
+        <translation type="vanished">Les drapeaux n&apos;ont pas pu être nettoyés.</translation>
     </message>
     <message>
         <source>Flag cleared.</source>
-        <translation>Drapeaux nettoyés.</translation>
+        <translation type="vanished">Drapeaux nettoyés.</translation>
     </message>
     <message>
         <source>Cannot set unencrypted volume read-only</source>
-        <translation>Impossible de placer le volume déchiffré en lecture seule</translation>
+        <translation type="vanished">Impossible de placer le volume déchiffré en lecture seule</translation>
     </message>
     <message>
         <source>Unencrypted volume set read-only</source>
-        <translation>Le volume déchiffré a été placé en lecture seule</translation>
+        <translation type="vanished">Le volume déchiffré a été placé en lecture seule</translation>
     </message>
     <message>
         <source>Cannot set unencrypted volume read-write</source>
-        <translation>Impossible de rendre le volume déchiffré accessible en lecture et en écriture</translation>
+        <translation type="vanished">Impossible de rendre le volume déchiffré accessible en lecture et en écriture</translation>
     </message>
     <message>
         <source>Unencrypted volume set read-write</source>
-        <translation>Le volume déchiffré est désormais accessible en lecture et en écriture</translation>
-    </message>
-    <message>
-        <source>Cannot set encrypted volume read-only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Encrypted volume set read-only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot set encrypted volume read-write</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Encrypted volume set read-write</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Le volume déchiffré est désormais accessible en lecture et en écriture</translation>
     </message>
     <message>
         <source>Functionality not implemented in current version</source>
-        <translation>Cette fonctionnalité n&apos;est pas disponible dans la version actuelle</translation>
+        <translation type="vanished">Cette fonctionnalité n&apos;est pas disponible dans la version actuelle</translation>
     </message>
     <message>
         <source>Hidden volume created</source>
-        <translation>Le volume caché a été créé</translation>
+        <translation type="vanished">Le volume caché a été créé</translation>
     </message>
     <message>
         <source>Hidden volume could not be created.</source>
-        <translation>Le volume caché n&apos;a pas pu être créé.</translation>
-    </message>
-    <message>
-        <source>To complete the lock procedure, please remove and reconnect the Nitrokey.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Le volume caché n&apos;a pas pu être créé.</translation>
     </message>
 </context>
 <context>
     <name>Tray</name>
     <message>
         <source>Active (debug mode)</source>
-        <translation>Activée (mode de débogage)</translation>
+        <translation type="vanished">Activée (mode de débogage)</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Activée</translation>
+        <translation type="vanished">Activée</translation>
     </message>
     <message>
         <source>Nitrokey is not connected!</source>
-        <translation type="unfinished">La Nitrokey n&apos;est pas connectée !</translation>
+        <translation type="obsolete">La Nitrokey n&apos;est pas connectée&#xa0;!</translation>
     </message>
     <message>
         <source>Unlock password safe</source>
-        <translation>Débloquer l&apos;espace sécurisé des mots de passe</translation>
+        <translation type="vanished">Débloquer l&apos;espace sécurisé des mots de passe</translation>
     </message>
     <message>
         <source>&amp;OTP</source>
-        <translation>&amp;OTP</translation>
+        <translation type="vanished">&amp;OTP</translation>
     </message>
     <message>
         <source>&amp;Factory reset</source>
-        <translation>&amp;Réinitialisation aux paramètres d&apos;usine</translation>
+        <translation type="vanished">&amp;Réinitialisation aux paramètres d&apos;usine</translation>
     </message>
     <message>
         <source>&amp;Change User PIN</source>
-        <translation>&amp;Changer le PIN utilisateur</translation>
+        <translation type="vanished">&amp;Changer le PIN utilisateur</translation>
     </message>
     <message>
         <source>&amp;Change Admin PIN</source>
-        <translation>&amp;Changer le PIN administrateur</translation>
+        <translation type="vanished">&amp;Changer le PIN administrateur</translation>
     </message>
     <message>
         <source>&amp;Debug</source>
-        <translation>&amp;Débogage</translation>
+        <translation type="vanished">&amp;Débogage</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>&amp;Quitter</translation>
+        <translation type="vanished">&amp;Quitter</translation>
     </message>
     <message>
         <source>&amp;About Nitrokey</source>
-        <translation>&amp;À propos de Nitrokey</translation>
+        <translation type="vanished">&amp;À propos de Nitrokey</translation>
     </message>
     <message>
         <source>&amp;OTP and Password safe</source>
-        <translation>Espace sécurisé des mots de passe et &amp;OTP</translation>
+        <translation type="vanished">Espace sécurisé des mots de passe et &amp;OTP</translation>
     </message>
     <message>
         <source>&amp;Unlock encrypted volume</source>
-        <translation>&amp;Déverrouiller le volume chiffré</translation>
+        <translation type="vanished">&amp;Déverrouiller le volume chiffré</translation>
     </message>
     <message>
         <source>&amp;Lock encrypted volume</source>
-        <translation>&amp;Verrouiller le volume chiffré</translation>
+        <translation type="vanished">&amp;Verrouiller le volume chiffré</translation>
     </message>
     <message>
         <source>&amp;Unlock hidden volume</source>
-        <translation>&amp;Déverrouiller le volume caché</translation>
+        <translation type="vanished">&amp;Déverrouiller le volume caché</translation>
     </message>
     <message>
         <source>&amp;Lock hidden volume</source>
-        <translation>&amp;Verrouiller le volume caché</translation>
+        <translation type="vanished">&amp;Verrouiller le volume caché</translation>
     </message>
     <message>
         <source>&amp;Change Firmware Password</source>
-        <translation>&amp;Changer le mot de passe du micrologiciel</translation>
+        <translation type="vanished">&amp;Changer le mot de passe du micrologiciel</translation>
     </message>
     <message>
         <source>&amp;Enable firmware update</source>
-        <translation>&amp;Activer les mises à jour du micrologiciel</translation>
+        <translation type="vanished">&amp;Activer les mises à jour du micrologiciel</translation>
     </message>
     <message>
         <source>&amp;Export firmware to file</source>
-        <translation>&amp;Exporter le micrologiciel vers un fichier</translation>
+        <translation type="vanished">&amp;Exporter le micrologiciel vers un fichier</translation>
     </message>
     <message>
         <source>&amp;Destroy encrypted data</source>
-        <translation>&amp;Détruire les données chiffrées</translation>
+        <translation type="vanished">&amp;Détruire les données chiffrées</translation>
     </message>
     <message>
         <source>&amp;Initialize device</source>
-        <translation>&amp;Initialiser la clef</translation>
+        <translation type="vanished">&amp;Initialiser la clef</translation>
     </message>
     <message>
         <source>&amp;Initialize storage with random data</source>
-        <translation>&amp;Initialiser le stockage à l&apos;aide de données aléatoires</translation>
+        <translation type="vanished">&amp;Initialiser le stockage à l&apos;aide de données aléatoires</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-only</source>
-        <translation>&amp;Rendre le volume déchiffré accessible seulement en lecture</translation>
+        <translation type="vanished">&amp;Rendre le volume déchiffré accessible seulement en lecture</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-write</source>
-        <translation>&amp;Rendre le volume déchiffré accessible en lecture-écriture</translation>
+        <translation type="vanished">&amp;Rendre le volume déchiffré accessible en lecture-écriture</translation>
     </message>
     <message>
         <source>&amp;Set encrypted volume read-only</source>
-        <translation>&amp;Définir le volume chiffré en lecture seule</translation>
+        <translation type="vanished">&amp;Définir le volume chiffré en lecture seule</translation>
     </message>
     <message>
         <source>&amp;Set encrypted volume read-write</source>
-        <translation>&amp;Définir le volume chiffré en lecture-écriture</translation>
+        <translation type="vanished">&amp;Définir le volume chiffré en lecture-écriture</translation>
     </message>
     <message>
         <source>&amp;Setup hidden volume</source>
-        <translation>&amp;Configurer le volume caché</translation>
+        <translation type="vanished">&amp;Configurer le volume caché</translation>
     </message>
     <message>
         <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
-        <translation>&amp;Désactiver l&apos;avertissement &apos;Initialiser le stockage à l&apos;aide de données aléatoires&apos;</translation>
+        <translation type="vanished">&amp;Désactiver l&apos;avertissement &apos;Initialiser le stockage à l&apos;aide de données aléatoires&apos;</translation>
     </message>
     <message>
         <source>&amp;Lock stick hardware</source>
-        <translation>&amp;Verrouiller le micrologiciel de la clef</translation>
+        <translation type="vanished">&amp;Verrouiller le micrologiciel de la clef</translation>
     </message>
     <message>
         <source>&amp;Reset User PIN</source>
-        <translation>&amp;Réinitialiser le PIN utilisateur</translation>
+        <translation type="vanished">&amp;Réinitialiser le PIN utilisateur</translation>
     </message>
     <message>
         <source>&amp;Lock Device</source>
-        <translation>&amp;Verrouiller la clef</translation>
+        <translation type="vanished">&amp;Verrouiller la clef</translation>
     </message>
     <message>
         <source>Smartcard or SD card are not ready</source>
-        <translation>La smartcard ou la carte SD n&apos;est pas prête</translation>
+        <translation type="vanished">La smartcard ou la carte SD n&apos;est pas prête</translation>
     </message>
     <message>
         <source>Passwords</source>
-        <translation>Mots de passe</translation>
+        <translation type="vanished">Mots de passe</translation>
     </message>
     <message>
         <source>(empty)</source>
-        <translation>(vide)</translation>
+        <translation type="vanished">(vide)</translation>
     </message>
     <message>
         <source>Configure</source>
-        <translation>Configurer</translation>
+        <translation type="vanished">Configurer</translation>
     </message>
     <message>
         <source>Special Configure</source>
-        <translation>Configuration spéciale</translation>
+        <translation type="vanished">Configuration spéciale</translation>
     </message>
     <message>
         <source>Long operation in progress: %1%</source>
-        <translation>Une longue opération est en cours : %1%</translation>
+        <translation type="vanished">Une longue opération est en cours&#xa0;: %1%</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Aide</translation>
+        <translation type="vanished">&amp;Aide</translation>
     </message>
     <message>
         <source>&amp;Overview</source>
-        <translation>&amp;Vue d&apos;ensemble</translation>
+        <translation type="vanished">&amp;Vue d&apos;ensemble</translation>
     </message>
 </context>
 <context>
@@ -1527,54 +1503,54 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the device enters the &lt;br/&gt;firmware update mode. There is no way back!&lt;br/&gt;Please read the &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation &lt;/span&gt;&lt;/a&gt;how to &lt;br/&gt;update the firmware.&lt;/p&gt;&lt;p&gt;Continue entering the firmware update mode?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;En sélectionnant &amp;quot;OK&amp;quot; la clef va passer en &lt;br/&gt;mode de mise à jour du micrologiciel. Il ne sera plus possible de revenir en arrière !&lt;br/&gt;Merci de lire dans la &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation (en)&lt;/span&gt;&lt;/a&gt; comment &lt;br/&gt;mettre à jour le micrologiciel.&lt;/p&gt;&lt;p&gt;Êtes vous sûr de vouloir passer en mode mise à jour ?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;En sélectionnant &amp;quot;OK&amp;quot; la clef va passer en &lt;br/&gt;mode de mise à jour du micrologiciel. Il ne sera plus possible de revenir en arrière&#xa0;!&lt;br/&gt;Merci de lire dans la &lt;a href=&quot;https://www.nitrokey.com/en/doc/firmware-update-storage&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;documentation (en)&lt;/span&gt;&lt;/a&gt; comment &lt;br/&gt;mettre à jour le micrologiciel.&lt;/p&gt;&lt;p&gt;Êtes vous sûr de vouloir passer en mode mise à jour&#xa0;?&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
         <source>Nitrokey App - Manage your Nitrokey sticks</source>
-        <translation>Nitrokey App - Gestion de vos Nitrokey</translation>
+        <translation type="vanished">Nitrokey App - Gestion de vos Nitrokey</translation>
     </message>
     <message>
         <source>Enable debug messages</source>
-        <translation>Activer les messages de débogage</translation>
+        <translation type="vanished">Activer les messages de débogage</translation>
     </message>
     <message>
         <source>Save debug log to file with name &lt;log-file-name&gt; (experimental)</source>
-        <translation>Enregistrer le journal de débogage dans un fichier nommé &lt;log-file-name&gt; (expérimental)</translation>
+        <translation type="vanished">Enregistrer le journal de débogage dans un fichier nommé &lt;log-file-name&gt; (expérimental)</translation>
     </message>
     <message>
         <source>Save debug log to App&apos;s window (experimental)</source>
-        <translation>Afficher le journal de débogage dans la fenêtre de l&apos;application (expérimental)</translation>
+        <translation type="vanished">Afficher le journal de débogage dans la fenêtre de l&apos;application (expérimental)</translation>
     </message>
     <message>
         <source>Set debug level, 0-4</source>
-        <translation>Positionner le niveau de débogage, 0-4</translation>
+        <translation type="vanished">Positionner le niveau de débogage, 0-4</translation>
     </message>
     <message>
         <source>Set delay between commands sent to device (in ms) to &lt;delay&gt;</source>
-        <translation>Régler le délai entre deux commandes envoyées à la clef sur &lt;delay&gt; (en ms)</translation>
+        <translation type="vanished">Régler le délai entre deux commandes envoyées à la clef sur &lt;delay&gt; (en ms)</translation>
     </message>
     <message>
         <source>Show additional information about binary</source>
-        <translation>Afficher les informations additionnelles à propos du binaire</translation>
+        <translation type="vanished">Afficher les informations additionnelles à propos du binaire</translation>
     </message>
     <message>
         <source>Enable extra administrative functions</source>
-        <translation>Activer les fonctions d&apos;administration additionnelles</translation>
+        <translation type="vanished">Activer les fonctions d&apos;administration additionnelles</translation>
     </message>
     <message>
         <source>List available languages</source>
-        <translation>Lister les traductions disponibles</translation>
+        <translation type="vanished">Lister les traductions disponibles</translation>
     </message>
     <message>
         <source>Load translation file with given name and store this choice in settings file.</source>
-        <translation>Charger un fichier de traduction portant ce nom et enregistrer ce choix dans le fichier de configuration.</translation>
+        <translation type="vanished">Charger un fichier de traduction portant ce nom et enregistrer ce choix dans le fichier de configuration.</translation>
     </message>
     <message>
         <source>Clear all application&apos;s settings</source>
-        <translation>Effacer tous les paramètres de l&apos;application</translation>
+        <translation type="vanished">Effacer tous les paramètres de l&apos;application</translation>
     </message>
 </context>
 <context>
@@ -1604,7 +1580,7 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;You should understand the properties of hidden volumes before proceeding. It can destroy your encrypted data! &lt;br/&gt;Please read &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;these instructions&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; first.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Vous devriez comprendre les propriétés des volumes cachés avant de continuer. Cela pourrait détruire vos données chiffrées ! &lt;br/&gt;Merci de lire &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;ces instructions (en anglais)&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; avant toute chose.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Vous devriez comprendre les propriétés des volumes cachés avant de continuer. Cela pourrait détruire vos données chiffrées&#xa0;! &lt;br/&gt;Merci de lire &lt;/span&gt;&lt;a href=&quot;https://www.nitrokey.com/documentation/hidden-volumes&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#0000ff;&quot;&gt;ces instructions (en anglais)&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-weight:600;&quot;&gt; avant toute chose.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. You may want to copy some innocuous files to the encrypted data.&lt;br/&gt;2. Configure hidden volumes in this dialogue. &lt;br/&gt;3. Once you configured a hidden volume you must not use/write to the encryption volume anymore. Otherwise it may destroy the data in your hidden volume.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -1616,7 +1592,7 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     </message>
     <message>
         <source>Password strength:</source>
-        <translation>Force du mot de passe :</translation>
+        <translation>Force du mot de passe&#xa0;:</translation>
     </message>
     <message>
         <source>length</source>
@@ -1660,7 +1636,7 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation>Mot de passe&#xa0;:</translation>
     </message>
     <message>
         <source>Show password</source>
@@ -1680,7 +1656,7 @@ Pour éviter toute perte de données, merci de démonter les partitions avant de
     </message>
     <message>
         <source>Unit:</source>
-        <translation>Unité :</translation>
+        <translation>Unité&#xa0;:</translation>
     </message>
     <message>
         <source>%</source>
@@ -1726,15 +1702,15 @@ est compris entre %1 % et %2 % de la taille totale du stockage</translation>
     </message>
     <message>
         <source>Storage capacity: %1GB</source>
-        <translation>Capacité de stockage : %1GB</translation>
+        <translation>Capacité de stockage&#xa0;: %1GB</translation>
     </message>
     <message>
         <source>Start hidden volume at %1 of the encrypted storage:</source>
-        <translation>Commencer le volume caché à %1 de l&apos;emplacement chiffré :</translation>
+        <translation>Commencer le volume caché à %1 de l&apos;emplacement chiffré&#xa0;:</translation>
     </message>
     <message>
         <source>End hidden volume at %1 of the encrypted storage:</source>
-        <translation>Terminer le volume caché à %1 de l&apos;emplacement chiffré :</translation>
+        <translation>Terminer le volume caché à %1 de l&apos;emplacement chiffré&#xa0;:</translation>
     </message>
     <message>
         <source>Hidden volume password</source>
@@ -1769,7 +1745,7 @@ est compris entre %1 % et %2 % de la taille totale du stockage</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When you select &amp;quot;OK&amp;quot; the stick lock the firmware and close the hardware debug port.This disables any external hardware access to the data in the device (processor).&lt;/p&gt;&lt;p&gt;There is no way back! &lt;/p&gt;&lt;p&gt;After this you can&apos;t update the firmware.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;En sélectionnant &amp;laquo; OK &amp;raquo;, la clef va verrouiller son micrologiciel et fermer le port matériel de débogage. Ceci empêche tout accès matériel aux données depuis l&apos;extérieur.&lt;/p&gt;&lt;p&gt;Cette action n&apos;est pas réversible !&lt;/p&gt;&lt;p&gt;Une fois cette action effectuée, il ne sera plus possible de mettre à jour le micrologiciel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;En sélectionnant &amp;laquo; OK &amp;raquo;, la clef va verrouiller son micrologiciel et fermer le port matériel de débogage. Ceci empêche tout accès matériel aux données depuis l&apos;extérieur.&lt;/p&gt;&lt;p&gt;Cette action n&apos;est pas réversible&#xa0;!&lt;/p&gt;&lt;p&gt;Une fois cette action effectuée, il ne sera plus possible de mettre à jour le micrologiciel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 </TS>
