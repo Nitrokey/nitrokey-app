@@ -117,9 +117,7 @@ int main(int argc, char *argv[]) {
 
 
   MainWindow w;
-  if (parser.isSet("admin")){
-    w.enable_admin_commands();
-  }
+  w.enable_admin_commands();
 
   QString df = settings.value("debug/file", "").toString().trimmed();
   if (!df.isEmpty() && settings.value("debug/enabled", false).toBool() && df != "console"){
