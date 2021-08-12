@@ -75,7 +75,7 @@ public:
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
-    void generateMenuPasswordSafe();
+    void generateMenuPasswordSafe(std::shared_ptr<QMenu> &trayMenu, std::shared_ptr<QMenu> &windowMenu);
     void populateOTPPasswordMenu();
     void passOTPProgressFurther(int i);
     void showOTPProgressInTray(int i);
@@ -85,9 +85,9 @@ private:
     Q_DISABLE_COPY(Tray);
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
     void generateMenu(bool init=false, std::function<void(QMenu *)> run_before = [](QMenu*){});
-    void generateMenuForStorageDevice();
-    void generatePasswordMenu();
-    void generateMenuForProDevice();
+    void generateMenuForStorageDevice(std::shared_ptr<QMenu> trayMenu, std::shared_ptr<QMenu> windowMenu);
+    void generatePasswordMenu(std::shared_ptr<QMenu> &trayMenu, std::shared_ptr<QMenu> &windowMenu);
+    void generateMenuForProDevice(std::shared_ptr<QMenu> &trayMenu, std::shared_ptr<QMenu> &windowMenu);
     void initActionsForStick10();
     void initActionsForStick20();
     void initCommonActions();

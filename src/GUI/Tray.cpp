@@ -161,59 +161,57 @@ void Tray::generateMenu(bool init, std::function<void(QMenu *)> run_before) {
     static QMutex mtx;
     QMutexLocker locker(&mtx);
 
-    if (nullptr == trayMenu)
-      trayMenu = std::make_shared<QMenu>();
-    else
-      trayMenu->clear(); // Clear old menu
+    std::shared_ptr<QMenu> trayMenuLocal;
+    std::shared_ptr<QMenu> windowMenuLocal;
 
-    if (nullptr == windowMenu)
-      windowMenu = std::make_shared<QMenu>("Menu");
-    else
-      windowMenu->clear(); // Clear old menu
+    windowMenuLocal = std::make_shared<QMenu>("Menu");
+    trayMenuLocal = std::make_shared<QMenu>();
 
-
-    run_before(trayMenu.get());
+    run_before(trayMenuLocal.get());
 
     if (!init){
       // Setup the new menu
       if (!libada::i()->isDeviceConnected()) {
-        trayMenu->addAction(tr("Nitrokey is not connected!"));
+        trayMenuLocal->addAction(tr("Nitrokey is not connected!"));
       } else {
         if (!libada::i()->isStorageDeviceConnected()) // Nitrokey Pro connected
-          generateMenuForProDevice();
+            generateMenuForProDevice(trayMenuLocal, windowMenuLocal);
         else {
           // Nitrokey Storage is connected
-          generateMenuForStorageDevice();
+            generateMenuForStorageDevice(trayMenuLocal, windowMenuLocal);
         }
       }
     }
 
     // Add debug window ?
     if (debug_mode){
-      trayMenu->addAction(DebugAction);
-      windowMenu->addAction(DebugAction);
+      trayMenuLocal->addAction(DebugAction);
+      windowMenuLocal->addAction(DebugAction);
     }
 
-    trayMenu->addSeparator();
+    trayMenuLocal->addSeparator();
 
     if (!long_operation_in_progress)
-        trayMenu->addAction(ShowWindowAction);
+        trayMenuLocal->addAction(ShowWindowAction);
 
-    trayMenu->addAction(ActionHelp_tray);
-    trayMenu->addAction(ActionAboutDialog_tray);
-    trayMenu->addAction(quitAction_tray);
+    trayMenuLocal->addAction(ActionHelp_tray);
+    trayMenuLocal->addAction(ActionAboutDialog_tray);
+    trayMenuLocal->addAction(quitAction_tray);
 
-    windowMenu->addSeparator();
-    windowMenu->addAction(ActionHelp);
-    windowMenu->addAction(ActionAboutDialog);
-    windowMenu->addAction(quitAction);
+    windowMenuLocal->addSeparator();
+    windowMenuLocal->addAction(ActionHelp);
+    windowMenuLocal->addAction(ActionAboutDialog);
+    windowMenuLocal->addAction(quitAction);
 
-    trayIcon->setContextMenu(trayMenu.get());
+    trayIcon->setContextMenu(trayMenuLocal.get());
 
-    if (file_menu != nullptr && windowMenu != nullptr){
-//      file_menu->addMenu(windowMenu.get()); // does not work for macOS
-      file_menu->addAction(windowMenu->menuAction());
+    if (file_menu != nullptr && windowMenuLocal != nullptr){
+//      file_menu->addMenu(windowMenuLocal.get()); // does not work for macOS
+      file_menu->addAction(windowMenuLocal->menuAction());
     }
+
+    trayMenu = trayMenuLocal;
+    windowMenu = windowMenuLocal;
   }
 
 void Tray::initActionsForStick10() {
@@ -443,7 +441,8 @@ void tray_Worker::doWork() {
   emit resultReady();
 }
 
-void Tray::generatePasswordMenu() {
+void Tray::generatePasswordMenu(std::shared_ptr<QMenu> &trayMenu, std::shared_ptr<QMenu> &windowMenu) {
+
   trayMenuPasswdSubMenu = std::make_shared<QMenu>(tr("Passwords"));
   trayMenuPasswdSubMenu->setIcon(GraphicsTools::loadColorize(":/images/new/icon_passwords.svg"));
 
@@ -535,10 +534,10 @@ void Tray::populateOTPPasswordMenu() {
 }
 
 
-void Tray::generateMenuForProDevice() {
-    generatePasswordMenu();
+void Tray::generateMenuForProDevice(std::shared_ptr<QMenu> &trayMenu, std::shared_ptr<QMenu> &windowMenu) {
+    generatePasswordMenu(trayMenu, windowMenu);
     trayMenu->addSeparator();
-    generateMenuPasswordSafe();
+    generateMenuPasswordSafe(trayMenu, windowMenu);
 
     trayMenuSubConfigure = trayMenu->addMenu(tr("Configure"));
     trayMenuSubConfigure->setIcon(GraphicsTools::loadColorize(":/images/new/icon_settings.svg"));
@@ -570,7 +569,7 @@ void Tray::generateMenuForProDevice() {
 }
 using nm = nitrokey::NitrokeyManager;
 
-void Tray::generateMenuForStorageDevice() {
+void Tray::generateMenuForStorageDevice(std::shared_ptr<QMenu> trayMenu, std::shared_ptr<QMenu> windowMenu) {
   int AddSeperator = FALSE;
   {
     nitrokey::proto::stick20::DeviceConfigurationResponsePacket::ResponsePayload status;
@@ -621,12 +620,12 @@ void Tray::generateMenuForStorageDevice() {
       windowMenu->addSeparator();
     }
 
-    generatePasswordMenu();
+    generatePasswordMenu(trayMenu, windowMenu);
     trayMenu->addSeparator();
 
     if (!status.StickKeysNotInitiated) {
       // Setup entrys for password safe
-      generateMenuPasswordSafe();
+        generateMenuPasswordSafe(trayMenu, windowMenu);
     }
 
     if (status.SDFillWithRandomChars_u8) { //filled randomly
@@ -733,7 +732,7 @@ int Tray::UpdateDynamicMenuEntrys(void) {
   return (TRUE);
 }
 
-void Tray::generateMenuPasswordSafe() {
+void Tray::generateMenuPasswordSafe(std::shared_ptr<QMenu> &trayMenu, std::shared_ptr<QMenu> &windowMenu) {
   auto passwordSafeUnlocked = libada::i()->isPasswordSafeUnlocked();
   if (!passwordSafeUnlocked) {
       trayMenu->addAction(UnlockPasswordSafeAction_tray);
