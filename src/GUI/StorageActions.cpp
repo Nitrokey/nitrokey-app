@@ -621,7 +621,7 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
     //FIXME use secure string
     switch(type){
       case USER_PIN:
-        m->set_unencrypted_read_only(s.c_str());
+        m->set_unencrypted_read_only(s.c_str());  // uses deprecated call on purpose
         break;
       case ADMIN_PIN:
         m->set_unencrypted_read_only_admin(s.c_str());
@@ -657,7 +657,7 @@ void StorageActions::startStick20SetReadWriteUncryptedVolume() {
     //FIXME use secure string
     switch(type){
       case USER_PIN:
-        m->set_unencrypted_read_write(s.c_str());
+        m->set_unencrypted_read_write(s.c_str());   // uses deprecated call on purpose
         break;
       case ADMIN_PIN:
         m->set_unencrypted_read_write_admin(s.c_str());
