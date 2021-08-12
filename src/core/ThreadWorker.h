@@ -82,7 +82,7 @@ public:
                const std::function<void(Data)> &usefunc,
                QObject *parent = nullptr, std::string name = "");
 
-  ~ThreadWorker();
+  virtual ~ThreadWorker();
 
 private slots:
   void worker_finished();

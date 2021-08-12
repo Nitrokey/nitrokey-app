@@ -71,7 +71,7 @@ class PinDialog : public QDialog {
   Q_OBJECT
 public :
     explicit PinDialog(PinType pinType, QWidget *parent = nullptr);
-  ~PinDialog();
+  virtual ~PinDialog();
 
   void getPassword(char *text);
   void getPassword(QString &pin);

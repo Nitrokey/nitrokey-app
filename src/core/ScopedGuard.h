@@ -26,7 +26,7 @@
 class ScopedGuard{
 public:
     explicit ScopedGuard(const std::function<void()> &function_to_run) : function_to_run(function_to_run), cancel_action(false) {}
-    ~ScopedGuard(){
+    virtual ~ScopedGuard(){
         if (!cancel_action){
             function_to_run();
         }

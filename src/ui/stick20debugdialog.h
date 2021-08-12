@@ -31,7 +31,7 @@ class DebugDialog;
 
 class DebugDialog : public QDialog {
   Q_OBJECT public : explicit DebugDialog(QWidget *parent = 0);
-  ~DebugDialog();
+  virtual ~DebugDialog();
 
   public slots:
     void on_DebugData(QString message);

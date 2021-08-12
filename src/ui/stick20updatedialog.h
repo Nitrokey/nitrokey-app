@@ -31,7 +31,7 @@ class UpdateDialog;
 
 class UpdateDialog : public QDialog {
   Q_OBJECT public : explicit UpdateDialog(QWidget *parent = 0);
-  ~UpdateDialog();
+  virtual ~UpdateDialog();
 
 private:
   Ui::UpdateDialog *ui;

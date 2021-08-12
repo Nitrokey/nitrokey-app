@@ -85,7 +85,7 @@ class AboutDialog : public QDialog {
   Q_OBJECT
   public :
   explicit AboutDialog(QWidget *parent = 0);
-  ~AboutDialog();
+  virtual ~AboutDialog();
   void showStick20Configuration(void);
   void showStick10Configuration(void);
   void showNoStickFound(void);
