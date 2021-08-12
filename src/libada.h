@@ -66,7 +66,7 @@ private:
 public:
   NameCache(){};
   NameCache(const std::function<const char *(int)> &getter);
-  ~NameCache();
+  virtual ~NameCache();
 
   void setGetter(const std::function<const char *(int)> &getter);
   std::string getName(const int i);
@@ -102,7 +102,7 @@ signals:
 
 public:
     explicit libada();
-    ~libada();
+    virtual ~libada();
     static std::shared_ptr<libada> i();
 
     int getMajorFirmwareVersion();

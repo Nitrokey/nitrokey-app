@@ -54,7 +54,7 @@ class MainWindow : public QMainWindow {
 
 public :
     explicit MainWindow(QWidget *parent = 0);
-  ~MainWindow();
+  virtual ~MainWindow();
 
 protected:
   void closeEvent(QCloseEvent *event) override;

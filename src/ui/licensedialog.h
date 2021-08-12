@@ -34,7 +34,7 @@ class LicenseDialog : public QDialog
 
 public:
     explicit LicenseDialog(QWidget *parent = 0);
-    ~LicenseDialog();
+    virtual ~LicenseDialog();
     void setText(QString string);
 
 private:

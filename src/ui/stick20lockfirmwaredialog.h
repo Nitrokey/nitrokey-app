@@ -30,7 +30,7 @@ class stick20LockFirmwareDialog;
 
 class stick20LockFirmwareDialog : public QDialog {
   Q_OBJECT public : explicit stick20LockFirmwareDialog(QWidget *parent = 0);
-  ~stick20LockFirmwareDialog();
+  virtual ~stick20LockFirmwareDialog();
 
 private:
   Ui::stick20LockFirmwareDialog *ui;
