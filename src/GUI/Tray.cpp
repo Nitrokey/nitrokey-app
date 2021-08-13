@@ -441,7 +441,8 @@ void tray_Worker::doWork() {
   emit resultReady();
 }
 
-void Tray::generatePasswordMenu() {
+void Tray::generatePasswordMenu(std::shared_ptr<QMenu> &trayMenu, std::shared_ptr<QMenu> &windowMenu) {
+
   trayMenuPasswdSubMenu = std::make_shared<QMenu>(tr("Passwords"));
   trayMenuPasswdSubMenu->setIcon(GraphicsTools::loadColorize(":/images/new/icon_passwords.svg"));
 
