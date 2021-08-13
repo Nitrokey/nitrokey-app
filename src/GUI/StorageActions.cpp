@@ -621,10 +621,10 @@ void StorageActions::startStick20SetReadOnlyUncryptedVolume() {
     //FIXME use secure string
     switch(type){
       case USER_PIN:
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         m->set_unencrypted_read_only(s.c_str());  // uses deprecated call on purpose
-#pragma clang diagnostic pop
+#pragma GCC diagnostic pop
         break;
       case ADMIN_PIN:
         m->set_unencrypted_read_only_admin(s.c_str());
@@ -660,10 +660,10 @@ void StorageActions::startStick20SetReadWriteUncryptedVolume() {
     //FIXME use secure string
     switch(type){
       case USER_PIN:
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         m->set_unencrypted_read_write(s.c_str());   // uses deprecated call on purpose
-#pragma clang diagnostic pop
+#pragma GCC diagnostic pop
         break;
       case ADMIN_PIN:
         m->set_unencrypted_read_write_admin(s.c_str());
