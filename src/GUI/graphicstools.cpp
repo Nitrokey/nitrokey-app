@@ -22,12 +22,14 @@ bool test_if_gnome(){
     return false;
 }
 
-QPixmap GraphicsTools::loadColorize(QString path, bool loadForTray){
+QPixmap GraphicsTools::loadColorize(const QString& path, bool loadForTray, bool mainTrayIcon){
     QColor text_color;
     bool is_gnome = test_if_gnome();
 
-    if (loadForTray && is_gnome){
-        text_color.setRgb(255, 255, 255);
+    if (mainTrayIcon){
+        text_color.setRgb(255, 0, 0);
+//    } else if (loadForTray && is_gnome){
+//        text_color.setRgb(255, 255, 255);
     } else {
         text_color = QGuiApplication::palette().color(QPalette::WindowText);
     }

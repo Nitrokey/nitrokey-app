@@ -17,7 +17,7 @@
     </message>
     <message>
         <source>Firmware version:</source>
-        <translation>Wersja firmware:</translation> 
+        <translation>Wersja firmware:</translation>
     </message>
     <message>
         <source>Card serial number:</source>
@@ -180,7 +180,7 @@ Spróbuj ponownie</translation>
     <name>Authentication</name>
     <message>
         <source>Wrong PIN. Please try again.</source>
-        <translation>Nieprawidłowy PIN. Spróbuj ponownie.</translation>
+        <translation type="vanished">Nieprawidłowy PIN. Spróbuj ponownie.</translation>
     </message>
 </context>
 <context>
@@ -320,6 +320,10 @@ Spróbuj ponownie</translation>
         <source>WARNING! If you lose your Firmware password, Nitrokey can’t be updated or reset!</source>
         <translation>OSTRZEŻENIE! W przypadku utraty hasła do firmware&apos;u Nitrokey nie można zaktualizować ani zresetować Nitrokey&apos;a!</translation>
     </message>
+    <message>
+        <source>This device does not have firmware update feature.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LicenseDialog</name>
@@ -364,7 +368,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The secret key is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hasło jest dostarczane przez usługodawcę, do którego usług chcesz się zalogować lub który można skonfigurować w aplikacji lokalnej, do której możesz się zalogować.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hasło jest dostarczane przez usługodawcę, do którego usług chcesz się zalogować lub który można skonfigurować w aplikacji lokalnej, do której możesz się zalogować.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Secret Key:</source>
@@ -400,7 +404,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
-        <translation>Uwaga: Dwuskładnikowe uwierzytelnianie nie jest odporne na ataki fizyczne. Zmień wszystkie klucze tajne OTP w przypadku utraty Nitrokey.</translation>
+        <translation type="vanished">Uwaga: Dwuskładnikowe uwierzytelnianie nie jest odporne na ataki fizyczne. Zmień wszystkie klucze tajne OTP w przypadku utraty Nitrokey.</translation>
     </message>
     <message>
         <source>Parameters</source>
@@ -436,23 +440,23 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Token ID</source>
-        <translation>Identyfikator tokena</translation>
+        <translation type="vanished">Identyfikator tokena</translation>
     </message>
     <message>
         <source>Send token ID</source>
-        <translation>Wyślij identyfikator tokena</translation>
+        <translation type="vanished">Wyślij identyfikator tokena</translation>
     </message>
     <message>
         <source>MUI:</source>
-        <translation>MUI:</translation>
+        <translation type="vanished">MUI:</translation>
     </message>
     <message>
         <source>TT:</source>
-        <translation>TT:</translation>
+        <translation type="vanished">TT:</translation>
     </message>
     <message>
         <source>OMP:</source>
-        <translation>OMP:</translation>
+        <translation type="vanished">OMP:</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -472,7 +476,7 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Send &apos;enter&apos; as the last keystroke</source>
-        <translation>Wyślij &quot;enter&quot; jako ostatnie naciśnięcie klawisza</translation>
+        <translation type="vanished">Wyślij &quot;enter&quot; jako ostatnie naciśnięcie klawisza</translation>
     </message>
     <message>
         <source>00000000000000000000</source>
@@ -488,27 +492,27 @@ Spróbuj ponownie</translation>
     </message>
     <message>
         <source>Double press NumLock:</source>
-        <translation>Dwukrotne naciśnięcie NumLock:</translation>
+        <translation type="vanished">Dwukrotne naciśnięcie NumLock:</translation>
     </message>
     <message>
         <source>Double press CapsLock:</source>
-        <translation>Dwukrotne naciśnięcie CapsLock:</translation>
+        <translation type="vanished">Dwukrotne naciśnięcie CapsLock:</translation>
     </message>
     <message>
         <source>Double press ScrollLock:</source>
-        <translation>Dwukrotne naciśnięcie ScrollLock:</translation>
+        <translation type="vanished">Dwukrotne naciśnięcie ScrollLock:</translation>
     </message>
     <message>
         <source>Do nothing</source>
-        <translation>Nic nie rób</translation>
+        <translation type="vanished">Nic nie rób</translation>
     </message>
     <message>
         <source>Send HOTP1</source>
-        <translation>Wyślij HOTP1</translation>
+        <translation type="vanished">Wyślij HOTP1</translation>
     </message>
     <message>
         <source>Send HOTP2</source>
-        <translation>Wyślij HOTP2</translation>
+        <translation type="vanished">Wyślij HOTP2</translation>
     </message>
     <message>
         <source>Password Safe</source>
@@ -806,19 +810,19 @@ Wybierz opcję &quot;Zainicjuj urządzenie przy użyciu losowych danych&quot;</t
     </message>
     <message>
         <source>OMP part of Token ID</source>
-        <translation>Część OMP identyfikatora tokena</translation>
+        <translation type="vanished">Część OMP identyfikatora tokena</translation>
     </message>
     <message>
         <source>TT part of Token ID</source>
-        <translation>Część TT identyfikatora tokena</translation>
+        <translation type="vanished">Część TT identyfikatora tokena</translation>
     </message>
     <message>
         <source>MUI part of Token ID</source>
-        <translation>Część MUI identyfikatora tokena</translation>
+        <translation type="vanished">Część MUI identyfikatora tokena</translation>
     </message>
     <message>
         <source>Settings for inserting HOTP code through special key shortcut (USB-Keyboard only)</source>
-        <translation>Ustawienia wstawiania kodu HOTP za pomocą specjalnego skrótu klawiszowego (tylko Klawiatura USB)</translation>
+        <translation type="vanished">Ustawienia wstawiania kodu HOTP za pomocą specjalnego skrótu klawiszowego (tylko Klawiatura USB)</translation>
     </message>
     <message>
         <source>Erase Password Safe slot</source>
@@ -881,7 +885,6 @@ Wybierz opcję &quot;Zainicjuj urządzenie przy użyciu losowych danych&quot;</t
         <extracomment>Label shown when the OTP secret key is too long</extracomment>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#a40000;&quot;&gt;Wpisany klucz tajny OTP jest dłuższy niż obsługiwany przez to urządzenie.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
-	
     <message>
         <source>secret is not passing validation.</source>
         <translation>Hasło nie przeszło pomyślnie procesu sprawdzenia.</translation>
@@ -1076,6 +1079,26 @@ Select &quot;Initialize device&quot; option from context menu.</source>
         <translation>OSTRZEŻENIE: Zaszyfrowany wolumin nie jest bezpieczny,
 wybierz &quot;Zainicjalizuj urządzenie&quot; z menu kontekstowego.</translation>
     </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The secret is provided by your service provider you may want to login or can be configured in your local application which you may want to login to.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Generated secret target length (bytes):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note: 2&lt;sup&gt;nd&lt;/sup&gt; factors aren&apos;t protected against physical attacks. Change all OTP secrets in case you loose the Nitrokey.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show main window on start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Old libnitrokey library detected. Some features may not work. Minimal supported version is %1, but the current one is %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
@@ -1147,7 +1170,7 @@ Zalecana jest zmiana kodu PIN na inny.</translation>
     </message>
     <message>
         <source>Enter Firmware Password:</source>
-        <translation>Wprowadź hasło do firmware'u</translation>
+        <translation>Wprowadź hasło do firmware&apos;u</translation>
     </message>
     <message>
         <source>Enter password for hidden volume</source>
@@ -1159,11 +1182,15 @@ Zalecana jest zmiana kodu PIN na inny.</translation>
     </message>
     <message>
         <source>Would you like to do it now?</source>
-        <translation>Czy chcesz zrobić to teraz?</translation>
+        <translation type="vanished">Czy chcesz zrobić to teraz?</translation>
     </message>
     <message>
         <source>Please enter the new PIN/password</source>
         <translation>Wprowadź nowy kod PIN/hasło</translation>
+    </message>
+    <message>
+        <source>Would you like to so now?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1171,7 +1198,7 @@ Zalecana jest zmiana kodu PIN na inny.</translation>
     <message>
         <source>Critical error encountered. Please restart application.
 Message: </source>
-        <translation>Wystąpił błąd krytyczny. Proszę zrestartować aplikację.
+        <translation type="vanished">Wystąpił błąd krytyczny. Proszę zrestartować aplikację.
 Wiadomość: </translation>
     </message>
 </context>
@@ -1187,341 +1214,341 @@ Wiadomość: </translation>
     <message>
         <source>This activity locks your hidden volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>Ta czynność blokuje ukrytą partycję. Chcesz kontynuować?
+        <translation type="vanished">Ta czynność blokuje ukrytą partycję. Chcesz kontynuować?
 Aby uniknąć utraty danych, przed przystąpieniem do dalszych czynności należy odmontować wszystkie partycje.</translation>
     </message>
     <message>
         <source>Enabling encrypted volume</source>
-        <translation> Uruchamianie zaszyfrowanego woluminu</translation>
+        <translation type="vanished"> Uruchamianie zaszyfrowanego woluminu</translation>
     </message>
     <message>
         <source>Encrypted volume enabled</source>
-        <translation>Zaszyfrowany wolumin uruchomiony</translation>
+        <translation type="vanished">Zaszyfrowany wolumin uruchomiony</translation>
     </message>
     <message>
         <source>Could not enable encrypted volume.</source>
-        <translation>Nie można uruchomić zaszyfrowanego woluminu.</translation>
+        <translation type="vanished">Nie można uruchomić zaszyfrowanego woluminu.</translation>
     </message>
     <message>
         <source>Wrong password.</source>
-        <translation>Nieprawidłowe hasło.</translation>
+        <translation type="vanished">Nieprawidłowe hasło.</translation>
     </message>
     <message>
         <source>Status code: %1</source>
-        <translation>Kod statusu: %1</translation>
+        <translation type="vanished">Kod statusu: %1</translation>
     </message>
     <message>
         <source>This activity locks your encrypted volume. Do you want to proceed?
 To avoid data loss, please unmount the partitions before proceeding.</source>
-        <translation>Ta czynność blokuje zaszyfrowany wolumin. Chcesz kontynuować?
+        <translation type="vanished">Ta czynność blokuje zaszyfrowany wolumin. Chcesz kontynuować?
 Aby uniknąć utraty danych, przed przystąpieniem do dalszych czynności należy odmontować wszystkie partycje.</translation>
     </message>
     <message>
         <source>Disabling encrypted volume</source>
-        <translation>Wyłączanie zaszyfrowanego woluminu</translation>
+        <translation type="vanished">Wyłączanie zaszyfrowanego woluminu</translation>
     </message>
     <message>
         <source>Encrypted volume disabled</source>
-        <translation>Zaszyfrowany wolumin został wyłączony</translation>
+        <translation type="vanished">Zaszyfrowany wolumin został wyłączony</translation>
     </message>
     <message>
         <source>Could not lock encrypted volume.</source>
-        <translation>Nie można zablokować zaszyfrowanego woluminu.</translation>
+        <translation type="vanished">Nie można zablokować zaszyfrowanego woluminu.</translation>
     </message>
     <message>
         <source>Please enable the encrypted volume first.</source>
-        <translation>Najpierw należy uruchomić zaszyfrowany wolumin.</translation>
+        <translation type="vanished">Najpierw należy uruchomić zaszyfrowany wolumin.</translation>
     </message>
     <message>
         <source>Enabling hidden volume</source>
-        <translation>Uruchamianie ukrytego woluminu</translation>
+        <translation type="vanished">Uruchamianie ukrytego woluminu</translation>
     </message>
     <message>
         <source>Hidden volume enabled</source>
-        <translation>Ukryty wolumin został uruchomiony</translation>
+        <translation type="vanished">Ukryty wolumin został uruchomiony</translation>
     </message>
     <message>
         <source>Could not enable hidden volume.</source>
-        <translation>Nie można uruchomić ukrytego woluminu.</translation>
+        <translation type="vanished">Nie można uruchomić ukrytego woluminu.</translation>
     </message>
     <message>
         <source>Disabling hidden volume</source>
-        <translation>Wyłączanie ukrytego woluminu</translation>
+        <translation type="vanished">Wyłączanie ukrytego woluminu</translation>
     </message>
     <message>
         <source>Hidden volume disabled</source>
-        <translation>Ukryty wolumin został wyłączony</translation>
+        <translation type="vanished">Ukryty wolumin został wyłączony</translation>
     </message>
     <message>
         <source>Could not lock hidden volume.</source>
-        <translation>Nie można zablokować ukrytego woluminu.</translation>
+        <translation type="vanished">Nie można zablokować ukrytego woluminu.</translation>
     </message>
     <message>
         <source>Locking device</source>
-        <translation>Blokowanie urządzenia</translation>
+        <translation type="vanished">Blokowanie urządzenia</translation>
     </message>
     <message>
         <source>Device locked</source>
-        <translation>Urządzenie zablokowane</translation>
+        <translation type="vanished">Urządzenie zablokowane</translation>
     </message>
     <message>
         <source>Could not lock device.</source>
-        <translation>Nie można zablokować urządzenia.</translation>
+        <translation type="vanished">Nie można zablokować urządzenia.</translation>
     </message>
     <message>
         <source>Device set in update mode</source>
-        <translation>Urządzenie ustawione w trybie "do aktualizacji"</translation>
+        <translation type="vanished">Urządzenie ustawione w trybie &quot;do aktualizacji&quot;</translation>
     </message>
     <message>
         <source>Device could not be set in update mode.</source>
-        <translation>Urządzenie nie mogło być ustawione w trybie "do aktualizacji".</translation>
+        <translation type="vanished">Urządzenie nie mogło być ustawione w trybie &quot;do aktualizacji&quot;.</translation>
     </message>
     <message>
         <source>Firmware exported</source>
-        <translation>Firmware został wyeksportowany</translation>
+        <translation type="vanished">Firmware został wyeksportowany</translation>
     </message>
     <message>
         <source>Could not export firmware.</source>
-        <translation>Nie można wyeksportować firmware'u.</translation>
+        <translation type="vanished">Nie można wyeksportować firmware&apos;u.</translation>
     </message>
     <message>
         <source>WARNING: Generating new AES keys will destroy the encrypted volumes, hidden volumes, and password safe! Continue?</source>
-        <translation>OSTRZEŻENIE: Wygenerowanie nowych kluczy AES spowoduje zniszczenie zaszyfrowanych woluminów, ukrytych woluminów i danych w Sejfie Haseł! Kontynuować?</translation>
+        <translation type="vanished">OSTRZEŻENIE: Wygenerowanie nowych kluczy AES spowoduje zniszczenie zaszyfrowanych woluminów, ukrytych woluminów i danych w Sejfie Haseł! Kontynuować?</translation>
     </message>
     <message>
         <source>Generating new AES keys</source>
-        <translation>Generowanie nowych kluczy AES</translation>
+        <translation type="vanished">Generowanie nowych kluczy AES</translation>
     </message>
     <message>
         <source>New AES keys generated</source>
-        <translation>Nowe klucze AES zostały wygenerowane</translation>
+        <translation type="vanished">Nowe klucze AES zostały wygenerowane</translation>
     </message>
     <message>
         <source>Keys could not be generated.</source>
-        <translation>Nie udało się wygenerować kluczy AES.</translation>
+        <translation type="vanished">Nie udało się wygenerować kluczy AES.</translation>
     </message>
     <message>
         <source>Could not clear SD card.</source>
-        <translation>Nie można wyczyścić karty SD.</translation>
+        <translation type="vanished">Nie można wyczyścić karty SD.</translation>
     </message>
     <message>
         <source>Communication issue.</source>
-        <translation>Problem z komunikacją.</translation>
+        <translation type="vanished">Problem z komunikacją.</translation>
     </message>
     <message>
         <source>Flag cannot be cleared.</source>
-        <translation>Flaga nie może zostać wyczyszczona.</translation>
+        <translation type="vanished">Flaga nie może zostać wyczyszczona.</translation>
     </message>
     <message>
         <source>Flag cleared.</source>
-        <translation>Flaga wyczyszczona.</translation>
+        <translation type="vanished">Flaga wyczyszczona.</translation>
     </message>
     <message>
         <source>Cannot set unencrypted volume read-only</source>
-        <translation>Nie można ustawić woluminu niezaszyfrowanego jako tylko do odczytu</translation>
+        <translation type="vanished">Nie można ustawić woluminu niezaszyfrowanego jako tylko do odczytu</translation>
     </message>
     <message>
         <source>Unencrypted volume set read-only</source>
-        <translation>Niezaszyfrowany wolumin został ustawiony jako tylko do odczytu</translation>
+        <translation type="vanished">Niezaszyfrowany wolumin został ustawiony jako tylko do odczytu</translation>
     </message>
     <message>
         <source>Cannot set unencrypted volume read-write</source>
-        <translation>Nie udało się ustawić niezaszyfrowanego woluminu jako do odczytu i zapisu</translation>
+        <translation type="vanished">Nie udało się ustawić niezaszyfrowanego woluminu jako do odczytu i zapisu</translation>
     </message>
     <message>
         <source>Unencrypted volume set read-write</source>
-        <translation>Niezaszyfrowany wolumin ustawiony jako do odczytu i zapisu</translation>
+        <translation type="vanished">Niezaszyfrowany wolumin ustawiony jako do odczytu i zapisu</translation>
     </message>
     <message>
         <source>Cannot set encrypted volume read-only</source>
-        <translation>Nie można ustawić zaszyfrowanego woluminu jako tylko do odczytu</translation>
+        <translation type="vanished">Nie można ustawić zaszyfrowanego woluminu jako tylko do odczytu</translation>
     </message>
     <message>
         <source>Encrypted volume set read-only</source>
-        <translation>Zaszyfrowany wolumin ustawiono jako do odczytu i zapisu</translation>
+        <translation type="vanished">Zaszyfrowany wolumin ustawiono jako do odczytu i zapisu</translation>
     </message>
     <message>
         <source>Cannot set encrypted volume read-write</source>
-        <translation>Nie można ustawić zaszyfrowanego woluminu jako do odczytu i zapisu</translation>
+        <translation type="vanished">Nie można ustawić zaszyfrowanego woluminu jako do odczytu i zapisu</translation>
     </message>
     <message>
         <source>Encrypted volume set read-write</source>
-        <translation>Zaszyfrowany wolumin został ustawiony jako do odczytu i zapisu</translation>
+        <translation type="vanished">Zaszyfrowany wolumin został ustawiony jako do odczytu i zapisu</translation>
     </message>
     <message>
         <source>Functionality not implemented in current version</source>
-        <translation>Funkcjonalność nie jest zaimplementowana w bieżącej wersji</translation>
+        <translation type="vanished">Funkcjonalność nie jest zaimplementowana w bieżącej wersji</translation>
     </message>
     <message>
         <source>Hidden volume created</source>
-        <translation>Utworzono ukryty wolumin</translation>
+        <translation type="vanished">Utworzono ukryty wolumin</translation>
     </message>
     <message>
         <source>Hidden volume could not be created.</source>
-        <translation>Nie udało się utworzyć ukrytego woluminu.</translation>
+        <translation type="vanished">Nie udało się utworzyć ukrytego woluminu.</translation>
     </message>
     <message>
         <source>To complete the lock procedure, please remove and reconnect the Nitrokey.</source>
-        <translation>Aby zakończyć procedurę blokowania, należy usunąć i ponownie podłączyć klucz Nitrokey.</translation>
+        <translation type="vanished">Aby zakończyć procedurę blokowania, należy usunąć i ponownie podłączyć klucz Nitrokey.</translation>
     </message>
 </context>
 <context>
     <name>Tray</name>
     <message>
         <source>Active (debug mode)</source>
-        <translation>Aktywny (tryb debugowania)</translation>
+        <translation type="vanished">Aktywny (tryb debugowania)</translation>
     </message>
     <message>
         <source>Active</source>
-        <translation>Aktywny</translation>
+        <translation type="vanished">Aktywny</translation>
     </message>
     <message>
         <source>Nitrokey is not connected!</source>
-        <translation>Nitrokey nie jest podłączony!</translation>
+        <translation type="vanished">Nitrokey nie jest podłączony!</translation>
     </message>
     <message>
         <source>Unlock password safe</source>
-        <translation>Odblokowanie Sejfu Haseł</translation>
+        <translation type="vanished">Odblokowanie Sejfu Haseł</translation>
     </message>
     <message>
         <source>&amp;OTP</source>
-        <translation>&amp;OTP</translation>
+        <translation type="vanished">&amp;OTP</translation>
     </message>
     <message>
         <source>&amp;Factory reset</source>
-        <translation>&amp;Przywrócenie do ustawień fabrycznych</translation>
+        <translation type="vanished">&amp;Przywrócenie do ustawień fabrycznych</translation>
     </message>
     <message>
         <source>&amp;Change User PIN</source>
-        <translation>&amp;Zmiana kodu PIN użytkownika</translation>
+        <translation type="vanished">&amp;Zmiana kodu PIN użytkownika</translation>
     </message>
     <message>
         <source>&amp;Change Admin PIN</source>
-        <translation>&amp;Zmiana kodu PIN administratora</translation>
+        <translation type="vanished">&amp;Zmiana kodu PIN administratora</translation>
     </message>
     <message>
         <source>&amp;Debug</source>
-        <translation>&amp;Debugowanie</translation>
+        <translation type="vanished">&amp;Debugowanie</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>&amp;Wyjdź</translation>
+        <translation type="vanished">&amp;Wyjdź</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Pomoc</translation>
+        <translation type="vanished">&amp;Pomoc</translation>
     </message>
     <message>
         <source>&amp;About Nitrokey</source>
-        <translation>&amp;Informacje o Nitrokey&apos;u</translation>
+        <translation type="vanished">&amp;Informacje o Nitrokey&apos;u</translation>
     </message>
     <message>
         <source>&amp;OTP and Password safe</source>
-        <translation>&amp;OTP i Password Safe</translation>
+        <translation type="vanished">&amp;OTP i Password Safe</translation>
     </message>
     <message>
         <source>&amp;Unlock encrypted volume</source>
-        <translation>&amp;Odblokuj zaszyfrowany wolumin</translation>
+        <translation type="vanished">&amp;Odblokuj zaszyfrowany wolumin</translation>
     </message>
     <message>
         <source>&amp;Lock encrypted volume</source>
-        <translation>&amp;Zablokuj zaszyfrowany wolumin</translation>
+        <translation type="vanished">&amp;Zablokuj zaszyfrowany wolumin</translation>
     </message>
     <message>
         <source>&amp;Unlock hidden volume</source>
-        <translation>&amp;Odblokuj ukryty wolumin</translation>
+        <translation type="vanished">&amp;Odblokuj ukryty wolumin</translation>
     </message>
     <message>
         <source>&amp;Lock hidden volume</source>
-        <translation>&amp;Zablokuj ukryty wolumin</translation>
+        <translation type="vanished">&amp;Zablokuj ukryty wolumin</translation>
     </message>
     <message>
         <source>&amp;Change Firmware Password</source>
-        <translation>&amp;Zmień hasło do firmware&apos;u</translation>
+        <translation type="vanished">&amp;Zmień hasło do firmware&apos;u</translation>
     </message>
     <message>
         <source>&amp;Enable firmware update</source>
-        <translation>&amp;Włącz aktualizację firmware</translation>
+        <translation type="vanished">&amp;Włącz aktualizację firmware</translation>
     </message>
     <message>
         <source>&amp;Export firmware to file</source>
-        <translation>&amp;Eksportuj firmware do pliku</translation>
+        <translation type="vanished">&amp;Eksportuj firmware do pliku</translation>
     </message>
     <message>
         <source>&amp;Destroy encrypted data</source>
-        <translation>&amp;Zniszcz zaszyfrowane dane</translation>
+        <translation type="vanished">&amp;Zniszcz zaszyfrowane dane</translation>
     </message>
     <message>
         <source>&amp;Initialize device</source>
-        <translation>&amp;Inicjalizuj urządzenie</translation>
+        <translation type="vanished">&amp;Inicjalizuj urządzenie</translation>
     </message>
     <message>
         <source>&amp;Initialize storage with random data</source>
-        <translation>&amp;Inicjalizuj pamięć masową z losowymi danymi</translation>
+        <translation type="vanished">&amp;Inicjalizuj pamięć masową z losowymi danymi</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-only</source>
-        <translation>&amp;Ustaw niezaszyfrowany wolumin w trybie tylko do odczytu</translation>
+        <translation type="vanished">&amp;Ustaw niezaszyfrowany wolumin w trybie tylko do odczytu</translation>
     </message>
     <message>
         <source>&amp;Set unencrypted volume read-write</source>
-        <translation>&amp;Ustaw niezaszyfrowany wolumin w trybie do odczytu i zapisu</translation>
+        <translation type="vanished">&amp;Ustaw niezaszyfrowany wolumin w trybie do odczytu i zapisu</translation>
     </message>
     <message>
         <source>&amp;Set encrypted volume read-only</source>
-        <translation>&amp;Ustaw zaszyfrowany wolumin w trybie tylko do odczytu</translation>
+        <translation type="vanished">&amp;Ustaw zaszyfrowany wolumin w trybie tylko do odczytu</translation>
     </message>
     <message>
         <source>&amp;Set encrypted volume read-write</source>
-        <translation>&amp;Ustaw zaszyfrowany wolumin w trybie do odczytu i zapisu</translation>
+        <translation type="vanished">&amp;Ustaw zaszyfrowany wolumin w trybie do odczytu i zapisu</translation>
     </message>
     <message>
         <source>&amp;Setup hidden volume</source>
-        <translation>&amp;Ustawienia ukrytego woluminu</translation>
+        <translation type="vanished">&amp;Ustawienia ukrytego woluminu</translation>
     </message>
     <message>
         <source>&amp;Disable &apos;initialize storage with random data&apos; warning</source>
-        <translation>&amp;Wyłącz ostrzeżenia o &apos;inicjalizacji pamięci masowej losowymi danymi&apos;</translation>
+        <translation type="vanished">&amp;Wyłącz ostrzeżenia o &apos;inicjalizacji pamięci masowej losowymi danymi&apos;</translation>
     </message>
     <message>
         <source>&amp;Lock stick hardware</source>
-        <translation>&amp;Zablokuj dysk USB</translation>
+        <translation type="vanished">&amp;Zablokuj dysk USB</translation>
     </message>
     <message>
         <source>&amp;Reset User PIN</source>
-        <translation>&amp;Resetowanie kodu PIN użytkownika</translation>
+        <translation type="vanished">&amp;Resetowanie kodu PIN użytkownika</translation>
     </message>
     <message>
         <source>&amp;Lock Device</source>
-        <translation>&amp;Zablokuj urządzenie</translation>
+        <translation type="vanished">&amp;Zablokuj urządzenie</translation>
     </message>
     <message>
         <source>Smartcard or SD card are not ready</source>
-        <translation>Karta inteligentna lub karta SD nie są gotowe</translation>
+        <translation type="vanished">Karta inteligentna lub karta SD nie są gotowe</translation>
     </message>
     <message>
         <source>Passwords</source>
-        <translation>Hasła</translation>
+        <translation type="vanished">Hasła</translation>
     </message>
     <message>
         <source>(empty)</source>
-        <translation>(puste)</translation>
+        <translation type="vanished">(puste)</translation>
     </message>
     <message>
         <source>Configure</source>
-        <translation>Konfiguracja</translation>
+        <translation type="vanished">Konfiguracja</translation>
     </message>
     <message>
         <source>Special Configure</source>
-        <translation>Ustawienia zaawansowane</translation>
+        <translation type="vanished">Ustawienia zaawansowane</translation>
     </message>
     <message>
         <source>Long operation in progress: %1%</source>
-        <translation> Operacja w toku: %1%</translation>
+        <translation type="vanished"> Operacja w toku: %1%</translation>
     </message>
     <message>
         <source>&amp;Overview</source>
-        <translation>&amp;Przegląd</translation>
+        <translation type="vanished">&amp;Przegląd</translation>
     </message>
 </context>
 <context>
@@ -1539,47 +1566,47 @@ Aby uniknąć utraty danych, przed przystąpieniem do dalszych czynności należ
     <name>main</name>
     <message>
         <source>Nitrokey App - Manage your Nitrokey sticks</source>
-        <translation>Aplikacja Nitrokey - Zarządzaj kluczami USB Nitrokey</translation>
+        <translation type="vanished">Aplikacja Nitrokey - Zarządzaj kluczami USB Nitrokey</translation>
     </message>
     <message>
         <source>Enable debug messages</source>
-        <translation>Włącz komunikaty o debugowaniu</translation>
+        <translation type="vanished">Włącz komunikaty o debugowaniu</translation>
     </message>
     <message>
         <source>Save debug log to file with name &lt;log-file-name&gt; (experimental)</source>
-        <translation>Zapisz log debugowania do pliku o nazwie &lt;nazwa logu&gt; (funkcja eksperymentalna)</translation>
+        <translation type="vanished">Zapisz log debugowania do pliku o nazwie &lt;nazwa logu&gt; (funkcja eksperymentalna)</translation>
     </message>
     <message>
         <source>Save debug log to App&apos;s window (experimental)</source>
-        <translation>Zapisz log debugowania w oknie aplikacji (funkcja eksperymentalna)</translation>
+        <translation type="vanished">Zapisz log debugowania w oknie aplikacji (funkcja eksperymentalna)</translation>
     </message>
     <message>
         <source>Set delay between commands sent to device (in ms) to &lt;delay&gt;</source>
-        <translation>Ustaw opóźnienie między poleceniami wysyłanymi do urządzenia (w ms) na wartość&lt;delay&gt;</translation>
+        <translation type="vanished">Ustaw opóźnienie między poleceniami wysyłanymi do urządzenia (w ms) na wartość&lt;delay&gt;</translation>
     </message>
     <message>
         <source>Show additional information about binary</source>
-        <translation>Pokaż dodatkowe informacje na temat aplikacji</translation>
+        <translation type="vanished">Pokaż dodatkowe informacje na temat aplikacji</translation>
     </message>
     <message>
         <source>Enable extra administrative functions</source>
-        <translation>Włącz dodatkowe funkcje administracyjne</translation>
+        <translation type="vanished">Włącz dodatkowe funkcje administracyjne</translation>
     </message>
     <message>
         <source>List available languages</source>
-        <translation>Lista dostępnych języków</translation>
+        <translation type="vanished">Lista dostępnych języków</translation>
     </message>
     <message>
         <source>Load translation file with given name and store this choice in settings file.</source>
-        <translation>Wczytaj plik z tłumaczeniem o podanej nazwie i zapisz ten wybór w pliku ustawień</translation>
+        <translation type="vanished">Wczytaj plik z tłumaczeniem o podanej nazwie i zapisz ten wybór w pliku ustawień</translation>
     </message>
     <message>
         <source>Set debug level, 0-4</source>
-        <translation>Ustaw poziom szczegółowości debugowania, 0-4</translation>
+        <translation type="vanished">Ustaw poziom szczegółowości debugowania, 0-4</translation>
     </message>
     <message>
         <source>Clear all application&apos;s settings</source>
-        <translation>Wyczyść wszystkie ustawienia aplikacji</translation>
+        <translation type="vanished">Wyczyść wszystkie ustawienia aplikacji</translation>
     </message>
 </context>
 <context>

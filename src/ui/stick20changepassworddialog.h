@@ -49,7 +49,7 @@ class DialogChangePassword : public QDialog {
     int minimumPasswordLength = {};
 
   explicit DialogChangePassword(QWidget *parent, PasswordKind _kind);
-    ~DialogChangePassword();
+    virtual ~DialogChangePassword();
 
     void InitData(void);
     virtual int exec() override;

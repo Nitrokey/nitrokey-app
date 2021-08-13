@@ -32,7 +32,7 @@ Q_OBJECT
 public:
     enum Type{ADMIN, USER, FIRMWARE, HIDDEN_VOLUME};
     Authentication(QObject *parent, Type _type);
-    ~Authentication();
+    virtual ~Authentication();
     bool authenticate();
     const QByteArray getTempPassword();
     std::string getPassword();

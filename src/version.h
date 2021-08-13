@@ -29,13 +29,13 @@
 #endif
 
 #ifndef GUI_VERSION
-#define GUI_VERSION "1.4-unspecified"
+#define GUI_VERSION "1.5-unspecified"
 #endif
 
 #ifndef GIT_VERSION
 #define GIT_VERSION ""
 #endif
 
-#define COPYRIGHT_YEARS "2012-2019"
+#define COPYRIGHT_YEARS "2012-2021"
 
 #endif //NITROKEYAPP_VERSION_H

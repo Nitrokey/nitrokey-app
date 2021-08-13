@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 cmake_policy(SET CMP0043 OLD) # cmake --help-policy CMP0043
 
 PROJECT(NitrokeyApp LANGUAGES CXX)
-SET(PROJECT_VERSION "1.4.2")
+SET(PROJECT_VERSION "1.5.0")
 set(LIBNK_MIN_VERSION 3.5)
 
 include(GNUInstallDirs)
@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+OPTION(LIBNITROKEY_FORCE_BUNDLED "Do not use system provided libnitrokey" FALSE)
 OPTION(ADD_GIT_INFO "Add information about source code version from Git repository" TRUE)
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build all libraries as shared")
 
@@ -62,6 +63,7 @@ ELSE()
 ENDIF()
 
 add_definitions(-DGUI_VERSION="${PROJECT_VERSION}")
+add_definitions(-DLIBNK_MIN_VERSION="${LIBNK_MIN_VERSION}")
 
 
 # for out of source build
@@ -224,7 +226,11 @@ find_package(PkgConfig)
 pkg_search_module(LIBNITROKEY ${_pkgconfig_REQUIRED} libnitrokey-1 >= ${LIBNK_MIN_VERSION})
 
 MESSAGE(STATUS "Required libnitrokey version: ${LIBNK_MIN_VERSION}")
-if(LIBNITROKEY_FOUND)
+if(LIBNITROKEY_FORCE_BUNDLED)
+    MESSAGE(WARNING "Using bundled libnitrokey forced")
+endif()
+
+if(LIBNITROKEY_FOUND AND !LIBNITROKEY_FORCE_BUNDLED)
   MESSAGE(STATUS "Found system libnitrokey (Cflags: '${LIBNITROKEY_CFLAGS}' Libs: '${LIBNITROKEY_LDFLAGS}')")
   if (BUILD_SHARED_LIBS)
     target_compile_options(nitrokey-app PRIVATE ${LIBNITROKEY_CFLAGS})
@@ -237,6 +243,7 @@ else()
   MESSAGE("Using bundled libnitrokey")
   add_subdirectory (libnitrokey)
   include_directories(libnitrokey)
+  include_directories(libnitrokey/libnitrokey)
   target_link_libraries(nitrokey-app nitrokey)
 endif()
 

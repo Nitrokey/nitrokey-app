@@ -54,7 +54,7 @@ class MainWindow : public QMainWindow {
 
 public :
     explicit MainWindow(QWidget *parent = 0);
-  ~MainWindow();
+  virtual ~MainWindow();
 
 protected:
   void closeEvent(QCloseEvent *event) override;
@@ -234,7 +234,12 @@ private:
   QString getOTPSecretCleaned(QString secret_input);
 
   void make_UI_enabled(bool enabled);
+
+  void check_libnitrokey_version();
+
 };
+
+quint32 get_random();
 
 class utf8FieldLengthValidator : public QValidator {
   Q_OBJECT

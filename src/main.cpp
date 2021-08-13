@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <libnitrokey/log.h>
+#include <QStyleFactory>
 //#include <QSharedMemory>
 #include "src/version.h"
 #include "src/utils/bool_values.h"
@@ -46,7 +47,7 @@ void issue_43_workaround();
 void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
                          QTranslator &myappTranslator);
 
-void configureRandomGenerator();
+void set_dark_theme();
 
 int main(int argc, char *argv[]) {
   qRegisterMetaType<QMap<QString, QVariant>>();
@@ -112,14 +113,11 @@ int main(int argc, char *argv[]) {
      QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
 
 
-  configureRandomGenerator();
   a.setQuitOnLastWindowClosed(false);
 
 
   MainWindow w;
-  if (parser.isSet("admin")){
-    w.enable_admin_commands();
-  }
+  w.enable_admin_commands();
 
   QString df = settings.value("debug/file", "").toString().trimmed();
   if (!df.isEmpty() && settings.value("debug/enabled", false).toBool() && df != "console"){
@@ -154,6 +152,9 @@ int main(int argc, char *argv[]) {
     w.hideOnStartup();
   }
 
+  if(parser.isSet("dark-theme")){
+      set_dark_theme();
+  }
 
 //  csApplet()->setParent(&w);
   int retcode = -1;
@@ -174,10 +175,6 @@ int main(int argc, char *argv[]) {
   return retcode;
 }
 
-void configureRandomGenerator() {
-    QDateTime local(QDateTime::currentDateTime());
-    qsrand(static_cast<uint> (local.currentMSecsSinceEpoch() % 2000000000));
-  }
 
 void configureTranslator(const QApplication &a, const QCommandLineParser &parser, const QString &settings_language,
                          QTranslator &myappTranslator) {
@@ -282,6 +279,8 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
           "log-file-name"},
       {{"dw","debug-window"},
           QCoreApplication::translate("main", "Save debug log to App's window (experimental)") },
+      {"dark-theme",
+          QCoreApplication::translate("main", "Set dark theme")},
       {{"dl","debug-level"},
           QCoreApplication::translate("main", "Set debug level, 0-4"),
           "debug-level-int"},
@@ -330,3 +329,46 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
   return false;
 }
 
+
+void set_dark_theme() {
+    //    https://stackoverflow.com/questions/48256772/dark-theme-for-qt-widgets
+    qApp->setStyle(QStyleFactory::create("Fusion"));
+
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor(53,53,53));
+    darkPalette.setColor(QPalette::WindowText, Qt::white);
+    darkPalette.setColor(QPalette::Base, QColor(25,25,25));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
+    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor(QPalette::Text, Qt::white);
+    darkPalette.setColor(QPalette::Button, QColor(53,53,53));
+    darkPalette.setColor(QPalette::ButtonText, Qt::white);
+    darkPalette.setColor(QPalette::BrightText, Qt::red);
+    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+
+    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+
+    qApp->setPalette(darkPalette);
+
+    qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+}
+
+void set_dark_theme2() {
+    //    https://stackoverflow.com/questions/48256772/dark-theme-for-qt-widgets
+    QApplication::setStyle(QStyleFactory::create("Fusion"));
+    QPalette p;
+    p = qApp->palette();
+    p.setColor(QPalette::Window, QColor(53,53,53));
+    p.setColor(QPalette::Button, QColor(53,53,53));
+    p.setColor(QPalette::Highlight, QColor(142,45,197));
+    p.setColor(QPalette::ButtonText, QColor(255,255,255));
+    qApp->setPalette(p);
+}
+
+void set_dark_theme3(){
+//  further resources
+//  https://github.com/ColinDuquesnoy/QDarkStyleSheet
+//  https://github.com/albertosottile/darkdetect
+}

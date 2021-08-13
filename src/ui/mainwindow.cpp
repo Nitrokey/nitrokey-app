@@ -256,7 +256,7 @@ MainWindow::MainWindow(QWidget *parent):
   connect(ui->btn_dial_HV, SIGNAL(clicked()), &storage, SLOT(startStick20EnableHiddenVolume()));
   connect(ui->btn_dial_quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 
-
+  check_libnitrokey_version();
 }
 
 #include <libnitrokey/stick20_commands.h>
@@ -310,6 +310,36 @@ void MainWindow::manageStartPage(){
                                       );
         ui->PWS_ButtonEnable->setEnabled(ui->btn_dial_PWS->isEnabled());
     }
+}
+
+#ifndef LIBNK_MIN_VERSION
+#pragma message "LIBNK_MIN_VERSION not set, using 3.5"
+#define LIBNK_MIN_VERSION "3.5"
+#endif
+
+#include "libnitrokey/NK_C_API.h"
+
+void MainWindow::check_libnitrokey_version(){
+    const auto msg_template = tr("Old libnitrokey library detected. Some features may not work. "
+                  "Minimal supported version is %1, but the current one is %2.");
+
+    const unsigned int current_major = NK_get_major_library_version();
+    const unsigned int current_minor = NK_get_minor_library_version();
+    const QStringList &libnk_version_list = QStringLiteral(LIBNK_MIN_VERSION).split(".");
+    const unsigned int min_supported_major = libnk_version_list[0].toLong();
+    const unsigned int min_supported_minor = libnk_version_list[1].toLong();
+    const bool libnitrokey_too_old = current_major < min_supported_major
+                                     || (current_major == min_supported_major && current_minor < min_supported_minor);
+
+    if (!libnitrokey_too_old) {
+        return;
+    }
+
+    const auto final_message = msg_template.arg(LIBNK_MIN_VERSION, QStringLiteral("%1.%2").arg(QString::number(current_major), QString::number(current_minor)));
+    tray.showTrayMessage(final_message);
+    ui->statusBar->showMessage(final_message);
+    qWarning() << final_message;
+    csApplet()->warningBox(final_message);
 }
 
 void MainWindow::first_run(){
@@ -955,7 +985,7 @@ void MainWindow::on_setToZeroButton_clicked() { ui->counterEdit->setText("0"); }
 
 void MainWindow::on_setToRandomButton_clicked() {
   quint64 counter;
-  counter = qrand();
+  counter = get_random();
   if (libada::i()->isStorageDeviceConnected()) {
     const int maxDigits = 7;
     counter = counter % ((quint64)pow(10, maxDigits));
@@ -1082,6 +1112,7 @@ void MainWindow::on_eraseButton_clicked() {
 
 quint32 get_random(){
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+  // will be securely seeded by Qt
   return QRandomGenerator::global()->generate();
 #else
   static std::random_device dev;
@@ -1468,8 +1499,8 @@ std::string MainWindow::getNextCode(uint8_t slotNumber) {
   bool isTOTP = slotNumber >= 0x20;
   auto temp_password_byte_array = tempPassword;
   if (isTOTP){
-    //run only once before first TOTP request
-    static bool time_synchronized = libada::i()->is_time_synchronized();
+    //run each time before a TOTP request
+    bool time_synchronized = libada::i()->is_time_synchronized();
     if (!time_synchronized) {
        bool user_wants_time_reset =
            csApplet()->detailedYesOrNoBox(tr("Time is out-of-sync") + " - " + tr(Reset_nitrokeys_time),

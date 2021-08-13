@@ -38,7 +38,7 @@ class Stick20ResponseDialog : public QDialog {
 
 public :
   explicit Stick20ResponseDialog(QWidget *parent = 0);
-  ~Stick20ResponseDialog();
+  virtual ~Stick20ResponseDialog();
 
   enum class Type{
     none, wheel, progress_bar

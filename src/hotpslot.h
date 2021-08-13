@@ -44,7 +44,7 @@ public:
     };
 
     OTPSlot();
-    ~OTPSlot(){
+    virtual ~OTPSlot(){
       volatile char* p;
       p = slotName;
       for (uint64_t i = 0; i < sizeof(slotName); ++i) {
