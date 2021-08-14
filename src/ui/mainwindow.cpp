@@ -1877,6 +1877,8 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("main/close_main_on_connection", ui->cb_hide_main_window_on_connection->isChecked());
     settings.setValue("main/hide_on_close", ui->cb_hide_main_window_on_close->isChecked());
     settings.setValue("main/show_on_start", ui->cb_show_window_on_start->isChecked());
+
+    restart_required |= ui->trayIconColorEdit->text() != settings.value("main/tray_icon_color").toString();
     settings.setValue("main/tray_icon_color", ui->trayIconColorEdit->text());
 
     settings.setValue("storage/check_symlink", ui->cb_check_symlink->isChecked());
