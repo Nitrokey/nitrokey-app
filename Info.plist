@@ -10,8 +10,10 @@
 	<string>CS_icon.icns</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleGetInfoString</key>
-        <string>Nitrokey Device Manager</string>
+	<key>CFBundleShortVersionString</key>
+	<string>@FULL_VERSION@</string>
+	<key>CFBundleVersion</key>
+	<string>@FULL_VERSION@</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
