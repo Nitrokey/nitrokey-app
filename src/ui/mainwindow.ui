@@ -1331,14 +1331,48 @@
                  </layout>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="cb_show_main_window_on_connection">
-                  <property name="text">
-                   <string>Show main window when device connects</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_10">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_13">
+                    <item>
+                     <widget class="QLabel" name="label_8">
+                      <property name="text">
+                       <string>Tray icon color:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="trayIconColorEdit">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string notr="true">#FF0000</string>
+                      </property>
+                      <property name="maxLength">
+                       <number>7</number>
+                      </property>
+                      <property name="placeholderText">
+                       <string notr="true">#FF0000</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_show_main_window_on_connection">
+                    <property name="text">
+                     <string>Show main window when device connects</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
                  <widget class="QCheckBox" name="cb_check_symlink">

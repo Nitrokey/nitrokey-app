@@ -107,6 +107,8 @@ void MainWindow::load_settings_page(){
     emit ui->cb_debug_enabled->toggled(settings_debug_enabled);
     ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
     ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
+    ui->trayIconColorEdit->setText(settings.value("main/tray_icon_color", "#FF0000").toString());
+
     ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
     ui->cb_show_main_window_on_connection->setChecked(settings.value("main/show_main_on_connection", true).toBool());
     ui->cb_hide_main_window_on_connection->setChecked(settings.value("main/close_main_on_connection", false).toBool());
@@ -1875,6 +1877,7 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("main/close_main_on_connection", ui->cb_hide_main_window_on_connection->isChecked());
     settings.setValue("main/hide_on_close", ui->cb_hide_main_window_on_close->isChecked());
     settings.setValue("main/show_on_start", ui->cb_show_window_on_start->isChecked());
+    settings.setValue("main/tray_icon_color", ui->trayIconColorEdit->text());
 
     settings.setValue("storage/check_symlink", ui->cb_check_symlink->isChecked());
 
