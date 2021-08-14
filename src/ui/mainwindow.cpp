@@ -1777,7 +1777,7 @@ void MainWindow::on_KeepDeviceOnline() {
   });
 
   try{
-    nm::instance()->get_status();
+    nm::instance()->get_password_safe_slot_status();
     //if long operation in progress jump to catch,
     // clear the flag otherwise
     if (long_operation_in_progress) {
@@ -1798,6 +1798,9 @@ void MainWindow::on_KeepDeviceOnline() {
       keepDeviceOnlineTimer->setInterval(10*1000);
     }
     emit OperationInProgress(e.progress_bar_value);
+  }
+  catch (CommandFailedException &e) {
+      // do not handle errors here
   }
 }
 
