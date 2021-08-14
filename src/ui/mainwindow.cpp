@@ -842,6 +842,22 @@ void MainWindow::on_writeButton_clicked() {
   const auto isHOTP = slotNo > TOTP_SlotCount;
   slotNo = isHOTP? slotNo - TOTP_SlotCount -1:slotNo;
 
+  // check if this slot is already used
+  auto name = isHOTP? libada::i()->getHOTPSlotName(slotNo) : libada::i()->getTOTPSlotName(slotNo);
+  if (!name.empty() && !ui->secretEdit->text().isEmpty()) {
+      auto confirmation_string = tr("The selected OTP slot is already used. Are you sure you want to overwrite it?");
+      auto user_confirms = csApplet()->yesOrNoBox(confirmation_string, false);
+      if (!user_confirms) {
+          auto confirmation_string = tr("Would you like to revert the changes?");
+          auto user_wants_revert = csApplet()->yesOrNoBox(confirmation_string, false);
+          if (user_wants_revert) {
+              // repopulate the OTP slots
+              emit OTP_slot_write(slotNo, isHOTP);
+          }
+          return;
+      }
+  }
+
 
   if (ui->nameEdit->text().isEmpty()) {
     csApplet()->warningBox(tr("Please enter a slotname."));
