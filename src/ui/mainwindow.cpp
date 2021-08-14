@@ -107,6 +107,8 @@ void MainWindow::load_settings_page(){
     emit ui->cb_debug_enabled->toggled(settings_debug_enabled);
     ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
     ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
+    ui->trayIconColorEdit->setText(settings.value("main/tray_icon_color", "#FF0000").toString());
+
     ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
     ui->cb_show_main_window_on_connection->setChecked(settings.value("main/show_main_on_connection", true).toBool());
     ui->cb_hide_main_window_on_connection->setChecked(settings.value("main/close_main_on_connection", false).toBool());
@@ -703,6 +705,9 @@ void MainWindow::displayCurrentSlotConfig() {
   ui->slotComboBox->repaint();
 
   uint8_t slotNo = ui->slotComboBox->currentIndex();
+  const auto isHOTP = slotNo > TOTP_SlotCount;
+  ui->hotpRadioButton->setChecked(isHOTP);
+  ui->totpRadioButton->setChecked(!isHOTP);
 
   if (slotNo == 255)
     return;
@@ -841,6 +846,22 @@ void MainWindow::on_writeButton_clicked() {
   uint8_t slotNo = (uint8_t) ui->slotComboBox->currentIndex();
   const auto isHOTP = slotNo > TOTP_SlotCount;
   slotNo = isHOTP? slotNo - TOTP_SlotCount -1:slotNo;
+
+  // check if this slot is already used
+  auto name = isHOTP? libada::i()->getHOTPSlotName(slotNo) : libada::i()->getTOTPSlotName(slotNo);
+  if (!name.empty() && !ui->secretEdit->text().isEmpty()) {
+      auto confirmation_string = tr("The selected OTP slot is already used. Are you sure you want to overwrite it?");
+      auto user_confirms = csApplet()->yesOrNoBox(confirmation_string, false);
+      if (!user_confirms) {
+          auto confirmation_string = tr("Would you like to revert the changes?");
+          auto user_wants_revert = csApplet()->yesOrNoBox(confirmation_string, false);
+          if (user_wants_revert) {
+              // repopulate the OTP slots
+              emit OTP_slot_write(slotNo, isHOTP);
+          }
+          return;
+      }
+  }
 
 
   if (ui->nameEdit->text().isEmpty()) {
@@ -1582,16 +1603,6 @@ int MainWindow::factoryResetAction() {
   return 0;
 }
 
-void MainWindow::on_radioButton_2_toggled(bool checked) {
-  if (checked)
-    ui->slotComboBox->setCurrentIndex(0);
-}
-
-void MainWindow::on_radioButton_toggled(bool checked) {
-  if (checked)
-    ui->slotComboBox->setCurrentIndex(TOTP_SlotCount + 1);
-}
-
 void setCounter(int size, const QString &arg1, QLabel *counter) {
   int chars_left = size - arg1.toUtf8().size();
   QString t = QString::number(chars_left);
@@ -1761,7 +1772,7 @@ void MainWindow::on_KeepDeviceOnline() {
   });
 
   try{
-    nm::instance()->get_status();
+    nm::instance()->get_password_safe_slot_status();
     //if long operation in progress jump to catch,
     // clear the flag otherwise
     if (long_operation_in_progress) {
@@ -1782,6 +1793,9 @@ void MainWindow::on_KeepDeviceOnline() {
       keepDeviceOnlineTimer->setInterval(10*1000);
     }
     emit OperationInProgress(e.progress_bar_value);
+  }
+  catch (CommandFailedException &e) {
+      // do not handle errors here
   }
 }
 
@@ -1864,6 +1878,9 @@ void MainWindow::on_btn_writeSettings_clicked()
     settings.setValue("main/hide_on_close", ui->cb_hide_main_window_on_close->isChecked());
     settings.setValue("main/show_on_start", ui->cb_show_window_on_start->isChecked());
 
+    restart_required |= ui->trayIconColorEdit->text() != settings.value("main/tray_icon_color").toString();
+    settings.setValue("main/tray_icon_color", ui->trayIconColorEdit->text());
+
     settings.setValue("storage/check_symlink", ui->cb_check_symlink->isChecked());
 
     // inform user and quit if asked
@@ -1905,4 +1922,27 @@ void MainWindow::ready() {
 void MainWindow::on_btn_select_debug_console_clicked()
 {
     ui->edit_debug_file_path->setText("console");
+}
+
+
+void MainWindow::on_totpRadioButton_clicked(bool checked)
+{
+    if (checked)
+        ui->slotComboBox->setCurrentIndex(0);
+}
+
+void MainWindow::on_hotpRadioButton_clicked(bool checked)
+{
+    if (checked)
+        ui->slotComboBox->setCurrentIndex(TOTP_SlotCount + 1);
+}
+
+void MainWindow::on_btn_trayColorChange_clicked()
+{
+    QColorDialog d;
+    d.setCurrentColor(ui->trayIconColorEdit->text());
+    auto res = d.exec();
+    if (res == QDialog::Accepted) {
+        ui->trayIconColorEdit->setText(d.currentColor().name());
+    }
 }

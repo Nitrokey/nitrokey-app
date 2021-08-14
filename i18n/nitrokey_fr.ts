@@ -1071,6 +1071,22 @@ Veuillez sélectionner l&apos;option &quot;Initialiser la clef&quot; dans le men
         <source>Old libnitrokey library detected. Some features may not work. Minimal supported version is %1, but the current one is %2.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The selected OTP slot is already used. Are you sure you want to overwrite it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Would you like to revert the changes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tray icon color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change color</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
