@@ -439,8 +439,15 @@ void StorageActions::startStick20DestroyCryptedVolume(int fillSDWithRandomChars)
   bool user_entered_PIN;
   bool answer;
 
-  answer = (fillSDWithRandomChars == 1) || csApplet()->yesOrNoBox(tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
-                                         "hidden volumes, and password safe! Continue?"), false);
+    const QString &storage_string = tr("WARNING: Generating new AES keys will destroy the encrypted volumes, "
+                                       "hidden volumes, and password safe! Continue?");
+    const QString &pro_string = tr("WARNING: Generating new AES keys will destroy the password safe! Continue?");
+
+    QString device_string = pro_string;
+    if (libada::i()->isStorageDeviceConnected()) {
+        device_string = storage_string;
+    }
+    answer = (fillSDWithRandomChars == 1) || csApplet()->yesOrNoBox(device_string, false);
   if (answer) {
     PinDialog dialog(PinType::ADMIN_PIN);
     user_entered_PIN = QDialog::Accepted == dialog.exec();
