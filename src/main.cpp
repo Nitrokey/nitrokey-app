@@ -192,7 +192,7 @@ void configureTranslator(const QApplication &a, const QCommandLineParser &parser
         QString(settings_language),
         QString(QLocale::system().name()),
         QString(lang.toLower()),
-        QString("en"),
+        QString("English"),
     };
 
     if (parser.isSet("debug")) {
@@ -298,7 +298,7 @@ bool configureParser(const QApplication &a, QCommandLineParser &parser) {
           QCoreApplication::translate("main",
                                       "Load translation file with given name "
                                       "and store this choice in settings file."),
-          "en"},
+                                      "English"},
       {"no-window",
           QCoreApplication::translate("main", "Display no window.")},
 });
