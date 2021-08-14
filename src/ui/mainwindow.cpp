@@ -1598,16 +1598,6 @@ int MainWindow::factoryResetAction() {
   return 0;
 }
 
-void MainWindow::on_radioButton_2_toggled(bool checked) {
-  if (checked)
-    ui->slotComboBox->setCurrentIndex(0);
-}
-
-void MainWindow::on_radioButton_toggled(bool checked) {
-  if (checked)
-    ui->slotComboBox->setCurrentIndex(TOTP_SlotCount + 1);
-}
-
 void setCounter(int size, const QString &arg1, QLabel *counter) {
   int chars_left = size - arg1.toUtf8().size();
   QString t = QString::number(chars_left);
@@ -1924,4 +1914,17 @@ void MainWindow::ready() {
 void MainWindow::on_btn_select_debug_console_clicked()
 {
     ui->edit_debug_file_path->setText("console");
+}
+
+
+void MainWindow::on_totpRadioButton_clicked(bool checked)
+{
+    if (checked)
+        ui->slotComboBox->setCurrentIndex(0);
+}
+
+void MainWindow::on_hotpRadioButton_clicked(bool checked)
+{
+    if (checked)
+        ui->slotComboBox->setCurrentIndex(TOTP_SlotCount + 1);
 }

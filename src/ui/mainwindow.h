@@ -182,8 +182,6 @@ private slots:
   void on_PWS_ButtonSaveSlot_clicked();
   void on_PWS_ButtonEnable_clicked();
   void on_counterEdit_editingFinished();
-  void on_radioButton_2_toggled(bool checked);
-  void on_radioButton_toggled(bool checked);
   void on_PWS_EditSlotName_textChanged(const QString &arg1);
   void on_PWS_EditLoginName_textChanged(const QString &arg1);
   void on_PWS_EditPassword_textChanged(const QString &arg1);
@@ -198,6 +196,10 @@ private slots:
   void on_btn_copyToClipboard_clicked();
 
   void on_btn_select_debug_console_clicked();
+
+  void on_totpRadioButton_clicked(bool checked);
+
+  void on_hotpRadioButton_clicked(bool checked);
 
 public:
   void generateOTPConfig(OTPSlot *slot);

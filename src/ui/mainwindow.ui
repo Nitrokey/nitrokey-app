@@ -250,7 +250,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_14">
              <item>
-              <widget class="QRadioButton" name="radioButton_2">
+              <widget class="QRadioButton" name="totpRadioButton">
                <property name="accessibleName">
                 <string>Select slot type: TOTP</string>
                </property>
@@ -266,7 +266,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QRadioButton" name="radioButton">
+              <widget class="QRadioButton" name="hotpRadioButton">
                <property name="accessibleName">
                 <string>Select slot type: HOTP</string>
                </property>
@@ -1621,8 +1621,8 @@
   <tabstop>btn_dial_lock</tabstop>
   <tabstop>btn_dial_help</tabstop>
   <tabstop>btn_dial_quit</tabstop>
-  <tabstop>radioButton_2</tabstop>
-  <tabstop>radioButton</tabstop>
+  <tabstop>totpRadioButton</tabstop>
+  <tabstop>hotpRadioButton</tabstop>
   <tabstop>slotComboBox</tabstop>
   <tabstop>nameEdit</tabstop>
   <tabstop>eraseButton</tabstop>
