@@ -1936,3 +1936,13 @@ void MainWindow::on_hotpRadioButton_clicked(bool checked)
     if (checked)
         ui->slotComboBox->setCurrentIndex(TOTP_SlotCount + 1);
 }
+
+void MainWindow::on_btn_trayColorChange_clicked()
+{
+    QColorDialog d;
+    d.setCurrentColor(ui->trayIconColorEdit->text());
+    auto res = d.exec();
+    if (res == QDialog::Accepted) {
+        ui->trayIconColorEdit->setText(d.currentColor().name());
+    }
+}

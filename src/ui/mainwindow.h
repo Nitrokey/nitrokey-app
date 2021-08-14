@@ -201,6 +201,8 @@ private slots:
 
   void on_hotpRadioButton_clicked(bool checked);
 
+  void on_btn_trayColorChange_clicked();
+
 public:
   void generateOTPConfig(OTPSlot *slot);
   unsigned int get_supported_secret_length_base32() const;

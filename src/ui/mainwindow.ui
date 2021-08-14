@@ -1342,6 +1342,13 @@
                      </widget>
                     </item>
                     <item>
+                     <widget class="QPushButton" name="btn_trayColorChange">
+                      <property name="text">
+                       <string>Change color</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
                      <widget class="QLineEdit" name="trayIconColorEdit">
                       <property name="sizePolicy">
                        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
