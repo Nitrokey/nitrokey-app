@@ -703,6 +703,9 @@ void MainWindow::displayCurrentSlotConfig() {
   ui->slotComboBox->repaint();
 
   uint8_t slotNo = ui->slotComboBox->currentIndex();
+  const auto isHOTP = slotNo > TOTP_SlotCount;
+  ui->hotpRadioButton->setChecked(isHOTP);
+  ui->totpRadioButton->setChecked(!isHOTP);
 
   if (slotNo == 255)
     return;
