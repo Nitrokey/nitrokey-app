@@ -1021,6 +1021,14 @@ Select &quot;Initialize device&quot; option from context menu.</translation>
         <source>Would you like to revert the changes?</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Tray icon color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change color</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PinDialog</name>
