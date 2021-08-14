@@ -1331,14 +1331,55 @@
                  </layout>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="cb_show_main_window_on_connection">
-                  <property name="text">
-                   <string>Show main window when device connects</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_10">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_13">
+                    <item>
+                     <widget class="QLabel" name="label_8">
+                      <property name="text">
+                       <string>Tray icon color:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="btn_trayColorChange">
+                      <property name="text">
+                       <string>Change color</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="trayIconColorEdit">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string notr="true">#FF0000</string>
+                      </property>
+                      <property name="maxLength">
+                       <number>7</number>
+                      </property>
+                      <property name="placeholderText">
+                       <string notr="true">#FF0000</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <widget class="QCheckBox" name="cb_show_main_window_on_connection">
+                    <property name="text">
+                     <string>Show main window when device connects</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
                  <widget class="QCheckBox" name="cb_check_symlink">
@@ -1608,22 +1649,22 @@
      <x>0</x>
      <y>0</y>
      <width>932</width>
-     <height>27</height>
+     <height>29</height>
     </rect>
    </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>btn_dial_PWS</tabstop>
-  <tabstop>btn_dial_EV</tabstop>
-  <tabstop>btn_dial_HV</tabstop>
-  <tabstop>btn_dial_lock</tabstop>
-  <tabstop>btn_dial_help</tabstop>
-  <tabstop>btn_dial_quit</tabstop>
-  <tabstop>totpRadioButton</tabstop>
-  <tabstop>hotpRadioButton</tabstop>
-  <tabstop>slotComboBox</tabstop>
+  <tabstop>cb_first_run_message</tabstop>
+  <tabstop>cb_show_window_on_start</tabstop>
+  <tabstop>cb_hide_main_window_on_close</tabstop>
+  <tabstop>cb_hide_main_window_on_connection</tabstop>
+  <tabstop>trayIconColorEdit</tabstop>
+  <tabstop>cb_show_main_window_on_connection</tabstop>
+  <tabstop>cb_check_symlink</tabstop>
+  <tabstop>cb_device_connection_message</tabstop>
+  <tabstop>combo_languages</tabstop>
   <tabstop>nameEdit</tabstop>
   <tabstop>eraseButton</tabstop>
   <tabstop>base32RadioButton</tabstop>
@@ -1652,14 +1693,13 @@
   <tabstop>PWS_Lock</tabstop>
   <tabstop>PWS_ButtonClose</tabstop>
   <tabstop>PWS_ButtonSaveSlot</tabstop>
-  <tabstop>cb_first_run_message</tabstop>
-  <tabstop>cb_show_window_on_start</tabstop>
-  <tabstop>cb_check_symlink</tabstop>
-  <tabstop>cb_device_connection_message</tabstop>
-  <tabstop>cb_show_main_window_on_connection</tabstop>
-  <tabstop>cb_hide_main_window_on_connection</tabstop>
-  <tabstop>cb_hide_main_window_on_close</tabstop>
-  <tabstop>combo_languages</tabstop>
+  <tabstop>btn_dial_PWS</tabstop>
+  <tabstop>btn_dial_EV</tabstop>
+  <tabstop>totpRadioButton</tabstop>
+  <tabstop>hotpRadioButton</tabstop>
+  <tabstop>btn_dial_lock</tabstop>
+  <tabstop>btn_dial_HV</tabstop>
+  <tabstop>slotComboBox</tabstop>
   <tabstop>cb_debug_enabled</tabstop>
   <tabstop>edit_debug_file_path</tabstop>
   <tabstop>btn_select_debug_console</tabstop>
@@ -1675,6 +1715,8 @@
   <tabstop>secret_key_generated_len</tabstop>
   <tabstop>randomSecretButton</tabstop>
   <tabstop>btn_copyToClipboard</tabstop>
+  <tabstop>btn_dial_quit</tabstop>
+  <tabstop>btn_dial_help</tabstop>
  </tabstops>
  <resources>
   <include location="../../resources.qrc"/>

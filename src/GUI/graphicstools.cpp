@@ -7,6 +7,7 @@
 #include <QStyle>
 #include <QProcess>
 #include <QApplication>
+#include <QSettings>
 
 bool test_if_gnome(){
 #ifdef Q_OS_LINUX
@@ -26,7 +27,9 @@ QPixmap GraphicsTools::loadColorize(const QString& path, bool loadForTray, bool 
     QColor text_color;
 
     if (mainTrayIcon){
-        text_color.setRgb(255, 0, 0);
+        QSettings settings;
+        auto color = settings.value("main/tray_icon_color", "#FF0000").toString();
+        text_color.setNamedColor(color);
     } else {
         text_color = QGuiApplication::palette().color(QPalette::WindowText);
     }
