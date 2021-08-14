@@ -14,10 +14,10 @@ variables:
   SCRIPTS_REPO: git@git.dotplex.com:nitrokey/gitlab-ci.git
   REPO_USER: nitrokey
   REPO_NAME: nitrokey-app
-  MAIN_BRANCH: ci
+  MAIN_BRANCH: master
   COMMON_PULL: "true"
   COMMON_UPLOAD_NIGHTLY: "true"
-  COMMON_GITHUB_RELEASE: "false"
+  COMMON_GITHUB_RELEASE: "true"
   COMMON_UPLOAD_FILES: "false"
 
 fetch-and-package:
