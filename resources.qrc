@@ -4,12 +4,12 @@
         <file alias="progressWheel2.gif">images/progressWheel2.gif</file>
     </qresource>
     <qresource prefix="/i18n">
-        <file alias="nitrokey_de_DE.qm">i18n/nitrokey_de_DE.qm</file>
-        <file alias="nitrokey_en.qm">i18n/nitrokey_en.qm</file>
-        <file alias="nitrokey_arabic.qm">i18n/nitrokey_arabic.qm</file>
-        <file alias="nitrokey_fr.qm">i18n/nitrokey_fr.qm</file>
-        <file alias="nitrokey_pl.qm">i18n/nitrokey_pl.qm</file>
-        <file alias="nitrokey_it.qm">i18n/nitrokey_it.qm</file>
+        <file alias="nitrokey_Deutsch.qm">i18n/nitrokey_Deutsch.qm</file>
+        <file alias="nitrokey_English.qm">i18n/nitrokey_English.qm</file>
+        <file alias="nitrokey_Arabic.qm">i18n/nitrokey_Arabic.qm</file>
+        <file alias="nitrokey_Francais.qm">i18n/nitrokey_Francais.qm</file>
+        <file alias="nitrokey_Polski.qm">i18n/nitrokey_Polski.qm</file>
+        <file alias="nitrokey_Italiano.qm">i18n/nitrokey_Italiano.qm</file>
     </qresource>
     <qresource prefix="/license">
         <file alias="General">3RDPARTY.txt</file>
