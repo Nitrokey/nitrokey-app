@@ -24,6 +24,8 @@ fetch-and-package:
   image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   tags:
     - docker
   stage: fetch
@@ -44,6 +46,8 @@ fetch-and-package:
 .build:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   tags:
     - docker
   stage: build
@@ -80,6 +84,8 @@ snapcraft:
   image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   tags:
     - docker
   stage: build
@@ -100,6 +106,8 @@ deb:
   image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   tags:
     - docker
   stage: build
@@ -121,6 +129,8 @@ appimage:
   image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-appimages-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   tags:
     - docker
   stage: build
@@ -138,6 +148,8 @@ mxe:
   image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-mxe-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   tags:
     - docker
   stage: build
@@ -158,6 +170,8 @@ flatpak:
   #image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   tags:
     - lxc
   stage: build
@@ -191,19 +205,3 @@ flatpak:
 #      - artifacts
 #    expire_in: 2 week
 #  allow_failure: true
-
-collect-artifacts:
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-  tags:
-    - docker
-  stage: deploy
-  script: 
-    - echo collecting artifacts
-  after_script:
-    - wget $icon_server/checkmark/$CI_COMMIT_REF_NAME/$CI_COMMIT_SHA/$CI_JOB_NAME/$CI_JOB_STATUS/${CI_JOB_URL#*/*/*/}
-  artifacts:
-    paths:
-      - artifacts
-    expire_in: 2 week
