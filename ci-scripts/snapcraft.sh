@@ -5,10 +5,13 @@ set -exuo pipefail
 
 tar xf ./artifacts/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
+NITROKEY_APP_BUILD_SNAPCRAFT_VERSION=$(git describe --always)
+echo NITROKEY_APP_BUILD_SNAPCRAFT_VERSION (Git Version): ${NITROKEY_APP_BUILD_SNAPCRAFT_VERSION}
+
 mkdir -p artifacts
 OUTDIR="$(realpath artifacts)"
 
-OUTNAME="nitrokey-app_${NITROKEY_APP_BUILD_ARTIFACT_VERSION}_amd64.snap"
+OUTNAME="nitrokey-app_${NITROKEY_APP_BUILD_SNAPCRAFT_VERSION}_amd64.snap"
 
 pushd ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
 
@@ -28,7 +31,7 @@ esac
 cat <<-EOF > snapcraft.yaml
   name: nitrokey-app
   base: core18
-  version: ${NITROKEY_APP_BUILD_ARTIFACT_VERSION}
+  version: ${NITROKEY_APP_BUILD_SNAPCRAFT_VERSION}
   summary: Nitrokey Application
   description: A QT GUI for managing your Nitrokey device
   confinement: strict
