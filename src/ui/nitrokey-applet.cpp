@@ -73,6 +73,14 @@ bool AppMessageBox::detailedYesOrNoBox(const QString& msg, const QString& detail
   return b;
 }
 
+AppMessageBox *AppMessageBox::instance() {
+    //C++11 static initialization is thread safe
+    //In Visual Studio supported since 2015 hence mutex
+    QMutexLocker locker(&mutex);
+    static AppMessageBox applet;
+    return &applet;
+}
+
 QString getBrand() {
   return QStringLiteral(CRYPTOSTICK_APP_BRAND);
 }
