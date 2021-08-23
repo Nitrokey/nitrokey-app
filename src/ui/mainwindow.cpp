@@ -56,6 +56,7 @@
 #include <QSvgWidget>
 
 #include <random>
+#include "GUI/graphicstools.h"
 
 using nm = nitrokey::NitrokeyManager;
 const auto Communication_error_message = QT_TRANSLATE_NOOP("MainWindow", "Communication error. Please reinsert the device.");
@@ -107,7 +108,7 @@ void MainWindow::load_settings_page(){
     emit ui->cb_debug_enabled->toggled(settings_debug_enabled);
     ui->spin_PWS_time->setValue(settings.value("clipboard/PWS_time", 60).toInt());
     ui->spin_OTP_time->setValue(settings.value("clipboard/OTP_time", 120).toInt());
-    ui->trayIconColorEdit->setText(settings.value("main/tray_icon_color", "#FF0000").toString());
+    ui->trayIconColorEdit->setText(settings.value("main/tray_icon_color", GraphicsTools::get_default_tray_color()).toString());
 
     ui->cb_device_connection_message->setChecked(settings.value("main/connection_message", true).toBool());
     ui->cb_show_main_window_on_connection->setChecked(settings.value("main/show_main_on_connection", true).toBool());

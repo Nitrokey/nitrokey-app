@@ -23,12 +23,19 @@ bool test_if_gnome(){
     return false;
 }
 
+QString GraphicsTools::get_default_tray_color(){
+    if (test_if_gnome()) {
+        return QStringLiteral("#FFFFFF");
+    }
+    return QStringLiteral("#000000");
+}
+
 QPixmap GraphicsTools::loadColorize(const QString& path, bool loadForTray, bool mainTrayIcon){
     QColor text_color;
 
     if (mainTrayIcon){
         QSettings settings;
-        auto color = settings.value("main/tray_icon_color", "#FF0000").toString();
+        auto color = settings.value("main/tray_icon_color", GraphicsTools::get_default_tray_color()).toString();
         text_color.setNamedColor(color);
     } else {
         text_color = QGuiApplication::palette().color(QPalette::WindowText);
