@@ -33,10 +33,10 @@ QString getBrand();
 
 class AppMessageBox {
   public:
-  void messageBox(const QString msg);
-  void warningBox(const QString msg);
-  bool yesOrNoBox(const QString msg, bool default_val);
-  bool detailedYesOrNoBox(const QString msg, const QString detailed_text, bool default_val);
+  void messageBox(const QString& msg);
+  void warningBox(const QString& msg);
+  bool yesOrNoBox(const QString& msg, bool default_val);
+  bool detailedYesOrNoBox(const QString& msg, const QString& detailed_text, bool default_val);
   static AppMessageBox* instance(){
     //C++11 static initialization is thread safe
     //In Visual Studio supported since 2015 hence mutex
