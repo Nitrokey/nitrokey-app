@@ -22,13 +22,13 @@ sources.files = qss
 TARGET = nitrokey-app
 TEMPLATE = app
 
-VERSION = 1.4.2
-VERSION_STR = 1.4.2
+VERSION = 1.5.0
+VERSION_STR = 1.5.0
 QMAKE_TARGET_COMPANY = Nitrokey
 QMAKE_TARGET_PRODUCT = Nitrokey App
 QMAKE_TARGET_DESCRIPTION = Nitrokey Device Manager
 
-QMAKE_TARGET_COPYRIGHT = Copyright (c) 2012-2020 Nitrokey UG
+QMAKE_TARGET_COPYRIGHT = Copyright (c) 2012-2021 Nitrokey GmbH
 
 
 ROOTDIR=$$PWD
