@@ -6,7 +6,7 @@ set -exuo pipefail
 tar xf ./artifacts/${NITROKEY_APP_BUILD_ARTIFACT_VERSION}.tar.gz
 
 NITROKEY_APP_BUILD_SNAPCRAFT_VERSION=$(git describe --always)
-echo NITROKEY_APP_BUILD_SNAPCRAFT_VERSION (Git Version): ${NITROKEY_APP_BUILD_SNAPCRAFT_VERSION}
+echo NITROKEY_APP_BUILD_SNAPCRAFT_VERSION Git Version: ${NITROKEY_APP_BUILD_SNAPCRAFT_VERSION}
 
 mkdir -p artifacts
 OUTDIR="$(realpath artifacts)"

@@ -21,7 +21,7 @@ variables:
   COMMON_UPLOAD_FILES: "false"
 
 fetch-and-package:
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -62,26 +62,26 @@ fetch-and-package:
 
 build-bionic-gcc8:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc8-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc8-agent:latest
 
 build-bionic-gcc7:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc7-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc7-agent:latest
 
 build-bionic-gcc6:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc6-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc6-agent:latest
 
 build-bionic-gcc5:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-xenial-gcc5-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc5-agent:latest
 
 build-bionic-llvm7:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-bionic-llvm7-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-llvm7-agent:latest
 
 snapcraft:
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -103,7 +103,7 @@ snapcraft:
     expire_in: 2 week
 
 deb:
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -126,7 +126,7 @@ deb:
     expire_in: 2 week
 
 appimage:
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-appimages-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-appimages-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -145,7 +145,7 @@ appimage:
     expire_in: 2 week
 
 mxe:
-  image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-mxe-agent:latest
+  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-mxe-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -154,8 +154,8 @@ mxe:
     - docker
   stage: build
   before_script: 
-    - apt-get update
-    - apt-get -y install wget curl qttools5-dev git
+  #  - apt-get update
+  #  - apt-get -y install wget curl qttools5-dev git
   script: 
     - chmod +x ci-scripts/mxe.sh
     - ci-scripts/mxe.sh
@@ -167,7 +167,6 @@ mxe:
     expire_in: 2 week
 
 flatpak:
-  #image: registry.git.dotplex.com/nitrokey/nitrokeyapp/nitrokeyapp-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -175,9 +174,6 @@ flatpak:
   tags:
     - lxc
   stage: build
-  #before_script: 
-  #  - apt-get update
-  #  - apt-get -y install wget curl qttools5-dev git
   script: 
     - chmod +x ci-scripts/flatpak.sh
     - ci-scripts/flatpak.sh
