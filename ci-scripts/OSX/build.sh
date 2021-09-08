@@ -1,32 +1,31 @@
-#!/bin/bash
+#!/bin/zsh
 
 set -exuo pipefail
 
 # Script for downloading sources from github and building code-signed DMG package
 # Run example:
-# bash ./ci-scripts/OSX/build.sh ~/qt/5.9.9/clang_64/bin v1.4.2 "enable_log"
-# For unsigned build comment 'sign' function call at the script bottom
+# bash ci-scripts/OSX/build.sh /Users/nitrokey/Qt/5.9.9/clang_64/bin/ "enable_log"
+# Latest tested version is Qt 5.9.9
+# For nonsigned build comment 'sign' function call at the script bottom
 #/usr/local/Cellar/qt/6.1.2/bin
 #KEYID=118E862D88E30998B6C4BACB8ABCB1FB486E1EB6
 #user password for unlocking keychain
 #PASSWORD=xxx 
 
+
+
 QTPATH=$1
-BRANCH=$2
-CONFIG=$3
+CONFIG=$2
+BRANCH=`git describe`
 
-DIRNAME=nitrokey-app.$BRANCH.$CONFIG
-
-git clone https://github.com/Nitrokey/nitrokey-app --recursive -b $BRANCH --depth 10 $DIRNAME
-mkdir -p $DIRNAME
-cd $DIRNAME
 mkdir -p libnitrokey/build
 pushd libnitrokey/build
 cmake ..
 env MACOSX_DEPLOYMENT_TARGET=10.9 make -j4
 popd
+rm -r -f build-qmake
 mkdir build-qmake
-cd build-qmake
+pushd build-qmake
 $QTPATH/qmake .. CONFIG+=$CONFIG
 env MACOSX_DEPLOYMENT_TARGET=10.9 make -j4
 
@@ -35,7 +34,7 @@ APPFNAME="Nitrokey App $BRANCH"
 
 
 mv -v "$APPFNAMEOLD" "$APPFNAME"
-APPFNAMERP=`realpath "Nitrokey App $BRANCH"`
+APPFNAMERP=`grealpath "Nitrokey App $BRANCH"`
 
 $QTPATH/macdeployqt "$APPFNAME" 
 #cp /Users/jan/work/workaround/build/Info.plist "$APPFNAME"/Contents/
@@ -50,7 +49,11 @@ function sign {
 
 
 #sign
-bash ~/projects/nitrokey-app/ci-scripts/OSX/create-dmg.sh  "$APPFNAME" "$BRANCH"
+popd
+grealpath .
+echo appname: ${APPFNAME}
+find ./build-qmake/ -name "nitrokey"
+python3 -m dmgbuild -s ci-scripts/OSX/dmgbuild-settings.py -D app=./build-qmake/${APPFNAME} -D background_img=ci-scripts/OSX/arrow.png "Nitrokey-App" ${APPFNAME}.dmg
 #codesign --deep --force --verify --verbose --sign $KEYID "${APPFNAME}.dmg"
 
 #or instead
@@ -58,8 +61,9 @@ bash ~/projects/nitrokey-app/ci-scripts/OSX/create-dmg.sh  "$APPFNAME" "$BRANCH"
 
 
 
-FNDMG=nitrokey-app-`git describe`-$BRANCH.$CONFIG.dmg
-mv -v "${APPFNAME}.dmg"  "$FNDMG"
+mkdir -p artifacts
+FNDMG=nitrokey-app-$BRANCH.dmg
+mv -v "${APPFNAME}.dmg"  "artifacts/$FNDMG"
+pushd artifacts
 ls -lh "$FNDMG"
 gsha512sum "$FNDMG" > "$FNDMG".sha512
-cp "$FNDMG"* ../../
