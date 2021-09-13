@@ -187,6 +187,8 @@ flatpak:
 macos-dmg:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
   tags:
     - macos
   stage: build
