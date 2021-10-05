@@ -29,6 +29,8 @@ jobs:
 
     - name: Build app
       run: |
+        git submodule init
+        git submodule update
         sudo apt install libnitrokey-dev qt5-default qttools5-dev qttools5-dev-tools libqt5svg5-dev libqt5concurrent5
         mkdir build; cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
