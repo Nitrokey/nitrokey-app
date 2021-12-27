@@ -11,8 +11,6 @@ variables:
   GIT_STRATEGY: clone     #This seems to have no effect also set in webinterface
   GIT_DEPTH: 0          #This seems to have no effect also set in webinterface
   GIT_SUBMODULE_STRATEGY: recursive
-  SCRIPTS_REPO: git@git.dotplex.com:nitrokey/gitlab-ci.git
-  REPO_USER: nitrokey
   REPO_NAME: nitrokey-app
   MAIN_BRANCH: master
   COMMON_PULL: "true"
@@ -21,7 +19,7 @@ variables:
   COMMON_UPLOAD_FILES: "false"
 
 fetch-and-package:
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -62,26 +60,26 @@ fetch-and-package:
 
 build-bionic-gcc8:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc8-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc8-agent:latest
 
 build-bionic-gcc7:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc7-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc7-agent:latest
 
 build-bionic-gcc6:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc6-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc6-agent:latest
 
 build-bionic-gcc5:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc5-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-bionic-gcc5-agent:latest
 
 build-bionic-llvm7:
   extends: .build
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-bionic-llvm7-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-bionic-llvm7-agent:latest
 
 snapcraft:
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -103,7 +101,7 @@ snapcraft:
     expire_in: 2 week
 
 deb:
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-packaging-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -126,7 +124,7 @@ deb:
     expire_in: 2 week
 
 appimage:
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-appimages-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-appimages-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -145,7 +143,7 @@ appimage:
     expire_in: 2 week
 
 mxe:
-  image: registry.git.dotplex.com/nitrokey/nitrokey-app/nitrokey-app-mxe-agent:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-mxe-agent:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
