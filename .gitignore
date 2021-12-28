@@ -21,3 +21,4 @@ nitrokey-app
 *.cmake
 CMakeFiles/
 qrc_resources.cpp
+*.DS_Store
