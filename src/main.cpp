@@ -51,12 +51,15 @@ void set_dark_theme();
 #ifndef LIBNK_MIN_VERSION
 #define LIBNK_MIN_VERSION "(not defined)"
 #endif
+#ifndef LIBNK_VERSION
+#define LIBNK_VERSION "(not defined)"
+#endif
 
 
 int main(int argc, char *argv[]) {
   qInfo() << "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
   qInfo() << "Qt versions - built with: " QTWIDGETS_VERSION_STR << ", connected:" << qVersion();
-  qInfo() << "libnitrokey versions - connected:" << NK_get_library_version() << ", required:" << LIBNK_MIN_VERSION;
+  qInfo() << "libnitrokey versions - connected:" << NK_get_library_version() << ", required:" << LIBNK_MIN_VERSION << LIBNK_VERSION;
 
   qRegisterMetaType<QMap<QString, QVariant>>();
 //  issue_43_workaround();
