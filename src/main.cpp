@@ -21,17 +21,15 @@
  */
 
 #include "mainwindow.h"
-//#include "mcvs-wrapper.h"
-//#include "nitrokey-applet.h"
-//#include "splash.h"
 #include <QApplication>
-#include <QTranslator>
+#include <QDebug>
+#include <QFileInfo>
 #include <QLibraryInfo>
 #include <QSettings>
-#include <QFileInfo>
-#include <QDebug>
-#include <libnitrokey/log.h>
 #include <QStyleFactory>
+#include <QTranslator>
+#include <QtWidgets>
+#include <libnitrokey/log.h>
 //#include <QSharedMemory>
 #include "src/version.h"
 #include "src/utils/bool_values.h"
