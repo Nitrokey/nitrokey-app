@@ -28,7 +28,7 @@ QMAKE_TARGET_COMPANY = Nitrokey
 QMAKE_TARGET_PRODUCT = Nitrokey App
 QMAKE_TARGET_DESCRIPTION = Nitrokey Device Manager
 
-QMAKE_TARGET_COPYRIGHT = Copyright (c) 2012-2021 Nitrokey GmbH
+QMAKE_TARGET_COPYRIGHT = Copyright (c) 2012-2022 Nitrokey GmbH
 
 
 ROOTDIR=$$PWD
