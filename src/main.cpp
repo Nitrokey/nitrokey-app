@@ -20,19 +20,20 @@
  * SPDX-License-Identifier: GPL-3.0
  */
 
+#include "NitrokeyManager.h"
 #include "mainwindow.h"
+#include "src/utils/bool_values.h"
+#include "src/version.h"
 #include <QApplication>
 #include <QDebug>
 #include <QFileInfo>
 #include <QLibraryInfo>
 #include <QSettings>
+#include <QSharedMemory>
 #include <QStyleFactory>
 #include <QTranslator>
 #include <QtWidgets>
 #include <libnitrokey/log.h>
-#include <QSharedMemory>
-#include "src/version.h"
-#include "src/utils/bool_values.h"
 
 enum {DEBUG_STATUS_NO_DEBUGGING = 0, DEBUG_STATUS_LOCAL_DEBUG, DEBUG_STATUS_DEBUG_ALL};
 
@@ -59,7 +60,7 @@ void set_dark_theme();
 int main(int argc, char *argv[]) {
   qInfo() << "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
   qInfo() << "Qt versions - built with: " QTWIDGETS_VERSION_STR << ", connected:" << qVersion();
-  qInfo() << "libnitrokey versions - connected:" << NK_get_library_version() << ", required:" << LIBNK_MIN_VERSION << LIBNK_VERSION;
+  qInfo() << "libnitrokey versions - connected:" << NK_get_library_version() << ", required:" << LIBNK_MIN_VERSION << ", built with:" << LIBNK_VERSION;
 
   qRegisterMetaType<QMap<QString, QVariant>>();
 //  issue_43_workaround();
