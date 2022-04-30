@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
   qInfo() << "libnitrokey versions - connected:" << NK_get_library_version() << ", required:" << LIBNK_MIN_VERSION;
 
   qRegisterMetaType<QMap<QString, QVariant>>();
-  issue_43_workaround();
+//  issue_43_workaround();
 
   QApplication a(argc, argv);
   configureApplicationName();
