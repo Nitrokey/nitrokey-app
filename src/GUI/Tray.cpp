@@ -161,6 +161,8 @@ void Tray::generateMenu(bool init, std::function<void(QMenu *)> run_before) {
     static QMutex mtx;
     QMutexLocker locker(&mtx);
 
+    trayIcon->hide();
+
     std::shared_ptr<QMenu> trayMenuLocal;
     std::shared_ptr<QMenu> windowMenuLocal;
 
@@ -212,6 +214,8 @@ void Tray::generateMenu(bool init, std::function<void(QMenu *)> run_before) {
 
     trayMenu = trayMenuLocal;
     windowMenu = windowMenuLocal;
+
+    trayIcon->show();
   }
 
 void Tray::initActionsForStick10() {
