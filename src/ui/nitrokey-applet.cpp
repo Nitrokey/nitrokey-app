@@ -44,6 +44,8 @@ void AppMessageBox::messageBox(const QString& msg) {
 bool AppMessageBox::yesOrNoBox(const QString& msg, bool default_val) {
   QMessageBox::StandardButton default_btn = default_val ? QMessageBox::Yes : QMessageBox::No;
 
+  // FIXME make it modal and always on top, or bring it up periodically
+
   auto buttons = QMessageBox::Yes | QMessageBox::No;
   bool b =
       QMessageBox::question(_parent, getBrand(), msg,

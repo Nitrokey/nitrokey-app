@@ -38,7 +38,7 @@ public:
 
 private:
     QClipboard *clipboard;
-    uint lastClipboardTime;
+    uint lastClipboardTime{};
     QString secretInClipboard;
     void copyToClipboard(QString text, int time=60);
 private slots:

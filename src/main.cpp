@@ -65,6 +65,8 @@ int main(int argc, char *argv[]) {
   qRegisterMetaType<QMap<QString, QVariant>>();
 //  issue_43_workaround();
 
+  qputenv("QT_QPA_PLATFORM", "xcb");
+
   QApplication a(argc, argv);
   configureApplicationName();
   QCommandLineParser parser;

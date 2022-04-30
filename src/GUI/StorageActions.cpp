@@ -373,6 +373,12 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
 
   auto successMessage = tr("Device set in update mode");
   auto failureMessage = tr("Device could not be set in update mode.");
+  auto unsupportedMessage = tr("Your device is not supported.");
+
+  if (libada::is_firmware_update_mode_pro_not_supported()) {
+    QMessageBox::warning(&dialogUpdate, getBrand(), unsupportedMessage, QMessageBox::Ok);
+    return;
+  }
 
   bool success = false;
   // try with default password
@@ -386,8 +392,11 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
                                  success = true;
                              } else {
                                  try{
-                                     m->enable_firmware_update_pro("12345678");
-                                     success = false;
+                                   if (!libada::is_firmware_update_mode_pro_supported()) {
+                                      return;
+                                   }
+                                   m->enable_firmware_update_pro("12345678");
+                                     success = true;
                                  }
                                  catch (DeviceCommunicationException &e) {
                                      // losing connection to the device is expected once it switches to bootloader
@@ -410,13 +419,14 @@ void StorageActions::startStick20EnableFirmwareUpdate() {
      [s](){ //FIXME use secure string
          local_sync();
          auto m = nitrokey::NitrokeyManager::instance();
-         m->enable_firmware_update(s.c_str());
          if (m->get_connected_device_model() == nitrokey::device::DeviceModel::STORAGE) {
              m->enable_firmware_update(s.c_str());
          } else {
              m->enable_firmware_update_pro(s.c_str());
          }
-       },[](){});
+       },[&successMessage](){
+        QMessageBox::warning(nullptr, getBrand(), successMessage, QMessageBox::Ok);
+      });
 }
 
 

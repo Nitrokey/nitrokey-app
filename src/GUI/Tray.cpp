@@ -96,7 +96,7 @@ void Tray::createIndicator() {
     showTrayMessage("Nitrokey App", tr("Active"), INFORMATION, TRAY_MSG_TIMEOUT);
 }
 
-void Tray::showTrayMessage(QString message) {
+void Tray::showTrayMessage(const QString& message) {
   showTrayMessage("Nitrokey App", message, INFORMATION, 2000);
 }
 
@@ -107,7 +107,11 @@ void Tray::showTrayMessage(const QString &title, const QString &msg,
   if (trayIcon->supportsMessages()) {
     switch (type) {
       case INFORMATION:
+#ifdef Q_OS_LINUX
+        trayIcon->showMessage(title, msg, QSystemTrayIcon::NoIcon, timeout);
+#else
         trayIcon->showMessage(title, msg, QSystemTrayIcon::Information, timeout);
+#endif
         break;
       case WARNING:
         trayIcon->showMessage(title, msg, QSystemTrayIcon::Warning, timeout);

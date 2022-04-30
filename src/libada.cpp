@@ -301,6 +301,16 @@ bool libada::is_secret320_supported() {
   return secret320_supported_cached == true_value;
 }
 
+bool libada::is_firmware_update_mode_pro_supported(){
+  const auto &n = nm::instance();
+  return n->get_connected_device_model() == nitrokey::device::DeviceModel::PRO && n->get_minor_firmware_version() >= 11;
+}
+
+bool libada::is_firmware_update_mode_pro_not_supported(){
+  const auto &n = nm::instance();
+  return n->get_connected_device_model() == nitrokey::device::DeviceModel::PRO && n->get_minor_firmware_version() < 11;
+}
+
 std::string libada::getTOTPCode(int slot_number, const char *user_temporary_password) {
   return nm::instance()->get_TOTP_code(slot_number, user_temporary_password);
 }

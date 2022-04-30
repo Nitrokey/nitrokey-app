@@ -146,6 +146,8 @@ public:
   bool have_communication_issues_occurred();
 
     void clearUserDataCache();
+  static bool is_firmware_update_mode_pro_supported();
+    static bool is_firmware_update_mode_pro_not_supported();
 };
 
 

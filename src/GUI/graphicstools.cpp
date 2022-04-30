@@ -38,7 +38,8 @@ QPixmap GraphicsTools::loadColorize(const QString& path, bool loadForTray, bool 
         auto color = settings.value("main/tray_icon_color", GraphicsTools::get_default_tray_color()).toString();
         text_color.setNamedColor(color);
     } else {
-        text_color = QGuiApplication::palette().color(QPalette::WindowText);
+//        text_color = QGuiApplication::palette().color(QPalette::WindowText);
+        text_color = QColor::fromRgb(0xaa, 0xaa, 0xaa);
     }
 
     auto effect = new QGraphicsColorizeEffect;
