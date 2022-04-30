@@ -102,11 +102,11 @@ int main(int argc, char *argv[]) {
       char message[] = SHARED_MEMORY_CMD_STR;
       memcpy((char*) shared->data(), reinterpret_cast<const void *>(message), sizeof message);
       shared->unlock();
-      shared->detach();
     } else {
       qWarning() << "Cannot attach and write";
     }
 
+    shared->detach();
     exit(0);
   }
 

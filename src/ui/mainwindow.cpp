@@ -440,6 +440,7 @@ void MainWindow::initialTimeReset() {
 
 MainWindow::~MainWindow() {
   nm::instance()->set_log_function([](std::string /*data*/){});
+  shared->detach();
   delete ui;
 }
 
@@ -1765,6 +1766,9 @@ void MainWindow::on_DeviceConnected() {
 }
 
 void MainWindow::on_anotherInstance() {
+  if(!shared->isAttached())
+    return;
+
   bool show = false;
   shared->lock();
   ScopedGuard mutexGuard([this]() { shared->unlock(); });
