@@ -21,42 +21,65 @@
 
 #include "Clipboard.h"
 #include <QApplication>
-#include <QTimer>
 #include <QDateTime>
+#include <QMimeData>
 #include <QSettings>
+#include <QTimer>
+#include <utility>
 
-void Clipboard::copyOTP(QString text){
-    QSettings settings;
-    copyToClipboard(text, settings.value("clipboard/OTP_time", 120).toInt());
+void Clipboard::copyOTP(QString text) {
+  QSettings settings;
+  copyToClipboard(std::move(text), settings.value("clipboard/OTP_time", 120).toInt());
 }
 
-void Clipboard::copyPWS(QString text){
-    QSettings settings;
-    copyToClipboard(text, settings.value("clipboard/PWS_time", 60).toInt());
+void Clipboard::copyPWS(QString text) {
+  QSettings settings;
+  copyToClipboard(std::move(text), settings.value("clipboard/PWS_time", 60).toInt());
 }
 
+//  see https://github.com/keepassxreboot/keepassxc/blob/develop/src/gui/Clipboard.cpp#L55
 void Clipboard::copyToClipboard(QString text, int time) {
   if (text.length() != 0) {
-    lastClipboardTime = QDateTime::currentDateTime().toTime_t() + time - 1;
-    clipboard->setText(text);
-    secretInClipboard = text;
+    secretInClipboard = std::move(text);
+    lastClipboardTime = QDateTime::currentDateTimeUtc().toTime_t() + time - 1;
+
+    auto *mime = new QMimeData;
+    mime->setText(secretInClipboard);
+
+    // select proper MIME string
+#ifdef Q_OS_MACOS
+    mime->setData("application/x-nspasteboard-concealed-type", text.toUtf8());
+#endif
+#ifdef Q_OS_LINUX
+    mime->setData("x-kde-passwordManagerHint", QByteArrayLiteral("secret"));
+#endif
+#ifdef Q_OS_WIN
+    mime->setData("ExcludeClipboardContentFromMonitorProcessing", QByteArrayLiteral("1"));
+#endif
+    clipboard->setMimeData(mime, QClipboard::Clipboard);
+
+#ifndef Q_OS_MACOS
+    if (clipboard->supportsSelection()) {
+      clipboard->setMimeData(mime, QClipboard::Selection);
+    }
+#endif //! Q_OS_MACOS
   }
   QTimer::singleShot(time*1000, this, SLOT(checkClipboard_Valid()));
 }
 
 #include <core/SecureString.h>
 void Clipboard::checkClipboard_Valid(bool force_clear) {
-  uint64_t currentTime = QDateTime::currentDateTime().toTime_t();
+  uint64_t currentTime = QDateTime::currentDateTimeUtc().toTime_t();
 
   if (force_clear || (currentTime >= lastClipboardTime)) {
     if (clipboard->text() == secretInClipboard) {
-      clipboard->setText(QString(""));
-      overwrite_string(secretInClipboard);
+      clipboard->clear();
     }
+    overwrite_string(secretInClipboard);
   }
 }
 
-Clipboard::Clipboard(QObject *parent) : QObject(parent) {
+Clipboard::Clipboard(QObject *parent) : QObject(parent), lastClipboardTime(0) {
   clipboard = QApplication::clipboard();
 }
 
