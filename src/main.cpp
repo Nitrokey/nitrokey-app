@@ -30,7 +30,7 @@
 #include <QTranslator>
 #include <QtWidgets>
 #include <libnitrokey/log.h>
-//#include <QSharedMemory>
+#include <QSharedMemory>
 #include "src/version.h"
 #include "src/utils/bool_values.h"
 
@@ -77,7 +77,6 @@ int main(int argc, char *argv[]) {
 //  QTranslator qtTranslator;
 //  configureBasicTranslator(a, qtTranslator);
 
-
   QSettings settings;
   const auto language_key = "main/language";
   if (parser.isSet("language")){
@@ -92,39 +91,36 @@ int main(int argc, char *argv[]) {
   QTranslator myappTranslator;
   configureTranslator(a, parser, settings_language, myappTranslator);
 
+  // Check for multiple instances, bring up the other one if opened already, and close the current one
+  auto shared = new QSharedMemory(SHARED_MEMORY_KEY);
+  if (!shared->create(512, QSharedMemory::ReadWrite) && !parser.isSet("admin")) {
+    auto text = QObject::tr("Can't start more than one instance of the application.");
+    qWarning() << "Warning:" << text;
 
-  // Check for multiple instances
-  // GUID from http://www.guidgenerator.com/online-guid-generator.aspx
-  /*
-     QSharedMemory shared("6b50960df-f5f3-4562-bbdc-84c3bc004ef4");
+    if(shared->attach()){
+      shared->lock();
+      char message[] = SHARED_MEMORY_CMD_STR;
+      memcpy((char*) shared->data(), reinterpret_cast<const void *>(message), sizeof message);
+      shared->unlock();
+      shared->detach();
+    } else {
+      qWarning() << "Cannot attach and write";
+    }
 
-     if( !shared.create( 512, QSharedMemory::ReadWrite) ) { // An instance is already running. Quit
-     the current instance QMessageBox msgBox;
-     msgBox.setText( QObject::tr("Can't start more than one instance of the application.") );
-     msgBox.setIcon( QMessageBox::Critical );
-     msgBox.exec(); exit(0); } else { */
+    exit(0);
+  }
+
   if(debug_enabled) {
     qDebug() << "Application started successfully.";
   }
-  // }
-
-  /*
-     SplashScreen *splash = 0; splash = new SplashScreen; splash->show();
-
-     QFile qss( ":/qss/default.qss" ); if( ! qss.open( QIODevice::ReadOnly ) ) { qss.setFileName(
-     ":/qss/default.qss" ); qss.open(
-     QIODevice::ReadOnly ); }
-
-     if( qss.isOpen() ) { a.setStyleSheet( qss.readAll() ); }
-
-     QTimer::singleShot(3000,splash,SLOT(deleteLater())); */
-
 
   a.setQuitOnLastWindowClosed(false);
 
 
   MainWindow w;
   w.enable_admin_commands();
+  w.shared = shared;
+
 
   QString df = settings.value("debug/file", "").toString().trimmed();
   if (!df.isEmpty() && settings.value("debug/enabled", false).toBool() && df != "console"){

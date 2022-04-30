@@ -224,6 +224,9 @@ MainWindow::MainWindow(QWidget *parent):
   keepDeviceOnlineTimer->start(30*1000);
   QTimer::singleShot(10*1000, this, SLOT(on_KeepDeviceOnline()));
 
+  QTimer *anotherInstanceTimer = new QTimer(this);
+  connect(anotherInstanceTimer, SIGNAL(timeout()), this, SLOT(on_anotherInstance()));
+  anotherInstanceTimer->start(1000);
 
   connect(ui->secretEdit, SIGNAL(textEdited(QString)), this, SLOT(checkTextEdited()));
 
@@ -1759,6 +1762,24 @@ void MainWindow::on_DeviceConnected() {
     tray.showTrayMessage(tr("Nitrokey connected"), connected_device_model);
   }
   ui->statusBar->showMessage(connected_device_model);
+}
+
+void MainWindow::on_anotherInstance() {
+  bool show = false;
+  shared->lock();
+  ScopedGuard mutexGuard([this]() { shared->unlock(); });
+  char message[] = SHARED_MEMORY_CMD_STR;
+  if (memcmp(shared->constData(), message, sizeof message) == 0) {
+    qDebug() << "Show main window request detected";
+    memset(shared->data(), 0, sizeof message);
+    show = true;
+  }
+
+  if (show) {
+    this->hide();
+    ui->tabWidget->setCurrentIndex(0);
+    this->show();
+  }
 }
 
 void MainWindow::on_KeepDeviceOnline() {

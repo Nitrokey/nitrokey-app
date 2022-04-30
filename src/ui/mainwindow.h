@@ -55,6 +55,7 @@ class MainWindow : public QMainWindow {
 public :
     explicit MainWindow(QWidget *parent = 0);
   virtual ~MainWindow();
+  QSharedMemory *shared;
 
 protected:
   void closeEvent(QCloseEvent *event) override;
@@ -138,6 +139,7 @@ signals:
 private slots:
   void manageStartPage();
   void on_longOperationStart();
+  void on_anotherInstance();
   void on_KeepDeviceOnline();
   void on_DeviceConnected();
   void on_DeviceDisconnected();
@@ -266,5 +268,8 @@ public:
     return Invalid;
   }
 };
+
+#define SHARED_MEMORY_KEY "6b50960df-f5f3-4562-bbdc-84c3bc004ef4"
+#define SHARED_MEMORY_CMD_STR "SHOW"
 
 #endif // MAINWINDOW_H
