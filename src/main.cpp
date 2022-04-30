@@ -47,7 +47,17 @@ void configureTranslator(const QApplication &a, const QCommandLineParser &parser
 
 void set_dark_theme();
 
+#include <libnitrokey/NK_C_API.h>
+#ifndef LIBNK_MIN_VERSION
+#define LIBNK_MIN_VERSION
+#endif
+
+
 int main(int argc, char *argv[]) {
+  qInfo() << "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
+  qInfo() << "Qt versions - built with: " QTWIDGETS_VERSION_STR << ", connected:" << qVersion();
+  qInfo() << "libnitrokey versions - connected:" << NK_get_library_version() << ", required:" << LIBNK_MIN_VERSION;
+
   qRegisterMetaType<QMap<QString, QVariant>>();
   issue_43_workaround();
 
@@ -94,7 +104,6 @@ int main(int argc, char *argv[]) {
      msgBox.setIcon( QMessageBox::Critical );
      msgBox.exec(); exit(0); } else { */
   if(debug_enabled) {
-    qDebug() << "Nitrokey App " CMAKE_BUILD_TYPE " " GUI_VERSION " (git: " GIT_VERSION ")";
     qDebug() << "Application started successfully.";
   }
   // }
