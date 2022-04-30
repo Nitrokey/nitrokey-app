@@ -49,7 +49,7 @@ void set_dark_theme();
 
 #include <libnitrokey/NK_C_API.h>
 #ifndef LIBNK_MIN_VERSION
-#define LIBNK_MIN_VERSION
+#define LIBNK_MIN_VERSION "(not defined)"
 #endif
 
 
