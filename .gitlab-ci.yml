@@ -124,7 +124,7 @@ deb:
     expire_in: 2 week
 
 appimage:
-  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/test:latest
+  image: registry.git.nitrokey.com/nitrokey/nitrokey-app/nitrokey-app-appimages-agent/test:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
