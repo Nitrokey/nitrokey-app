@@ -26,14 +26,14 @@ EXTRAPLUGS=imageformats,iconengines,platforms,platformthemes
 /linuxdeployqt-x86_64.AppImage --appimage-extract-and-run ${APPDIR}/usr/share/applications/nitrokey-app.desktop -bundle-non-qt-libs -extra-plugins=${EXTRAPLUGS}
 
 ## Workaround to increase compatibility with older systems; see https://github.com/darealshinji/AppImageKit-checkrt for details
-pushd ${APPDIR}
-rm AppRun
-mkdir -p usr/optional/libstdc++/
-wget -c https://github.com/darealshinji/AppImageKit-checkrt/releases/download/continuous/exec-x86_64.so -O usr/optional/exec.so
-wget -c https://github.com/darealshinji/AppImageKit-checkrt/releases/download/continuous/AppRun-patched-x86_64 -O AppRun
-chmod a+x AppRun
-cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 usr/optional/libstdc++/
-popd
+#pushd ${APPDIR}
+#rm AppRun
+#mkdir -p usr/optional/libstdc++/
+#wget -c https://github.com/darealshinji/AppImageKit-checkrt/releases/download/continuous/exec-x86_64.so -O usr/optional/exec.so
+#wget -c https://github.com/darealshinji/AppImageKit-checkrt/releases/download/continuous/AppRun-patched-x86_64 -O AppRun
+#chmod a+x AppRun
+#cp /usr/lib/x86_64-linux-gnu/libstdc++.so.6 usr/optional/libstdc++/
+#popd
 
 ## Manually invoke appimagetool so that libstdc++ gets bundled and the modified AppRun stays intact
 /appimagetool-x86_64.AppImage --appimage-extract-and-run -g ${APPDIR} ${OUTDIR}/${OUTNAME}
