@@ -199,3 +199,4 @@ macos-dmg:
     paths:
       - artifacts
     expire_in: 2 week
+  allow_failure: true
