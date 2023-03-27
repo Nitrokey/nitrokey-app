@@ -223,14 +223,14 @@ TARGET_LINK_LIBRARIES(nitrokey-app
 
 # first try to find libnitrokey via pkg-config
 find_package(PkgConfig)
-pkg_search_module(LIBNITROKEY ${_pkgconfig_REQUIRED} libnitrokey-1 >= ${LIBNK_MIN_VERSION})
+pkg_search_module(LIBNITROKEY ${_pkgconfig_REQUIRED} libnitrokey-1>=${LIBNK_MIN_VERSION})
 
 MESSAGE(STATUS "Required libnitrokey version: ${LIBNK_MIN_VERSION}")
 if(LIBNITROKEY_FORCE_BUNDLED)
     MESSAGE(WARNING "Using bundled libnitrokey forced")
 endif()
 
-if(LIBNITROKEY_FOUND AND !LIBNITROKEY_FORCE_BUNDLED)
+if(LIBNITROKEY_FOUND AND NOT LIBNITROKEY_FORCE_BUNDLED)
   MESSAGE(STATUS "Found system libnitrokey (Cflags: '${LIBNITROKEY_CFLAGS}' Libs: '${LIBNITROKEY_LDFLAGS}')")
   if (BUILD_SHARED_LIBS)
     target_compile_options(nitrokey-app PRIVATE ${LIBNITROKEY_CFLAGS})
